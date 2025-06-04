@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://bl8p4bid734wo"]
+[gd_scene load_steps=3 format=3 uid="uid://bl8p4bid734wo"]
 
 [ext_resource type="Script" uid="uid://rhc2whb7j6tt" path="res://flow_root.gd" id="1_lpoe1"]
+[ext_resource type="PackedScene" uid="uid://3bdcpg54ctoy" path="res://flow_nodes/grid.tscn" id="2_lsii6"]
 
 [node name="FlowRoot" type="Control"]
 layout_mode = 3
@@ -37,8 +38,11 @@ text = "NodeInfo"
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
+theme_override_colors/activity = Color(1, 0.501961, 0.25098, 1)
+connection_lines_thickness = 3.0
 
 [node name="GraphNode3" type="GraphNode" parent="VBoxContainer/GraphEdit"]
+visible = false
 layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
@@ -46,6 +50,7 @@ mouse_filter = 1
 title = "0,0"
 
 [node name="GraphNode" type="GraphNode" parent="VBoxContainer/GraphEdit"]
+visible = false
 layout_mode = 0
 offset_left = 200.0
 offset_top = 200.0
@@ -56,6 +61,7 @@ position_offset = Vector2(200, 200)
 title = "200,200"
 
 [node name="GraphNode2" type="GraphNode" parent="VBoxContainer/GraphEdit"]
+visible = false
 layout_mode = 0
 offset_top = -400.0
 offset_right = 100.0
@@ -63,6 +69,15 @@ offset_bottom = -300.0
 mouse_filter = 1
 position_offset = Vector2(0, -400)
 title = "0,-400"
+
+[node name="Grid" parent="VBoxContainer/GraphEdit" instance=ExtResource("2_lsii6")]
+layout_mode = 0
+offset_left = 198.0
+offset_top = 204.0
+offset_right = 431.0
+offset_bottom = 282.0
+mouse_filter = 1
+position_offset = Vector2(198, 204)
 
 [node name="PopupMenu" type="PopupMenu" parent="."]
 unique_name_in_owner = true
@@ -75,6 +90,10 @@ item_1/separator = true
 item_2/text = "Delete"
 item_2/id = 2
 
+[connection signal="connection_from_empty" from="VBoxContainer/GraphEdit" to="." method="_on_graph_edit_connection_from_empty"]
+[connection signal="connection_request" from="VBoxContainer/GraphEdit" to="." method="_on_graph_edit_connection_request"]
+[connection signal="connection_to_empty" from="VBoxContainer/GraphEdit" to="." method="_on_graph_edit_connection_to_empty"]
+[connection signal="disconnection_request" from="VBoxContainer/GraphEdit" to="." method="_on_graph_edit_disconnection_request"]
 [connection signal="gui_input" from="VBoxContainer/GraphEdit" to="." method="_on_graph_edit_gui_input"]
 [connection signal="node_selected" from="VBoxContainer/GraphEdit" to="." method="_on_graph_edit_node_selected"]
 [connection signal="popup_request" from="VBoxContainer/GraphEdit" to="." method="_on_graph_edit_popup_request"]
