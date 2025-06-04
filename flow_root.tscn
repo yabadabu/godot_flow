@@ -38,58 +38,44 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 
+[node name="GraphNode3" type="GraphNode" parent="VBoxContainer/GraphEdit"]
+layout_mode = 0
+offset_right = 100.0
+offset_bottom = 100.0
+mouse_filter = 1
+title = "0,0"
+
 [node name="GraphNode" type="GraphNode" parent="VBoxContainer/GraphEdit"]
 layout_mode = 0
-offset_right = 192.0
-offset_bottom = 137.0
+offset_left = 200.0
+offset_top = 200.0
+offset_right = 300.0
+offset_bottom = 300.0
 mouse_filter = 1
-resizable = true
-title = "Input"
-slot/0/left_enabled = true
-slot/0/left_type = 0
-slot/0/left_color = Color(1, 0, 1, 1)
-slot/0/left_icon = null
-slot/0/right_enabled = true
-slot/0/right_type = 0
-slot/0/right_color = Color(1, 1, 1, 1)
-slot/0/right_icon = null
-slot/0/draw_stylebox = true
-slot/1/left_enabled = true
-slot/1/left_type = 0
-slot/1/left_color = Color(1, 1, 1, 1)
-slot/1/left_icon = null
-slot/1/right_enabled = true
-slot/1/right_type = 0
-slot/1/right_color = Color(1, 1, 1, 1)
-slot/1/right_icon = null
-slot/1/draw_stylebox = true
+position_offset = Vector2(200, 200)
+title = "200,200"
 
-[node name="Button" type="Button" parent="VBoxContainer/GraphEdit/GraphNode"]
-layout_mode = 2
-size_flags_vertical = 3
-text = "Input
-"
-
-[node name="Label" type="Label" parent="VBoxContainer/GraphEdit/GraphNode"]
-layout_mode = 2
-text = "Pep
-"
+[node name="GraphNode2" type="GraphNode" parent="VBoxContainer/GraphEdit"]
+layout_mode = 0
+offset_top = -400.0
+offset_right = 100.0
+offset_bottom = -300.0
+mouse_filter = 1
+position_offset = Vector2(0, -400)
+title = "0,-400"
 
 [node name="PopupMenu" type="PopupMenu" parent="."]
 unique_name_in_owner = true
 position = Vector2i(20, 150)
-visible = true
-
-[node name="VBoxContainer" type="VBoxContainer" parent="PopupMenu"]
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="ButtonAddGrid" type="Button" parent="PopupMenu/VBoxContainer"]
-layout_mode = 2
-text = "Add Grid
-"
+item_count = 3
+item_0/text = "Grid"
+item_0/id = 0
+item_1/id = 1
+item_1/separator = true
+item_2/text = "Delete"
+item_2/id = 2
 
 [connection signal="gui_input" from="VBoxContainer/GraphEdit" to="." method="_on_graph_edit_gui_input"]
 [connection signal="node_selected" from="VBoxContainer/GraphEdit" to="." method="_on_graph_edit_node_selected"]
 [connection signal="popup_request" from="VBoxContainer/GraphEdit" to="." method="_on_graph_edit_popup_request"]
-[connection signal="pressed" from="PopupMenu/VBoxContainer/ButtonAddGrid" to="." method="_on_button_add_grid_pressed"]
+[connection signal="id_pressed" from="PopupMenu" to="." method="_on_popup_menu_id_pressed"]
