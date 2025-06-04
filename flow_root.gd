@@ -13,6 +13,13 @@ var auto_connect_to_node : String
 var auto_connect_to_port : int
 
 var counter : int = 0
+var min_id = 1000
+var max_id = min_id
+
+var node_types = { 
+	"grid" : "Grid",
+	"spawn_meshes" : "Spawn Meshes",
+}
 
 func getNewName():
 	counter+= 1
@@ -20,6 +27,11 @@ func getNewName():
 
 func _ready():
 	#gedit.theme.ac = Color( 1, 0.5, 0.5 );
+	var pm = %PopupMenu as PopupMenu
+	for key in node_types.keys():
+		var label = node_types[ key ]
+		pm.add_item(label, max_id, 0 )
+		max_id += 1
 	pass
 	
 # ------------------------------------------------
@@ -156,8 +168,10 @@ func _on_button_add_grid_pressed():
 	addNode( "grid" )
 
 func _on_popup_menu_id_pressed(id: int) -> void:
-	if id == 0:
-		addNode( "grid" )
+	if id >= min_id && id < max_id:
+		var idx = id - min_id
+		var key = node_types.keys()[ idx ]
+		addNode( key )
 	else:
 		# Highlight the connection...
 		var nodes = getSelectedNodes()

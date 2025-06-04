@@ -82,13 +82,11 @@ position_offset = Vector2(198, 204)
 [node name="PopupMenu" type="PopupMenu" parent="."]
 unique_name_in_owner = true
 position = Vector2i(20, 150)
-item_count = 3
-item_0/text = "Grid"
+item_count = 2
 item_0/id = 0
-item_1/id = 1
-item_1/separator = true
-item_2/text = "Delete"
-item_2/id = 2
+item_0/separator = true
+item_1/text = "Delete"
+item_1/id = 100
 
 [connection signal="connection_from_empty" from="VBoxContainer/GraphEdit" to="." method="_on_graph_edit_connection_from_empty"]
 [connection signal="connection_request" from="VBoxContainer/GraphEdit" to="." method="_on_graph_edit_connection_request"]
