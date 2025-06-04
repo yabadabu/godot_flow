@@ -1,0 +1,95 @@
+[gd_scene load_steps=2 format=3 uid="uid://bl8p4bid734wo"]
+
+[ext_resource type="Script" uid="uid://rhc2whb7j6tt" path="res://flow_root.gd" id="1_lpoe1"]
+
+[node name="FlowRoot" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_lpoe1")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="LabelInfo" type="Label" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Info"
+
+[node name="LabelNodeInfo" type="Label" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "NodeInfo"
+
+[node name="GraphEdit" type="GraphEdit" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="GraphNode" type="GraphNode" parent="VBoxContainer/GraphEdit"]
+layout_mode = 0
+offset_right = 192.0
+offset_bottom = 137.0
+mouse_filter = 1
+resizable = true
+title = "Input"
+slot/0/left_enabled = true
+slot/0/left_type = 0
+slot/0/left_color = Color(1, 0, 1, 1)
+slot/0/left_icon = null
+slot/0/right_enabled = true
+slot/0/right_type = 0
+slot/0/right_color = Color(1, 1, 1, 1)
+slot/0/right_icon = null
+slot/0/draw_stylebox = true
+slot/1/left_enabled = true
+slot/1/left_type = 0
+slot/1/left_color = Color(1, 1, 1, 1)
+slot/1/left_icon = null
+slot/1/right_enabled = true
+slot/1/right_type = 0
+slot/1/right_color = Color(1, 1, 1, 1)
+slot/1/right_icon = null
+slot/1/draw_stylebox = true
+
+[node name="Button" type="Button" parent="VBoxContainer/GraphEdit/GraphNode"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Input
+"
+
+[node name="Label" type="Label" parent="VBoxContainer/GraphEdit/GraphNode"]
+layout_mode = 2
+text = "Pep
+"
+
+[node name="PopupMenu" type="PopupMenu" parent="."]
+unique_name_in_owner = true
+position = Vector2i(20, 150)
+visible = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PopupMenu"]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="ButtonAddGrid" type="Button" parent="PopupMenu/VBoxContainer"]
+layout_mode = 2
+text = "Add Grid
+"
+
+[connection signal="gui_input" from="VBoxContainer/GraphEdit" to="." method="_on_graph_edit_gui_input"]
+[connection signal="node_selected" from="VBoxContainer/GraphEdit" to="." method="_on_graph_edit_node_selected"]
+[connection signal="popup_request" from="VBoxContainer/GraphEdit" to="." method="_on_graph_edit_popup_request"]
+[connection signal="pressed" from="PopupMenu/VBoxContainer/ButtonAddGrid" to="." method="_on_button_add_grid_pressed"]

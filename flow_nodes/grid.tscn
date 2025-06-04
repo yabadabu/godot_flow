@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://3bdcpg54ctoy"]
+
+[node name="Grid" type="GraphNode"]
+offset_right = 233.0
+offset_bottom = 78.0
+title = "Grid Points"
+slot/0/left_enabled = true
+slot/0/left_type = 0
+slot/0/left_color = Color(1, 1, 1, 1)
+slot/0/left_icon = null
+slot/0/right_enabled = true
+slot/0/right_type = 0
+slot/0/right_color = Color(1, 1, 1, 1)
+slot/0/right_icon = null
+slot/0/draw_stylebox = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="LabelLeft" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Input"
+
+[node name="LabelRight" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Output"
+horizontal_alignment = 2
