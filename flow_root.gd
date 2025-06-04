@@ -30,7 +30,7 @@ func _ready():
 	var pm = %PopupMenu as PopupMenu
 	for key in node_types.keys():
 		var label = node_types[ key ]
-		pm.add_item(label, max_id, 0 )
+		pm.add_item(label, max_id, KEY_NONE )
 		max_id += 1
 	pass
 	
@@ -65,6 +65,38 @@ func getRectOfNodes( nodes : Array[GraphNode] ):
 			r = r.expand( p0 )
 		r = r.expand( p1 )
 	return r
+	
+# Get all connections for a specific node
+func getNodeConnections(node_name: StringName) -> Dictionary:
+	var node_connections = {
+		"inputs": [],    # Connections coming INTO this node
+		"outputs": []    # Connections going OUT of this node
+	}
+	
+	# Get all connections in the graph
+	var all_connections = gedit.get_connection_list()
+	
+	# Filter connections for this specific node
+	for connection in all_connections:
+		# connection is a Dictionary with: from_node, from_port, to_node, to_port
+		
+		if connection.to_node == node_name:
+			# This node is receiving input
+			node_connections.inputs.append({
+				"from_node": connection.from_node,
+				"from_port": connection.from_port,
+				"to_port": connection.to_port
+			})
+		
+		if connection.from_node == node_name:
+			# This node is sending output
+			node_connections.outputs.append({
+				"to_node": connection.to_node,
+				"to_port": connection.to_port,
+				"from_port": connection.from_port
+			})
+	
+	return node_connections
 
 func localToGraphCoords( local_coords : Vector2 ):
 	#var view_zero_in_scroll_offset = gedit.scroll_offset / gedit.zoom
@@ -90,7 +122,7 @@ func addNode( node_name ):
 		
 	node.name = getNewName()
 	node.position_offset = localToGraphCoords(local_drop_position)
-	node.size.x = 400
+	#node.size.x = 400
 	gedit.add_child(node)
 	
 	if auto_connect_from_node:
@@ -100,6 +132,10 @@ func addNode( node_name ):
 	if auto_connect_to_node:
 		gedit.connect_node(node.name, 0, auto_connect_to_node, auto_connect_to_port )
 		auto_connect_to_node = ""
+	
+	for prev_node in getSelectedNodes():
+		prev_node.selected = false
+	node.selected = true
 
 # ------------------------------------------------
 func _on_graph_edit_gui_input(event):
@@ -146,6 +182,9 @@ func updateNodeInfo():
 		var node = c as GraphNode
 		if node and node.selected:
 			new_text = "PosOff:%s N:%s T:%s" % [node.position_offset, node.name, node.title ]
+			var conns = getNodeConnections( node.name )
+			new_text += " InConns:%d OutConn:%d" % [conns.inputs.size(), conns.outputs.size() ]
+			break
 	node_info.text = new_text
 	
 func _on_graph_edit_node_selected(_node):
@@ -163,9 +202,6 @@ func _on_graph_edit_popup_request(at_position):
 func openAddMenu():
 	var pos = get_local_mouse_position()
 	_on_graph_edit_popup_request( pos )
-
-func _on_button_add_grid_pressed():
-	addNode( "grid" )
 
 func _on_popup_menu_id_pressed(id: int) -> void:
 	if id >= min_id && id < max_id:

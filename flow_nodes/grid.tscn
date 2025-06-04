@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://3bdcpg54ctoy"]
 
 [node name="Grid" type="GraphNode"]
-offset_right = 233.0
+offset_right = 130.0
 offset_bottom = 78.0
 title = "Grid Points"
 slot/0/left_enabled = true
@@ -20,10 +20,14 @@ layout_mode = 2
 [node name="LabelLeft" type="Label" parent="HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Input"
+text = "In"
+
+[node name="Control" type="Control" parent="HBoxContainer"]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
 
 [node name="LabelRight" type="Label" parent="HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Output"
+text = "Out"
 horizontal_alignment = 2

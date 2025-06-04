@@ -41,43 +41,14 @@ size_flags_vertical = 3
 theme_override_colors/activity = Color(1, 0.501961, 0.25098, 1)
 connection_lines_thickness = 3.0
 
-[node name="GraphNode3" type="GraphNode" parent="VBoxContainer/GraphEdit"]
-visible = false
-layout_mode = 0
-offset_right = 100.0
-offset_bottom = 100.0
-mouse_filter = 1
-title = "0,0"
-
-[node name="GraphNode" type="GraphNode" parent="VBoxContainer/GraphEdit"]
-visible = false
-layout_mode = 0
-offset_left = 200.0
-offset_top = 200.0
-offset_right = 300.0
-offset_bottom = 300.0
-mouse_filter = 1
-position_offset = Vector2(200, 200)
-title = "200,200"
-
-[node name="GraphNode2" type="GraphNode" parent="VBoxContainer/GraphEdit"]
-visible = false
-layout_mode = 0
-offset_top = -400.0
-offset_right = 100.0
-offset_bottom = -300.0
-mouse_filter = 1
-position_offset = Vector2(0, -400)
-title = "0,-400"
-
 [node name="Grid" parent="VBoxContainer/GraphEdit" instance=ExtResource("2_lsii6")]
 layout_mode = 0
 offset_left = 198.0
-offset_top = 204.0
+offset_top = 201.0
 offset_right = 431.0
-offset_bottom = 282.0
+offset_bottom = 279.0
 mouse_filter = 1
-position_offset = Vector2(198, 204)
+position_offset = Vector2(198, 201)
 
 [node name="PopupMenu" type="PopupMenu" parent="."]
 unique_name_in_owner = true
