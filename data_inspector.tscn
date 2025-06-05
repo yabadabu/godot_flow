@@ -10,6 +10,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_h15u6")
+data_ex = 1
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
@@ -26,9 +27,16 @@ layout_mode = 2
 layout_mode = 2
 text = "Refresh"
 
+[node name="LabelTitle" type="Label" parent="VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Node Title"
+
 [node name="GridContainer" type="GridContainer" parent="VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_constants/h_separation = 1
+theme_override_constants/v_separation = 1
 columns = 4
 
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/BtnRefresh" to="." method="_on_btn_refresh_pressed"]

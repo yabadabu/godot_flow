@@ -14,6 +14,21 @@ var datas = [
 	[ Vector3(0,0,1), Color.GREEN, 2.0 ],
 ]
 
+var node : FlowNodeBase
+
+func setNode( new_node : FlowNodeBase ):
+	# If there was already one active... disabled it
+	if node:
+		%LabelTitle.text = "..."
+		node.inspect_enabled = false
+		
+	if node != new_node and new_node:
+		%LabelTitle.text = new_node.get_title()
+		new_node.inspect_enabled = true
+		node = new_node
+	else:
+		node = null
+
 func addLabel( gc : GridContainer, str_data : String ):
 	var c = Label.new()
 	c.text = str_data
@@ -28,35 +43,49 @@ func addColor( gc : GridContainer, data : Color ):
 	return c
 	
 func refresh():
-	var gc : GridContainer = %GridContainer
+	var gc : GridContainer = find_child( "GridContainer")
+	if not gc:
+		return
 	gc.columns = 3 + 1 
+	
 	for i in range( 0, gc.get_child_count() ):
 		gc.remove_child( gc.get_child( gc.get_child_count() - 1 ))
 	
 	# add titles
 	for title in titles:
-		addLabel( gc, title )
+		addLabel( gc, " %s " % title )
+
+	# Background color (zebra striping)
+	var styleA = StyleBoxFlat.new()
+	styleA.bg_color = Color(0.5, 0.5, 0.5)
+	var styleB = StyleBoxFlat.new()
+	styleB.bg_color = styleA.bg_color + Color( 0.1, 0.1, 0.1 )
 
 	# add data
-	var idx = 0
+	var row_idx = 0
 	for row in datas:
 		
-		var cidx = addLabel( gc, str(idx))
+		var cidx = addLabel( gc, str(row_idx))
 		cidx.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+		cidx.add_theme_stylebox_override( "normal", styleA if (row_idx % 2) else styleB )
 		
 		var col_idx = 0
 		for cell in row:
+			var c;
 			var data_type = col_types[ col_idx + 1 ]
 			if data_type == "int":
-				var c = addLabel( gc, str(cell) ) as Label
+				c = addLabel( gc, str(cell) ) as Label
 				c.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 			elif data_type == "color":
-				addColor( gc, cell )
+				c = addColor( gc, cell )
 			else:
-				addLabel( gc, str(cell) )
+				c = addLabel( gc, str(cell) )
+			
+			if c is Label:
+				c.add_theme_stylebox_override( "normal", styleA if (row_idx % 2) else styleB )
 				
 			col_idx += 1
-		idx += 1
+		row_idx += 1
 
 func _ready():
 	refresh()

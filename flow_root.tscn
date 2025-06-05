@@ -1,9 +1,6 @@
-[gd_scene load_steps=6 format=3 uid="uid://bl8p4bid734wo"]
+[gd_scene load_steps=3 format=3 uid="uid://bl8p4bid734wo"]
 
 [ext_resource type="Script" uid="uid://rhc2whb7j6tt" path="res://flow_root.gd" id="1_lpoe1"]
-[ext_resource type="PackedScene" uid="uid://3bdcpg54ctoy" path="res://flow_nodes/grid.tscn" id="2_lsii6"]
-[ext_resource type="PackedScene" uid="uid://6m3tf1go1488" path="res://flow_nodes/spawn_meshes.tscn" id="3_w15im"]
-[ext_resource type="Script" uid="uid://4epcqfovpgk7" path="res://flow_node_base.gd" id="4_u7rqg"]
 [ext_resource type="PackedScene" uid="uid://dpoyi7gu03i7v" path="res://data_inspector.tscn" id="5_u7rqg"]
 
 [node name="FlowRoot" type="Control"]
@@ -44,29 +41,10 @@ size_flags_vertical = 3
 theme_override_colors/activity = Color(1, 0.501961, 0.25098, 1)
 connection_lines_thickness = 3.0
 
-[node name="Grid" parent="VBoxContainer/GraphEdit" instance=ExtResource("2_lsii6")]
-layout_mode = 0
-offset_left = 198.0
-offset_top = 201.0
-offset_right = 431.0
-offset_bottom = 355.0
-mouse_filter = 1
-position_offset = Vector2(198, 201)
-
-[node name="Grid2" parent="VBoxContainer/GraphEdit" instance=ExtResource("3_w15im")]
-layout_mode = 0
-offset_left = 553.0
-offset_top = 202.0
-offset_right = 798.0
-offset_bottom = 384.0
-mouse_filter = 1
-position_offset = Vector2(553, 202)
-script = ExtResource("4_u7rqg")
-
 [node name="DataInspector" parent="VBoxContainer" instance=ExtResource("5_u7rqg")]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 300)
 layout_mode = 2
-data_ex = 1
 
 [node name="PopupMenu" type="PopupMenu" parent="."]
 unique_name_in_owner = true

@@ -3,8 +3,11 @@ extends Control
 @onready var gedit : GraphEdit = %GraphEdit
 @onready var info : Label = %LabelInfo
 @onready var node_info : Label = %LabelNodeInfo
+@onready var data_inspector = %DataInspector
 
 var comment_padding = Vector2( 40, 40 )
+
+var packed_node = preload("res://flow_node_base.tscn")
 
 var local_drop_position : Vector2 = Vector2(0,0)
 var auto_connect_from_node : String
@@ -27,6 +30,7 @@ func getNewName():
 
 func _ready():
 	#gedit.theme.ac = Color( 1, 0.5, 0.5 );
+	gedit.connection_lines_thickness = 2.0
 	var pm = %PopupMenu as PopupMenu
 	for key in node_types.keys():
 		var label = node_types[ key ]
@@ -103,25 +107,25 @@ func localToGraphCoords( local_coords : Vector2 ):
 	return ( gedit.scroll_offset + local_coords ) / gedit.zoom
 
 func addNode( node_name ):
-	var uri = "res://flow_nodes/%s.tscn" % node_name
+	
+	var node = packed_node.instantiate() as GraphNode
+	var logic_uri = "res://flow_nodes/%s.gd" % node_name
 
 	# Check if file exists first
-	if not ResourceLoader.exists(uri):
-		push_error("Error: Scene file does not exist at ", uri)
+	if not ResourceLoader.exists(logic_uri):
+		push_error("Error: Logic file does not exist at ", logic_uri)
 		return null	
 	
-	var scene = load( uri ) as PackedScene
-	if not scene:
-		push_error("Error: Scene file failed to load ", uri)
+	var logic = load( logic_uri ) as Script
+	if not logic:
+		push_error("Error: Scene file failed to load ", logic_uri)
 		return null	
 		
-	var node = scene.instantiate() as GraphNode
-	if not node:
-		push_error("Error: Scene file should contain a GraphNode ", uri)
-		return null
+	node.set_script(logic)
 		
 	node.name = getNewName()
 	node.position_offset = localToGraphCoords(local_drop_position)
+	node.title = node.getTitle()
 	#node.size.x = 400
 	gedit.add_child(node)
 	
@@ -136,6 +140,7 @@ func addNode( node_name ):
 	for prev_node in getSelectedNodes():
 		prev_node.selected = false
 	node.selected = true
+	node.visible = true
 
 # ------------------------------------------------
 func _on_graph_edit_gui_input(event):
@@ -153,10 +158,26 @@ func _on_graph_edit_gui_input(event):
 		var key = evt_key.keycode
 		if key == KEY_X:
 			deleteSelectedNodes()
-		if key == KEY_A:
+		elif key == KEY_A:
 			openAddMenu()
-		if key == KEY_C:
+		elif key == KEY_C:
 			addComment()
+		elif key == KEY_D:
+			toggleDebug()
+		elif key == KEY_E:
+			toggleInspection()
+
+func toggleDebug():
+	var nodes = getSelectedNodes()
+	for n in nodes:
+		n.debug_enabled = !n.debug_enabled
+
+func toggleInspection():
+	var nodes = getSelectedNodes()
+	if nodes.size() != 1:
+		data_inspector.setNode( null )
+		return
+	data_inspector.setNode( nodes[0] )
 
 func addComment():
 	var nodes = getSelectedNodes()
