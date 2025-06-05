@@ -19,9 +19,13 @@ var counter : int = 0
 var min_id = 1000
 var max_id = min_id
 
+# During graph deps evaluation
+var nodes_by_name = {}
+
 var node_types = { 
 	"grid" : "Grid",
 	"spawn_meshes" : "Spawn Meshes",
+	"transform" : "Transform",
 }
 
 func getNewName():
@@ -69,7 +73,18 @@ func getRectOfNodes( nodes : Array[GraphNode] ):
 			r = r.expand( p0 )
 		r = r.expand( p1 )
 	return r
-	
+
+
+# Get all connections for a specific node
+func getNodeInputConnections(node_name: StringName) -> Array[Dictionary]:
+	var conns : Array[Dictionary] = []	    # Connections coming INTO this node
+	var all_connections = gedit.get_connection_list()
+	for connection in all_connections:
+		if connection.to_node == node_name:
+			conns.append( connection )
+	return conns
+
+
 # Get all connections for a specific node
 func getNodeConnections(node_name: StringName) -> Dictionary:
 	var node_connections = {
@@ -123,7 +138,7 @@ func addNode( node_name ):
 		
 	node.set_script(logic)
 		
-	node.name = getNewName()
+	node.name = getNewName() + ( "_%s" % node_name )
 	node.position_offset = localToGraphCoords(local_drop_position)
 	node.title = node.getTitle()
 	node.initFromScript()
@@ -167,6 +182,8 @@ func _on_graph_edit_gui_input(event):
 			toggleDebug()
 		elif key == KEY_E:
 			toggleInspection()
+		elif key == KEY_R:
+			evalGraph()
 
 func toggleDebug():
 	var nodes = getSelectedNodes()
@@ -203,7 +220,7 @@ func updateNodeInfo():
 	for c in gedit.get_children():
 		var node = c as GraphNode
 		if node and node.selected:
-			new_text = "PosOff:%s N:%s T:%s" % [node.position_offset, node.name, node.title ]
+			new_text = "%s PosOff:%s N:%s T:%s" % [node.name, node.position_offset, node.name, node.title ]
 			var conns = getNodeConnections( node.name )
 			new_text += " InConns:%d OutConn:%d" % [conns.inputs.size(), conns.outputs.size() ]
 			break
@@ -255,3 +272,62 @@ func _on_graph_edit_connection_from_empty(to_node: StringName, to_port: int, rel
 	auto_connect_to_port = to_port
 	local_drop_position = release_position
 	_on_graph_edit_popup_request( local_drop_position )
+
+func getDeps( node : FlowNodeBase ) -> Array[ FlowNodeBase ]:
+	node.deps = getNodeInputConnections( node.name )
+	var deps : Array[ FlowNodeBase ] = [ node ]
+	for dep in node.deps:
+		var dep_node = nodes_by_name.get( dep.from_node, null )
+		if not dep_node:
+			push_error( "Failed to find node %s in the graph" % dep.from_node )
+			continue
+		var req_deps = getDeps( dep_node )
+		deps.append_array( req_deps )
+	return deps
+	
+func getEvalOrder():
+	# Find targets, like spawn meshes
+	var finals : Array[ FlowNodeBase ]
+	for child in gedit.get_children():
+		var node = child as FlowNodeBase
+		if not node:
+			continue
+		if not node.isFinal():
+			continue
+		finals.append( node )
+	
+	# for each node, find requirements
+	# A -
+	#    -- C - D
+	# B -
+	# D -> C -> A -> B
+	var all_deps : Array[ FlowNodeBase ]
+	for node in finals:
+		var node_deps = getDeps( node )
+		all_deps.append_array( node_deps )
+	
+	# Evaluate in inverse order
+	# B, A, C, D
+	all_deps.reverse()	
+	return all_deps
+
+func evalGraph():
+	print( "evalGraph starts" )
+	nodes_by_name = {}
+	for c in gedit.get_children():
+		print( "  ", c.name )
+		nodes_by_name[ c.name ] = c
+	
+	print( "getEvalOrder..." )
+	var nodes_to_eval = getEvalOrder( )
+	for node in nodes_to_eval:
+		print( "  ", node )
+		
+		for req in node.deps:
+			print("  - req : ", req )
+			var req_node = nodes_by_name.get( req.from_node )
+			var data = req_node.get_output( req.from_port )
+			node.set_input( req.to_port, data )
+			#node.set_input( req.)
+		
+		node.execute()

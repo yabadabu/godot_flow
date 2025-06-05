@@ -32,15 +32,37 @@ var outputs = []
 
 var connectors_row_prefab = preload( "res://connectors_row.tscn" )
 
+var deps : Array[ Dictionary ]
+var frame_id : int = 0
+
 func _ready():
 	refreshInspectMark()
 	refreshDebugMark()
-	pass
+	
+func isFinal() -> bool:
+	return false
 
 func set_output( idx : int, data : Array ):
-	if idx + 1 < outputs.size():
+	if idx >= outputs.size():
 		outputs.resize( idx + 1 )
 	outputs[ idx ] = data
+
+func set_input( idx : int, data : Array ):
+	if idx >= inputs.size():
+		inputs.resize( idx + 1 )
+	inputs[ idx ] = data
+
+func get_input( idx : int ):
+	if idx >= inputs.size():
+		push_error( "Input.%d does not exists in node %s" % [ idx, name ])
+		return []
+	return inputs[ idx ]
+
+func get_output( idx : int ):
+	if idx >= outputs.size():
+		push_error( "Output.%d does not exists in node %s" % [ idx, name ])
+		return []
+	return outputs[ idx ]
 
 func refreshDebugMark():
 	if control_debug:
