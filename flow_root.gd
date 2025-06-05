@@ -126,6 +126,7 @@ func addNode( node_name ):
 	node.name = getNewName()
 	node.position_offset = localToGraphCoords(local_drop_position)
 	node.title = node.getTitle()
+	node.initFromScript()
 	#node.size.x = 400
 	gedit.add_child(node)
 	

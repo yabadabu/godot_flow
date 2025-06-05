@@ -5,6 +5,12 @@ extends FlowNodeBase
 @export var z : int = 1
 @export var step : Vector3 = Vector3( 1.0, 1.0, 1.0 )
 
+func getMeta() -> Dictionary :
+	return {
+		"ins" : [],
+		"outs" : [{ "label" : "Out" }],
+	}
+
 func getTitle() -> String:
 	return "Grid"
 

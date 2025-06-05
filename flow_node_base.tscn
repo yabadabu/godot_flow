@@ -3,8 +3,7 @@
 [ext_resource type="Script" uid="uid://4epcqfovpgk7" path="res://flow_node_base.gd" id="1_o2v65"]
 
 [node name="FlowNodeBase" type="GraphNode"]
-visible = false
-offset_right = 148.0
+offset_right = 208.0
 offset_bottom = 158.0
 title = "Title"
 slot/0/left_enabled = false
@@ -16,15 +15,6 @@ slot/0/right_type = 0
 slot/0/right_color = Color(1, 1, 1, 1)
 slot/0/right_icon = null
 slot/0/draw_stylebox = true
-slot/1/left_enabled = true
-slot/1/left_type = 0
-slot/1/left_color = Color(1, 1, 1, 1)
-slot/1/left_icon = null
-slot/1/right_enabled = true
-slot/1/right_type = 0
-slot/1/right_color = Color(1, 1, 1, 1)
-slot/1/right_icon = null
-slot/1/draw_stylebox = true
 script = ExtResource("1_o2v65")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
@@ -58,20 +48,3 @@ offset_right = 51.0
 offset_bottom = -68.0
 size_flags_horizontal = 0
 color = Color(0, 1, 1, 1)
-
-[node name="HBoxContainer2" type="HBoxContainer" parent="."]
-layout_mode = 2
-
-[node name="LabelIn" type="Label" parent="HBoxContainer2"]
-layout_mode = 2
-text = "In"
-
-[node name="Spacer" type="Control" parent="HBoxContainer2"]
-custom_minimum_size = Vector2(32, 0)
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="LabelOut" type="Label" parent="HBoxContainer2"]
-layout_mode = 2
-text = "Out"
-horizontal_alignment = 2

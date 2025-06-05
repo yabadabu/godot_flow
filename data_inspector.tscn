@@ -30,7 +30,7 @@ text = "Refresh"
 [node name="LabelTitle" type="Label" parent="VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-text = "Node Title"
+text = "...Node Title..."
 
 [node name="GridContainer" type="GridContainer" parent="VBoxContainer"]
 unique_name_in_owner = true
