@@ -4,7 +4,7 @@
 offset_right = 130.0
 offset_bottom = 78.0
 title = "Grid Points"
-slot/0/left_enabled = true
+slot/0/left_enabled = false
 slot/0/left_type = 0
 slot/0/left_color = Color(1, 1, 1, 1)
 slot/0/left_icon = null
@@ -16,11 +16,6 @@ slot/0/draw_stylebox = true
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 2
-
-[node name="LabelLeft" type="Label" parent="HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "In"
 
 [node name="Control" type="Control" parent="HBoxContainer"]
 custom_minimum_size = Vector2(40, 0)

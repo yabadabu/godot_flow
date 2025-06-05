@@ -217,19 +217,10 @@ func _on_popup_menu_id_pressed(id: int) -> void:
 			gedit.set_connection_activity( node.name, 0, target.name, 0, 1.0)
 
 func _on_graph_edit_connection_request(from_node: StringName, from_port: int, to_node: StringName, to_port: int) -> void:
-	# This is called when the user tries to connect two ports
-	# You can add validation logic here if needed
-	# Create the connection
 	gedit.connect_node(from_node, from_port, to_node, to_port)
-	# Optional: Store connection data for your own logic
-	print("Connected: ", from_node, ":", from_port, " -> ", to_node, ":", to_port)
 	
 func _on_graph_edit_disconnection_request(from_node: StringName, from_port: int, to_node: StringName, to_port: int) -> void:
-	# Remove the connection
 	gedit.disconnect_node(from_node, from_port, to_node, to_port)
-	
-	# Optional: Update your own data structures
-	print("Disconnected: ", from_node, ":", from_port, " -> ", to_node, ":", to_port)
 
 func _on_graph_edit_connection_to_empty(from_node: StringName, from_port: int, release_position: Vector2) -> void:
 	auto_connect_from_node = from_node
