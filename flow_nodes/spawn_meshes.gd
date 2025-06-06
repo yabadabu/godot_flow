@@ -2,17 +2,15 @@ extends FlowNodeBase
 
 @export var value : float = 2.0
 
-func getMeta() -> Dictionary :
+static func getMeta() -> Dictionary :
 	return {
+		"title" : "Spawn Meshes",
 		"ins" : [{ "label" : "In" }],
 		"outs" : [{ "label" : "Out" }, { "label" : "Removed" }],
 	}
 
 func isFinal() -> bool:
 	return true
-
-func getTitle() -> String:
-	return "Spawn Meshes"
 
 func execute( ):
 	var input = get_input(0)

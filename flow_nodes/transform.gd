@@ -2,14 +2,12 @@ extends FlowNodeBase
 
 @export var trans : Transform3D = Transform3D(Basis.IDENTITY, Vector3(0,0,1))
 
-func getMeta() -> Dictionary :
+static func getMeta() -> Dictionary :
 	return {
+		"title" : "Transform",
 		"ins" : [{"label": "In" }], 
 		"outs" : [{ "label" : "Out" }],
 	}
-
-func getTitle() -> String:
-	return "Transform"
 
 func execute( ):
 	var output = []

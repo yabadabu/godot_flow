@@ -20,24 +20,36 @@ var min_id = 1000
 var max_id = min_id
 
 # During graph deps evaluation
-var nodes_by_name = {}
+var gedit_nodes_by_name = {}
 
-var node_types = { 
-	"grid" : "Grid",
-	"spawn_meshes" : "Spawn Meshes",
-	"transform" : "Transform",
-	"select" : "Select",
-}
+var node_types = { }
 
-func getNewName():
+func getNewName( suffix : String ):
 	counter+= 1
-	return "id_%04d" % counter
+	return "id_%04d_%s" % [ counter, suffix ]
+
+func scanAvailableNodes():
+	var directory_path := "res://flow_nodes"
+	var files := ResourceLoader.list_directory(directory_path) 
+	for file in files:
+		var full_res_path = directory_path + "/" + file
+		var loaded_class = load( full_res_path ) as Script
+		if not loaded_class:
+			push_error("Failed to load class %s" % full_res_path )
+			continue
+		#var meta = loaded_class.getMeta()
+		#var title = meta.title
+		var stem = file.get_basename()
+		node_types[ stem ] = loaded_class
 
 func _ready():
+	
+	scanAvailableNodes()
+	
 	#gedit.theme.ac = Color( 1, 0.5, 0.5 );
 	var pm = %PopupMenu as PopupMenu
 	for key in node_types.keys():
-		var label = node_types[ key ]
+		var label = node_types[ key ].getMeta().title
 		pm.add_item(label, max_id, KEY_NONE )
 		max_id += 1
 	pass
@@ -74,8 +86,7 @@ func getRectOfNodes( nodes : Array[GraphNode] ):
 		r = r.expand( p1 )
 	return r
 
-
-# Get all connections for a specific node
+# Get all connections aarriving to a specific node
 func getNodeInputConnections(node_name: StringName) -> Array[Dictionary]:
 	var conns : Array[Dictionary] = []	    # Connections coming INTO this node
 	var all_connections = gedit.get_connection_list()
@@ -84,39 +95,6 @@ func getNodeInputConnections(node_name: StringName) -> Array[Dictionary]:
 			conns.append( connection )
 	return conns
 
-
-# Get all connections for a specific node
-func getNodeConnections(node_name: StringName) -> Dictionary:
-	var node_connections = {
-		"inputs": [],    # Connections coming INTO this node
-		"outputs": []    # Connections going OUT of this node
-	}
-	
-	# Get all connections in the graph
-	var all_connections = gedit.get_connection_list()
-	
-	# Filter connections for this specific node
-	for connection in all_connections:
-		# connection is a Dictionary with: from_node, from_port, to_node, to_port
-		
-		if connection.to_node == node_name:
-			# This node is receiving input
-			node_connections.inputs.append({
-				"from_node": connection.from_node,
-				"from_port": connection.from_port,
-				"to_port": connection.to_port
-			})
-		
-		if connection.from_node == node_name:
-			# This node is sending output
-			node_connections.outputs.append({
-				"to_node": connection.to_node,
-				"to_port": connection.to_port,
-				"from_port": connection.from_port
-			})
-	
-	return node_connections
-
 func localToGraphCoords( local_coords : Vector2 ):
 	#var view_zero_in_scroll_offset = gedit.scroll_offset / gedit.zoom
 	return ( gedit.scroll_offset + local_coords ) / gedit.zoom
@@ -124,25 +102,17 @@ func localToGraphCoords( local_coords : Vector2 ):
 func addNode( node_name ):
 	
 	var node = packed_node.instantiate() as GraphNode
-	var logic_uri = "res://flow_nodes/%s.gd" % node_name
-
-	# Check if file exists first
-	if not ResourceLoader.exists(logic_uri):
-		push_error("Error: Logic file does not exist at ", logic_uri)
-		return null	
-	
-	var logic = load( logic_uri ) as Script
+	var logic = node_types.get( node_name, null )
 	if not logic:
-		push_error("Error: Scene file failed to load ", logic_uri)
+		push_error("node_type %s is not registered", node_name)
 		return null	
 		
 	node.set_script(logic)
 		
-	node.name = getNewName() + ( "_%s" % node_name )
+	node.name = getNewName(node_name)
 	node.position_offset = localToGraphCoords(local_drop_position)
-	node.title = node.getTitle()
+	node.title = node.getMeta().title
 	node.initFromScript()
-	#node.size.x = 400
 	gedit.add_child(node)
 	
 	if auto_connect_from_node:
@@ -204,7 +174,7 @@ func addComment():
 	rect.size += comment_padding * 2
 	
 	var frame := GraphFrame.new()
-	frame.name = getNewName()
+	frame.name = getNewName("comment")
 	frame.title = "My Comments..."
 	frame.position_offset = rect.position
 	frame.size = rect.size
@@ -221,8 +191,6 @@ func updateNodeInfo():
 		var node = c as GraphNode
 		if node and node.selected:
 			new_text = "%s PosOff:%s N:%s T:%s" % [node.name, node.position_offset, node.name, node.title ]
-			var conns = getNodeConnections( node.name )
-			new_text += " InConns:%d OutConn:%d" % [conns.inputs.size(), conns.outputs.size() ]
 			break
 	node_info.text = new_text
 	
@@ -277,7 +245,7 @@ func getDeps( node : FlowNodeBase ) -> Array[ FlowNodeBase ]:
 	node.deps = getNodeInputConnections( node.name )
 	var deps : Array[ FlowNodeBase ] = [ node ]
 	for dep in node.deps:
-		var dep_node = nodes_by_name.get( dep.from_node, null )
+		var dep_node = gedit_nodes_by_name.get( dep.from_node, null )
 		if not dep_node:
 			push_error( "Failed to find node %s in the graph" % dep.from_node )
 			continue
@@ -313,10 +281,10 @@ func getEvalOrder():
 
 func evalGraph():
 	print( "evalGraph starts" )
-	nodes_by_name = {}
+	gedit_nodes_by_name = {}
 	for c in gedit.get_children():
 		print( "  ", c.name )
-		nodes_by_name[ c.name ] = c
+		gedit_nodes_by_name[ c.name ] = c
 	
 	print( "getEvalOrder..." )
 	var nodes_to_eval = getEvalOrder( )
@@ -324,10 +292,9 @@ func evalGraph():
 		print( "  ", node )
 		
 		for req in node.deps:
-			print("  - req : ", req )
-			var req_node = nodes_by_name.get( req.from_node )
+			var req_node = gedit_nodes_by_name.get( req.from_node )
 			var data = req_node.get_output( req.from_port )
 			node.set_input( req.to_port, data )
-			#node.set_input( req.)
+			
 		node.preExecute()
 		node.execute()
