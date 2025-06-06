@@ -17,7 +17,7 @@ func execute( ):
 	# print( "From %d, took %1.2f%% -> %d" % [ in_size, ratio, out_size ])
 	
 	var pool := range(in_size)
-	pool.shuffle()
+	shuffleArray( pool )
 	var subset := pool.slice(0, out_size)
 	subset.sort()
 	

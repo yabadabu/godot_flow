@@ -76,6 +76,13 @@ func refreshInspectMark():
 	if control_inspect:
 		control_inspect.visible = inspect_enabled
 
+func shuffleArray(arr: Array) -> void:
+	for i in range(arr.size() - 1, 0, -1):
+		var j = rng.randi_range(0, i)
+		var temp = arr[i]
+		arr[i] = arr[j]
+		arr[j] = temp
+
 func initFromScript():
 	var meta = call("getMeta")
 	

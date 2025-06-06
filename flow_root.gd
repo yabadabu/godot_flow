@@ -107,7 +107,7 @@ func addNode( node_name ):
 		push_error("node_type %s is not registered", node_name)
 		return null	
 		
-	var meta = node.getMeta()
+	var meta = script.getMeta()
 		
 	node.set_script(script)
 		
