@@ -113,6 +113,7 @@ func addNode( node_name ):
 	node.position_offset = localToGraphCoords(local_drop_position)
 	node.title = node.getMeta().title
 	node.initFromScript()
+	node.size = Vector2(32,32)
 	gedit.add_child(node)
 	
 	if auto_connect_from_node:
