@@ -1,6 +1,7 @@
 class_name FlowNodeBase
 extends GraphNode
 
+# Debug section
 enum eMode {
 	EXTENDS,
 	ABSOLUTE,
@@ -21,17 +22,17 @@ enum eMode {
 @onready var control_inspect = %InspectMark
 @onready var control_debug = %DebugMark
 
-	#func _init(new_lat: float, new_lon:float):
-		#lat = new_lat
-		#lon = new_lon
-	#func _to_string():
-		#return "(%f,%f)" % [lat, lon]
-
+# Common attributes
 var inputs = []
 var outputs = []
 
+@export var rng_seed : int = 8212421413;
+var rng : RandomNumberGenerator = RandomNumberGenerator.new()
+
+# Helper to create the UI
 var connectors_row_prefab = preload( "res://connectors_row.tscn" )
 
+# Filled during runtime
 var deps : Array[ Dictionary ]
 var frame_id : int = 0
 
@@ -63,6 +64,9 @@ func get_output( idx : int ):
 		push_error( "Output.%d does not exists in node %s" % [ idx, name ])
 		return []
 	return outputs[ idx ]
+
+func preExecute():
+	rng.seed = rng_seed
 
 func refreshDebugMark():
 	if control_debug:

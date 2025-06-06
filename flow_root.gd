@@ -26,6 +26,7 @@ var node_types = {
 	"grid" : "Grid",
 	"spawn_meshes" : "Spawn Meshes",
 	"transform" : "Transform",
+	"select" : "Select",
 }
 
 func getNewName():
@@ -34,7 +35,6 @@ func getNewName():
 
 func _ready():
 	#gedit.theme.ac = Color( 1, 0.5, 0.5 );
-	gedit.connection_lines_thickness = 2.0
 	var pm = %PopupMenu as PopupMenu
 	for key in node_types.keys():
 		var label = node_types[ key ]
@@ -329,5 +329,5 @@ func evalGraph():
 			var data = req_node.get_output( req.from_port )
 			node.set_input( req.to_port, data )
 			#node.set_input( req.)
-		
+		node.preExecute()
 		node.execute()

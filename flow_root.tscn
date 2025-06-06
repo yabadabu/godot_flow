@@ -39,7 +39,10 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_colors/activity = Color(1, 0.501961, 0.25098, 1)
-connection_lines_thickness = 3.0
+right_disconnects = true
+connection_lines_thickness = 2.0
+show_zoom_buttons = false
+show_grid_buttons = false
 
 [node name="DataInspector" parent="VBoxContainer" instance=ExtResource("5_u7rqg")]
 unique_name_in_owner = true
