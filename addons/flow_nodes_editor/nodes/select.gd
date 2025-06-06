@@ -1,7 +1,7 @@
 @tool
 extends FlowNodeBase
 
-@export var ratio : float = 0.2
+@export_range(0.0, 1.0) var ratio : float = 0.2
 
 func getMeta() -> Dictionary :
 	return {

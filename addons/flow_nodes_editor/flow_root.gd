@@ -4,7 +4,7 @@ extends Control
 @onready var gedit : GraphEdit = %GraphEdit
 @onready var info : Label = %LabelInfo
 @onready var node_info : Label = %LabelNodeInfo
-@onready var data_inspector = %DataInspector
+@onready var data_inspector : Control
 
 var comment_padding = Vector2( 40, 40 )
 
@@ -171,6 +171,8 @@ func toggleDebug():
 		n.debug_enabled = !n.debug_enabled
 
 func toggleInspection():
+	if not data_inspector:
+		return
 	var nodes = getSelectedNodes()
 	if nodes.size() != 1:
 		data_inspector.setNode( null )
@@ -204,8 +206,9 @@ func updateNodeInfo():
 			break
 	node_info.text = new_text
 	
-func _on_graph_edit_node_selected(_node):
+func _on_graph_edit_node_selected(node):
 	updateNodeInfo()
+	EditorInterface.inspect_object(node)
 
 func _on_graph_edit_popup_request(at_position):
 	local_drop_position = at_position

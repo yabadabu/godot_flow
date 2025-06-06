@@ -1,7 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://bl8p4bid734wo"]
+[gd_scene load_steps=2 format=3 uid="uid://bl8p4bid734wo"]
 
 [ext_resource type="Script" uid="uid://rhc2whb7j6tt" path="res://addons/flow_nodes_editor/flow_root.gd" id="1_lpoe1"]
-[ext_resource type="PackedScene" uid="uid://dpoyi7gu03i7v" path="res://addons/flow_nodes_editor/data_inspector.tscn" id="5_u7rqg"]
 
 [node name="FlowRoot" type="Control"]
 layout_mode = 3
@@ -39,33 +38,27 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_colors/activity = Color(1, 0.501961, 0.25098, 1)
-scroll_offset = Vector2(0, -304)
 right_disconnects = true
 connection_lines_thickness = 2.0
 show_zoom_buttons = false
 show_grid_buttons = false
-
-[node name="DataInspector" parent="VBoxContainer" instance=ExtResource("5_u7rqg")]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 300)
-layout_mode = 2
 
 [node name="PopupMenu" type="PopupMenu" parent="."]
 unique_name_in_owner = true
 position = Vector2i(20, 150)
 size = Vector2i(137, 147)
 item_count = 6
-item_0/text = "Delete"
-item_0/id = 100
-item_1/id = 0
+item_0/text = "Clear"
+item_0/id = 0
+item_1/id = -1
 item_1/separator = true
-item_2/text = "grid"
+item_2/text = "Grid"
 item_2/id = 1000
-item_3/text = "select"
+item_3/text = "Select"
 item_3/id = 1001
-item_4/text = "spawn_meshes"
+item_4/text = "Spawn Meshes"
 item_4/id = 1002
-item_5/text = "transform"
+item_5/text = "Transform"
 item_5/id = 1003
 
 [connection signal="connection_from_empty" from="VBoxContainer/GraphEdit" to="." method="_on_graph_edit_connection_from_empty"]
