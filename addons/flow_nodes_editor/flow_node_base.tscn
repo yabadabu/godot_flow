@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://bnbhxhwqoqbj1"]
 
-[ext_resource type="Script" uid="uid://4epcqfovpgk7" path="res://flow_node_base.gd" id="1_o2v65"]
+[ext_resource type="Script" uid="uid://4epcqfovpgk7" path="res://addons/flow_nodes_editor/flow_node_base.gd" id="1_o2v65"]
 
 [node name="FlowNodeBase" type="GraphNode"]
 offset_right = 208.0
@@ -25,12 +25,12 @@ layout_mode = 2
 
 [node name="InspectMark" type="ColorRect" parent="HBoxContainer/Control"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(32, 32)
+custom_minimum_size = Vector2(16, 16)
 layout_mode = 2
-offset_left = -50.0
-offset_top = -101.0
-offset_right = -18.0
-offset_bottom = -69.0
+offset_left = -26.0
+offset_top = -52.0
+offset_right = -10.0
+offset_bottom = -36.0
 size_flags_horizontal = 0
 color = Color(1, 1, 0, 1)
 
@@ -40,11 +40,11 @@ size_flags_horizontal = 10
 
 [node name="DebugMark" type="ColorRect" parent="HBoxContainer/Control2"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(32, 32)
+custom_minimum_size = Vector2(16, 16)
 layout_mode = 2
-offset_left = 19.0
-offset_top = -100.0
-offset_right = 51.0
-offset_bottom = -68.0
+offset_left = 10.0
+offset_top = -51.0
+offset_right = 26.0
+offset_bottom = -35.0
 size_flags_horizontal = 0
 color = Color(0, 1, 1, 1)

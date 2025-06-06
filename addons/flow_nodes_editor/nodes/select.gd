@@ -1,8 +1,9 @@
+@tool
 extends FlowNodeBase
 
 @export var ratio : float = 0.2
 
-static func getMeta() -> Dictionary :
+func getMeta() -> Dictionary :
 	return {
 		"title" : "Select",
 		"ins" : [{"label": "In" }], 

@@ -1,3 +1,4 @@
+@tool
 extends Control
 
 @onready var gedit : GraphEdit = %GraphEdit
@@ -7,7 +8,7 @@ extends Control
 
 var comment_padding = Vector2( 40, 40 )
 
-var packed_node = preload("res://flow_node_base.tscn")
+var packed_node = preload("res://addons/flow_nodes_editor/flow_node_base.tscn")
 
 var local_drop_position : Vector2 = Vector2(0,0)
 var auto_connect_from_node : String
@@ -29,18 +30,20 @@ func getNewName( suffix : String ):
 	return "id_%04d_%s" % [ counter, suffix ]
 
 func scanAvailableNodes():
-	var directory_path := "res://flow_nodes"
+	var directory_path := "res://addons/flow_nodes_editor/nodes"
 	var files := ResourceLoader.list_directory(directory_path) 
 	for file in files:
 		var full_res_path = directory_path + "/" + file
-		var loaded_class = load( full_res_path ) as Script
+		var loaded_class : Script = load( full_res_path ) as Script
 		if not loaded_class:
 			push_error("Failed to load class %s" % full_res_path )
 			continue
-		#var meta = loaded_class.getMeta()
-		#var title = meta.title
+		var instance = loaded_class.new() as FlowNodeBase
+		var meta = instance.getMeta()
+		meta.factory = loaded_class
+		#print( "Meta is %s " % str(meta) )
 		var stem = file.get_basename()
-		node_types[ stem ] = loaded_class
+		node_types[ stem ] = meta
 
 func _ready():
 	
@@ -48,11 +51,15 @@ func _ready():
 	
 	#gedit.theme.ac = Color( 1, 0.5, 0.5 );
 	var pm = %PopupMenu as PopupMenu
+	pm.clear();
+	pm.add_item( "Clear", 0, KEY_NONE )
+	pm.add_separator( "", -1 )
+	
 	for key in node_types.keys():
-		var label = node_types[ key ].getMeta().title
+		var label = node_types[ key ].title
+		print( "Adding menu", label)
 		pm.add_item(label, max_id, KEY_NONE )
 		max_id += 1
-	pass
 	
 # ------------------------------------------------
 func getSelectedNodes() -> Array[GraphNode]:
@@ -102,14 +109,13 @@ func localToGraphCoords( local_coords : Vector2 ):
 func addNode( node_name ):
 	
 	var node = packed_node.instantiate() as GraphNode
-	var script = node_types.get( node_name, null )
-	if not script:
+	var meta = node_types.get( node_name, null )
+	if not meta:
 		push_error("node_type %s is not registered", node_name)
 		return null	
+	print( "Meta:", str(meta) )
 		
-	var meta = script.getMeta()
-		
-	node.set_script(script)
+	node.set_script(meta.factory)
 		
 	node.name = getNewName(node_name)
 	node.position_offset = localToGraphCoords(local_drop_position)
@@ -204,10 +210,10 @@ func _on_graph_edit_node_selected(_node):
 func _on_graph_edit_popup_request(at_position):
 	local_drop_position = at_position
 	var p : PopupMenu = %PopupMenu
+	
 	p.size = Vector2( 400,200 )
-	p.popup_centered( Vector2( 400, 200 ))
+	#p.popup_centered( Vector2( 400, 200 ))
 	p.position = get_screen_position() + at_position
-	p.show()
 	p.popup()
 	
 func openAddMenu():

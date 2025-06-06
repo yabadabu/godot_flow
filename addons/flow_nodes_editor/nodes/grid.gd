@@ -1,3 +1,4 @@
+@tool
 extends FlowNodeBase
 
 @export var x : int = 4
@@ -5,16 +6,13 @@ extends FlowNodeBase
 @export var z : int = 1
 @export var step : Vector3 = Vector3( 1.0, 1.0, 1.0 )
 
-static func getMeta() -> Dictionary :
+func getMeta() -> Dictionary :
 	return {
 		"title" : "Grid",
 		"ins" : [],
 		"outs" : [{ "label" : "Out" }],
 		"tooltip" :"Generates a set of points in a grid spatial distribution,\nwhere the separation is step"
 	}
-
-func getTitle() -> String:
-	return "Grid"
 
 func execute( ):
 	var output = []

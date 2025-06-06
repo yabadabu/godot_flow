@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://dpoyi7gu03i7v"]
 
-[ext_resource type="Script" uid="uid://41lbfvspokrt" path="res://data_inspector.gd" id="1_h15u6"]
+[ext_resource type="Script" uid="uid://41lbfvspokrt" path="res://addons/flow_nodes_editor/data_inspector.gd" id="1_h15u6"]
 
 [node name="DataInspector" type="Control"]
 layout_mode = 3

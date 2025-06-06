@@ -1,3 +1,4 @@
+@tool
 class_name FlowNodeBase
 extends GraphNode
 
@@ -30,7 +31,7 @@ var outputs = []
 var rng : RandomNumberGenerator = RandomNumberGenerator.new()
 
 # Helper to create the UI
-var connectors_row_prefab = preload( "res://connectors_row.tscn" )
+var connectors_row_prefab = preload( "res://addons/flow_nodes_editor/connectors_row.tscn" )
 
 # Filled during runtime
 var deps : Array[ Dictionary ]

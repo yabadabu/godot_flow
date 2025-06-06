@@ -1,8 +1,9 @@
+@tool
 extends FlowNodeBase
 
 @export var value : float = 2.0
 
-static func getMeta() -> Dictionary :
+func getMeta() -> Dictionary :
 	return {
 		"title" : "Spawn Meshes",
 		"ins" : [{ "label" : "In" }],
