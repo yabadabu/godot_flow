@@ -102,18 +102,21 @@ func localToGraphCoords( local_coords : Vector2 ):
 func addNode( node_name ):
 	
 	var node = packed_node.instantiate() as GraphNode
-	var logic = node_types.get( node_name, null )
-	if not logic:
+	var script = node_types.get( node_name, null )
+	if not script:
 		push_error("node_type %s is not registered", node_name)
 		return null	
 		
-	node.set_script(logic)
+	var meta = node.getMeta()
+		
+	node.set_script(script)
 		
 	node.name = getNewName(node_name)
 	node.position_offset = localToGraphCoords(local_drop_position)
-	node.title = node.getMeta().title
+	node.title = meta.title
 	node.initFromScript()
 	node.size = Vector2(32,32)
+	node.tooltip_text = meta.get( "tooltip", "" )
 	gedit.add_child(node)
 	
 	if auto_connect_from_node:

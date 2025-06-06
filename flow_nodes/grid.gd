@@ -10,6 +10,7 @@ static func getMeta() -> Dictionary :
 		"title" : "Grid",
 		"ins" : [],
 		"outs" : [{ "label" : "Out" }],
+		"tooltip" :"Generates a set of points in a grid spatial distribution,\nwhere the separation is step"
 	}
 
 func getTitle() -> String:
