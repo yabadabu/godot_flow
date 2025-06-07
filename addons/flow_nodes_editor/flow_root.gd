@@ -5,6 +5,7 @@ extends Control
 @onready var info : Label = %LabelInfo
 @onready var node_info : Label = %LabelNodeInfo
 @onready var data_inspector : Control
+var inspector: EditorInspector
 
 var comment_padding = Vector2( 40, 40 )
 
@@ -60,6 +61,22 @@ func _ready():
 		print( "Adding menu", label)
 		pm.add_item(label, max_id, KEY_NONE )
 		max_id += 1
+		
+	inspector = EditorInspector.new()
+	inspector.custom_minimum_size = Vector2( 200, 600 )
+	var splitter = $VBoxContainer/VSplitContainer
+	splitter.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	splitter.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	splitter.add_child( inspector )
+	splitter.split_offset = 400
+	
+	gedit.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	gedit.size_flags_vertical = Control.SIZE_EXPAND_FILL	
+	inspector.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	inspector.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	gedit.custom_minimum_size.y = 200
+	inspector.custom_minimum_size.y = 150
+	
 	
 # ------------------------------------------------
 func getSelectedNodes() -> Array[GraphNode]:
@@ -208,7 +225,16 @@ func updateNodeInfo():
 	
 func _on_graph_edit_node_selected(node):
 	updateNodeInfo()
-	EditorInterface.inspect_object(node)
+	
+	#var current_main_screen = EditorInterface.get_editor_main_screen()
+	#print( current_main_screen )
+	if not inspector:
+		push_error("inspector is null")
+		return
+	inspector.edit( node )
+	#EditorInterface.inspect_object(node)
+	#EditorInterface.set_main_screen_editor("3D")
+	
 
 func _on_graph_edit_popup_request(at_position):
 	local_drop_position = at_position

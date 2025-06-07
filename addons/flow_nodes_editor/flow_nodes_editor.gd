@@ -4,7 +4,6 @@ extends EditorPlugin
 var graph_dock: Control
 var data_inspector_dock: Control
 
-
 func spawnDock( res_template : String, title : String, bottom : bool ) -> Control:
 	var packed : PackedScene = load( res_template )
 	var new_control = packed.instantiate() as Control

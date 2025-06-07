@@ -25,19 +25,28 @@ size_flags_vertical = 3
 
 [node name="LabelInfo" type="Label" parent="VBoxContainer"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 text = "Info"
 
 [node name="LabelNodeInfo" type="Label" parent="VBoxContainer"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 text = "NodeInfo"
 
-[node name="GraphEdit" type="GraphEdit" parent="VBoxContainer"]
+[node name="VSplitContainer" type="VSplitContainer" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+size_flags_vertical = 3
+split_offset = 200
+
+[node name="GraphEdit" type="GraphEdit" parent="VBoxContainer/VSplitContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_colors/activity = Color(1, 0.501961, 0.25098, 1)
+scroll_offset = Vector2(-40, -32)
 right_disconnects = true
 connection_lines_thickness = 2.0
 show_zoom_buttons = false
@@ -61,11 +70,11 @@ item_4/id = 1002
 item_5/text = "Transform"
 item_5/id = 1003
 
-[connection signal="connection_from_empty" from="VBoxContainer/GraphEdit" to="." method="_on_graph_edit_connection_from_empty"]
-[connection signal="connection_request" from="VBoxContainer/GraphEdit" to="." method="_on_graph_edit_connection_request"]
-[connection signal="connection_to_empty" from="VBoxContainer/GraphEdit" to="." method="_on_graph_edit_connection_to_empty"]
-[connection signal="disconnection_request" from="VBoxContainer/GraphEdit" to="." method="_on_graph_edit_disconnection_request"]
-[connection signal="gui_input" from="VBoxContainer/GraphEdit" to="." method="_on_graph_edit_gui_input"]
-[connection signal="node_selected" from="VBoxContainer/GraphEdit" to="." method="_on_graph_edit_node_selected"]
-[connection signal="popup_request" from="VBoxContainer/GraphEdit" to="." method="_on_graph_edit_popup_request"]
+[connection signal="connection_from_empty" from="VBoxContainer/VSplitContainer/GraphEdit" to="." method="_on_graph_edit_connection_from_empty"]
+[connection signal="connection_request" from="VBoxContainer/VSplitContainer/GraphEdit" to="." method="_on_graph_edit_connection_request"]
+[connection signal="connection_to_empty" from="VBoxContainer/VSplitContainer/GraphEdit" to="." method="_on_graph_edit_connection_to_empty"]
+[connection signal="disconnection_request" from="VBoxContainer/VSplitContainer/GraphEdit" to="." method="_on_graph_edit_disconnection_request"]
+[connection signal="gui_input" from="VBoxContainer/VSplitContainer/GraphEdit" to="." method="_on_graph_edit_gui_input"]
+[connection signal="node_selected" from="VBoxContainer/VSplitContainer/GraphEdit" to="." method="_on_graph_edit_node_selected"]
+[connection signal="popup_request" from="VBoxContainer/VSplitContainer/GraphEdit" to="." method="_on_graph_edit_popup_request"]
 [connection signal="id_pressed" from="PopupMenu" to="." method="_on_popup_menu_id_pressed"]
