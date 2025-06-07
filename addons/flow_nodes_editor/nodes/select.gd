@@ -1,11 +1,10 @@
 @tool
 extends FlowNodeBase
 
-@export_range(0.0, 1.0) var ratio : float = 0.2
-
 func getMeta() -> Dictionary :
 	return {
 		"title" : "Select",
+		"settings" : SelectNodeSettings,
 		"ins" : [{"label": "In" }], 
 		"outs" : [{ "label" : "Out" }],
 	}
@@ -14,7 +13,7 @@ func execute( ):
 	var in_data = get_input(0)
 	var out_data = []
 	var in_size = in_data.size()
-	var out_size = round(in_size * ratio)
+	var out_size = round(in_size * settings.ratio)
 	# print( "From %d, took %1.2f%% -> %d" % [ in_size, ratio, out_size ])
 	
 	var pool := range(in_size)

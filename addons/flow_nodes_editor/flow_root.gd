@@ -34,6 +34,9 @@ func scanAvailableNodes():
 	var directory_path := "res://addons/flow_nodes_editor/nodes"
 	var files := ResourceLoader.list_directory(directory_path) 
 	for file in files:
+		var stem = file.get_basename()
+		if stem.ends_with("_settings"):
+			continue
 		var full_res_path = directory_path + "/" + file
 		var loaded_class : Script = load( full_res_path ) as Script
 		if not loaded_class:
@@ -43,7 +46,6 @@ func scanAvailableNodes():
 		var meta = instance.getMeta()
 		meta.factory = loaded_class
 		#print( "Meta is %s " % str(meta) )
-		var stem = file.get_basename()
 		node_types[ stem ] = meta
 
 func _ready():
@@ -137,6 +139,10 @@ func addNode( node_name ):
 	node.name = getNewName(node_name)
 	node.position_offset = localToGraphCoords(local_drop_position)
 	node.title = meta.title
+	if meta.has( "settings" ):
+		node.settings = meta.settings.new()
+	else:
+		node.settings = NodeBaseSettings.new()
 	node.initFromScript()
 	node.size = Vector2(32,32)
 	node.tooltip_text = meta.get( "tooltip", "" )
@@ -231,7 +237,7 @@ func _on_graph_edit_node_selected(node):
 	if not inspector:
 		push_error("inspector is null")
 		return
-	inspector.edit( node )
+	inspector.edit( node.settings )
 	#EditorInterface.inspect_object(node)
 	#EditorInterface.set_main_screen_editor("3D")
 	

@@ -38,15 +38,17 @@ text = "NodeInfo"
 [node name="VSplitContainer" type="VSplitContainer" parent="VBoxContainer"]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
+size_flags_horizontal = 3
 size_flags_vertical = 3
-split_offset = 200
+split_offset = 400
 
 [node name="GraphEdit" type="GraphEdit" parent="VBoxContainer/VSplitContainer"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 200)
 layout_mode = 2
+size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_colors/activity = Color(1, 0.501961, 0.25098, 1)
-scroll_offset = Vector2(-40, -32)
 right_disconnects = true
 connection_lines_thickness = 2.0
 show_zoom_buttons = false

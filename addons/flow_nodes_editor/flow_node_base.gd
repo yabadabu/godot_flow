@@ -2,33 +2,16 @@
 class_name FlowNodeBase
 extends GraphNode
 
-# Debug section
-enum eMode {
-	EXTENDS,
-	ABSOLUTE,
-}
-@export var debug_enabled : bool = false :
-	set(new_value):
-		debug_enabled = new_value
-		refreshDebugMark()
+@onready var control_debug : Control = %DebugMark
+@onready var control_inspect : Control = %InspectMark
 
-@export var inspect_enabled : bool = false :
-	set(new_value):
-		inspect_enabled = new_value
-		refreshInspectMark()
-		
-@export var debug_mode : eMode = eMode.EXTENDS
-@export var debug_scale : float = 1.0
-
-@onready var control_inspect = %InspectMark
-@onready var control_debug = %DebugMark
+#@export var settings: NodeBaseSettings : set = set_settings
+@export var settings: NodeBaseSettings
+var rng : RandomNumberGenerator = RandomNumberGenerator.new()
 
 # Common attributes
 var inputs = []
 var outputs = []
-
-@export var rng_seed : int = 8212421413;
-var rng : RandomNumberGenerator = RandomNumberGenerator.new()
 
 # Helper to create the UI
 var connectors_row_prefab = preload( "res://addons/flow_nodes_editor/connectors_row.tscn" )
@@ -67,15 +50,15 @@ func get_output( idx : int ):
 	return outputs[ idx ]
 
 func preExecute():
-	rng.seed = rng_seed
+	rng.seed = settings.rng_seed
 
 func refreshDebugMark():
 	if control_debug:
-		control_debug.visible = debug_enabled
+		control_debug.visible = settings.debug_enabled
 
 func refreshInspectMark():
 	if control_inspect:
-		control_inspect.visible = inspect_enabled
+		control_inspect.visible = settings.inspect_enabled
 
 func shuffleArray(arr: Array) -> void:
 	for i in range(arr.size() - 1, 0, -1):

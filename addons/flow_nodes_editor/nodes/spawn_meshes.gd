@@ -6,6 +6,7 @@ extends FlowNodeBase
 func getMeta() -> Dictionary :
 	return {
 		"title" : "Spawn Meshes",
+		"settings" : SpawnMeshesNodeSettings,
 		"ins" : [{ "label" : "In" }],
 		"outs" : [{ "label" : "Out" }, { "label" : "Removed" }],
 	}
