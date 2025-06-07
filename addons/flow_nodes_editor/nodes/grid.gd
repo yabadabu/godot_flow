@@ -11,10 +11,19 @@ func getMeta() -> Dictionary :
 	}
 
 func execute( ):
-	var output = []
+	var output := FlowData.Data.new()
+	var spos = output.addStream( FlowData.DataType.Vector, "position" )
+	if spos == null:
+		return
+	var nsamples : int = settings.x * settings.y * settings.z
+	spos.resize( nsamples )
+	#print( "Spos.size %d of type %s" % [ spos.size(), type_string(typeof(spos)) ])
+	var idx := 0
+	var step : Vector3 = settings.step
 	for iz in range( 0, settings.z ):
 		for iy in range( 0, settings.y ):
 			for ix in range( 0, settings.x ):
-				var p = Vector3( ix, iy, iz ) * settings.step
-				output.append(p)
+				var p := Vector3( ix, iy, iz ) * step
+				spos[idx] = p
+				idx += 1
 	set_output( 0, output )

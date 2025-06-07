@@ -16,7 +16,13 @@ func isFinal() -> bool:
 
 func execute( ):
 	var input = get_input(0)
-	for data in input:
-		print( "Spawning at %s" % str(data) )
-	var output = []
-	set_output( 0, output )
+	if !input:
+		print( "Input is invalid")
+		return
+	input.dump( "At spawn meshes" )
+	#for stream in input.streams.values():
+		#print( "%s (%s) %d elems" % [ stream.name, stream.data_type, stream.container.size() ] )
+		#for data in stream.container:
+			#print( "  %s" % str(data ))
+	#var output = []
+	#set_output( 0, output )

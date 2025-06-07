@@ -26,12 +26,12 @@ func _ready():
 func isFinal() -> bool:
 	return false
 
-func set_output( idx : int, data : Array ):
+func set_output( idx : int, data ):
 	if idx >= outputs.size():
 		outputs.resize( idx + 1 )
 	outputs[ idx ] = data
 
-func set_input( idx : int, data : Array ):
+func set_input( idx : int, data ):
 	if idx >= inputs.size():
 		inputs.resize( idx + 1 )
 	inputs[ idx ] = data

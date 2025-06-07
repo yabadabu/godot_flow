@@ -6,22 +6,25 @@ extends Control
 @onready var node_info : Label = %LabelNodeInfo
 @onready var data_inspector : Control
 
+# The inspector shows the settings property of the node
 var inspector: EditorInspector
 var inspected_node : Node
 
-var comment_padding = Vector2( 40, 40 )
-
 var packed_node = preload("res://addons/flow_nodes_editor/node.tscn")
 
+# New nodes generation
 var local_drop_position : Vector2 = Vector2(0,0)
 var auto_connect_from_node : String
 var auto_connect_from_port : int
 var auto_connect_to_node : String
 var auto_connect_to_port : int
-
 var counter : int = 0
+
+# Ranges for the menu
 var min_id = 1000
 var max_id = min_id
+
+var comment_padding = Vector2( 40, 40 )
 
 # During graph deps evaluation
 var gedit_nodes_by_name = {}
@@ -254,7 +257,6 @@ func _on_graph_edit_node_selected(node):
 	inspected_node = node
 	#EditorInterface.inspect_object(node)
 	#EditorInterface.set_main_screen_editor("3D")
-	
 
 func _on_graph_edit_popup_request(at_position):
 	local_drop_position = at_position
