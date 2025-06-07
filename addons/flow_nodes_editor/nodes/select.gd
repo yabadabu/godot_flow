@@ -11,19 +11,18 @@ func getMeta() -> Dictionary :
 	}
 
 func execute( ):
-	var in_data = get_input(0)
+	var in_data : FlowData.Data = get_input(0)
+	in_data.dump( "Select.Input")
 	var in_size = in_data.size()
 	var out_size = round(in_size * settings.ratio)
-	## print( "From %d, took %1.2f%% -> %d" % [ in_size, ratio, out_size ])
+	print( "Select: From %d, took %1.2f%% -> %d" % [ in_size, settings.ratio, out_size ])
 	
 	var pool := range(in_size)
 	shuffleArray( pool )
 	var subset := pool.slice(0, out_size)
 	subset.sort()
+	var indices := PackedInt32Array( subset )
+	print( "select.indices", indices )
 	
-	#return in_data.filter( subset )
-	
-	#for idx in subset:
-		#out_data.append( in_data[idx] )
-	#set_output( 0, out_data )
-	pass
+	var out_data = in_data.filter( indices )
+	set_output( 0, out_data )
