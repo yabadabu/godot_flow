@@ -12,7 +12,7 @@ func spawnDock( res_template : String, title : String, bottom : bool ) -> Contro
 	if bottom:
 		add_control_to_bottom_panel(new_control, title)	
 	else:
-		add_control_to_dock( DOCK_SLOT_LEFT_UL, new_control )
+		add_control_to_dock( DOCK_SLOT_RIGHT_UL, new_control )
 	return new_control
 
 func _enter_tree():
