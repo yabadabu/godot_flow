@@ -27,6 +27,12 @@ class Data:
 		var key0 = streams.keys()[0]
 		return streams[ key0 ].container.size()
 	
+	func getContainerChecked( name : String, data_type : DataType ):
+		var stream = streams.get( name, null )
+		if stream and stream.data_type == data_type:
+			return stream.container
+		return null
+	
 	func registerStream( name : String, data_type : DataType, container ):
 		streams[ name ] = { 
 			"container" : container,
