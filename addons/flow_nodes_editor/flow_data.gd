@@ -38,7 +38,8 @@ class Data:
 			"container" : container,
 			"name" : name,
 			"data_type" : data_type
-		}	
+		}
+		print( "Registered stream %s : %s " % [ name, streams[ name ] ])
 	
 	func addStream( data_type : DataType, name : String ):
 		if streams.has( name ):
@@ -46,6 +47,8 @@ class Data:
 			return null
 		var new_container = newContainerOfType(data_type)
 		registerStream( name, data_type, new_container )
+		if size() > 0:
+			new_container.resize( size() )
 		return new_container
 		
 	func cloneStream( name : String ):

@@ -54,19 +54,21 @@ show_grid_buttons = false
 unique_name_in_owner = true
 position = Vector2i(20, 150)
 size = Vector2i(137, 147)
-item_count = 6
+item_count = 7
 item_0/text = "Clear"
 item_0/id = 0
 item_1/id = -1
 item_1/separator = true
 item_2/text = "Grid"
 item_2/id = 1000
-item_3/text = "Select"
+item_3/text = "Noise"
 item_3/id = 1001
-item_4/text = "Spawn Meshes"
+item_4/text = "Select"
 item_4/id = 1002
-item_5/text = "Transform"
+item_5/text = "Spawn Meshes"
 item_5/id = 1003
+item_6/text = "Transform"
+item_6/id = 1004
 
 [connection signal="connection_from_empty" from="VBoxContainer/VSplitContainer/GraphEdit" to="." method="_on_graph_edit_connection_from_empty"]
 [connection signal="connection_request" from="VBoxContainer/VSplitContainer/GraphEdit" to="." method="_on_graph_edit_connection_request"]

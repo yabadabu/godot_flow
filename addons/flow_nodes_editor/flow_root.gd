@@ -300,6 +300,10 @@ func getEvalOrder():
 		var node = child as FlowNodeBase
 		if not node:
 			continue
+		if node.settings.inspect_enabled:
+			finals.clear()
+			finals.append( node )
+			break
 		if not node.isFinal():
 			continue
 		finals.append( node )
@@ -323,13 +327,12 @@ func evalGraph():
 	#print( "evalGraph starts" )
 	gedit_nodes_by_name = {}
 	for c in gedit.get_children():
-		print( "  ", c.name )
 		gedit_nodes_by_name[ c.name ] = c
 	
 	#print( "getEvalOrder..." )
 	var nodes_to_eval = getEvalOrder( )
 	for node in nodes_to_eval:
-		#print( "  ", node )
+		print( "  ", node )
 		
 		for req in node.deps:
 			var req_node = gedit_nodes_by_name.get( req.from_node )

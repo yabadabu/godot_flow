@@ -63,6 +63,7 @@ func refresh():
 		var col = VBoxContainer.new()
 		col.add_theme_constant_override("separation", 0)
 		var head = addLabel( col, " %s " % stream.name )
+		head.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 
 		# Add the data
 		match stream.data_type:
@@ -73,6 +74,14 @@ func refresh():
 					var c = addLabel( col, str(cell) )
 					#c.add_theme_stylebox_override( "normal", styleA if (idx % 2) else styleB )
 				#cidx.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+			
+			FlowData.DataType.Float:
+				var container : PackedFloat32Array = stream.container
+				for idx in range( container.size() ):
+					var cell = container[idx]
+					var c = addLabel( col, "%1.4f" % cell )
+					#c.add_theme_stylebox_override( "normal", styleA if (idx % 2) else styleB )
+					c.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 			
 			# type not supported...
 			
