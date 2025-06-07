@@ -5,11 +5,13 @@ extends Control
 @onready var info : Label = %LabelInfo
 @onready var node_info : Label = %LabelNodeInfo
 @onready var data_inspector : Control
+
 var inspector: EditorInspector
+var inspected_node : Node
 
 var comment_padding = Vector2( 40, 40 )
 
-var packed_node = preload("res://addons/flow_nodes_editor/flow_node_base.tscn")
+var packed_node = preload("res://addons/flow_nodes_editor/node.tscn")
 
 var local_drop_position : Vector2 = Vector2(0,0)
 var auto_connect_from_node : String
@@ -78,8 +80,13 @@ func _ready():
 	inspector.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	gedit.custom_minimum_size.y = 200
 	inspector.custom_minimum_size.y = 150
+	inspector.property_edited.connect( onNodePropertyChanged )
 	
-	
+func onNodePropertyChanged( prop_name : String):
+	if inspected_node:
+		print( "Node %s.%s has changed" % [ inspected_node.name, prop_name ])
+		inspected_node.refreshFromSettings()
+		
 # ------------------------------------------------
 func getSelectedNodes() -> Array[GraphNode]:
 	var nodes : Array[GraphNode] = []
@@ -96,6 +103,8 @@ func deleteNodes( nodes : Array[GraphNode] ):
 func deleteSelectedNodes():
 	var nodes := getSelectedNodes()
 	deleteNodes( nodes )
+	inspected_node = null
+	inspector.edit(null)
 	
 func getRectOfNodes( nodes : Array[GraphNode] ):
 	var r : Rect2
@@ -143,6 +152,7 @@ func addNode( node_name ):
 		node.settings = meta.settings.new()
 	else:
 		node.settings = NodeSettings.new()
+	node.settings.title = meta.title
 	node.initFromScript()
 	node.size = Vector2(32,32)
 	node.tooltip_text = meta.get( "tooltip", "" )
@@ -190,8 +200,9 @@ func _on_graph_edit_gui_input(event):
 
 func toggleDebug():
 	var nodes = getSelectedNodes()
-	for n in nodes:
-		n.debug_enabled = !n.debug_enabled
+	for node in nodes:
+		node.settings.debug_enabled = !node.settings.debug_enabled
+		node.refreshFromSettings()
 
 func toggleInspection():
 	if not data_inspector:
@@ -200,7 +211,9 @@ func toggleInspection():
 	if nodes.size() != 1:
 		data_inspector.setNode( null )
 		return
-	data_inspector.setNode( nodes[0] )
+	var node = nodes[0]
+	data_inspector.setNode( node )
+	node.refreshFromSettings()
 
 func addComment():
 	var nodes = getSelectedNodes()
@@ -238,6 +251,7 @@ func _on_graph_edit_node_selected(node):
 		push_error("inspector is null")
 		return
 	inspector.edit( node.settings )
+	inspected_node = node
 	#EditorInterface.inspect_object(node)
 	#EditorInterface.set_main_screen_editor("3D")
 	

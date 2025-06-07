@@ -7,6 +7,7 @@ func getMeta() -> Dictionary :
 		"settings" : SelectNodeSettings,
 		"ins" : [{"label": "In" }], 
 		"outs" : [{ "label" : "Out" }],
+		"tooltip" :"Filter inputs by the ratio.\nSo when ratio = 0.2, only 20% of the input points will appear in the output.",
 	}
 
 func execute( ):

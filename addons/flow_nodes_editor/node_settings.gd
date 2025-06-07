@@ -8,7 +8,7 @@ enum eDebugMode {
 }
 
 @export_group("Common Settings")
-@export var rng_seed: int = 12345
+@export var random_seed: int = 12345
 
 @export var inspect_enabled: bool = false
 
@@ -23,4 +23,4 @@ enum eDebugMode {
 func _init():
 	# Set default values when resource is created
 	resource_name = "Node Settings"
-	rng_seed = randi()
+	random_seed = randi()

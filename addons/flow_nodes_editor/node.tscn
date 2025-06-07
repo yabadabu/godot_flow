@@ -1,8 +1,8 @@
 [gd_scene load_steps=2 format=3 uid="uid://bnbhxhwqoqbj1"]
 
-[ext_resource type="Script" uid="uid://4epcqfovpgk7" path="res://addons/flow_nodes_editor/flow_node_base.gd" id="1_o2v65"]
+[ext_resource type="Script" uid="uid://4epcqfovpgk7" path="res://addons/flow_nodes_editor/node.gd" id="1_3mr3y"]
 
-[node name="FlowNodeBase" type="GraphNode"]
+[node name="NodeBase" type="GraphNode"]
 offset_right = 208.0
 offset_bottom = 158.0
 title = "Title"
@@ -15,7 +15,7 @@ slot/0/right_type = 0
 slot/0/right_color = Color(1, 1, 1, 1)
 slot/0/right_icon = null
 slot/0/draw_stylebox = true
-script = ExtResource("1_o2v65")
+script = ExtResource("1_3mr3y")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 2

@@ -5,8 +5,7 @@ extends GraphNode
 @onready var control_debug : Control = %DebugMark
 @onready var control_inspect : Control = %InspectMark
 
-#@export var settings: NodeBaseSettings : set = set_settings
-@export var settings: NodeBaseSettings
+@export var settings: NodeSettings
 var rng : RandomNumberGenerator = RandomNumberGenerator.new()
 
 # Common attributes
@@ -50,7 +49,7 @@ func get_output( idx : int ):
 	return outputs[ idx ]
 
 func preExecute():
-	rng.seed = settings.rng_seed
+	rng.seed = settings.random_seed
 
 func refreshDebugMark():
 	if control_debug:
@@ -59,6 +58,11 @@ func refreshDebugMark():
 func refreshInspectMark():
 	if control_inspect:
 		control_inspect.visible = settings.inspect_enabled
+
+func refreshFromSettings():
+	refreshDebugMark()
+	refreshInspectMark()
+	title = settings.title
 
 func shuffleArray(arr: Array) -> void:
 	for i in range(arr.size() - 1, 0, -1):

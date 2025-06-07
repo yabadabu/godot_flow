@@ -20,11 +20,12 @@ func setNode( new_node : FlowNodeBase ):
 	# If there was already one active... disabled it
 	if node:
 		%LabelTitle.text = "..."
-		node.inspect_enabled = false
+		if node.settings:
+			node.settings.inspect_enabled = false
 		
 	if node != new_node and new_node:
 		%LabelTitle.text = new_node.get_title()
-		new_node.inspect_enabled = true
+		new_node.settings.inspect_enabled = true
 		node = new_node
 	else:
 		node = null
