@@ -22,6 +22,11 @@ func removeOld( root : Node):
 	for child in children_to_remove:
 		root.remove_child(child)
 		child.free()	
+		
+func spawnNode( root : Node, class_to_spawn ):
+	var new_node = class_to_spawn.new()
+	new_node.set_meta("flow_gen", true )	
+	return new_node
 
 func execute( ):
 	var in_data = get_input(0)
@@ -45,12 +50,20 @@ func execute( ):
 		
 	print( "Spawning meshes children of %s" % [root.name])
 		
-	for p in container:
-		var new_node = Node3D.new()
-		root.add_child( new_node )
-		new_node.owner = root 
-		new_node.position = p
-		new_node.set_meta("flow_gen", true )
+	var mmi : MultiMeshInstance3D = spawnNode( root, MultiMeshInstance3D )
+	if mmi == null:
+		push_error( "Failed to spawn multiMeshInstance3D")
+		return
+	var multimesh := MultiMesh.new()
+	multimesh.mesh = settings.mesh
+	multimesh.transform_format = MultiMesh.TransformFormat.TRANSFORM_3D
+	multimesh.instance_count = container.size()
+	for idx in range( container.size() ):
+		var transform : Transform3D = Transform3D( Basis.IDENTITY, container[idx] )
+		multimesh.set_instance_transform( idx, transform )
+	mmi.multimesh = multimesh
+	root.add_child( mmi )
+	mmi.owner = root 
 	
 	EditorInterface.mark_scene_as_unsaved()
 		
