@@ -1,6 +1,6 @@
 @tool
 class_name TransformNodeSettings
-extends NodeBaseSettings
+extends NodeSettings
 
 @export_group("Transform")
 

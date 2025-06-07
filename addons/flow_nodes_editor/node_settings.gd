@@ -1,5 +1,5 @@
 @tool
-class_name NodeBaseSettings
+class_name NodeSettings
 extends Resource
 
 enum eDebugMode {
@@ -7,7 +7,7 @@ enum eDebugMode {
 	ABSOLUTE,
 }
 
-@export_group("Base Settings")
+@export_group("Common Settings")
 @export var rng_seed: int = 12345
 
 @export var inspect_enabled: bool = false

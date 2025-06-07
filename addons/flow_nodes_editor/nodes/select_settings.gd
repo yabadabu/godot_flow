@@ -1,6 +1,6 @@
 @tool
 class_name SelectNodeSettings
-extends NodeBaseSettings
+extends NodeSettings
 
 @export_group("Select")
 

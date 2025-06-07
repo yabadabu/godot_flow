@@ -1,6 +1,6 @@
 @tool
 class_name GridNodeSettings
-extends NodeBaseSettings
+extends NodeSettings
 
 @export_group("Grid")
 

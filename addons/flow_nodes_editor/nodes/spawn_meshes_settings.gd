@@ -1,6 +1,6 @@
 @tool
 class_name SpawnMeshesNodeSettings
-extends NodeBaseSettings
+extends NodeSettings
 
 @export_group("Spawn Meshes")
 

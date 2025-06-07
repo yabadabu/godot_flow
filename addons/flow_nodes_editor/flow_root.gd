@@ -142,7 +142,7 @@ func addNode( node_name ):
 	if meta.has( "settings" ):
 		node.settings = meta.settings.new()
 	else:
-		node.settings = NodeBaseSettings.new()
+		node.settings = NodeSettings.new()
 	node.initFromScript()
 	node.size = Vector2(32,32)
 	node.tooltip_text = meta.get( "tooltip", "" )
