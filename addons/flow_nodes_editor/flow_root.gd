@@ -2,8 +2,6 @@
 extends Control
 
 @onready var gedit : GraphEdit = %GraphEdit
-@onready var info : Label = %LabelInfo
-@onready var node_info : Label = %LabelNodeInfo
 @onready var data_inspector : Control
 
 # The inspector shows the settings property of the node
@@ -81,7 +79,6 @@ func _ready():
 	gedit.size_flags_vertical = Control.SIZE_EXPAND_FILL	
 	inspector.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	inspector.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	gedit.custom_minimum_size.y = 200
 	inspector.custom_minimum_size.y = 150
 	inspector.property_edited.connect( onNodePropertyChanged )
 	
@@ -89,6 +86,7 @@ func onNodePropertyChanged( prop_name : String):
 	if inspected_node:
 		print( "Node %s.%s has changed" % [ inspected_node.name, prop_name ])
 		inspected_node.refreshFromSettings()
+		evalGraph()
 		
 # ------------------------------------------------
 func getSelectedNodes() -> Array[GraphNode]:
@@ -176,15 +174,6 @@ func addNode( node_name ):
 
 # ------------------------------------------------
 func _on_graph_edit_gui_input(event):
-	updateNodeInfo()
-
-	var evt_mouse_motion = event as InputEventMouseMotion
-	if evt_mouse_motion:
-		var local_pos = evt_mouse_motion.position
-		var mouse_in_scroll_offset = localToGraphCoords( local_pos )
-		info.text = "Local:%s Z:%s SO:%s G:%s" % [ local_pos, gedit.zoom, gedit.scroll_offset, mouse_in_scroll_offset ]
-		return
-		
 	var evt_key = event as InputEventKey
 	if evt_key and evt_key.pressed:
 		var key = evt_key.keycode
@@ -235,18 +224,8 @@ func addComment():
 	
 	for node in nodes:
 		gedit.attach_graph_element_to_frame( node.name, frame.name )
-
-func updateNodeInfo():
-	var new_text : String
-	for c in gedit.get_children():
-		var node = c as GraphNode
-		if node and node.selected:
-			new_text = "%s PosOff:%s N:%s T:%s" % [node.name, node.position_offset, node.name, node.title ]
-			break
-	node_info.text = new_text
 	
 func _on_graph_edit_node_selected(node):
-	updateNodeInfo()
 	
 	#var current_main_screen = EditorInterface.get_editor_main_screen()
 	#print( current_main_screen )
@@ -341,16 +320,16 @@ func getEvalOrder():
 	return all_deps
 
 func evalGraph():
-	print( "evalGraph starts" )
+	#print( "evalGraph starts" )
 	gedit_nodes_by_name = {}
 	for c in gedit.get_children():
 		print( "  ", c.name )
 		gedit_nodes_by_name[ c.name ] = c
 	
-	print( "getEvalOrder..." )
+	#print( "getEvalOrder..." )
 	var nodes_to_eval = getEvalOrder( )
 	for node in nodes_to_eval:
-		print( "  ", node )
+		#print( "  ", node )
 		
 		for req in node.deps:
 			var req_node = gedit_nodes_by_name.get( req.from_node )

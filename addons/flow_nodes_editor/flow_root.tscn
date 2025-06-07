@@ -1,6 +1,15 @@
-[gd_scene load_steps=2 format=3 uid="uid://bl8p4bid734wo"]
+[gd_scene load_steps=4 format=3 uid="uid://bl8p4bid734wo"]
 
 [ext_resource type="Script" uid="uid://rhc2whb7j6tt" path="res://addons/flow_nodes_editor/flow_root.gd" id="1_lpoe1"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_no5d7"]
+size = Vector3(0.5, 0.5, 0.5)
+
+[sub_resource type="MultiMesh" id="MultiMesh_y3lpu"]
+transform_format = 1
+instance_count = 16
+mesh = SubResource("BoxMesh_no5d7")
+buffer = PackedFloat32Array(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 2, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 3, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0, 2, 0, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0, 3, 0, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 2, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 2, 1, 0, 0, 2, 0, 1, 0, 0, 0, 0, 1, 2, 1, 0, 0, 3, 0, 1, 0, 0, 0, 0, 1, 2, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 3, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 3, 1, 0, 0, 2, 0, 1, 0, 0, 0, 0, 1, 3, 1, 0, 0, 3, 0, 1, 0, 0, 0, 0, 1, 3)
 
 [node name="FlowRoot" type="Control"]
 layout_mode = 3
@@ -23,22 +32,17 @@ grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="LabelInfo" type="Label" parent="VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="LabelInfo" type="Label" parent="VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
-visible = false
 layout_mode = 2
 text = "Info"
 
-[node name="LabelNodeInfo" type="Label" parent="VBoxContainer"]
-unique_name_in_owner = true
-visible = false
-layout_mode = 2
-text = "NodeInfo"
-
 [node name="VSplitContainer" type="VSplitContainer" parent="VBoxContainer"]
-custom_minimum_size = Vector2(0, 32)
+custom_minimum_size = Vector2(0, 200)
 layout_mode = 2
-size_flags_horizontal = 3
 size_flags_vertical = 3
 split_offset = 400
 
@@ -49,6 +53,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_colors/activity = Color(1, 0.501961, 0.25098, 1)
+scroll_offset = Vector2(0, -200)
 right_disconnects = true
 connection_lines_thickness = 2.0
 show_zoom_buttons = false
@@ -71,6 +76,10 @@ item_4/text = "Spawn Meshes"
 item_4/id = 1002
 item_5/text = "Transform"
 item_5/id = 1003
+
+[node name="@MultiMeshInstance3D@33609" type="MultiMeshInstance3D" parent="."]
+multimesh = SubResource("MultiMesh_y3lpu")
+metadata/flow_gen = true
 
 [connection signal="connection_from_empty" from="VBoxContainer/VSplitContainer/GraphEdit" to="." method="_on_graph_edit_connection_from_empty"]
 [connection signal="connection_request" from="VBoxContainer/VSplitContainer/GraphEdit" to="." method="_on_graph_edit_connection_request"]

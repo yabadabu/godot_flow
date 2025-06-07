@@ -1,8 +1,6 @@
 @tool
 extends FlowNodeBase
 
-@export var value : float = 2.0
-
 func getMeta() -> Dictionary :
 	return {
 		"title" : "Spawn Meshes",
@@ -34,7 +32,7 @@ func execute( ):
 		print( "Spawn.Input is invalid")
 		return
 
-	in_data.dump( "Spawn" )
+	#in_data.dump( "Spawn" )
 
 	var container = in_data.getContainerChecked( "position", FlowData.DataType.Vector )
 	if container == null:
@@ -48,7 +46,7 @@ func execute( ):
 
 	removeOld( root )
 		
-	print( "Spawning meshes children of %s" % [root.name])
+	#print( "Spawning meshes children of %s" % [root.name])
 		
 	var mmi : MultiMeshInstance3D = spawnNode( root, MultiMeshInstance3D )
 	if mmi == null:
@@ -66,10 +64,3 @@ func execute( ):
 	mmi.owner = root 
 	
 	EditorInterface.mark_scene_as_unsaved()
-		
-	#for stream in input.streams.values():
-		#print( "%s (%s) %d elems" % [ stream.name, stream.data_type, stream.container.size() ] )
-		#for data in stream.container:
-			#print( "  %s" % str(data ))
-	#var output = []
-	#set_output( 0, output )
