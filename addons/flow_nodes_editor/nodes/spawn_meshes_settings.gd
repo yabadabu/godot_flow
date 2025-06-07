@@ -4,7 +4,7 @@ extends NodeSettings
 
 @export_group("Spawn Meshes")
 
-@export var mesh : Mesh
+@export var mesh : Mesh = preload( "res://addons/flow_nodes_editor/resources/unit_cube.tres" )
 
 func _init():
 	super._init()

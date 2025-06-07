@@ -6,14 +6,6 @@ extends Control
 		data_ex = new_value
 		refresh()
 
-var titles = [ "index", "pos", "color", "scale"]
-var col_types = [ "int", "vector", "color", "float"]
-var datas = [
-	[ Vector3(1,0,1), Color.RED, 1.0 ],
-	[ Vector3(1,0,0), Color.BLUE, 0.5 ],
-	[ Vector3(0,0,1), Color.GREEN, 2.0 ],
-]
-
 var node : FlowNodeBase
 
 func setNode( new_node : FlowNodeBase ):
@@ -30,13 +22,13 @@ func setNode( new_node : FlowNodeBase ):
 	else:
 		node = null
 
-func addLabel( gc : GridContainer, str_data : String ):
+func addLabel( gc : Container, str_data : String ):
 	var c = Label.new()
 	c.text = str_data
 	gc.add_child( c )
 	return c
 	
-func addColor( gc : GridContainer, data : Color ):
+func addColor( gc : Container, data : Color ):
 	var c = ColorRect.new()
 	c.custom_minimum_size = Vector2( 16,16 )
 	c.color = data
@@ -44,50 +36,48 @@ func addColor( gc : GridContainer, data : Color ):
 	return c
 	
 func refresh():
-	var gc : GridContainer = find_child( "GridContainer")
-	if not gc:
+	print( "refresh is ", node)
+	
+	if node == null:
 		return
-	gc.columns = 3 + 1 
 	
-	for i in range( 0, gc.get_child_count() ):
-		gc.remove_child( gc.get_child( gc.get_child_count() - 1 ))
+	var cols = find_child("Columns")
+	if cols == null:
+		return
+		
+	var data = node.get_output(0)
 	
-	# add titles
-	for title in titles:
-		addLabel( gc, " %s " % title )
+	# Remove prev columns
+	for i in range( 0, cols.get_child_count() ):
+		cols.remove_child( cols.get_child( cols.get_child_count() - 1 ))
 
 	# Background color (zebra striping)
 	var styleA = StyleBoxFlat.new()
 	styleA.bg_color = Color(0.5, 0.5, 0.5)
 	var styleB = StyleBoxFlat.new()
 	styleB.bg_color = styleA.bg_color + Color( 0.1, 0.1, 0.1 )
+	
+	for stream in data.streams.values():
+		
+		# Add the title
+		var col = VBoxContainer.new()
+		col.add_theme_constant_override("separation", 0)
+		var head = addLabel( col, " %s " % stream.name )
 
-	# add data
-	var row_idx = 0
-	for row in datas:
-		
-		var cidx = addLabel( gc, str(row_idx))
-		cidx.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-		cidx.add_theme_stylebox_override( "normal", styleA if (row_idx % 2) else styleB )
-		
-		var col_idx = 0
-		for cell in row:
-			var c;
-			var data_type = col_types[ col_idx + 1 ]
-			if data_type == "int":
-				c = addLabel( gc, str(cell) ) as Label
-				c.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-			elif data_type == "color":
-				c = addColor( gc, cell )
-			else:
-				c = addLabel( gc, str(cell) )
+		# Add the data
+		match stream.data_type:
+			FlowData.DataType.Vector:
+				var container : PackedVector3Array = stream.container
+				for idx in range( container.size() ):
+					var cell = container[idx]
+					var c = addLabel( col, str(cell) )
+					#c.add_theme_stylebox_override( "normal", styleA if (idx % 2) else styleB )
+				#cidx.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 			
-			if c is Label:
-				c.add_theme_stylebox_override( "normal", styleA if (row_idx % 2) else styleB )
-				
-			col_idx += 1
-		row_idx += 1
-
+			# type not supported...
+			
+		cols.add_child( col )
+	
 func _ready():
 	refresh()
 

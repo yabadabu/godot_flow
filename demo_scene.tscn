@@ -1,16 +1,15 @@
 [gd_scene load_steps=3 format=3 uid="uid://c1b6ke05vpb8r"]
 
-[sub_resource type="BoxMesh" id="BoxMesh_no5d7"]
-size = Vector3(0.25, 0.25, 0.25)
+[ext_resource type="BoxMesh" uid="uid://7flu82pqtc5d" path="res://addons/flow_nodes_editor/resources/unit_cube.tres" id="1_iapjp"]
 
-[sub_resource type="MultiMesh" id="MultiMesh_iapjp"]
+[sub_resource type="MultiMesh" id="MultiMesh_8n7uv"]
 transform_format = 1
-instance_count = 16
-mesh = SubResource("BoxMesh_no5d7")
-buffer = PackedFloat32Array(1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 2, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 2, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 2, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 1, 1, 0, 0, 2, 0, 1, 0, 2, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 2, 1, 0, 0, 2, 0, 1, 0, 0, 0, 0, 1, 2, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 2, 1, 0, 0, 2, 0, 1, 0, 1, 0, 0, 1, 2, 1, 0, 0, 1, 0, 1, 0, 2, 0, 0, 1, 2, 1, 0, 0, 2, 0, 1, 0, 2, 0, 0, 1, 2)
+instance_count = 9
+mesh = ExtResource("1_iapjp")
+buffer = PackedFloat32Array(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 2, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 2, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 2, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 2, 0, 0, 1, 0, 1, 0, 0, 2, 0, 1, 0, 2, 0, 0, 1, 0)
 
 [node name="DemoScene" type="Node3D"]
 
-[node name="@MultiMeshInstance3D@25172" type="MultiMeshInstance3D" parent="."]
-multimesh = SubResource("MultiMesh_iapjp")
+[node name="@MultiMeshInstance3D@23115" type="MultiMeshInstance3D" parent="."]
+multimesh = SubResource("MultiMesh_8n7uv")
 metadata/flow_gen = true

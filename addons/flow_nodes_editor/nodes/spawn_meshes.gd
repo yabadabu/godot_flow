@@ -45,6 +45,8 @@ func execute( ):
 		return
 
 	removeOld( root )
+	
+	return
 		
 	#print( "Spawning meshes children of %s" % [root.name])
 		
