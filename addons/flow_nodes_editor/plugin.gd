@@ -1,0 +1,53 @@
+@tool
+extends EditorPlugin
+
+# This is the entry point for the plugin
+# Where we register all editors, inspectors and docks
+
+var graph_dock: FlowGraphEditor
+var data_inspector_dock: Control
+var inspector_plugin
+
+@onready var selection = EditorInterface.get_selection()
+
+func spawnDock( res_template : String, title : String, bottom : bool ) -> Control:
+	var packed : PackedScene = load( res_template )
+	var new_control = packed.instantiate() as Control
+	new_control.name = title
+	if bottom:
+		add_control_to_bottom_panel(new_control, title)	
+	else:
+		add_control_to_dock( DOCK_SLOT_RIGHT_UL, new_control )
+	return new_control
+
+func _enter_tree():
+	print("Data Flow plugin enabled")
+	graph_dock = spawnDock("res://addons/flow_nodes_editor/flow_root.tscn", "Data Flow", false ) as FlowGraphEditor
+	data_inspector_dock = spawnDock("res://addons/flow_nodes_editor/data_inspector.tscn", "Data Inspector", true)
+	graph_dock.data_inspector = data_inspector_dock
+	
+	#inspector_plugin = FlowGraphInspectorPlugin.new()
+	#add_inspector_plugin(inspector_plugin)
+
+func _exit_tree():
+	#remove_inspector_plugin(inspector_plugin)
+	remove_control_from_docks(graph_dock)
+	graph_dock.free()
+	remove_control_from_bottom_panel(data_inspector_dock)
+	data_inspector_dock.free()
+	selection.selection_changed.disconnect(_selection_changed)
+
+func _ready():
+	selection.selection_changed.connect(_selection_changed)
+	_selection_changed()
+
+func _selection_changed():
+	var nodes = selection.get_selected_nodes()
+	if nodes.is_empty():
+		return
+	var flow_node = nodes[0]
+	if flow_node is FlowGraphNode3D:
+		graph_dock.setResourceToEdit( flow_node.graph )
+		#if not foliage.graph_changed.is_connected(add_graph_edit):
+			#foliage.graph_changed.connect(add_graph_edit.bind(foliage))
+		#add_graph_edit(foliage)

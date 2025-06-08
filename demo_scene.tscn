@@ -1,3 +1,17 @@
-[gd_scene format=3 uid="uid://c1b6ke05vpb8r"]
+[gd_scene load_steps=4 format=3 uid="uid://c1b6ke05vpb8r"]
+
+[ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_iapjp"]
+[ext_resource type="Resource" uid="uid://66ejgwppld3l" path="res://graph00.tres" id="2_8n7uv"]
+[ext_resource type="Resource" uid="uid://doldqxmlcvh80" path="res://graph01.tres" id="3_ayuu8"]
 
 [node name="DemoScene" type="Node3D"]
+
+[node name="PCG_1" type="Node3D" parent="."]
+script = ExtResource("1_iapjp")
+graph = ExtResource("2_8n7uv")
+metadata/_custom_type_script = "uid://d1krtmb1urldl"
+
+[node name="PCG_2" type="Node3D" parent="."]
+script = ExtResource("1_iapjp")
+graph = ExtResource("3_ayuu8")
+metadata/_custom_type_script = "uid://d1krtmb1urldl"

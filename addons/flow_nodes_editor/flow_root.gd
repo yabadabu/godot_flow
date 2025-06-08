@@ -1,5 +1,8 @@
 @tool
 extends Control
+class_name FlowGraphEditor
+
+var current_resource: FlowGraphResource
 
 @onready var gedit : GraphEdit = %GraphEdit
 @onready var data_inspector : Control
@@ -28,6 +31,57 @@ var comment_padding = Vector2( 40, 40 )
 var gedit_nodes_by_name = {}
 
 var node_types = { }
+
+func setResourceToEdit( new_resource : FlowGraphResource ):
+	print( "setResourceToEdit %s" % new_resource )
+	if current_resource == new_resource:
+		return
+	if current_resource:
+		saveResource()
+	current_resource = new_resource
+	# Remove exiting nodes
+	for child in gedit.get_children():
+		if child is GraphNode:
+			child.queue_free()
+			
+	if current_resource != null:
+		print( "Recoverting %d nodes" % current_resource.nodes.size() )
+		for res_node in current_resource.nodes:
+			print( "Recovering node %s" % [ res_node ])
+			var node = addNodeFromTemplate( res_node.template, res_node.settings )
+			if not node:
+				push_error( "Failed to recover node %s %s" % [ res_node ])
+				continue
+			node.position_offset = res_node.position_offset
+			node.name = res_node.name
+		
+		print( "Recovering %d conns" % current_resource.conns.size() )
+		for conn in current_resource.conns:
+			print( "Regenerating conn %s" % [conn])
+			var err = gedit.connect_node( conn.from_node, conn.from_port, conn.to_node, conn.to_port )	
+			if err:
+				push_error("Error adding conn %s" % [err])
+
+func saveResource():
+	if current_resource == null:
+		return
+	current_resource.nodes.clear()
+	current_resource.conns.clear()
+	for child in gedit.get_children():
+		var node = child as FlowNodeBase
+		if not node:
+			continue
+		var stored_data = {
+			"position_offset" : node.position_offset,
+			"name" : node.name,
+			"template" : node.node_template,
+			"settings" : node.settings,
+			}
+		print( "Saving node %s" % [stored_data])
+		current_resource.nodes.append(stored_data)
+
+	for connection in gedit.get_connection_list():
+		current_resource.conns.append( connection.duplicate() )
 
 func getNewName( suffix : String ):
 	counter+= 1
@@ -141,30 +195,43 @@ func localToGraphCoords( local_coords : Vector2 ):
 	#var view_zero_in_scroll_offset = gedit.scroll_offset / gedit.zoom
 	return ( gedit.scroll_offset + local_coords ) / gedit.zoom
 
-func addNode( node_name ):
-	
+func addNodeFromTemplate( node_template, settings = null ):
+	print( "addNode %s" % node_template)
 	var node = packed_node.instantiate() as GraphNode
-	var meta = node_types.get( node_name, null )
+	var meta = node_types.get( node_template, null )
 	if not meta:
-		push_error("node_type %s is not registered", node_name)
+		push_error("node_type %s is not registered", node_template)
 		return null	
 	print( "Meta:", str(meta) )
 		
 	node.set_script(meta.factory)
-		
-	node.name = getNewName(node_name)
+
+	node.node_template = node_template
+	node.name = getNewName(node_template)
 	node.position_offset = localToGraphCoords(local_drop_position)
-	node.title = meta.title
-	if meta.has( "settings" ):
-		node.settings = meta.settings.new()
+	if settings:
+		node.settings = settings
 	else:
-		node.settings = NodeSettings.new()
+		if meta.has( "settings" ):
+			print( "Assigning settings of type %s" % meta.settings )
+			print( "node is %s" % node )
+			node.settings = meta.settings.new()
+		else:
+			print( "Assigning default settings" )
+			node.settings = NodeSettings.new()
 	node.settings.title = meta.title
 	node.initFromScript()
+	node.title = node.getTitle()
 	node.size = Vector2(32,32)
 	node.tooltip_text = meta.get( "tooltip", "" )
 	gedit.add_child(node)
+	return node
 	
+func addNode( node_template ):
+	var node = addNodeFromTemplate( node_template )
+	if not node:
+		return null
+		
 	if auto_connect_from_node:
 		gedit.connect_node(auto_connect_from_node, auto_connect_from_port, node.name, 0)
 		auto_connect_from_node = ""
@@ -177,6 +244,7 @@ func addNode( node_name ):
 		prev_node.selected = false
 	node.selected = true
 	node.visible = true
+	saveResource()
 
 # ------------------------------------------------
 func _on_graph_edit_gui_input(event):
@@ -272,9 +340,11 @@ func _on_popup_menu_id_pressed(id: int) -> void:
 
 func _on_graph_edit_connection_request(from_node: StringName, from_port: int, to_node: StringName, to_port: int) -> void:
 	gedit.connect_node(from_node, from_port, to_node, to_port)
+	saveResource()
 	
 func _on_graph_edit_disconnection_request(from_node: StringName, from_port: int, to_node: StringName, to_port: int) -> void:
 	gedit.disconnect_node(from_node, from_port, to_node, to_port)
+	saveResource()
 
 func _on_graph_edit_connection_to_empty(from_node: StringName, from_port: int, release_position: Vector2) -> void:
 	auto_connect_from_node = from_node
@@ -355,3 +425,7 @@ func evalGraph():
 func _on_button_reload_pressed() -> void:
 	scanAvailableNodes()
 	populatePopupMenu()
+
+func _on_button_save_pressed() -> void:
+	if current_resource:
+		ResourceSaver.save(current_resource)

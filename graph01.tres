@@ -1,0 +1,90 @@
+[gd_resource type="Resource" script_class="FlowGraphResource" load_steps=8 format=3 uid="uid://doldqxmlcvh80"]
+
+[ext_resource type="Script" uid="uid://dwtm2hr5nh78h" path="res://addons/flow_nodes_editor/nodes/grid_settings.gd" id="1_kx8in"]
+[ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="1_pwag0"]
+[ext_resource type="Script" uid="uid://ckff4og6eip3" path="res://addons/flow_nodes_editor/nodes/math_op_settings.gd" id="2_hlk1a"]
+[ext_resource type="Script" uid="uid://ctpeiiq5p30rt" path="res://addons/flow_nodes_editor/nodes/noise_settings.gd" id="3_hlk1a"]
+
+[sub_resource type="Resource" id="Resource_6r1i8"]
+resource_name = "Grid Settings"
+script = ExtResource("1_kx8in")
+x = 3
+y = 3
+z = 1
+step = Vector3(1, 1, 1)
+random_seed = 1264968684
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+title = "Grid"
+enabled = true
+
+[sub_resource type="Resource" id="Resource_840wp"]
+resource_name = "Math Op"
+script = ExtResource("2_hlk1a")
+operation = 5
+in_nameA = "density"
+in_nameB = "density"
+out_name = "density2"
+random_seed = 1251242
+inspect_enabled = true
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+title = "Math "
+enabled = true
+
+[sub_resource type="Resource" id="Resource_hovoc"]
+resource_name = "Noise Settings"
+script = ExtResource("3_hlk1a")
+out_attribute_name = "density"
+in_scale = 1.0
+noise_bias = 0.0
+noise_amplitude = 1.0
+random_seed = 1405892362
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+title = "Noise"
+enabled = true
+
+[resource]
+script = ExtResource("1_pwag0")
+nodes = Array[Dictionary]([{
+"name": &"id_0020_grid",
+"position_offset": Vector2(60, 140),
+"settings": SubResource("Resource_6r1i8"),
+"template": "grid"
+}, {
+"name": &"id_0022_math_op",
+"position_offset": Vector2(480, 140),
+"settings": SubResource("Resource_840wp"),
+"template": "math_op"
+}, {
+"name": &"id_0004_noise",
+"position_offset": Vector2(260, 140),
+"settings": SubResource("Resource_hovoc"),
+"template": "noise"
+}])
+conns = Array[Dictionary]([{
+"from_node": &"id_0020_grid",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0004_noise",
+"to_port": 0
+}, {
+"from_node": &"id_0004_noise",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0022_math_op",
+"to_port": 0
+}, {
+"from_node": &"id_0004_noise",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0022_math_op",
+"to_port": 1
+}])
+metadata/_custom_type_script = "uid://j6vjeb5cjjoy"

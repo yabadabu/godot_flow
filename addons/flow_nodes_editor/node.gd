@@ -9,6 +9,8 @@ var rng : RandomNumberGenerator = RandomNumberGenerator.new()
 var inputs = []
 var outputs = []
 
+var node_template : String
+
 # Helper to create the UI
 var connectors_row_prefab = preload( "res://addons/flow_nodes_editor/connectors_row.tscn" )
 

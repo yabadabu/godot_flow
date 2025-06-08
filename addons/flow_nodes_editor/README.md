@@ -1,5 +1,6 @@
 === TODO
 
+[ ] save graph into scene node 
 [ ] dependencies/dirty chains
 [ ] node transform with ranges
 [X] node add density
@@ -10,6 +11,5 @@
 [ ] spline sampling
 [ ] nodes to filter A/B
 [ ] support for prev
-[ ] save graph into scene node 
 [ ] undo/redo
 [X] Dynamic title

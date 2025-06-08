@@ -35,6 +35,10 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "Info"
 
+[node name="ButtonSave" type="Button" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Save Resource"
+
 [node name="VSplitContainer" type="VSplitContainer" parent="VBoxContainer"]
 custom_minimum_size = Vector2(0, 200)
 layout_mode = 2
@@ -49,7 +53,6 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_colors/activity = Color(1, 0.501961, 0.25098, 1)
-scroll_offset = Vector2(0, -8)
 right_disconnects = true
 connection_lines_thickness = 2.0
 show_zoom_buttons = false
@@ -78,6 +81,7 @@ item_7/text = "Transform"
 item_7/id = 1005
 
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/ButtonReload" to="." method="_on_button_reload_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/ButtonSave" to="." method="_on_button_save_pressed"]
 [connection signal="connection_from_empty" from="VBoxContainer/VSplitContainer/GraphEdit" to="." method="_on_graph_edit_connection_from_empty"]
 [connection signal="connection_request" from="VBoxContainer/VSplitContainer/GraphEdit" to="." method="_on_graph_edit_connection_request"]
 [connection signal="connection_to_empty" from="VBoxContainer/VSplitContainer/GraphEdit" to="." method="_on_graph_edit_connection_to_empty"]
