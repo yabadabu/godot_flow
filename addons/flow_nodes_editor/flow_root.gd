@@ -45,7 +45,7 @@ func setResourceToEdit( new_resource : FlowGraphResource ):
 			child.queue_free()
 			
 	if current_resource != null:
-		print( "Recoverting %d nodes" % current_resource.nodes.size() )
+		print( "Recovering %d nodes" % current_resource.nodes.size() )
 		for res_node in current_resource.nodes:
 			print( "Recovering node %s" % [ res_node ])
 			var node = addNodeFromTemplate( res_node.template, res_node.settings )
@@ -61,6 +61,9 @@ func setResourceToEdit( new_resource : FlowGraphResource ):
 			var err = gedit.connect_node( conn.from_node, conn.from_port, conn.to_node, conn.to_port )	
 			if err:
 				push_error("Error adding conn %s" % [err])
+				
+		gedit.zoom = current_resource.view_zoom
+		gedit.scroll_offset = current_resource.view_offset
 
 func saveResource():
 	if current_resource == null:
@@ -82,6 +85,10 @@ func saveResource():
 
 	for connection in gedit.get_connection_list():
 		current_resource.conns.append( connection.duplicate() )
+
+	current_resource.view_zoom = gedit.zoom
+	current_resource.view_offset = gedit.scroll_offset
+	
 
 func getNewName( suffix : String ):
 	counter+= 1

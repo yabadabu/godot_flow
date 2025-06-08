@@ -48,10 +48,36 @@ nodes = Array[Dictionary]([{
 "template": "noise"
 }])
 conns = Array[Dictionary]([{
+"from_node": &"id_0020_grid",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0004_noise",
+"to_port": 0
+}, {
+"from_node": &"id_0004_noise",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0022_math_op",
+"to_port": 0
+}, {
+"from_node": &"id_0004_noise",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0022_math_op",
+"to_port": 1
+}, {
+"from_node": &"id_0130_sample_spline",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0131_spawn_meshes",
+"to_port": 0
+}, {
 "from_node": &"id_0004_grid",
 "from_port": 0,
 "keep_alive": false,
 "to_node": &"id_0005_noise",
 "to_port": 0
 }])
+view_zoom = 1.00902
+view_offset = Vector2(-67.5571, -52.5119)
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"

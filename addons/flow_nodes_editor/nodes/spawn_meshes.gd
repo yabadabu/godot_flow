@@ -46,8 +46,6 @@ func execute( ):
 
 	removeOld( root )
 	
-	return
-		
 	#print( "Spawning meshes children of %s" % [root.name])
 		
 	var mmi : MultiMeshInstance3D = spawnNode( root, MultiMeshInstance3D )
