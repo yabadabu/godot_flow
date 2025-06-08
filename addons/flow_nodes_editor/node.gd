@@ -2,9 +2,6 @@
 class_name FlowNodeBase
 extends GraphNode
 
-@onready var control_debug : Control = %DebugMark
-@onready var control_inspect : Control = %InspectMark
-
 @export var settings: NodeSettings
 var rng : RandomNumberGenerator = RandomNumberGenerator.new()
 
@@ -54,18 +51,13 @@ func preExecute():
 	rng.seed = settings.random_seed
 
 func redrawUI():
-	position_offset.x += 1
-	position_offset.x -= 1
+	queue_redraw()
 
 func refreshDebugMark():
-	if control_debug:
-		control_debug.visible = settings.debug_enabled
-		redrawUI()
+	redrawUI()
 
 func refreshInspectMark():
-	if control_inspect:
-		control_inspect.visible = settings.inspect_enabled
-		redrawUI()
+	redrawUI()
 
 func refreshFromSettings():
 	refreshDebugMark()
@@ -78,14 +70,19 @@ func setError( new_err : String ):
 	editor_state_changed.emit()
 		
 func _on_draw() -> void:
-	if settings.inspect_enabled:
-		draw_circle( Vector2(0,0), 16.0, Color.YELLOW )
-	if settings.debug_enabled:
-		draw_circle( Vector2(size.x,0), 16.0, Color.CYAN )
+		
 	if err:
-		self_modulate = Color.RED
+		self_modulate = Color(1.0, 0.5, 0.5)
+		draw_string( ThemeDB.fallback_font, Vector2(0,size.y + 32), err, HORIZONTAL_ALIGNMENT_LEFT, -1, 32 )
 	else:
 		self_modulate = Color.WHITE
+		
+	if settings.inspect_enabled:
+		var clr : Color = Color.YELLOW / self_modulate
+		draw_circle( Vector2(0,0), 16.0, clr )
+	if settings.debug_enabled:
+		var clr : Color = Color.CYAN / self_modulate
+		draw_circle( Vector2(size.x,0), 16.0, clr )
 
 func shuffleArray(arr: Array) -> void:
 	for i in range(arr.size() - 1, 0, -1):
@@ -110,12 +107,12 @@ func initFromScript():
 		var lbl_out = ctrl.get_child(2) as Label
 		if idx < num_ins:
 			lbl_in.text = ins[ idx ].label
-			set_slot_enabled_left( idx + 1, true )
+			set_slot_enabled_left( idx, true )
 		else:
 			lbl_in.text = ""
 			
 		if idx < num_outs:
 			lbl_out.text = outs[ idx ].label
-			set_slot_enabled_right( idx + 1, true )
+			set_slot_enabled_right( idx, true )
 		else:
 			lbl_out.text = ""

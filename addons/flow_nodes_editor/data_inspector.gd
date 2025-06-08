@@ -14,6 +14,7 @@ func setNode( new_node : FlowNodeBase ):
 		%LabelTitle.text = "..."
 		if node.settings:
 			node.settings.inspect_enabled = false
+			node.refreshFromSettings()
 		
 	if node != new_node and new_node:
 		%LabelTitle.text = new_node.get_title()
@@ -21,6 +22,7 @@ func setNode( new_node : FlowNodeBase ):
 		node = new_node
 	else:
 		node = null
+		refresh()
 
 func addLabel( gc : Container, str_data : String ):
 	var c = Label.new()
@@ -38,18 +40,18 @@ func addColor( gc : Container, data : Color ):
 func refresh():
 	print( "refresh is ", node)
 	
-	if node == null:
-		return
-	
 	var cols = find_child("Columns")
 	if cols == null:
 		return
-		
-	var data = node.get_output(0)
 	
 	# Remove prev columns
 	for i in range( 0, cols.get_child_count() ):
 		cols.remove_child( cols.get_child( cols.get_child_count() - 1 ))
+	
+	if node == null:
+		return
+		
+	var data = node.get_output(0)
 
 	# Background color (zebra striping)
 	var styleA = StyleBoxFlat.new()

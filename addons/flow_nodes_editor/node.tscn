@@ -5,49 +5,7 @@
 [node name="NodeBase" type="GraphNode"]
 offset_right = 208.0
 offset_bottom = 158.0
-resizable = true
 title = "Title"
-slot/0/left_enabled = false
-slot/0/left_type = 0
-slot/0/left_color = Color(1, 1, 1, 1)
-slot/0/left_icon = null
-slot/0/right_enabled = false
-slot/0/right_type = 0
-slot/0/right_color = Color(1, 1, 1, 1)
-slot/0/right_icon = null
-slot/0/draw_stylebox = true
 script = ExtResource("1_3mr3y")
-
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
-layout_mode = 2
-
-[node name="Control" type="Control" parent="HBoxContainer"]
-layout_mode = 2
-
-[node name="InspectMark" type="ColorRect" parent="HBoxContainer/Control"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(16, 16)
-layout_mode = 1
-offset_left = -26.0
-offset_top = -52.0
-offset_right = -10.0
-offset_bottom = -36.0
-size_flags_horizontal = 0
-color = Color(1, 1, 0, 1)
-
-[node name="Control2" type="Control" parent="HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 10
-
-[node name="DebugMark" type="ColorRect" parent="HBoxContainer/Control2"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(16, 16)
-layout_mode = 2
-offset_left = 10.0
-offset_top = -51.0
-offset_right = 26.0
-offset_bottom = -35.0
-size_flags_horizontal = 0
-color = Color(0, 1, 1, 1)
 
 [connection signal="draw" from="." to="." method="_on_draw"]
