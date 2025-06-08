@@ -8,6 +8,9 @@ func getMeta() -> Dictionary :
 		"ins" : [{"label": "In A" }, {"label": "In B" }], 
 		"outs" : [{ "label" : "Out" }],
 	}
+	
+func getTitle() -> String:
+	return MathOpNodeSettings.eOperation.keys()[settings.operation]
 
 func execute( ):
 	var in_data : FlowData.Data = get_input(0)

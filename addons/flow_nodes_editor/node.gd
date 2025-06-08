@@ -62,7 +62,7 @@ func refreshInspectMark():
 func refreshFromSettings():
 	refreshDebugMark()
 	refreshInspectMark()
-	title = settings.title
+	title = getTitle()
 	
 func setError( new_err : String ):
 	push_error( "Node.Err %s : %s" % [ name, new_err ])
@@ -83,6 +83,9 @@ func _on_draw() -> void:
 	if settings.debug_enabled:
 		var clr : Color = Color.CYAN / self_modulate
 		draw_circle( Vector2(size.x,0), 16.0, clr )
+
+func getTitle() -> String:
+	return settings.title
 
 func shuffleArray(arr: Array) -> void:
 	for i in range(arr.size() - 1, 0, -1):
