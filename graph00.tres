@@ -48,6 +48,18 @@ nodes = Array[Dictionary]([{
 "template": "noise"
 }])
 conns = Array[Dictionary]([{
+"from_node": &"id_0139_sample_spline",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0141_ray_cast",
+"to_port": 0
+}, {
+"from_node": &"id_0141_ray_cast",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0142_spawn_meshes",
+"to_port": 0
+}, {
 "from_node": &"id_0020_grid",
 "from_port": 0,
 "keep_alive": false,

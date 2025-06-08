@@ -35,8 +35,11 @@ func execute( ):
 	var output := FlowData.Data.new()
 	var spos : PackedVector3Array = output.addStream( "position", FlowData.DataType.Vector )
 
+	var uniform_interval = maxf( settings.uniform_interval, 0.01 )
+
 	for path_3d in path3d_nodes:
-		var curve = path_3d.curve
+		var curve : Curve3D = path_3d.curve
+		curve.bake_interval = uniform_interval
 		var samples : PackedVector3Array = curve.get_baked_points()
 		var base = spos.size()
 		spos.resize( base + samples.size() )

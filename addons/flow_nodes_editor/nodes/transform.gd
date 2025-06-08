@@ -10,8 +10,8 @@ func getMeta() -> Dictionary :
 	}
 
 func execute( ):
-	var in_data = get_input(0)
-	var out_data = in_data.duplicate()
+	var in_data : FlowData.Data = get_input(0)
+	var out_data : FlowData.Data = in_data.duplicate()
 	var spos = out_data.cloneStream( "position" )
 	var trans = settings.trans
 	for i in spos.size():

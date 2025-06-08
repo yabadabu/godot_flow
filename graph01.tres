@@ -1,62 +1,16 @@
-[gd_resource type="Resource" script_class="FlowGraphResource" load_steps=13 format=3 uid="uid://doldqxmlcvh80"]
+[gd_resource type="Resource" script_class="FlowGraphResource" load_steps=9 format=3 uid="uid://doldqxmlcvh80"]
 
-[ext_resource type="Script" uid="uid://dwtm2hr5nh78h" path="res://addons/flow_nodes_editor/nodes/grid_settings.gd" id="1_kx8in"]
 [ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="1_pwag0"]
-[ext_resource type="Script" uid="uid://ckff4og6eip3" path="res://addons/flow_nodes_editor/nodes/math_op_settings.gd" id="2_hlk1a"]
-[ext_resource type="Script" uid="uid://ctpeiiq5p30rt" path="res://addons/flow_nodes_editor/nodes/noise_settings.gd" id="3_hlk1a"]
 [ext_resource type="Script" uid="uid://cbj3mmuatfk1v" path="res://addons/flow_nodes_editor/nodes/sample_spline_settings.gd" id="4_840wp"]
 [ext_resource type="BoxMesh" uid="uid://7flu82pqtc5d" path="res://addons/flow_nodes_editor/resources/unit_cube.tres" id="5_pcyhw"]
 [ext_resource type="Script" uid="uid://bnpohx6mm4hdh" path="res://addons/flow_nodes_editor/nodes/spawn_meshes_settings.gd" id="6_78rjk"]
+[ext_resource type="Script" uid="uid://bfwm6jlb65yts" path="res://addons/flow_nodes_editor/nodes/ray_cast_settings.gd" id="7_pcyhw"]
 
-[sub_resource type="Resource" id="Resource_6r1i8"]
-resource_name = "Grid Settings"
-script = ExtResource("1_kx8in")
-x = 3
-y = 3
-z = 1
-step = Vector3(1, 1, 1)
-random_seed = 1264968684
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-title = "Grid"
-enabled = true
-
-[sub_resource type="Resource" id="Resource_840wp"]
-resource_name = "Math Op"
-script = ExtResource("2_hlk1a")
-operation = 5
-in_nameA = "density"
-in_nameB = "density"
-out_name = "density2"
-random_seed = 1251242
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-title = "Math "
-enabled = true
-
-[sub_resource type="Resource" id="Resource_hovoc"]
-resource_name = "Noise Settings"
-script = ExtResource("3_hlk1a")
-out_attribute_name = "density"
-in_scale = 1.0
-noise_bias = 0.0
-noise_amplitude = 1.0
-random_seed = 1405892362
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-title = "Noise"
-enabled = true
-
-[sub_resource type="Resource" id="Resource_ly1tl"]
+[sub_resource type="Resource" id="Resource_pcyhw"]
 resource_name = "Sample Spline Settings"
 script = ExtResource("4_840wp")
-random_seed = 4215216874
+uniform_interval = 0.5
+random_seed = 1977794624
 inspect_enabled = false
 debug_enabled = false
 debug_mode = 0
@@ -64,11 +18,24 @@ debug_scale = 1.0
 title = "Sample Spline"
 enabled = true
 
-[sub_resource type="Resource" id="Resource_oxd56"]
+[sub_resource type="Resource" id="Resource_ly1tl"]
+resource_name = "RayCast Settings"
+script = ExtResource("7_pcyhw")
+dir = Vector3(0, -1, 0)
+max_distance = 1000.0
+random_seed = 2520541056
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+title = "Ray Cast"
+enabled = true
+
+[sub_resource type="Resource" id="Resource_6r1i8"]
 resource_name = "Spawn Meshes Settings"
 script = ExtResource("6_78rjk")
 mesh = ExtResource("5_pcyhw")
-random_seed = 1979363036
+random_seed = 3812069898
 inspect_enabled = true
 debug_enabled = false
 debug_mode = 0
@@ -79,56 +46,34 @@ enabled = true
 [resource]
 script = ExtResource("1_pwag0")
 nodes = Array[Dictionary]([{
-"name": &"id_0020_grid",
-"position_offset": Vector2(20, 180),
-"settings": SubResource("Resource_6r1i8"),
-"template": "grid"
-}, {
-"name": &"id_0022_math_op",
-"position_offset": Vector2(480, 140),
-"settings": SubResource("Resource_840wp"),
-"template": "math_op"
-}, {
-"name": &"id_0004_noise",
-"position_offset": Vector2(240, 180),
-"settings": SubResource("Resource_hovoc"),
-"template": "noise"
-}, {
-"name": &"id_0130_sample_spline",
-"position_offset": Vector2(60, 560),
-"settings": SubResource("Resource_ly1tl"),
+"name": &"id_0139_sample_spline",
+"position_offset": Vector2(-80, 560),
+"settings": SubResource("Resource_pcyhw"),
 "template": "sample_spline"
 }, {
-"name": &"id_0131_spawn_meshes",
-"position_offset": Vector2(340, 560),
-"settings": SubResource("Resource_oxd56"),
+"name": &"id_0141_ray_cast",
+"position_offset": Vector2(200, 560),
+"settings": SubResource("Resource_ly1tl"),
+"template": "ray_cast"
+}, {
+"name": &"id_0142_spawn_meshes",
+"position_offset": Vector2(480, 800),
+"settings": SubResource("Resource_6r1i8"),
 "template": "spawn_meshes"
 }])
 conns = Array[Dictionary]([{
-"from_node": &"id_0020_grid",
+"from_node": &"id_0139_sample_spline",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0004_noise",
+"to_node": &"id_0141_ray_cast",
 "to_port": 0
 }, {
-"from_node": &"id_0004_noise",
+"from_node": &"id_0141_ray_cast",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0022_math_op",
-"to_port": 0
-}, {
-"from_node": &"id_0004_noise",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0022_math_op",
-"to_port": 1
-}, {
-"from_node": &"id_0130_sample_spline",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0131_spawn_meshes",
+"to_node": &"id_0142_spawn_meshes",
 "to_port": 0
 }])
 view_zoom = 0.940374
-view_offset = Vector2(-16.0756, -168.96)
+view_offset = Vector2(55.2741, 218.88)
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
