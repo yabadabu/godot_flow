@@ -12,7 +12,7 @@ func getMeta() -> Dictionary :
 
 func execute( ):
 	var output := FlowData.Data.new()
-	var spos = output.addStream( FlowData.DataType.Vector, "position" )
+	var spos : PackedVector3Array = output.addStream( "position", FlowData.DataType.Vector )
 	if spos == null:
 		return
 	var nsamples : int = settings.x * settings.y * settings.z

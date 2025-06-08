@@ -18,6 +18,7 @@ var connectors_row_prefab = preload( "res://addons/flow_nodes_editor/connectors_
 # Filled during runtime
 var deps : Array[ Dictionary ]
 var frame_id : int = 0
+var err : String
 
 func _ready():
 	refreshInspectMark()
@@ -49,20 +50,42 @@ func get_output( idx : int ):
 	return outputs[ idx ]
 
 func preExecute():
+	setError("")
 	rng.seed = settings.random_seed
+
+func redrawUI():
+	position_offset.x += 1
+	position_offset.x -= 1
 
 func refreshDebugMark():
 	if control_debug:
 		control_debug.visible = settings.debug_enabled
+		redrawUI()
 
 func refreshInspectMark():
 	if control_inspect:
 		control_inspect.visible = settings.inspect_enabled
+		redrawUI()
 
 func refreshFromSettings():
 	refreshDebugMark()
 	refreshInspectMark()
 	title = settings.title
+	
+func setError( new_err : String ):
+	push_error( "Node.Err %s : %s" % [ name, new_err ])
+	err = new_err
+	editor_state_changed.emit()
+		
+func _on_draw() -> void:
+	if settings.inspect_enabled:
+		draw_circle( Vector2(0,0), 16.0, Color.YELLOW )
+	if settings.debug_enabled:
+		draw_circle( Vector2(size.x,0), 16.0, Color.CYAN )
+	if err:
+		self_modulate = Color.RED
+	else:
+		self_modulate = Color.WHITE
 
 func shuffleArray(arr: Array) -> void:
 	for i in range(arr.size() - 1, 0, -1):
@@ -96,4 +119,3 @@ func initFromScript():
 			set_slot_enabled_right( idx + 1, true )
 		else:
 			lbl_out.text = ""
-		

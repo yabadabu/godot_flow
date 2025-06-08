@@ -5,6 +5,7 @@
 [node name="NodeBase" type="GraphNode"]
 offset_right = 208.0
 offset_bottom = 158.0
+resizable = true
 title = "Title"
 slot/0/left_enabled = false
 slot/0/left_type = 0
@@ -26,7 +27,7 @@ layout_mode = 2
 [node name="InspectMark" type="ColorRect" parent="HBoxContainer/Control"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(16, 16)
-layout_mode = 2
+layout_mode = 1
 offset_left = -26.0
 offset_top = -52.0
 offset_right = -10.0
@@ -48,3 +49,5 @@ offset_right = 26.0
 offset_bottom = -35.0
 size_flags_horizontal = 0
 color = Color(0, 1, 1, 1)
+
+[connection signal="draw" from="." to="." method="_on_draw"]

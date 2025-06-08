@@ -51,9 +51,10 @@ func scanAvailableNodes():
 		#print( "Meta is %s " % str(meta) )
 		node_types[ stem ] = meta
 
-func _ready():
+func populatePopupMenu():
 	
-	scanAvailableNodes()
+	min_id = 1000
+	max_id = min_id
 	
 	#gedit.theme.ac = Color( 1, 0.5, 0.5 );
 	var pm = %PopupMenu as PopupMenu
@@ -66,6 +67,11 @@ func _ready():
 		print( "Adding menu", label)
 		pm.add_item(label, max_id, KEY_NONE )
 		max_id += 1
+
+func _ready():
+	
+	scanAvailableNodes()
+	populatePopupMenu()
 		
 	inspector = EditorInspector.new()
 	inspector.custom_minimum_size = Vector2( 200, 600 )
@@ -187,6 +193,7 @@ func _on_graph_edit_gui_input(event):
 			toggleDebug()
 		elif key == KEY_E:
 			toggleInspection()
+			evalGraph()
 		elif key == KEY_R:
 			evalGraph()
 
@@ -341,3 +348,10 @@ func evalGraph():
 			
 		node.preExecute()
 		node.execute()
+		
+		if node.settings.inspect_enabled:
+			data_inspector.refresh()
+
+func _on_button_reload_pressed() -> void:
+	scanAvailableNodes()
+	populatePopupMenu()

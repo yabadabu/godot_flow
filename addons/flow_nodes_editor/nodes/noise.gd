@@ -14,7 +14,7 @@ func execute( ):
 	var in_data : FlowData.Data = get_input(0)
 	var out_data : FlowData.Data = in_data.duplicate()
 	
-	var sout : PackedFloat32Array = out_data.addStream( FlowData.DataType.Float, settings.out_attribute_name )
+	var sout : PackedFloat32Array = out_data.addStream( settings.out_attribute_name, FlowData.DataType.Float )
 	if sout == null:
 		return
 		
@@ -25,10 +25,15 @@ func execute( ):
 	var noise := FastNoiseLite.new()
 	noise.seed = settings.random_seed
 	
-	var scale : float = settings.scale
+	var in_scale : float = settings.in_scale
+	var noise_bias : float = settings.noise_bias
+	var noise_amplitude : float = settings.noise_amplitude
 	
 	for i in sout.size():
-		var pos := ipos[i] * scale
-		sout[i] = noise.get_noise_3d( pos.x, pos.y, pos.z )
+		var pos := ipos[i] * in_scale
+		var raw_noise := noise.get_noise_3d( pos.x, pos.y, pos.z )
+		var noise_01 = ( raw_noise + 1.0 ) * 0.5
+		var nval = clampf( noise_01, 0.0, 1.0 )
+		sout[i] = noise_bias + nval * noise_amplitude
 		
 	set_output( 0, out_data )

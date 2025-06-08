@@ -32,6 +32,9 @@ class Data:
 		if stream and stream.data_type == data_type:
 			return stream.container
 		return null
+		
+	func findStream( name : String ):
+		return streams.get( name, null )
 	
 	func registerStream( name : String, data_type : DataType, container ):
 		streams[ name ] = { 
@@ -41,7 +44,10 @@ class Data:
 		}
 		print( "Registered stream %s : %s " % [ name, streams[ name ] ])
 	
-	func addStream( data_type : DataType, name : String ):
+	func addStream( name : String, data_type : DataType):
+		if not name:
+			push_error("stream name can't be empty" )
+			return null
 		if streams.has( name ):
 			push_error("Data already has stream named %s" % name )
 			return null
@@ -70,6 +76,7 @@ class Data:
 	func filteredStream( old_stream : Dictionary, indices : PackedInt32Array ):
 		var new_size : int = indices.size()
 		match old_stream.data_type:
+			
 			DataType.Bool:
 				var old_container : PackedByteArray = old_stream.container
 				var new_container = PackedByteArray( )
@@ -77,6 +84,7 @@ class Data:
 				for idx in range( new_size ):
 					new_container[idx] = old_container[ indices[idx] ]
 				return new_container
+				
 			DataType.Float:
 				var old_container : PackedFloat32Array = old_stream.container
 				var new_container = PackedFloat32Array( )
@@ -84,6 +92,7 @@ class Data:
 				for idx in range( new_size ):
 					new_container[idx] = old_container[ indices[idx] ]
 				return new_container
+				
 			DataType.Vector:
 				var old_container : PackedVector3Array = old_stream.container
 				var new_container = PackedVector3Array(  )		
@@ -91,17 +100,18 @@ class Data:
 				for idx in range( new_size ):
 					new_container[idx] = old_container[ indices[idx] ]
 				return new_container
+				
 		return null
 
 	func duplicate():
 		# This is not a deep close, the packed*arrays are shared,
 		# use cloneStream to create an independent cpy
-		var s = Data.new()
+		var s := Data.new()
 		s.streams = streams.duplicate()
 		return s
 		
 	func filter( indices : PackedInt32Array ):
-		var new_data = Data.new()
+		var new_data := Data.new()
 		for old_stream in streams.values():
 			var new_container = filteredStream( old_stream, indices )
 			new_data.registerStream( old_stream.name, old_stream.data_type, new_container )

@@ -4,8 +4,10 @@ extends NodeSettings
 
 @export_group("Noise")
 
-@export var scale : float = 1.0
 @export var out_attribute_name : String = "density"
+@export var in_scale : float = 1.0
+@export var noise_bias : float = 0.0
+@export var noise_amplitude : float = 1.0
 
 func _init():
 	super._init()
