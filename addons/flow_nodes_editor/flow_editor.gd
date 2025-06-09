@@ -31,9 +31,8 @@ var max_id = min_id
 
 var comment_padding = Vector2( 40, 40 )
 
-# During graph deps evaluation
+# Required during evaluation
 var gedit_nodes_by_name = {}
-var eval_id = 0
 
 var node_types = { }
 
@@ -58,16 +57,17 @@ func setResourceToEdit( new_resource : FlowGraphResource, new_resource_owner : N
 		gedit.remove_child( child )
 	expected_children_count = gedit.get_child_count()
 	
+	gedit_nodes_by_name.clear()
+	
 	if current_resource != null:
 		print( "Recovering %d nodes" % current_resource.nodes.size() )
 		for res_node in current_resource.nodes:
 			#print( "Recovering node %s" % [ res_node ])
-			var node = addNodeFromTemplate( res_node.template, res_node.settings )
+			var node = addNodeFromTemplate( res_node.template, res_node.name, res_node.settings )
 			if not node:
 				push_error( "Failed to recover node %s" % [ res_node ])
 				continue
 			node.position_offset = res_node.position_offset
-			node.name = res_node.name
 			expected_children_count += 1
 		
 		print( "Recovering %d conns" % current_resource.conns.size() )
@@ -188,6 +188,7 @@ func getSelectedNodes() -> Array[GraphNode]:
 
 func deleteNodes( nodes : Array[GraphNode] ):
 	for node in nodes:
+		gedit_nodes_by_name.erase( node.name )
 		node.queue_free()
 
 func deleteSelectedNodes():
@@ -195,6 +196,8 @@ func deleteSelectedNodes():
 	deleteNodes( nodes )
 	inspected_node = null
 	inspector.edit(null)
+	
+	
 	
 func getRectOfNodes( nodes : Array[GraphNode] ):
 	var r : Rect2
@@ -224,7 +227,7 @@ func localToGraphCoords( local_coords : Vector2 ):
 	#var view_zero_in_scroll_offset = gedit.scroll_offset / gedit.zoom
 	return ( gedit.scroll_offset + local_coords ) / gedit.zoom
 
-func addNodeFromTemplate( node_template, settings = null ):
+func addNodeFromTemplate( node_template, node_name : String, settings = null ):
 	print( "addNode %s" % node_template)
 	var node = packed_node.instantiate() as GraphNode
 	var meta = node_types.get( node_template, null )
@@ -236,7 +239,7 @@ func addNodeFromTemplate( node_template, settings = null ):
 	node.set_script(meta.factory)
 
 	node.node_template = node_template
-	node.name = getNewName(node_template)
+	node.name = node_name
 	node.position_offset = localToGraphCoords(local_drop_position)
 	if settings:
 		node.settings = settings
@@ -254,10 +257,12 @@ func addNodeFromTemplate( node_template, settings = null ):
 	node.size = Vector2(32,32)
 	node.tooltip_text = meta.get( "tooltip", "" )
 	gedit.add_child(node)
+	gedit_nodes_by_name[ node.name ] = node
 	return node
 	
 func addNode( node_template ):
-	var node = addNodeFromTemplate( node_template )
+	var node_name = getNewName(node_template)
+	var node = addNodeFromTemplate( node_template, node_name )
 	if not node:
 		return null
 		
@@ -426,24 +431,26 @@ func getEvalOrder():
 	return all_deps
 
 func evalGraph():
-	print( "evalGraph starts from %s" % resource_owner.name if resource_owner else "null" )
-	gedit_nodes_by_name = {}
-	for c in gedit.get_children():
-		gedit_nodes_by_name[ c.name ] = c
-	
 	ctx.owner = resource_owner
+	ctx.eval_id += 1
+	
+	print( "evalGraph %d starts from %s" % [ ctx.eval_id, resource_owner.name if resource_owner else "null" ] )
 	
 	#print( "getEvalOrder..." )
 	var nodes_to_eval = getEvalOrder( )
 	for node in nodes_to_eval:
-		print( "  Eval:", node.name )
+		print( "  Eval: %s (%d)" % [ node.name, node.eval_id ] )
+			
+		# The node has already been evaluated
+		if node.eval_id == ctx.eval_id:
+			continue
 		
 		for req in node.deps:
 			var req_node = gedit_nodes_by_name.get( req.from_node )
 			var data = req_node.get_output( req.from_port )
 			node.set_input( req.to_port, data )
 			
-		node.preExecute()
+		node.preExecute( ctx )
 		node.execute( ctx )
 		
 		if node.settings.inspect_enabled:

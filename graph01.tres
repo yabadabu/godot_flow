@@ -17,19 +17,6 @@ debug_scale = 1.0
 title = "Sample Spline"
 enabled = true
 
-[sub_resource type="Resource" id="Resource_ly1tl"]
-resource_name = "RayCast Settings"
-script = ExtResource("7_pcyhw")
-dir = Vector3(0.03, -1, 0)
-max_distance = 1000.0
-random_seed = 2520541056
-inspect_enabled = false
-debug_enabled = true
-debug_mode = 0
-debug_scale = 1.0
-title = "Ray Cast"
-enabled = true
-
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_ayuu8"]
 radius = 0.04
 height = 0.54
@@ -46,6 +33,19 @@ debug_scale = 1.0
 title = "Spawn Meshes"
 enabled = true
 
+[sub_resource type="Resource" id="Resource_ly1tl"]
+resource_name = "RayCast Settings"
+script = ExtResource("7_pcyhw")
+dir = Vector3(0.03, -0.93, 0)
+max_distance = 1000.0
+random_seed = 2520541056
+inspect_enabled = false
+debug_enabled = true
+debug_mode = 0
+debug_scale = 1.0
+title = "Ray Cast"
+enabled = true
+
 [resource]
 script = ExtResource("1_pwag0")
 nodes = Array[Dictionary]([{
@@ -54,15 +54,15 @@ nodes = Array[Dictionary]([{
 "settings": SubResource("Resource_pcyhw"),
 "template": "sample_spline"
 }, {
-"name": &"id_0141_ray_cast",
-"position_offset": Vector2(200, 560),
-"settings": SubResource("Resource_ly1tl"),
-"template": "ray_cast"
-}, {
 "name": &"id_0039_spawn_meshes",
 "position_offset": Vector2(20, 980),
 "settings": SubResource("Resource_6r1i8"),
 "template": "spawn_meshes"
+}, {
+"name": &"id_0141_ray_cast",
+"position_offset": Vector2(200, 560),
+"settings": SubResource("Resource_ly1tl"),
+"template": "ray_cast"
 }])
 conns = Array[Dictionary]([{
 "from_node": &"id_0139_sample_spline",
@@ -78,5 +78,5 @@ conns = Array[Dictionary]([{
 "to_port": 0
 }])
 view_zoom = 1.00902
-view_offset = Vector2(-75.2299, 145.92)
+view_offset = Vector2(-40.3608, 145.92)
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"

@@ -16,7 +16,7 @@ var connectors_row_prefab = preload( "res://addons/flow_nodes_editor/connectors_
 
 # Filled during runtime
 var deps : Array[ Dictionary ]
-var frame_id : int = 0
+var eval_id : int = 0
 var err : String
 
 var scenario_rid : RID
@@ -71,8 +71,9 @@ func get_output( idx : int ):
 		return []
 	return outputs[ idx ]
 
-func preExecute():
+func preExecute( ctx : FlowData.EvaluationContext ):
 	# clean outputs...
+	eval_id = ctx.eval_id
 	setError("")
 	rng.seed = settings.random_seed
 

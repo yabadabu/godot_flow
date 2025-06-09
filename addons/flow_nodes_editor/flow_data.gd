@@ -9,6 +9,7 @@ enum DataType {
 
 class EvaluationContext:
 	var owner : Node3D
+	var eval_id : int = 0
 
 class Data:
 	var streams : Dictionary = {}
