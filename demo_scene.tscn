@@ -40,7 +40,7 @@ script = ExtResource("1_iapjp")
 graph = ExtResource("3_ayuu8")
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
 
-[node name="@MultiMeshInstance3D@67099" type="MultiMeshInstance3D" parent="PCG_2"]
+[node name="@MultiMeshInstance3D@68087" type="MultiMeshInstance3D" parent="PCG_2"]
 multimesh = SubResource("MultiMesh_ayuu8")
 metadata/flow_owner = &"id_0039_spawn_meshes"
 
