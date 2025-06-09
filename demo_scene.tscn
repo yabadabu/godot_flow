@@ -44,7 +44,6 @@ graph = ExtResource("4_ctgmk")
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
 
 [node name="Path3D" type="Path3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 curve = SubResource("Curve3D_ayuu8")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]

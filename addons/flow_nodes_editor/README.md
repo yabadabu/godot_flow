@@ -7,6 +7,7 @@
 [ ] read-write sub-streams
 	[ ] vector3 -> .x, .y, .z
 	[ ] basis   -> yaw, pitch, roll
+[ ] dispay substreams
 [x] node transform with ranges in local space
 [ ] Choose mesh to spawn
 [ ] Stream to ref mesh instance
