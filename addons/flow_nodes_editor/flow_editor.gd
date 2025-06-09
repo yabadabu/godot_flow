@@ -7,6 +7,9 @@ var resource_owner : Node3D
 var ctx := FlowData.EvaluationContext.new()
 var regen_pending := false
 var auto_regen := true
+
+# Regen needs to take place once the graph nodes have been added/removed
+# from the actual scene, but there are more nodes child of the graph-edit
 var num_non_nodes_children = 0
 
 @onready var gedit : GraphEdit = %GraphEdit
@@ -16,9 +19,10 @@ var num_non_nodes_children = 0
 var inspector: EditorInspector
 var inspected_node : Node
 
+# This is the default graph-node instantiated, the script contains the logic
 var packed_node = preload("res://addons/flow_nodes_editor/node.tscn")
 
-# New nodes generation
+# New nodes generation using the editor
 var local_drop_position : Vector2 = Vector2(0,0)
 var auto_connect_from_node : String
 var auto_connect_from_port : int
