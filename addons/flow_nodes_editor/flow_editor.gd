@@ -6,12 +6,13 @@ var current_resource: FlowGraphResource
 var resource_owner : Node3D
 var ctx := FlowData.EvaluationContext.new()
 var regen_pending := false
+var auto_regen := true
 var expected_children_count = 0
 
 @onready var gedit : GraphEdit = %GraphEdit
 @onready var data_inspector : Control
 
-# The inspector shows the settings property of the node
+# The inspector shows the settings property of the current node
 var inspector: EditorInspector
 var inspected_node : Node
 
@@ -113,7 +114,7 @@ func _process(delta: float) -> void:
 			evalGraph()
 
 func getNewName( suffix : String ):
-	counter+= 1
+	counter += 1
 	return "id_%04d_%s" % [ counter, suffix ]
 
 func scanAvailableNodes():
@@ -171,11 +172,13 @@ func _ready():
 	inspector.custom_minimum_size.y = 150
 	inspector.property_edited.connect( onNodePropertyChanged )
 	
+	(%AutoRegen as CheckBox).button_pressed = auto_regen
+	
 func onNodePropertyChanged( prop_name : String):
 	if inspected_node:
 		print( "Node %s.%s has changed" % [ inspected_node.name, prop_name ])
 		inspected_node.refreshFromSettings()
-		regen_pending = true
+		regen_pending = auto_regen
 		
 # ------------------------------------------------
 func getSelectedNodes() -> Array[GraphNode]:
@@ -468,3 +471,9 @@ func _on_button_reload_pressed() -> void:
 func _on_button_save_pressed() -> void:
 	if current_resource:
 		ResourceSaver.save(current_resource)
+
+func _on_button_regenerate_pressed() -> void:
+	regen_pending = true
+
+func _on_auto_regen_toggled(toggled_on: bool) -> void:
+	auto_regen = toggled_on

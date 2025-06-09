@@ -39,6 +39,15 @@ text = "Info"
 layout_mode = 2
 text = "Save Resource"
 
+[node name="AutoRegen" type="CheckBox" parent="VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Auto Regen"
+
+[node name="ButtonRegenerate" type="Button" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Regenerate"
+
 [node name="VSplitContainer" type="VSplitContainer" parent="VBoxContainer"]
 custom_minimum_size = Vector2(0, 200)
 layout_mode = 2
@@ -86,6 +95,8 @@ item_9/id = 1007
 
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/ButtonReload" to="." method="_on_button_reload_pressed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/ButtonSave" to="." method="_on_button_save_pressed"]
+[connection signal="toggled" from="VBoxContainer/HBoxContainer/AutoRegen" to="." method="_on_auto_regen_toggled"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/ButtonRegenerate" to="." method="_on_button_regenerate_pressed"]
 [connection signal="connection_from_empty" from="VBoxContainer/VSplitContainer/GraphEdit" to="." method="_on_graph_edit_connection_from_empty"]
 [connection signal="connection_request" from="VBoxContainer/VSplitContainer/GraphEdit" to="." method="_on_graph_edit_connection_request"]
 [connection signal="connection_to_empty" from="VBoxContainer/VSplitContainer/GraphEdit" to="." method="_on_graph_edit_connection_to_empty"]
