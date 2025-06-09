@@ -1,8 +1,9 @@
-[gd_resource type="Resource" script_class="FlowGraphResource" load_steps=6 format=3 uid="uid://66ejgwppld3l"]
+[gd_resource type="Resource" script_class="FlowGraphResource" load_steps=8 format=3 uid="uid://66ejgwppld3l"]
 
 [ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="1_i7hbt"]
 [ext_resource type="Script" uid="uid://dwtm2hr5nh78h" path="res://addons/flow_nodes_editor/nodes/grid_settings.gd" id="1_qjhb7"]
 [ext_resource type="Script" uid="uid://ctpeiiq5p30rt" path="res://addons/flow_nodes_editor/nodes/noise_settings.gd" id="2_rvt80"]
+[ext_resource type="Script" uid="uid://dt7o3moxddt4h" path="res://addons/flow_nodes_editor/nodes/transform_settings.gd" id="3_js8uo"]
 
 [sub_resource type="Resource" id="Resource_u5yrf"]
 resource_name = "Noise Settings"
@@ -34,6 +35,21 @@ debug_scale = 1.0
 title = "Grid"
 enabled = true
 
+[sub_resource type="Resource" id="Resource_f0s07"]
+resource_name = "Transform Settings"
+script = ExtResource("3_js8uo")
+offset_min = Vector3(0, 0, 0)
+offset_max = Vector3(0, 0, 0)
+rotation_min = Vector3(0.5, 0, 0)
+rotation_max = Vector3(0, 336.1, 0)
+random_seed = 3465457644
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+title = "Transform"
+enabled = true
+
 [resource]
 script = ExtResource("1_i7hbt")
 nodes = Array[Dictionary]([{
@@ -46,6 +62,11 @@ nodes = Array[Dictionary]([{
 "position_offset": Vector2(-40, 380),
 "settings": SubResource("Resource_js8uo"),
 "template": "grid"
+}, {
+"name": &"id_0001_transform",
+"position_offset": Vector2(200, 600),
+"settings": SubResource("Resource_f0s07"),
+"template": "transform"
 }])
 conns = Array[Dictionary]([{
 "from_node": &"id_0004_grid",
@@ -53,7 +74,13 @@ conns = Array[Dictionary]([{
 "keep_alive": false,
 "to_node": &"id_0005_noise",
 "to_port": 0
+}, {
+"from_node": &"id_0004_grid",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0001_transform",
+"to_port": 0
 }])
 view_zoom = 1.00902
-view_offset = Vector2(-97.9608, -90.9119)
+view_offset = Vector2(-51.8808, -2.5919)
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"

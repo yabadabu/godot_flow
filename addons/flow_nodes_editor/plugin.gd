@@ -28,6 +28,7 @@ func _enter_tree():
 	data_inspector_dock = spawnDock("res://addons/flow_nodes_editor/data_inspector.tscn", "Data Inspector", true)
 	graph_dock.data_inspector = data_inspector_dock
 	
+	# Will refresh everytime the undo/redo subsystem saves a point
 	undo_redo = get_undo_redo()
 	undo_redo.history_changed.connect(_on_history_changed)	
 
@@ -56,5 +57,5 @@ func _selection_changed():
 		graph_dock.setResourceToEdit( scene_node.graph, scene_node )
 
 func _on_history_changed( ):
-	print("Something changed in the editor (undo/redo history updated)")	
+	#print("Something changed in the editor (undo/redo history updated)")	
 	graph_dock.regen_pending = true

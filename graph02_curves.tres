@@ -1,18 +1,34 @@
-[gd_resource type="Resource" script_class="FlowGraphResource" load_steps=4 format=3 uid="uid://c6tic21gyki1f"]
+[gd_resource type="Resource" script_class="FlowGraphResource" load_steps=6 format=3 uid="uid://c6tic21gyki1f"]
 
 [ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="1_4ly6f"]
 [ext_resource type="Script" uid="uid://cbj3mmuatfk1v" path="res://addons/flow_nodes_editor/nodes/sample_spline_settings.gd" id="1_bd8sb"]
+[ext_resource type="Script" uid="uid://dt7o3moxddt4h" path="res://addons/flow_nodes_editor/nodes/transform_settings.gd" id="2_2h21p"]
 
 [sub_resource type="Resource" id="Resource_2h21p"]
 resource_name = "Sample Spline Settings"
 script = ExtResource("1_bd8sb")
 uniform_interval = 0.2
 random_seed = 2842677187
-inspect_enabled = true
-debug_enabled = true
+inspect_enabled = false
+debug_enabled = false
 debug_mode = 0
 debug_scale = 1.0
 title = "Sample Spline"
+enabled = true
+
+[sub_resource type="Resource" id="Resource_1xbvu"]
+resource_name = "Transform Settings"
+script = ExtResource("2_2h21p")
+offset_min = Vector3(0.01, 0, 0)
+offset_max = Vector3(0, 0, 0)
+rotation_min = Vector3(0, 0, 0)
+rotation_max = Vector3(0, 0, 0)
+random_seed = 2046638687
+inspect_enabled = false
+debug_enabled = true
+debug_mode = 0
+debug_scale = 1.0
+title = "Transform"
 enabled = true
 
 [resource]
@@ -22,12 +38,17 @@ nodes = Array[Dictionary]([{
 "position_offset": Vector2(140, 300),
 "settings": SubResource("Resource_2h21p"),
 "template": "sample_spline"
+}, {
+"name": &"id_0002_transform",
+"position_offset": Vector2(375.04, 668.2),
+"settings": SubResource("Resource_1xbvu"),
+"template": "transform"
 }])
 conns = Array[Dictionary]([{
 "from_node": &"id_0001_sample_spline",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0003_select",
+"to_node": &"id_0002_transform",
 "to_port": 0
 }])
 view_zoom = 1.0

@@ -1,13 +1,13 @@
 === TODO
 
-[ ] store rotations
+[x] store rotations
 [ ] store sizes
 [ ] store color
 [ ] display density/color in debug
 [ ] read-write sub-streams
 	[ ] vector3 -> .x, .y, .z
 	[ ] basis   -> yaw, pitch, roll
-[ ] node transform with ranges in local space
+[x] node transform with ranges in local space
 [ ] Choose mesh to spawn
 [ ] Stream to ref mesh instance
 [ ] Multic Constant as Arg vs Attribute input

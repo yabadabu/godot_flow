@@ -83,7 +83,7 @@ func setResourceToEdit( new_resource : FlowGraphResource, new_resource_owner : N
 				
 		gedit.zoom = current_resource.view_zoom
 		gedit.scroll_offset = current_resource.view_offset
-		new_name_counter = current_resource.new_name_counter
+		#new_name_counter = current_resource.new_name_counter
 
 	regen_pending = true
 	print( "regen_pending is now true (%d)" % [num_non_nodes_children])
@@ -447,7 +447,7 @@ func removeGeneratedNodes():
 	for child in resource_owner.get_children():
 		if child.has_meta( "flow_owner" ):
 			nodes_to_remove.append(child)
-	print( "Removing %d generated comps" % [nodes_to_remove.size()])
+	#print( "Removing %d generated comps" % [nodes_to_remove.size()])
 	for child in nodes_to_remove:
 		resource_owner.remove_child( child )
 		child.queue_free()
@@ -462,7 +462,7 @@ func evalGraph():
 	#print( "getEvalOrder..." )
 	var nodes_to_eval = getEvalOrder( )
 	for node in nodes_to_eval:
-		print( "  Eval: %s (%d)" % [ node.name, node.eval_id ] )
+		#print( "  Eval: %s (%d)" % [ node.name, node.eval_id ] )
 			
 		# The node has already been evaluated
 		if node.eval_id == ctx.eval_id:
@@ -482,7 +482,7 @@ func evalGraph():
 			node.setupDebugDraw()
 
 	regen_pending = false
-	print( "regen_pending is now false")
+	#print( "regen_pending is now false")
 
 func _on_button_reload_pressed() -> void:
 	scanAvailableNodes()

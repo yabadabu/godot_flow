@@ -23,28 +23,34 @@ grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer"]
 layout_mode = 2
+vertical_scroll_mode = 0
 
-[node name="ButtonReload" type="Button" parent="VBoxContainer/HBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ButtonReload" type="Button" parent="VBoxContainer/ScrollContainer/HBoxContainer"]
 layout_mode = 2
 text = "Reload"
 
-[node name="LabelInfo" type="Label" parent="VBoxContainer/HBoxContainer"]
+[node name="LabelInfo" type="Label" parent="VBoxContainer/ScrollContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Info"
 
-[node name="ButtonSave" type="Button" parent="VBoxContainer/HBoxContainer"]
+[node name="ButtonSave" type="Button" parent="VBoxContainer/ScrollContainer/HBoxContainer"]
 layout_mode = 2
 text = "Save Resource"
 
-[node name="AutoRegen" type="CheckBox" parent="VBoxContainer/HBoxContainer"]
+[node name="AutoRegen" type="CheckBox" parent="VBoxContainer/ScrollContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+button_pressed = true
 text = "Auto Regen"
 
-[node name="ButtonRegenerate" type="Button" parent="VBoxContainer/HBoxContainer"]
+[node name="ButtonRegenerate" type="Button" parent="VBoxContainer/ScrollContainer/HBoxContainer"]
 layout_mode = 2
 text = "Regenerate"
 
@@ -62,6 +68,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_colors/activity = Color(1, 0.501961, 0.25098, 1)
+scroll_offset = Vector2(0, -348)
 right_disconnects = true
 connection_lines_thickness = 2.0
 show_zoom_buttons = false
@@ -93,10 +100,10 @@ item_8/id = 1006
 item_9/text = "Transform"
 item_9/id = 1007
 
-[connection signal="pressed" from="VBoxContainer/HBoxContainer/ButtonReload" to="." method="_on_button_reload_pressed"]
-[connection signal="pressed" from="VBoxContainer/HBoxContainer/ButtonSave" to="." method="_on_button_save_pressed"]
-[connection signal="toggled" from="VBoxContainer/HBoxContainer/AutoRegen" to="." method="_on_auto_regen_toggled"]
-[connection signal="pressed" from="VBoxContainer/HBoxContainer/ButtonRegenerate" to="." method="_on_button_regenerate_pressed"]
+[connection signal="pressed" from="VBoxContainer/ScrollContainer/HBoxContainer/ButtonReload" to="." method="_on_button_reload_pressed"]
+[connection signal="pressed" from="VBoxContainer/ScrollContainer/HBoxContainer/ButtonSave" to="." method="_on_button_save_pressed"]
+[connection signal="toggled" from="VBoxContainer/ScrollContainer/HBoxContainer/AutoRegen" to="." method="_on_auto_regen_toggled"]
+[connection signal="pressed" from="VBoxContainer/ScrollContainer/HBoxContainer/ButtonRegenerate" to="." method="_on_button_regenerate_pressed"]
 [connection signal="connection_from_empty" from="VBoxContainer/VSplitContainer/GraphEdit" to="." method="_on_graph_edit_connection_from_empty"]
 [connection signal="connection_request" from="VBoxContainer/VSplitContainer/GraphEdit" to="." method="_on_graph_edit_connection_request"]
 [connection signal="connection_to_empty" from="VBoxContainer/VSplitContainer/GraphEdit" to="." method="_on_graph_edit_connection_to_empty"]
