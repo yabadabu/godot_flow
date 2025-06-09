@@ -1,23 +1,9 @@
 [gd_resource type="Resource" script_class="FlowGraphResource" load_steps=9 format=3 uid="uid://doldqxmlcvh80"]
 
 [ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="1_pwag0"]
-[ext_resource type="BoxMesh" uid="uid://7flu82pqtc5d" path="res://addons/flow_nodes_editor/resources/unit_cube.tres" id="3_6r1i8"]
 [ext_resource type="Script" uid="uid://cbj3mmuatfk1v" path="res://addons/flow_nodes_editor/nodes/sample_spline_settings.gd" id="4_840wp"]
 [ext_resource type="Script" uid="uid://bnpohx6mm4hdh" path="res://addons/flow_nodes_editor/nodes/spawn_meshes_settings.gd" id="4_hovoc"]
 [ext_resource type="Script" uid="uid://bfwm6jlb65yts" path="res://addons/flow_nodes_editor/nodes/ray_cast_settings.gd" id="7_pcyhw"]
-
-[sub_resource type="Resource" id="Resource_ly1tl"]
-resource_name = "RayCast Settings"
-script = ExtResource("7_pcyhw")
-dir = Vector3(0, -1, 0)
-max_distance = 1000.0
-random_seed = 2520541056
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-title = "Ray Cast"
-enabled = true
 
 [sub_resource type="Resource" id="Resource_pcyhw"]
 resource_name = "Sample Spline Settings"
@@ -31,10 +17,27 @@ debug_scale = 1.0
 title = "Sample Spline"
 enabled = true
 
+[sub_resource type="Resource" id="Resource_ly1tl"]
+resource_name = "RayCast Settings"
+script = ExtResource("7_pcyhw")
+dir = Vector3(0.03, -1, 0)
+max_distance = 1000.0
+random_seed = 2520541056
+inspect_enabled = false
+debug_enabled = true
+debug_mode = 0
+debug_scale = 1.0
+title = "Ray Cast"
+enabled = true
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_ayuu8"]
+radius = 0.04
+height = 0.54
+
 [sub_resource type="Resource" id="Resource_6r1i8"]
 resource_name = "Spawn Meshes Settings"
 script = ExtResource("4_hovoc")
-mesh = ExtResource("3_6r1i8")
+mesh = SubResource("CapsuleMesh_ayuu8")
 random_seed = 1320015197
 inspect_enabled = false
 debug_enabled = false
@@ -46,15 +49,15 @@ enabled = true
 [resource]
 script = ExtResource("1_pwag0")
 nodes = Array[Dictionary]([{
-"name": &"id_0141_ray_cast",
-"position_offset": Vector2(200, 560),
-"settings": SubResource("Resource_ly1tl"),
-"template": "ray_cast"
-}, {
 "name": &"id_0139_sample_spline",
 "position_offset": Vector2(-80, 560),
 "settings": SubResource("Resource_pcyhw"),
 "template": "sample_spline"
+}, {
+"name": &"id_0141_ray_cast",
+"position_offset": Vector2(200, 560),
+"settings": SubResource("Resource_ly1tl"),
+"template": "ray_cast"
 }, {
 "name": &"id_0039_spawn_meshes",
 "position_offset": Vector2(20, 980),
@@ -74,6 +77,6 @@ conns = Array[Dictionary]([{
 "to_node": &"id_0039_spawn_meshes",
 "to_port": 0
 }])
-view_zoom = 0.940374
+view_zoom = 1.00902
 view_offset = Vector2(-75.2299, 145.92)
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"

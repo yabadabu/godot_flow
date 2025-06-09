@@ -90,9 +90,7 @@ func refreshFromSettings():
 	refreshInspectMark()
 	title = getTitle()
 	
-	if settings.debug_enabled:
-		create_multimesh_direct()
-	else:
+	if not settings.debug_enabled:
 		cleanup_multimesh_direct()
 	
 func create_multimesh_direct():
@@ -184,12 +182,18 @@ func initFromScript():
 func setupDebugDraw():
 	var out_data : FlowData.Data = get_output(0)
 	if not out_data:
+		print( "setupDebugDraw failed - out_data" )
 		return
+		
+	create_multimesh_direct()
+		
 	if not multimesh_rid.is_valid():
+		print( "setupDebugDraw failed - multimesh_rid" )
 		return
 		
 	var positions : PackedVector3Array = out_data.getContainerChecked( "position", FlowData.DataType.Vector )
 	if positions == null:
+		print( "setupDebugDraw failed - positions" )
 		return
 	
 	var instance_count = positions.size()

@@ -1,8 +1,18 @@
-[gd_scene load_steps=7 format=3 uid="uid://c1b6ke05vpb8r"]
+[gd_scene load_steps=9 format=3 uid="uid://c1b6ke05vpb8r"]
 
 [ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_iapjp"]
 [ext_resource type="Resource" uid="uid://66ejgwppld3l" path="res://graph00.tres" id="2_8n7uv"]
 [ext_resource type="Resource" uid="uid://doldqxmlcvh80" path="res://graph01.tres" id="3_ayuu8"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_ayuu8"]
+radius = 0.04
+height = 0.54
+
+[sub_resource type="MultiMesh" id="MultiMesh_ayuu8"]
+transform_format = 1
+instance_count = 15
+mesh = SubResource("CapsuleMesh_ayuu8")
+buffer = PackedFloat32Array(1, 0, 0, -0.0381936, 0, 1, 0, -0.706621, 0, 0, 1, -0.910154, 1, 0, 0, 0.0767709, 0, 1, 0, -0.803432, 0, 0, 1, -0.70659, 1, 0, 0, 0.32221, 0, 1, 0, -1.02825, 0, 0, 1, -0.23386, 1, 0, 0, 0.548941, 0, 1, 0, -1.28267, 0, 0, 1, 0.301091, 1, 0, 0, 0.607783, 0, 1, 0, -1.46825, 0, 0, 1, 0.691321, 1, 0, 0, 0.152891, 0, 1, 0, -1.67864, 0, 0, 1, 1.1337, 1, 0, 0, -0.502683, 0, 1, 0, -1.77918, 0, 0, 1, 1.3451, 1, 0, 0, -1.05722, 0, 1, 0, -1.79847, 0, 0, 1, 1.38566, 1, 0, 0, -1.53386, 0, 1, 0, -1.71655, 0, 0, 1, 1.21341, 1, 0, 0, -1.58782, 0, 1, 0, -1.46465, 0, 0, 1, 0.683738, 1, 0, 0, -1.44416, 0, 1, 0, -1.30544, 0, 0, 1, 0.348968, 1, 0, 0, -1.22448, 0, 1, 0, -1.21187, 0, 0, 1, 0.15223, 1, 0, 0, -0.741178, 0, 1, 0, -1.00603, 0, 0, 1, -0.280593, 1, 0, 0, -0.257876, 0, 1, 0, -0.800186, 0, 0, 1, -0.713416, 1, 0, 0, -0.0381936, 0, 1, 0, -0.706621, 0, 0, 1, -0.910154)
 
 [sub_resource type="Curve3D" id="Curve3D_ayuu8"]
 closed = true
@@ -26,10 +36,14 @@ graph = ExtResource("2_8n7uv")
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
 
 [node name="PCG_2" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.022011, 0.00430929, 1.0249)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.217819, 0.675133, 0.321692)
 script = ExtResource("1_iapjp")
 graph = ExtResource("3_ayuu8")
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
+
+[node name="@MultiMeshInstance3D@62237" type="MultiMeshInstance3D" parent="PCG_2"]
+multimesh = SubResource("MultiMesh_ayuu8")
+metadata/flow_owner = &"id_0039_spawn_meshes"
 
 [node name="Path3D" type="Path3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.02005, 1.26692, -0.0621197)

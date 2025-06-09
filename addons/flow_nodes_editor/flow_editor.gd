@@ -5,6 +5,8 @@ class_name FlowGraphEditor
 var current_resource: FlowGraphResource
 var resource_owner : Node3D
 var ctx := FlowData.EvaluationContext.new()
+var regen_pending := false
+var expected_children_count = 0
 
 @onready var gedit : GraphEdit = %GraphEdit
 @onready var data_inspector : Control
@@ -31,6 +33,7 @@ var comment_padding = Vector2( 40, 40 )
 
 # During graph deps evaluation
 var gedit_nodes_by_name = {}
+var eval_id = 0
 
 var node_types = { }
 
@@ -44,10 +47,17 @@ func setResourceToEdit( new_resource : FlowGraphResource, new_resource_owner : N
 	resource_owner = new_resource_owner
 	
 	# Remove exiting nodes
+	var children = []
 	for child in gedit.get_children():
 		if child is GraphNode:
 			child.queue_free()
+			children.append( child )
 			
+	gedit.clear_connections()
+	for child in children:
+		gedit.remove_child( child )
+	expected_children_count = gedit.get_child_count()
+	
 	if current_resource != null:
 		print( "Recovering %d nodes" % current_resource.nodes.size() )
 		for res_node in current_resource.nodes:
@@ -58,6 +68,7 @@ func setResourceToEdit( new_resource : FlowGraphResource, new_resource_owner : N
 				continue
 			node.position_offset = res_node.position_offset
 			node.name = res_node.name
+			expected_children_count += 1
 		
 		print( "Recovering %d conns" % current_resource.conns.size() )
 		for conn in current_resource.conns:
@@ -69,7 +80,8 @@ func setResourceToEdit( new_resource : FlowGraphResource, new_resource_owner : N
 		gedit.zoom = current_resource.view_zoom
 		gedit.scroll_offset = current_resource.view_offset
 
-	evalGraph()
+	regen_pending = true
+	print( "regen_pending is now true (%d)" % [expected_children_count])
 
 func saveResource():
 	if current_resource == null:
@@ -95,6 +107,10 @@ func saveResource():
 	current_resource.view_zoom = gedit.zoom
 	current_resource.view_offset = gedit.scroll_offset
 	
+func _process(delta: float) -> void:
+	if regen_pending and current_resource:
+		if gedit.get_child_count() == expected_children_count:
+			evalGraph()
 
 func getNewName( suffix : String ):
 	counter+= 1
@@ -159,7 +175,7 @@ func onNodePropertyChanged( prop_name : String):
 	if inspected_node:
 		print( "Node %s.%s has changed" % [ inspected_node.name, prop_name ])
 		inspected_node.refreshFromSettings()
-		evalGraph()
+		regen_pending = true
 		
 # ------------------------------------------------
 func getSelectedNodes() -> Array[GraphNode]:
@@ -391,13 +407,8 @@ func getEvalOrder():
 		var node = child as FlowNodeBase
 		if not node:
 			continue
-		if node.settings.inspect_enabled or node.settings.debug_enabled:
-			finals.clear()
+		if node.settings.inspect_enabled or node.settings.debug_enabled or node.isFinal():
 			finals.append( node )
-			break
-		if not node.isFinal():
-			continue
-		finals.append( node )
 	
 	# for each node, find requirements
 	# A -
@@ -415,7 +426,7 @@ func getEvalOrder():
 	return all_deps
 
 func evalGraph():
-	print( "evalGraph starts" )
+	print( "evalGraph starts from %s" % resource_owner.name if resource_owner else "null" )
 	gedit_nodes_by_name = {}
 	for c in gedit.get_children():
 		gedit_nodes_by_name[ c.name ] = c
@@ -439,6 +450,9 @@ func evalGraph():
 			data_inspector.refresh()
 		if node.settings.debug_enabled:
 			node.setupDebugDraw()
+
+	regen_pending = false
+	print( "regen_pending is now false")
 
 func _on_button_reload_pressed() -> void:
 	scanAvailableNodes()

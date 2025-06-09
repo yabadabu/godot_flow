@@ -45,7 +45,7 @@ class Data:
 			"name" : name,
 			"data_type" : data_type
 		}
-		print( "Registered stream %s : %s " % [ name, streams[ name ] ])
+		#print( "Registered stream %s : %s " % [ name, streams[ name ] ])
 	
 	func addStream( name : String, data_type : DataType):
 		if not name:
