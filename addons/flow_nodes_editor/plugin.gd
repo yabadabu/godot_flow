@@ -7,6 +7,8 @@ extends EditorPlugin
 var graph_dock: FlowGraphEditor
 var data_inspector_dock: Control
 var inspector_plugin
+var watched_nodes : Array[Node] = []
+var undo_redo: EditorUndoRedoManager
 
 @onready var selection = EditorInterface.get_selection()
 
@@ -26,10 +28,12 @@ func _enter_tree():
 	data_inspector_dock = spawnDock("res://addons/flow_nodes_editor/data_inspector.tscn", "Data Inspector", true)
 	graph_dock.data_inspector = data_inspector_dock
 	
-	#inspector_plugin = FlowGraphInspectorPlugin.new()
-	#add_inspector_plugin(inspector_plugin)
+	undo_redo = get_undo_redo()
+	undo_redo.history_changed.connect(_on_history_changed)	
 
 func _exit_tree():
+	if undo_redo:
+		undo_redo.history_changed.disconnect(_on_history_changed)
 	#remove_inspector_plugin(inspector_plugin)
 	remove_control_from_docks(graph_dock)
 	graph_dock.free()
@@ -42,12 +46,15 @@ func _ready():
 	_selection_changed()
 
 func _selection_changed():
+	
 	var scene_nodes = selection.get_selected_nodes()
 	if scene_nodes.is_empty():
 		return
+		
 	var scene_node = scene_nodes[0]
 	if scene_node is FlowGraphNode3D:
 		graph_dock.setResourceToEdit( scene_node.graph, scene_node )
-		#if not foliage.graph_changed.is_connected(add_graph_edit):
-			#foliage.graph_changed.connect(add_graph_edit.bind(foliage))
-		#add_graph_edit(foliage)
+
+func _on_history_changed( ):
+	print("Something changed in the editor (undo/redo history updated)")	
+	graph_dock.regen_pending = true
