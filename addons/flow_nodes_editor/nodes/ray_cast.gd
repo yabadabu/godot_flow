@@ -22,7 +22,7 @@ func execute( _ctx : FlowData.EvaluationContext ):
 	
 	var in_data : FlowData.Data = get_input(0)
 	var out_data : FlowData.Data = in_data.duplicate()
-	var spos : PackedVector3Array = out_data.cloneStream( "position" )
+	var spos : PackedVector3Array = out_data.cloneStream( FlowData.AttrPosition )
 	var scaled_dir : Vector3 = settings.dir * settings.max_distance
 	var ray_start := Vector3(0,0,0)
 	var ray_end := ray_start + scaled_dir

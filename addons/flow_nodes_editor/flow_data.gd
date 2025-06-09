@@ -7,6 +7,9 @@ enum DataType {
 	Vector,
 }
 
+const AttrPosition : StringName = "position"
+const AttrRotation : StringName = "rotation"
+
 class EvaluationContext:
 	var owner : Node3D
 	var eval_id : int = 0

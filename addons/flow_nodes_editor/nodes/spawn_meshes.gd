@@ -38,7 +38,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 
 	#in_data.dump( "Spawn" )
 
-	var container : PackedVector3Array = in_data.getContainerChecked( "position", FlowData.DataType.Vector )
+	var container : PackedVector3Array = in_data.getContainerChecked( FlowData.AttrPosition, FlowData.DataType.Vector )
 	if container == null:
 		setError("Spawn.Missing stream position")
 		return

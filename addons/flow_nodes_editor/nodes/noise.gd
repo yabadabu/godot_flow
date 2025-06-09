@@ -18,7 +18,7 @@ func execute( _ctx : FlowData.EvaluationContext ):
 	if sout == null:
 		return
 		
-	var ipos : PackedVector3Array = out_data.getContainerChecked( "position", FlowData.DataType.Vector )
+	var ipos : PackedVector3Array = out_data.getContainerChecked( FlowData.AttrPosition, FlowData.DataType.Vector )
 	if ipos == null:
 		return
 		

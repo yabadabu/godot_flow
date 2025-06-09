@@ -192,7 +192,7 @@ func setupDebugDraw():
 		print( "setupDebugDraw failed - multimesh_rid" )
 		return
 		
-	var positions : PackedVector3Array = out_data.getContainerChecked( "position", FlowData.DataType.Vector )
+	var positions : PackedVector3Array = out_data.getContainerChecked( FlowData.AttrPosition, FlowData.DataType.Vector )
 	if positions == null:
 		print( "setupDebugDraw failed - positions" )
 		return

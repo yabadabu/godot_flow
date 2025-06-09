@@ -28,7 +28,7 @@ var auto_connect_from_node : String
 var auto_connect_from_port : int
 var auto_connect_to_node : String
 var auto_connect_to_port : int
-var counter : int = 0
+var new_name_counter : int = 0
 
 # Ranges for the menu
 var min_id = 1000
@@ -83,6 +83,7 @@ func setResourceToEdit( new_resource : FlowGraphResource, new_resource_owner : N
 				
 		gedit.zoom = current_resource.view_zoom
 		gedit.scroll_offset = current_resource.view_offset
+		new_name_counter = current_resource.new_name_counter
 
 	regen_pending = true
 	print( "regen_pending is now true (%d)" % [num_non_nodes_children])
@@ -110,6 +111,7 @@ func saveResource():
 
 	current_resource.view_zoom = gedit.zoom
 	current_resource.view_offset = gedit.scroll_offset
+	current_resource.new_name_counter = new_name_counter
 	
 func _process(delta: float) -> void:
 	if regen_pending and current_resource:
@@ -118,8 +120,8 @@ func _process(delta: float) -> void:
 			evalGraph()
 
 func getNewName( suffix : String ):
-	counter += 1
-	return "id_%04d_%s" % [ counter, suffix ]
+	new_name_counter += 1
+	return "id_%04d_%s" % [ new_name_counter, suffix ]
 
 func scanAvailableNodes():
 	var directory_path := "res://addons/flow_nodes_editor/nodes"
@@ -176,11 +178,11 @@ func _ready():
 	inspector.custom_minimum_size.y = 150
 	inspector.property_edited.connect( onNodePropertyChanged )
 	
-	(%AutoRegen as CheckBox).button_pressed = auto_regen
+	%AutoRegen.button_pressed = auto_regen
 	
 func onNodePropertyChanged( prop_name : String):
 	if inspected_node:
-		print( "Node %s.%s has changed" % [ inspected_node.name, prop_name ])
+		#print( "Node %s.%s has changed" % [ inspected_node.name, prop_name ])
 		inspected_node.refreshFromSettings()
 		regen_pending = auto_regen
 		

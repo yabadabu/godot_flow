@@ -33,7 +33,7 @@ func execute( _ctx : FlowData.EvaluationContext ):
 	print("Found ", path3d_nodes.size(), " Path3D nodes:")
 
 	var output := FlowData.Data.new()
-	var spos : PackedVector3Array = output.addStream( "position", FlowData.DataType.Vector )
+	var spos : PackedVector3Array = output.addStream( FlowData.AttrPosition, FlowData.DataType.Vector )
 
 	var uniform_interval = maxf( settings.uniform_interval, 0.01 )
 
