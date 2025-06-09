@@ -4,21 +4,6 @@
 [ext_resource type="Script" uid="uid://dwtm2hr5nh78h" path="res://addons/flow_nodes_editor/nodes/grid_settings.gd" id="1_qjhb7"]
 [ext_resource type="Script" uid="uid://ctpeiiq5p30rt" path="res://addons/flow_nodes_editor/nodes/noise_settings.gd" id="2_rvt80"]
 
-[sub_resource type="Resource" id="Resource_js8uo"]
-resource_name = "Grid Settings"
-script = ExtResource("1_qjhb7")
-x = 8
-y = 1
-z = 8
-step = Vector3(0.5, 0.5, 0.5)
-random_seed = 3320734397
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-title = "Grid"
-enabled = true
-
 [sub_resource type="Resource" id="Resource_u5yrf"]
 resource_name = "Noise Settings"
 script = ExtResource("2_rvt80")
@@ -34,18 +19,33 @@ debug_scale = 1.0
 title = "Noise"
 enabled = true
 
+[sub_resource type="Resource" id="Resource_js8uo"]
+resource_name = "Grid Settings"
+script = ExtResource("1_qjhb7")
+x = 8
+y = 1
+z = 8
+step = Vector3(0.5, 0.5, 0.5)
+random_seed = 3320734397
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+title = "Grid"
+enabled = true
+
 [resource]
 script = ExtResource("1_i7hbt")
 nodes = Array[Dictionary]([{
-"name": &"id_0004_grid",
-"position_offset": Vector2(-40, 380),
-"settings": SubResource("Resource_js8uo"),
-"template": "grid"
-}, {
 "name": &"id_0005_noise",
 "position_offset": Vector2(220, 380),
 "settings": SubResource("Resource_u5yrf"),
 "template": "noise"
+}, {
+"name": &"id_0004_grid",
+"position_offset": Vector2(-40, 380),
+"settings": SubResource("Resource_js8uo"),
+"template": "grid"
 }])
 conns = Array[Dictionary]([{
 "from_node": &"id_0004_grid",
@@ -55,5 +55,5 @@ conns = Array[Dictionary]([{
 "to_port": 0
 }])
 view_zoom = 1.00902
-view_offset = Vector2(-40.3608, -81.3119)
+view_offset = Vector2(-97.9608, -90.9119)
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"

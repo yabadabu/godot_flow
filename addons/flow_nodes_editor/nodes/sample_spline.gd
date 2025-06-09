@@ -33,17 +33,26 @@ func execute( _ctx : FlowData.EvaluationContext ):
 	print("Found ", path3d_nodes.size(), " Path3D nodes:")
 
 	var output := FlowData.Data.new()
-	var spos : PackedVector3Array = output.addStream( FlowData.AttrPosition, FlowData.DataType.Vector )
+	output.addCommonStreams( 0 )
+	var spos : = output.getVector3Container( FlowData.AttrPosition )
+	var srot : = output.getVector3Container( FlowData.AttrRotation )
 
 	var uniform_interval = maxf( settings.uniform_interval, 0.01 )
 
 	for path_3d in path3d_nodes:
 		var curve : Curve3D = path_3d.curve
 		curve.bake_interval = uniform_interval
-		var samples : PackedVector3Array = curve.get_baked_points()
 		var base = spos.size()
-		spos.resize( base + samples.size() )
-		for idx in range( samples.size() ):
-			spos[base + idx] = path_3d.transform * samples[idx]
+		var curve_length := curve.get_baked_length()
+		var num_samples = curve.get_baked_points().size()
+		spos.resize( base + num_samples )
+		srot.resize( base + num_samples )
+		for idx in range( num_samples ):
+			var offset = idx * curve_length / float(num_samples)
+			var t : Transform3D = curve.sample_baked_with_rotation( offset )
+			spos[base + idx] = path_3d.transform * t.origin
+			
+			var b : Basis = path_3d.transform.basis * t.basis
+			srot[base + idx] = FlowData.basisToEuler( b )
 
 	set_output( 0, output )

@@ -4,18 +4,6 @@
 [ext_resource type="Script" uid="uid://cbj3mmuatfk1v" path="res://addons/flow_nodes_editor/nodes/sample_spline_settings.gd" id="4_840wp"]
 [ext_resource type="Script" uid="uid://bfwm6jlb65yts" path="res://addons/flow_nodes_editor/nodes/ray_cast_settings.gd" id="7_pcyhw"]
 
-[sub_resource type="Resource" id="Resource_pcyhw"]
-resource_name = "Sample Spline Settings"
-script = ExtResource("4_840wp")
-uniform_interval = 0.44
-random_seed = 1977794624
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-title = "Sample Spline"
-enabled = true
-
 [sub_resource type="Resource" id="Resource_ly1tl"]
 resource_name = "RayCast Settings"
 script = ExtResource("7_pcyhw")
@@ -29,18 +17,30 @@ debug_scale = 1.0
 title = "Ray Cast"
 enabled = true
 
+[sub_resource type="Resource" id="Resource_pcyhw"]
+resource_name = "Sample Spline Settings"
+script = ExtResource("4_840wp")
+uniform_interval = 0.25
+random_seed = 1977794624
+inspect_enabled = true
+debug_enabled = true
+debug_mode = 0
+debug_scale = 1.0
+title = "Sample Spline"
+enabled = true
+
 [resource]
 script = ExtResource("1_pwag0")
 nodes = Array[Dictionary]([{
-"name": &"id_0139_sample_spline",
-"position_offset": Vector2(-80, 560),
-"settings": SubResource("Resource_pcyhw"),
-"template": "sample_spline"
-}, {
 "name": &"id_0141_ray_cast",
 "position_offset": Vector2(180, 560),
 "settings": SubResource("Resource_ly1tl"),
 "template": "ray_cast"
+}, {
+"name": &"id_0139_sample_spline",
+"position_offset": Vector2(-80, 560),
+"settings": SubResource("Resource_pcyhw"),
+"template": "sample_spline"
 }])
 conns = Array[Dictionary]([{
 "from_node": &"id_0139_sample_spline",

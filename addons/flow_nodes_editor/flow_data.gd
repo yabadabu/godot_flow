@@ -14,6 +14,19 @@ class EvaluationContext:
 	var owner : Node3D
 	var eval_id : int = 0
 
+static func basisToEuler( basis : Basis ) -> Vector3:
+	var euler = basis.get_euler() 
+	euler.x = rad_to_deg( euler.x )
+	euler.y = rad_to_deg( euler.y )
+	euler.z = rad_to_deg( euler.z )
+	return euler
+
+static func eulerToBasis( euler : Vector3) -> Basis:
+	euler.x = deg_to_rad( euler.x )
+	euler.y = deg_to_rad( euler.y )
+	euler.z = deg_to_rad( euler.z )
+	return Basis.from_euler( euler )
+
 class Data:
 	var streams : Dictionary = {}
 
@@ -130,3 +143,12 @@ class Data:
 			print( "%s (%s) %d elems" % [ stream.name, stream.data_type, stream.container.size() ] )
 			for data in stream.container:
 				print( "  %s" % str(data ))
+
+	func addCommonStreams( num_points : int ):
+		var spos = addStream( FlowData.AttrPosition, FlowData.DataType.Vector )
+		spos.resize( num_points )
+		var srot = addStream( FlowData.AttrRotation, FlowData.DataType.Vector )
+		srot.resize( num_points )
+
+	func getVector3Container( stream_name : StringName ) -> PackedVector3Array:
+		return getContainerChecked( stream_name, DataType.Vector )

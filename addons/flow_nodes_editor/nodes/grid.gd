@@ -12,11 +12,10 @@ func getMeta() -> Dictionary :
 
 func execute( _ctx : FlowData.EvaluationContext ):
 	var output := FlowData.Data.new()
-	var spos : PackedVector3Array = output.addStream( FlowData.AttrPosition, FlowData.DataType.Vector )
-	if spos == null:
-		return
 	var nsamples : int = settings.x * settings.y * settings.z
-	spos.resize( nsamples )
+	output.addCommonStreams( nsamples )
+	var spos := output.getVector3Container( FlowData.AttrPosition )
+	assert( spos != null )
 	#print( "Spos.size %d of type %s" % [ spos.size(), type_string(typeof(spos)) ])
 	var idx := 0
 	var step : Vector3 = settings.step

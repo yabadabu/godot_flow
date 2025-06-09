@@ -196,6 +196,10 @@ func setupDebugDraw():
 	if positions == null:
 		print( "setupDebugDraw failed - positions" )
 		return
+	var eulers : PackedVector3Array = out_data.getContainerChecked( FlowData.AttrRotation, FlowData.DataType.Vector )
+	if eulers == null:
+		print( "setupDebugDraw failed - eulers" )
+		return
 	
 	var instance_count = positions.size()
 	var current_count = RenderingServer.multimesh_get_instance_count(multimesh_rid)
@@ -203,5 +207,6 @@ func setupDebugDraw():
 		RenderingServer.multimesh_allocate_data(multimesh_rid, instance_count, RenderingServer.MultimeshTransformFormat.MULTIMESH_TRANSFORM_3D )
 	
 	for idx in range( instance_count ):
-		var t : Transform3D = Transform3D( Basis.IDENTITY, positions[idx] )
+		var b := FlowData.eulerToBasis( eulers[idx])
+		var t : Transform3D = Transform3D( b, positions[idx] )
 		RenderingServer.multimesh_instance_set_transform( multimesh_rid, idx, t)
