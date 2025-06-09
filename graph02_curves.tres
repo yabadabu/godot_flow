@@ -7,7 +7,7 @@
 [sub_resource type="Resource" id="Resource_2h21p"]
 resource_name = "Sample Spline Settings"
 script = ExtResource("1_bd8sb")
-uniform_interval = 0.2
+uniform_interval = 10.0
 random_seed = 2842677187
 inspect_enabled = false
 debug_enabled = false
@@ -19,9 +19,9 @@ enabled = true
 [sub_resource type="Resource" id="Resource_1xbvu"]
 resource_name = "Transform Settings"
 script = ExtResource("2_2h21p")
-offset_min = Vector3(0, 0, 0)
-offset_max = Vector3(-0.3, 0, 0)
-rotation_min = Vector3(0, 0, 0)
+offset_min = Vector3(0.4, 0, 0)
+offset_max = Vector3(0, 0, 0)
+rotation_min = Vector3(3.27, 360, 0)
 rotation_max = Vector3(0, 0, 0)
 random_seed = 2046638687
 inspect_enabled = true
@@ -35,12 +35,12 @@ enabled = true
 script = ExtResource("1_4ly6f")
 nodes = Array[Dictionary]([{
 "name": &"id_0001_sample_spline",
-"position_offset": Vector2(140, 300),
+"position_offset": Vector2(40, 140),
 "settings": SubResource("Resource_2h21p"),
 "template": "sample_spline"
 }, {
 "name": &"id_0002_transform",
-"position_offset": Vector2(375.04, 668.2),
+"position_offset": Vector2(320, 140),
 "settings": SubResource("Resource_1xbvu"),
 "template": "transform"
 }])
@@ -52,5 +52,5 @@ conns = Array[Dictionary]([{
 "to_port": 0
 }])
 view_zoom = 1.0
-view_offset = Vector2(119.04, 19.2)
+view_offset = Vector2(0, 0)
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"

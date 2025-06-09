@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="FlowGraphResource" load_steps=8 format=3 uid="uid://66ejgwppld3l"]
+[gd_resource type="Resource" script_class="FlowGraphResource" load_steps=10 format=3 uid="uid://66ejgwppld3l"]
 
 [ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="1_i7hbt"]
 [ext_resource type="Script" uid="uid://dwtm2hr5nh78h" path="res://addons/flow_nodes_editor/nodes/grid_settings.gd" id="1_qjhb7"]
@@ -23,9 +23,9 @@ enabled = true
 [sub_resource type="Resource" id="Resource_js8uo"]
 resource_name = "Grid Settings"
 script = ExtResource("1_qjhb7")
-x = 8
+x = 5
 y = 1
-z = 8
+z = 5
 step = Vector3(0.5, 0.5, 0.5)
 random_seed = 3320734397
 inspect_enabled = false
@@ -38,9 +38,9 @@ enabled = true
 [sub_resource type="Resource" id="Resource_f0s07"]
 resource_name = "Transform Settings"
 script = ExtResource("3_js8uo")
-offset_min = Vector3(0, 0, 0)
-offset_max = Vector3(0, 0, 0)
-rotation_min = Vector3(0.5, 0, 0)
+offset_min = Vector3(4.46, 1.55, 0.19)
+offset_max = Vector3(-0.24, -0.44, 0)
+rotation_min = Vector3(0.5, 0.04, 0)
 rotation_max = Vector3(0, 336.1, 0)
 random_seed = 3465457644
 inspect_enabled = false
@@ -48,6 +48,36 @@ debug_enabled = false
 debug_mode = 0
 debug_scale = 1.0
 title = "Transform"
+enabled = true
+
+[sub_resource type="Resource" id="Resource_jx2uv"]
+resource_name = "Noise Settings"
+script = ExtResource("2_rvt80")
+out_attribute_name = "density2"
+in_scale = 1.0
+noise_bias = -0.68
+noise_amplitude = 1.0
+random_seed = 3535616638
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+title = "Noise"
+enabled = true
+
+[sub_resource type="Resource" id="Resource_n2x4a"]
+resource_name = "Noise Settings"
+script = ExtResource("2_rvt80")
+out_attribute_name = "density"
+in_scale = 0.89
+noise_bias = 0.0
+noise_amplitude = 1.0
+random_seed = 162461965
+inspect_enabled = true
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+title = "Noise"
 enabled = true
 
 [resource]
@@ -64,9 +94,19 @@ nodes = Array[Dictionary]([{
 "template": "grid"
 }, {
 "name": &"id_0001_transform",
-"position_offset": Vector2(200, 600),
+"position_offset": Vector2(20, 640),
 "settings": SubResource("Resource_f0s07"),
 "template": "transform"
+}, {
+"name": &"_GraphNode_92737",
+"position_offset": Vector2(440, 960),
+"settings": SubResource("Resource_jx2uv"),
+"template": "noise"
+}, {
+"name": &"id_0004_noise",
+"position_offset": Vector2(80, 860),
+"settings": SubResource("Resource_n2x4a"),
+"template": "noise"
 }])
 conns = Array[Dictionary]([{
 "from_node": &"id_0004_grid",
@@ -80,7 +120,13 @@ conns = Array[Dictionary]([{
 "keep_alive": false,
 "to_node": &"id_0001_transform",
 "to_port": 0
+}, {
+"from_node": &"id_0001_transform",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0004_noise",
+"to_port": 0
 }])
 view_zoom = 1.00902
-view_offset = Vector2(-51.8808, -2.5919)
+view_offset = Vector2(-23.0808, -165.792)
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
