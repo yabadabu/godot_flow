@@ -7,10 +7,10 @@
 [sub_resource type="Resource" id="Resource_js8uo"]
 resource_name = "Grid Settings"
 script = ExtResource("1_qjhb7")
-x = 4
+x = 8
 y = 1
-z = 4
-step = Vector3(1, 1, 1)
+z = 8
+step = Vector3(0.5, 0.5, 0.5)
 random_seed = 3320734397
 inspect_enabled = false
 debug_enabled = false
@@ -27,8 +27,8 @@ in_scale = 1427.24
 noise_bias = -0.04
 noise_amplitude = 1.75
 random_seed = 2705376433
-inspect_enabled = false
-debug_enabled = true
+inspect_enabled = true
+debug_enabled = false
 debug_mode = 0
 debug_scale = 1.0
 title = "Noise"

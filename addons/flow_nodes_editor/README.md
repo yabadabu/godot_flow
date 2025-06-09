@@ -8,17 +8,12 @@
 	[ ] vector3 -> .x, .y, .z
 	[ ] basis   -> yaw, pitch, roll
 [ ] node transform with ranges in local space
-[ ] update while changing the scene
-	[x] bool to control auto-regen
-	[ ] splines
-	[ ] meshes
-[ ] Block auto-update
 [ ] Choose mesh to spawn
 [ ] Stream to ref mesh instance
-[ ] Conditional UI
-[ ] MulticConstant vs Attribute input
+[ ] Multic Constant as Arg vs Attribute input
+	[ ] Conditional UI
 [ ] Custom inputs to the pcg
-[ ] Spawn Scene
+[ ] Spawn PackedScene
 [ ] Aggregate MultiInstanceMesh per mesh in spawn meshes
 [x] save graph into scene node 
 [x] dependencies/dirty chains
@@ -32,3 +27,5 @@
 [x] support for prev
 [ ] undo/redo
 [X] Dynamic title
+[X] update while changing the scene
+[X] Block auto-update

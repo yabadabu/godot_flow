@@ -7,7 +7,7 @@ var resource_owner : Node3D
 var ctx := FlowData.EvaluationContext.new()
 var regen_pending := false
 var auto_regen := true
-var expected_children_count = 0
+var num_non_nodes_children = 0
 
 @onready var gedit : GraphEdit = %GraphEdit
 @onready var data_inspector : Control
@@ -56,7 +56,7 @@ func setResourceToEdit( new_resource : FlowGraphResource, new_resource_owner : N
 	gedit.clear_connections()
 	for child in children:
 		gedit.remove_child( child )
-	expected_children_count = gedit.get_child_count()
+	num_non_nodes_children = gedit.get_child_count()
 	
 	gedit_nodes_by_name.clear()
 	
@@ -69,7 +69,6 @@ func setResourceToEdit( new_resource : FlowGraphResource, new_resource_owner : N
 				push_error( "Failed to recover node %s" % [ res_node ])
 				continue
 			node.position_offset = res_node.position_offset
-			expected_children_count += 1
 		
 		print( "Recovering %d conns" % current_resource.conns.size() )
 		for conn in current_resource.conns:
@@ -82,7 +81,7 @@ func setResourceToEdit( new_resource : FlowGraphResource, new_resource_owner : N
 		gedit.scroll_offset = current_resource.view_offset
 
 	regen_pending = true
-	print( "regen_pending is now true (%d)" % [expected_children_count])
+	print( "regen_pending is now true (%d)" % [num_non_nodes_children])
 
 func saveResource():
 	if current_resource == null:
@@ -110,7 +109,8 @@ func saveResource():
 	
 func _process(delta: float) -> void:
 	if regen_pending and current_resource:
-		if gedit.get_child_count() == expected_children_count:
+		#print( "Waiting %d == %d + %d (%d)" % [ gedit.get_child_count(), num_non_nodes_children, current_resource.nodes.size(), gedit_nodes_by_name.size()])
+		if gedit.get_child_count() == num_non_nodes_children + current_resource.nodes.size():
 			evalGraph()
 
 func getNewName( suffix : String ):
@@ -192,15 +192,16 @@ func getSelectedNodes() -> Array[GraphNode]:
 func deleteNodes( nodes : Array[GraphNode] ):
 	for node in nodes:
 		gedit_nodes_by_name.erase( node.name )
+		gedit.remove_child( node )
 		node.queue_free()
 
 func deleteSelectedNodes():
 	var nodes := getSelectedNodes()
 	deleteNodes( nodes )
+	saveResource()
 	inspected_node = null
 	inspector.edit(null)
-	
-	
+	regen_pending = true
 	
 func getRectOfNodes( nodes : Array[GraphNode] ):
 	var r : Rect2
@@ -282,6 +283,7 @@ func addNode( node_template ):
 	node.selected = true
 	node.visible = true
 	saveResource()
+	regen_pending = true
 
 # ------------------------------------------------
 func _on_graph_edit_gui_input(event):
@@ -433,11 +435,23 @@ func getEvalOrder():
 	all_deps.reverse()	
 	return all_deps
 
+func removeGeneratedNodes():
+	# Remove instances from prev execution
+	var nodes_to_remove = []
+	for child in resource_owner.get_children():
+		if child.has_meta( "flow_owner" ):
+			nodes_to_remove.append(child)
+	print( "Removing %d generated comps" % [nodes_to_remove.size()])
+	for child in nodes_to_remove:
+		resource_owner.remove_child( child )
+		child.queue_free()
+
 func evalGraph():
 	ctx.owner = resource_owner
 	ctx.eval_id += 1
 	
 	print( "evalGraph %d starts from %s" % [ ctx.eval_id, resource_owner.name if resource_owner else "null" ] )
+	removeGeneratedNodes()
 	
 	#print( "getEvalOrder..." )
 	var nodes_to_eval = getEvalOrder( )
