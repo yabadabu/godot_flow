@@ -1,8 +1,10 @@
-[gd_resource type="Resource" script_class="FlowGraphResource" load_steps=9 format=3 uid="uid://66ejgwppld3l"]
+[gd_resource type="Resource" script_class="FlowGraphResource" load_steps=12 format=3 uid="uid://66ejgwppld3l"]
 
 [ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="1_i7hbt"]
 [ext_resource type="Script" uid="uid://dwtm2hr5nh78h" path="res://addons/flow_nodes_editor/nodes/grid_settings.gd" id="1_qjhb7"]
 [ext_resource type="Script" uid="uid://cchxntewglwb0" path="res://addons/flow_nodes_editor/nodes/assets_settings.gd" id="2_rvt80"]
+[ext_resource type="Script" uid="uid://7g705n2fjnlr" path="res://addons/flow_nodes_editor/user_resource.gd" id="2_u5yrf"]
+[ext_resource type="Script" uid="uid://c0ql72e1bbdqo" path="res://my_meshes.gd" id="3_f0s07"]
 
 [sub_resource type="Resource" id="Resource_qjhb7"]
 resource_name = "Grid Settings"
@@ -19,18 +21,28 @@ debug_scale = 1.0
 title = "Grid"
 enabled = true
 
-[sub_resource type="PrismMesh" id="PrismMesh_js8uo"]
+[sub_resource type="PlaneMesh" id="PlaneMesh_n2x4a"]
 
-[sub_resource type="SphereMesh" id="SphereMesh_rvt80"]
+[sub_resource type="Resource" id="Resource_jx2uv"]
+script = ExtResource("3_f0s07")
+weight = 5.0
+asset = SubResource("PlaneMesh_n2x4a")
+metadata/_custom_type_script = "uid://c0ql72e1bbdqo"
 
-[sub_resource type="CylinderMesh" id="CylinderMesh_js8uo"]
+[sub_resource type="SphereMesh" id="SphereMesh_2ku6k"]
 
-[sub_resource type="Resource" id="Resource_f0s07"]
+[sub_resource type="Resource" id="Resource_vqsss"]
+script = ExtResource("3_f0s07")
+weight = 2.0
+asset = SubResource("SphereMesh_2ku6k")
+metadata/_custom_type_script = "uid://c0ql72e1bbdqo"
+
+[sub_resource type="Resource" id="Resource_cvsyc"]
 resource_name = "Assets Settings"
 script = ExtResource("2_rvt80")
-assets = Array[Resource]([SubResource("PrismMesh_js8uo"), SubResource("SphereMesh_rvt80"), SubResource("CylinderMesh_js8uo")])
-random_seed = 143321439
-inspect_enabled = false
+assets = Array[ExtResource("2_u5yrf")]([SubResource("Resource_jx2uv"), SubResource("Resource_vqsss")])
+random_seed = 1252696536
+inspect_enabled = true
 debug_enabled = false
 debug_mode = 0
 debug_scale = 1.0
@@ -41,17 +53,17 @@ enabled = true
 script = ExtResource("1_i7hbt")
 nodes = Array[Dictionary]([{
 "name": &"id_0001_grid",
-"position_offset": Vector2(189.69, 55.4023),
+"position_offset": Vector2(180, 60),
 "settings": SubResource("Resource_qjhb7"),
 "template": "grid"
 }, {
-"name": &"id_0001_assets",
-"position_offset": Vector2(142.267, 342.143),
-"settings": SubResource("Resource_f0s07"),
+"name": &"id_0002_assets",
+"position_offset": Vector2(190.793, 271.561),
+"settings": SubResource("Resource_cvsyc"),
 "template": "assets"
 }])
 conns = Array[Dictionary]([])
 view_zoom = 0.906744
 view_offset = Vector2(0, -122.764)
-new_name_counter = 1
+new_name_counter = 2
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
