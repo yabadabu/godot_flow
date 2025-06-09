@@ -10,7 +10,7 @@ func getMeta() -> Dictionary :
 		"tooltip" :"Generates a set of points in a grid spatial distribution,\nwhere the separation is step",
 	}
 
-func execute( ):
+func execute( _ctx : FlowData.EvaluationContext ):
 	var output := FlowData.Data.new()
 	var spos : PackedVector3Array = output.addStream( "position", FlowData.DataType.Vector )
 	if spos == null:

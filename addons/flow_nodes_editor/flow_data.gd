@@ -7,6 +7,9 @@ enum DataType {
 	Vector,
 }
 
+class EvaluationContext:
+	var owner : Node3D
+
 class Data:
 	var streams : Dictionary = {}
 

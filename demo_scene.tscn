@@ -6,7 +6,7 @@
 
 [sub_resource type="Curve3D" id="Curve3D_ayuu8"]
 closed = true
-bake_interval = 0.5
+bake_interval = 0.76
 _data = {
 "points": PackedVector3Array(0, 0, 0, 0, 0, 0, -1.11161, -0.19466, -0.848034, 0.0969775, 0.251062, -0.331849, -0.0969775, -0.251062, 0.331849, -0.493382, -0.0313487, 0.75344, 0.369206, -0.0504826, -0.0238729, -0.369206, 0.0504826, 0.0238729, -1.61266, -0.0485349, 1.40722, 0.26109, -0.0436706, 0.259869, -0.26109, 0.0436706, -0.259869, -2.64929, 0.195791, 1.27553, 0, 0, 0, 0, 0, 0, -2.53903, -0.0784302, 0.411088),
 "tilts": PackedFloat32Array(0, 0, 0, 0, 0)
@@ -26,7 +26,7 @@ graph = ExtResource("2_8n7uv")
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
 
 [node name="PCG_2" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000121355, 0.00430977, -0.000930309)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.022011, 0.00430929, 1.0249)
 script = ExtResource("1_iapjp")
 graph = ExtResource("3_ayuu8")
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
@@ -36,7 +36,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.02005, 1.26692, -0.0621197)
 curve = SubResource("Curve3D_ayuu8")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(3.30218, 0, 0, 0, 0.903073, -1.24101, 0, 0.429487, 2.60945, 0, -1.13224, 0)
+transform = Transform3D(3.30218, 0, 0, 0, 0.903073, -1.24101, 0, 0.429487, 2.60945, 0.564809, -1.13947, 0)
 mesh = SubResource("PlaneMesh_ayuu8")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="MeshInstance3D"]

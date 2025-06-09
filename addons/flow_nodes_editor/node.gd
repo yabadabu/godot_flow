@@ -125,9 +125,10 @@ func create_multimesh_direct():
 	RenderingServer.instance_set_transform(instance_rid, global_transform)
 
 func setError( new_err : String ):
-	push_error( "Node.Err %s : %s" % [ name, new_err ])
+	if new_err:
+		push_error( "Node.Err %s : %s" % [ name, new_err ])
+		editor_state_changed.emit()
 	err = new_err
-	editor_state_changed.emit()
 		
 func _on_draw() -> void:
 		

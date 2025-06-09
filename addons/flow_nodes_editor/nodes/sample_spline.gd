@@ -23,7 +23,7 @@ func findNodesOfType(root: Node, type_name: String) -> Array[Node]:
 	
 	return found_nodes	
 
-func execute( ):
+func execute( _ctx : FlowData.EvaluationContext ):
 	
 	var root = EditorInterface.get_edited_scene_root()
 	if not root:

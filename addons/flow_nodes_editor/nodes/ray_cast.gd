@@ -9,7 +9,7 @@ func getMeta() -> Dictionary :
 		"outs" : [{ "label" : "Out" }],
 	}
 
-func execute( ):
+func execute( _ctx : FlowData.EvaluationContext ):
 	
 	var root = EditorInterface.get_edited_scene_root()
 	if not root:

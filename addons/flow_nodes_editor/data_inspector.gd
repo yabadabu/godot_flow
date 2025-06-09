@@ -38,7 +38,6 @@ func addColor( gc : Container, data : Color ):
 	return c
 	
 func refresh():
-	print( "refresh is ", node)
 	
 	var cols = find_child("Columns")
 	if cols == null:
@@ -51,7 +50,9 @@ func refresh():
 	if node == null:
 		return
 		
-	var data = node.get_output(0)
+	var data : FlowData.Data = node.get_output(0)
+	if data == null:
+		return
 
 	# Background color (zebra striping)
 	var styleA = StyleBoxFlat.new()

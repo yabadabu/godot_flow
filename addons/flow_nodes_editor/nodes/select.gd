@@ -10,7 +10,7 @@ func getMeta() -> Dictionary :
 		"tooltip" :"Filter inputs by the ratio.\nSo when ratio = 0.2, only 20% of the input points will appear in the output.",
 	}
 
-func execute( ):
+func execute( _ctx : FlowData.EvaluationContext ):
 	var in_data : FlowData.Data = get_input(0)
 	#in_data.dump( "Select.Input")
 	var in_size = in_data.size()

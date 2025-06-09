@@ -40,22 +40,4 @@ size_flags_vertical = 3
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/ScrollContainer/Columns"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="VBoxContainer/ScrollContainer/Columns/VBoxContainer"]
-layout_mode = 2
-text = "BLA HA"
-
-[node name="VBoxContainer2" type="VBoxContainer" parent="VBoxContainer/ScrollContainer/Columns"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="VBoxContainer/ScrollContainer/Columns/VBoxContainer2"]
-layout_mode = 2
-text = "BLA HA"
-
-[node name="Label2" type="Label" parent="VBoxContainer/ScrollContainer/Columns/VBoxContainer2"]
-layout_mode = 2
-text = "BLA HA"
-
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/BtnRefresh" to="." method="_on_btn_refresh_pressed"]

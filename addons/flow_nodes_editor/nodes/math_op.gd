@@ -12,7 +12,7 @@ func getMeta() -> Dictionary :
 func getTitle() -> String:
 	return MathOpNodeSettings.eOperation.keys()[settings.operation]
 
-func execute( ):
+func execute( _ctx : FlowData.EvaluationContext ):
 	var in_data : FlowData.Data = get_input(0)
 	var out_data : FlowData.Data = in_data.duplicate()
 	

@@ -9,7 +9,7 @@ func getMeta() -> Dictionary :
 		"outs" : [{ "label" : "Out" }],
 	}
 
-func execute( ):
+func execute( _ctx : FlowData.EvaluationContext ):
 	var in_data : FlowData.Data = get_input(0)
 	var out_data : FlowData.Data = in_data.duplicate()
 	var spos = out_data.cloneStream( "position" )

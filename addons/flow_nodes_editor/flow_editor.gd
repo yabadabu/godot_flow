@@ -3,6 +3,8 @@ extends Control
 class_name FlowGraphEditor
 
 var current_resource: FlowGraphResource
+var resource_owner : Node3D
+var ctx := FlowData.EvaluationContext.new()
 
 @onready var gedit : GraphEdit = %GraphEdit
 @onready var data_inspector : Control
@@ -32,13 +34,15 @@ var gedit_nodes_by_name = {}
 
 var node_types = { }
 
-func setResourceToEdit( new_resource : FlowGraphResource ):
+func setResourceToEdit( new_resource : FlowGraphResource, new_resource_owner : Node3D ):
 	print( "setResourceToEdit %s" % new_resource )
-	if current_resource == new_resource:
+	if current_resource == new_resource and resource_owner == new_resource_owner:
 		return
 	if current_resource:
 		saveResource()
 	current_resource = new_resource
+	resource_owner = new_resource_owner
+	
 	# Remove exiting nodes
 	for child in gedit.get_children():
 		if child is GraphNode:
@@ -47,23 +51,25 @@ func setResourceToEdit( new_resource : FlowGraphResource ):
 	if current_resource != null:
 		print( "Recovering %d nodes" % current_resource.nodes.size() )
 		for res_node in current_resource.nodes:
-			print( "Recovering node %s" % [ res_node ])
+			#print( "Recovering node %s" % [ res_node ])
 			var node = addNodeFromTemplate( res_node.template, res_node.settings )
 			if not node:
-				push_error( "Failed to recover node %s %s" % [ res_node ])
+				push_error( "Failed to recover node %s" % [ res_node ])
 				continue
 			node.position_offset = res_node.position_offset
 			node.name = res_node.name
 		
 		print( "Recovering %d conns" % current_resource.conns.size() )
 		for conn in current_resource.conns:
-			print( "Regenerating conn %s" % [conn])
+			#print( "Regenerating conn %s" % [conn])
 			var err = gedit.connect_node( conn.from_node, conn.from_port, conn.to_node, conn.to_port )	
 			if err:
-				push_error("Error adding conn %s" % [err])
+				push_error("Error adding conn %s from %s" % [err, conn])
 				
 		gedit.zoom = current_resource.view_zoom
 		gedit.scroll_offset = current_resource.view_offset
+
+	evalGraph()
 
 func saveResource():
 	if current_resource == null:
@@ -80,7 +86,7 @@ func saveResource():
 			"template" : node.node_template,
 			"settings" : node.settings,
 			}
-		print( "Saving node %s" % [stored_data])
+		#print( "Saving node %s" % [stored_data])
 		current_resource.nodes.append(stored_data)
 
 	for connection in gedit.get_connection_list():
@@ -409,15 +415,17 @@ func getEvalOrder():
 	return all_deps
 
 func evalGraph():
-	#print( "evalGraph starts" )
+	print( "evalGraph starts" )
 	gedit_nodes_by_name = {}
 	for c in gedit.get_children():
 		gedit_nodes_by_name[ c.name ] = c
 	
+	ctx.owner = resource_owner
+	
 	#print( "getEvalOrder..." )
 	var nodes_to_eval = getEvalOrder( )
 	for node in nodes_to_eval:
-		print( "  ", node )
+		print( "  Eval:", node.name )
 		
 		for req in node.deps:
 			var req_node = gedit_nodes_by_name.get( req.from_node )
@@ -425,7 +433,7 @@ func evalGraph():
 			node.set_input( req.to_port, data )
 			
 		node.preExecute()
-		node.execute()
+		node.execute( ctx )
 		
 		if node.settings.inspect_enabled:
 			data_inspector.refresh()

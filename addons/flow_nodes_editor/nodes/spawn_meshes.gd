@@ -9,48 +9,52 @@ func getMeta() -> Dictionary :
 		"outs" : [{ "label" : "Out" }, { "label" : "Removed" }],
 	}
 
+func _exit_tree():
+	#removeInstancedComponents();
+	pass
+
 func isFinal() -> bool:
 	return true
 	
-func removeOld( root : Node):
-	var children_to_remove =[]
+func removeInstancedComponents( root : Node3D ):
+	var comps = []
 	for child in root.get_children():
-		if child.has_meta("flow_gen"):
-			children_to_remove.append( child )
-	for child in children_to_remove:
-		root.remove_child(child)
-		child.free()	
+		var mmi = child as MultiMeshInstance3D
+		if mmi and mmi.get_meta( "flow_owner" ) == name:
+			comps.append( mmi )
+	for comp in comps:
+		comp.queue_free()
 		
 func spawnNode( root : Node, class_to_spawn ):
 	var new_node = class_to_spawn.new()
-	new_node.set_meta("flow_gen", true )	
+	new_node.set_meta("flow_owner", name )	
 	return new_node
 
-func execute( ):
-	var in_data = get_input(0)
+func execute( ctx : FlowData.EvaluationContext ):
+	var in_data : FlowData.Data = get_input(0)
 	if !in_data:
-		print( "Spawn.Input is invalid")
+		setError( "Spawn.Input is invalid")
 		return
 
 	#in_data.dump( "Spawn" )
 
-	var container = in_data.getContainerChecked( "position", FlowData.DataType.Vector )
+	var container : PackedVector3Array = in_data.getContainerChecked( "position", FlowData.DataType.Vector )
 	if container == null:
-		push_error("Spawn.Missing stream position")
+		setError("Spawn.Missing stream position")
 		return
 		
-	var root = EditorInterface.get_edited_scene_root()
+	var root = ctx.owner
 	if not root:
-		push_error("Spawn.No scene opened")
+		setError("Spawn.No node3d assigned in context")
 		return
 
-	removeOld( root )
+	removeInstancedComponents( root )
 	
 	#print( "Spawning meshes children of %s" % [root.name])
 		
 	var mmi : MultiMeshInstance3D = spawnNode( root, MultiMeshInstance3D )
 	if mmi == null:
-		push_error( "Failed to spawn multiMeshInstance3D")
+		setError( "Failed to spawn multiMeshInstance3D")
 		return
 	var multimesh := MultiMesh.new()
 	multimesh.mesh = settings.mesh
@@ -61,6 +65,18 @@ func execute( ):
 		multimesh.set_instance_transform( idx, transform )
 	mmi.multimesh = multimesh
 	root.add_child( mmi )
-	mmi.owner = root 
 	
+	var scene_root = root.get_tree().current_scene
+	if scene_root:
+		mmi.owner = scene_root
+	else:
+		# Fallback: find the top-most node with an owner
+		var current = root
+		while current.get_parent() and current.owner:
+			current = current.get_parent()
+		mmi.owner = current	
+	
+	print( "mmi added to %s (Owner:%s)" % [ root.name, mmi.owner.name ])
 	EditorInterface.mark_scene_as_unsaved()
+
+	set_output(0, in_data)

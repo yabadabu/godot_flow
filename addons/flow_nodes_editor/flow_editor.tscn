@@ -1,8 +1,8 @@
 [gd_scene load_steps=2 format=3 uid="uid://bl8p4bid734wo"]
 
-[ext_resource type="Script" uid="uid://rhc2whb7j6tt" path="res://addons/flow_nodes_editor/flow_root.gd" id="1_lpoe1"]
+[ext_resource type="Script" uid="uid://rhc2whb7j6tt" path="res://addons/flow_nodes_editor/flow_editor.gd" id="1_0ji4f"]
 
-[node name="FlowRoot" type="Control"]
+[node name="FlowEditor" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -11,7 +11,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-script = ExtResource("1_lpoe1")
+script = ExtResource("1_0ji4f")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
@@ -62,7 +62,7 @@ show_grid_buttons = false
 unique_name_in_owner = true
 position = Vector2i(20, 150)
 size = Vector2i(137, 147)
-item_count = 8
+item_count = 10
 item_0/text = "Clear"
 item_0/id = 0
 item_1/id = -1
@@ -73,12 +73,16 @@ item_3/text = "Math "
 item_3/id = 1001
 item_4/text = "Noise"
 item_4/id = 1002
-item_5/text = "Select"
+item_5/text = "Ray Cast"
 item_5/id = 1003
-item_6/text = "Spawn Meshes"
+item_6/text = "Sample Spline"
 item_6/id = 1004
-item_7/text = "Transform"
+item_7/text = "Select"
 item_7/id = 1005
+item_8/text = "Spawn Meshes"
+item_8/id = 1006
+item_9/text = "Transform"
+item_9/id = 1007
 
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/ButtonReload" to="." method="_on_button_reload_pressed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/ButtonSave" to="." method="_on_button_save_pressed"]

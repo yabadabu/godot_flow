@@ -22,7 +22,7 @@ func spawnDock( res_template : String, title : String, bottom : bool ) -> Contro
 
 func _enter_tree():
 	print("Data Flow plugin enabled")
-	graph_dock = spawnDock("res://addons/flow_nodes_editor/flow_root.tscn", "Data Flow", false ) as FlowGraphEditor
+	graph_dock = spawnDock("res://addons/flow_nodes_editor/flow_editor.tscn", "Data Flow", false ) as FlowGraphEditor
 	data_inspector_dock = spawnDock("res://addons/flow_nodes_editor/data_inspector.tscn", "Data Inspector", true)
 	graph_dock.data_inspector = data_inspector_dock
 	
@@ -42,12 +42,12 @@ func _ready():
 	_selection_changed()
 
 func _selection_changed():
-	var nodes = selection.get_selected_nodes()
-	if nodes.is_empty():
+	var scene_nodes = selection.get_selected_nodes()
+	if scene_nodes.is_empty():
 		return
-	var flow_node = nodes[0]
-	if flow_node is FlowGraphNode3D:
-		graph_dock.setResourceToEdit( flow_node.graph )
+	var scene_node = scene_nodes[0]
+	if scene_node is FlowGraphNode3D:
+		graph_dock.setResourceToEdit( scene_node.graph, scene_node )
 		#if not foliage.graph_changed.is_connected(add_graph_edit):
 			#foliage.graph_changed.connect(add_graph_edit.bind(foliage))
 		#add_graph_edit(foliage)
