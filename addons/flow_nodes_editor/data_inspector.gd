@@ -80,9 +80,10 @@ func updateNumRowsAndCols():
 				col_titles.append( "%s.X" % stream_name)
 				col_titles.append( "%s.Y" % stream_name)
 				col_titles.append( "%s.Z" % stream_name)
-			FlowData.DataType.Float:
-				col_titles.append( "%s.X" % stream_name)
+			_:
+				col_titles.append( "%s" % stream_name)
 	num_cols = col_titles.size()
+	#print( col_titles )
 	
 func fmt( v : float ) -> String:
 	return "%1.4f" % v
@@ -155,6 +156,16 @@ func refresh():
 					var cell = container[idx]
 					var j := idx + 1
 					setLabelText( col.get_child(j), cell )
+				cols.add_child( col )
+
+			FlowData.DataType.DTResource:
+				var container : Array[ Resource ] = stream.container
+				var col = allocFloat32Column()
+				col.get_child(0).text = stream.name
+				for idx in range( num_rows ):
+					var cell = container[idx]
+					var j := idx + 1
+					col.get_child(j).text = "   " + cell.resource_path
 				cols.add_child( col )
 
 			## type not supported...

@@ -83,7 +83,7 @@ func setResourceToEdit( new_resource : FlowGraphResource, new_resource_owner : N
 				
 		gedit.zoom = current_resource.view_zoom
 		gedit.scroll_offset = current_resource.view_offset
-		#new_name_counter = current_resource.new_name_counter
+		new_name_counter = current_resource.new_name_counter
 
 	regen_pending = true
 	print( "regen_pending is now true (%d)" % [num_non_nodes_children])

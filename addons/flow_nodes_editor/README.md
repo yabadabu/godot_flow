@@ -7,8 +7,6 @@
 [ ] read-write sub-streams
 	[ ] vector3 -> .x, .y, .z
 	[ ] basis   -> yaw, pitch, roll
-[ ] dispay substreams
-[x] node transform with ranges in local space
 [ ] Choose mesh to spawn
 [ ] Stream to ref mesh instance
 [ ] Multic Constant as Arg vs Attribute input
@@ -16,6 +14,8 @@
 [ ] Custom inputs to the pcg
 [ ] Spawn PackedScene
 [ ] Aggregate MultiInstanceMesh per mesh in spawn meshes
+[x] dispay substreams
+[x] node transform with ranges in local space
 [x] save graph into scene node 
 [x] dependencies/dirty chains
 [X] node add density

@@ -5,10 +5,11 @@ enum DataType {
 	Bool,
 	Float,
 	Vector,
+	DTResource,
 }
 
-const AttrPosition : StringName = "position"
-const AttrRotation : StringName = "rotation"
+const AttrPosition : StringName = &"position"
+const AttrRotation : StringName = &"rotation"
 
 class EvaluationContext:
 	var owner : Node3D
@@ -38,6 +39,9 @@ class Data:
 				return PackedFloat32Array()
 			DataType.Vector:
 				return PackedVector3Array()
+			DataType.DTResource:
+				var q : Array[ Resource ] = []
+				return q
 		return null
 	
 	func numFields() -> int:
@@ -46,6 +50,9 @@ class Data:
 	func size() -> int:
 		var key0 = streams.keys()[0]
 		return streams[ key0 ].container.size()
+	
+	func hasStream( name : StringName ) -> bool:
+		return streams.has( name )
 	
 	func getContainerChecked( name : String, data_type : DataType ):
 		var stream = streams.get( name, null )
@@ -90,6 +97,8 @@ class Data:
 				new_container = PackedFloat32Array( prev_stream.container )
 			DataType.Vector:
 				new_container = PackedVector3Array( prev_stream.container )		
+			DataType.DTResource:
+				new_container = prev_stream.container.duplicate()	
 		prev_stream.container = new_container
 		return new_container
 		
@@ -99,7 +108,7 @@ class Data:
 			
 			DataType.Bool:
 				var old_container : PackedByteArray = old_stream.container
-				var new_container = PackedByteArray( )
+				var new_container := PackedByteArray( )
 				new_container.resize( new_size )
 				for idx in range( new_size ):
 					new_container[idx] = old_container[ indices[idx] ]
@@ -107,7 +116,7 @@ class Data:
 				
 			DataType.Float:
 				var old_container : PackedFloat32Array = old_stream.container
-				var new_container = PackedFloat32Array( )
+				var new_container := PackedFloat32Array( )
 				new_container.resize( new_size )
 				for idx in range( new_size ):
 					new_container[idx] = old_container[ indices[idx] ]
@@ -115,7 +124,15 @@ class Data:
 				
 			DataType.Vector:
 				var old_container : PackedVector3Array = old_stream.container
-				var new_container = PackedVector3Array(  )		
+				var new_container := PackedVector3Array(  )		
+				new_container.resize( new_size )
+				for idx in range( new_size ):
+					new_container[idx] = old_container[ indices[idx] ]
+				return new_container
+				
+			DataType.DTResource:
+				var old_container : Array[ Resource ] = old_stream.container
+				var new_container : Array[ Resource ] = []
 				new_container.resize( new_size )
 				for idx in range( new_size ):
 					new_container[idx] = old_container[ indices[idx] ]

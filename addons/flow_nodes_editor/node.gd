@@ -182,7 +182,7 @@ func initFromScript():
 
 func setupDebugDraw():
 	var out_data : FlowData.Data = get_output(0)
-	if not out_data:
+	if not out_data || !out_data.hasStream( FlowData.AttrPosition ):
 		print( "setupDebugDraw failed - out_data" )
 		return
 		
