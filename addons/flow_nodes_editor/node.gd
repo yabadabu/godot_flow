@@ -19,9 +19,32 @@ var deps : Array[ Dictionary ]
 var frame_id : int = 0
 var err : String
 
+var scenario_rid : RID
+var multimesh_rid : RID
+var instance_rid : RID
+var mesh_resource: Mesh = preload( "res://addons/flow_nodes_editor/resources/unit_cube.tres" )
+
 func _ready():
 	refreshInspectMark()
 	refreshDebugMark()
+	
+	var viewport = get_viewport()
+	if viewport:
+		scenario_rid = viewport.get_world_3d().scenario
+	else:
+		print( "Viewport is invalid")
+	
+func _exit_tree():
+	cleanup_multimesh_direct()
+	
+func cleanup_multimesh_direct():
+	if instance_rid.is_valid():
+		RenderingServer.free_rid(instance_rid)
+		instance_rid = RID()
+
+	if multimesh_rid.is_valid():
+		RenderingServer.free_rid(multimesh_rid)
+		multimesh_rid = RID()	
 	
 func isFinal() -> bool:
 	return false
@@ -49,6 +72,7 @@ func get_output( idx : int ):
 	return outputs[ idx ]
 
 func preExecute():
+	# clean outputs...
 	setError("")
 	rng.seed = settings.random_seed
 
@@ -66,6 +90,40 @@ func refreshFromSettings():
 	refreshInspectMark()
 	title = getTitle()
 	
+	if settings.debug_enabled:
+		create_multimesh_direct()
+	else:
+		cleanup_multimesh_direct()
+	
+func create_multimesh_direct():
+	if not mesh_resource:
+		print("No mesh resource assigned")
+		return
+	
+	cleanup_multimesh_direct()  # Clean up any existing
+	
+	# Create MultiMesh resource
+	multimesh_rid = RenderingServer.multimesh_create()
+	
+	# Setup MultiMesh
+	RenderingServer.multimesh_set_mesh(multimesh_rid, mesh_resource.get_rid())
+	#RenderingServer.multimesh_allocate_data(multimesh_rid, instance_count, RS.MULTIMESH_TRANSFORM_3D)
+	
+	# Create instance transforms
+	#setup_instance_transforms()
+	
+	# Create rendering instance
+	instance_rid = RenderingServer.instance_create()
+	RenderingServer.instance_set_base(instance_rid, multimesh_rid)
+	
+	# Add to current scenario (viewport world)
+	if scenario_rid.is_valid():
+		RenderingServer.instance_set_scenario(instance_rid, scenario_rid)
+	
+	# Set transform
+	var global_transform : Transform3D = Transform3D.IDENTITY
+	RenderingServer.instance_set_transform(instance_rid, global_transform)
+
 func setError( new_err : String ):
 	push_error( "Node.Err %s : %s" % [ name, new_err ])
 	err = new_err
@@ -121,3 +179,23 @@ func initFromScript():
 			set_slot_enabled_right( idx, true )
 		else:
 			lbl_out.text = ""
+
+func setupDebugDraw():
+	var out_data : FlowData.Data = get_output(0)
+	if not out_data:
+		return
+	if not multimesh_rid.is_valid():
+		return
+		
+	var positions : PackedVector3Array = out_data.getContainerChecked( "position", FlowData.DataType.Vector )
+	if positions == null:
+		return
+	
+	var instance_count = positions.size()
+	var current_count = RenderingServer.multimesh_get_instance_count(multimesh_rid)
+	if instance_count != current_count:
+		RenderingServer.multimesh_allocate_data(multimesh_rid, instance_count, RenderingServer.MultimeshTransformFormat.MULTIMESH_TRANSFORM_3D )
+	
+	for idx in range( instance_count ):
+		var t : Transform3D = Transform3D( Basis.IDENTITY, positions[idx] )
+		RenderingServer.multimesh_instance_set_transform( multimesh_rid, idx, t)

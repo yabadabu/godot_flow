@@ -266,6 +266,7 @@ func _on_graph_edit_gui_input(event):
 			addComment()
 		elif key == KEY_D:
 			toggleDebug()
+			evalGraph()
 		elif key == KEY_E:
 			toggleInspection()
 			evalGraph()
@@ -384,7 +385,7 @@ func getEvalOrder():
 		var node = child as FlowNodeBase
 		if not node:
 			continue
-		if node.settings.inspect_enabled:
+		if node.settings.inspect_enabled or node.settings.debug_enabled:
 			finals.clear()
 			finals.append( node )
 			break
@@ -428,6 +429,8 @@ func evalGraph():
 		
 		if node.settings.inspect_enabled:
 			data_inspector.refresh()
+		if node.settings.debug_enabled:
+			node.setupDebugDraw()
 
 func _on_button_reload_pressed() -> void:
 	scanAvailableNodes()

@@ -1,9 +1,8 @@
-[gd_scene load_steps=9 format=3 uid="uid://c1b6ke05vpb8r"]
+[gd_scene load_steps=7 format=3 uid="uid://c1b6ke05vpb8r"]
 
 [ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_iapjp"]
 [ext_resource type="Resource" uid="uid://66ejgwppld3l" path="res://graph00.tres" id="2_8n7uv"]
 [ext_resource type="Resource" uid="uid://doldqxmlcvh80" path="res://graph01.tres" id="3_ayuu8"]
-[ext_resource type="BoxMesh" uid="uid://7flu82pqtc5d" path="res://addons/flow_nodes_editor/resources/unit_cube.tres" id="4_ctgmk"]
 
 [sub_resource type="Curve3D" id="Curve3D_ayuu8"]
 closed = true
@@ -18,12 +17,6 @@ point_count = 5
 
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_ctgmk"]
 data = PackedVector3Array(1, 0, 1, -1, 0, 1, 1, 0, -1, -1, 0, 1, -1, 0, -1, 1, 0, -1)
-
-[sub_resource type="MultiMesh" id="MultiMesh_1hm1i"]
-transform_format = 1
-instance_count = 24
-mesh = ExtResource("4_ctgmk")
-buffer = PackedFloat32Array(1, 0, 0, -0.0915636, 0, 1, 0, -0.69939, 0, 0, 1, -0.910153, 1, 0, 0, 0.0186721, 0, 1, 0, -0.796202, 0, 0, 1, -0.706589, 1, 0, 0, 0.129618, 0, 1, 0, -0.898763, 0, 0, 1, -0.490936, 1, 0, 0, 0.253917, 0, 1, 0, -1.02102, 0, 0, 1, -0.23386, 1, 0, 0, 0.373671, 0, 1, 0, -1.15068, 0, 0, 1, 0.0387724, 1, 0, 0, 0.470979, 0, 1, 0, -1.27544, 0, 0, 1, 0.301092, 1, 0, 0, 0.526665, 0, 1, 0, -1.46103, 0, 0, 1, 0.691321, 1, 0, 0, 0.362786, 0, 1, 0, -1.57459, 0, 0, 1, 0.930115, 1, 0, 0, 0.0691128, 0, 1, 0, -1.67141, 0, 0, 1, 1.1337, 1, 0, 0, -0.275603, 0, 1, 0, -1.74077, 0, 0, 1, 1.27954, 1, 0, 0, -0.592611, 0, 1, 0, -1.77195, 0, 0, 1, 1.3451, 1, 0, 0, -0.873628, 0, 1, 0, -1.78433, 0, 0, 1, 1.37114, 1, 0, 0, -1.15147, 0, 1, 0, -1.79124, 0, 0, 1, 1.38566, 1, 0, 0, -1.40904, 0, 1, 0, -1.77284, 0, 0, 1, 1.34697, 1, 0, 0, -1.62924, 0, 1, 0, -1.70932, 0, 0, 1, 1.21341, 1, 0, 0, -1.72216, 0, 1, 0, -1.59294, 0, 0, 1, 0.968705, 1, 0, 0, -1.67202, 0, 1, 0, -1.45742, 0, 0, 1, 0.683736, 1, 0, 0, -1.51898, 0, 1, 0, -1.29821, 0, 0, 1, 0.348968, 1, 0, 0, -1.29595, 0, 1, 0, -1.20464, 0, 0, 1, 0.15223, 1, 0, 0, -1.06734, 0, 1, 0, -1.10874, 0, 0, 1, -0.0494258, 1, 0, 0, -0.805272, 0, 1, 0, -0.998799, 0, 0, 1, -0.280593, 1, 0, 0, -0.543207, 0, 1, 0, -0.88886, 0, 0, 1, -0.511759, 1, 0, 0, -0.314597, 0, 1, 0, -0.792955, 0, 0, 1, -0.713416, 1, 0, 0, -0.0915636, 0, 1, 0, -0.69939, 0, 0, 1, -0.910153)
 
 [node name="DemoScene" type="Node3D"]
 
@@ -50,7 +43,3 @@ mesh = SubResource("PlaneMesh_ayuu8")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D/StaticBody3D"]
 shape = SubResource("ConcavePolygonShape3D_ctgmk")
-
-[node name="@MultiMeshInstance3D@104745" type="MultiMeshInstance3D" parent="."]
-multimesh = SubResource("MultiMesh_1hm1i")
-metadata/flow_gen = true
