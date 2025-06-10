@@ -34,8 +34,8 @@ func execute( _ctx : FlowData.EvaluationContext ):
 
 	var output := FlowData.Data.new()
 	output.addCommonStreams( 0 )
-	var spos : = output.getVector3Container( FlowData.AttrPosition )
-	var srot : = output.getVector3Container( FlowData.AttrRotation )
+	var spos := output.getVector3Container( FlowData.AttrPosition )
+	var srot := output.getVector3Container( FlowData.AttrRotation )
 
 	var uniform_interval = maxf( settings.uniform_interval, 0.01 )
 

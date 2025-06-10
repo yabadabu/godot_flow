@@ -153,7 +153,8 @@ func refresh():
 				var container : Array[ Resource ] = stream.container
 				var col = allocColumn(stream.name)
 				for idx in range( num_rows ):
-					col.get_child( idx + 1 ).text = "   " + container[idx].resource_path
+					var value = container[idx]
+					col.get_child( idx + 1 ).text = ("   " + container[idx].resource_path) if value else ""
 
 			FlowData.DataType.DTString:
 				var container : Array[ String ] = stream.container
