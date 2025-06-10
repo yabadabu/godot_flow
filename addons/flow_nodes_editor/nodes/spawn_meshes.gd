@@ -6,7 +6,7 @@ func getMeta() -> Dictionary :
 		"title" : "Spawn Meshes",
 		"settings" : SpawnMeshesNodeSettings,
 		"ins" : [{ "label" : "In" }],
-		"outs" : [{ "label" : "Out" }, { "label" : "Removed" }],
+		"outs" : [{ "label" : "Out" }],
 	}
 
 func _exit_tree():
@@ -33,50 +33,76 @@ func spawnNode( root : Node, class_to_spawn ):
 func execute( ctx : FlowData.EvaluationContext ):
 	var in_data : FlowData.Data = get_input(0)
 	if !in_data:
-		setError( "Spawn.Input is invalid")
+		setError( "Input is invalid")
 		return
 
-	#in_data.dump( "Spawn" )
-
-	var container : PackedVector3Array = in_data.getContainerChecked( FlowData.AttrPosition, FlowData.DataType.Vector )
-	if container == null:
-		setError("Spawn.Missing stream position")
+	var meshes = null
+	if settings.mesh_attribute:
+		var stream_meshes = in_data.findStream( settings.mesh_attribute )
+		if stream_meshes == null:
+			setError( "Input does not have attribute '%s'" % settings.mesh_attribute)
+			return
+		if stream_meshes.data_type != FlowData.DataType.DTResource:
+			setError( "Attribute '%s' should be of type Resource" % settings.mesh_attribute)
+			return
+		meshes = stream_meshes.container
+	
+	var positions := in_data.getVector3Container( FlowData.AttrPosition )
+	if positions == null:
+		setError("Missing stream %s" % FlowData.AttrPosition)
 		return
-		
+	var eulers := in_data.getVector3Container( FlowData.AttrRotation )
+	if eulers == null:
+		setError("Missing stream %s" % FlowData.AttrRotation)
+		return
+
 	var root = ctx.owner
-	if not root:
-		setError("Spawn.No node3d assigned in context")
-		return
-
+	var in_size = in_data.size()
 	removeInstancedComponents( root )
-	
-	#print( "Spawning meshes children of %s" % [root.name])
-		
-	var mmi : MultiMeshInstance3D = spawnNode( root, MultiMeshInstance3D )
-	if mmi == null:
-		setError( "Failed to spawn multiMeshInstance3D")
-		return
-	var multimesh := MultiMesh.new()
-	multimesh.mesh = settings.mesh
-	multimesh.transform_format = MultiMesh.TransformFormat.TRANSFORM_3D
-	multimesh.instance_count = container.size()
-	for idx in range( container.size() ):
-		var transform : Transform3D = Transform3D( Basis.IDENTITY, container[idx] )
-		multimesh.set_instance_transform( idx, transform )
-	mmi.multimesh = multimesh
-	root.add_child( mmi )
-	
+
+	# Find who is going to be the owner of the new nodes
+	# (shoulw be the parent root of the scene, not the parent)
 	var scene_root = root.get_tree().current_scene
+	var owner_of_mmis : Node
 	if scene_root:
-		mmi.owner = scene_root
+		owner_of_mmis = scene_root
 	else:
 		# Fallback: find the top-most node with an owner
-		var current = root
-		while current.get_parent() and current.owner:
-			current = current.get_parent()
-		mmi.owner = current	
+		owner_of_mmis = root
+		while owner_of_mmis.get_parent() and owner_of_mmis.owner:
+			owner_of_mmis = owner_of_mmis.get_parent()
+
+	# Aggregate by resource type
+	var mmis := {}
+	for idx in range( in_size ):
+		var mesh = meshes[idx] if meshes else settings.mesh
+		var key = mesh.resource_path
+		var mmi = mmis.get( key, null )
+		if mmi == null:
+			mmis[ key ] = []
+		mmis[ key ].append( idx )
 	
-	print( "mmi added to %s (Owner:%s)" % [ root.name, mmi.owner.name ])
+	for res in mmis.keys():
+		var mmi : MultiMeshInstance3D = spawnNode( root, MultiMeshInstance3D )
+		
+		var multimesh := MultiMesh.new()
+		multimesh.mesh = load( res )
+		multimesh.transform_format = MultiMesh.TransformFormat.TRANSFORM_3D
+		var ids = mmis[res]
+		multimesh.instance_count = ids.size()
+		
+		# We could also create a large buffer and perform a single update
+		var idx := 0
+		for id in ids:
+			var basis := FlowData.eulerToBasis( eulers[id] )
+			var transform : Transform3D = Transform3D( basis, positions[id] )
+			multimesh.set_instance_transform( idx, transform )
+			idx += 1
+			
+		mmi.multimesh = multimesh
+		root.add_child( mmi )
+		mmi.owner = owner_of_mmis
+	
 	EditorInterface.mark_scene_as_unsaved()
 
 	set_output(0, in_data)

@@ -1,10 +1,12 @@
-[gd_resource type="Resource" script_class="FlowGraphResource" load_steps=16 format=3 uid="uid://66ejgwppld3l"]
+[gd_resource type="Resource" script_class="FlowGraphResource" load_steps=19 format=3 uid="uid://66ejgwppld3l"]
 
 [ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="1_i7hbt"]
 [ext_resource type="Script" uid="uid://dwtm2hr5nh78h" path="res://addons/flow_nodes_editor/nodes/grid_settings.gd" id="1_qjhb7"]
 [ext_resource type="Script" uid="uid://cchxntewglwb0" path="res://addons/flow_nodes_editor/nodes/assets_settings.gd" id="2_rvt80"]
 [ext_resource type="Script" uid="uid://7g705n2fjnlr" path="res://addons/flow_nodes_editor/user_resource.gd" id="2_u5yrf"]
 [ext_resource type="Script" uid="uid://c0ql72e1bbdqo" path="res://my_meshes.gd" id="3_f0s07"]
+[ext_resource type="BoxMesh" uid="uid://7flu82pqtc5d" path="res://addons/flow_nodes_editor/resources/unit_cube.tres" id="4_jx2uv"]
+[ext_resource type="Script" uid="uid://bnpohx6mm4hdh" path="res://addons/flow_nodes_editor/nodes/spawn_meshes_settings.gd" id="5_2ku6k"]
 [ext_resource type="Script" uid="uid://dm55x0bp4p6a0" path="res://addons/flow_nodes_editor/nodes/match_and_set_settings.gd" id="5_f0s07"]
 
 [sub_resource type="QuadMesh" id="QuadMesh_u5yrf"]
@@ -25,13 +27,13 @@ type = "Bush"
 asset = SubResource("SphereMesh_u5yrf")
 metadata/_custom_type_script = "uid://c0ql72e1bbdqo"
 
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_u5yrf"]
+[sub_resource type="PrismMesh" id="PrismMesh_jx2uv"]
 
 [sub_resource type="Resource" id="Resource_2ku6k"]
 script = ExtResource("3_f0s07")
 weight = 2.0
-type = "Bush"
-asset = SubResource("CapsuleMesh_u5yrf")
+type = "Tree"
+asset = SubResource("PrismMesh_jx2uv")
 metadata/_custom_type_script = "uid://c0ql72e1bbdqo"
 
 [sub_resource type="Resource" id="Resource_n2x4a"]
@@ -49,10 +51,10 @@ enabled = true
 [sub_resource type="Resource" id="Resource_u5yrf"]
 resource_name = "Grid Settings"
 script = ExtResource("1_qjhb7")
-x = 3
-y = 3
-z = 1
-step = Vector3(1, 1, 1)
+x = 5
+y = 1
+z = 5
+step = Vector3(2, 1, 2)
 random_seed = 2943639960
 inspect_enabled = false
 debug_enabled = false
@@ -65,31 +67,49 @@ enabled = true
 resource_name = "Match And Set"
 script = ExtResource("5_f0s07")
 weight_attr = ""
-random_seed = 3920521348
-inspect_enabled = true
+random_seed = 3920522808
+inspect_enabled = false
 debug_enabled = false
 debug_mode = 0
 debug_scale = 1.0
 title = "Match And Set"
 enabled = true
 
+[sub_resource type="Resource" id="Resource_cvsyc"]
+resource_name = "Spawn Meshes Settings"
+script = ExtResource("5_2ku6k")
+mesh = ExtResource("4_jx2uv")
+mesh_attribute = "asset"
+random_seed = 3099121585
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+title = "Spawn Meshes"
+enabled = true
+
 [resource]
 script = ExtResource("1_i7hbt")
 nodes = Array[Dictionary]([{
 "name": &"id_0010_assets",
-"position_offset": Vector2(160, 240),
+"position_offset": Vector2(80, 80),
 "settings": SubResource("Resource_n2x4a"),
 "template": "assets"
 }, {
 "name": &"id_0007_grid",
-"position_offset": Vector2(160, -20),
+"position_offset": Vector2(80, -40),
 "settings": SubResource("Resource_u5yrf"),
 "template": "grid"
 }, {
 "name": &"id_0011_match_and_set",
-"position_offset": Vector2(360, 40),
+"position_offset": Vector2(280, 0),
 "settings": SubResource("Resource_vqsss"),
 "template": "match_and_set"
+}, {
+"name": &"id_0014_spawn_meshes",
+"position_offset": Vector2(505.195, 63.1437),
+"settings": SubResource("Resource_cvsyc"),
+"template": "spawn_meshes"
 }])
 conns = Array[Dictionary]([{
 "from_node": &"id_0007_grid",
@@ -103,8 +123,14 @@ conns = Array[Dictionary]([{
 "keep_alive": false,
 "to_node": &"id_0011_match_and_set",
 "to_port": 1
+}, {
+"from_node": &"id_0011_match_and_set",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0014_spawn_meshes",
+"to_port": 0
 }])
-view_zoom = 0.967349
-view_offset = Vector2(0, -186.318)
-new_name_counter = 11
+view_zoom = 0.879408
+view_offset = Vector2(-22.7273, -193.471)
+new_name_counter = 14
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"

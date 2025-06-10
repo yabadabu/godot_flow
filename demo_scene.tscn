@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://c1b6ke05vpb8r"]
+[gd_scene load_steps=17 format=3 uid="uid://c1b6ke05vpb8r"]
 
 [ext_resource type="Script" uid="uid://dsft6ocvh7yuk" path="res://demo_scene.gd" id="1_1hm1i"]
 [ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_iapjp"]
@@ -6,6 +6,30 @@
 [ext_resource type="Resource" uid="uid://doldqxmlcvh80" path="res://graph01.tres" id="3_ayuu8"]
 [ext_resource type="Resource" uid="uid://c6tic21gyki1f" path="res://graph02_curves.tres" id="4_ctgmk"]
 [ext_resource type="Script" uid="uid://cjfky1m4j3nl" path="res://tree_data.gd" id="6_om45m"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_u5yrf"]
+
+[sub_resource type="MultiMesh" id="MultiMesh_om45m"]
+transform_format = 1
+instance_count = 4
+mesh = SubResource("QuadMesh_u5yrf")
+buffer = PackedFloat32Array(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 4, 1, 0, 0, 6, 0, 1, 0, 0, 0, 0, 1, 6, 1, 0, 0, 2, 0, 1, 0, 0, 0, 0, 1, 8)
+
+[sub_resource type="SphereMesh" id="SphereMesh_u5yrf"]
+
+[sub_resource type="MultiMesh" id="MultiMesh_4qc3i"]
+transform_format = 1
+instance_count = 13
+mesh = SubResource("SphereMesh_u5yrf")
+buffer = PackedFloat32Array(1, 0, 0, 2, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 6, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 8, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 2, 0, 1, 0, 0, 0, 0, 1, 2, 1, 0, 0, 8, 0, 1, 0, 0, 0, 0, 1, 2, 1, 0, 0, 2, 0, 1, 0, 0, 0, 0, 1, 4, 1, 0, 0, 6, 0, 1, 0, 0, 0, 0, 1, 4, 1, 0, 0, 8, 0, 1, 0, 0, 0, 0, 1, 4, 1, 0, 0, 4, 0, 1, 0, 0, 0, 0, 1, 6, 1, 0, 0, 8, 0, 1, 0, 0, 0, 0, 1, 6, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 8, 1, 0, 0, 4, 0, 1, 0, 0, 0, 0, 1, 8, 1, 0, 0, 8, 0, 1, 0, 0, 0, 0, 1, 8)
+
+[sub_resource type="PrismMesh" id="PrismMesh_jx2uv"]
+
+[sub_resource type="MultiMesh" id="MultiMesh_mssda"]
+transform_format = 1
+instance_count = 8
+mesh = SubResource("PrismMesh_jx2uv")
+buffer = PackedFloat32Array(1, 0, 0, 4, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 2, 1, 0, 0, 4, 0, 1, 0, 0, 0, 0, 1, 2, 1, 0, 0, 6, 0, 1, 0, 0, 0, 0, 1, 2, 1, 0, 0, 4, 0, 1, 0, 0, 0, 0, 1, 4, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 6, 1, 0, 0, 2, 0, 1, 0, 0, 0, 0, 1, 6, 1, 0, 0, 6, 0, 1, 0, 0, 0, 0, 1, 8)
 
 [sub_resource type="Curve3D" id="Curve3D_ayuu8"]
 closed = true
@@ -37,6 +61,18 @@ persons = [NodePath("Path3D_Planar/Node"), NodePath("Path3D_Planar/Node2"), Node
 script = ExtResource("1_iapjp")
 graph = ExtResource("2_8n7uv")
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
+
+[node name="@MultiMeshInstance3D@69789" type="MultiMeshInstance3D" parent="PCG_1"]
+multimesh = SubResource("MultiMesh_om45m")
+metadata/flow_owner = &"id_0014_spawn_meshes"
+
+[node name="@MultiMeshInstance3D@69790" type="MultiMeshInstance3D" parent="PCG_1"]
+multimesh = SubResource("MultiMesh_4qc3i")
+metadata/flow_owner = &"id_0014_spawn_meshes"
+
+[node name="@MultiMeshInstance3D@69791" type="MultiMeshInstance3D" parent="PCG_1"]
+multimesh = SubResource("MultiMesh_mssda")
+metadata/flow_owner = &"id_0014_spawn_meshes"
 
 [node name="PCG_2" type="Node3D" parent="."]
 transform = Transform3D(0.801128, 0, -0.598492, 0, 1, 0, 0.598492, 0, 0.801128, 0, 0, 0)
