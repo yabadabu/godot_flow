@@ -23,6 +23,7 @@ var scenario_rid : RID
 var multimesh_rid : RID
 var instance_rid : RID
 var mesh_resource: Mesh = preload( "res://addons/flow_nodes_editor/resources/unit_cube.tres" )
+var ui_scale = 1.0
 var marker_radius : float = 9
 
 func _ready():
@@ -38,7 +39,7 @@ func _ready():
 	var dpi = DisplayServer.screen_get_dpi()
 	print( "Dpi is %d and %d" % [ DisplayServer.screen_get_dpi(), DisplayServer.screen_get_scale()])
 	if dpi > 150:
-		marker_radius *= 2.0
+		ui_scale *= 2.0
 	
 func _exit_tree():
 	cleanup_multimesh_direct()
@@ -134,21 +135,23 @@ func setError( new_err : String ):
 		push_error( "Node.Err %s : %s" % [ name, new_err ])
 		editor_state_changed.emit()
 	err = new_err
+	redrawUI()
 		
 func _on_draw() -> void:
 
 	if err:
+		var sz = 16 * ui_scale
 		self_modulate = Color(1.0, 0.5, 0.5)
-		draw_string( ThemeDB.fallback_font, Vector2(0,size.y + 32), err, HORIZONTAL_ALIGNMENT_LEFT, -1, 32 )
+		draw_string( ThemeDB.fallback_font, Vector2(0,size.y + sz), err, HORIZONTAL_ALIGNMENT_LEFT, -1, sz )
 	else:
 		self_modulate = Color.WHITE
 		
 	if settings.inspect_enabled:
 		var clr : Color = Color.YELLOW / self_modulate
-		draw_circle( Vector2(0,0), marker_radius, clr )
+		draw_circle( Vector2(0,0), marker_radius * ui_scale, clr )
 	if settings.debug_enabled:
 		var clr : Color = Color.CYAN / self_modulate
-		draw_circle( Vector2(size.x,0), marker_radius, clr )
+		draw_circle( Vector2(size.x,0), marker_radius * ui_scale, clr )
 
 func getTitle() -> String:
 	return settings.title

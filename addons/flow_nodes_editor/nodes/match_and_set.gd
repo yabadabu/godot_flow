@@ -22,7 +22,7 @@ func execute( _ctx : FlowData.EvaluationContext ):
 	var out_containers = []
 	for attr_stream in attrs_data.streams.values():
 		var new_container = out_data.addStream( attr_stream.name, attr_stream.data_type )
-		print( "new_container: ", attr_stream, " Sz:", new_container.size())
+		# print( "new_container: ", attr_stream, " Sz:", new_container.size())
 		in_containers.append( attr_stream.container )
 		out_containers.append( new_container )
 		

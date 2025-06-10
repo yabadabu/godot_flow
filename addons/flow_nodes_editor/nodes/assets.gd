@@ -25,13 +25,13 @@ func execute( _ctx : FlowData.EvaluationContext ):
 	var count = settings.assets.size()
 	for idx in range(count):
 		var asset = settings.assets[idx]
-		print( "=== %s (x %d)" % [ asset, count ] )
+		# print( "=== %s (x %d)" % [ asset, count ] )
 		for prop in asset.get_property_list():
 			if !(prop.usage & PROPERTY_USAGE_EDITOR) || !(prop.usage & PROPERTY_USAGE_STORAGE):
 				continue
 			if discardted_props.has( prop.name ):
 				continue
-			print( " %s " % prop )
+			# print( " %s " % prop )
 			match prop.type:
 				TYPE_FLOAT:
 					new_streams[ prop.name ] = FlowData.DataType.Float
