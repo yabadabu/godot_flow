@@ -1,25 +1,11 @@
-[gd_resource type="Resource" script_class="FlowGraphResource" load_steps=14 format=3 uid="uid://66ejgwppld3l"]
+[gd_resource type="Resource" script_class="FlowGraphResource" load_steps=16 format=3 uid="uid://66ejgwppld3l"]
 
 [ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="1_i7hbt"]
 [ext_resource type="Script" uid="uid://dwtm2hr5nh78h" path="res://addons/flow_nodes_editor/nodes/grid_settings.gd" id="1_qjhb7"]
 [ext_resource type="Script" uid="uid://cchxntewglwb0" path="res://addons/flow_nodes_editor/nodes/assets_settings.gd" id="2_rvt80"]
 [ext_resource type="Script" uid="uid://7g705n2fjnlr" path="res://addons/flow_nodes_editor/user_resource.gd" id="2_u5yrf"]
 [ext_resource type="Script" uid="uid://c0ql72e1bbdqo" path="res://my_meshes.gd" id="3_f0s07"]
-
-[sub_resource type="Resource" id="Resource_u5yrf"]
-resource_name = "Grid Settings"
-script = ExtResource("1_qjhb7")
-x = 3
-y = 3
-z = 1
-step = Vector3(1, 1, 1)
-random_seed = 2943639960
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-title = "Grid"
-enabled = true
+[ext_resource type="Script" uid="uid://dm55x0bp4p6a0" path="res://addons/flow_nodes_editor/nodes/match_and_set_settings.gd" id="5_f0s07"]
 
 [sub_resource type="QuadMesh" id="QuadMesh_u5yrf"]
 
@@ -60,21 +46,65 @@ debug_scale = 1.0
 title = "Assets"
 enabled = true
 
+[sub_resource type="Resource" id="Resource_u5yrf"]
+resource_name = "Grid Settings"
+script = ExtResource("1_qjhb7")
+x = 3
+y = 3
+z = 1
+step = Vector3(1, 1, 1)
+random_seed = 2943639960
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+title = "Grid"
+enabled = true
+
+[sub_resource type="Resource" id="Resource_vqsss"]
+resource_name = "Match And Set"
+script = ExtResource("5_f0s07")
+weight_attr = ""
+random_seed = 3920521348
+inspect_enabled = true
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+title = "Match And Set"
+enabled = true
+
 [resource]
 script = ExtResource("1_i7hbt")
 nodes = Array[Dictionary]([{
+"name": &"id_0010_assets",
+"position_offset": Vector2(160, 240),
+"settings": SubResource("Resource_n2x4a"),
+"template": "assets"
+}, {
 "name": &"id_0007_grid",
-"position_offset": Vector2(160, 60),
+"position_offset": Vector2(160, -20),
 "settings": SubResource("Resource_u5yrf"),
 "template": "grid"
 }, {
-"name": &"id_0010_assets",
-"position_offset": Vector2(81.6665, 227.097),
-"settings": SubResource("Resource_n2x4a"),
-"template": "assets"
+"name": &"id_0011_match_and_set",
+"position_offset": Vector2(360, 40),
+"settings": SubResource("Resource_vqsss"),
+"template": "match_and_set"
 }])
-conns = Array[Dictionary]([])
+conns = Array[Dictionary]([{
+"from_node": &"id_0007_grid",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0011_match_and_set",
+"to_port": 0
+}, {
+"from_node": &"id_0010_assets",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0011_match_and_set",
+"to_port": 1
+}])
 view_zoom = 0.967349
 view_offset = Vector2(0, -186.318)
-new_name_counter = 10
+new_name_counter = 11
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
