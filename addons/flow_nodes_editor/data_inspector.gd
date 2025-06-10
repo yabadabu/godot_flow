@@ -47,16 +47,17 @@ func addColor( gc : Container, data : Color ):
 	gc.add_child( c )
 	return c
 	
-func allocFloat32Column( ):
+func allocColumn( title : String ):
 		
 	var col : VBoxContainer = VBoxContainer.new()	
 	col.add_theme_constant_override("separation", 0)
-	col.custom_minimum_size.x = 150
+	col.custom_minimum_size.x = 100
 		
 	for idx in range( num_rows + 1 ):
 		var cell : Label = Label.new()
 		if idx == 0:
 			cell.add_theme_stylebox_override( "normal", style_titles )
+			cell.text = title
 		elif not idx % 2:
 			cell.add_theme_stylebox_override( "normal", styleA )
 		else:
@@ -113,13 +114,10 @@ func refresh():
 	%LabelStats.text = "%d Reserved, %d Rows, (%d cols in %d Streams)" % [ cols.get_child_count(), num_rows, num_cols, data.numFields()]
 	
 	# Index column
-	var col_ids = allocFloat32Column()
-	for row in range( num_rows + 1 ):
-		var label : Label = col_ids.get_child( row )
-		if row == 0:
-			label.text = "Index"
-		else:
-			label.text = str(row-1)
+	var col_ids = allocColumn("Index")
+	for row in range( num_rows ):
+		var label : Label = col_ids.get_child( row + 1 )
+		label.text = str(row)
 	cols.add_child( col_ids )
 
 	style_titles.bg_color = Color( 0.1, 0.1, 0.1 )
@@ -130,16 +128,13 @@ func refresh():
 		match stream.data_type:
 			FlowData.DataType.Vector:
 				var container : PackedVector3Array = stream.container
-				var colx = allocFloat32Column()
-				var coly = allocFloat32Column()
-				var colz = allocFloat32Column()
 				var stream_name : StringName = stream.name
 				var titles = [" %s.X " % stream.name, " %s.Y " % stream.name, " %s.Z " % stream.name]
 				if stream_name == FlowData.AttrRotation:
 					titles = ["  Yaw ", "  Pitch ", "  Roll "]
-				colx.get_child(0).text = titles[0]
-				coly.get_child(0).text = titles[1]
-				colz.get_child(0).text = titles[2]
+				var colx = allocColumn(titles[0])
+				var coly = allocColumn(titles[1])
+				var colz = allocColumn(titles[2])
 				for idx in range( num_rows ):
 					var cell : Vector3 = container[idx]
 					var j := idx + 1
@@ -152,24 +147,21 @@ func refresh():
 
 			FlowData.DataType.Float:
 				var container : PackedFloat32Array = stream.container
-				var col = allocFloat32Column()
-				col.get_child(0).text = stream.name
+				var col = allocColumn(stream.name)
 				for idx in range( num_rows ):
 					setLabelText( col.get_child(  idx + 1 ), container[idx] )
 				cols.add_child( col )
 
 			FlowData.DataType.DTResource:
 				var container : Array[ Resource ] = stream.container
-				var col = allocFloat32Column()
-				col.get_child(0).text = stream.name
+				var col = allocColumn(stream.name)
 				for idx in range( num_rows ):
 					col.get_child( idx + 1 ).text = "   " + container[idx].resource_path
 				cols.add_child( col )
 
 			FlowData.DataType.DTString:
 				var container : Array[ String ] = stream.container
-				var col = allocFloat32Column()
-				col.get_child(0).text = stream.name
+				var col = allocColumn(stream.name)
 				for idx in range( num_rows ):
 					col.get_child( idx + 1 ).text = container[ idx ]
 				cols.add_child( col )
