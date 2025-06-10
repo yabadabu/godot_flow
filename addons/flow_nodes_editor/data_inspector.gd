@@ -112,7 +112,6 @@ func refresh():
 	
 	%LabelStats.text = "%d Reserved, %d Rows, (%d cols in %d Streams)" % [ cols.get_child_count(), num_rows, num_cols, data.numFields()]
 	
-	
 	# Index column
 	var col_ids = allocFloat32Column()
 	for row in range( num_rows + 1 ):
@@ -156,9 +155,7 @@ func refresh():
 				var col = allocFloat32Column()
 				col.get_child(0).text = stream.name
 				for idx in range( num_rows ):
-					var cell = container[idx]
-					var j := idx + 1
-					setLabelText( col.get_child(j), cell )
+					setLabelText( col.get_child(  idx + 1 ), container[idx] )
 				cols.add_child( col )
 
 			FlowData.DataType.DTResource:
@@ -166,9 +163,15 @@ func refresh():
 				var col = allocFloat32Column()
 				col.get_child(0).text = stream.name
 				for idx in range( num_rows ):
-					var cell = container[idx]
-					var j := idx + 1
-					col.get_child(j).text = "   " + cell.resource_path
+					col.get_child( idx + 1 ).text = "   " + container[idx].resource_path
+				cols.add_child( col )
+
+			FlowData.DataType.DTString:
+				var container : Array[ String ] = stream.container
+				var col = allocFloat32Column()
+				col.get_child(0).text = stream.name
+				for idx in range( num_rows ):
+					col.get_child( idx + 1 ).text = container[ idx ]
 				cols.add_child( col )
 
 			## type not supported...

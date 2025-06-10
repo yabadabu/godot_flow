@@ -6,6 +6,7 @@ enum DataType {
 	Float,
 	Vector,
 	DTResource,
+	DTString,
 }
 
 const AttrPosition : StringName = &"position"
@@ -40,8 +41,9 @@ class Data:
 			DataType.Vector:
 				return PackedVector3Array()
 			DataType.DTResource:
-				var q : Array[ Resource ] = []
-				return q
+				return Array([], TYPE_OBJECT, "Resource", null)
+			DataType.DTString:
+				return Array([], TYPE_STRING, "", null)
 		return null
 	
 	func numFields() -> int:
@@ -99,7 +101,7 @@ class Data:
 				new_container = PackedFloat32Array( prev_stream.container )
 			DataType.Vector:
 				new_container = PackedVector3Array( prev_stream.container )		
-			DataType.DTResource:
+			_:
 				new_container = prev_stream.container.duplicate()	
 		prev_stream.container = new_container
 		return new_container
@@ -127,6 +129,14 @@ class Data:
 			DataType.Vector:
 				var old_container : PackedVector3Array = old_stream.container
 				var new_container := PackedVector3Array(  )		
+				new_container.resize( new_size )
+				for idx in range( new_size ):
+					new_container[idx] = old_container[ indices[idx] ]
+				return new_container
+				
+			DataType.DTString:
+				var old_container : Array[ String ] = old_stream.container
+				var new_container : Array[ String ] = []
 				new_container.resize( new_size )
 				for idx in range( new_size ):
 					new_container[idx] = old_container[ indices[idx] ]

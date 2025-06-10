@@ -9,6 +9,13 @@ func getMeta() -> Dictionary :
 		"outs" : [{ "label" : "Out" }],
 		"tooltip" :"Generates a list of assets",
 	}
+	
+const discardted_props = {
+	"resource_local_to_scene" : 1,
+	"resource_name" : 1,
+	"metadata/_custom_type_script" : 1,
+	"script" : 1,
+}
 
 func execute( _ctx : FlowData.EvaluationContext ):
 	var output := FlowData.Data.new()
@@ -20,34 +27,33 @@ func execute( _ctx : FlowData.EvaluationContext ):
 		var asset = settings.assets[idx]
 		print( "=== %s (x %d)" % [ asset, count ] )
 		for prop in asset.get_property_list():
-			if prop.usage != 6:
+			if !(prop.usage & PROPERTY_USAGE_EDITOR) || !(prop.usage & PROPERTY_USAGE_STORAGE):
 				continue
-			if prop.name == "resource_local_to_scene" || prop.name == "resource_name" || prop.name == "metadata/_custom_type_script":
+			if discardted_props.has( prop.name ):
 				continue
 			print( " %s " % prop )
-			if prop.type == TYPE_FLOAT:
-				#print( "%s is a float" % prop.name)
-				new_streams[ prop.name ] = FlowData.DataType.Float
-			elif prop.type == typeof(Resource):
-				#print( "%s is a resource" % prop.name)
-				new_streams[ prop.name ] = FlowData.DataType.DTResource
+			match prop.type:
+				TYPE_FLOAT:
+					new_streams[ prop.name ] = FlowData.DataType.Float
+				TYPE_STRING:
+					new_streams[ prop.name ] = FlowData.DataType.DTString
+				TYPE_OBJECT:
+					new_streams[ prop.name ] = FlowData.DataType.DTResource
+				_:
+					push_error("Property %s has unsupported type (%d)" % [ prop.name, prop.type ])
 
 	for prop_name in new_streams.keys():
 		var prop_type = new_streams[ prop_name ]
-		if prop_type == FlowData.DataType.Float:
-			var container : PackedFloat32Array = output.addStream( prop_name, prop_type )
-			container.resize( count )
-			for idx in range(count):
-				var asset = settings.assets[idx]
-				var value = asset.get( prop_name )
-				#print( "FloatProp:%s, Idx:%d -> %s" % [ prop_name, idx, str(value)] )
-				container[idx] = value
-		else:
-			var container : Array = output.addStream( prop_name, prop_type )
-			container.resize( count )
-			for idx in range(count):
-				var asset = settings.assets[idx]
-				var value = asset.get( prop_name )
-				#print( "ObjProp:%s, Idx:%d -> %s" % [ prop_name, idx, str(value)] )
-				container[idx] = value
+		match prop_type:
+			FlowData.DataType.Float:
+				var container : PackedFloat32Array = output.addStream( prop_name, prop_type )
+				container.resize( count )
+				for idx in range(count):
+					container[idx] = settings.assets[idx].get( prop_name )
+			_:
+				var container : Array = output.addStream( prop_name, prop_type )
+				container.resize( count )
+				for idx in range(count):
+					container[idx] = settings.assets[idx].get( prop_name )
+					
 	set_output( 0, output )
