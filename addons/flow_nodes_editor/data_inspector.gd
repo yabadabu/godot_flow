@@ -64,9 +64,11 @@ func allocColumn( title : String ):
 			cell.add_theme_stylebox_override( "normal", styleB )
 		col.add_child( cell )
 		cell.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT	
+		
+	cols.add_child( col )
 	return col
 	
-func setLabelText( label : Label, value : float ):
+func setLabelNumber( label : Label, value : float ):
 	var new_text = fmt( value )
 	if new_text != label.text:
 		label.text = new_text
@@ -118,7 +120,6 @@ func refresh():
 	for row in range( num_rows ):
 		var label : Label = col_ids.get_child( row + 1 )
 		label.text = str(row)
-	cols.add_child( col_ids )
 
 	style_titles.bg_color = Color( 0.1, 0.1, 0.1 )
 	styleA.bg_color = Color( 0.2, 0.2, 0.2, 0.1 )
@@ -138,33 +139,27 @@ func refresh():
 				for idx in range( num_rows ):
 					var cell : Vector3 = container[idx]
 					var j := idx + 1
-					setLabelText( colx.get_child(j), cell.x )
-					setLabelText( coly.get_child(j), cell.y )
-					setLabelText( colz.get_child(j), cell.z )
-				cols.add_child( colx )
-				cols.add_child( coly )
-				cols.add_child( colz )
+					setLabelNumber( colx.get_child(j), cell.x )
+					setLabelNumber( coly.get_child(j), cell.y )
+					setLabelNumber( colz.get_child(j), cell.z )
 
 			FlowData.DataType.Float:
 				var container : PackedFloat32Array = stream.container
 				var col = allocColumn(stream.name)
 				for idx in range( num_rows ):
-					setLabelText( col.get_child(  idx + 1 ), container[idx] )
-				cols.add_child( col )
+					setLabelNumber( col.get_child(  idx + 1 ), container[idx] )
 
 			FlowData.DataType.DTResource:
 				var container : Array[ Resource ] = stream.container
 				var col = allocColumn(stream.name)
 				for idx in range( num_rows ):
 					col.get_child( idx + 1 ).text = "   " + container[idx].resource_path
-				cols.add_child( col )
 
 			FlowData.DataType.DTString:
 				var container : Array[ String ] = stream.container
 				var col = allocColumn(stream.name)
 				for idx in range( num_rows ):
 					col.get_child( idx + 1 ).text = container[ idx ]
-				cols.add_child( col )
 
 			## type not supported...
 	#
