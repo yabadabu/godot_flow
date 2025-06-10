@@ -4,7 +4,7 @@ extends NodeSettings
 
 @export_group("Assets")
 
-@export var assets : Array[ FlowUserResourcenData ] = []
+@export var assets : Array[ FlowUserResourceData ] = []
 
 func _init():
 	super._init()

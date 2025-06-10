@@ -88,8 +88,16 @@ func updateNumRowsAndCols():
 func fmt( v : float ) -> String:
 	return "%1.4f" % v
 		
+func removeAll():
+	# Remove everything
+	while( cols.get_child_count() > 0):
+		var col = cols.get_child( cols.get_child_count()-1)
+		cols.remove_child( col )
+		col.queue_free()
+		
 func refresh():
 	queue_redraw()
+	removeAll()
 	
 	if cols == null || node == null:
 		return
@@ -104,11 +112,6 @@ func refresh():
 	
 	%LabelStats.text = "%d Reserved, %d Rows, (%d cols in %d Streams)" % [ cols.get_child_count(), num_rows, num_cols, data.numFields()]
 	
-	# Remove everything
-	while( cols.get_child_count() > 0):
-		var col = cols.get_child( cols.get_child_count()-1)
-		cols.remove_child( col )
-		col.queue_free()
 	
 	# Index column
 	var col_ids = allocFloat32Column()

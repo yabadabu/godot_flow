@@ -19,9 +19,9 @@ enabled = true
 [sub_resource type="Resource" id="Resource_1xbvu"]
 resource_name = "Transform Settings"
 script = ExtResource("2_2h21p")
-offset_min = Vector3(0.4, 0, 0)
+offset_min = Vector3(0, 0, 0)
 offset_max = Vector3(0, 0, 0)
-rotation_min = Vector3(3.27, 360, 0)
+rotation_min = Vector3(0, 360, -0.555)
 rotation_max = Vector3(0, 0, 0)
 random_seed = 2046638687
 inspect_enabled = true
@@ -51,7 +51,7 @@ conns = Array[Dictionary]([{
 "to_node": &"id_0002_transform",
 "to_port": 0
 }])
-view_zoom = 1.0
-view_offset = Vector2(0, 0)
+view_zoom = 1.331
+view_offset = Vector2(-10.8837, -58.6595)
 new_name_counter = 0
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"

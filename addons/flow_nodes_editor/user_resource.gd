@@ -1,2 +1,2 @@
-class_name FlowUserResourcenData
+class_name FlowUserResourceData
 extends Resource

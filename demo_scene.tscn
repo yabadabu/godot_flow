@@ -1,9 +1,11 @@
-[gd_scene load_steps=9 format=3 uid="uid://c1b6ke05vpb8r"]
+[gd_scene load_steps=11 format=3 uid="uid://c1b6ke05vpb8r"]
 
+[ext_resource type="Script" uid="uid://dsft6ocvh7yuk" path="res://demo_scene.gd" id="1_1hm1i"]
 [ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_iapjp"]
 [ext_resource type="Resource" uid="uid://66ejgwppld3l" path="res://graph00.tres" id="2_8n7uv"]
 [ext_resource type="Resource" uid="uid://doldqxmlcvh80" path="res://graph01.tres" id="3_ayuu8"]
 [ext_resource type="Resource" uid="uid://c6tic21gyki1f" path="res://graph02_curves.tres" id="4_ctgmk"]
+[ext_resource type="Script" uid="uid://cjfky1m4j3nl" path="res://tree_data.gd" id="6_om45m"]
 
 [sub_resource type="Curve3D" id="Curve3D_ayuu8"]
 closed = true
@@ -27,7 +29,9 @@ _data = {
 }
 point_count = 3
 
-[node name="DemoScene" type="Node3D"]
+[node name="DemoScene" type="Node3D" node_paths=PackedStringArray("persons")]
+script = ExtResource("1_1hm1i")
+persons = [NodePath("Path3D_Planar/Node"), NodePath("Path3D_Planar/Node2"), NodePath("Path3D_Planar/Node3"), NodePath("Path3D_Planar/Node4")]
 
 [node name="PCG_1" type="Node3D" parent="."]
 script = ExtResource("1_iapjp")
@@ -60,3 +64,18 @@ shape = SubResource("ConcavePolygonShape3D_ctgmk")
 [node name="Path3D_Planar" type="Path3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0536261, 9.53674e-07, -0.0246732)
 curve = SubResource("Curve3D_1hm1i")
+
+[node name="Node" type="Node" parent="Path3D_Planar"]
+script = ExtResource("6_om45m")
+
+[node name="Node2" type="Node" parent="Path3D_Planar"]
+script = ExtResource("6_om45m")
+weight = 2.0
+
+[node name="Node3" type="Node" parent="Path3D_Planar"]
+script = ExtResource("6_om45m")
+weight = 3.0
+
+[node name="Node4" type="Node" parent="Path3D_Planar"]
+script = ExtResource("6_om45m")
+weight = 4.0

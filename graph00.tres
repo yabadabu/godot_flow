@@ -1,10 +1,9 @@
-[gd_resource type="Resource" script_class="FlowGraphResource" load_steps=12 format=3 uid="uid://66ejgwppld3l"]
+[gd_resource type="Resource" script_class="FlowGraphResource" load_steps=7 format=3 uid="uid://66ejgwppld3l"]
 
 [ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="1_i7hbt"]
 [ext_resource type="Script" uid="uid://dwtm2hr5nh78h" path="res://addons/flow_nodes_editor/nodes/grid_settings.gd" id="1_qjhb7"]
 [ext_resource type="Script" uid="uid://cchxntewglwb0" path="res://addons/flow_nodes_editor/nodes/assets_settings.gd" id="2_rvt80"]
 [ext_resource type="Script" uid="uid://7g705n2fjnlr" path="res://addons/flow_nodes_editor/user_resource.gd" id="2_u5yrf"]
-[ext_resource type="Script" uid="uid://c0ql72e1bbdqo" path="res://my_meshes.gd" id="3_f0s07"]
 
 [sub_resource type="Resource" id="Resource_qjhb7"]
 resource_name = "Grid Settings"
@@ -21,28 +20,12 @@ debug_scale = 1.0
 title = "Grid"
 enabled = true
 
-[sub_resource type="PlaneMesh" id="PlaneMesh_n2x4a"]
-
-[sub_resource type="Resource" id="Resource_jx2uv"]
-script = ExtResource("3_f0s07")
-weight = 5.0
-asset = SubResource("PlaneMesh_n2x4a")
-metadata/_custom_type_script = "uid://c0ql72e1bbdqo"
-
-[sub_resource type="SphereMesh" id="SphereMesh_2ku6k"]
-
-[sub_resource type="Resource" id="Resource_vqsss"]
-script = ExtResource("3_f0s07")
-weight = 2.0
-asset = SubResource("SphereMesh_2ku6k")
-metadata/_custom_type_script = "uid://c0ql72e1bbdqo"
-
-[sub_resource type="Resource" id="Resource_cvsyc"]
+[sub_resource type="Resource" id="Resource_js8uo"]
 resource_name = "Assets Settings"
 script = ExtResource("2_rvt80")
-assets = Array[ExtResource("2_u5yrf")]([SubResource("Resource_jx2uv"), SubResource("Resource_vqsss")])
-random_seed = 1252696536
-inspect_enabled = true
+assets = Array[ExtResource("2_u5yrf")]([])
+random_seed = 463000606
+inspect_enabled = false
 debug_enabled = false
 debug_mode = 0
 debug_scale = 1.0
@@ -57,13 +40,13 @@ nodes = Array[Dictionary]([{
 "settings": SubResource("Resource_qjhb7"),
 "template": "grid"
 }, {
-"name": &"id_0002_assets",
-"position_offset": Vector2(190.793, 271.561),
-"settings": SubResource("Resource_cvsyc"),
+"name": &"id_0006_assets",
+"position_offset": Vector2(273.798, 207.543),
+"settings": SubResource("Resource_js8uo"),
 "template": "assets"
 }])
 conns = Array[Dictionary]([])
-view_zoom = 0.906744
-view_offset = Vector2(0, -122.764)
-new_name_counter = 2
+view_zoom = 1.17049
+view_offset = Vector2(98.4783, -54.0729)
+new_name_counter = 6
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"

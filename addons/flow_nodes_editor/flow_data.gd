@@ -48,6 +48,8 @@ class Data:
 		return streams.size()
 		
 	func size() -> int:
+		if streams.size() == 0:
+			return 0
 		var key0 = streams.keys()[0]
 		return streams[ key0 ].container.size()
 	

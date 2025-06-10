@@ -23,6 +23,7 @@ var scenario_rid : RID
 var multimesh_rid : RID
 var instance_rid : RID
 var mesh_resource: Mesh = preload( "res://addons/flow_nodes_editor/resources/unit_cube.tres" )
+var marker_radius : float = 9
 
 func _ready():
 	refreshInspectMark()
@@ -33,6 +34,11 @@ func _ready():
 		scenario_rid = viewport.get_world_3d().scenario
 	else:
 		print( "Viewport is invalid")
+	
+	var dpi = DisplayServer.screen_get_dpi()
+	print( "Dpi is %d and %d" % [ DisplayServer.screen_get_dpi(), DisplayServer.screen_get_scale()])
+	if dpi > 150:
+		marker_radius *= 2.0
 	
 func _exit_tree():
 	cleanup_multimesh_direct()
@@ -130,7 +136,7 @@ func setError( new_err : String ):
 	err = new_err
 		
 func _on_draw() -> void:
-		
+
 	if err:
 		self_modulate = Color(1.0, 0.5, 0.5)
 		draw_string( ThemeDB.fallback_font, Vector2(0,size.y + 32), err, HORIZONTAL_ALIGNMENT_LEFT, -1, 32 )
@@ -139,10 +145,10 @@ func _on_draw() -> void:
 		
 	if settings.inspect_enabled:
 		var clr : Color = Color.YELLOW / self_modulate
-		draw_circle( Vector2(0,0), 16.0, clr )
+		draw_circle( Vector2(0,0), marker_radius, clr )
 	if settings.debug_enabled:
 		var clr : Color = Color.CYAN / self_modulate
-		draw_circle( Vector2(size.x,0), 16.0, clr )
+		draw_circle( Vector2(size.x,0), marker_radius, clr )
 
 func getTitle() -> String:
 	return settings.title
