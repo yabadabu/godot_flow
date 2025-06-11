@@ -47,19 +47,19 @@ debug_scale = 1.0
 title = "Noise"
 enabled = true
 
-[sub_resource type="Resource" id="Resource_u5yrf"]
-resource_name = "Grid Settings"
-script = ExtResource("1_qjhb7")
-x = 4
-y = 1
-z = 4
-step = Vector3(2, 1, 2)
-random_seed = 2943639960
+[sub_resource type="Resource" id="Resource_71tyt"]
+resource_name = "Math Op"
+script = ExtResource("9_vqsss")
+operation = 0
+in_nameA = "position.X"
+in_nameB = "MyOffs.X"
+out_name = "MyOffs.X"
+random_seed = 3065715348
 inspect_enabled = false
 debug_enabled = false
 debug_mode = 0
 debug_scale = 1.0
-title = "Grid"
+title = "Math"
 enabled = true
 
 [sub_resource type="QuadMesh" id="QuadMesh_u5yrf"]
@@ -101,21 +101,6 @@ debug_scale = 1.0
 title = "Assets"
 enabled = true
 
-[sub_resource type="Resource" id="Resource_71tyt"]
-resource_name = "Math Op"
-script = ExtResource("9_vqsss")
-operation = 0
-in_nameA = "position.X"
-in_nameB = "MyOffs.X"
-out_name = "MyOffs.X"
-random_seed = 3065715348
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-title = "Math"
-enabled = true
-
 [sub_resource type="Resource" id="Resource_vqsss"]
 resource_name = "Match And Set"
 script = ExtResource("5_f0s07")
@@ -126,6 +111,21 @@ debug_enabled = false
 debug_mode = 0
 debug_scale = 1.0
 title = "Match And Set"
+enabled = true
+
+[sub_resource type="Resource" id="Resource_u5yrf"]
+resource_name = "Grid Settings"
+script = ExtResource("1_qjhb7")
+x = 4
+y = 1
+z = 4
+step = Vector3(2, 1, 2)
+random_seed = 2943639960
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+title = "Grid"
 enabled = true
 
 [sub_resource type="Resource" id="Resource_cvsyc"]
@@ -154,25 +154,25 @@ nodes = Array[Dictionary]([{
 "settings": SubResource("Resource_ffstm"),
 "template": "noise"
 }, {
-"name": &"id_0007_grid",
-"position_offset": Vector2(-80, -80),
-"settings": SubResource("Resource_u5yrf"),
-"template": "grid"
+"name": &"id_0022_math_op",
+"position_offset": Vector2(660, -360),
+"settings": SubResource("Resource_71tyt"),
+"template": "math_op"
 }, {
 "name": &"id_0010_assets",
 "position_offset": Vector2(-80, 120),
 "settings": SubResource("Resource_n2x4a"),
 "template": "assets"
 }, {
-"name": &"id_0022_math_op",
-"position_offset": Vector2(660, -360),
-"settings": SubResource("Resource_71tyt"),
-"template": "math_op"
-}, {
 "name": &"id_0011_match_and_set",
 "position_offset": Vector2(240, 0),
 "settings": SubResource("Resource_vqsss"),
 "template": "match_and_set"
+}, {
+"name": &"id_0007_grid",
+"position_offset": Vector2(-80, -80),
+"settings": SubResource("Resource_u5yrf"),
+"template": "grid"
 }, {
 "name": &"id_0014_spawn_meshes",
 "position_offset": Vector2(660, 20),
@@ -223,6 +223,6 @@ conns = Array[Dictionary]([{
 "to_port": 0
 }])
 view_zoom = 0.879408
-view_offset = Vector2(107.591, -779.471)
+view_offset = Vector2(362.951, -798.671)
 new_name_counter = 24
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
