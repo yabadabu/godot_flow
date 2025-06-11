@@ -7,7 +7,7 @@
 [sub_resource type="Resource" id="Resource_2h21p"]
 resource_name = "Sample Spline Settings"
 script = ExtResource("1_bd8sb")
-uniform_interval = 10.0
+uniform_interval = 0.31
 random_seed = 2842677187
 inspect_enabled = false
 debug_enabled = false
@@ -21,10 +21,10 @@ resource_name = "Transform Settings"
 script = ExtResource("2_2h21p")
 offset_min = Vector3(0, 0, 0)
 offset_max = Vector3(0, 0, 0)
-rotation_min = Vector3(0, 360, -0.555)
-rotation_max = Vector3(0, 0, 0)
+rotation_min = Vector3(0, 0, -0.555)
+rotation_max = Vector3(0, 360, 0)
 random_seed = 2046638687
-inspect_enabled = true
+inspect_enabled = false
 debug_enabled = true
 debug_mode = 0
 debug_scale = 1.0
@@ -51,7 +51,7 @@ conns = Array[Dictionary]([{
 "to_node": &"id_0002_transform",
 "to_port": 0
 }])
-view_zoom = 1.331
-view_offset = Vector2(-10.8837, -58.6595)
+view_zoom = 1.05371
+view_offset = Vector2(-46.1742, -216.16)
 new_name_counter = 0
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"

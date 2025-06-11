@@ -24,7 +24,11 @@ func execute( _ctx : FlowData.EvaluationContext ):
 		return
 		
 	if sB == null:
-		setError( "Input B %s not found" % [settings.in_nameA])
+		setError( "Input B %s not found" % [settings.in_nameB])
+		return
+		
+	if not settings.out_name:
+		setError( "Output name can't be empty")
 		return
 	
 	if sA.data_type != sB.data_type:
@@ -34,28 +38,32 @@ func execute( _ctx : FlowData.EvaluationContext ):
 	if sA.data_type == FlowData.DataType.Float:
 		var inA : PackedFloat32Array = sA.container
 		var inB : PackedFloat32Array = sB.container
-		var spos : PackedFloat32Array = out_data.addStream( settings.out_name, sA.data_type )
-		if spos == null:
-			setError( "Invalid out name %s" % [ settings.out_name ] )
-			return
+		var num_elems := inA.size()
+		var outC := PackedFloat32Array()
+		outC.resize( num_elems )
+		
 		match settings.operation:
 			MathOpNodeSettings.eOperation.Multiply:
-				for i in spos.size():
-					spos[i] = inA[i] * inB[i]
+				for i in num_elems:
+					outC[i] = inA[i] * inB[i]
 			MathOpNodeSettings.eOperation.Add:
-				for i in spos.size():
-					spos[i] = inA[i] + inB[i]
+				for i in num_elems:
+					outC[i] = inA[i] + inB[i]
 			MathOpNodeSettings.eOperation.Substract:
-				for i in spos.size():
-					spos[i] = inA[i] - inB[i]
+				for i in num_elems:
+					outC[i] = inA[i] - inB[i]
 			MathOpNodeSettings.eOperation.Divide:
-				for i in spos.size():
-					spos[i] = inA[i] / inB[i]
+				for i in num_elems:
+					outC[i] = inA[i] / inB[i]
 			MathOpNodeSettings.eOperation.Negate:
-				for i in spos.size():
-					spos[i] = -inA[i]
+				for i in num_elems:
+					outC[i] = -inA[i]
 			MathOpNodeSettings.eOperation.Absolute:
-				for i in spos.size():
-					spos[i] = absf(inA[i])
-
+				for i in num_elems:
+					outC[i] = absf(inA[i])
+		var err = out_data.registerStream( settings.out_name, sA.data_type, outC )
+		if err:
+			setError( err )
+			return
+		
 	set_output( 0, out_data )

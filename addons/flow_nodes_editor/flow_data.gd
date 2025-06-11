@@ -64,28 +64,104 @@ class Data:
 			return stream.container
 		return null
 		
+	# converts 'Yaw' into "Rotation.Y" 
+	func translateStreamName( name : String ):
+		if name == "Yaw":
+			return "%s.Y" % FlowData.AttrRotation
+		if name == "Pitch":
+			return "%s.X" % FlowData.AttrRotation
+		if name == "Roll":
+			return "%s.Z" % FlowData.AttrRotation
+		return name
+		
+	func getSubStreamIndex(  sub_comp : String ):
+		if sub_comp == "X":
+			return 0
+		elif sub_comp== "Y":
+			return 1
+		elif sub_comp == "Z":
+			return 2
+		return -1
+	
+	func getSubStream( stream : Dictionary, sub_comp : String ):
+		var subcomp_idx = getSubStreamIndex( sub_comp )
+		if subcomp_idx == -1:
+			push_error( "Invalid sub_stream name %s" % sub_comp )
+			return null
+		if stream.data_type != DataType.Vector:
+			return "getSubStream.Parent stream must be of type Vector"
+			return null
+		var big_container = stream.container
+		var new_container = PackedFloat32Array()
+		new_container.resize( big_container.size() )
+		for idx in range( big_container.size() ):
+			new_container[idx] = big_container[idx][ subcomp_idx ]
+		var q = {
+			"data_type" : DataType.Float,
+			"container" : new_container,
+			"name" : "%s.%s" % [ stream.name, sub_comp ]
+		}
+		print( "Q is ", q)
+		return q
+		
+	func setSubStream( stream : Dictionary, sub_comp : String, sub_container  ):
+		var subcomp_idx = getSubStreamIndex( sub_comp )
+		if subcomp_idx == -1:
+			return "Invalid sub stream name %s" % sub_comp
+		if stream.data_type != DataType.Vector:
+			return "setSubStream.Parent stream must be of type Vector"
+		var big_container = stream.container
+		if sub_container.size() != big_container.size():
+			return "Container sizes do not match (%d vs %d)" % [sub_container.size(), big_container.size()]
+		for idx in range( big_container.size() ):
+			big_container[idx][ subcomp_idx ] = sub_container[idx]
+		
 	func findStream( name : String ):
+		name = translateStreamName( name )
+		var parts = name.split( "." )
+		if parts.size() == 2:
+			print( "findStream(%s) => %s" % [ name, parts])
+			var s0 = streams.get( parts[0], null )
+			if s0 == null:
+				push_error( "Failed to find stream root %s" % parts[0] )
+				return null
+			print( "searching (%s) in %s" % [ parts[1], s0])
+			return getSubStream( s0, parts[1] )
+		elif parts.size() > 2:
+			return null
 		return streams.get( name, null )
 	
 	func registerStream( name : String, data_type : DataType, container ):
-		streams[ name ] = { 
-			"container" : container,
-			"name" : name,
-			"data_type" : data_type
-		}
+		if not name:
+			push_error("registerStream name can't be empty" )
+			return null
+		name = translateStreamName( name )
+		var parts = name.split( "." )
+		if parts.size() == 2:
+			var s0 = streams.get( parts[0], null )
+			if s0 == null:
+				return "Failed to find stream %s" % parts[0] 
+			return setSubStream( s0, parts[1], container )
+		elif parts.size() > 2:
+			return "Too many '.' in stream name"
+		else:
+			streams[ name ] = { 
+				"container" : container,
+				"name" : name,
+				"data_type" : data_type
+			}
 		#print( "Registered stream %s : %s " % [ name, streams[ name ] ])
+		return null
 	
 	func addStream( name : String, data_type : DataType):
 		if not name:
 			push_error("stream name can't be empty" )
 			return null
-		if streams.has( name ):
-			push_error("Data already has stream named %s" % name )
-			return null
+		var sz := size()
 		var new_container = newContainerOfType(data_type)
 		registerStream( name, data_type, new_container )
-		if size() > 0:
-			new_container.resize( size() )
+		if sz:
+			new_container.resize( sz )
 		return new_container
 		
 	func cloneStream( name : String ):

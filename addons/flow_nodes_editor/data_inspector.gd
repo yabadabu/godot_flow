@@ -134,7 +134,7 @@ func refresh():
 				var stream_name : StringName = stream.name
 				var titles = [" %s.X " % stream.name, " %s.Y " % stream.name, " %s.Z " % stream.name]
 				if stream_name == FlowData.AttrRotation:
-					titles = ["  Yaw ", "  Pitch ", "  Roll "]
+					titles = [" Pitch ", " Yaw ", " Roll "]
 				var colx = allocColumn(titles[0])
 				var coly = allocColumn(titles[1])
 				var colz = allocColumn(titles[2])

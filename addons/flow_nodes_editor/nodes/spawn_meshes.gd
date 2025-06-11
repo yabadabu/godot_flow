@@ -57,12 +57,25 @@ func execute( ctx : FlowData.EvaluationContext ):
 		return
 
 	var root = ctx.owner
+	if not root:
+		setError("Failed to find root")
+		return
+		
 	var in_size = in_data.size()
 	removeInstancedComponents( root )
 
 	# Find who is going to be the owner of the new nodes
 	# (shoulw be the parent root of the scene, not the parent)
-	var scene_root = root.get_tree().current_scene
+	var node_tree = root.get_tree()
+	if not node_tree:
+		setError("Invalid current scene")
+		return
+		
+	var scene_root = node_tree.current_scene
+	if not root.get_tree():
+		setError("Invalid scene_root scene")
+		return
+		
 	var owner_of_mmis : Node
 	if scene_root:
 		owner_of_mmis = scene_root

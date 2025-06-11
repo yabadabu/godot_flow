@@ -38,7 +38,6 @@ func execute( _ctx : FlowData.EvaluationContext ):
 				
 		FlowData.DataType.Resource:
 			var new_val : Resource = settings.cte_resource
-			print( "Adding value %s" % new_val )
 			var sout : Array[Resource] = out_data.addStream( settings.name, settings.data_type )
 			for i in sout.size():
 				sout[i] = new_val
