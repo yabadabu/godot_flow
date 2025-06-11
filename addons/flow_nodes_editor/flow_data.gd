@@ -100,13 +100,11 @@ class Data:
 		new_container.resize( big_container.size() )
 		for idx in range( big_container.size() ):
 			new_container[idx] = big_container[idx][ subcomp_idx ]
-		var q = {
+		return {
 			"data_type" : DataType.Float,
 			"container" : new_container,
 			"name" : "%s.%s" % [ stream.name, sub_comp ]
 		}
-		print( "Q is ", q)
-		return q
 		
 	func setSubStream( stream : Dictionary, sub_comp : String, sub_container  ):
 		var subcomp_idx = getSubStreamIndex( sub_comp )
@@ -124,12 +122,12 @@ class Data:
 		name = translateStreamName( name )
 		var parts = name.split( "." )
 		if parts.size() == 2:
-			print( "findStream(%s) => %s" % [ name, parts])
+			#print( "findStream(%s) => %s" % [ name, parts])
 			var s0 = streams.get( parts[0], null )
 			if s0 == null:
 				push_error( "Failed to find stream root %s" % parts[0] )
 				return null
-			print( "searching (%s) in %s" % [ parts[1], s0])
+			#print( "searching (%s) in %s" % [ parts[1], s0])
 			return getSubStream( s0, parts[1] )
 		elif parts.size() > 2:
 			return null
