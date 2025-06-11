@@ -11,6 +11,7 @@ enum DataType {
 
 const AttrPosition : StringName = &"position"
 const AttrRotation : StringName = &"rotation"
+const AttrSize     : StringName = &"size"
 
 class EvaluationContext:
 	var owner : Node3D
@@ -32,11 +33,10 @@ static func eulerToBasis( euler : Vector3) -> Basis:
 class TransformsStream:
 	var positions : PackedVector3Array
 	var eulers : PackedVector3Array
-	#var sizes : PackedVector3Array
-	
+	var sizes : PackedVector3Array
 	func atIndex( id: int ) -> Transform3D:
 		var basis := FlowData.eulerToBasis( eulers[id] )
-		return Transform3D( basis, positions[id] )
+		return Transform3D( basis.scaled( sizes[id] ), positions[id] )
 
 class Data:
 	var streams : Dictionary = {}
@@ -261,6 +261,12 @@ class Data:
 		spos.resize( num_points )
 		var srot = addStream( FlowData.AttrRotation, FlowData.DataType.Vector )
 		srot.resize( num_points )
+		
+		var ssizes : PackedVector3Array = addStream( FlowData.AttrSize, FlowData.DataType.Vector )
+		if ssizes != null:
+			ssizes.resize( num_points )
+			for idx in range( num_points ):
+				ssizes[idx] = Vector3( 1.0, 1.0, 1.0 )
 
 	func getVector3Container( stream_name : StringName ) -> PackedVector3Array:
 		return getContainerChecked( stream_name, DataType.Vector )
@@ -272,5 +278,8 @@ class Data:
 			return null
 		trs.eulers = getVector3Container( AttrRotation )
 		if trs.eulers == null:
+			return null	
+		trs.sizes = getVector3Container( AttrSize )
+		if trs.sizes == null:
 			return null	
 		return trs
