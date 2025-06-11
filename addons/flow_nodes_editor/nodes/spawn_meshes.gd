@@ -85,7 +85,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 		while owner_of_mmis.get_parent() and owner_of_mmis.owner:
 			owner_of_mmis = owner_of_mmis.get_parent()
 
-	# Aggregate by resource type
+	# Collect which indices use the samee by resource type
 	var mmis := {}
 	for idx in range( in_size ):
 		var mesh = meshes[idx] if meshes else settings.mesh
@@ -107,9 +107,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 		# We could also create a large buffer and perform a single update
 		var idx := 0
 		for id in ids:
-			var basis := FlowData.eulerToBasis( eulers[id] )
-			var transform : Transform3D = Transform3D( basis, positions[id] )
-			multimesh.set_instance_transform( idx, transform )
+			multimesh.set_instance_transform( idx, FlowData.asTransform( idx, positions, eulers ) )
 			idx += 1
 			
 		mmi.multimesh = multimesh

@@ -29,6 +29,10 @@ static func eulerToBasis( euler : Vector3) -> Basis:
 	euler.z = deg_to_rad( euler.z )
 	return Basis.from_euler( euler )
 
+static func asTransform( id: int, positions: PackedVector3Array, eulers : PackedVector3Array ) -> Transform3D:
+	var basis := eulerToBasis( eulers[id] )
+	return Transform3D( basis, positions[id] )
+
 class Data:
 	var streams : Dictionary = {}
 

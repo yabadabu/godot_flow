@@ -216,6 +216,5 @@ func setupDebugDraw():
 		RenderingServer.multimesh_allocate_data(multimesh_rid, instance_count, RenderingServer.MultimeshTransformFormat.MULTIMESH_TRANSFORM_3D )
 	
 	for idx in range( instance_count ):
-		var b := FlowData.eulerToBasis( eulers[idx])
-		var t : Transform3D = Transform3D( b, positions[idx] )
+		var t := FlowData.asTransform( idx, positions, eulers )
 		RenderingServer.multimesh_instance_set_transform( multimesh_rid, idx, t)

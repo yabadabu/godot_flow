@@ -20,6 +20,9 @@ func execute( _ctx : FlowData.EvaluationContext ):
 		
 	var noise := FastNoiseLite.new()
 	noise.seed = settings.random_seed
+	noise.noise_type = FastNoiseLite.NoiseType.TYPE_VALUE
+	#noise.cellular_distance_function = FastNoiseLite.CellularDistanceFunction.DISTANCE_EUCLIDEAN
+	#noise.cellular_return_type = FastNoiseLite.CellularReturnType.RETURN_DISTANCE
 	
 	var in_scale : float = settings.in_scale
 	var noise_bias : float = settings.noise_bias
@@ -35,6 +38,6 @@ func execute( _ctx : FlowData.EvaluationContext ):
 		var nval = clampf( noise_01, 0.0, 1.0 )
 		sout[i] = noise_bias + nval * noise_amplitude
 	
-	out_data.registerStream( settings.out_attribute_name, FlowData.DataType.Float, sout )
+	out_data.registerStream( settings.out_name, FlowData.DataType.Float, sout )
 	
 	set_output( 0, out_data )

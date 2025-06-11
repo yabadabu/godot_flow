@@ -129,11 +129,11 @@ enabled = true
 [sub_resource type="Resource" id="Resource_ffstm"]
 resource_name = "Noise Settings"
 script = ExtResource("10_cvsyc")
-out_attribute_name = "Yaw"
-in_scale = 1.0
+out_name = "density"
+in_scale = 124293.0
 noise_bias = 0.0
 noise_amplitude = 1.0
-random_seed = 1991162146
+random_seed = 28001471
 inspect_enabled = true
 debug_enabled = false
 debug_mode = 0
@@ -174,8 +174,8 @@ nodes = Array[Dictionary]([{
 "settings": SubResource("Resource_71tyt"),
 "template": "math_op"
 }, {
-"name": &"id_0023_noise",
-"position_offset": Vector2(952.358, 110.266),
+"name": &"id_0024_noise",
+"position_offset": Vector2(953.495, -409.402),
 "settings": SubResource("Resource_ffstm"),
 "template": "noise"
 }])
@@ -219,10 +219,10 @@ conns = Array[Dictionary]([{
 "from_node": &"id_0022_math_op",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0023_noise",
+"to_node": &"id_0024_noise",
 "to_port": 0
 }])
 view_zoom = 0.879408
 view_offset = Vector2(301.511, -574.031)
-new_name_counter = 23
+new_name_counter = 24
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
