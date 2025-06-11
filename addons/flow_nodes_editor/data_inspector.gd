@@ -92,6 +92,8 @@ func fmt( v : float ) -> String:
 	return "%1.4f" % v
 		
 func removeAll():
+	if cols == null:
+		return
 	# Remove everything
 	while( cols.get_child_count() > 0):
 		var col = cols.get_child( cols.get_child_count()-1)
@@ -149,14 +151,14 @@ func refresh():
 				for idx in range( num_rows ):
 					setLabelNumber( col.get_child(  idx + 1 ), container[idx] )
 
-			FlowData.DataType.DTResource:
+			FlowData.DataType.Resource:
 				var container : Array[ Resource ] = stream.container
 				var col = allocColumn(stream.name)
 				for idx in range( num_rows ):
 					var value = container[idx]
 					col.get_child( idx + 1 ).text = ("   " + container[idx].resource_path) if value else ""
 
-			FlowData.DataType.DTString:
+			FlowData.DataType.String:
 				var container : Array[ String ] = stream.container
 				var col = allocColumn(stream.name)
 				for idx in range( num_rows ):

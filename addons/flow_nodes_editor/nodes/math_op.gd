@@ -3,7 +3,7 @@ extends FlowNodeBase
 
 func getMeta() -> Dictionary :
 	return {
-		"title" : "Math ",
+		"title" : "Math",
 		"settings" : MathOpNodeSettings,
 		"ins" : [{"label": "In A" }, {"label": "In B" }], 
 		"outs" : [{ "label" : "Out" }],

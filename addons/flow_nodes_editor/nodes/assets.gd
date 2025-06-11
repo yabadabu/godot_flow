@@ -36,9 +36,9 @@ func execute( _ctx : FlowData.EvaluationContext ):
 				TYPE_FLOAT:
 					new_streams[ prop.name ] = FlowData.DataType.Float
 				TYPE_STRING:
-					new_streams[ prop.name ] = FlowData.DataType.DTString
+					new_streams[ prop.name ] = FlowData.DataType.String
 				TYPE_OBJECT:
-					new_streams[ prop.name ] = FlowData.DataType.DTResource
+					new_streams[ prop.name ] = FlowData.DataType.Resource
 				_:
 					push_error("Property %s has unsupported type (%d)" % [ prop.name, prop.type ])
 

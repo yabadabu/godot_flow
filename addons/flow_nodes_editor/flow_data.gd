@@ -5,8 +5,8 @@ enum DataType {
 	Bool,
 	Float,
 	Vector,
-	DTResource,
-	DTString,
+	String,
+	Resource,
 }
 
 const AttrPosition : StringName = &"position"
@@ -40,9 +40,9 @@ class Data:
 				return PackedFloat32Array()
 			DataType.Vector:
 				return PackedVector3Array()
-			DataType.DTResource:
+			DataType.Resource:
 				return Array([], TYPE_OBJECT, "Resource", null)
-			DataType.DTString:
+			DataType.String:
 				return Array([], TYPE_STRING, "", null)
 		return null
 	
@@ -134,7 +134,7 @@ class Data:
 					new_container[idx] = old_container[ indices[idx] ]
 				return new_container
 				
-			DataType.DTString:
+			DataType.String:
 				var old_container : Array[ String ] = old_stream.container
 				var new_container : Array[ String ] = []
 				new_container.resize( new_size )
@@ -142,7 +142,7 @@ class Data:
 					new_container[idx] = old_container[ indices[idx] ]
 				return new_container
 				
-			DataType.DTResource:
+			DataType.Resource:
 				var old_container : Array[ Resource ] = old_stream.container
 				var new_container : Array[ Resource ] = []
 				new_container.resize( new_size )

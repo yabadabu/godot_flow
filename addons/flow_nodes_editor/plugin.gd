@@ -9,6 +9,7 @@ var data_inspector_dock: Control
 var inspector_plugin
 var watched_nodes : Array[Node] = []
 var undo_redo: EditorUndoRedoManager
+var add_attribute_inspector_plugin : EditorInspectorPlugin
 
 @onready var selection = EditorInterface.get_selection()
 
@@ -28,6 +29,10 @@ func _enter_tree():
 	data_inspector_dock = spawnDock("res://addons/flow_nodes_editor/data_inspector.tscn", "Data Inspector", true)
 	graph_dock.data_inspector = data_inspector_dock
 	
+	add_attribute_inspector_plugin = load("res://addons/flow_nodes_editor/attribute_inspector_plugin.gd").new()
+	print( "add_attribute_inspector_plugin", add_attribute_inspector_plugin)
+	add_inspector_plugin(add_attribute_inspector_plugin)
+	
 	# Will refresh everytime the undo/redo subsystem saves a point
 	undo_redo = get_undo_redo()
 	undo_redo.history_changed.connect(_on_history_changed)	
@@ -35,6 +40,7 @@ func _enter_tree():
 func _exit_tree():
 	if undo_redo:
 		undo_redo.history_changed.disconnect(_on_history_changed)
+	remove_inspector_plugin(add_attribute_inspector_plugin)
 	#remove_inspector_plugin(inspector_plugin)
 	remove_control_from_docks(graph_dock)
 	graph_dock.free()

@@ -42,7 +42,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 		if stream_meshes == null:
 			setError( "Input does not have attribute '%s'" % settings.mesh_attribute)
 			return
-		if stream_meshes.data_type != FlowData.DataType.DTResource:
+		if stream_meshes.data_type != FlowData.DataType.Resource:
 			setError( "Attribute '%s' should be of type Resource" % settings.mesh_attribute)
 			return
 		meshes = stream_meshes.container

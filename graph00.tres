@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="FlowGraphResource" load_steps=19 format=3 uid="uid://66ejgwppld3l"]
+[gd_resource type="Resource" script_class="FlowGraphResource" load_steps=22 format=3 uid="uid://66ejgwppld3l"]
 
 [ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="1_i7hbt"]
 [ext_resource type="Script" uid="uid://dwtm2hr5nh78h" path="res://addons/flow_nodes_editor/nodes/grid_settings.gd" id="1_qjhb7"]
@@ -8,6 +8,7 @@
 [ext_resource type="BoxMesh" uid="uid://7flu82pqtc5d" path="res://addons/flow_nodes_editor/resources/unit_cube.tres" id="4_jx2uv"]
 [ext_resource type="Script" uid="uid://bnpohx6mm4hdh" path="res://addons/flow_nodes_editor/nodes/spawn_meshes_settings.gd" id="5_2ku6k"]
 [ext_resource type="Script" uid="uid://dm55x0bp4p6a0" path="res://addons/flow_nodes_editor/nodes/match_and_set_settings.gd" id="5_f0s07"]
+[ext_resource type="Script" uid="uid://runa6a3koevg" path="res://addons/flow_nodes_editor/nodes/add_attribute_settings.gd" id="8_2ku6k"]
 
 [sub_resource type="QuadMesh" id="QuadMesh_u5yrf"]
 
@@ -63,18 +64,6 @@ debug_scale = 1.0
 title = "Grid"
 enabled = true
 
-[sub_resource type="Resource" id="Resource_vqsss"]
-resource_name = "Match And Set"
-script = ExtResource("5_f0s07")
-weight_attr = ""
-random_seed = 3920522808
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-title = "Match And Set"
-enabled = true
-
 [sub_resource type="Resource" id="Resource_cvsyc"]
 resource_name = "Spawn Meshes Settings"
 script = ExtResource("5_2ku6k")
@@ -88,6 +77,38 @@ debug_scale = 1.0
 title = "Spawn Meshes"
 enabled = true
 
+[sub_resource type="Resource" id="Resource_vqsss"]
+resource_name = "Match And Set"
+script = ExtResource("5_f0s07")
+weight_attr = ""
+random_seed = 3920522808
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+title = "Match And Set"
+enabled = true
+
+[sub_resource type="TextMesh" id="TextMesh_2ku6k"]
+
+[sub_resource type="Resource" id="Resource_cwbhy"]
+resource_name = "Add Attribute"
+script = ExtResource("8_2ku6k")
+name = "new_attr"
+data_type = 1
+cte_bool = false
+cte_float = 0.72
+cte_vector = Vector3(-1.135, 2.27, 0.445)
+cte_resource = SubResource("TextMesh_2ku6k")
+cte_string = "Tree"
+random_seed = 1409845431
+inspect_enabled = true
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+title = "Add Attribute"
+enabled = true
+
 [resource]
 script = ExtResource("1_i7hbt")
 nodes = Array[Dictionary]([{
@@ -97,19 +118,24 @@ nodes = Array[Dictionary]([{
 "template": "assets"
 }, {
 "name": &"id_0007_grid",
-"position_offset": Vector2(80, -40),
+"position_offset": Vector2(-80, -60),
 "settings": SubResource("Resource_u5yrf"),
 "template": "grid"
+}, {
+"name": &"id_0014_spawn_meshes",
+"position_offset": Vector2(480, 0),
+"settings": SubResource("Resource_cvsyc"),
+"template": "spawn_meshes"
 }, {
 "name": &"id_0011_match_and_set",
 "position_offset": Vector2(280, 0),
 "settings": SubResource("Resource_vqsss"),
 "template": "match_and_set"
 }, {
-"name": &"id_0014_spawn_meshes",
-"position_offset": Vector2(505.195, 63.1437),
-"settings": SubResource("Resource_cvsyc"),
-"template": "spawn_meshes"
+"name": &"id_0020_add_attribute",
+"position_offset": Vector2(196.122, -141.539),
+"settings": SubResource("Resource_cwbhy"),
+"template": "add_attribute"
 }])
 conns = Array[Dictionary]([{
 "from_node": &"id_0007_grid",
@@ -129,8 +155,14 @@ conns = Array[Dictionary]([{
 "keep_alive": false,
 "to_node": &"id_0014_spawn_meshes",
 "to_port": 0
+}, {
+"from_node": &"id_0007_grid",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0020_add_attribute",
+"to_port": 0
 }])
 view_zoom = 0.879408
-view_offset = Vector2(-22.7273, -193.471)
-new_name_counter = 14
+view_offset = Vector2(-105.529, -299.471)
+new_name_counter = 20
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
