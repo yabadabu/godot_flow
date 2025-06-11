@@ -43,13 +43,9 @@ func execute( ctx : FlowData.EvaluationContext ):
 			return
 		scenes = stream_scenes.container
 	
-	var positions := in_data.getVector3Container( FlowData.AttrPosition )
-	if positions == null:
-		setError("Missing stream %s" % FlowData.AttrPosition)
-		return
-	var eulers := in_data.getVector3Container( FlowData.AttrRotation )
-	if eulers == null:
-		setError("Missing stream %s" % FlowData.AttrRotation)
+	var transforms = in_data.getTransformsStream()
+	if transforms == null:
+		setError("Missing required streams %s/%s" % [ FlowData.AttrPosition, FlowData.AttrRotation ])
 		return
 
 	var root = ctx.owner
@@ -87,7 +83,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 		if not packed_scene:
 			continue
 		var node : Node3D = packed_scene.instantiate()
-		node.transform =  FlowData.asTransform( idx, positions, eulers )
+		node.transform = transforms.atIndex( idx )
 		node.name = "Scene_%04d" % idx
 		root.add_child( node )
 		node.owner = owner_of_spawned_nodes

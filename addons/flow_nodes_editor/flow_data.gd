@@ -29,9 +29,14 @@ static func eulerToBasis( euler : Vector3) -> Basis:
 	euler.z = deg_to_rad( euler.z )
 	return Basis.from_euler( euler )
 
-static func asTransform( id: int, positions: PackedVector3Array, eulers : PackedVector3Array ) -> Transform3D:
-	var basis := eulerToBasis( eulers[id] )
-	return Transform3D( basis, positions[id] )
+class TransformsStream:
+	var positions : PackedVector3Array
+	var eulers : PackedVector3Array
+	#var sizes : PackedVector3Array
+	
+	func atIndex( id: int ) -> Transform3D:
+		var basis := FlowData.eulerToBasis( eulers[id] )
+		return Transform3D( basis, positions[id] )
 
 class Data:
 	var streams : Dictionary = {}
@@ -259,3 +264,13 @@ class Data:
 
 	func getVector3Container( stream_name : StringName ) -> PackedVector3Array:
 		return getContainerChecked( stream_name, DataType.Vector )
+
+	func getTransformsStream() -> TransformsStream:
+		var trs := TransformsStream.new()
+		trs.positions = getVector3Container( AttrPosition )
+		if trs.positions == null:
+			return null
+		trs.eulers = getVector3Container( AttrRotation )
+		if trs.eulers == null:
+			return null	
+		return trs

@@ -47,13 +47,9 @@ func execute( ctx : FlowData.EvaluationContext ):
 			return
 		meshes = stream_meshes.container
 	
-	var positions := in_data.getVector3Container( FlowData.AttrPosition )
-	if positions == null:
-		setError("Missing stream %s" % FlowData.AttrPosition)
-		return
-	var eulers := in_data.getVector3Container( FlowData.AttrRotation )
-	if eulers == null:
-		setError("Missing stream %s" % FlowData.AttrRotation)
+	var transforms := in_data.getTransformsStream()
+	if transforms == null:
+		setError("Missing transforms information")
 		return
 
 	var root = ctx.owner
@@ -107,7 +103,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 		# We could also create a large buffer and perform a single update
 		var idx := 0
 		for id in ids:
-			multimesh.set_instance_transform( idx, FlowData.asTransform( id, positions, eulers ) )
+			multimesh.set_instance_transform( idx, transforms.atIndex( id ) )
 			idx += 1
 			
 		mmi.multimesh = multimesh

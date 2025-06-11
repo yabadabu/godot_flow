@@ -115,41 +115,6 @@ script = ExtResource("1_iapjp")
 graph = SubResource("Resource_mssda")
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
 
-[node name="Scene_0000" type="Node3D" parent="PCG_4" instance=ExtResource("7_yg6rb")]
-metadata/flow_owner = &"id_0009_spawn_scenes"
-
-[node name="Scene_0001" type="Node3D" parent="PCG_4" instance=ExtResource("7_yg6rb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 0)
-metadata/flow_owner = &"id_0009_spawn_scenes"
-
-[node name="Scene_0002" type="Node3D" parent="PCG_4" instance=ExtResource("7_yg6rb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 0)
-metadata/flow_owner = &"id_0009_spawn_scenes"
-
-[node name="Scene_0003" type="Node3D" parent="PCG_4" instance=ExtResource("7_yg6rb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
-metadata/flow_owner = &"id_0009_spawn_scenes"
-
-[node name="Scene_0004" type="Node3D" parent="PCG_4" instance=ExtResource("7_yg6rb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 2)
-metadata/flow_owner = &"id_0009_spawn_scenes"
-
-[node name="Scene_0005" type="Node3D" parent="PCG_4" instance=ExtResource("7_yg6rb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 2)
-metadata/flow_owner = &"id_0009_spawn_scenes"
-
-[node name="Scene_0006" type="Node3D" parent="PCG_4" instance=ExtResource("7_yg6rb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4)
-metadata/flow_owner = &"id_0009_spawn_scenes"
-
-[node name="Scene_0007" type="Node3D" parent="PCG_4" instance=ExtResource("7_yg6rb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 4)
-metadata/flow_owner = &"id_0009_spawn_scenes"
-
-[node name="Scene_0008" type="Node3D" parent="PCG_4" instance=ExtResource("7_yg6rb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 4)
-metadata/flow_owner = &"id_0009_spawn_scenes"
-
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(3.28555, 0.0905085, -0.124378, -0.330954, 0.898526, -1.23476, 0, 0.429487, 2.60945, -0.685871, -1.56801, 0)
 mesh = SubResource("PlaneMesh_ayuu8")
