@@ -61,6 +61,8 @@ func execute( _ctx : FlowData.EvaluationContext ):
 			MathOpNodeSettings.eOperation.Absolute:
 				for i in num_elems:
 					outC[i] = absf(inA[i])
+					
+		# This will override the existing stream if exists or update a substream
 		var err = out_data.registerStream( settings.out_name, sA.data_type, outC )
 		if err:
 			setError( err )
