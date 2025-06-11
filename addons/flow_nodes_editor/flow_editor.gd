@@ -85,7 +85,7 @@ func setResourceToEdit( new_resource : FlowGraphResource, new_resource_owner : N
 		gedit.scroll_offset = current_resource.view_offset
 		new_name_counter = current_resource.new_name_counter
 
-	regen_pending = true
+	queueRegen()
 	print( "regen_pending is now true (%d)" % [num_non_nodes_children])
 
 func saveResource():
@@ -184,7 +184,7 @@ func onNodePropertyChanged( prop_name : String):
 	if inspected_node:
 		#print( "Node %s.%s has changed" % [ inspected_node.name, prop_name ])
 		inspected_node.refreshFromSettings()
-		regen_pending = auto_regen
+		queueRegen()
 		
 # ------------------------------------------------
 func getSelectedNodes() -> Array[GraphNode]:
@@ -207,7 +207,10 @@ func deleteSelectedNodes():
 	saveResource()
 	inspected_node = null
 	inspector.edit(null)
-	regen_pending = true
+	queueRegen()
+	
+func queueRegen():
+	regen_pending = auto_regen
 	
 func getRectOfNodes( nodes : Array[GraphNode] ):
 	var r : Rect2
@@ -289,7 +292,7 @@ func addNode( node_template ):
 	node.selected = true
 	node.visible = true
 	saveResource()
-	regen_pending = true
+	queueRegen()
 
 # ------------------------------------------------
 func _on_graph_edit_gui_input(event):
@@ -387,10 +390,12 @@ func _on_popup_menu_id_pressed(id: int) -> void:
 func _on_graph_edit_connection_request(from_node: StringName, from_port: int, to_node: StringName, to_port: int) -> void:
 	gedit.connect_node(from_node, from_port, to_node, to_port)
 	saveResource()
+	queueRegen()
 	
 func _on_graph_edit_disconnection_request(from_node: StringName, from_port: int, to_node: StringName, to_port: int) -> void:
 	gedit.disconnect_node(from_node, from_port, to_node, to_port)
 	saveResource()
+	queueRegen()
 
 func _on_graph_edit_connection_to_empty(from_node: StringName, from_port: int, release_position: Vector2) -> void:
 	auto_connect_from_node = from_node
@@ -468,6 +473,7 @@ func evalGraph():
 		if node.eval_id == ctx.eval_id:
 			continue
 		
+		node.clearInputs()
 		for req in node.deps:
 			var req_node = gedit_nodes_by_name.get( req.from_node )
 			var data = req_node.get_output( req.from_port )
@@ -493,7 +499,7 @@ func _on_button_save_pressed() -> void:
 		ResourceSaver.save(current_resource)
 
 func _on_button_regenerate_pressed() -> void:
-	regen_pending = true
+	queueRegen()
 
 func _on_auto_regen_toggled(toggled_on: bool) -> void:
 	auto_regen = toggled_on

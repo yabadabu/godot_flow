@@ -107,7 +107,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 		# We could also create a large buffer and perform a single update
 		var idx := 0
 		for id in ids:
-			multimesh.set_instance_transform( idx, FlowData.asTransform( idx, positions, eulers ) )
+			multimesh.set_instance_transform( idx, FlowData.asTransform( id, positions, eulers ) )
 			idx += 1
 			
 		mmi.multimesh = multimesh

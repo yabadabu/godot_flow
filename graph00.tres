@@ -12,12 +12,47 @@
 [ext_resource type="Script" uid="uid://ckff4og6eip3" path="res://addons/flow_nodes_editor/nodes/math_op_settings.gd" id="9_vqsss"]
 [ext_resource type="Script" uid="uid://ctpeiiq5p30rt" path="res://addons/flow_nodes_editor/nodes/noise_settings.gd" id="10_cvsyc"]
 
+[sub_resource type="TextMesh" id="TextMesh_2ku6k"]
+
+[sub_resource type="Resource" id="Resource_cwbhy"]
+resource_name = "Add Attribute"
+script = ExtResource("8_2ku6k")
+name = "MyOffs"
+data_type = 2
+cte_bool = false
+cte_float = 0.1
+cte_vector = Vector3(-0.885, 2.07, 0.445)
+cte_resource = SubResource("TextMesh_2ku6k")
+cte_string = "Tree"
+random_seed = 1409845431
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+title = "Add Attribute"
+enabled = true
+
+[sub_resource type="Resource" id="Resource_ffstm"]
+resource_name = "Noise Settings"
+script = ExtResource("10_cvsyc")
+out_name = "density"
+in_scale = 124293.0
+noise_bias = 0.0
+noise_amplitude = 1.0
+random_seed = 28001471
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+title = "Noise"
+enabled = true
+
 [sub_resource type="Resource" id="Resource_u5yrf"]
 resource_name = "Grid Settings"
 script = ExtResource("1_qjhb7")
-x = 5
+x = 4
 y = 1
-z = 5
+z = 4
 step = Vector3(2, 1, 2)
 random_seed = 2943639960
 inspect_enabled = false
@@ -25,18 +60,6 @@ debug_enabled = false
 debug_mode = 0
 debug_scale = 1.0
 title = "Grid"
-enabled = true
-
-[sub_resource type="Resource" id="Resource_vqsss"]
-resource_name = "Match And Set"
-script = ExtResource("5_f0s07")
-weight_attr = ""
-random_seed = 3920522808
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-title = "Match And Set"
 enabled = true
 
 [sub_resource type="QuadMesh" id="QuadMesh_u5yrf"]
@@ -78,39 +101,6 @@ debug_scale = 1.0
 title = "Assets"
 enabled = true
 
-[sub_resource type="TextMesh" id="TextMesh_2ku6k"]
-
-[sub_resource type="Resource" id="Resource_cwbhy"]
-resource_name = "Add Attribute"
-script = ExtResource("8_2ku6k")
-name = "MyOffs"
-data_type = 2
-cte_bool = false
-cte_float = 0.1
-cte_vector = Vector3(-0.885, 2.07, 0.445)
-cte_resource = SubResource("TextMesh_2ku6k")
-cte_string = "Tree"
-random_seed = 1409845431
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-title = "Add Attribute"
-enabled = true
-
-[sub_resource type="Resource" id="Resource_cvsyc"]
-resource_name = "Spawn Meshes Settings"
-script = ExtResource("5_2ku6k")
-mesh = ExtResource("4_jx2uv")
-mesh_attribute = "asset"
-random_seed = 3099121585
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-title = "Spawn Meshes"
-enabled = true
-
 [sub_resource type="Resource" id="Resource_71tyt"]
 resource_name = "Math Op"
 script = ExtResource("9_vqsss")
@@ -126,58 +116,68 @@ debug_scale = 1.0
 title = "Math"
 enabled = true
 
-[sub_resource type="Resource" id="Resource_ffstm"]
-resource_name = "Noise Settings"
-script = ExtResource("10_cvsyc")
-out_name = "density"
-in_scale = 124293.0
-noise_bias = 0.0
-noise_amplitude = 1.0
-random_seed = 28001471
-inspect_enabled = true
+[sub_resource type="Resource" id="Resource_vqsss"]
+resource_name = "Match And Set"
+script = ExtResource("5_f0s07")
+weight_attr = ""
+random_seed = 3920522808
+inspect_enabled = false
 debug_enabled = false
 debug_mode = 0
 debug_scale = 1.0
-title = "Noise"
+title = "Match And Set"
+enabled = true
+
+[sub_resource type="Resource" id="Resource_cvsyc"]
+resource_name = "Spawn Meshes Settings"
+script = ExtResource("5_2ku6k")
+mesh = ExtResource("4_jx2uv")
+mesh_attribute = "asset"
+random_seed = 3099121585
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+title = "Spawn Meshes"
 enabled = true
 
 [resource]
 script = ExtResource("1_i7hbt")
 nodes = Array[Dictionary]([{
+"name": &"id_0020_add_attribute",
+"position_offset": Vector2(220, -180),
+"settings": SubResource("Resource_cwbhy"),
+"template": "add_attribute"
+}, {
+"name": &"id_0024_noise",
+"position_offset": Vector2(960, -400),
+"settings": SubResource("Resource_ffstm"),
+"template": "noise"
+}, {
 "name": &"id_0007_grid",
-"position_offset": Vector2(-80, -60),
+"position_offset": Vector2(-80, -80),
 "settings": SubResource("Resource_u5yrf"),
 "template": "grid"
-}, {
-"name": &"id_0011_match_and_set",
-"position_offset": Vector2(240, 0),
-"settings": SubResource("Resource_vqsss"),
-"template": "match_and_set"
 }, {
 "name": &"id_0010_assets",
 "position_offset": Vector2(-80, 120),
 "settings": SubResource("Resource_n2x4a"),
 "template": "assets"
 }, {
-"name": &"id_0020_add_attribute",
-"position_offset": Vector2(220, -180),
-"settings": SubResource("Resource_cwbhy"),
-"template": "add_attribute"
-}, {
-"name": &"id_0014_spawn_meshes",
-"position_offset": Vector2(540, 0),
-"settings": SubResource("Resource_cvsyc"),
-"template": "spawn_meshes"
-}, {
 "name": &"id_0022_math_op",
 "position_offset": Vector2(660, -360),
 "settings": SubResource("Resource_71tyt"),
 "template": "math_op"
 }, {
-"name": &"id_0024_noise",
-"position_offset": Vector2(953.495, -409.402),
-"settings": SubResource("Resource_ffstm"),
-"template": "noise"
+"name": &"id_0011_match_and_set",
+"position_offset": Vector2(240, 0),
+"settings": SubResource("Resource_vqsss"),
+"template": "match_and_set"
+}, {
+"name": &"id_0014_spawn_meshes",
+"position_offset": Vector2(660, 20),
+"settings": SubResource("Resource_cvsyc"),
+"template": "spawn_meshes"
 }])
 conns = Array[Dictionary]([{
 "from_node": &"id_0007_grid",
@@ -191,12 +191,6 @@ conns = Array[Dictionary]([{
 "keep_alive": false,
 "to_node": &"id_0011_match_and_set",
 "to_port": 1
-}, {
-"from_node": &"id_0011_match_and_set",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0014_spawn_meshes",
-"to_port": 0
 }, {
 "from_node": &"id_0007_grid",
 "from_port": 0,
@@ -221,8 +215,14 @@ conns = Array[Dictionary]([{
 "keep_alive": false,
 "to_node": &"id_0024_noise",
 "to_port": 0
+}, {
+"from_node": &"id_0011_match_and_set",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0014_spawn_meshes",
+"to_port": 0
 }])
 view_zoom = 0.879408
-view_offset = Vector2(301.511, -574.031)
+view_offset = Vector2(107.591, -779.471)
 new_name_counter = 24
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"

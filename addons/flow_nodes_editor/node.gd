@@ -65,6 +65,10 @@ func set_input( idx : int, data ):
 	if idx >= inputs.size():
 		inputs.resize( idx + 1 )
 	inputs[ idx ] = data
+	
+func clearInputs():
+	for idx in range( inputs.size() ):
+		inputs[ idx ] = null
 
 func get_input( idx : int ):
 	if idx >= inputs.size():

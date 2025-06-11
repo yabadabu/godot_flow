@@ -5,19 +5,6 @@
 [ext_resource type="Script" uid="uid://cbj3mmuatfk1v" path="res://addons/flow_nodes_editor/nodes/sample_spline_settings.gd" id="4_840wp"]
 [ext_resource type="Script" uid="uid://bfwm6jlb65yts" path="res://addons/flow_nodes_editor/nodes/ray_cast_settings.gd" id="7_pcyhw"]
 
-[sub_resource type="Resource" id="Resource_ly1tl"]
-resource_name = "RayCast Settings"
-script = ExtResource("7_pcyhw")
-dir = Vector3(0.03, -0.93, 0)
-max_distance = 1000.0
-random_seed = 2520541056
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-title = "Ray Cast"
-enabled = true
-
 [sub_resource type="Resource" id="Resource_pcyhw"]
 resource_name = "Sample Spline Settings"
 script = ExtResource("4_840wp")
@@ -39,29 +26,42 @@ rotation_min = Vector3(0, 0, 0)
 rotation_max = Vector3(0, 360, 0)
 random_seed = 2752293856
 inspect_enabled = false
-debug_enabled = true
+debug_enabled = false
 debug_mode = 0
 debug_scale = 1.0
 title = "Transform"
 enabled = true
 
+[sub_resource type="Resource" id="Resource_ly1tl"]
+resource_name = "RayCast Settings"
+script = ExtResource("7_pcyhw")
+dir = Vector3(0.03, -0.93, 0)
+max_distance = 1000.0
+random_seed = 2520541056
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+title = "Ray Cast"
+enabled = true
+
 [resource]
 script = ExtResource("1_pwag0")
 nodes = Array[Dictionary]([{
-"name": &"id_0141_ray_cast",
-"position_offset": Vector2(180, 560),
-"settings": SubResource("Resource_ly1tl"),
-"template": "ray_cast"
-}, {
 "name": &"id_0139_sample_spline",
-"position_offset": Vector2(-80, 560),
+"position_offset": Vector2(-140, 560),
 "settings": SubResource("Resource_pcyhw"),
 "template": "sample_spline"
 }, {
 "name": &"id_0001_transform",
-"position_offset": Vector2(160, 400),
+"position_offset": Vector2(180, 400),
 "settings": SubResource("Resource_6r1i8"),
 "template": "transform"
+}, {
+"name": &"id_0141_ray_cast",
+"position_offset": Vector2(180, 600),
+"settings": SubResource("Resource_ly1tl"),
+"template": "ray_cast"
 }])
 conns = Array[Dictionary]([{
 "from_node": &"id_0139_sample_spline",
