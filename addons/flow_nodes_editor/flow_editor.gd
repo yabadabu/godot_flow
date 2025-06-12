@@ -63,6 +63,8 @@ func setResourceToEdit( new_resource : FlowGraphResource, new_resource_owner : N
 	num_non_nodes_children = gedit.get_child_count()
 	
 	gedit_nodes_by_name.clear()
+	inspector.edit( null )
+	inspected_node = null
 	
 	if current_resource != null:
 		print( "Recovering %d nodes" % current_resource.nodes.size() )
@@ -84,6 +86,7 @@ func setResourceToEdit( new_resource : FlowGraphResource, new_resource_owner : N
 		gedit.zoom = current_resource.view_zoom
 		gedit.scroll_offset = current_resource.view_offset
 		new_name_counter = current_resource.new_name_counter
+		
 
 	queueRegen()
 	print( "regen_pending is now true (%d)" % [num_non_nodes_children])
@@ -142,26 +145,39 @@ func scanAvailableNodes():
 		node_types[ stem ] = meta
 
 func populatePopupMenu():
-	
 	min_id = 1000
 	max_id = min_id
 	
 	#gedit.theme.ac = Color( 1, 0.5, 0.5 );
-	var pm = %PopupMenu as PopupMenu
+	var pm := PopupMenu.new()
+	add_child( pm )
+	pm.name = "MainMenu"
 	pm.clear();
 	pm.add_item( "Clear", 0, KEY_NONE )
+	pm.id_pressed.connect( _on_popup_menu_id_pressed )
 	pm.add_separator( "", -1 )
+	
+	# A submenu to invoke the inputs declared in the pcg
+	if current_resource && current_resource.inputs:
+		var inputs_menu := PopupMenu.new()
+		pm.add_child(inputs_menu)
+		for idx in range(current_resource.inputs.inputs.size()):
+			var label : String = current_resource.inputs.inputs[idx].name
+			inputs_menu.add_item(label, idx)
+		inputs_menu.id_pressed.connect( _on_inputs_menu_id_pressed )
+		pm.add_submenu_item("Inputs...", inputs_menu.name)
+		pm.add_separator( "", -1 )
 	
 	for key in node_types.keys():
 		var label = node_types[ key ].title
-		print( "Adding menu", label)
+		#print( "Adding menu", label)
 		pm.add_item(label, max_id, KEY_NONE )
 		max_id += 1
+	return pm
 
 func _ready():
 	
 	scanAvailableNodes()
-	populatePopupMenu()
 		
 	inspector = EditorInspector.new()
 	inspector.custom_minimum_size = Vector2( 200, 600 )
@@ -363,8 +379,8 @@ func _on_graph_edit_node_selected(node):
 
 func _on_graph_edit_popup_request(at_position):
 	local_drop_position = at_position
-	var p : PopupMenu = %PopupMenu
 	
+	var p = populatePopupMenu()
 	p.size = Vector2( 400,200 )
 	#p.popup_centered( Vector2( 400, 200 ))
 	p.position = get_screen_position() + at_position
@@ -373,6 +389,10 @@ func _on_graph_edit_popup_request(at_position):
 func openAddMenu():
 	var pos = get_local_mouse_position()
 	_on_graph_edit_popup_request( pos )
+
+func _on_inputs_menu_id_pressed(id: int) -> void:
+	var input = current_resource.inputs.inputs[id]
+	print( "Creating a input node: %s (%d)" % [ input.name, input.data_type] )
 
 func _on_popup_menu_id_pressed(id: int) -> void:
 	if id >= min_id && id < max_id:
@@ -492,7 +512,6 @@ func evalGraph():
 
 func _on_button_reload_pressed() -> void:
 	scanAvailableNodes()
-	populatePopupMenu()
 
 func _on_button_save_pressed() -> void:
 	if current_resource:
@@ -503,3 +522,7 @@ func _on_button_regenerate_pressed() -> void:
 
 func _on_auto_regen_toggled(toggled_on: bool) -> void:
 	auto_regen = toggled_on
+
+func _on_button_inputs_pressed():
+	inspector.edit( current_resource.inputs )
+	inspected_node = null

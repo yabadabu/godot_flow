@@ -1,11 +1,13 @@
-[gd_scene load_steps=20 format=3 uid="uid://c1b6ke05vpb8r"]
+[gd_scene load_steps=25 format=3 uid="uid://c1b6ke05vpb8r"]
 
 [ext_resource type="Script" uid="uid://dsft6ocvh7yuk" path="res://demo_scene.gd" id="1_1hm1i"]
 [ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_iapjp"]
 [ext_resource type="Resource" uid="uid://66ejgwppld3l" path="res://graph00.tres" id="2_8n7uv"]
 [ext_resource type="Resource" uid="uid://doldqxmlcvh80" path="res://graph01.tres" id="3_ayuu8"]
 [ext_resource type="Resource" uid="uid://c6tic21gyki1f" path="res://graph02_curves.tres" id="4_ctgmk"]
+[ext_resource type="Script" uid="uid://ctvo7a7lud8bn" path="res://addons/flow_nodes_editor/graph_input_parameters.gd" id="6_1hljp"]
 [ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="6_4qc3i"]
+[ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="6_h7mfa"]
 [ext_resource type="Script" uid="uid://dwtm2hr5nh78h" path="res://addons/flow_nodes_editor/nodes/grid_settings.gd" id="6_mssda"]
 [ext_resource type="Script" uid="uid://cjfky1m4j3nl" path="res://tree_data.gd" id="6_om45m"]
 [ext_resource type="PackedScene" uid="uid://b6q4l56g02tqn" path="res://scenes/scene_3p.tscn" id="7_yg6rb"]
@@ -21,6 +23,31 @@ _data = {
 }
 point_count = 5
 
+[sub_resource type="Resource" id="Resource_ragla"]
+script = ExtResource("6_h7mfa")
+name = "step"
+data_type = 1
+cte_bool = false
+cte_float = 1.86
+cte_vector = Vector3(0, 0, 0)
+cte_string = ""
+metadata/_custom_type_script = "uid://co0f3ugd2wj1y"
+
+[sub_resource type="Resource" id="Resource_h7mfa"]
+script = ExtResource("6_h7mfa")
+name = "angle"
+data_type = 0
+cte_bool = false
+cte_float = 30.0
+cte_vector = Vector3(0, 0, 0)
+cte_string = ""
+metadata/_custom_type_script = "uid://co0f3ugd2wj1y"
+
+[sub_resource type="Resource" id="Resource_qmojn"]
+script = ExtResource("6_1hljp")
+inputs = Array[ExtResource("6_h7mfa")]([SubResource("Resource_ragla"), SubResource("Resource_h7mfa")])
+metadata/_custom_type_script = "uid://ctvo7a7lud8bn"
+
 [sub_resource type="Resource" id="Resource_1hljp"]
 resource_name = "Spawn Scenes Settings"
 script = ExtResource("8_6qj3o")
@@ -32,6 +59,21 @@ debug_enabled = false
 debug_mode = 0
 debug_scale = 1.0
 title = "Spawn Scenes"
+enabled = true
+
+[sub_resource type="Resource" id="Resource_sxiuf"]
+resource_name = "Grid Settings"
+script = ExtResource("6_mssda")
+x = 4
+y = 1
+z = 4
+step = Vector3(1, 1, 1)
+random_seed = 102748684
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+title = "Grid"
 enabled = true
 
 [sub_resource type="Resource" id="Resource_6qj3o"]
@@ -52,21 +94,6 @@ debug_scale = 1.0
 title = "Transform"
 enabled = true
 
-[sub_resource type="Resource" id="Resource_sxiuf"]
-resource_name = "Grid Settings"
-script = ExtResource("6_mssda")
-x = 4
-y = 1
-z = 4
-step = Vector3(1, 1, 1)
-random_seed = 102748684
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-title = "Grid"
-enabled = true
-
 [sub_resource type="Resource" id="Resource_mssda"]
 script = ExtResource("6_4qc3i")
 nodes = Array[Dictionary]([{
@@ -75,15 +102,15 @@ nodes = Array[Dictionary]([{
 "settings": SubResource("Resource_1hljp"),
 "template": "spawn_scenes"
 }, {
-"name": &"id_0015_transform",
-"position_offset": Vector2(160, 180),
-"settings": SubResource("Resource_6qj3o"),
-"template": "transform"
-}, {
 "name": &"id_0013_grid",
 "position_offset": Vector2(20, 180),
 "settings": SubResource("Resource_sxiuf"),
 "template": "grid"
+}, {
+"name": &"id_0015_transform",
+"position_offset": Vector2(160, 180),
+"settings": SubResource("Resource_6qj3o"),
+"template": "transform"
 }])
 conns = Array[Dictionary]([{
 "from_node": &"id_0013_grid",
@@ -100,7 +127,8 @@ conns = Array[Dictionary]([{
 }])
 view_zoom = 1.0
 view_offset = Vector2(0, -1.92)
-new_name_counter = 16
+new_name_counter = 18
+inputs = SubResource("Resource_qmojn")
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_ayuu8"]

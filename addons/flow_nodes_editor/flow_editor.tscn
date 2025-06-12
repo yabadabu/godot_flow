@@ -35,6 +35,10 @@ size_flags_horizontal = 3
 layout_mode = 2
 text = "Reload"
 
+[node name="ButtonInputs" type="Button" parent="VBoxContainer/ScrollContainer/HBoxContainer"]
+layout_mode = 2
+text = "Inputs"
+
 [node name="LabelInfo" type="Label" parent="VBoxContainer/ScrollContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
@@ -73,33 +77,8 @@ connection_lines_thickness = 2.0
 show_zoom_buttons = false
 show_grid_buttons = false
 
-[node name="PopupMenu" type="PopupMenu" parent="."]
-unique_name_in_owner = true
-position = Vector2i(20, 150)
-size = Vector2i(137, 147)
-item_count = 10
-item_0/text = "Clear"
-item_0/id = 0
-item_1/id = -1
-item_1/separator = true
-item_2/text = "Grid"
-item_2/id = 1000
-item_3/text = "Math "
-item_3/id = 1001
-item_4/text = "Noise"
-item_4/id = 1002
-item_5/text = "Ray Cast"
-item_5/id = 1003
-item_6/text = "Sample Spline"
-item_6/id = 1004
-item_7/text = "Select"
-item_7/id = 1005
-item_8/text = "Spawn Meshes"
-item_8/id = 1006
-item_9/text = "Transform"
-item_9/id = 1007
-
 [connection signal="pressed" from="VBoxContainer/ScrollContainer/HBoxContainer/ButtonReload" to="." method="_on_button_reload_pressed"]
+[connection signal="pressed" from="VBoxContainer/ScrollContainer/HBoxContainer/ButtonInputs" to="." method="_on_button_inputs_pressed"]
 [connection signal="pressed" from="VBoxContainer/ScrollContainer/HBoxContainer/ButtonSave" to="." method="_on_button_save_pressed"]
 [connection signal="toggled" from="VBoxContainer/ScrollContainer/HBoxContainer/AutoRegen" to="." method="_on_auto_regen_toggled"]
 [connection signal="pressed" from="VBoxContainer/ScrollContainer/HBoxContainer/ButtonRegenerate" to="." method="_on_button_regenerate_pressed"]
@@ -110,4 +89,3 @@ item_9/id = 1007
 [connection signal="gui_input" from="VBoxContainer/VSplitContainer/GraphEdit" to="." method="_on_graph_edit_gui_input"]
 [connection signal="node_selected" from="VBoxContainer/VSplitContainer/GraphEdit" to="." method="_on_graph_edit_node_selected"]
 [connection signal="popup_request" from="VBoxContainer/VSplitContainer/GraphEdit" to="." method="_on_graph_edit_popup_request"]
-[connection signal="id_pressed" from="PopupMenu" to="." method="_on_popup_menu_id_pressed"]
