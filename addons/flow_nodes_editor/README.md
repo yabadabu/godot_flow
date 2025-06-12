@@ -7,7 +7,7 @@
 [ ] spatial operations
 [ ] nodes to filter A/B
 [ ] undo/redo
-[ ] Move isFinal to getMeta
+[X] Move isFinal to getMeta
 [X] Spawn PackedScene
 [X] store rotations
 [x] read-write sub-streams
