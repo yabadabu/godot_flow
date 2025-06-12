@@ -4,12 +4,12 @@
 [ ] store color
 [ ] display density/color in debug
 [ ] Custom inputs to the pcg
-[ ] Spawn PackedScene
 [ ] spatial operations
 [ ] nodes to filter A/B
 [ ] undo/redo
 [ ] Move isFinal to getMeta
-[x] store rotations
+[X] Spawn PackedScene
+[X] store rotations
 [x] read-write sub-streams
 	[x] vector3 -> .x, .y, .z
 	[x] basis   -> yaw, pitch, roll
