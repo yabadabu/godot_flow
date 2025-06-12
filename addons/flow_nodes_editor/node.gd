@@ -52,9 +52,6 @@ func cleanup_multimesh_direct():
 	if multimesh_rid.is_valid():
 		RenderingServer.free_rid(multimesh_rid)
 		multimesh_rid = RID()	
-	
-func isFinal() -> bool:
-	return false
 
 func set_output( idx : int, data ):
 	if idx >= outputs.size():

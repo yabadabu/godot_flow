@@ -428,7 +428,7 @@ func getEvalOrder():
 		var node = child as FlowNodeBase
 		if not node:
 			continue
-		if node.settings.inspect_enabled or node.settings.debug_enabled or node.isFinal():
+		if node.settings.inspect_enabled or node.settings.debug_enabled or node.getMeta().get( "is_final", false ):
 			finals.append( node )
 	
 	# for each node, find requirements

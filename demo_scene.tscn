@@ -21,21 +21,6 @@ _data = {
 }
 point_count = 5
 
-[sub_resource type="Resource" id="Resource_sxiuf"]
-resource_name = "Grid Settings"
-script = ExtResource("6_mssda")
-x = 3
-y = 1
-z = 3
-step = Vector3(1, 1, 1)
-random_seed = 102748684
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-title = "Grid"
-enabled = true
-
 [sub_resource type="Resource" id="Resource_1hljp"]
 resource_name = "Spawn Scenes Settings"
 script = ExtResource("8_6qj3o")
@@ -56,10 +41,10 @@ offset_min = Vector3(0, 0, 0)
 offset_max = Vector3(0, 0, 0)
 rotation_min = Vector3(0, 0, 0)
 rotation_max = Vector3(0, 360, 0)
-scale_min = Vector3(0.5, 0.03, 1)
-scale_max = Vector3(0.5, 1, 1)
-uniform_scale = true
-random_seed = 2631885821
+scale_min = Vector3(1, 1, 1)
+scale_max = Vector3(1, 1, 1)
+uniform_scale = false
+random_seed = 2631886296
 inspect_enabled = false
 debug_enabled = false
 debug_mode = 0
@@ -67,23 +52,38 @@ debug_scale = 1.0
 title = "Transform"
 enabled = true
 
+[sub_resource type="Resource" id="Resource_sxiuf"]
+resource_name = "Grid Settings"
+script = ExtResource("6_mssda")
+x = 4
+y = 1
+z = 4
+step = Vector3(1, 1, 1)
+random_seed = 102748684
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+title = "Grid"
+enabled = true
+
 [sub_resource type="Resource" id="Resource_mssda"]
 script = ExtResource("6_4qc3i")
 nodes = Array[Dictionary]([{
-"name": &"id_0013_grid",
-"position_offset": Vector2(20, 180),
-"settings": SubResource("Resource_sxiuf"),
-"template": "grid"
-}, {
 "name": &"id_0016_spawn_scenes",
-"position_offset": Vector2(380, 640),
+"position_offset": Vector2(300, 180),
 "settings": SubResource("Resource_1hljp"),
 "template": "spawn_scenes"
 }, {
 "name": &"id_0015_transform",
-"position_offset": Vector2(160, 440),
+"position_offset": Vector2(160, 180),
 "settings": SubResource("Resource_6qj3o"),
 "template": "transform"
+}, {
+"name": &"id_0013_grid",
+"position_offset": Vector2(20, 180),
+"settings": SubResource("Resource_sxiuf"),
+"template": "grid"
 }])
 conns = Array[Dictionary]([{
 "from_node": &"id_0013_grid",
@@ -146,39 +146,67 @@ graph = SubResource("Resource_mssda")
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
 
 [node name="Scene_0000" type="Node3D" parent="PCG_4" instance=ExtResource("7_yg6rb")]
-transform = Transform3D(-0.459626, 0, 0.196834, 0, 0.5, 0, -0.196834, 0, -0.459626, 0, 0, 0)
+transform = Transform3D(-0.202695, 0, 0.979242, 0, 1, 0, -0.979242, 0, -0.202695, 0, 0, 0)
 metadata/flow_owner = &"id_0016_spawn_scenes"
 
 [node name="Scene_0001" type="Node3D" parent="PCG_4" instance=ExtResource("7_yg6rb")]
-transform = Transform3D(-0.234036, 0, 0.441845, 0, 0.5, 0, -0.441845, 0, -0.234036, 1, 0, 0)
+transform = Transform3D(-0.628816, 0, 0.777554, 0, 1, 0, -0.777554, 0, -0.628816, 1, 0, 0)
 metadata/flow_owner = &"id_0016_spawn_scenes"
 
 [node name="Scene_0002" type="Node3D" parent="PCG_4" instance=ExtResource("7_yg6rb")]
-transform = Transform3D(0.177364, 0, 0.467485, 0, 0.5, 0, -0.467485, 0, 0.177364, 2, 0, 0)
+transform = Transform3D(-0.282614, 0, -0.959234, 0, 1, 0, 0.959234, 0, -0.282614, 2, 0, 0)
 metadata/flow_owner = &"id_0016_spawn_scenes"
 
 [node name="Scene_0003" type="Node3D" parent="PCG_4" instance=ExtResource("7_yg6rb")]
-transform = Transform3D(0.271935, 0, 0.419585, 0, 0.5, 0, -0.419585, 0, 0.271935, 0, 0, 1)
+transform = Transform3D(-0.382643, 0, -0.923896, 0, 1, 0, 0.923896, 0, -0.382643, 3, 0, 0)
 metadata/flow_owner = &"id_0016_spawn_scenes"
 
 [node name="Scene_0004" type="Node3D" parent="PCG_4" instance=ExtResource("7_yg6rb")]
-transform = Transform3D(-0.0641369, 0, -0.495869, 0, 0.5, 0, 0.495869, 0, -0.0641369, 1, 0, 1)
+transform = Transform3D(0.748819, 0, -0.662774, 0, 1, 0, 0.662774, 0, 0.748819, 0, 0, 1)
 metadata/flow_owner = &"id_0016_spawn_scenes"
 
 [node name="Scene_0005" type="Node3D" parent="PCG_4" instance=ExtResource("7_yg6rb")]
-transform = Transform3D(-0.449461, 0, -0.219055, 0, 0.5, 0, 0.219055, 0, -0.449461, 2, 0, 1)
+transform = Transform3D(-0.752382, 0, -0.658728, 0, 1, 0, 0.658728, 0, -0.752382, 1, 0, 1)
 metadata/flow_owner = &"id_0016_spawn_scenes"
 
 [node name="Scene_0006" type="Node3D" parent="PCG_4" instance=ExtResource("7_yg6rb")]
-transform = Transform3D(0.497819, 0, -0.0466487, 0, 0.5, 0, 0.0466487, 0, 0.497819, 0, 0, 2)
+transform = Transform3D(0.997146, 0, 0.0754969, 0, 1, 0, -0.0754969, 0, 0.997146, 2, 0, 1)
 metadata/flow_owner = &"id_0016_spawn_scenes"
 
 [node name="Scene_0007" type="Node3D" parent="PCG_4" instance=ExtResource("7_yg6rb")]
-transform = Transform3D(-0.0035302, 0, 0.499988, 0, 0.5, 0, -0.499988, 0, -0.0035302, 1, 0, 2)
+transform = Transform3D(0.87491, 0, -0.484285, 0, 1, 0, 0.484285, 0, 0.87491, 3, 0, 1)
 metadata/flow_owner = &"id_0016_spawn_scenes"
 
 [node name="Scene_0008" type="Node3D" parent="PCG_4" instance=ExtResource("7_yg6rb")]
-transform = Transform3D(-0.469346, 0, 0.172378, 0, 0.5, 0, -0.172378, 0, -0.469346, 2, 0, 2)
+transform = Transform3D(0.674192, 0, 0.738556, 0, 1, 0, -0.738556, 0, 0.674192, 0, 0, 2)
+metadata/flow_owner = &"id_0016_spawn_scenes"
+
+[node name="Scene_0009" type="Node3D" parent="PCG_4" instance=ExtResource("7_yg6rb")]
+transform = Transform3D(-0.580683, 0, 0.81413, 0, 1, 0, -0.81413, 0, -0.580683, 1, 0, 2)
+metadata/flow_owner = &"id_0016_spawn_scenes"
+
+[node name="Scene_0010" type="Node3D" parent="PCG_4" instance=ExtResource("7_yg6rb")]
+transform = Transform3D(0.600973, 0, 0.799269, 0, 1, 0, -0.799269, 0, 0.600973, 2, 0, 2)
+metadata/flow_owner = &"id_0016_spawn_scenes"
+
+[node name="Scene_0011" type="Node3D" parent="PCG_4" instance=ExtResource("7_yg6rb")]
+transform = Transform3D(0.502327, 0, -0.864678, 0, 1, 0, 0.864678, 0, 0.502327, 3, 0, 2)
+metadata/flow_owner = &"id_0016_spawn_scenes"
+
+[node name="Scene_0012" type="Node3D" parent="PCG_4" instance=ExtResource("7_yg6rb")]
+transform = Transform3D(-0.227381, 0, -0.973806, 0, 1, 0, 0.973806, 0, -0.227381, 0, 0, 3)
+metadata/flow_owner = &"id_0016_spawn_scenes"
+
+[node name="Scene_0013" type="Node3D" parent="PCG_4" instance=ExtResource("7_yg6rb")]
+transform = Transform3D(0.755145, 0, 0.655558, 0, 1, 0, -0.655558, 0, 0.755145, 1, 0, 3)
+metadata/flow_owner = &"id_0016_spawn_scenes"
+
+[node name="Scene_0014" type="Node3D" parent="PCG_4" instance=ExtResource("7_yg6rb")]
+transform = Transform3D(-0.958412, 0, 0.285387, 0, 1, 0, -0.285387, 0, -0.958412, 2, 0, 3)
+metadata/flow_owner = &"id_0016_spawn_scenes"
+
+[node name="Scene_0015" type="Node3D" parent="PCG_4" instance=ExtResource("7_yg6rb")]
+transform = Transform3D(0.229546, 0, -0.973298, 0, 1, 0, 0.973298, 0, 0.229546, 3, 0, 3)
 metadata/flow_owner = &"id_0016_spawn_scenes"
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]

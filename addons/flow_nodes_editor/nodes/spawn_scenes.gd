@@ -7,14 +7,12 @@ func getMeta() -> Dictionary :
 		"settings" : SpawnScenesNodeSettings,
 		"ins" : [{ "label" : "In" }],
 		"outs" : [{ "label" : "Out" }],
+		"is_final" : true
 	}
 
 func _exit_tree():
 	#removeInstancedComponents();
 	pass
-
-func isFinal() -> bool:
-	return true
 	
 func removeInstancedNodes( root : Node3D ):
 	var nodes : Array[Node] = []
