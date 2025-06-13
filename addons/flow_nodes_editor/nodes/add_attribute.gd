@@ -7,6 +7,7 @@ func getMeta() -> Dictionary :
 		"settings" : AddAttributeNodeSettings,
 		"ins" : [{"label": "In A" }], 
 		"outs" : [{ "label" : "Out" }],
+		"hide_inputs" : true,
 	}
 	
 func getTitle() -> String:

@@ -164,6 +164,26 @@ func shuffleArray(arr: Array) -> void:
 		arr[i] = arr[j]
 		arr[j] = temp
 
+func editorDisplayName(property_name: String) -> String:
+	var parts = property_name.split("_")
+	for i in parts.size():
+		parts[i] = parts[i].capitalize()
+	return " ".join(parts)
+
+func getColorForGDScriptType( gd_type : int ):
+	match( gd_type ):
+		TYPE_STRING:
+			return Color.YELLOW
+		TYPE_BOOL:
+			return Color.RED
+		TYPE_INT:
+			return Color.CYAN
+		TYPE_VECTOR3:
+			return Color.BLUE_VIOLET
+		TYPE_FLOAT:
+			return Color.WEB_GREEN
+	return Color.WHEAT
+
 func initFromScript():
 	var meta = call("getMeta")
 	
@@ -189,6 +209,32 @@ func initFromScript():
 			set_slot_enabled_right( idx, true )
 		else:
 			lbl_out.text = ""
+			
+	if !meta.get( "hide_inputs", false ):
+		var inputs = settings.get_property_list()
+		var slot_idx = num_rows
+		var inside_my_vars := false
+		var my_title : String = meta.title
+		for input in inputs:
+			if input.name == "node_settings.gd":
+				break
+			if input.name == my_title:
+				inside_my_vars = true
+			if !(input.usage & PROPERTY_USAGE_STORAGE) || !(input.usage & PROPERTY_USAGE_EDITOR):
+				continue
+			if !inside_my_vars:
+				continue
+			print( input )
+			var ictrl = connectors_row_prefab.instantiate()
+			add_child( ictrl )
+			var lbl_in = ictrl.get_child(0) as Label
+			var lbl_out = ictrl.get_child(2) as Label
+			set_slot_enabled_left( slot_idx, true )
+			var color = getColorForGDScriptType( input.type )
+			set_slot_color_left( slot_idx, color )
+			lbl_in.text = editorDisplayName( input.name )
+			lbl_out.text = ""
+			slot_idx += 1
 
 func setupDebugDraw():
 	var out_data : FlowData.Data = get_output(0)
