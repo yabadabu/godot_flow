@@ -3,6 +3,7 @@ extends ScrollContainer
 var col_starts : Array[ float ] = []
 var col_widths : Array[ float ] = []	
 var font : Font
+var line_height : int = 0
 
 func _ready():
 	var hbar = get_h_scroll_bar()
@@ -10,7 +11,8 @@ func _ready():
 	hbar.value_changed.connect( _on_scroll_changed )
 	vbar.value_changed.connect( _on_scroll_changed )
 	font = get_theme_default_font()
-	$Contents.custom_minimum_size = Vector2( 100, 800 )
+	line_height = get_theme_default_font_size() + 1
+	$Contents.custom_minimum_size = Vector2(400, 800 )
 	
 func _on_scroll_changed(_value):
 	queue_redraw()
@@ -45,11 +47,32 @@ func drawVerticalLines():
 		#verticalLine( x0, Color.GREEN_YELLOW )
 		#verticalLine( x0 + col_widths[idx], Color.WHITE )	
 
+func drawCol( col_idx : int, y0 : float, row_idx : int ):
+	var y1 := size.y
+	var pos := Vector2( 0, y0 )
+	while y0 < y1:
+		#horizontallLine( y0, Color.AQUA )
+		pos.y = y0 + line_height - 2
+		
+		drawCell( pos, row_idx, col_idx )
+		
+		y0 += line_height
+		row_idx += 1	
+
+func drawBackgrounds( y0 : float, row_idx : int ):
+	var w = size.x
+	var y1 := size.y
+	var pos := Vector2( 0, y0 )
+	while y0 < y1:
+		if row_idx & 1:
+			draw_rect( Rect2( pos + Vector2( 0, 3 ), Vector2( w, line_height - 2 )), Color.DIM_GRAY )
+		pos.y = y0 + line_height - 2
+		y0 += line_height
+		row_idx += 1		
+
 func _draw():
 	if col_starts.size() == 0:
 		return
-
-	var line_height := get_theme_default_font_size() + 1
 	
 	var voffset := scroll_vertical
 	var y0 := -voffset
@@ -62,18 +85,9 @@ func _draw():
 	y0 += num_hidden_rows * line_height
 	row_idx += num_hidden_rows
 	
-	var y1 := size.y
-	var pos := Vector2( 0, y0 )
-	var w = size.x
-	while y0 < y1:
-		if row_idx & 1:
-			draw_rect( Rect2( pos + Vector2( 0, 3 ), Vector2( w, line_height - 2 )), Color.DIM_GRAY )
-		#horizontallLine( y0, Color.AQUA )
-		pos.y = y0 + line_height - 2
-		
-		drawRow( pos, row_idx )
-		
-		y0 += line_height
-		row_idx += 1
+	drawBackgrounds( y0, row_idx )
+	
+	for col in range(col_starts.size()-1):
+		drawCol( col, y0, row_idx )
 
 	drawVerticalLines()

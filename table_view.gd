@@ -41,6 +41,7 @@ func splitDragged( _offset : int ):
 		col_starts.append( pos.x )
 		col_widths.append( lbl_size.x )
 	if col_starts.size() > 0:
+		col_widths[ col_widths.size() - 1 ] -= 16
 		col_starts.append( col_starts.back() + col_widths.back() )
 		col_widths.append( 0 )
 	$ScrollContainer.col_starts = col_starts
