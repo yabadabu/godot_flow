@@ -74,7 +74,7 @@ conns = Array[Dictionary]([{
 "to_port": 0
 }])
 view_zoom = 1.05371
-view_offset = Vector2(-46.1742, -216.16)
+view_offset = Vector2(0, -200)
 new_name_counter = 0
 inputs = SubResource("Resource_ao7vp")
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"

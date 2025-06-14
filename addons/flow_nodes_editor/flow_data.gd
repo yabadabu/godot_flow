@@ -16,6 +16,7 @@ const AttrSize     : StringName = &"size"
 class EvaluationContext:
 	var owner : Node3D
 	var eval_id : int = 0
+	var graph : FlowGraphResource
 
 static func basisToEuler( basis : Basis ) -> Vector3:
 	var euler = basis.get_euler() 
