@@ -1,0 +1,79 @@
+extends ScrollContainer
+
+var col_starts : Array[ float ] = []
+var col_widths : Array[ float ] = []	
+var font : Font
+
+func _ready():
+	var hbar = get_h_scroll_bar()
+	var vbar = get_v_scroll_bar()
+	hbar.value_changed.connect( _on_scroll_changed )
+	vbar.value_changed.connect( _on_scroll_changed )
+	font = get_theme_default_font()
+	$Contents.custom_minimum_size = Vector2( 100, 800 )
+	
+func _on_scroll_changed(_value):
+	queue_redraw()
+	
+func verticalLine( x0 : int, color : Color ):
+	var y0 = 0
+	var y1 = size.y + y0
+	var p0 := Vector2( x0, y0 )
+	var p1 := Vector2( x0, y1 )
+	draw_line( p0, p1, color )
+	
+func horizontallLine( y0 : int, color : Color ):
+	var x0 = 0
+	var x1 = size.x + x0
+	var p0 := Vector2( x0, y0 )
+	var p1 := Vector2( x1, y0 )
+	draw_line( p0, p1, color )
+
+func drawCell( row_pos : Vector2, row : int,  col : int ):
+	var w = col_widths[ col ] + 4
+	row_pos.x += col_starts[ col ]
+	draw_string( font, row_pos, "%d/%d" % [ row, col ], HORIZONTAL_ALIGNMENT_RIGHT, w )
+
+func drawRow( pos : Vector2, row : int ):
+	for col in range( 3 ):
+		drawCell( pos, row, col )
+		
+func drawVerticalLines():
+	for idx in range( col_starts.size() ):
+		var x0 = col_starts[idx]
+		verticalLine( x0 - 1, Color.GREEN_YELLOW )
+		#verticalLine( x0, Color.GREEN_YELLOW )
+		#verticalLine( x0 + col_widths[idx], Color.WHITE )	
+
+func _draw():
+	if col_starts.size() == 0:
+		return
+
+	var line_height := get_theme_default_font_size() + 1
+	
+	var voffset := scroll_vertical
+	var y0 := -voffset
+	
+	var row_idx = 0
+	var num_hidden_rows = int( floor( voffset / line_height ) )
+	if num_hidden_rows < 0:
+		num_hidden_rows = 0	
+		
+	y0 += num_hidden_rows * line_height
+	row_idx += num_hidden_rows
+	
+	var y1 := size.y
+	var pos := Vector2( 0, y0 )
+	var w = size.x
+	while y0 < y1:
+		if row_idx & 1:
+			draw_rect( Rect2( pos + Vector2( 0, 3 ), Vector2( w, line_height - 2 )), Color.DIM_GRAY )
+		#horizontallLine( y0, Color.AQUA )
+		pos.y = y0 + line_height - 2
+		
+		drawRow( pos, row_idx )
+		
+		y0 += line_height
+		row_idx += 1
+
+	drawVerticalLines()

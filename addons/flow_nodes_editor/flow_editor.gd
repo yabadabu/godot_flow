@@ -177,8 +177,11 @@ func populatePopupMenu():
 
 func _ready():
 	
-	scanAvailableNodes()
+	if not Engine.is_editor_hint():
+		return
 		
+	scanAvailableNodes()
+	
 	inspector = EditorInspector.new()
 	inspector.custom_minimum_size = Vector2( 200, 600 )
 	var splitter = $VBoxContainer/VSplitContainer
