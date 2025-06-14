@@ -15,6 +15,7 @@ func addColumn( text : String ):
 
 	var lbl = Label.new()
 	lbl.text = text
+	lbl.custom_minimum_size = Vector2( 20, 0 )
 
 	while true:
 		var child_count = parent.get_child_count()
@@ -42,8 +43,6 @@ func splitDragged( _offset : int ):
 		col_widths.append( lbl_size.x )
 	if col_starts.size() > 0:
 		col_widths[ col_widths.size() - 1 ] -= 16
-		col_starts.append( col_starts.back() + col_widths.back() )
-		col_widths.append( 0 )
 	$ScrollContainer.col_starts = col_starts
 	$ScrollContainer.col_widths = col_widths
 	updateInfo()
@@ -65,4 +64,5 @@ func _ready():
 	addColumn( "Position.Y" )
 	addColumn( "Position.Z" )
 	addColumn( "Density" )
+	addColumn( "" )
 	call_deferred( "refreshUI" )
