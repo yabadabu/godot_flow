@@ -31,14 +31,8 @@ func horizontallLine( y0 : int, color : Color ):
 	var p1 := Vector2( x1, y0 )
 	draw_line( p0, p1, color )
 
-func drawCell( row_pos : Vector2, row : int,  col : int ):
-	var w = col_widths[ col ] + 4
-	row_pos.x += col_starts[ col ]
-	draw_string( font, row_pos, "%d/%d" % [ row, col ], HORIZONTAL_ALIGNMENT_RIGHT, w )
-
-func drawRow( pos : Vector2, row : int ):
-	for col in range( 3 ):
-		drawCell( pos, row, col )
+func drawCell( cell_pos : Vector2, width: float, row : int,  col : int ):
+	draw_string( font, cell_pos, "%d/%d _#gpB0" % [ row, col ], HORIZONTAL_ALIGNMENT_RIGHT, width )
 		
 func drawVerticalLines():
 	for idx in range( col_starts.size() ):
@@ -49,15 +43,23 @@ func drawVerticalLines():
 
 func drawCol( col_idx : int, y0 : float, row_idx : int ):
 	var y1 := size.y
-	var pos := Vector2( 0, y0 )
+	var cell_pos := Vector2( 0, y0 )
+	var w = col_widths[ col_idx ]
+	cell_pos.x = col_starts[ col_idx ]
+	
+	# No need to render fully clipped columns
+	if cell_pos.x > size.x || cell_pos.x + w < 0:
+		return
+		
 	while y0 < y1:
 		#horizontallLine( y0, Color.AQUA )
-		pos.y = y0 + line_height - 2
+		cell_pos.y = y0 + line_height - 6
 		
-		drawCell( pos, row_idx, col_idx )
+		drawCell( cell_pos, w, row_idx, col_idx )
 		
 		y0 += line_height
 		row_idx += 1	
+		
 
 func drawBackgrounds( y0 : float, row_idx : int ):
 	var w = size.x
