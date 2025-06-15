@@ -46,8 +46,8 @@ scale_min = Vector3(1, 1, 1)
 scale_max = Vector3(1, 1, 1)
 uniform_scale = true
 random_seed = 2046638687
-inspect_enabled = true
-debug_enabled = false
+inspect_enabled = false
+debug_enabled = true
 debug_mode = 0
 debug_scale = 1.0
 title = "Transform"
@@ -57,7 +57,7 @@ enabled = true
 script = ExtResource("1_4ly6f")
 nodes = Array[Dictionary]([{
 "name": &"id_0001_sample_spline",
-"position_offset": Vector2(-120, 140),
+"position_offset": Vector2(40, 140),
 "settings": SubResource("Resource_2h21p"),
 "template": "sample_spline"
 }, {
@@ -74,7 +74,7 @@ conns = Array[Dictionary]([{
 "to_port": 0
 }])
 view_zoom = 1.05371
-view_offset = Vector2(-226.377, -234.56)
+view_offset = Vector2(0, -200)
 new_name_counter = 0
 inputs = SubResource("Resource_ao7vp")
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"

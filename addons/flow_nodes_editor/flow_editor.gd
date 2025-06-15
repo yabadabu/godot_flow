@@ -21,6 +21,7 @@ var inspected_node : Node
 
 # This is the default graph-node instantiated, the script contains the logic
 var packed_node = preload("res://addons/flow_nodes_editor/node.tscn")
+const directory_path := "res://addons/flow_nodes_editor/nodes"
 
 # New nodes generation using the editor
 var local_drop_position : Vector2 = Vector2(0,0)
@@ -86,7 +87,10 @@ func setResourceToEdit( new_resource : FlowGraphResource, new_resource_owner : N
 		gedit.zoom = current_resource.view_zoom
 		gedit.scroll_offset = current_resource.view_offset
 		new_name_counter = current_resource.new_name_counter
-		
+
+		for input in current_resource.inputs.inputs:
+			var node_type_name := "input_%s" % input.name
+			registerNodeType( node_type_name, "input.gd")
 
 	queueRegen()
 	print( "regen_pending is now true (%d)" % [num_non_nodes_children])
@@ -126,23 +130,25 @@ func getNewName( suffix : String ):
 	new_name_counter += 1
 	return "id_%04d_%s" % [ new_name_counter, suffix ]
 
+func registerNodeType( node_type_name, file ):
+	var full_res_path = directory_path + "/" + file
+	var loaded_class : Script = load( full_res_path ) as Script
+	if not loaded_class:
+		push_error("Failed to load class %s" % full_res_path )
+		return
+	var instance = loaded_class.new() as FlowNodeBase
+	var meta = instance.getMeta()
+	meta.factory = loaded_class
+	#print( "Registering node type %s" % node_type_name )
+	node_types[ node_type_name ] = meta
+
 func scanAvailableNodes():
-	var directory_path := "res://addons/flow_nodes_editor/nodes"
 	var files := ResourceLoader.list_directory(directory_path) 
 	for file in files:
 		var stem = file.get_basename()
 		if stem.ends_with("_settings"):
 			continue
-		var full_res_path = directory_path + "/" + file
-		var loaded_class : Script = load( full_res_path ) as Script
-		if not loaded_class:
-			push_error("Failed to load class %s" % full_res_path )
-			continue
-		var instance = loaded_class.new() as FlowNodeBase
-		var meta = instance.getMeta()
-		meta.factory = loaded_class
-		#print( "Meta is %s " % str(meta) )
-		node_types[ stem ] = meta
+		registerNodeType( stem, file )
 
 func populatePopupMenu():
 	min_id = 1000
@@ -169,10 +175,13 @@ func populatePopupMenu():
 		pm.add_separator( "", -1 )
 	
 	for key in node_types.keys():
+		var node_type = node_types[ key ]
+		max_id += 1
 		var label = node_types[ key ].title
+		if not node_type.get( "auto_register", true):
+			continue
 		#print( "Adding menu", label)
 		pm.add_item(label, max_id, KEY_NONE )
-		max_id += 1
 	return pm
 
 func _ready():
@@ -264,7 +273,7 @@ func addNodeFromTemplate( node_template, node_name : String, settings = null ):
 	var node = packed_node.instantiate() as GraphNode
 	var meta = node_types.get( node_template, null )
 	if not meta:
-		push_error("node_type %s is not registered", node_template)
+		push_error("node_type %s is not registered" % node_template)
 		return null	
 	print( "Meta:", str(meta) )
 		
@@ -292,9 +301,9 @@ func addNodeFromTemplate( node_template, node_name : String, settings = null ):
 	gedit_nodes_by_name[ node.name ] = node
 	return node
 	
-func addNode( node_template ):
+func addNode( node_template, settings = null ):
 	var node_name = getNewName(node_template)
-	var node = addNodeFromTemplate( node_template, node_name )
+	var node = addNodeFromTemplate( node_template, node_name, settings )
 	if not node:
 		return null
 		
@@ -395,7 +404,11 @@ func openAddMenu():
 
 func _on_inputs_menu_id_pressed(id: int) -> void:
 	var input = current_resource.inputs.inputs[id]
-	print( "Creating a input node: %s (%d)" % [ input.name, input.data_type] )
+	var node_type = "input_%s" % input.name
+	print( "Creating a input node: %s (%d) -> %s" % [ input.name, input.data_type, node_type] )
+	var settings := InputNodeSettings.new()
+	settings.name = input.name
+	addNode( node_type, settings )
 
 func _on_popup_menu_id_pressed(id: int) -> void:
 	if id >= min_id && id < max_id:
