@@ -1,16 +1,26 @@
 extends ScrollContainer
+class_name DataTableContainer
 
 var col_starts : Array[ float ] = []
 var col_widths : Array[ float ] = []	
-var font : Font
 var line_height : int = 0
+var font : Font
+
+class CellContents:
+	var row : int
+	var col : int
+	var text : String
+	var alignment : HorizontalAlignment
+
+# func drawCell( cell_pos : Vector2, width: float, row : int,  col : int ):
+var cell_contents: Callable
 
 func _ready():
+	font = get_theme_default_font()
 	var hbar = get_h_scroll_bar()
 	var vbar = get_v_scroll_bar()
 	hbar.value_changed.connect( _on_scroll_changed )
 	vbar.value_changed.connect( _on_scroll_changed )
-	font = get_theme_default_font()
 	line_height = get_theme_default_font_size() + 1
 	$Contents.custom_minimum_size = Vector2(400, 20 )
 	
@@ -31,8 +41,8 @@ func horizontallLine( y0 : int, color : Color ):
 	var p1 := Vector2( x1, y0 )
 	draw_line( p0, p1, color )
 
-func drawCell( cell_pos : Vector2, width: float, row : int,  col : int ):
-	draw_string( font, cell_pos, "%d/%d _#gpB0" % [ row, col ], HORIZONTAL_ALIGNMENT_RIGHT, width )
+func drawCell( cell_pos : Vector2, width: float, cell : CellContents ):
+	draw_string( font, cell_pos, cell.text, cell.alignment, width  )
 		
 func drawVerticalLines():
 	for idx in range( col_starts.size() ):
@@ -48,14 +58,19 @@ func drawCol( col_idx : int, y0 : float, row_idx : int ):
 	cell_pos.x = col_starts[ col_idx ]
 	
 	# No need to render fully clipped columns
-	if cell_pos.x > size.x || cell_pos.x + w < 0:
+	if cell_pos.x > size.x || cell_pos.x + w < 0 || not cell_contents.is_valid():
 		return
+	
+	var cell = CellContents.new()
+	cell.row = row_idx
+	cell.col = col_idx
 		
 	while y0 < y1:
 		#horizontallLine( y0, Color.AQUA )
 		cell_pos.y = y0 + line_height - 6
-		
-		drawCell( cell_pos, w, row_idx, col_idx )
+	
+		cell_contents.call( cell )
+		drawCell( cell_pos, w, cell )
 		
 		y0 += line_height
 		row_idx += 1	

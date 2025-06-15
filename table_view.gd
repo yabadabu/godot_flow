@@ -67,9 +67,17 @@ func updateInfo():
 func refreshUI():
 	splitDragged(0)
 
+func getCellContents( cell : DataTableContainer.CellContents ):
+	cell.text = "%d/%d _#gpB0" % [ cell.row, cell.col ]
+	if cell.col == 7:
+		cell.alignment = HORIZONTAL_ALIGNMENT_LEFT
+	else:
+		cell.alignment = HORIZONTAL_ALIGNMENT_RIGHT
+
 func _ready():
 	$TitlesContainer.get_h_scroll_bar().value_changed.connect( titlesScrolled )
 	$ScrollContainer.get_h_scroll_bar().value_changed.connect( dataScrolled )
+	$ScrollContainer.cell_contents = getCellContents
 	clearColumns()
 	addColumn( "Position.X" )
 	addColumn( "Position.Y" )

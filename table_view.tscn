@@ -14,6 +14,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 2
 size_flags_vertical = 3
+theme_override_constants/separation = 0
 script = ExtResource("1_j3t5q")
 
 [node name="DebugInfo" type="Label" parent="."]
