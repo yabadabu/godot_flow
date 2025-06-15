@@ -1,7 +1,10 @@
-[gd_scene load_steps=3 format=3 uid="uid://b5a4uh306y0de"]
+[gd_scene load_steps=4 format=3 uid="uid://b5a4uh306y0de"]
 
 [ext_resource type="Script" uid="uid://dkek7m8lxexb3" path="res://table_view.gd" id="1_j3t5q"]
 [ext_resource type="Script" uid="uid://ccuv3evx8yrn3" path="res://scroll_container.gd" id="2_twygl"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_twygl"]
+font_size = 12
 
 [node name="TableView" type="VBoxContainer"]
 anchors_preset = 15
@@ -9,20 +12,29 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-size_flags_horizontal = 3
+size_flags_horizontal = 2
 size_flags_vertical = 3
 script = ExtResource("1_j3t5q")
 
 [node name="DebugInfo" type="Label" parent="."]
+visible = false
 layout_mode = 2
+label_settings = SubResource("LabelSettings_twygl")
 
-[node name="ColumnTitles" type="HSplitContainer" parent="."]
+[node name="TitlesContainer" type="ScrollContainer" parent="."]
 layout_mode = 2
-theme_override_constants/separation = 10
+horizontal_scroll_mode = 3
+vertical_scroll_mode = 0
+
+[node name="ColumnTitles" type="HBoxContainer" parent="TitlesContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
 
 [node name="ScrollContainer" type="ScrollContainer" parent="."]
 layout_mode = 2
 size_flags_vertical = 3
+scroll_vertical_custom_step = 24.0
 script = ExtResource("2_twygl")
 
 [node name="Contents" type="Control" parent="ScrollContainer"]

@@ -12,7 +12,7 @@ func _ready():
 	vbar.value_changed.connect( _on_scroll_changed )
 	font = get_theme_default_font()
 	line_height = get_theme_default_font_size() + 1
-	$Contents.custom_minimum_size = Vector2(400, 800 )
+	$Contents.custom_minimum_size = Vector2(400, 20 )
 	
 func _on_scroll_changed(_value):
 	queue_redraw()
@@ -43,7 +43,7 @@ func drawRow( pos : Vector2, row : int ):
 func drawVerticalLines():
 	for idx in range( col_starts.size() ):
 		var x0 = col_starts[idx]
-		verticalLine( x0 - 1, Color.GREEN_YELLOW )
+		verticalLine( x0 - 6, Color.GREEN_YELLOW )
 		#verticalLine( x0, Color.GREEN_YELLOW )
 		#verticalLine( x0 + col_widths[idx], Color.WHITE )	
 

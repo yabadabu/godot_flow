@@ -1,9 +1,12 @@
 extends VBoxContainer
 
-@onready var col_titles := $ColumnTitles
+@onready var col_titles := %ColumnTitles
 var columns : Array[ Label ] = []
+var num_rows := 64
 var col_starts : Array[ float ] = []
 var col_widths : Array[ float ] = []
+
+var separator : PackedScene = preload("res://draggable_separator.tscn") 
 
 func clearColumns():
 	columns.clear()
@@ -17,34 +20,41 @@ func addColumn( text : String ):
 	lbl.text = text
 	lbl.custom_minimum_size = Vector2( 20, 0 )
 
-	while true:
-		var child_count = parent.get_child_count()
-		if child_count== 0:
-			break
-		elif child_count == 1:
-			var hs := HSplitContainer.new()
-			parent.add_child( hs )
-			parent = hs
-			hs.dragged.connect( splitDragged )
-			break
-		else:
-			parent = parent.get_child(1)
+	var child_count = parent.get_child_count()
+	if child_count== 0:
+		parent.add_child( lbl )
+	else:
+		var hs := separator.instantiate()
+		hs.size.y = 8
+		hs.dragged.connect( splitDragged )
+		parent.add_child( hs )
+		parent.add_child( lbl )
 			
 	columns.append( lbl )
-	parent.add_child( lbl )
+	
+func dataScrolled( _offset : int ):
+	$TitlesContainer.scroll_horizontal = $ScrollContainer.scroll_horizontal
+	call_deferred( "refreshUI" )
+	
+func titlesScrolled( _offset : int ):
+	$ScrollContainer.scroll_horizontal = $TitlesContainer.scroll_horizontal
+	call_deferred( "refreshUI" )
 	
 func splitDragged( _offset : int ):
+	$TitlesContainer.position.x = 0
 	col_starts.clear()
 	col_widths.clear()
 	for col in columns:
 		var pos = col.get_global_transform().origin
 		var lbl_size = col.size
-		col_starts.append( pos.x )
-		col_widths.append( lbl_size.x )
+		col_starts.append( pos.x - 1 )
+		col_widths.append( lbl_size.x + 2)
 	if col_starts.size() > 0:
 		col_widths[ col_widths.size() - 1 ] -= 16
 	$ScrollContainer.col_starts = col_starts
 	$ScrollContainer.col_widths = col_widths
+	$ScrollContainer/Contents.custom_minimum_size.x = %ColumnTitles.size.x
+	$ScrollContainer/Contents.custom_minimum_size.y = num_rows * $ScrollContainer.line_height
 	updateInfo()
 	$ScrollContainer.queue_redraw()
 	
@@ -58,11 +68,19 @@ func refreshUI():
 	splitDragged(0)
 
 func _ready():
-	col_titles.dragged.connect( splitDragged )
+	$TitlesContainer.get_h_scroll_bar().value_changed.connect( titlesScrolled )
+	$ScrollContainer.get_h_scroll_bar().value_changed.connect( dataScrolled )
 	clearColumns()
 	addColumn( "Position.X" )
 	addColumn( "Position.Y" )
 	addColumn( "Position.Z" )
 	addColumn( "Density" )
+	addColumn( "Size.X" )
+	addColumn( "Size.Y" )
+	addColumn( "Size.Z" )
+	addColumn( "Resource Name" )
+	addColumn( "Extends.X" )
+	addColumn( "Extends.Y" )
+	addColumn( "Extends.Z" )
 	addColumn( "" )
 	call_deferred( "refreshUI" )
