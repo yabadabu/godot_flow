@@ -1,4 +1,5 @@
 extends VBoxContainer
+class_name TableView
 
 @onready var col_titles := %ColumnTitles
 var columns : Array[ Label ] = []
@@ -6,7 +7,9 @@ var num_rows := 64
 var col_starts : Array[ float ] = []
 var col_widths : Array[ float ] = []
 
-var separator : PackedScene = preload("res://draggable_separator.tscn") 
+var separator : PackedScene = preload("res://addons/flow_nodes_editor/visualization/draggable_separator.tscn") 
+
+signal cell_clicked( row : int, col : int )
 
 func clearColumns():
 	columns.clear()
@@ -67,32 +70,17 @@ func updateInfo():
 func refreshUI():
 	splitDragged(0)
 
-func getCellContents( cell : DataTableContainer.CellContents ):
-	cell.text = "%d/%d _#gpB0" % [ cell.row, cell.col ]
-	if cell.col == 7:
-		cell.alignment = HORIZONTAL_ALIGNMENT_LEFT
-	else:
-		cell.alignment = HORIZONTAL_ALIGNMENT_RIGHT
-
 func onCellClicked( row : int, col : int ):
-	print( "Click on cell [%d,%d]" % [ row, col ])
+	cell_clicked.emit( row, col )
+
+func commitColumns():
+	addColumn( "" )
+	call_deferred( "refreshUI" )
+
+func setCellCallback( new_cell_callback : Callable ):
+	$ScrollContainer.cell_contents = new_cell_callback
 
 func _ready():
 	$TitlesContainer.get_h_scroll_bar().value_changed.connect( titlesScrolled )
 	$ScrollContainer.get_h_scroll_bar().value_changed.connect( dataScrolled )
-	$ScrollContainer.cell_contents = getCellContents
 	$ScrollContainer.on_cell_clicked.connect( onCellClicked )
-	clearColumns()
-	addColumn( "Position.X" )
-	addColumn( "Position.Y" )
-	addColumn( "Position.Z" )
-	addColumn( "Density" )
-	addColumn( "Size.X" )
-	addColumn( "Size.Y" )
-	addColumn( "Size.Z" )
-	addColumn( "Resource Name" )
-	addColumn( "Extends.X" )
-	addColumn( "Extends.Y" )
-	addColumn( "Extends.Z" )
-	addColumn( "" )
-	call_deferred( "refreshUI" )

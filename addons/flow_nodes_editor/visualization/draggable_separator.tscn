@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://cg20lmbheuas4"]
 
-[ext_resource type="Script" uid="uid://caim1m8h41nff" path="res://draggable_separator.gd" id="1_osrar"]
+[ext_resource type="Script" uid="uid://caim1m8h41nff" path="res://addons/flow_nodes_editor/visualization/draggable_separator.gd" id="1_osrar"]
 
 [node name="Separator" type="ColorRect"]
 custom_minimum_size = Vector2(5, 0)
