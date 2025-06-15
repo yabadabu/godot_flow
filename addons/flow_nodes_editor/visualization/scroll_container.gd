@@ -109,7 +109,8 @@ func drawBackgrounds( y0 : float, row_idx : int ):
 		row_idx += 1	
 
 func _draw():
-	if col_starts.size() == 0:
+	#print( "drawing table %d - %d" % [ num_rows , col_starts.size() ])
+	if col_starts.size() < 2:
 		return
 	
 	var voffset := scroll_vertical

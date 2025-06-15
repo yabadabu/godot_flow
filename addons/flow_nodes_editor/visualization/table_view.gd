@@ -15,6 +15,8 @@ signal cell_clicked( row : int, col : int )
 signal title_clicked( col : int )
 
 func clearColumns():
+	#print("Clearing rooms")
+	num_rows = 0
 	for child in col_titles.get_children():
 		child.queue_free()
 	for idx in range(col_titles.get_child_count()):
@@ -22,6 +24,8 @@ func clearColumns():
 	columns.clear()
 	col_starts.clear()
 	col_widths.clear()
+	$ScrollContainer.num_rows = num_rows
+	$ScrollContainer.col_starts = col_starts
 
 func addColumn( text : String, initial_width : int ):
 	var parent = col_titles
@@ -96,6 +100,7 @@ func refreshUI():
 
 func commitColumns():
 	addColumn( "", 0 )
+	#print("Comminging columns %d" % col_starts.size())
 	call_deferred( "refreshUI" )
 
 func setCellCallback( new_cell_callback : Callable ):
@@ -107,7 +112,7 @@ func setColumnCallback( new_callback : Callable ):
 func _ready():
 	$TitlesContainer.get_h_scroll_bar().value_changed.connect( titlesScrolled )
 	$ScrollContainer.get_h_scroll_bar().value_changed.connect( dataScrolled )
-	$ScrollContainer/Contents.gui_input.connect( _on_contents_gui_input )
+	#$ScrollContainer/Contents.gui_input.connect( _on_contents_gui_input )
 
 func setSelectedRow( new_row : int ):
 	$ScrollContainer.selected_row = new_row
@@ -142,10 +147,8 @@ func _on_column_titles_gui_input(event: InputEvent) -> void:
 				title_clicked.emit( col )
 
 func _input(event):
-	if get_rect().has_point(get_local_mouse_position()):
+	if visible and get_rect().has_point(get_local_mouse_position()):
 		_on_contents_gui_input( event )
-		#if event is InputEventMouseButton:
-			#print("Hovered and received: ", event)
 
 func _on_visibility_changed() -> void:
 	if visible:

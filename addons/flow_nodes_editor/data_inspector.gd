@@ -46,27 +46,6 @@ func addColor( gc : Container, data : Color ):
 	gc.add_child( c )
 	return c
 	
-#func allocColumn( title : String ):
-		#
-	#var col : VBoxContainer = VBoxContainer.new()	
-	#col.add_theme_constant_override("separation", 0)
-	#col.custom_minimum_size.x = 100
-		#
-	#for idx in range( num_rows + 1 ):
-		#var cell : Label = Label.new()
-		#if idx == 0:
-			#cell.add_theme_stylebox_override( "normal", style_titles )
-			#cell.text = title
-		#elif not idx % 2:
-			#cell.add_theme_stylebox_override( "normal", styleA )
-		#else:
-			#cell.add_theme_stylebox_override( "normal", styleB )
-		#col.add_child( cell )
-		#cell.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT	
-		#
-	#cols.add_child( col )
-	#return col
-	
 func setLabelNumber( label : Label, value : float ):
 	var new_text = fmt( value )
 	if new_text != label.text:
@@ -156,28 +135,23 @@ func getCellContentsResource(cell : DataTableContainer.CellContents ):
 		
 func refresh():
 	
-	if tv == null || node == null:
-		print( "di.tv or node is null" )
+	if tv == null:
 		return
 
 	tv.clearColumns()
 	tv.setColumnCallback( onColumnBegins )
 	
-	data = node.get_output(0)
-	if data == null:
-		print( "di.Data is null" )
-		return
+	data = node.get_output(0) if node else null
+	if data:
+		updateNumRowsAndCols()
+		%LabelStats.text = "%d Rows, (%d cols in %d Streams)" % [ num_rows, num_cols, data.numFields()]
 		
-	updateNumRowsAndCols()
-	
-	%LabelStats.text = "%d Rows, (%d cols in %d Streams)" % [ num_rows, num_cols, data.numFields()]
-	
-	# Index column
-	tv.addColumn( "Index", 0 )
-	tv.num_rows = num_rows
-	tv.setRowHeight( 26 )
-	for title in col_titles:
-		tv.addColumn( title, 120 )
+		# Index column
+		tv.addColumn( "Index", 0 )
+		tv.num_rows = num_rows
+		tv.setRowHeight( 26 )
+		for title in col_titles:
+			tv.addColumn( title, 120 )
 	tv.commitColumns()
 
 func onCellClicked( row : int, col : int ):
