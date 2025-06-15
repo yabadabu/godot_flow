@@ -70,9 +70,6 @@ func updateInfo():
 func refreshUI():
 	splitDragged(0)
 
-func onCellClicked( row : int, col : int ):
-	cell_clicked.emit( row, col )
-
 func commitColumns():
 	addColumn( "" )
 	call_deferred( "refreshUI" )
@@ -83,4 +80,14 @@ func setCellCallback( new_cell_callback : Callable ):
 func _ready():
 	$TitlesContainer.get_h_scroll_bar().value_changed.connect( titlesScrolled )
 	$ScrollContainer.get_h_scroll_bar().value_changed.connect( dataScrolled )
-	$ScrollContainer.on_cell_clicked.connect( onCellClicked )
+
+func _on_contents_gui_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_LEFT:
+			if event.pressed:
+				var ex = event.position.x - $ScrollContainer.scroll_horizontal
+				for col in range(col_starts.size()-1):
+					if ex >= col_starts[ col ] and ex < col_starts[ col+ 1 ]:
+						var row = int( ( event.position.y - 3 ) / $ScrollContainer.line_height )
+						cell_clicked.emit( row, col )
+						break 
