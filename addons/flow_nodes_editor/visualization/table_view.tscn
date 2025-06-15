@@ -29,7 +29,6 @@ vertical_scroll_mode = 0
 
 [node name="ColumnTitles" type="HBoxContainer" parent="TitlesContainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 
 [node name="ScrollContainer" type="ScrollContainer" parent="."]
@@ -42,7 +41,10 @@ script = ExtResource("2_twygl")
 layout_mode = 2
 
 [node name="Sumary" type="Label" parent="."]
+visible = false
 layout_mode = 2
 text = "Sumary"
 
+[connection signal="visibility_changed" from="." to="." method="_on_visibility_changed"]
+[connection signal="gui_input" from="TitlesContainer/ColumnTitles" to="." method="_on_column_titles_gui_input"]
 [connection signal="gui_input" from="ScrollContainer/Contents" to="." method="_on_contents_gui_input"]

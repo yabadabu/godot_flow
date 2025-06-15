@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://c1b6ke05vpb8r"]
+[gd_scene load_steps=30 format=3 uid="uid://c1b6ke05vpb8r"]
 
 [ext_resource type="Script" uid="uid://dsft6ocvh7yuk" path="res://demo_scene.gd" id="1_1hm1i"]
 [ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_iapjp"]
@@ -10,18 +10,10 @@
 [ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="6_h7mfa"]
 [ext_resource type="Script" uid="uid://dwtm2hr5nh78h" path="res://addons/flow_nodes_editor/nodes/grid_settings.gd" id="6_mssda"]
 [ext_resource type="Script" uid="uid://cjfky1m4j3nl" path="res://tree_data.gd" id="6_om45m"]
-[ext_resource type="PackedScene" uid="uid://b6q4l56g02tqn" path="res://scenes/scene_3p.tscn" id="7_yg6rb"]
-[ext_resource type="Script" uid="uid://dqd74l1ewnh0g" path="res://addons/flow_nodes_editor/nodes/spawn_scenes_settings.gd" id="8_6qj3o"]
 [ext_resource type="Script" uid="uid://dt7o3moxddt4h" path="res://addons/flow_nodes_editor/nodes/transform_settings.gd" id="9_6qj3o"]
-
-[sub_resource type="Curve3D" id="Curve3D_ayuu8"]
-closed = true
-bake_interval = 0.31
-_data = {
-"points": PackedVector3Array(0, 0, 0, 0, 0, 0, -1.072, -0.055, -0.848, 0.0969775, 0.251062, -0.331849, -0.0969775, -0.251062, 0.331849, 0.20064, -0.0313487, 0.75344, 0.369206, -0.0504826, -0.0238729, -0.369206, 0.0504826, 0.0238729, -1.63264, -0.0485349, 1.67794, 0.26109, -0.0436706, 0.259869, -0.26109, 0.0436706, -0.259869, -2.64929, 0.195791, 1.27553, 0, 0, 0, 0, 0, 0, -2.53903, -0.0784302, -0.241544),
-"tilts": PackedFloat32Array(0, 0, 0, 0, 0)
-}
-point_count = 5
+[ext_resource type="Script" uid="uid://7g705n2fjnlr" path="res://addons/flow_nodes_editor/user_resource.gd" id="10_ragla"]
+[ext_resource type="Script" uid="uid://c0ql72e1bbdqo" path="res://my_meshes.gd" id="11_qmojn"]
+[ext_resource type="Script" uid="uid://cchxntewglwb0" path="res://addons/flow_nodes_editor/nodes/assets_settings.gd" id="12_scy3m"]
 
 [sub_resource type="Resource" id="Resource_ragla"]
 script = ExtResource("6_h7mfa")
@@ -48,25 +40,42 @@ script = ExtResource("6_1hljp")
 inputs = Array[ExtResource("6_h7mfa")]([SubResource("Resource_ragla"), SubResource("Resource_h7mfa")])
 metadata/_custom_type_script = "uid://ctvo7a7lud8bn"
 
-[sub_resource type="Resource" id="Resource_1hljp"]
-resource_name = "Spawn Scenes Settings"
-script = ExtResource("8_6qj3o")
-scene = ExtResource("7_yg6rb")
-scene_attribute = ""
-random_seed = 4115871725
+[sub_resource type="PlaneMesh" id="PlaneMesh_tap1b"]
+
+[sub_resource type="Resource" id="Resource_nfkfi"]
+script = ExtResource("11_qmojn")
+weight = 3.0
+type = "tree"
+asset = SubResource("PlaneMesh_tap1b")
+metadata/_custom_type_script = "uid://c0ql72e1bbdqo"
+
+[sub_resource type="BoxMesh" id="BoxMesh_5hhy1"]
+
+[sub_resource type="Resource" id="Resource_8ei73"]
+script = ExtResource("11_qmojn")
+weight = 2.0
+type = "bush"
+asset = SubResource("BoxMesh_5hhy1")
+metadata/_custom_type_script = "uid://c0ql72e1bbdqo"
+
+[sub_resource type="Resource" id="Resource_cyigx"]
+resource_name = "Assets Settings"
+script = ExtResource("12_scy3m")
+assets = Array[ExtResource("10_ragla")]([SubResource("Resource_nfkfi"), SubResource("Resource_8ei73")])
+random_seed = 1995124741
 inspect_enabled = false
 debug_enabled = false
 debug_mode = 0
 debug_scale = 1.0
-title = "Spawn Scenes"
+title = "Assets"
 enabled = true
 
 [sub_resource type="Resource" id="Resource_sxiuf"]
 resource_name = "Grid Settings"
 script = ExtResource("6_mssda")
-x = 4
+x = 8
 y = 1
-z = 4
+z = 8
 step = Vector3(1, 1, 1)
 random_seed = 102748684
 inspect_enabled = false
@@ -80,14 +89,14 @@ enabled = true
 resource_name = "Transform Settings"
 script = ExtResource("9_6qj3o")
 offset_min = Vector3(0, 0, 0)
-offset_max = Vector3(0, 0, 0)
-rotation_min = Vector3(0, 0, 0)
+offset_max = Vector3(0, 0.02, 0)
+rotation_min = Vector3(0, 0.14, 0)
 rotation_max = Vector3(0, 360, 0)
 scale_min = Vector3(1, 1, 1)
-scale_max = Vector3(1, 1, 1)
+scale_max = Vector3(1.25, 1.81, 1.17)
 uniform_scale = false
 random_seed = 2631886296
-inspect_enabled = false
+inspect_enabled = true
 debug_enabled = false
 debug_mode = 0
 debug_scale = 1.0
@@ -97,18 +106,18 @@ enabled = true
 [sub_resource type="Resource" id="Resource_mssda"]
 script = ExtResource("6_4qc3i")
 nodes = Array[Dictionary]([{
-"name": &"id_0016_spawn_scenes",
-"position_offset": Vector2(300, 180),
-"settings": SubResource("Resource_1hljp"),
-"template": "spawn_scenes"
+"name": &"id_0019_assets",
+"position_offset": Vector2(200, 900),
+"settings": SubResource("Resource_cyigx"),
+"template": "assets"
 }, {
 "name": &"id_0013_grid",
-"position_offset": Vector2(20, 180),
+"position_offset": Vector2(0, 280),
 "settings": SubResource("Resource_sxiuf"),
 "template": "grid"
 }, {
 "name": &"id_0015_transform",
-"position_offset": Vector2(160, 180),
+"position_offset": Vector2(300, 280),
 "settings": SubResource("Resource_6qj3o"),
 "template": "transform"
 }])
@@ -118,18 +127,21 @@ conns = Array[Dictionary]([{
 "keep_alive": false,
 "to_node": &"id_0015_transform",
 "to_port": 0
-}, {
-"from_node": &"id_0015_transform",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0016_spawn_scenes",
-"to_port": 0
 }])
 view_zoom = 1.0
-view_offset = Vector2(0, -1.92)
-new_name_counter = 18
+view_offset = Vector2(0, -23.04)
+new_name_counter = 19
 inputs = SubResource("Resource_qmojn")
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
+
+[sub_resource type="Curve3D" id="Curve3D_ayuu8"]
+closed = true
+bake_interval = 0.31
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, -1.072, -0.055, -0.848, 0.0969775, 0.251062, -0.331849, -0.0969775, -0.251062, 0.331849, 0.20064, -0.0313487, 0.75344, 0.369206, -0.0504826, -0.0238729, -0.369206, 0.0504826, 0.0238729, -1.63264, -0.0485349, 1.67794, 0.26109, -0.0436706, 0.259869, -0.26109, 0.0436706, -0.259869, -2.64929, 0.195791, 1.27553, 0, 0, 0, 0, 0, 0, -2.53903, -0.0784302, -0.241544),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0)
+}
+point_count = 5
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_ayuu8"]
 
@@ -165,77 +177,13 @@ script = ExtResource("1_iapjp")
 graph = ExtResource("4_ctgmk")
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
 
-[node name="Path3D" type="Path3D" parent="."]
-curve = SubResource("Curve3D_ayuu8")
-
 [node name="PCG_4" type="Node3D" parent="."]
 script = ExtResource("1_iapjp")
 graph = SubResource("Resource_mssda")
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
 
-[node name="Scene_0000" parent="PCG_4" instance=ExtResource("7_yg6rb")]
-transform = Transform3D(-0.202695, 0, 0.979242, 0, 1, 0, -0.979242, 0, -0.202695, 0, 0, 0)
-metadata/flow_owner = &"id_0016_spawn_scenes"
-
-[node name="Scene_0001" parent="PCG_4" instance=ExtResource("7_yg6rb")]
-transform = Transform3D(-0.628816, 0, 0.777554, 0, 1, 0, -0.777554, 0, -0.628816, 1, 0, 0)
-metadata/flow_owner = &"id_0016_spawn_scenes"
-
-[node name="Scene_0002" parent="PCG_4" instance=ExtResource("7_yg6rb")]
-transform = Transform3D(-0.282614, 0, -0.959234, 0, 1, 0, 0.959234, 0, -0.282614, 2, 0, 0)
-metadata/flow_owner = &"id_0016_spawn_scenes"
-
-[node name="Scene_0003" parent="PCG_4" instance=ExtResource("7_yg6rb")]
-transform = Transform3D(-0.382643, 0, -0.923896, 0, 1, 0, 0.923896, 0, -0.382643, 3, 0, 0)
-metadata/flow_owner = &"id_0016_spawn_scenes"
-
-[node name="Scene_0004" parent="PCG_4" instance=ExtResource("7_yg6rb")]
-transform = Transform3D(0.748819, 0, -0.662774, 0, 1, 0, 0.662774, 0, 0.748819, 0, 0, 1)
-metadata/flow_owner = &"id_0016_spawn_scenes"
-
-[node name="Scene_0005" parent="PCG_4" instance=ExtResource("7_yg6rb")]
-transform = Transform3D(-0.752382, 0, -0.658728, 0, 1, 0, 0.658728, 0, -0.752382, 1, 0, 1)
-metadata/flow_owner = &"id_0016_spawn_scenes"
-
-[node name="Scene_0006" parent="PCG_4" instance=ExtResource("7_yg6rb")]
-transform = Transform3D(0.997146, 0, 0.0754969, 0, 1, 0, -0.0754969, 0, 0.997146, 2, 0, 1)
-metadata/flow_owner = &"id_0016_spawn_scenes"
-
-[node name="Scene_0007" parent="PCG_4" instance=ExtResource("7_yg6rb")]
-transform = Transform3D(0.87491, 0, -0.484285, 0, 1, 0, 0.484285, 0, 0.87491, 3, 0, 1)
-metadata/flow_owner = &"id_0016_spawn_scenes"
-
-[node name="Scene_0008" parent="PCG_4" instance=ExtResource("7_yg6rb")]
-transform = Transform3D(0.674192, 0, 0.738556, 0, 1, 0, -0.738556, 0, 0.674192, 0, 0, 2)
-metadata/flow_owner = &"id_0016_spawn_scenes"
-
-[node name="Scene_0009" parent="PCG_4" instance=ExtResource("7_yg6rb")]
-transform = Transform3D(-0.580683, 0, 0.81413, 0, 1, 0, -0.81413, 0, -0.580683, 1, 0, 2)
-metadata/flow_owner = &"id_0016_spawn_scenes"
-
-[node name="Scene_0010" parent="PCG_4" instance=ExtResource("7_yg6rb")]
-transform = Transform3D(0.600973, 0, 0.799269, 0, 1, 0, -0.799269, 0, 0.600973, 2, 0, 2)
-metadata/flow_owner = &"id_0016_spawn_scenes"
-
-[node name="Scene_0011" parent="PCG_4" instance=ExtResource("7_yg6rb")]
-transform = Transform3D(0.502327, 0, -0.864678, 0, 1, 0, 0.864678, 0, 0.502327, 3, 0, 2)
-metadata/flow_owner = &"id_0016_spawn_scenes"
-
-[node name="Scene_0012" parent="PCG_4" instance=ExtResource("7_yg6rb")]
-transform = Transform3D(-0.227381, 0, -0.973806, 0, 1, 0, 0.973806, 0, -0.227381, 0, 0, 3)
-metadata/flow_owner = &"id_0016_spawn_scenes"
-
-[node name="Scene_0013" parent="PCG_4" instance=ExtResource("7_yg6rb")]
-transform = Transform3D(0.755145, 0, 0.655558, 0, 1, 0, -0.655558, 0, 0.755145, 1, 0, 3)
-metadata/flow_owner = &"id_0016_spawn_scenes"
-
-[node name="Scene_0014" parent="PCG_4" instance=ExtResource("7_yg6rb")]
-transform = Transform3D(-0.958412, 0, 0.285387, 0, 1, 0, -0.285387, 0, -0.958412, 2, 0, 3)
-metadata/flow_owner = &"id_0016_spawn_scenes"
-
-[node name="Scene_0015" parent="PCG_4" instance=ExtResource("7_yg6rb")]
-transform = Transform3D(0.229546, 0, -0.973298, 0, 1, 0, 0.973298, 0, 0.229546, 3, 0, 3)
-metadata/flow_owner = &"id_0016_spawn_scenes"
+[node name="Path3D" type="Path3D" parent="."]
+curve = SubResource("Curve3D_ayuu8")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(3.28555, 0.0905085, -0.124378, -0.330954, 0.898526, -1.23476, 0, 0.429487, 2.60945, -0.685871, -1.56801, 0)

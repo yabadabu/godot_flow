@@ -1,3 +1,4 @@
+@tool
 extends ScrollContainer
 class_name DataTableContainer
 
@@ -21,6 +22,7 @@ class CellContents:
 
 # func drawCell( cell_pos : Vector2, width: float, row : int,  col : int ):
 var cell_contents: Callable
+var column_callback: Callable
 
 func _ready():
 	font = get_theme_default_font()
@@ -65,13 +67,19 @@ func drawCol( col_idx : int, y0 : float, row_idx : int ):
 	cell_pos.x = col_starts[ col_idx ]
 	
 	# No need to render fully clipped columns
-	if cell_pos.x > size.x || cell_pos.x + w < 0 || not cell_contents.is_valid():
+	if cell_pos.x > size.x || cell_pos.x + w < 0:
 		return
 	
 	var cell = CellContents.new()
 	cell.font_size = font_size
 	cell.row = row_idx
 	cell.col = col_idx
+	
+	if column_callback.is_valid():
+		column_callback.call( cell )
+	
+	if !cell_contents.is_valid():
+		return
 		
 	while y0 < y1:
 		#horizontallLine( y0, Color.AQUA )
@@ -85,6 +93,8 @@ func drawCol( col_idx : int, y0 : float, row_idx : int ):
 		
 
 func drawBackgrounds( y0 : float, row_idx : int ):
+	var g = 0.3
+	var bg_color_odd : Color = Color( g, g, g )
 	var w = size.x
 	var y1 := min( size.y, num_rows * line_height )
 	var pos := Vector2( 0, y0 )
@@ -93,7 +103,7 @@ func drawBackgrounds( y0 : float, row_idx : int ):
 			draw_rect( Rect2( pos, Vector2( w, line_height )), Color.CORNFLOWER_BLUE )
 		else:
 			if row_idx & 1:
-				draw_rect( Rect2( pos, Vector2( w, line_height )), Color.DIM_GRAY )
+				draw_rect( Rect2( pos, Vector2( w, line_height )), bg_color_odd )
 		pos.y = y0 + line_height - 2
 		y0 += line_height
 		row_idx += 1	

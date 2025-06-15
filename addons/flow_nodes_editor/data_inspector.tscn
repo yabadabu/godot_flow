@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://dpoyi7gu03i7v"]
+[gd_scene load_steps=3 format=3 uid="uid://dpoyi7gu03i7v"]
 
 [ext_resource type="Script" uid="uid://41lbfvspokrt" path="res://addons/flow_nodes_editor/data_inspector.gd" id="1_h15u6"]
+[ext_resource type="PackedScene" uid="uid://b5a4uh306y0de" path="res://addons/flow_nodes_editor/visualization/table_view.tscn" id="2_ehj1v"]
 
 [node name="DataInspector" type="Control"]
 layout_mode = 3
@@ -39,14 +40,9 @@ size_flags_horizontal = 3
 text = "N Datas"
 horizontal_alignment = 2
 
-[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="Columns" type="HBoxContainer" parent="VBoxContainer/ScrollContainer"]
+[node name="TableView" parent="VBoxContainer" instance=ExtResource("2_ehj1v")]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
+size_flags_horizontal = 1
 
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/BtnRefresh" to="." method="_on_btn_refresh_pressed"]

@@ -8,7 +8,6 @@ func getMeta() -> Dictionary :
 		"ins" : [],
 		"outs" : [{ "label" : "Out" }],
 	}
-	
 
 func findNodesOfType(root: Node, type_name: String) -> Array[Node]:
 	var found_nodes: Array[Node] = []
@@ -36,6 +35,7 @@ func execute( _ctx : FlowData.EvaluationContext ):
 	output.addCommonStreams( 0 )
 	var spos := output.getVector3Container( FlowData.AttrPosition )
 	var srot := output.getVector3Container( FlowData.AttrRotation )
+	var ssize := output.getVector3Container( FlowData.AttrSize )
 
 	var uniform_interval = maxf( settings.uniform_interval, 0.01 )
 
@@ -47,6 +47,7 @@ func execute( _ctx : FlowData.EvaluationContext ):
 		var num_samples = curve.get_baked_points().size()
 		spos.resize( base + num_samples )
 		srot.resize( base + num_samples )
+		ssize.resize( base + num_samples)
 		for idx in range( num_samples ):
 			var offset = idx * curve_length / float(num_samples)
 			var t : Transform3D = curve.sample_baked_with_rotation( offset )
@@ -54,5 +55,7 @@ func execute( _ctx : FlowData.EvaluationContext ):
 			
 			var b : Basis = path_3d.transform.basis * t.basis
 			srot[base + idx] = FlowData.basisToEuler( b )
+			
+			ssize[base + idx] = Vector3.ONE
 
 	set_output( 0, output )

@@ -1,5 +1,5 @@
+@tool
 extends Control
-
 @onready var tv : TableView = $TableView
 
 func getCellContents( cell : DataTableContainer.CellContents ):
@@ -12,6 +12,9 @@ func getCellContents( cell : DataTableContainer.CellContents ):
 func onCellClicked( row : int, col : int ):
 	print( "Click on cell [%d,%d]" % [ row, col ])
 	tv.setSelectedRow( row )
+
+func onTitleClicked( col : int ):
+	print( "Click on title [%d]" % [  col ])
 
 func _ready():
 	tv.clearColumns()
@@ -31,8 +34,12 @@ func _ready():
 	tv.num_rows = 20
 	tv.setRowHeight( 14 )
 	tv.cell_clicked.connect( onCellClicked )
+	tv.title_clicked.connect( onTitleClicked )
 	tv.setCellCallback( getCellContents )
 	tv.clearColumns()
 	for col in columns_names:
-		tv.addColumn( col )
+		var w = 120
+		if col == "Size.X":
+			w = 80
+		tv.addColumn( col, w )
 	tv.commitColumns()
