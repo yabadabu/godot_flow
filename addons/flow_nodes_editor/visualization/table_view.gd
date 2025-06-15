@@ -3,7 +3,7 @@ class_name TableView
 
 @onready var col_titles := %ColumnTitles
 var columns : Array[ Label ] = []
-var num_rows := 64
+var num_rows : int = 64
 var col_starts : Array[ float ] = []
 var col_widths : Array[ float ] = []
 
@@ -54,6 +54,7 @@ func splitDragged( _offset : int ):
 		col_widths.append( lbl_size.x + 2)
 	if col_starts.size() > 0:
 		col_widths[ col_widths.size() - 1 ] -= 16
+	$ScrollContainer.num_rows = num_rows
 	$ScrollContainer.col_starts = col_starts
 	$ScrollContainer.col_widths = col_widths
 	$ScrollContainer/Contents.custom_minimum_size.x = %ColumnTitles.size.x
@@ -81,6 +82,14 @@ func _ready():
 	$TitlesContainer.get_h_scroll_bar().value_changed.connect( titlesScrolled )
 	$ScrollContainer.get_h_scroll_bar().value_changed.connect( dataScrolled )
 
+func setSelectedRow( new_row : int ):
+	$ScrollContainer.selected_row = new_row
+	call_deferred( "refreshUI" )
+
+func setRowHeight( new_height : float ):
+	$ScrollContainer.font_size = new_height
+	$ScrollContainer.line_height = new_height + 4
+	
 func _on_contents_gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT:
@@ -88,6 +97,6 @@ func _on_contents_gui_input(event: InputEvent) -> void:
 				var ex = event.position.x - $ScrollContainer.scroll_horizontal
 				for col in range(col_starts.size()-1):
 					if ex >= col_starts[ col ] and ex < col_starts[ col+ 1 ]:
-						var row = int( ( event.position.y - 3 ) / $ScrollContainer.line_height )
+						var row = int( ( event.position.y ) / $ScrollContainer.line_height )
 						cell_clicked.emit( row, col )
 						break 

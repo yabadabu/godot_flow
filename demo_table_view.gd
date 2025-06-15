@@ -11,6 +11,7 @@ func getCellContents( cell : DataTableContainer.CellContents ):
 
 func onCellClicked( row : int, col : int ):
 	print( "Click on cell [%d,%d]" % [ row, col ])
+	tv.setSelectedRow( row )
 
 func _ready():
 	tv.clearColumns()
@@ -27,6 +28,8 @@ func _ready():
 		"Extends.Z", 
 		"Resource Name", 
 	]
+	tv.num_rows = 20
+	tv.setRowHeight( 14 )
 	tv.cell_clicked.connect( onCellClicked )
 	tv.setCellCallback( getCellContents )
 	tv.clearColumns()

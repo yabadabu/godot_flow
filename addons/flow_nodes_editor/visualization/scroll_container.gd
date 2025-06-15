@@ -5,13 +5,17 @@ var col_starts : Array[ float ] = []
 var col_widths : Array[ float ] = []	
 var line_height : int = 0
 var font : Font
+var num_rows : int = 0
 var selected_row : int = -1
+var font_size : int = 16
 
 class CellContents:
 	var row : int
 	var col : int
 	var text : String
 	var alignment : HorizontalAlignment
+	var font_size : int = 16
+	var color : Color = Color.WHITE
 
 # func drawCell( cell_pos : Vector2, width: float, row : int,  col : int ):
 var cell_contents: Callable
@@ -43,7 +47,7 @@ func horizontallLine( y0 : int, color : Color ):
 	draw_line( p0, p1, color )
 
 func drawCell( cell_pos : Vector2, width: float, cell : CellContents ):
-	draw_string( font, cell_pos, cell.text, cell.alignment, width  )
+	draw_string( font, cell_pos, cell.text, cell.alignment, width, cell.font_size, cell.color  )
 		
 func drawVerticalLines():
 	for idx in range( col_starts.size() ):
@@ -53,7 +57,7 @@ func drawVerticalLines():
 		#verticalLine( x0 + col_widths[idx], Color.WHITE )	
 
 func drawCol( col_idx : int, y0 : float, row_idx : int ):
-	var y1 := size.y
+	var y1 := min( size.y, num_rows * line_height )
 	var cell_pos := Vector2( 0, y0 )
 	var w = col_widths[ col_idx ]
 	cell_pos.x = col_starts[ col_idx ]
@@ -63,12 +67,13 @@ func drawCol( col_idx : int, y0 : float, row_idx : int ):
 		return
 	
 	var cell = CellContents.new()
+	cell.font_size = font_size
 	cell.row = row_idx
 	cell.col = col_idx
 		
 	while y0 < y1:
 		#horizontallLine( y0, Color.AQUA )
-		cell_pos.y = y0 + line_height - 6
+		cell_pos.y = y0 + line_height / 3 * 2
 	
 		cell_contents.call( cell )
 		drawCell( cell_pos, w, cell )
@@ -79,14 +84,17 @@ func drawCol( col_idx : int, y0 : float, row_idx : int ):
 
 func drawBackgrounds( y0 : float, row_idx : int ):
 	var w = size.x
-	var y1 := size.y
+	var y1 := min( size.y, num_rows * line_height )
 	var pos := Vector2( 0, y0 )
 	while y0 < y1:
-		if row_idx & 1:
-			draw_rect( Rect2( pos + Vector2( 0, 3 ), Vector2( w, line_height - 2 )), Color.DIM_GRAY )
+		if row_idx == selected_row:
+			draw_rect( Rect2( pos, Vector2( w, line_height )), Color.CORNFLOWER_BLUE )
+		else:
+			if row_idx & 1:
+				draw_rect( Rect2( pos, Vector2( w, line_height )), Color.DIM_GRAY )
 		pos.y = y0 + line_height - 2
 		y0 += line_height
-		row_idx += 1		
+		row_idx += 1	
 
 func _draw():
 	if col_starts.size() == 0:
