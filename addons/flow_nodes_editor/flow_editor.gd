@@ -495,6 +495,7 @@ func removeGeneratedNodes():
 
 func evalGraph():
 	ctx.owner = resource_owner
+	ctx.graph = current_resource
 	ctx.eval_id += 1
 	
 	print( "evalGraph %d starts from %s" % [ ctx.eval_id, resource_owner.name if resource_owner else "null" ] )
