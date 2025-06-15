@@ -44,3 +44,5 @@ layout_mode = 2
 [node name="Sumary" type="Label" parent="."]
 layout_mode = 2
 text = "Sumary"
+
+[connection signal="gui_input" from="ScrollContainer/Contents" to="ScrollContainer" method="_on_contents_gui_input"]

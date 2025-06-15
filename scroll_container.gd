@@ -15,6 +15,8 @@ class CellContents:
 # func drawCell( cell_pos : Vector2, width: float, row : int,  col : int ):
 var cell_contents: Callable
 
+signal on_cell_clicked( row : int, col : int )
+
 func _ready():
 	font = get_theme_default_font()
 	var hbar = get_h_scroll_bar()
@@ -73,7 +75,7 @@ func drawCol( col_idx : int, y0 : float, row_idx : int ):
 		drawCell( cell_pos, w, cell )
 		
 		y0 += line_height
-		row_idx += 1	
+		cell.row += 1	
 		
 
 func drawBackgrounds( y0 : float, row_idx : int ):
@@ -108,3 +110,14 @@ func _draw():
 		drawCol( col, y0, row_idx )
 
 	drawVerticalLines()
+
+func _on_contents_gui_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_LEFT:
+			if event.pressed:
+				var ex = event.position.x - scroll_horizontal
+				for col in range(col_starts.size()-1):
+					if ex >= col_starts[ col ] and ex < col_starts[ col+ 1 ]:
+						var row = int( ( event.position.y - 3 ) / line_height )
+						on_cell_clicked.emit( row, col )
+						break 

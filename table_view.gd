@@ -74,10 +74,14 @@ func getCellContents( cell : DataTableContainer.CellContents ):
 	else:
 		cell.alignment = HORIZONTAL_ALIGNMENT_RIGHT
 
+func onCellClicked( row : int, col : int ):
+	print( "Click on cell [%d,%d]" % [ row, col ])
+
 func _ready():
 	$TitlesContainer.get_h_scroll_bar().value_changed.connect( titlesScrolled )
 	$ScrollContainer.get_h_scroll_bar().value_changed.connect( dataScrolled )
 	$ScrollContainer.cell_contents = getCellContents
+	$ScrollContainer.on_cell_clicked.connect( onCellClicked )
 	clearColumns()
 	addColumn( "Position.X" )
 	addColumn( "Position.Y" )
