@@ -21,6 +21,7 @@ func addColumn( text : String ):
 
 	var lbl = Label.new()
 	lbl.text = text
+	lbl.add_theme_font_size_override("font_size", 14)
 	lbl.custom_minimum_size = Vector2( 20, 0 )
 
 	var child_count = parent.get_child_count()

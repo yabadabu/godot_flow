@@ -5,7 +5,6 @@
 [node name="Separator" type="ColorRect"]
 custom_minimum_size = Vector2(5, 0)
 mouse_default_cursor_shape = 15
-color = Color(0.25098, 0.25098, 0.25098, 1)
 script = ExtResource("1_osrar")
 
 [connection signal="gui_input" from="." to="." method="_on_gui_input"]

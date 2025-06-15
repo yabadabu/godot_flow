@@ -9,6 +9,8 @@ var num_rows : int = 0
 var selected_row : int = -1
 var font_size : int = 16
 
+var vertical_lines_color = Color.WHITE
+
 class CellContents:
 	var row : int
 	var col : int
@@ -52,7 +54,7 @@ func drawCell( cell_pos : Vector2, width: float, cell : CellContents ):
 func drawVerticalLines():
 	for idx in range( col_starts.size() ):
 		var x0 = col_starts[idx]
-		verticalLine( x0 - 6, Color.GREEN_YELLOW )
+		verticalLine( x0 - 6, vertical_lines_color )
 		#verticalLine( x0, Color.GREEN_YELLOW )
 		#verticalLine( x0 + col_widths[idx], Color.WHITE )	
 
