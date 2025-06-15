@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://c1b6ke05vpb8r"]
+[gd_scene load_steps=39 format=3 uid="uid://c1b6ke05vpb8r"]
 
 [ext_resource type="Script" uid="uid://dsft6ocvh7yuk" path="res://demo_scene.gd" id="1_1hm1i"]
 [ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_iapjp"]
@@ -14,6 +14,10 @@
 [ext_resource type="Script" uid="uid://7g705n2fjnlr" path="res://addons/flow_nodes_editor/user_resource.gd" id="10_ragla"]
 [ext_resource type="Script" uid="uid://c0ql72e1bbdqo" path="res://my_meshes.gd" id="11_qmojn"]
 [ext_resource type="Script" uid="uid://cchxntewglwb0" path="res://addons/flow_nodes_editor/nodes/assets_settings.gd" id="12_scy3m"]
+[ext_resource type="Script" uid="uid://dm55x0bp4p6a0" path="res://addons/flow_nodes_editor/nodes/match_and_set_settings.gd" id="13_nfkfi"]
+[ext_resource type="BoxMesh" uid="uid://7flu82pqtc5d" path="res://addons/flow_nodes_editor/resources/unit_cube.tres" id="14_5hhy1"]
+[ext_resource type="Script" uid="uid://bnpohx6mm4hdh" path="res://addons/flow_nodes_editor/nodes/spawn_meshes_settings.gd" id="15_8ei73"]
+[ext_resource type="Script" uid="uid://cnhqpivgscgff" path="res://addons/flow_nodes_editor/nodes/select_settings.gd" id="16_cyigx"]
 
 [sub_resource type="Resource" id="Resource_ragla"]
 script = ExtResource("6_h7mfa")
@@ -39,6 +43,39 @@ metadata/_custom_type_script = "uid://co0f3ugd2wj1y"
 script = ExtResource("6_1hljp")
 inputs = Array[ExtResource("6_h7mfa")]([SubResource("Resource_ragla"), SubResource("Resource_h7mfa")])
 metadata/_custom_type_script = "uid://ctvo7a7lud8bn"
+
+[sub_resource type="Resource" id="Resource_sxiuf"]
+resource_name = "Grid Settings"
+script = ExtResource("6_mssda")
+x = 8
+y = 1
+z = 8
+step = Vector3(1, 1, 1)
+random_seed = 102748684
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+title = "Grid"
+enabled = true
+
+[sub_resource type="Resource" id="Resource_6qj3o"]
+resource_name = "Transform Settings"
+script = ExtResource("9_6qj3o")
+offset_min = Vector3(0, 0, 0)
+offset_max = Vector3(0, 0.02, 0)
+rotation_min = Vector3(0, 0.14, 0)
+rotation_max = Vector3(0, 360, 0)
+scale_min = Vector3(1, 1, 1)
+scale_max = Vector3(1.25, 1.81, 1.17)
+uniform_scale = false
+random_seed = 2631886296
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+title = "Transform"
+enabled = true
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_tap1b"]
 
@@ -70,47 +107,46 @@ debug_scale = 1.0
 title = "Assets"
 enabled = true
 
-[sub_resource type="Resource" id="Resource_sxiuf"]
-resource_name = "Grid Settings"
-script = ExtResource("6_mssda")
-x = 8
-y = 1
-z = 8
-step = Vector3(1, 1, 1)
-random_seed = 102748684
+[sub_resource type="Resource" id="Resource_mhui6"]
+resource_name = "Match And Set"
+script = ExtResource("13_nfkfi")
+weight_attr = "weight"
+random_seed = 606395321
 inspect_enabled = false
 debug_enabled = false
 debug_mode = 0
 debug_scale = 1.0
-title = "Grid"
+title = "Match And Set"
 enabled = true
 
-[sub_resource type="Resource" id="Resource_6qj3o"]
-resource_name = "Transform Settings"
-script = ExtResource("9_6qj3o")
-offset_min = Vector3(0, 0, 0)
-offset_max = Vector3(0, 0.02, 0)
-rotation_min = Vector3(0, 0.14, 0)
-rotation_max = Vector3(0, 360, 0)
-scale_min = Vector3(1, 1, 1)
-scale_max = Vector3(1.25, 1.81, 1.17)
-uniform_scale = false
-random_seed = 2631886296
-inspect_enabled = true
+[sub_resource type="Resource" id="Resource_gh461"]
+resource_name = "Spawn Meshes Settings"
+script = ExtResource("15_8ei73")
+mesh = ExtResource("14_5hhy1")
+mesh_attribute = "asset"
+random_seed = 4017424819
+inspect_enabled = false
 debug_enabled = false
 debug_mode = 0
 debug_scale = 1.0
-title = "Transform"
+title = "Spawn Meshes"
+enabled = true
+
+[sub_resource type="Resource" id="Resource_ntvxq"]
+resource_name = "Select Settings"
+script = ExtResource("16_cyigx")
+ratio = 0.516
+random_seed = 1537657574
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+title = "Select"
 enabled = true
 
 [sub_resource type="Resource" id="Resource_mssda"]
 script = ExtResource("6_4qc3i")
 nodes = Array[Dictionary]([{
-"name": &"id_0019_assets",
-"position_offset": Vector2(200, 900),
-"settings": SubResource("Resource_cyigx"),
-"template": "assets"
-}, {
 "name": &"id_0013_grid",
 "position_offset": Vector2(0, 280),
 "settings": SubResource("Resource_sxiuf"),
@@ -120,6 +156,26 @@ nodes = Array[Dictionary]([{
 "position_offset": Vector2(300, 280),
 "settings": SubResource("Resource_6qj3o"),
 "template": "transform"
+}, {
+"name": &"id_0019_assets",
+"position_offset": Vector2(320, 940),
+"settings": SubResource("Resource_cyigx"),
+"template": "assets"
+}, {
+"name": &"id_0021_match_and_set",
+"position_offset": Vector2(780, 480),
+"settings": SubResource("Resource_mhui6"),
+"template": "match_and_set"
+}, {
+"name": &"id_0024_spawn_meshes",
+"position_offset": Vector2(1380, 620),
+"settings": SubResource("Resource_gh461"),
+"template": "spawn_meshes"
+}, {
+"name": &"id_0025_select",
+"position_offset": Vector2(1173.64, 368.48),
+"settings": SubResource("Resource_ntvxq"),
+"template": "select"
 }])
 conns = Array[Dictionary]([{
 "from_node": &"id_0013_grid",
@@ -127,12 +183,48 @@ conns = Array[Dictionary]([{
 "keep_alive": false,
 "to_node": &"id_0015_transform",
 "to_port": 0
+}, {
+"from_node": &"id_0015_transform",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0021_match_and_set",
+"to_port": 0
+}, {
+"from_node": &"id_0019_assets",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0021_match_and_set",
+"to_port": 1
+}, {
+"from_node": &"id_0021_match_and_set",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0025_select",
+"to_port": 0
+}, {
+"from_node": &"id_0025_select",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0024_spawn_meshes",
+"to_port": 0
 }])
 view_zoom = 1.0
-view_offset = Vector2(0, -23.04)
-new_name_counter = 19
+view_offset = Vector2(848.64, -59.52)
+new_name_counter = 25
 inputs = SubResource("Resource_qmojn")
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
+
+[sub_resource type="MultiMesh" id="MultiMesh_odeuj"]
+transform_format = 1
+instance_count = 15
+mesh = SubResource("PlaneMesh_tap1b")
+buffer = PackedFloat32Array(-0.780598, 0, 0.962147, 1, 0, 1.19008, 0, 0.00153108, -0.792267, 0, -0.642773, 0, -0.454681, 0, -1.10021, 3, 0, 1.13074, 0, 0.00651461, 1.0526, 0, -0.435006, 0, 0.676045, 0, 0.743746, 0, 0, 1.65043, 0, 0.0181319, -0.791991, 0, 0.719899, 1, 0.249585, 0, -1.0558, 7, 0, 1.39823, 0, 0.0119694, 1.09182, 0, 0.2581, 1, 1.09658, 0, -0.555063, 3, 0, 1.40793, 0, 0.00688284, 0.48939, 0, 0.966838, 2, 1.06383, 0, -0.597048, 2, 0, 1.61634, 0, 0.011602, 0.519045, 0, 0.924841, 3, -0.478729, 0, -1.07318, 4, 0, 1.10363, 0, 0.00196689, 0.94862, 0, -0.423164, 3, 0.426385, 0, -1.11716, 5, 0, 1.75823, 0, 0.00611294, 1.06127, 0, 0.405053, 4, 0.256688, 0, -0.967973, 3, 0, 1.5344, 0, 0.0165758, 1.0164, 0, 0.26953, 5, -0.73662, 0, 0.840201, 7, 0, 1.56637, 0, 0.00121537, -0.851632, 0, -0.746643, 5, -0.34284, 0, -1.05938, 2, 0, 1.69279, 0, 0.0155466, 1.09497, 0, -0.354357, 6, -0.257559, 0, -1.10347, 5, 0, 1.7736, 0, 0.00970112, 1.01986, 0, -0.238044, 6, 1.06011, 0, 0.648215, 2, 0, 1.04987, 0, 0.00542608, -0.541821, 0, 0.88611, 7, -0.287807, 0, -0.971948, 4, 0, 1.35446, 0, 0.0113521, 1.02814, 0, -0.304446, 7, 0.228775, 0, 1.09425, 7, 0, 1.77263, 0, 0.0113093, -1.12757, 0, 0.235741, 7)
+
+[sub_resource type="MultiMesh" id="MultiMesh_5r23a"]
+transform_format = 1
+instance_count = 18
+mesh = SubResource("BoxMesh_5hhy1")
+buffer = PackedFloat32Array(0.785871, 0, -0.695174, 4, 0, 1.32066, 0, 0.0153205, 0.707184, 0, 0.799448, 0, -0.811932, 0, -0.712217, 5, 0, 1.59622, 0, 0.00590284, 0.675813, 0, -0.770431, 0, 0.930768, 0, -0.514964, 7, 0, 1.64186, 0, 0.0188327, 0.550754, 0, 0.995457, 0, -0.652149, 0, 0.911256, 1, 0, 1.60616, 0, 0.0197155, -0.852785, 0, -0.610303, 1, 0.666441, 0, 0.890194, 2, 0, 1.43338, 0, 0.0190838, -0.834737, 0, 0.624924, 1, 0.588129, 0, -1.01143, 3, 0, 1.55925, 0, 0.010061, 0.907165, 0, 0.527503, 1, 0.670299, 0, 0.862396, 1, 0, 1.56826, 0, 0.0152886, -0.835652, 0, 0.649512, 2, 0.61192, 0, -1.04661, 4, 0, 1.42108, 0, 0.000777934, 0.985155, 0, 0.575988, 2, -1.10799, 0, 0.0193306, 3, 0, 1.42952, 0, 0.00640235, -0.0185346, 0, -1.06236, 3, 1.1478, 0, 0.462293, 5, 0, 1.34146, 0, 0.0131982, -0.418487, 0, 1.03903, 3, -0.344655, 0, 0.951629, 6, 0, 1.33334, 0, 0.0137813, -0.966035, 0, -0.349873, 3, 0.38912, 0, 0.935529, 1, 0, 1.68095, 0, 0.0095414, -1.06843, 0, 0.444398, 4, -1.00892, 0, 0.210003, 1, 0, 1.56394, 0, 0.0160259, -0.226001, 0, -1.08578, 5, -0.518938, 0, 0.87266, 4, 0, 1.23085, 0, 0.0046251, -1.00114, 0, -0.595342, 5, -0.198497, 0, 0.982897, 6, 0, 1.25632, 0, 0.0148048, -1.00786, 0, -0.203538, 5, 1.02178, 0, -0.441893, 3, 0, 1.43407, 0, 0.00681421, 0.41178, 0, 0.952152, 6, 1.00288, 0, 0.134878, 7, 0, 1.21864, 0, 0.00143969, -0.15005, 0, 1.11569, 6, 1.00758, 0, -0.511427, 1, 0, 1.63673, 0, 0.00773683, 0.473981, 0, 0.933808, 7)
 
 [sub_resource type="Curve3D" id="Curve3D_ayuu8"]
 closed = true
@@ -181,6 +273,14 @@ metadata/_custom_type_script = "uid://d1krtmb1urldl"
 script = ExtResource("1_iapjp")
 graph = SubResource("Resource_mssda")
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
+
+[node name="@MultiMeshInstance3D@47393" type="MultiMeshInstance3D" parent="PCG_4"]
+multimesh = SubResource("MultiMesh_odeuj")
+metadata/flow_owner = &"id_0024_spawn_meshes"
+
+[node name="@MultiMeshInstance3D@47394" type="MultiMeshInstance3D" parent="PCG_4"]
+multimesh = SubResource("MultiMesh_5r23a")
+metadata/flow_owner = &"id_0024_spawn_meshes"
 
 [node name="Path3D" type="Path3D" parent="."]
 curve = SubResource("Curve3D_ayuu8")
