@@ -93,7 +93,7 @@ func refreshDebugMark():
 
 func refreshInspectMark():
 	redrawUI()
-
+	
 func refreshFromSettings():
 	refreshDebugMark()
 	refreshInspectMark()
@@ -170,7 +170,7 @@ func editorDisplayName(property_name: String) -> String:
 		parts[i] = parts[i].capitalize()
 	return " ".join(parts)
 
-func getColorForGDScriptType( gd_type : int ):
+func getColorForGDScriptType( gd_type : int ) -> Color:
 	match( gd_type ):
 		TYPE_STRING:
 			return Color.YELLOW
@@ -183,6 +183,20 @@ func getColorForGDScriptType( gd_type : int ):
 		TYPE_FLOAT:
 			return Color.WEB_GREEN
 	return Color.WHEAT
+
+func getGdScriptTypeForFlowDataType( data_type : FlowData.DataType ) -> int:
+	match( data_type ):
+		FlowData.DataType.Float:
+			return TYPE_FLOAT
+		FlowData.DataType.String:
+			return TYPE_STRING
+		FlowData.DataType.Bool:
+			return TYPE_BOOL
+		#FlowData.DataType.Int:
+			#return TYPE_INT
+		FlowData.DataType.Vector:
+			return TYPE_VECTOR3
+	return TYPE_NIL
 
 func initFromScript():
 	var meta = call("getMeta")

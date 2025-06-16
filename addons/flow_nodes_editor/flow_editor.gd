@@ -89,10 +89,13 @@ func setResourceToEdit( new_resource : FlowGraphResource, new_resource_owner : N
 		new_name_counter = current_resource.new_name_counter
 
 		for input in current_resource.inputs.inputs:
+			print( "Regiistering get_graph_input %s" % input.name )
 			var node_type_name := "input_%s" % input.name
 			registerNodeType( node_type_name, "input.gd")
+			print( "done" )
 
 	queueRegen()
+	ctx.graph = current_resource
 	print( "regen_pending is now true (%d)" % [num_non_nodes_children])
 
 func saveResource():
@@ -269,11 +272,12 @@ func localToGraphCoords( local_coords : Vector2 ):
 	return ( gedit.scroll_offset + local_coords ) / gedit.zoom
 
 func addNodeFromTemplate( node_template, node_name : String, settings = null ):
-	print( "addNode %s" % node_template)
+	print( "addNode %s (%s : %s)" % [ node_template, node_name, str(settings) ])
 	var node = packed_node.instantiate() as GraphNode
 	var meta = node_types.get( node_template, null )
 	if not meta:
 		push_error("node_type %s is not registered" % node_template)
+		print( node_types.keys() )
 		return null	
 	print( "Meta:", str(meta) )
 		
@@ -297,6 +301,7 @@ func addNodeFromTemplate( node_template, node_name : String, settings = null ):
 	node.title = node.getTitle()
 	node.size = Vector2(32,32)
 	node.tooltip_text = meta.get( "tooltip", "" )
+	node.refreshFromSettings()
 	gedit.add_child(node)
 	gedit_nodes_by_name[ node.name ] = node
 	return node
@@ -408,6 +413,7 @@ func _on_inputs_menu_id_pressed(id: int) -> void:
 	print( "Creating a input node: %s (%d) -> %s" % [ input.name, input.data_type, node_type] )
 	var settings := InputNodeSettings.new()
 	settings.name = input.name
+	settings.data_type = input.data_type
 	addNode( node_type, settings )
 
 func _on_popup_menu_id_pressed(id: int) -> void:
@@ -495,7 +501,6 @@ func removeGeneratedNodes():
 
 func evalGraph():
 	ctx.owner = resource_owner
-	ctx.graph = current_resource
 	ctx.eval_id += 1
 	
 	print( "evalGraph %d starts from %s" % [ ctx.eval_id, resource_owner.name if resource_owner else "null" ] )
