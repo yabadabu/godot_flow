@@ -120,7 +120,7 @@ func setSelectedRow( new_row : int ):
 
 func setRowHeight( new_height : float ):
 	$ScrollContainer.font_size = new_height
-	$ScrollContainer.line_height = new_height + 16
+	$ScrollContainer.line_height = new_height * 1.4
 	
 func findColAtX( ex : float ):
 	ex -= $ScrollContainer.scroll_horizontal

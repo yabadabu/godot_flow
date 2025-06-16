@@ -149,7 +149,8 @@ func refresh():
 		# Index column
 		tv.addColumn( "Index", 0 )
 		tv.num_rows = num_rows
-		tv.setRowHeight( 26 )
+		var row_height := get_theme_default_font_size()
+		tv.setRowHeight( row_height )
 		for title in col_titles:
 			tv.addColumn( title, 120 )
 	tv.commitColumns()
