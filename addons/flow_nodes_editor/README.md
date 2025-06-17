@@ -1,5 +1,8 @@
 === TODO
 
+[ ] input nodes are not restored correctly
+[ ] use inputs on all settings
+[ ] support for bools
 [ ] store sizes
 [ ] store color
 [ ] display density/color in debug
