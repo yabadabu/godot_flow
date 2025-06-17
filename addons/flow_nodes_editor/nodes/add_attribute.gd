@@ -21,9 +21,9 @@ func execute( _ctx : FlowData.EvaluationContext ):
 				
 		FlowData.DataType.Bool:
 			var new_val : bool = settings.cte_bool
-			var sout : PackedInt32Array = out_data.addStream( settings.name, settings.data_type )
+			var sout : PackedByteArray = out_data.addStream( settings.name, settings.data_type )
 			for i in sout.size():
-				sout[i] = new_val
+				sout[i] = 1 if new_val else 0
 				
 		FlowData.DataType.Int:
 			var new_val : int = settings.cte_int
@@ -54,5 +54,5 @@ func execute( _ctx : FlowData.EvaluationContext ):
 			var sout : Array[Resource] = out_data.addStream( settings.name, settings.data_type )
 			for i in sout.size():
 				sout[i] = new_val
-
+				
 	set_output( 0, out_data )

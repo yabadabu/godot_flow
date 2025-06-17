@@ -1,8 +1,9 @@
 === TODO
 
 [X] input nodes are not restored correctly
+[ ] Promote input pin to graph input
 [ ] use inputs on all settings
-[ ] support for bools
+[X] support for bools
 [ ] store sizes
 [ ] store color
 [ ] display density/color in debug

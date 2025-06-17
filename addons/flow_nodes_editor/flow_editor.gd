@@ -34,6 +34,7 @@ var new_name_counter : int = 0
 # Ranges for the menu
 var min_id = 1000
 var max_id = min_id
+var menu_ids : Dictionary = {}
 
 var comment_padding = Vector2( 40, 40 )
 
@@ -160,6 +161,7 @@ func scanAvailableNodes():
 func populatePopupMenu():
 	min_id = 1000
 	max_id = min_id
+	menu_ids = {}
 	
 	#gedit.theme.ac = Color( 1, 0.5, 0.5 );
 	var pm := PopupMenu.new()
@@ -183,11 +185,13 @@ func populatePopupMenu():
 	
 	for key in node_types.keys():
 		var node_type = node_types[ key ]
+		var label = node_type.title
 		max_id += 1
-		var label = node_types[ key ].title
 		if not node_type.get( "auto_register", true):
+			print( "Adding menu %s skip (id:%d)" % [ label, max_id ])
 			continue
-		#print( "Adding menu", label)
+		print( "Adding menu %s -> %d" % [ label, max_id ])
+		menu_ids[ max_id ] = key
 		pm.add_item(label, max_id, KEY_NONE )
 	return pm
 
@@ -421,9 +425,8 @@ func _on_inputs_menu_id_pressed(id: int) -> void:
 	addNode( node_type, settings )
 
 func _on_popup_menu_id_pressed(id: int) -> void:
-	if id >= min_id && id < max_id:
-		var idx = id - min_id
-		var key = node_types.keys()[ idx ]
+	if menu_ids.has( id ):
+		var key = menu_ids[ id ]
 		addNode( key )
 	else:
 		# Highlight the connection...
