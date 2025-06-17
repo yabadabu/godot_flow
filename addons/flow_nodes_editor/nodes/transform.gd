@@ -21,7 +21,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 	var rotation_max : Vector3 = getSettingValue( ctx, "rotation_max" )
 	var scale_min : Vector3 = getSettingValue( ctx, "scale_min" )
 	var scale_max : Vector3 = getSettingValue( ctx, "scale_max" )
-	var uniform_scale : bool = settings.uniform_scale
+	var uniform_scale : bool = getSettingValue( ctx, "uniform_scale" )
 	for i in spos.size():
 		var amount_pos = Vector3( rng.randf(), rng.randf(), rng.randf() )
 		var basis := FlowData.eulerToBasis( srot[i] )

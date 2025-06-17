@@ -1,6 +1,6 @@
 === TODO
 
-[ ] input nodes are not restored correctly
+[X] input nodes are not restored correctly
 [ ] use inputs on all settings
 [ ] support for bools
 [ ] store sizes

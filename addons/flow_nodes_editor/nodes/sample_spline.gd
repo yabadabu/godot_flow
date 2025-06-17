@@ -22,7 +22,7 @@ func findNodesOfType(root: Node, type_name: String) -> Array[Node]:
 	
 	return found_nodes	
 
-func execute( _ctx : FlowData.EvaluationContext ):
+func execute( ctx : FlowData.EvaluationContext ):
 	
 	var root = EditorInterface.get_edited_scene_root()
 	if not root:
@@ -37,7 +37,8 @@ func execute( _ctx : FlowData.EvaluationContext ):
 	var srot := output.getVector3Container( FlowData.AttrRotation )
 	var ssize := output.getVector3Container( FlowData.AttrSize )
 
-	var uniform_interval = maxf( settings.uniform_interval, 0.01 )
+	var uniform_interval = getSettingValue( ctx, "uniform_interval" )
+	uniform_interval = maxf( uniform_interval, 0.01 )
 
 	for path_3d in path3d_nodes:
 		var curve : Curve3D = path_3d.curve

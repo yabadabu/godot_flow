@@ -11,6 +11,7 @@ extends NodeSettings
 		notify_property_list_changed()
 		
 @export var cte_bool: bool = false
+@export var cte_int : int = 0
 @export var cte_float : float = 0.0
 @export var cte_vector : Vector3 = Vector3.ZERO
 @export var cte_resource : Resource

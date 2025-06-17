@@ -169,7 +169,7 @@ func shuffleArray(arr: Array) -> void:
 		arr[i] = arr[j]
 		arr[j] = temp
 
-func editorDisplayName(property_name: String) -> String:
+static func editorDisplayName(property_name: String) -> String:
 	var parts = property_name.split("_")
 	for i in parts.size():
 		parts[i] = parts[i].capitalize()
@@ -177,28 +177,28 @@ func editorDisplayName(property_name: String) -> String:
 
 func getColorForGDScriptType( gd_type : int ) -> Color:
 	match( gd_type ):
-		TYPE_STRING:
-			return Color.YELLOW
 		TYPE_BOOL:
 			return Color.RED
 		TYPE_INT:
 			return Color.CYAN
-		TYPE_VECTOR3:
-			return Color.BLUE_VIOLET
 		TYPE_FLOAT:
 			return Color.WEB_GREEN
+		TYPE_VECTOR3:
+			return Color.BLUE_VIOLET
+		TYPE_STRING:
+			return Color.YELLOW
 	return Color.WHEAT
 
 func getGdScriptTypeForFlowDataType( data_type : FlowData.DataType ) -> int:
 	match( data_type ):
+		FlowData.DataType.Bool:
+			return TYPE_BOOL
+		FlowData.DataType.Int:
+			return TYPE_INT
 		FlowData.DataType.Float:
 			return TYPE_FLOAT
 		FlowData.DataType.String:
 			return TYPE_STRING
-		FlowData.DataType.Bool:
-			return TYPE_BOOL
-		#FlowData.DataType.Int:
-			#return TYPE_INT
 		FlowData.DataType.Vector:
 			return TYPE_VECTOR3
 	return TYPE_NIL

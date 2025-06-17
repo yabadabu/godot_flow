@@ -3,6 +3,7 @@ class_name FlowData
 
 enum DataType {
 	Bool,
+	Int,
 	Float,
 	Vector,
 	String,
@@ -46,6 +47,8 @@ class Data:
 		match data_type:
 			DataType.Bool:
 				return PackedByteArray()
+			DataType.Int:
+				return PackedInt32Array()
 			DataType.Float:
 				return PackedFloat32Array()
 			DataType.Vector:
@@ -181,11 +184,13 @@ class Data:
 		match prev_stream.data_type:
 			DataType.Bool:
 				new_container = PackedByteArray( prev_stream.container )
+			DataType.Int:
+				new_container = PackedInt32Array( prev_stream.container )
 			DataType.Float:
 				new_container = PackedFloat32Array( prev_stream.container )
 			DataType.Vector:
 				new_container = PackedVector3Array( prev_stream.container )		
-			_:
+			_:  # String, Resource
 				new_container = prev_stream.container.duplicate()	
 		prev_stream.container = new_container
 		return new_container
@@ -197,6 +202,14 @@ class Data:
 			DataType.Bool:
 				var old_container : PackedByteArray = old_stream.container
 				var new_container := PackedByteArray( )
+				new_container.resize( new_size )
+				for idx in range( new_size ):
+					new_container[idx] = old_container[ indices[idx] ]
+				return new_container
+				
+			DataType.Int:
+				var old_container : PackedInt32Array = old_stream.container
+				var new_container := PackedInt32Array( )
 				new_container.resize( new_size )
 				for idx in range( new_size ):
 					new_container[idx] = old_container[ indices[idx] ]

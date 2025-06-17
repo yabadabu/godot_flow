@@ -10,11 +10,15 @@ func _init():
 		"tooltip" :"Filter inputs by the ratio.\nSo when ratio = 0.2, only 20% of the input points will appear in the output.",
 	}
 
-func execute( _ctx : FlowData.EvaluationContext ):
+func execute( ctx : FlowData.EvaluationContext ):
 	var in_data : FlowData.Data = get_input(0)
 	#in_data.dump( "Select.Input")
 	var in_size = in_data.size()
-	var out_size = round(in_size * settings.ratio)
+	
+	var ratio = getSettingValue(ctx, "ratio")
+	ratio = clamp( ratio, 0.0, 1.0 )
+	
+	var out_size = round(in_size * ratio)
 	#print( "Select: From %d, took %1.2f%% -> %d" % [ in_size, settings.ratio, out_size ])
 	
 	var pool := range(in_size)

@@ -23,9 +23,9 @@ func findInputInCtx( ctx : FlowData.EvaluationContext ):
 
 func refreshFromSettings():
 	super.refreshFromSettings()
-	print( "settings.data_type", settings.data_type)
+	#print( "settings.data_type", settings.data_type)
 	var gd_type := getGdScriptTypeForFlowDataType( settings.data_type )
-	print( "gd_type", gd_type)
+	#print( "gd_type", gd_type)
 	var color := getColorForGDScriptType( gd_type )
 	set_slot_color_right( 0, color )
 
@@ -37,24 +37,41 @@ func execute( ctx : FlowData.EvaluationContext ):
 	
 	var input = findInputInCtx( ctx )
 	if not input:
-		setError( "%s is not a valid input of the flow graph")
+		setError( "%s is not a valid input of the flow graph" % settings.name)
 		return
 	
 	var output := FlowData.Data.new()
-	if input.data_type == FlowData.DataType.Float:
-		var container : PackedFloat32Array = output.addStream( settings.name, input.data_type )
-		if container == null:
-			setError( "Invalid name %s or data_type %d" % [settings.name, input.data_type ])
-			return
-		container.resize( 1 )
-		container[0] = input.cte_float
+	match input.data_type:
+		FlowData.DataType.Bool:
+			var container : PackedByteArray = output.addStream( settings.name, input.data_type )
+			if container == null:
+				setError( "Invalid name %s or data_type %d (bool)" % [settings.name, input.data_type ])
+				return
+			container.resize( 1 )
+			container[0] = 1 if input.cte_bool else 0
+			
+		FlowData.DataType.Int:
+			var container : PackedInt32Array = output.addStream( settings.name, input.data_type )
+			if container == null:
+				setError( "Invalid name %s or data_type %d (int)" % [settings.name, input.data_type ])
+				return
+			container.resize( 1 )
+			container[0] = input.cte_int
 		
-	elif input.data_type == FlowData.DataType.Vector:
-		var container : PackedVector3Array = output.addStream( settings.name, input.data_type )
-		if container == null:
-			setError( "Invalid name %s or data_type %d" % [settings.name, input.data_type ])
-			return
-		container.resize( 1 )
-		container[0] = input.cte_vector
+		FlowData.DataType.Float:
+			var container : PackedFloat32Array = output.addStream( settings.name, input.data_type )
+			if container == null:
+				setError( "Invalid name %s or data_type %d (float)" % [settings.name, input.data_type ])
+				return
+			container.resize( 1 )
+			container[0] = input.cte_float
+		
+		FlowData.DataType.Vector:
+			var container : PackedVector3Array = output.addStream( settings.name, input.data_type )
+			if container == null:
+				setError( "Invalid name %s or data_type %d (vector)" % [settings.name, input.data_type ])
+				return
+			container.resize( 1 )
+			container[0] = input.cte_vector
 		
 	set_output( 0, output )

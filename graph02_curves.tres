@@ -13,6 +13,7 @@ script = ExtResource("1_a1se2")
 name = "arg_name"
 data_type = 4
 cte_bool = false
+cte_int = null
 cte_float = 0.0
 cte_vector = Vector3(0, 0, 0)
 cte_resource = SubResource("QuadMesh_a1se2")

@@ -44,6 +44,8 @@ var node_types = { }
 
 func setResourceToEdit( new_resource : FlowGraphResource, new_resource_owner : Node3D ):
 	print( "setResourceToEdit %s" % new_resource )
+	
+	# Time to save the current resource
 	if current_resource == new_resource and resource_owner == new_resource_owner:
 		return
 	if current_resource:
@@ -68,6 +70,14 @@ func setResourceToEdit( new_resource : FlowGraphResource, new_resource_owner : N
 	inspected_node = null
 	
 	if current_resource != null:
+		
+		# Register the input_* nodes before trying to load the nodes
+		for input in current_resource.inputs.inputs:
+			print( "Regiistering get_graph_input %s" % input.name )
+			var node_type_name := "input_%s" % input.name
+			registerNodeType( node_type_name, "input.gd")
+			print( "done" )
+		
 		print( "Recovering %d nodes" % current_resource.nodes.size() )
 		for res_node in current_resource.nodes:
 			#print( "Recovering node %s" % [ res_node ])
@@ -87,12 +97,6 @@ func setResourceToEdit( new_resource : FlowGraphResource, new_resource_owner : N
 		gedit.zoom = current_resource.view_zoom
 		gedit.scroll_offset = current_resource.view_offset
 		new_name_counter = current_resource.new_name_counter
-
-		for input in current_resource.inputs.inputs:
-			print( "Regiistering get_graph_input %s" % input.name )
-			var node_type_name := "input_%s" % input.name
-			registerNodeType( node_type_name, "input.gd")
-			print( "done" )
 
 	queueRegen()
 	ctx.graph = current_resource
@@ -172,7 +176,7 @@ func populatePopupMenu():
 		pm.add_child(inputs_menu)
 		for idx in range(current_resource.inputs.inputs.size()):
 			var label : String = current_resource.inputs.inputs[idx].name
-			inputs_menu.add_item(label, idx)
+			inputs_menu.add_item( FlowNodeBase.editorDisplayName( label ), idx)
 		inputs_menu.id_pressed.connect( _on_inputs_menu_id_pressed )
 		pm.add_submenu_item("Inputs...", inputs_menu.name)
 		pm.add_separator( "", -1 )

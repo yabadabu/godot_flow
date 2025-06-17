@@ -18,6 +18,18 @@ func execute( _ctx : FlowData.EvaluationContext ):
 	var out_data : FlowData.Data = in_data.duplicate()
 	
 	match settings.data_type:
+				
+		FlowData.DataType.Bool:
+			var new_val : bool = settings.cte_bool
+			var sout : PackedInt32Array = out_data.addStream( settings.name, settings.data_type )
+			for i in sout.size():
+				sout[i] = new_val
+				
+		FlowData.DataType.Int:
+			var new_val : int = settings.cte_int
+			var sout : PackedInt32Array = out_data.addStream( settings.name, settings.data_type )
+			for i in sout.size():
+				sout[i] = new_val
 		
 		FlowData.DataType.Float:
 			var new_val : float = settings.cte_float

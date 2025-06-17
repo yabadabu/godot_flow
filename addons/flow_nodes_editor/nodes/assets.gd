@@ -33,8 +33,14 @@ func execute( _ctx : FlowData.EvaluationContext ):
 				continue
 			# print( " %s " % prop )
 			match prop.type:
+				TYPE_BOOL:
+					new_streams[ prop.name ] = FlowData.DataType.Bool
+				TYPE_INT:
+					new_streams[ prop.name ] = FlowData.DataType.Int
 				TYPE_FLOAT:
 					new_streams[ prop.name ] = FlowData.DataType.Float
+				TYPE_VECTOR3:
+					new_streams[ prop.name ] = FlowData.DataType.Vector
 				TYPE_STRING:
 					new_streams[ prop.name ] = FlowData.DataType.String
 				TYPE_OBJECT:
@@ -45,11 +51,31 @@ func execute( _ctx : FlowData.EvaluationContext ):
 	for prop_name in new_streams.keys():
 		var prop_type = new_streams[ prop_name ]
 		match prop_type:
+			
+			FlowData.DataType.Bool:
+				var container : PackedByteArray = output.addStream( prop_name, prop_type )
+				container.resize( count )
+				for idx in range(count):
+					container[idx] = settings.assets[idx].get( prop_name )
+					
+			FlowData.DataType.Int:
+				var container : PackedInt32Array = output.addStream( prop_name, prop_type )
+				container.resize( count )
+				for idx in range(count):
+					container[idx] = settings.assets[idx].get( prop_name )
+					
 			FlowData.DataType.Float:
 				var container : PackedFloat32Array = output.addStream( prop_name, prop_type )
 				container.resize( count )
 				for idx in range(count):
 					container[idx] = settings.assets[idx].get( prop_name )
+					
+			FlowData.DataType.Vector:
+				var container : PackedVector3Array = output.addStream( prop_name, prop_type )
+				container.resize( count )
+				for idx in range(count):
+					container[idx] = settings.assets[idx].get( prop_name )
+					
 			_:
 				var container : Array = output.addStream( prop_name, prop_type )
 				container.resize( count )

@@ -102,6 +102,10 @@ func onColumnBegins( cell : DataTableContainer.CellContents ):
 			tv.setCellCallback( getCellContentsVectorY )
 		elif title.ends_with(".Z"):
 			tv.setCellCallback( getCellContentsVectorZ )
+	elif stream.data_type == FlowData.DataType.Bool:
+		tv.setCellCallback( getCellContentsBool )
+	elif stream.data_type == FlowData.DataType.Int:
+		tv.setCellCallback( getCellContentsInt )
 	elif stream.data_type == FlowData.DataType.Float:
 		tv.setCellCallback( getCellContentsFloat )
 	elif stream.data_type == FlowData.DataType.String:
@@ -123,6 +127,12 @@ func getCellContentsVectorZ(cell : DataTableContainer.CellContents ):
 func getCellContentsFloat(cell : DataTableContainer.CellContents ):
 	cell.text = fmt( container[ cell.row ] )
 	
+func getCellContentsBool(cell : DataTableContainer.CellContents ):
+	cell.text = "True" if container[ cell.row ] else "False"
+	
+func getCellContentsInt(cell : DataTableContainer.CellContents ):
+	cell.text = "%d" % container[ cell.row ]
+	
 func getCellContentsIndex(cell : DataTableContainer.CellContents ):
 	cell.text = "%d" % cell.row
 	
@@ -141,8 +151,10 @@ func refresh():
 	tv.clearColumns()
 	tv.setColumnCallback( onColumnBegins )
 	
+	
 	data = node.get_output(0) if node else null
 	if data:
+
 		updateNumRowsAndCols()
 		%LabelStats.text = "%d Rows, (%d cols in %d Streams)" % [ num_rows, num_cols, data.numFields()]
 		
