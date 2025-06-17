@@ -1,26 +1,26 @@
 @tool
 extends FlowNodeBase
 
-func getMeta() -> Dictionary :
-	return {
+func _init():
+	meta_node = {
 		"title" : "Transform",
 		"settings" : TransformNodeSettings,
 		"ins" : [{"label": "In" }], 
 		"outs" : [{ "label" : "Out" }],
 	}
 
-func execute( _ctx : FlowData.EvaluationContext ):
+func execute( ctx : FlowData.EvaluationContext ):
 	var in_data : FlowData.Data = get_input(0)
 	var out_data : FlowData.Data = in_data.duplicate()
 	var spos : PackedVector3Array = out_data.cloneStream( FlowData.AttrPosition )
 	var srot : PackedVector3Array = out_data.cloneStream( FlowData.AttrRotation )
 	var ssizes : PackedVector3Array = out_data.cloneStream( FlowData.AttrSize )
-	var offset_min : Vector3 = settings.offset_min
-	var offset_max : Vector3 = settings.offset_max
-	var rotation_min : Vector3 = settings.rotation_min
-	var rotation_max : Vector3 = settings.rotation_max
-	var scale_min : Vector3 = settings.scale_min
-	var scale_max : Vector3 = settings.scale_max
+	var offset_min : Vector3 = getSettingValue( ctx, "offset_min" )
+	var offset_max : Vector3 = getSettingValue( ctx, "offset_max" )
+	var rotation_min : Vector3 = getSettingValue( ctx, "rotation_min" )
+	var rotation_max : Vector3 = getSettingValue( ctx, "rotation_max" )
+	var scale_min : Vector3 = getSettingValue( ctx, "scale_min" )
+	var scale_max : Vector3 = getSettingValue( ctx, "scale_max" )
 	var uniform_scale : bool = settings.uniform_scale
 	for i in spos.size():
 		var amount_pos = Vector3( rng.randf(), rng.randf(), rng.randf() )

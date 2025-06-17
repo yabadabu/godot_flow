@@ -1,8 +1,8 @@
 @tool
 extends FlowNodeBase
 
-func getMeta() -> Dictionary :
-	return {
+func _init():
+	meta_node = {
 		"title" : "Match And Set",
 		"settings" : MatchAndSetNodeSettings,
 		"ins" : [{ "label" : "In" }, { "label" : "Attributes" }],

@@ -1,8 +1,8 @@
 @tool
 extends FlowNodeBase
 
-func getMeta() -> Dictionary :
-	return {
+func _init():
+	meta_node = {
 		"title" : "Grid",
 		"settings" : GridNodeSettings,
 		"ins" : [],
@@ -10,7 +10,7 @@ func getMeta() -> Dictionary :
 		"tooltip" :"Generates a set of points in a grid spatial distribution,\nwhere the separation is step",
 	}
 
-func execute( _ctx : FlowData.EvaluationContext ):
+func execute( ctx : FlowData.EvaluationContext ):
 	var output := FlowData.Data.new()
 	var nsamples : int = settings.x * settings.y * settings.z
 	output.addCommonStreams( nsamples )
@@ -18,7 +18,7 @@ func execute( _ctx : FlowData.EvaluationContext ):
 	assert( spos != null )
 	#print( "Spos.size %d of type %s" % [ spos.size(), type_string(typeof(spos)) ])
 	var idx := 0
-	var step : Vector3 = settings.step
+	var step : Vector3 = getSettingValue( ctx, "step" )
 	for iz in range( 0, settings.z ):
 		for iy in range( 0, settings.y ):
 			for ix in range( 0, settings.x ):

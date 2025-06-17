@@ -9,6 +9,8 @@ var rng : RandomNumberGenerator = RandomNumberGenerator.new()
 var inputs = []
 var outputs = []
 
+var meta_node: Dictionary = {}
+
 var node_template : String
 
 # Helper to create the UI
@@ -154,6 +156,9 @@ func _on_draw() -> void:
 		var clr : Color = Color.CYAN / self_modulate
 		draw_circle( Vector2(size.x,0), marker_radius * ui_scale, clr )
 
+func getMeta() -> Dictionary:
+	return meta_node
+	
 func getTitle() -> String:
 	return settings.title
 
@@ -199,13 +204,14 @@ func getGdScriptTypeForFlowDataType( data_type : FlowData.DataType ) -> int:
 	return TYPE_NIL
 
 func initFromScript():
-	var meta = call("getMeta")
+	var meta := getMeta()
 	
 	var ins = meta.get( "ins", [] )
 	var outs = meta.get( "outs", [] )
 	var num_ins = ins.size()
 	var num_outs = outs.size()
 	var num_rows = max( num_ins, num_outs )
+	var num_inputs = num_ins
 	
 	for idx in range( 0, num_rows ):
 		var ctrl = connectors_row_prefab.instantiate()
@@ -225,6 +231,8 @@ func initFromScript():
 			lbl_out.text = ""
 			
 	if !meta.get( "hide_inputs", false ):
+		if !meta.has( "input_slots" ):
+			meta.input_slots = {}
 		var inputs = settings.get_property_list()
 		var slot_idx = num_rows
 		var inside_my_vars := false
@@ -249,6 +257,10 @@ func initFromScript():
 			lbl_in.text = editorDisplayName( input.name )
 			lbl_out.text = ""
 			slot_idx += 1
+			
+			meta.input_slots[ input.name ] = num_inputs
+			#print( "Assigning slot %d for input %s when %d" % [ meta.input_slots[ input.name ], input.name, num_inputs ])
+			num_inputs += 1
 
 func setupDebugDraw():
 	var out_data : FlowData.Data = get_output(0)
@@ -275,3 +287,28 @@ func setupDebugDraw():
 	for idx in range( instance_count ):
 		var t := transforms.atIndex( idx )
 		RenderingServer.multimesh_instance_set_transform( multimesh_rid, idx, t)
+
+func getSettingValue( ctx : FlowData.EvaluationContext, in_name : String ):
+	var meta = getMeta()
+	var inputs_by_name = meta.get( "input_slots", {})
+	#print( "Searching the current value of input %s in %d inputs at node %s. ByName:%s vs %s" % [ in_name, inputs.size(), name, inputs_by_name, inputs ] )
+	var idx = inputs_by_name.get( in_name, -1 )
+	if idx != -1 and idx < inputs.size():
+		#print( "  Meta input %s is at slot %d " % [ in_name, idx ] )
+		var input = inputs[ idx ] as FlowData.Data
+		if input:
+			var in_streams = input.streams
+			#print( "Got the input for %s : %s" % [ in_name, in_streams.keys() ] )
+			if in_streams and in_streams.size() == 1:
+				var stream = in_streams.values()[0]
+				var in_size = in_streams.size()
+				if in_size == 0:
+					setError( "Input %s has no data" % in_name)
+				elif in_size > 1:
+					setError( "Input %s has too many data (%d)" % [ in_name, in_size ])
+				else:
+					var value = stream.container[0]
+					#print( "  -> Using %s = %s" % [ in_name, value ])
+					return value
+			
+	return settings.get( in_name )
