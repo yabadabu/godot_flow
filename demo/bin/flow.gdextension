@@ -1,0 +1,7 @@
+[configuration]
+entry_symbol = "flow_library_init"
+compatibility_minimum = "4.4"
+
+[libraries]
+macos.debug = "res://bin/libflow.macos.template_debug.framework"
+macos.release = "res://bin/libflow.macos.template_release.framework"
