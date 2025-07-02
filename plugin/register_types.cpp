@@ -1,5 +1,5 @@
 #include "register_types.h"
-#include "gd_flow.h"
+#include "gd_rtree.h"
 
 #include <gdextension_interface.h>
 #include <godot_cpp/core/defs.hpp>
@@ -12,7 +12,7 @@ void initialize_module(ModuleInitializationLevel p_level) {
     return;
   }
 
-  ClassDB::register_class<FlowOp>();
+  ClassDB::register_class<GDRTree>();
 }
 
 void uninitialize_module(ModuleInitializationLevel p_level) {
@@ -23,7 +23,7 @@ void uninitialize_module(ModuleInitializationLevel p_level) {
 
 extern "C" {
 // Initialization.
-GDExtensionBool GDE_EXPORT flow_library_init(GDExtensionInterfaceGetProcAddress p_get_proc_address, const GDExtensionClassLibraryPtr p_library, GDExtensionInitialization *r_initialization) {
+GDExtensionBool GDE_EXPORT library_init(GDExtensionInterfaceGetProcAddress p_get_proc_address, const GDExtensionClassLibraryPtr p_library, GDExtensionInitialization *r_initialization) {
   godot::GDExtensionBinding::InitObject init_obj(p_get_proc_address, p_library, r_initialization);
 
   init_obj.register_initializer(initialize_module);
