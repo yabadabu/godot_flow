@@ -1,0 +1,88 @@
+[gd_scene load_steps=12 format=3 uid="uid://bec321f7nwi5h"]
+
+[ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_6hs3b"]
+[ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="2_0uiub"]
+[ext_resource type="Script" uid="uid://ctvo7a7lud8bn" path="res://addons/flow_nodes_editor/graph_input_parameters.gd" id="3_f6xpl"]
+[ext_resource type="Script" uid="uid://cbj3mmuatfk1v" path="res://addons/flow_nodes_editor/nodes/sample_spline_settings.gd" id="4_0uiub"]
+[ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="4_ow8g4"]
+[ext_resource type="Script" uid="uid://dt7o3moxddt4h" path="res://addons/flow_nodes_editor/nodes/transform_settings.gd" id="5_f6xpl"]
+
+[sub_resource type="Curve3D" id="Curve3D_lnu6d"]
+closed = true
+bake_interval = 0.61
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1.56279, 0, 1.31962, -0.246415, 0, 0.525253, 0.246415, 0, -0.525253, 2.28907, 0, -0.00324229, 0.175084, 0, 0.509042, -0.175084, 0, -0.509042, 2.17883, 0, -1.50767, 0.528495, 0, 0.103754, -0.528495, 0, -0.103754, 1.0116, 0, -2.61654, -0.0129693, 0, -0.158873, 0.0129693, 0, 0.158873, -0.800849, 0, -2.04589, -0.514984, 0, -0.530699, 0.514984, 0, 0.530699, 0.5058, 0, -1.54009, 0.136177, 0, -0.333957, -0.136177, 0, 0.333957, 0.674399, 0, -0.736003),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0)
+}
+point_count = 8
+
+[sub_resource type="Resource" id="Resource_qydfx"]
+script = ExtResource("3_f6xpl")
+inputs = Array[ExtResource("2_0uiub")]([])
+
+[sub_resource type="Resource" id="Resource_0uiub"]
+resource_name = "Sample Spline Settings"
+script = ExtResource("4_0uiub")
+uniform_interval = 0.61
+random_seed = 1104017835
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+title = "Sample Spline"
+enabled = true
+
+[sub_resource type="Resource" id="Resource_ow8g4"]
+resource_name = "Transform Settings"
+script = ExtResource("5_f6xpl")
+offset_min = Vector3(0, 0, 0)
+offset_max = Vector3(0, 0, 0)
+rotation_min = Vector3(0, 0, 0)
+rotation_max = Vector3(0, 0, 0)
+scale_min = Vector3(0.1, 0.1, 1)
+scale_max = Vector3(0.1, 0.2, 1)
+uniform_scale = true
+random_seed = 1107544440
+inspect_enabled = false
+debug_enabled = true
+debug_mode = 0
+debug_scale = 1.0
+title = "Transform"
+enabled = true
+
+[sub_resource type="Resource" id="Resource_ahfh6"]
+script = ExtResource("4_ow8g4")
+nodes = Array[Dictionary]([{
+"name": &"id_0002_sample_spline",
+"position_offset": Vector2(20, 160),
+"settings": SubResource("Resource_0uiub"),
+"template": "sample_spline"
+}, {
+"name": &"id_0003_transform",
+"position_offset": Vector2(267.5, 322.5),
+"settings": SubResource("Resource_ow8g4"),
+"template": "transform"
+}])
+conns = Array[Dictionary]([{
+"from_node": &"id_0002_sample_spline",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0003_transform",
+"to_port": 0
+}])
+view_zoom = 1.0
+view_offset = Vector2(0, 0)
+new_name_counter = 3
+inputs = SubResource("Resource_qydfx")
+metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
+
+[node name="DemoSplineFill" type="Node3D"]
+
+[node name="Path3D" type="Path3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.84766, 0, 0.470926)
+curve = SubResource("Curve3D_lnu6d")
+
+[node name="FlowGraphNode3D" type="Node3D" parent="."]
+script = ExtResource("1_6hs3b")
+graph = SubResource("Resource_ahfh6")
+metadata/_custom_type_script = "uid://d1krtmb1urldl"
