@@ -70,6 +70,11 @@ func setResourceToEdit( new_resource : FlowGraphResource, new_resource_owner : N
 	inspector.edit( null )
 	inspected_node = null
 	
+	var ui_scale = 1.0
+	var dpi = DisplayServer.screen_get_dpi()
+	if dpi > 150:
+		ui_scale *= 2.0
+	
 	if current_resource != null:
 		
 		# Register the input_* nodes before trying to load the nodes
@@ -86,7 +91,8 @@ func setResourceToEdit( new_resource : FlowGraphResource, new_resource_owner : N
 			if not node:
 				push_error( "Failed to recover node %s" % [ res_node ])
 				continue
-			node.position_offset = res_node.position_offset
+			node.ui_scale = ui_scale
+			node.position_offset = res_node.position_offset * ui_scale
 		
 		print( "Recovering %d conns" % current_resource.conns.size() )
 		for conn in current_resource.conns:
@@ -113,7 +119,7 @@ func saveResource():
 		if not node:
 			continue
 		var stored_data = {
-			"position_offset" : node.position_offset,
+			"position_offset" : node.position_offset / node.ui_scale,
 			"name" : node.name,
 			"template" : node.node_template,
 			"settings" : node.settings,

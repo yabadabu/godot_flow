@@ -38,11 +38,6 @@ func _ready():
 	else:
 		print( "Viewport is invalid")
 	
-	var dpi = DisplayServer.screen_get_dpi()
-	print( "Dpi is %d and %d" % [ DisplayServer.screen_get_dpi(), DisplayServer.screen_get_scale()])
-	if dpi > 150:
-		ui_scale *= 2.0
-	
 func _exit_tree():
 	cleanup_multimesh_direct()
 	
