@@ -11,7 +11,7 @@
 closed = true
 bake_interval = 0.61
 _data = {
-"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1.56279, 0, 1.31962, -0.246415, 0, 0.525253, 0.246415, 0, -0.525253, 2.28907, 0, -0.00324229, 0.175084, 0, 0.509042, -0.175084, 0, -0.509042, 2.17883, 0, -1.50767, 0.528495, 0, 0.103754, -0.528495, 0, -0.103754, 1.0116, 0, -2.61654, -0.0129693, 0, -0.158873, 0.0129693, 0, 0.158873, -0.800849, 0, -2.04589, -0.514984, 0, -0.530699, 0.514984, 0, 0.530699, 0.5058, 0, -1.54009, 0.136177, 0, -0.333957, -0.136177, 0, 0.333957, 0.674399, 0, -0.736003),
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, -0.549417, -0.0212173, 0.666117, 0, 0, 0, 0, 0, 0, 1.13073, 0, 5.20914, -0.246415, 0, 0.525253, 0.246415, 0, -0.525253, 2.28907, 0, -0.00324229, 0.162214, -0.00053215, 0.507052, -0.162214, 0.00053215, -0.507052, 2.17883, 0, -1.50767, 0.528495, 0, 0.103754, -0.528495, 0, -0.103754, 1.0116, 0, -2.61654, 0.0894269, 0.0361512, -0.731316, -0.0894269, -0.0361512, 0.731316, -1.66068, -0.20416, -2.40038, -0.514984, 0, -0.530699, 0.514984, 0, 0.530699, 0.5058, 0, -1.54009, 0.136177, 0, -0.333957, -0.136177, 0, 0.333957, 0.674399, 0, -0.736003),
 "tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0)
 }
 point_count = 8
@@ -23,7 +23,8 @@ inputs = Array[ExtResource("2_0uiub")]([])
 [sub_resource type="Resource" id="Resource_0uiub"]
 resource_name = "Sample Spline Settings"
 script = ExtResource("4_0uiub")
-uniform_interval = 0.61
+uniform_interval = 0.25
+fill_curve = true
 random_seed = 1104017835
 inspect_enabled = false
 debug_enabled = false
@@ -39,8 +40,8 @@ offset_min = Vector3(0, 0, 0)
 offset_max = Vector3(0, 0, 0)
 rotation_min = Vector3(0, 0, 0)
 rotation_max = Vector3(0, 0, 0)
-scale_min = Vector3(0.1, 0.1, 1)
-scale_max = Vector3(0.1, 0.2, 1)
+scale_min = Vector3(0.5, 1, 1)
+scale_max = Vector3(0.5, 1, 1)
 uniform_scale = true
 random_seed = 1107544440
 inspect_enabled = false
@@ -59,7 +60,7 @@ nodes = Array[Dictionary]([{
 "template": "sample_spline"
 }, {
 "name": &"id_0003_transform",
-"position_offset": Vector2(267.5, 322.5),
+"position_offset": Vector2(230, 200),
 "settings": SubResource("Resource_ow8g4"),
 "template": "transform"
 }])
@@ -71,7 +72,7 @@ conns = Array[Dictionary]([{
 "to_port": 0
 }])
 view_zoom = 1.0
-view_offset = Vector2(0, 0)
+view_offset = Vector2(-13.44, 53.76)
 new_name_counter = 3
 inputs = SubResource("Resource_qydfx")
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
@@ -79,7 +80,7 @@ metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 [node name="DemoSplineFill" type="Node3D"]
 
 [node name="Path3D" type="Path3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.84766, 0, 0.470926)
+transform = Transform3D(0.574764, -0.0236768, 0.817976, -0.13054, 0.984128, 0.120212, -0.80784, -0.175873, 0.562551, 0.65604, 0, -2.13114)
 curve = SubResource("Curve3D_lnu6d")
 
 [node name="FlowGraphNode3D" type="Node3D" parent="."]
