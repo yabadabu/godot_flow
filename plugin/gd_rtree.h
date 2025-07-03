@@ -28,7 +28,7 @@ public:
   void clear();
   bool add( const PackedVector3Array& in_min, const PackedVector3Array& in_max, int id_base );
   bool addFiltered( const PackedVector3Array& in_min, const PackedVector3Array& in_max, const PackedInt32Array& idxs, int id_base );
-  Dictionary overlaps( const PackedVector3Array& in_min, const PackedVector3Array& in_max ) const;
+  Dictionary overlaps( const PackedVector3Array& in_min, const PackedVector3Array& in_max, bool return_overlapped ) const;
 };
 
 }

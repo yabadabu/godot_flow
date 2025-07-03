@@ -1,0 +1,127 @@
+[gd_scene load_steps=14 format=3 uid="uid://dc8qy4ejmlaip"]
+
+[ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_5ex6f"]
+[ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="2_50g47"]
+[ext_resource type="Script" uid="uid://ctvo7a7lud8bn" path="res://addons/flow_nodes_editor/graph_input_parameters.gd" id="3_lacnk"]
+[ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="4_jn5vr"]
+[ext_resource type="Script" uid="uid://dwtm2hr5nh78h" path="res://addons/flow_nodes_editor/nodes/grid_settings.gd" id="4_lacnk"]
+[ext_resource type="Script" uid="uid://dt7o3moxddt4h" path="res://addons/flow_nodes_editor/nodes/transform_settings.gd" id="5_jn5vr"]
+[ext_resource type="Script" uid="uid://bw3x7p10afvc7" path="res://addons/flow_nodes_editor/nodes/substract_settings.gd" id="6_xx7ch"]
+
+[sub_resource type="Resource" id="Resource_xx7ch"]
+script = ExtResource("3_lacnk")
+inputs = Array[ExtResource("2_50g47")]([])
+
+[sub_resource type="Resource" id="Resource_hwxt1"]
+resource_name = "Grid Settings"
+script = ExtResource("4_lacnk")
+x = 1
+y = 1
+z = 1
+step = Vector3(1, 1, 1)
+random_seed = 2464084680
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+title = "Grid"
+enabled = true
+
+[sub_resource type="Resource" id="Resource_jn5vr"]
+resource_name = "Grid Settings"
+script = ExtResource("4_lacnk")
+x = 3
+y = 1
+z = 3
+step = Vector3(2, 2, 2)
+random_seed = 2166388212
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+title = "Grid"
+enabled = true
+
+[sub_resource type="Resource" id="Resource_lu65l"]
+resource_name = "Transform Settings"
+script = ExtResource("5_jn5vr")
+offset_min = Vector3(4, 0, 1)
+offset_max = Vector3(4, 0, 1)
+rotation_min = Vector3(0, 0, 0)
+rotation_max = Vector3(0, 0, 0)
+scale_min = Vector3(2, 2, 4)
+scale_max = Vector3(2, 2, 4)
+uniform_scale = false
+random_seed = 2729993948
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+title = "Transform"
+enabled = true
+
+[sub_resource type="Resource" id="Resource_s0see"]
+resource_name = "Substract"
+script = ExtResource("6_xx7ch")
+random_seed = 3590355377
+inspect_enabled = false
+debug_enabled = true
+debug_mode = 0
+debug_scale = 1.0
+title = "Substract"
+enabled = true
+
+[sub_resource type="Resource" id="Resource_gj6dq"]
+script = ExtResource("4_jn5vr")
+nodes = Array[Dictionary]([{
+"name": &"id_0002_grid",
+"position_offset": Vector2(141, 466),
+"settings": SubResource("Resource_hwxt1"),
+"template": "grid"
+}, {
+"name": &"id_0001_grid",
+"position_offset": Vector2(140, 100),
+"settings": SubResource("Resource_jn5vr"),
+"template": "grid"
+}, {
+"name": &"id_0003_transform",
+"position_offset": Vector2(280, 480),
+"settings": SubResource("Resource_lu65l"),
+"template": "transform"
+}, {
+"name": &"id_0004_substract",
+"position_offset": Vector2(531, 210),
+"settings": SubResource("Resource_s0see"),
+"template": "substract"
+}])
+conns = Array[Dictionary]([{
+"from_node": &"id_0002_grid",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0003_transform",
+"to_port": 0
+}, {
+"from_node": &"id_0001_grid",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0004_substract",
+"to_port": 0
+}, {
+"from_node": &"id_0003_transform",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0004_substract",
+"to_port": 1
+}])
+view_zoom = 1.0
+view_offset = Vector2(68, -99)
+new_name_counter = 4
+inputs = SubResource("Resource_xx7ch")
+metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
+
+[node name="DemoIntersect" type="Node3D"]
+
+[node name="PCG_Intersect" type="Node3D" parent="."]
+script = ExtResource("1_5ex6f")
+graph = SubResource("Resource_gj6dq")
+metadata/_custom_type_script = "uid://d1krtmb1urldl"
