@@ -277,12 +277,37 @@ func setupDebugDraw():
 	var instance_count = out_data.size()
 	var current_count = RenderingServer.multimesh_get_instance_count(multimesh_rid)
 	if instance_count != current_count:
-		RenderingServer.multimesh_allocate_data(multimesh_rid, instance_count, RenderingServer.MultimeshTransformFormat.MULTIMESH_TRANSFORM_3D )
+		RenderingServer.multimesh_allocate_data(multimesh_rid, instance_count, RenderingServer.MultimeshTransformFormat.MULTIMESH_TRANSFORM_3D, true )
 	
-	for idx in range( instance_count ):
-		var t := transforms.atIndex( idx )
-		RenderingServer.multimesh_instance_set_transform( multimesh_rid, idx, t)
+	if settings.debug_mode == NodeSettings.eDebugMode.EXTENDS:
+		for idx in range( instance_count ):
+			var t := transforms.atIndex( idx )
+			RenderingServer.multimesh_instance_set_transform( multimesh_rid, idx, t)
+			
+	elif settings.debug_mode == NodeSettings.eDebugMode.ABSOLUTE:
+		var abs_scale := settings.debug_scale
+		for idx in range( instance_count ):
+			var t := transforms.atIndexAbsScale( idx, abs_scale )
+			RenderingServer.multimesh_instance_set_transform( multimesh_rid, idx, t)
+		
+	setupColors( out_data )
 
+func setupColors( out_data : FlowData.Data ):
+	var instance_count = out_data.size()
+	var color : Color = settings.debug_color
+	if settings.debug_modulate_by:
+		var smod : PackedFloat32Array = out_data.getContainerChecked( settings.debug_modulate_by, FlowData.DataType.Float )
+		if not smod:
+			setError( "Attribute %s of type Float not found" % settings.debug_modulate_by )
+		else:
+			for idx in range( instance_count ):
+				RenderingServer.multimesh_instance_set_color( multimesh_rid, idx, color * smod[idx] )
+			return
+	for idx in range( instance_count ):
+		RenderingServer.multimesh_instance_set_color( multimesh_rid, idx, color )
+	
+	
+# This returns the current value of the input configuration taking into account potencial connections and overrides of the inputs
 func getSettingValue( ctx : FlowData.EvaluationContext, in_name : String ):
 	var meta = getMeta()
 	var inputs_by_name = meta.get( "input_slots", {})

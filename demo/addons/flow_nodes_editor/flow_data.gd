@@ -39,6 +39,10 @@ class TransformsStream:
 	func atIndex( id: int ) -> Transform3D:
 		var basis := FlowData.eulerToBasis( eulers[id] )
 		return Transform3D( basis.scaled( sizes[id] ), positions[id] )
+	
+	func atIndexAbsScale( id: int, scale: float ) -> Transform3D:
+		var basis := FlowData.eulerToBasis( eulers[id] )
+		return Transform3D( basis.scaled( Vector3.ONE * scale ), positions[id] )
 
 class Data:
 	var streams : Dictionary = {}

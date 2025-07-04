@@ -1,3 +1,9 @@
-[gd_resource type="BoxMesh" format=3 uid="uid://7flu82pqtc5d"]
+[gd_resource type="BoxMesh" load_steps=2 format=3 uid="uid://7flu82pqtc5d"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_a8ff4"]
+shading_mode = 2
+disable_fog = true
+vertex_color_use_as_albedo = true
 
 [resource]
+material = SubResource("StandardMaterial3D_a8ff4")
