@@ -14,6 +14,7 @@ var num_non_nodes_children = 0
 
 @onready var gedit : GraphEdit = %GraphEdit
 @onready var data_inspector : Control
+@onready var info : Label = %LabelInfo
 
 # The inspector shows the settings property of the current node
 var inspector: EditorInspector
@@ -545,6 +546,7 @@ func evalGraph():
 
 	regen_pending = false
 	#print( "regen_pending is now false")
+	info.text = "%d evals" % ctx.eval_id
 
 func _on_button_reload_pressed() -> void:
 	scanAvailableNodes()

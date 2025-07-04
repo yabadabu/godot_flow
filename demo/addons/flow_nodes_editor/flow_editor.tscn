@@ -39,11 +39,6 @@ text = "Reload"
 layout_mode = 2
 text = "Inputs"
 
-[node name="LabelInfo" type="Label" parent="VBoxContainer/ScrollContainer/HBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "Info"
-
 [node name="ButtonSave" type="Button" parent="VBoxContainer/ScrollContainer/HBoxContainer"]
 layout_mode = 2
 text = "Save Resource"
@@ -57,6 +52,11 @@ text = "Auto Regen"
 [node name="ButtonRegenerate" type="Button" parent="VBoxContainer/ScrollContainer/HBoxContainer"]
 layout_mode = 2
 text = "Regenerate"
+
+[node name="LabelInfo" type="Label" parent="VBoxContainer/ScrollContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Info"
 
 [node name="VSplitContainer" type="VSplitContainer" parent="VBoxContainer"]
 custom_minimum_size = Vector2(0, 200)
