@@ -1,0 +1,16 @@
+@tool
+extends FlowNodeBase
+
+func _init():
+	meta_node = {
+		"title" : "Debug",
+		"settings" : NodeSettings,
+		"ins" : [{ "label" : "In" }],
+		"outs" : [{ "label" : "Out" }],
+		"is_final" : true
+	}
+
+func execute( ctx : FlowData.EvaluationContext ):
+	var in_data = get_input( 0 )
+	settings.debug_enabled = true
+	set_output(0, in_data)
