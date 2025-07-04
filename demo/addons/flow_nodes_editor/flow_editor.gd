@@ -518,7 +518,9 @@ func evalGraph():
 	ctx.owner = resource_owner
 	ctx.eval_id += 1
 	
-	print( "evalGraph %d starts from %s" % [ ctx.eval_id, resource_owner.name if resource_owner else "null" ] )
+	var time_start = Time.get_ticks_usec()
+	
+	# print( "evalGraph %d starts from %s" % [ ctx.eval_id, resource_owner.name if resource_owner else "null" ] )
 	removeGeneratedNodes()
 	
 	#print( "getEvalOrder..." )
@@ -546,7 +548,9 @@ func evalGraph():
 
 	regen_pending = false
 	#print( "regen_pending is now false")
-	info.text = "%d evals" % ctx.eval_id
+	
+	var elapsed_usec = Time.get_ticks_usec() - time_start
+	info.text = "%d evals in %.3f ms" % [ ctx.eval_id, elapsed_usec / 1000.0 ]
 
 func _on_button_reload_pressed() -> void:
 	scanAvailableNodes()
