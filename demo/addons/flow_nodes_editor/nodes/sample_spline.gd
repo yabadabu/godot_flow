@@ -166,6 +166,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 	uniform_interval = maxf( uniform_interval, 0.01 )
 
 	if getSettingValue( ctx, "fill_curve" ):
+		var sdists : PackedFloat32Array = output.addStream( "distance", FlowData.DataType.Float )
 		for path_3d in path3d_nodes:
 			var curve : Curve3D = path_3d.curve
 			var polygon = curve_to_polygon(curve)
@@ -183,11 +184,11 @@ func execute( ctx : FlowData.EvaluationContext ):
 				var px = bounds.position.x
 				for d in gy:
 					if d <= 0:
-						print( d )
 						var pos = Vector3( px, 0.0, py )
 						spos.append( path_3d.transform * pos )
 						srot.append( Vector3.ZERO )
 						ssize.append( Vector3.ONE * uniform_interval )
+						sdists.append( -d )
 					px += dx
 				py += dy
 		

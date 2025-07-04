@@ -1,5 +1,6 @@
 #include "register_types.h"
 #include "gd_rtree.h"
+#include "gd_kdtree.h"
 
 #include <gdextension_interface.h>
 #include <godot_cpp/core/defs.hpp>
@@ -13,6 +14,7 @@ void initialize_module(ModuleInitializationLevel p_level) {
   }
 
   ClassDB::register_class<GDRTree>();
+  ClassDB::register_class<GDKdTree>();
 }
 
 void uninitialize_module(ModuleInitializationLevel p_level) {
