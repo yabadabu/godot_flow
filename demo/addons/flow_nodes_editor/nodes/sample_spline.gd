@@ -79,7 +79,7 @@ func rasterize_line(p1: Vector2, p2: Vector2) -> Array[Vector2]:
 	return points	
 	
 func compute_optimized_sdf(curve: Curve3D, bounds: Rect2, res_x: int, res_y : int) -> Array:
-	var polygon = curve_to_polygon(curve, 300)
+	var polygon = curve_to_polygon(curve, 50)
 	var sdf_grid = []
 	
 	# Initialize grid
@@ -127,8 +127,10 @@ func compute_distance_transform(grid: Array, edge_points: Array, polygon: Packed
 				bounds.position.y + y * step_y
 			)
 			
-			var distance = point_to_polygon_distance(world_pos, polygon)
 			var is_inside = Geometry2D.is_point_in_polygon(world_pos, polygon)
+			if not is_inside:
+				continue
+			var distance = point_to_polygon_distance(world_pos, polygon)
 			
 			grid[y][x] = distance * (-1 if is_inside else 1)
 	
