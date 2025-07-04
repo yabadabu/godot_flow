@@ -63,6 +63,8 @@ inspect_enabled = false
 debug_enabled = false
 debug_mode = 0
 debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
 title = "Spawn Scenes"
 enabled = true
 
@@ -81,6 +83,8 @@ inspect_enabled = false
 debug_enabled = false
 debug_mode = 0
 debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
 title = "Transform"
 enabled = true
 
@@ -96,6 +100,8 @@ inspect_enabled = false
 debug_enabled = false
 debug_mode = 0
 debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
 title = "Grid"
 enabled = true
 
@@ -109,6 +115,8 @@ inspect_enabled = false
 debug_enabled = false
 debug_mode = 0
 debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
 title = "Input"
 enabled = true
 
@@ -122,6 +130,8 @@ inspect_enabled = false
 debug_enabled = false
 debug_mode = 0
 debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
 title = "Input"
 enabled = true
 

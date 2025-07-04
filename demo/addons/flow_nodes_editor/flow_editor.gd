@@ -227,11 +227,25 @@ func _ready():
 	%AutoRegen.button_pressed = auto_regen
 	
 func onNodePropertyChanged( prop_name : String):
-	if inspected_node:
+	if inspected_node and inspected_node is FlowNodeBase:
 		#print( "Node %s.%s has changed" % [ inspected_node.name, prop_name ])
 		inspected_node.refreshFromSettings()
 		queueRegen()
 		
+# ------------------------------------------------
+func getSelectedFrames() -> Array[GraphFrame]:
+	var nodes : Array[GraphFrame] = []
+	for child in gedit.get_children():
+		var node = child as GraphFrame
+		if node and node.selected:
+			nodes.push_back(node)
+	return nodes
+
+func deleteFrames( frames : Array[GraphFrame] ):
+	for node in frames:
+		gedit.remove_child( node )
+		node.queue_free()
+	
 # ------------------------------------------------
 func getSelectedNodes() -> Array[GraphNode]:
 	var nodes : Array[GraphNode] = []
@@ -248,12 +262,17 @@ func deleteNodes( nodes : Array[GraphNode] ):
 		node.queue_free()
 
 func deleteSelectedNodes():
+	
+	var frames := getSelectedFrames()
+	deleteFrames( frames )
+	
 	var nodes := getSelectedNodes()
 	deleteNodes( nodes )
 	saveResource()
 	inspected_node = null
 	inspector.edit(null)
 	queueRegen()
+	
 	
 func queueRegen():
 	regen_pending = auto_regen
@@ -405,8 +424,14 @@ func _on_graph_edit_node_selected(node):
 	if not inspector:
 		push_error("inspector is null")
 		return
-	inspector.edit( node.settings )
+	
 	inspected_node = node
+	if inspected_node:
+		if inspected_node is FlowNodeBase:
+			inspector.edit( node.settings )
+		elif inspected_node is GraphFrame:
+			inspector.edit( inspected_node )
+		
 	#EditorInterface.inspect_object(node)
 	#EditorInterface.set_main_screen_editor("3D")
 
