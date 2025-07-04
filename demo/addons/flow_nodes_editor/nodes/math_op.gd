@@ -66,6 +66,9 @@ func execute( _ctx : FlowData.EvaluationContext ):
 			MathOpNodeSettings.eOperation.Absolute:
 				for i in num_elems:
 					outC[i] = absf(inA[i])
+			MathOpNodeSettings.eOperation.Saturate:
+				for i in num_elems:
+					outC[i] = clampf(inA[i], 0.0, 1.0)
 
 		out_container = outC
 		out_data_type = FlowData.DataType.Float
@@ -97,6 +100,11 @@ func execute( _ctx : FlowData.EvaluationContext ):
 					outC[i].x = absf(inA[i].x)
 					outC[i].y = absf(inA[i].y)
 					outC[i].z = absf(inA[i].z)
+			MathOpNodeSettings.eOperation.Saturate:
+				for i in num_elems:
+					outC[i].x = clampf(inA[i].x, 0.0, 1.0)
+					outC[i].y = clampf(inA[i].y, 0.0, 1.0)
+					outC[i].z = clampf(inA[i].z, 0.0, 1.0)
 		out_container = outC
 		out_data_type = FlowData.DataType.Vector
 

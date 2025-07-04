@@ -11,6 +11,7 @@ enum eOperation {
 	Divide,
 	Negate,
 	Absolute,
+	Saturate,
 }
 
 @export var operation : eOperation = eOperation.Add
