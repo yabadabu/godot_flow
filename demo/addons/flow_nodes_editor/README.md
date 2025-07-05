@@ -2,6 +2,7 @@
 
 [ ] Spline sampling non-uniform
 [X] Spline region - Spline path
+[ ] Read meta into the attributes
 [ ] Set color
 [ ] Remove self intersections
 [ ] Add noise to position
