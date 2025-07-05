@@ -1,0 +1,193 @@
+[gd_scene load_steps=18 format=3 uid="uid://bl32jt5udtf08"]
+
+[ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_2l584"]
+[ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="2_dxf0c"]
+[ext_resource type="Script" uid="uid://ctvo7a7lud8bn" path="res://addons/flow_nodes_editor/graph_input_parameters.gd" id="3_qf0nw"]
+[ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="4_2jbe2"]
+[ext_resource type="Script" uid="uid://cbj3mmuatfk1v" path="res://addons/flow_nodes_editor/nodes/sample_spline_settings.gd" id="4_qf0nw"]
+[ext_resource type="Script" uid="uid://dt7o3moxddt4h" path="res://addons/flow_nodes_editor/nodes/transform_settings.gd" id="5_2jbe2"]
+[ext_resource type="Script" uid="uid://cnhqpivgscgff" path="res://addons/flow_nodes_editor/nodes/select_settings.gd" id="6_5uxx2"]
+[ext_resource type="Script" uid="uid://bw3x7p10afvc7" path="res://addons/flow_nodes_editor/nodes/substract_settings.gd" id="7_2lc4x"]
+
+[sub_resource type="Curve3D" id="Curve3D_36lll"]
+closed = true
+bake_interval = 1.0
+_data = {
+"points": PackedVector3Array(-2.87821, 0, 0.0274496, 2.87821, 0, -0.0274496, -10.3826, 0, -5.85868, -3.1811, 0, 0.229375, 3.1811, 0, -0.229375, -0.160163, 0, -8.9128, -2.60057, 0, -1.46175, 2.60057, 0, 1.46175, 9.91085, 0, -7.75173, -0.0910978, 0, -4.14596, 0.0910978, 0, 4.14596, 14.6308, 0, 2.77362, 3.53368, 0, -2.77641, -3.53368, 0, 2.77641, 9.08778, 0, 12.939, 4.18995, 0, 0.201923, -4.18995, 0, -0.201923, -4.54217, 0, 14.3526, 2.87743, 0, 2.2969, -2.87743, 0, -2.2969, -18.3236, 0, 10.2888, -2.12021, 0, 3.357, 2.12021, 0, -3.357, -19.1817, 0, -2.78582),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0)
+}
+point_count = 8
+
+[sub_resource type="Resource" id="Resource_psfr8"]
+script = ExtResource("3_qf0nw")
+inputs = Array[ExtResource("2_dxf0c")]([])
+
+[sub_resource type="Resource" id="Resource_2lc4x"]
+resource_name = "Transform Settings"
+script = ExtResource("5_2jbe2")
+offset_min = Vector3(0, 0, 0)
+offset_max = Vector3(0, 0, 0)
+rotation_min = Vector3(0, 0, 0)
+rotation_max = Vector3(0, 0, 0)
+scale_min = Vector3(3, 1, 1)
+scale_max = Vector3(3, 1, 1)
+uniform_scale = true
+random_seed = 4192799995
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Transform"
+enabled = true
+
+[sub_resource type="Resource" id="Resource_qe4ar"]
+resource_name = "Substract"
+script = ExtResource("7_2lc4x")
+random_seed = 1939724238
+inspect_enabled = false
+debug_enabled = true
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(0, 0.251351, 0.123225, 1)
+debug_modulate_by = ""
+title = "Substract"
+enabled = true
+
+[sub_resource type="Resource" id="Resource_dbqvf"]
+resource_name = "Select Settings"
+script = ExtResource("6_5uxx2")
+ratio = 0.2
+random_seed = 1388504677
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Select"
+enabled = true
+
+[sub_resource type="Resource" id="Resource_2jbe2"]
+resource_name = "Sample Spline Settings"
+script = ExtResource("4_qf0nw")
+uniform_interval = 3.0
+fill_curve = false
+required_meta_bool = &"is_road"
+random_seed = 2623515292
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Sample Spline"
+enabled = true
+
+[sub_resource type="Resource" id="Resource_qt8uc"]
+resource_name = "Sample Spline Settings"
+script = ExtResource("4_qf0nw")
+uniform_interval = 1.0
+fill_curve = true
+required_meta_bool = &"is_grass"
+random_seed = 2797604824
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Sample Spline"
+enabled = true
+
+[sub_resource type="Resource" id="Resource_5uxx2"]
+resource_local_to_scene = true
+script = ExtResource("4_2jbe2")
+nodes = Array[Dictionary]([{
+"name": &"id_0003_transform",
+"position_offset": Vector2(360, 120),
+"settings": SubResource("Resource_2lc4x"),
+"template": "transform"
+}, {
+"name": &"id_0009_substract",
+"position_offset": Vector2(720, 500),
+"settings": SubResource("Resource_qe4ar"),
+"template": "substract"
+}, {
+"name": &"id_0008_select",
+"position_offset": Vector2(300, 540),
+"settings": SubResource("Resource_dbqvf"),
+"template": "select"
+}, {
+"name": &"id_0006_sample_spline",
+"position_offset": Vector2(20, 120),
+"settings": SubResource("Resource_2jbe2"),
+"template": "sample_spline"
+}, {
+"name": &"id_0007_sample_spline",
+"position_offset": Vector2(-140, 540),
+"settings": SubResource("Resource_qt8uc"),
+"template": "sample_spline"
+}])
+conns = Array[Dictionary]([{
+"from_node": &"id_0006_sample_spline",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0003_transform",
+"to_port": 0
+}, {
+"from_node": &"id_0007_sample_spline",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0008_select",
+"to_port": 0
+}, {
+"from_node": &"id_0008_select",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0009_substract",
+"to_port": 0
+}, {
+"from_node": &"id_0003_transform",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0009_substract",
+"to_port": 1
+}, {
+"from_node": &"id_0007_sample_spline",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0010_add_attribute",
+"to_port": 0
+}])
+view_zoom = 1.21
+view_offset = Vector2(-209.96, -84.59)
+new_name_counter = 10
+inputs = SubResource("Resource_psfr8")
+metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
+
+[sub_resource type="Curve3D" id="Curve3D_nuuxb"]
+bake_interval = 3.0
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, -24.8343, 0, 5.68748, -6.06478, 0, 0.294408, 6.06478, 0, -0.294408, -12.1454, 0, 1.71299, -5.03436, 0, 0.706576, 5.03436, 0, -0.706576, 4.91215, 1.90735e-06, 4.94331, 0, 0, 0, 0, 0, 0, 21.3287, 0, -2.4087),
+"tilts": PackedFloat32Array(0, 0, 0, 0)
+}
+point_count = 4
+
+[node name="DemoPathOverRegion" type="Node3D"]
+
+[node name="Region" type="Path3D" parent="."]
+transform = Transform3D(-0.934826, 0, -0.355107, 0, 1, 0, 0.355107, 0, -0.934826, -4.43323, 0, 6.79012)
+curve = SubResource("Curve3D_36lll")
+metadata/is_grass = true
+
+[node name="FlowGraphNode3D" type="Node3D" parent="."]
+script = ExtResource("1_2l584")
+graph = SubResource("Resource_5uxx2")
+metadata/_custom_type_script = "uid://d1krtmb1urldl"
+
+[node name="Road" type="Path3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0883217, 0, -0.0294399)
+curve = SubResource("Curve3D_nuuxb")
+metadata/is_road = true

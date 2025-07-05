@@ -1,16 +1,26 @@
 === TODO
 
-[X] input nodes are not restored correctly
+[ ] Spline sampling non-uniform
+[X] Spline region - Spline path
+[ ] Set color
+[ ] Remove self intersections
+[ ] Add noise to position
+[ ] Math Node. Should hide/not require some inputs when not needed. Like Abs
+[ ] Math Node. Should be easier to add a constant float/int/vector at least
+[ ] When changing scene, the registered nodes should be removed
+[ ] Test random colors for each node
 [ ] Promote input pin to graph input
 [ ] use inputs on all settings
-[X] support for bools
-[ ] store sizes
 [ ] store color
-[ ] display density/color in debug
 [ ] Custom inputs to the pcg
 [ ] spatial operations
+	[X] A - B
 [ ] nodes to filter A/B
 [ ] undo/redo
+[X] store sizes
+[X] display density/color in debug
+[X] input nodes are not restored correctly
+[X] support for bools
 [X] Move isFinal to getMeta
 [X] Spawn PackedScene
 [X] store rotations

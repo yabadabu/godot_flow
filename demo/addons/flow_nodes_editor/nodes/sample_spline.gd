@@ -143,9 +143,13 @@ func findNodesOfType(root: Node, type_name: String) -> Array[Node]:
 	if root.get_class() == type_name:
 		found_nodes.append(root)
 	
+	var required_meta_bool = settings.get( "required_meta_bool" )
+	print( "required_bool_tag", required_meta_bool)
+	
 	# Recursively check children
 	for child in root.get_children():
-		found_nodes.append_array(findNodesOfType(child, type_name))
+		if !required_meta_bool or child.get_meta(required_meta_bool, false):
+			found_nodes.append_array(findNodesOfType(child, type_name))
 	
 	return found_nodes	
 

@@ -29,6 +29,7 @@ resource_name = "Sample Spline Settings"
 script = ExtResource("1_bd8sb")
 uniform_interval = 0.31
 fill_curve = false
+required_meta_bool = &""
 random_seed = 2842677187
 inspect_enabled = false
 debug_enabled = false
