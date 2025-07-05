@@ -136,12 +136,12 @@ enabled = true
 [sub_resource type="Resource" id="Resource_i2drj"]
 resource_name = "Math Op"
 script = ExtResource("9_dbqvf")
-operation = 0
+operation = 2
 in_nameA = "index"
-in_nameB = "5"
+in_nameB = "3.14"
 out_name = "new_x"
 random_seed = 2687818424
-inspect_enabled = false
+inspect_enabled = true
 debug_enabled = false
 debug_mode = 0
 debug_scale = 1.0

@@ -12,9 +12,11 @@ func _init():
 func getTitle() -> String:
 	return MathOpNodeSettings.eOperation.keys()[settings.operation]
 
-func newFloatContainer( size : int, new_name : String ):
+func newFloatStream( size : int, new_name : String, initFn : Callable ):
 	var new_container = PackedFloat32Array()
 	new_container.resize( size )
+	for idx in size:
+		new_container[idx] = initFn.call(idx)
 	return { 
 		"data_type" : FlowData.DataType.Float,
 		"container" : new_container,
@@ -35,11 +37,10 @@ func execute( _ctx : FlowData.EvaluationContext ):
 		
 	if sB == null:
 		if settings.in_nameB.is_valid_float():
-			sB = newFloatContainer( in_dataA.size(), "Constant %s" % settings.in_nameB )
-			var new_container = sB.container as PackedFloat32Array
-			new_container.fill( settings.in_nameB.to_float() )
+			var v = settings.in_nameB.to_float()
+			sB = newFloatStream( in_dataA.size(), "Constant %s" % settings.in_nameB, func( idx : int ) -> float: return v )
 		else:
-			setError( "Input B %s not found" % [settings.in_nameB])
+			setError( "Input B %s not found, and can't be interpreted as a constant number" % [settings.in_nameB])
 			return
 		
 	if not settings.out_name:
@@ -57,15 +58,7 @@ func execute( _ctx : FlowData.EvaluationContext ):
 	var out_container
 	
 	if sA.data_type == FlowData.DataType.Int and sB.data_type == FlowData.DataType.Float:
-		var new_container = PackedFloat32Array( )
-		new_container.resize( num_elemsA )
-		for idx in range( num_elemsA ):
-			new_container[idx] = sA.container[idx]
-		sA = {
-			"container" : new_container,
-			"data_type" : FlowData.DataType.Float,
-			"name" : sA.name + " as float"
-		}
+		sA = newFloatStream( num_elemsA, sA.name + " as float", func( idx : int ) -> float: return sA.container[idx] )
 		
 	if sA.data_type == FlowData.DataType.Float and sB.data_type == FlowData.DataType.Float:
 		var inA : PackedFloat32Array = sA.container
