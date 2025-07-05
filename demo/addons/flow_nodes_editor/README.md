@@ -1,14 +1,12 @@
 === TODO
 
 [ ] Spline sampling non-uniform
-[ ] Confirm I can use Index as part of the streams
 [ ] Confirm I can set values of the generated instances
 [ ] Remove self intersections
 [ ] Add noise to position
 [ ] Math Node. Should hide/not require some inputs when not needed. Like Abs
 [ ] Math Node. Should be easier to add a constant float/int/vector at least
 [ ] Support for Vector4/Color -> Read SubAttributes / MathNode / SetAttribute / Use in Debug if exists
-[ ] When changing scene, the registered nodes should be removed
 [ ] Test random colors for each node
 [ ] Promote input pin to graph input
 [ ] use inputs on all settings
@@ -17,6 +15,8 @@
 	[X] A - B
 [ ] nodes to filter A/B
 [ ] undo/redo
+[X] When changing scene, the registered nodes should be removed
+[X] Confirm I can use Index as part of the streams
 [X] Spline region - Spline path
 [X] Node to scan nodes 
 [X] Read meta into the attributes
