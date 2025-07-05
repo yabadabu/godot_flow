@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://bhacwufn13rf6"]
+
+[sub_resource type="PrismMesh" id="PrismMesh_14ttc"]
+
+[node name="Totem" type="Node3D" groups=["totem"]]
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 0, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.485362, 0)
+mesh = SubResource("PrismMesh_14ttc")

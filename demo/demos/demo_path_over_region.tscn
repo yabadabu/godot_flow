@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://bl32jt5udtf08"]
+[gd_scene load_steps=21 format=3 uid="uid://bl32jt5udtf08"]
 
 [ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_2l584"]
 [ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="2_dxf0c"]
@@ -8,6 +8,8 @@
 [ext_resource type="Script" uid="uid://dt7o3moxddt4h" path="res://addons/flow_nodes_editor/nodes/transform_settings.gd" id="5_2jbe2"]
 [ext_resource type="Script" uid="uid://cnhqpivgscgff" path="res://addons/flow_nodes_editor/nodes/select_settings.gd" id="6_5uxx2"]
 [ext_resource type="Script" uid="uid://bw3x7p10afvc7" path="res://addons/flow_nodes_editor/nodes/substract_settings.gd" id="7_2lc4x"]
+[ext_resource type="Script" uid="uid://oocaue4cyte2" path="res://addons/flow_nodes_editor/nodes/scan_nodes_settings.gd" id="8_qt8uc"]
+[ext_resource type="PackedScene" uid="uid://bhacwufn13rf6" path="res://scenes/totem.tscn" id="9_2lc4x"]
 
 [sub_resource type="Curve3D" id="Curve3D_36lll"]
 closed = true
@@ -42,33 +44,6 @@ debug_modulate_by = ""
 title = "Transform"
 enabled = true
 
-[sub_resource type="Resource" id="Resource_qe4ar"]
-resource_name = "Substract"
-script = ExtResource("7_2lc4x")
-random_seed = 1939724238
-inspect_enabled = false
-debug_enabled = true
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(0, 0.251351, 0.123225, 1)
-debug_modulate_by = ""
-title = "Substract"
-enabled = true
-
-[sub_resource type="Resource" id="Resource_dbqvf"]
-resource_name = "Select Settings"
-script = ExtResource("6_5uxx2")
-ratio = 0.2
-random_seed = 1388504677
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Select"
-enabled = true
-
 [sub_resource type="Resource" id="Resource_2jbe2"]
 resource_name = "Sample Spline Settings"
 script = ExtResource("4_qf0nw")
@@ -101,6 +76,48 @@ debug_modulate_by = ""
 title = "Sample Spline"
 enabled = true
 
+[sub_resource type="Resource" id="Resource_qe4ar"]
+resource_name = "Substract"
+script = ExtResource("7_2lc4x")
+random_seed = 1939724238
+inspect_enabled = false
+debug_enabled = true
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(0, 0.251351, 0.123225, 1)
+debug_modulate_by = ""
+title = "Substract"
+enabled = true
+
+[sub_resource type="Resource" id="Resource_dbqvf"]
+resource_name = "Select Settings"
+script = ExtResource("6_5uxx2")
+ratio = 0.2
+random_seed = 1388504677
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Select"
+enabled = true
+
+[sub_resource type="Resource" id="Resource_banft"]
+resource_name = "Scan Nodes Settings"
+script = ExtResource("8_qt8uc")
+group_name = "totem"
+import_metadata = null
+random_seed = 1619377703
+inspect_enabled = true
+debug_enabled = true
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Scan Nodes"
+enabled = true
+
 [sub_resource type="Resource" id="Resource_5uxx2"]
 resource_local_to_scene = true
 script = ExtResource("4_2jbe2")
@@ -110,25 +127,30 @@ nodes = Array[Dictionary]([{
 "settings": SubResource("Resource_2lc4x"),
 "template": "transform"
 }, {
-"name": &"id_0009_substract",
-"position_offset": Vector2(720, 500),
-"settings": SubResource("Resource_qe4ar"),
-"template": "substract"
-}, {
-"name": &"id_0008_select",
-"position_offset": Vector2(300, 540),
-"settings": SubResource("Resource_dbqvf"),
-"template": "select"
-}, {
 "name": &"id_0006_sample_spline",
 "position_offset": Vector2(20, 120),
 "settings": SubResource("Resource_2jbe2"),
 "template": "sample_spline"
 }, {
 "name": &"id_0007_sample_spline",
-"position_offset": Vector2(-140, 540),
+"position_offset": Vector2(-40, 520),
 "settings": SubResource("Resource_qt8uc"),
 "template": "sample_spline"
+}, {
+"name": &"id_0009_substract",
+"position_offset": Vector2(800, 380),
+"settings": SubResource("Resource_qe4ar"),
+"template": "substract"
+}, {
+"name": &"id_0008_select",
+"position_offset": Vector2(400, 520),
+"settings": SubResource("Resource_dbqvf"),
+"template": "select"
+}, {
+"name": &"id_0011_scan_nodes",
+"position_offset": Vector2(140, 800),
+"settings": SubResource("Resource_banft"),
+"template": "scan_nodes"
 }])
 conns = Array[Dictionary]([{
 "from_node": &"id_0006_sample_spline",
@@ -154,16 +176,10 @@ conns = Array[Dictionary]([{
 "keep_alive": false,
 "to_node": &"id_0009_substract",
 "to_port": 1
-}, {
-"from_node": &"id_0007_sample_spline",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0010_add_attribute",
-"to_port": 0
 }])
-view_zoom = 1.21
-view_offset = Vector2(-209.96, -84.59)
-new_name_counter = 10
+view_zoom = 0.683013
+view_offset = Vector2(83.6795, -124.06)
+new_name_counter = 11
 inputs = SubResource("Resource_psfr8")
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 
@@ -183,6 +199,7 @@ curve = SubResource("Curve3D_36lll")
 metadata/is_grass = true
 
 [node name="FlowGraphNode3D" type="Node3D" parent="."]
+transform = Transform3D(0.998594, 0, 0, 0, 0.998594, 0, 0, 0, 0.998594, 0, 0, 0)
 script = ExtResource("1_2l584")
 graph = SubResource("Resource_5uxx2")
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
@@ -191,3 +208,11 @@ metadata/_custom_type_script = "uid://d1krtmb1urldl"
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0883217, 0, -0.0294399)
 curve = SubResource("Curve3D_nuuxb")
 metadata/is_road = true
+
+[node name="Totem" parent="." instance=ExtResource("9_2lc4x")]
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, -9.03087, 0, 10.6327)
+metadata/extra_scale = 0.5
+
+[node name="Totem2" parent="." instance=ExtResource("9_2lc4x")]
+transform = Transform3D(0.957354, 0, 1.56877, 0, 1.83781, 0, -1.56877, 0, 0.957354, 7.52767, -9.53674e-07, -2.50066)
+metadata/extra_scale = 2.0
