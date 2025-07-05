@@ -198,6 +198,20 @@ func getGdScriptTypeForFlowDataType( data_type : FlowData.DataType ) -> int:
 			return TYPE_VECTOR3
 	return TYPE_NIL
 
+func getFlowDataTypeFromGdScriptType( gd_type : int  ) -> FlowData.DataType:
+	match( gd_type ):
+		TYPE_BOOL:
+			return FlowData.DataType.Bool
+		TYPE_INT:
+			return FlowData.DataType.Int
+		TYPE_FLOAT: 
+			return FlowData.DataType.Float
+		TYPE_STRING:
+			return FlowData.DataType.String 
+		TYPE_VECTOR3:
+			return FlowData.DataType.Vector
+	return FlowData.DataType.Invalid
+
 func initFromScript():
 	var meta := getMeta()
 	

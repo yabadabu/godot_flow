@@ -107,7 +107,7 @@ enabled = true
 resource_name = "Scan Nodes Settings"
 script = ExtResource("8_qt8uc")
 group_name = "totem"
-import_metadata = null
+import_metadata = true
 random_seed = 1619377703
 inspect_enabled = true
 debug_enabled = true
@@ -148,7 +148,7 @@ nodes = Array[Dictionary]([{
 "template": "select"
 }, {
 "name": &"id_0011_scan_nodes",
-"position_offset": Vector2(140, 800),
+"position_offset": Vector2(40, 820),
 "settings": SubResource("Resource_banft"),
 "template": "scan_nodes"
 }])
@@ -178,7 +178,7 @@ conns = Array[Dictionary]([{
 "to_port": 1
 }])
 view_zoom = 0.683013
-view_offset = Vector2(83.6795, -124.06)
+view_offset = Vector2(-46.3205, -19.0596)
 new_name_counter = 11
 inputs = SubResource("Resource_psfr8")
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
@@ -211,8 +211,13 @@ metadata/is_road = true
 
 [node name="Totem" parent="." instance=ExtResource("9_2lc4x")]
 transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, -9.03087, 0, 10.6327)
+num_enemies = 4
 metadata/extra_scale = 0.5
+metadata/totem_class = "big"
 
 [node name="Totem2" parent="." instance=ExtResource("9_2lc4x")]
 transform = Transform3D(0.957354, 0, 1.56877, 0, 1.83781, 0, -1.56877, 0, 0.957354, 7.52767, -9.53674e-07, -2.50066)
+num_enemies = 2
 metadata/extra_scale = 2.0
+metadata/totem_class = "small"
+metadata/is_big = true

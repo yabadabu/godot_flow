@@ -1,9 +1,12 @@
-[gd_scene load_steps=2 format=3 uid="uid://bhacwufn13rf6"]
+[gd_scene load_steps=3 format=3 uid="uid://bhacwufn13rf6"]
+
+[ext_resource type="Script" uid="uid://dqajkneld6h6" path="res://scenes/totem.gd" id="1_jf62o"]
 
 [sub_resource type="PrismMesh" id="PrismMesh_14ttc"]
 
 [node name="Totem" type="Node3D" groups=["totem"]]
 transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 0, 0)
+script = ExtResource("1_jf62o")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.485362, 0)

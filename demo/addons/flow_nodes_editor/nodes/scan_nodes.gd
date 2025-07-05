@@ -24,6 +24,31 @@ func find_nodes_in_custom_group( ctx : FlowData.EvaluationContext, group_name: S
 	
 	return scene_nodes
 
+func importMetaData( output, nodes ):
+	var nsamples = nodes.size()
+	var streams_by_name : Dictionary = {}
+	for idx in range( nsamples ):
+		var node = nodes[idx]
+		var metas = node.get_meta_list()
+		for meta in metas:
+			var value = node.get_meta( meta )
+			if value == null:
+				continue
+			var value_data_type = getFlowDataTypeFromGdScriptType( typeof(value) )
+			if value_data_type == FlowData.DataType.Invalid:
+				continue
+			if not output.hasStream( meta ):
+				output.addStream( meta, value_data_type )
+			var stream = output.findStream( meta )
+			assert( stream )
+			if stream.data_type != value_data_type:
+				print( "Node %d (%s), meta: %s has type %d but the registered stream as type %d" % [ idx, node.name, meta, value_data_type, stream.type ])
+				continue
+			if value_data_type == FlowData.DataType.Bool:
+				value = 1 if value else 0
+			stream.container[ idx ] = value	
+			#print( "Saved as %s" % [ stream.container[ idx ] ])
+
 func execute( ctx : FlowData.EvaluationContext ):
 	var output := FlowData.Data.new()
 	
@@ -38,7 +63,11 @@ func execute( ctx : FlowData.EvaluationContext ):
 	for idx in range( nsamples ):
 		var node = nodes[idx]
 		spos[idx] = node.global_position
-		srot[idx] = node.global_rotation
 		ssize[idx] = node.scale
+		var b : Basis = node.global_transform.basis
+		srot[idx] = FlowData.basisToEuler( b )
+		
+	if getSettingValue( ctx, "import_metadata" ) as bool:
+		importMetaData( output, nodes )
 	
 	set_output( 0, output )

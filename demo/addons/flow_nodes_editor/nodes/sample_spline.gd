@@ -144,7 +144,6 @@ func findNodesOfType(root: Node, type_name: String) -> Array[Node]:
 		found_nodes.append(root)
 	
 	var required_meta_bool = settings.get( "required_meta_bool" )
-	print( "required_bool_tag", required_meta_bool)
 	
 	# Recursively check children
 	for child in root.get_children():
@@ -160,7 +159,6 @@ func execute( ctx : FlowData.EvaluationContext ):
 		return null
 		
 	var path3d_nodes = findNodesOfType(root, "Path3D")
-	print("Found ", path3d_nodes.size(), " Path3D nodes:")
 
 	var output := FlowData.Data.new()
 	output.addCommonStreams( 0 )

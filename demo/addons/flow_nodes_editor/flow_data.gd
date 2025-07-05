@@ -8,6 +8,7 @@ enum DataType {
 	Vector,
 	String,
 	Resource,
+	Invalid = 999
 }
 
 const AttrPosition : StringName = &"position"
