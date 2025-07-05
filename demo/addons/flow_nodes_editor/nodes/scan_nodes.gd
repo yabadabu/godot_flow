@@ -26,7 +26,6 @@ func find_nodes_in_custom_group( ctx : FlowData.EvaluationContext, group_name: S
 
 func importMetaData( output, nodes ):
 	var nsamples = nodes.size()
-	var streams_by_name : Dictionary = {}
 	for idx in range( nsamples ):
 		var node = nodes[idx]
 		var metas = node.get_meta_list()
@@ -49,6 +48,28 @@ func importMetaData( output, nodes ):
 			stream.container[ idx ] = value	
 			#print( "Saved as %s" % [ stream.container[ idx ] ])
 
+func importProperty( output, nodes, prop_name ):
+	var nsamples = nodes.size()
+	var stream = null
+	for idx in range( nsamples ):
+		var node = nodes[idx]
+		var value = node.get( prop_name )
+		if value == null:
+			continue
+		var value_data_type = getFlowDataTypeFromGdScriptType( typeof(value) )
+		if value_data_type == FlowData.DataType.Invalid:
+			continue
+		if not stream:
+			output.addStream( prop_name, value_data_type )
+			stream = output.findStream( prop_name )
+		
+		if stream.data_type != value_data_type:
+			print( "Node %d (%s), meta: %s has type %d but the registered stream as type %d" % [ idx, node.name, prop_name, value_data_type, stream.type ])
+			continue
+		if value_data_type == FlowData.DataType.Bool:
+			value = 1 if value else 0
+		stream.container[ idx ] = value	
+
 func execute( ctx : FlowData.EvaluationContext ):
 	var output := FlowData.Data.new()
 	
@@ -69,5 +90,9 @@ func execute( ctx : FlowData.EvaluationContext ):
 		
 	if getSettingValue( ctx, "import_metadata" ) as bool:
 		importMetaData( output, nodes )
+	
+	for prop_name in settings.import_properties:
+		if prop_name:
+			importProperty( output, nodes, prop_name )
 	
 	set_output( 0, output )

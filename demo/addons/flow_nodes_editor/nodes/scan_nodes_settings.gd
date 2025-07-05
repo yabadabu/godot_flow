@@ -6,6 +6,7 @@ extends NodeSettings
 
 @export var group_name : String
 @export var import_metadata : bool = false
+@export var import_properties : Array[ StringName ]
 
 func _init():
 	super._init()

@@ -76,19 +76,6 @@ debug_modulate_by = ""
 title = "Sample Spline"
 enabled = true
 
-[sub_resource type="Resource" id="Resource_qe4ar"]
-resource_name = "Substract"
-script = ExtResource("7_2lc4x")
-random_seed = 1939724238
-inspect_enabled = false
-debug_enabled = true
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(0, 0.251351, 0.123225, 1)
-debug_modulate_by = ""
-title = "Substract"
-enabled = true
-
 [sub_resource type="Resource" id="Resource_dbqvf"]
 resource_name = "Select Settings"
 script = ExtResource("6_5uxx2")
@@ -108,6 +95,7 @@ resource_name = "Scan Nodes Settings"
 script = ExtResource("8_qt8uc")
 group_name = "totem"
 import_metadata = true
+import_properties = Array[StringName]([&"num_enemies"])
 random_seed = 1619377703
 inspect_enabled = true
 debug_enabled = true
@@ -116,6 +104,19 @@ debug_scale = 1.0
 debug_color = Color(1, 1, 1, 1)
 debug_modulate_by = ""
 title = "Scan Nodes"
+enabled = true
+
+[sub_resource type="Resource" id="Resource_qe4ar"]
+resource_name = "Substract"
+script = ExtResource("7_2lc4x")
+random_seed = 1939724238
+inspect_enabled = false
+debug_enabled = true
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(0, 0.251351, 0.123225, 1)
+debug_modulate_by = ""
+title = "Substract"
 enabled = true
 
 [sub_resource type="Resource" id="Resource_5uxx2"]
@@ -137,11 +138,6 @@ nodes = Array[Dictionary]([{
 "settings": SubResource("Resource_qt8uc"),
 "template": "sample_spline"
 }, {
-"name": &"id_0009_substract",
-"position_offset": Vector2(800, 380),
-"settings": SubResource("Resource_qe4ar"),
-"template": "substract"
-}, {
 "name": &"id_0008_select",
 "position_offset": Vector2(400, 520),
 "settings": SubResource("Resource_dbqvf"),
@@ -151,6 +147,11 @@ nodes = Array[Dictionary]([{
 "position_offset": Vector2(40, 820),
 "settings": SubResource("Resource_banft"),
 "template": "scan_nodes"
+}, {
+"name": &"id_0009_substract",
+"position_offset": Vector2(800, 380),
+"settings": SubResource("Resource_qe4ar"),
+"template": "substract"
 }])
 conns = Array[Dictionary]([{
 "from_node": &"id_0006_sample_spline",
@@ -179,7 +180,7 @@ conns = Array[Dictionary]([{
 }])
 view_zoom = 0.683013
 view_offset = Vector2(-46.3205, -19.0596)
-new_name_counter = 11
+new_name_counter = 13
 inputs = SubResource("Resource_psfr8")
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 
@@ -199,7 +200,7 @@ curve = SubResource("Curve3D_36lll")
 metadata/is_grass = true
 
 [node name="FlowGraphNode3D" type="Node3D" parent="."]
-transform = Transform3D(0.998594, 0, 0, 0, 0.998594, 0, 0, 0, 0.998594, 0, 0, 0)
+transform = Transform3D(0.998594, 0, 0, 0, 0.998594, 0, 0, 0, 0.998594, 0.0372458, -0.0206623, -0.00506926)
 script = ExtResource("1_2l584")
 graph = SubResource("Resource_5uxx2")
 metadata/_custom_type_script = "uid://d1krtmb1urldl"

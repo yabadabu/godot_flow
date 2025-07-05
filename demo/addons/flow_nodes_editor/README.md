@@ -5,6 +5,7 @@
 [ ] Confirm I can use Index as part of the streams
 [X] Node to scan nodes 
 [X] Read meta into the attributes
+[X] Read properties from list
 [ ] Remove self intersections
 [ ] Add noise to position
 [ ] Math Node. Should hide/not require some inputs when not needed. Like Abs
