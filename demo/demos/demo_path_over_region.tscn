@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://bl32jt5udtf08"]
+[gd_scene load_steps=24 format=3 uid="uid://bl32jt5udtf08"]
 
 [ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_2l584"]
 [ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="2_dxf0c"]
@@ -10,6 +10,7 @@
 [ext_resource type="Script" uid="uid://bw3x7p10afvc7" path="res://addons/flow_nodes_editor/nodes/substract_settings.gd" id="7_2lc4x"]
 [ext_resource type="Script" uid="uid://oocaue4cyte2" path="res://addons/flow_nodes_editor/nodes/scan_nodes_settings.gd" id="8_qt8uc"]
 [ext_resource type="PackedScene" uid="uid://bhacwufn13rf6" path="res://scenes/totem.tscn" id="9_2lc4x"]
+[ext_resource type="Script" uid="uid://ckff4og6eip3" path="res://addons/flow_nodes_editor/nodes/math_op_settings.gd" id="9_dbqvf"]
 
 [sub_resource type="Curve3D" id="Curve3D_36lll"]
 closed = true
@@ -90,6 +91,32 @@ debug_modulate_by = ""
 title = "Select"
 enabled = true
 
+[sub_resource type="Resource" id="Resource_qe4ar"]
+resource_name = "Substract"
+script = ExtResource("7_2lc4x")
+random_seed = 1939724238
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(0, 0.251351, 0.123225, 1)
+debug_modulate_by = ""
+title = "Substract"
+enabled = true
+
+[sub_resource type="Resource" id="Resource_h10xn"]
+resource_name = "Substract"
+script = ExtResource("7_2lc4x")
+random_seed = 261856610
+inspect_enabled = false
+debug_enabled = true
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Substract"
+enabled = true
+
 [sub_resource type="Resource" id="Resource_banft"]
 resource_name = "Scan Nodes Settings"
 script = ExtResource("8_qt8uc")
@@ -97,8 +124,8 @@ group_name = "totem"
 import_metadata = true
 import_properties = Array[StringName]([&"num_enemies"])
 random_seed = 1619377703
-inspect_enabled = true
-debug_enabled = true
+inspect_enabled = false
+debug_enabled = false
 debug_mode = 0
 debug_scale = 1.0
 debug_color = Color(1, 1, 1, 1)
@@ -106,17 +133,21 @@ debug_modulate_by = ""
 title = "Scan Nodes"
 enabled = true
 
-[sub_resource type="Resource" id="Resource_qe4ar"]
-resource_name = "Substract"
-script = ExtResource("7_2lc4x")
-random_seed = 1939724238
+[sub_resource type="Resource" id="Resource_i2drj"]
+resource_name = "Math Op"
+script = ExtResource("9_dbqvf")
+operation = 0
+in_nameA = "index"
+in_nameB = "5"
+out_name = "new_x"
+random_seed = 2687818424
 inspect_enabled = false
-debug_enabled = true
+debug_enabled = false
 debug_mode = 0
 debug_scale = 1.0
-debug_color = Color(0, 0.251351, 0.123225, 1)
+debug_color = Color(1, 1, 1, 1)
 debug_modulate_by = ""
-title = "Substract"
+title = "Math"
 enabled = true
 
 [sub_resource type="Resource" id="Resource_5uxx2"]
@@ -143,15 +174,25 @@ nodes = Array[Dictionary]([{
 "settings": SubResource("Resource_dbqvf"),
 "template": "select"
 }, {
+"name": &"id_0009_substract",
+"position_offset": Vector2(800, 380),
+"settings": SubResource("Resource_qe4ar"),
+"template": "substract"
+}, {
+"name": &"id_0014_substract",
+"position_offset": Vector2(1060, 620),
+"settings": SubResource("Resource_h10xn"),
+"template": "substract"
+}, {
 "name": &"id_0011_scan_nodes",
 "position_offset": Vector2(40, 820),
 "settings": SubResource("Resource_banft"),
 "template": "scan_nodes"
 }, {
-"name": &"id_0009_substract",
-"position_offset": Vector2(800, 380),
-"settings": SubResource("Resource_qe4ar"),
-"template": "substract"
+"name": &"id_0015_math_op",
+"position_offset": Vector2(380, 1120),
+"settings": SubResource("Resource_i2drj"),
+"template": "math_op"
 }])
 conns = Array[Dictionary]([{
 "from_node": &"id_0006_sample_spline",
@@ -177,10 +218,28 @@ conns = Array[Dictionary]([{
 "keep_alive": false,
 "to_node": &"id_0009_substract",
 "to_port": 1
+}, {
+"from_node": &"id_0009_substract",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0014_substract",
+"to_port": 0
+}, {
+"from_node": &"id_0011_scan_nodes",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0014_substract",
+"to_port": 1
+}, {
+"from_node": &"id_0011_scan_nodes",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0015_math_op",
+"to_port": 0
 }])
-view_zoom = 0.683013
-view_offset = Vector2(-46.3205, -19.0596)
-new_name_counter = 13
+view_zoom = 0.879409
+view_offset = Vector2(64.4503, 445.177)
+new_name_counter = 15
 inputs = SubResource("Resource_psfr8")
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 
@@ -211,7 +270,7 @@ curve = SubResource("Curve3D_nuuxb")
 metadata/is_road = true
 
 [node name="Totem" parent="." instance=ExtResource("9_2lc4x")]
-transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, -9.03087, 0, 10.6327)
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, -9.48803, -1.71658, 10.4651)
 num_enemies = 4
 metadata/extra_scale = 0.5
 metadata/totem_class = "big"

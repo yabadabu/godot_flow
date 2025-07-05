@@ -1,11 +1,8 @@
 === TODO
 
 [ ] Spline sampling non-uniform
-[X] Spline region - Spline path
 [ ] Confirm I can use Index as part of the streams
-[X] Node to scan nodes 
-[X] Read meta into the attributes
-[X] Read properties from list
+[ ] Confirm I can set values of the generated instances
 [ ] Remove self intersections
 [ ] Add noise to position
 [ ] Math Node. Should hide/not require some inputs when not needed. Like Abs
@@ -20,6 +17,10 @@
 	[X] A - B
 [ ] nodes to filter A/B
 [ ] undo/redo
+[X] Spline region - Spline path
+[X] Node to scan nodes 
+[X] Read meta into the attributes
+[X] Read properties from list
 [X] store sizes
 [X] display density/color in debug
 [X] input nodes are not restored correctly

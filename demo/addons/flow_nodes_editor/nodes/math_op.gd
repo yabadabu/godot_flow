@@ -12,28 +12,42 @@ func _init():
 func getTitle() -> String:
 	return MathOpNodeSettings.eOperation.keys()[settings.operation]
 
+func newFloatContainer( size : int, new_name : String ):
+	var new_container = PackedFloat32Array()
+	new_container.resize( size )
+	return { 
+		"data_type" : FlowData.DataType.Float,
+		"container" : new_container,
+		"name" : new_name
+	}	
+
 func execute( _ctx : FlowData.EvaluationContext ):
 	var in_dataA: FlowData.Data = get_input(0)
 	var in_dataB : FlowData.Data = get_input(1)
 	var out_data : FlowData.Data = in_dataA.duplicate()
 	
 	var sA = in_dataA.findStream( settings.in_nameA )
-	var sB = in_dataB.findStream( settings.in_nameB )
+	var sB = in_dataB.findStream( settings.in_nameB ) if in_dataB else null
 	
 	if sA == null:
 		setError( "Input A %s not found" % [settings.in_nameA])
 		return
 		
 	if sB == null:
-		setError( "Input B %s not found" % [settings.in_nameB])
-		return
+		if settings.in_nameB.is_valid_float():
+			sB = newFloatContainer( in_dataA.size(), "Constant %s" % settings.in_nameB )
+			var new_container = sB.container as PackedFloat32Array
+			new_container.fill( settings.in_nameB.to_float() )
+		else:
+			setError( "Input B %s not found" % [settings.in_nameB])
+			return
 		
 	if not settings.out_name:
 		setError( "Output name can't be empty")
 		return
 
 	var num_elemsA := in_dataA.size()
-	var num_elemsB := in_dataB.size()
+	var num_elemsB := in_dataB.size() if in_dataB else num_elemsA
 	if num_elemsA != num_elemsB:
 		setError( "Num elements from A nd B do not match (%d vs %d)" % [num_elemsA, num_elemsB])
 		return
@@ -41,6 +55,18 @@ func execute( _ctx : FlowData.EvaluationContext ):
 	
 	var out_data_type
 	var out_container
+	
+	if sA.data_type == FlowData.DataType.Int and sB.data_type == FlowData.DataType.Float:
+		var new_container = PackedFloat32Array( )
+		new_container.resize( num_elemsA )
+		for idx in range( num_elemsA ):
+			new_container[idx] = sA.container[idx]
+		sA = {
+			"container" : new_container,
+			"data_type" : FlowData.DataType.Float,
+			"name" : sA.name + " as float"
+		}
+		
 	if sA.data_type == FlowData.DataType.Float and sB.data_type == FlowData.DataType.Float:
 		var inA : PackedFloat32Array = sA.container
 		var inB : PackedFloat32Array = sB.container
@@ -124,7 +150,7 @@ func execute( _ctx : FlowData.EvaluationContext ):
 		out_data_type = FlowData.DataType.Vector
 		
 	else:
-		setError( "Input A and B have incompatible data types (%s vs %s)" % [sA.data_type, sB.data_type])
+		setError( "Input A and B have incompatible/unsupported data types (%s vs %s)" % [sA.data_type, sB.data_type])
 		return
 		
 	# This will override the existing stream if exists or update a substream

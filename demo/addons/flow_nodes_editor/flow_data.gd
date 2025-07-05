@@ -134,6 +134,18 @@ class Data:
 		
 	func findStream( name : String ):
 		name = translateStreamName( name )
+		
+		if name == "index":
+			var new_container = PackedInt32Array()
+			new_container.resize( size() )
+			for idx in range( new_container.size() ):
+				new_container[idx] = idx
+			return {
+				"data_type" : DataType.Int,
+				"container" : new_container,
+				"name" : "Index"
+			}
+			
 		var parts = name.split( "." )
 		if parts.size() == 2:
 			#print( "findStream(%s) => %s" % [ name, parts])
