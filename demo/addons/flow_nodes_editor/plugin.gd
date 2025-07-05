@@ -12,6 +12,9 @@ var undo_redo: EditorUndoRedoManager
 var add_attribute_inspector_plugin : EditorInspectorPlugin
 var graph_input_inspector_plugin : EditorInspectorPlugin
 
+# To detect scene changes
+var current_scene_root = null
+
 @onready var selection = EditorInterface.get_selection()
 
 func spawnDock( res_template : String, title : String, bottom : bool ) -> Control:
@@ -37,8 +40,10 @@ func _enter_tree():
 	
 	# Will refresh everytime the undo/redo subsystem saves a point
 	undo_redo = get_undo_redo()
-	undo_redo.history_changed.connect(_on_history_changed)	
-
+	undo_redo.history_changed.connect(_on_history_changed)
+	
+	set_process(true)
+	
 func _exit_tree():
 	if undo_redo:
 		undo_redo.history_changed.disconnect(_on_history_changed)
@@ -55,6 +60,12 @@ func _ready():
 	selection.selection_changed.connect(_selection_changed)
 	_selection_changed()
 
+func on_scene_changed(scene_root: Node) -> void:
+	# Clear the current resource in the prev scene
+	graph_dock.setResourceToEdit( null, null )
+	# Refresh if the current scene is a pcg
+	_selection_changed()
+
 func _selection_changed():
 	
 	var scene_nodes = selection.get_selected_nodes()
@@ -68,3 +79,9 @@ func _selection_changed():
 func _on_history_changed( ):
 	#print("Something changed in the editor (undo/redo history updated)")	
 	graph_dock.regen_pending = true
+
+func _process( elapsed : float ):
+	var scene_root = get_editor_interface().get_edited_scene_root()
+	if scene_root != current_scene_root:
+		current_scene_root = scene_root
+		on_scene_changed(scene_root)

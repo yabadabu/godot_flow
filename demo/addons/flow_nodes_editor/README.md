@@ -2,17 +2,17 @@
 
 [ ] Spline sampling non-uniform
 [X] Spline region - Spline path
+[ ] Node to scan nodes
 [ ] Read meta into the attributes
-[ ] Set color
 [ ] Remove self intersections
 [ ] Add noise to position
 [ ] Math Node. Should hide/not require some inputs when not needed. Like Abs
 [ ] Math Node. Should be easier to add a constant float/int/vector at least
+[ ] Support for Vector4/Color -> Read SubAttributes / MathNode / SetAttribute / Use in Debug if exists
 [ ] When changing scene, the registered nodes should be removed
 [ ] Test random colors for each node
 [ ] Promote input pin to graph input
 [ ] use inputs on all settings
-[ ] store color
 [ ] Custom inputs to the pcg
 [ ] spatial operations
 	[X] A - B
