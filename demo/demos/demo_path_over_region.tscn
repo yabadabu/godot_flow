@@ -138,11 +138,11 @@ resource_name = "Math Op"
 script = ExtResource("9_dbqvf")
 operation = 2
 in_nameA = "index"
-in_nameB = "3.14"
+in_nameB = "3.12"
 out_name = "new_x"
 random_seed = 2687818424
 inspect_enabled = true
-debug_enabled = false
+debug_enabled = true
 debug_mode = 0
 debug_scale = 1.0
 debug_color = Color(1, 1, 1, 1)
@@ -190,7 +190,7 @@ nodes = Array[Dictionary]([{
 "template": "scan_nodes"
 }, {
 "name": &"id_0015_math_op",
-"position_offset": Vector2(380, 1120),
+"position_offset": Vector2(440, 1080),
 "settings": SubResource("Resource_i2drj"),
 "template": "math_op"
 }])
@@ -238,7 +238,7 @@ conns = Array[Dictionary]([{
 "to_port": 0
 }])
 view_zoom = 0.879409
-view_offset = Vector2(64.4503, 445.177)
+view_offset = Vector2(-11.5497, 230.177)
 new_name_counter = 15
 inputs = SubResource("Resource_psfr8")
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"

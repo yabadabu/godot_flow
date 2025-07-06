@@ -9,8 +9,8 @@ using namespace godot;
 
 void GDRTree::_bind_methods() {
   ClassDB::bind_method(D_METHOD("clear"), &GDRTree::clear);
-  ClassDB::bind_method(D_METHOD("add"), &GDRTree::add);
-  ClassDB::bind_method(D_METHOD("overlaps"), &GDRTree::overlaps);
+  ClassDB::bind_method(D_METHOD("add", "centers", "sizes"), &GDRTree::add);
+  ClassDB::bind_method(D_METHOD("overlaps", "others_centers", "others_sizes", "return_overlapped"), &GDRTree::overlaps);
 }
 
 GDRTree::GDRTree() {
@@ -24,26 +24,23 @@ void GDRTree::clear() {
   size = 0;
 }
 
-bool GDRTree::add( const PackedVector3Array& in_min, const PackedVector3Array& in_max, int id_base ) {
+bool GDRTree::add( const PackedVector3Array& in_centers, const PackedVector3Array& in_sizes ) {
   
-  if( in_min.size() != in_max.size() )
+  if( in_centers.size() != in_sizes.size() )
     return false;
 
-  if( id_base < 0 )
-    return false;
+  const Vector3 *centers_data = in_centers.ptr();
+  const Vector3 *sizes_data = in_sizes.ptr();
 
-  const Vector3 *min_data = in_min.ptr();
-  const Vector3 *max_data = in_max.ptr();
-
-  int id = id_base;
-  const size_t i_max = in_min.size();
+  int id = 0;
+  const size_t i_max = in_centers.size();
   for( size_t i=0; i<i_max; ++i, ++id ) {
-    const float* vmin = &min_data[i].x;
-    const float* vmax = &max_data[i].x;
-    dbg( "Inserting ", id, " : ", vmin[0], ", ", vmin[1], ", ", vmin[2], ", ", vmax[0], ", ", vmax[1], ", ", vmax[2] );
+    const float* center = &in_centers[i].x;
+    const float* size = &sizes_data[i].x;
+    dbg( "Inserting ", id, " : ", center[0], ", ", center[1], ", ", center[2], ", ", size[0], ", ", size[1], ", ", size[2] );
 
-    float pmin[3] = { vmin[0] - vmax[0] * 0.5f, vmin[1] - vmax[1] * 0.5f, vmin[2] - vmax[2] * 0.5f };
-    float pmax[3] = { vmin[0] + vmax[0] * 0.5f, vmin[1] + vmax[1] * 0.5f, vmin[2] + vmax[2] * 0.5f };
+    float pmin[3] = { center[0] - size[0] * 0.5f, center[1] - size[1] * 0.5f, center[2] - size[2] * 0.5f };
+    float pmax[3] = { center[0] + size[0] * 0.5f, center[1] + size[1] * 0.5f, center[2] + size[2] * 0.5f };
     tree.Insert(pmin, pmax, id);
   }
 
@@ -51,22 +48,22 @@ bool GDRTree::add( const PackedVector3Array& in_min, const PackedVector3Array& i
   return true;
 }
 
-Dictionary GDRTree::overlaps( const PackedVector3Array& others_min, const PackedVector3Array& others_max, bool return_overlapped ) const {
+Dictionary GDRTree::overlaps( const PackedVector3Array& others_centers, const PackedVector3Array& others_sizes, bool return_overlapped ) const {
 
   BitBuffer bb_my_idxs_overlapped_by_others;
   //PackedInt32Array other_idxs_overlapping_me;
 
   bool result = false;
-  if( others_min.size() == others_max.size() ) {
-    const size_t i_max = others_min.size();
+  if( others_centers.size() == others_sizes.size() ) {
+    const size_t i_max = others_centers.size();
     for( size_t i=0; i<i_max; ++i ) {
       
-      const float* vmin = &others_min[i].x;
-      const float* vmax = &others_max[i].x;
-      dbg( "Overlap ", i, " : ", vmin[0], ", ", vmin[1], ", ", vmin[2], ", ", vmax[0], ", ", vmax[1], ", ", vmax[2] );
+      const float* center = &others_centers[i].x;
+      const float* size = &others_sizes[i].x;
+      dbg( "Overlap ", i, " : ", center[0], ", ", center[1], ", ", center[2], ", ", size[0], ", ", size[1], ", ", size[2] );
 
-      float pmin[3] = { vmin[0] - vmax[0] * 0.5f, vmin[1] - vmax[1] * 0.5f, vmin[2] - vmax[2] * 0.5f };
-      float pmax[3] = { vmin[0] + vmax[0] * 0.5f, vmin[1] + vmax[1] * 0.5f, vmin[2] + vmax[2] * 0.5f };
+      float pmin[3] = { center[0] - size[0] * 0.5f, center[1] - size[1] * 0.5f, center[2] - size[2] * 0.5f };
+      float pmax[3] = { center[0] + size[0] * 0.5f, center[1] + size[1] * 0.5f, center[2] + size[2] * 0.5f };
 
       if( tree.Search(pmin, pmax, [&bb_my_idxs_overlapped_by_others,i](const int& id) -> bool {
         dbg( "  Overlaps of ", i, " with!! ", id );

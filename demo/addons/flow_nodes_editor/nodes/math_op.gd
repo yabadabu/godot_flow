@@ -12,11 +12,15 @@ func _init():
 func getTitle() -> String:
 	return MathOpNodeSettings.eOperation.keys()[settings.operation]
 
-func newFloatStream( size : int, new_name : String, initFn : Callable ):
+func newFloatStream( size : int, new_name : String, init_value ):
 	var new_container = PackedFloat32Array()
 	new_container.resize( size )
-	for idx in size:
-		new_container[idx] = initFn.call(idx)
+	if typeof(init_value) == TYPE_CALLABLE:
+		var fn : Callable = init_value
+		for idx in size:
+			new_container[idx] = fn.call(idx)
+	else:
+		new_container.fill( init_value )
 	return { 
 		"data_type" : FlowData.DataType.Float,
 		"container" : new_container,
@@ -24,31 +28,35 @@ func newFloatStream( size : int, new_name : String, initFn : Callable ):
 	}	
 
 func execute( _ctx : FlowData.EvaluationContext ):
-	var in_dataA: FlowData.Data = get_input(0)
-	var in_dataB : FlowData.Data = get_input(1)
-	var out_data : FlowData.Data = in_dataA.duplicate()
-	
-	var sA = in_dataA.findStream( settings.in_nameA )
-	var sB = in_dataB.findStream( settings.in_nameB ) if in_dataB else null
-	
-	if sA == null:
-		setError( "Input A %s not found" % [settings.in_nameA])
-		return
-		
-	if sB == null:
-		if settings.in_nameB.is_valid_float():
-			var v = settings.in_nameB.to_float()
-			sB = newFloatStream( in_dataA.size(), "Constant %s" % settings.in_nameB, func( idx : int ) -> float: return v )
-		else:
-			setError( "Input B %s not found, and can't be interpreted as a constant number" % [settings.in_nameB])
-			return
 		
 	if not settings.out_name:
 		setError( "Output name can't be empty")
 		return
-
+	
+	# Check A
+	var in_dataA: FlowData.Data = get_input(0)
+	var sA = in_dataA.findStream( settings.in_nameA )
+	if sA == null:
+		setError( "Input A %s not found" % [settings.in_nameA])
+		return
 	var num_elemsA := in_dataA.size()
-	var num_elemsB := in_dataB.size() if in_dataB else num_elemsA
+	
+	# B is optional, can be replaced by a cte
+	var in_dataB = get_optional_input(1)
+	var num_elemsB := num_elemsA
+	var sB = null
+	if in_dataB:
+		num_elemsB = in_dataB.size()
+		sB = in_dataB.findStream( settings.in_nameB )
+		
+	if sB == null:
+		if settings.in_nameB.is_valid_float():
+			var v = settings.in_nameB.to_float()
+			sB = newFloatStream( in_dataA.size(), "Constant %s" % settings.in_nameB, v )
+		else:
+			setError( "Input B %s not found, and can't be interpreted as a constant number" % [settings.in_nameB])
+			return
+
 	if num_elemsA != num_elemsB:
 		setError( "Num elements from A nd B do not match (%d vs %d)" % [num_elemsA, num_elemsB])
 		return
@@ -56,6 +64,7 @@ func execute( _ctx : FlowData.EvaluationContext ):
 	
 	var out_data_type
 	var out_container
+	var out_data : FlowData.Data = in_dataA.duplicate()
 	
 	if sA.data_type == FlowData.DataType.Int and sB.data_type == FlowData.DataType.Float:
 		sA = newFloatStream( num_elemsA, sA.name + " as float", func( idx : int ) -> float: return sA.container[idx] )

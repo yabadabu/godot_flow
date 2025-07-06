@@ -24,7 +24,7 @@ func execute( _ctx : FlowData.EvaluationContext ):
 	var tA := GDRTree.new()
 	var posA = in_dataA.getVector3Container( FlowData.AttrPosition )
 	var szA = in_dataA.getVector3Container( FlowData.AttrSize )
-	tA.add( posA, szA, 0 )
+	tA.add( posA, szA )
 	
 	var posB = in_dataB.getVector3Container( FlowData.AttrPosition )
 	var szB = in_dataB.getVector3Container( FlowData.AttrSize )

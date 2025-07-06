@@ -26,9 +26,8 @@ public:
   ~GDRTree();
   
   void clear();
-  bool add( const PackedVector3Array& in_min, const PackedVector3Array& in_max, int id_base );
-  bool addFiltered( const PackedVector3Array& in_min, const PackedVector3Array& in_max, const PackedInt32Array& idxs, int id_base );
-  Dictionary overlaps( const PackedVector3Array& in_min, const PackedVector3Array& in_max, bool return_overlapped ) const;
+  bool add( const PackedVector3Array& in_centers, const PackedVector3Array& in_sizes );
+  Dictionary overlaps( const PackedVector3Array& others_centers, const PackedVector3Array& others_sizes, bool return_overlapped ) const;
 };
 
 }

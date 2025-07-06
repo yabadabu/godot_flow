@@ -70,6 +70,11 @@ func get_input( idx : int ):
 		return []
 	return inputs[ idx ]
 
+func get_optional_input( idx : int ):
+	if idx >= inputs.size():
+		return null
+	return inputs[ idx ]
+
 func get_output( idx : int ):
 	if idx >= outputs.size():
 		push_error( "Output.%d does not exists in node %s" % [ idx, name ])
