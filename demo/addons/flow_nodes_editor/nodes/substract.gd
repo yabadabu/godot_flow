@@ -7,7 +7,11 @@ func _init():
 		"settings" : SubstractSettings,
 		"ins" : [{"label": "In A" }, {"label": "In B" }], 
 		"outs" : [{ "label" : "Out" }],
+		"hide_inputs" : true
 	}
+	
+func getTitle() -> String:
+	return "Substract" if settings.operation == SubstractSettings.eOperation.A_Minus_B else "Intersection"
 
 func execute( _ctx : FlowData.EvaluationContext ):
 	var in_dataA: FlowData.Data = get_input(0)
@@ -28,7 +32,9 @@ func execute( _ctx : FlowData.EvaluationContext ):
 	
 	var posB = in_dataB.getVector3Container( FlowData.AttrPosition )
 	var szB = in_dataB.getVector3Container( FlowData.AttrSize )
-	var result = tA.overlaps( posB, szB, true, false )
+	
+	var inverse_result = settings.operation == SubstractSettings.eOperation.A_Intersection_B
+	var result = tA.overlaps( posB, szB, inverse_result, false )
 	
 	var out_data : FlowData.Data = in_dataA.filter( result.idxs_overlapped )
 		

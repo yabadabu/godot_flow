@@ -26,26 +26,6 @@ point_count = 8
 script = ExtResource("3_qf0nw")
 inputs = Array[ExtResource("2_dxf0c")]([])
 
-[sub_resource type="Resource" id="Resource_2lc4x"]
-resource_name = "Transform Settings"
-script = ExtResource("5_2jbe2")
-offset_min = Vector3(0, 0, 0)
-offset_max = Vector3(0, 0, 0)
-rotation_min = Vector3(0, 0, 0)
-rotation_max = Vector3(0, 0, 0)
-scale_min = Vector3(3, 1, 1)
-scale_max = Vector3(3, 1, 1)
-uniform_scale = true
-random_seed = 4192799995
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Transform"
-enabled = true
-
 [sub_resource type="Resource" id="Resource_2jbe2"]
 resource_name = "Sample Spline Settings"
 script = ExtResource("4_qf0nw")
@@ -78,79 +58,6 @@ debug_modulate_by = ""
 title = "Sample Spline"
 enabled = true
 
-[sub_resource type="Resource" id="Resource_dbqvf"]
-resource_name = "Select Settings"
-script = ExtResource("6_5uxx2")
-ratio = 0.2
-random_seed = 1388504677
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Select"
-enabled = true
-
-[sub_resource type="Resource" id="Resource_qe4ar"]
-resource_name = "Substract"
-script = ExtResource("7_2lc4x")
-random_seed = 1939724238
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(0, 0.251351, 0.123225, 1)
-debug_modulate_by = ""
-title = "Substract"
-enabled = true
-
-[sub_resource type="Resource" id="Resource_banft"]
-resource_name = "Scan Nodes Settings"
-script = ExtResource("8_qt8uc")
-group_name = "totem"
-import_metadata = true
-import_properties = Array[StringName]([&"num_enemies"])
-random_seed = 1619377703
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Scan Nodes"
-enabled = true
-
-[sub_resource type="Resource" id="Resource_i2drj"]
-resource_name = "Math Op"
-script = ExtResource("9_dbqvf")
-operation = 2
-in_nameA = "index"
-in_nameB = "3.12"
-out_name = "new_x"
-random_seed = 2687818424
-inspect_enabled = true
-debug_enabled = true
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Math"
-enabled = true
-
-[sub_resource type="Resource" id="Resource_h10xn"]
-resource_name = "Substract"
-script = ExtResource("7_2lc4x")
-random_seed = 261856610
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Substract"
-enabled = true
-
 [sub_resource type="Resource" id="Resource_7k55o"]
 resource_name = "Transform Settings"
 script = ExtResource("5_2jbe2")
@@ -171,12 +78,45 @@ debug_modulate_by = ""
 title = "Transform"
 enabled = true
 
+[sub_resource type="Resource" id="Resource_i2drj"]
+resource_name = "Math Op"
+script = ExtResource("9_dbqvf")
+operation = 2
+in_nameA = "index"
+in_nameB = "3.12"
+out_name = "new_x"
+random_seed = 2687818424
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Math"
+enabled = true
+
+[sub_resource type="Resource" id="Resource_banft"]
+resource_name = "Scan Nodes Settings"
+script = ExtResource("8_qt8uc")
+group_name = "totem"
+import_metadata = true
+import_properties = Array[StringName]([&"num_enemies"])
+random_seed = 1619377703
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Scan Nodes"
+enabled = true
+
 [sub_resource type="Resource" id="Resource_2yywp"]
 resource_name = "Self Pruning"
 script = ExtResource("10_qe4ar")
 keep_self_intersections = false
 random_seed = 2100417751
-inspect_enabled = false
+inspect_enabled = true
 debug_enabled = true
 debug_mode = 0
 debug_scale = 1.0
@@ -185,15 +125,72 @@ debug_modulate_by = ""
 title = "Self Pruning"
 enabled = true
 
+[sub_resource type="Resource" id="Resource_dbqvf"]
+resource_name = "Select Settings"
+script = ExtResource("6_5uxx2")
+ratio = 0.2
+random_seed = 1388504677
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Select"
+enabled = true
+
+[sub_resource type="Resource" id="Resource_2lc4x"]
+resource_name = "Transform Settings"
+script = ExtResource("5_2jbe2")
+offset_min = Vector3(0, 0, 0)
+offset_max = Vector3(0, 0, 0)
+rotation_min = Vector3(0, 0, 0)
+rotation_max = Vector3(0, 0, 0)
+scale_min = Vector3(3, 1, 1)
+scale_max = Vector3(3, 1, 1)
+uniform_scale = true
+random_seed = 4192799995
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Transform"
+enabled = true
+
+[sub_resource type="Resource" id="Resource_h10xn"]
+resource_name = "Substract"
+script = ExtResource("7_2lc4x")
+operation = 0
+random_seed = 3661329179
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Substract"
+enabled = true
+
+[sub_resource type="Resource" id="Resource_qe4ar"]
+resource_name = "Substract"
+script = ExtResource("7_2lc4x")
+operation = 0
+random_seed = 468738614
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Substract"
+enabled = true
+
 [sub_resource type="Resource" id="Resource_5uxx2"]
 resource_local_to_scene = true
 script = ExtResource("4_2jbe2")
 nodes = Array[Dictionary]([{
-"name": &"id_0003_transform",
-"position_offset": Vector2(360, 120),
-"settings": SubResource("Resource_2lc4x"),
-"template": "transform"
-}, {
 "name": &"id_0006_sample_spline",
 "position_offset": Vector2(20, 120),
 "settings": SubResource("Resource_2jbe2"),
@@ -204,40 +201,45 @@ nodes = Array[Dictionary]([{
 "settings": SubResource("Resource_qt8uc"),
 "template": "sample_spline"
 }, {
-"name": &"id_0008_select",
-"position_offset": Vector2(400, 520),
-"settings": SubResource("Resource_dbqvf"),
-"template": "select"
-}, {
-"name": &"id_0009_substract",
-"position_offset": Vector2(800, 380),
-"settings": SubResource("Resource_qe4ar"),
-"template": "substract"
-}, {
-"name": &"id_0011_scan_nodes",
-"position_offset": Vector2(40, 820),
-"settings": SubResource("Resource_banft"),
-"template": "scan_nodes"
+"name": &"id_0016_transform",
+"position_offset": Vector2(1260, 620),
+"settings": SubResource("Resource_7k55o"),
+"template": "transform"
 }, {
 "name": &"id_0015_math_op",
 "position_offset": Vector2(440, 1080),
 "settings": SubResource("Resource_i2drj"),
 "template": "math_op"
 }, {
-"name": &"id_0014_substract",
-"position_offset": Vector2(1060, 620),
+"name": &"id_0011_scan_nodes",
+"position_offset": Vector2(40, 820),
+"settings": SubResource("Resource_banft"),
+"template": "scan_nodes"
+}, {
+"name": &"id_0019_self_pruning",
+"position_offset": Vector2(1500, 620),
+"settings": SubResource("Resource_2yywp"),
+"template": "self_pruning"
+}, {
+"name": &"id_0008_select",
+"position_offset": Vector2(400, 520),
+"settings": SubResource("Resource_dbqvf"),
+"template": "select"
+}, {
+"name": &"id_0003_transform",
+"position_offset": Vector2(360, 120),
+"settings": SubResource("Resource_2lc4x"),
+"template": "transform"
+}, {
+"name": &"id_0023_substract",
+"position_offset": Vector2(1000, 500),
 "settings": SubResource("Resource_h10xn"),
 "template": "substract"
 }, {
-"name": &"id_0016_transform",
-"position_offset": Vector2(1260, 620),
-"settings": SubResource("Resource_7k55o"),
-"template": "transform"
-}, {
-"name": &"id_0019_self_pruning",
-"position_offset": Vector2(1521.99, 710.906),
-"settings": SubResource("Resource_2yywp"),
-"template": "self_pruning"
+"name": &"id_0020_substract",
+"position_offset": Vector2(740, 320),
+"settings": SubResource("Resource_qe4ar"),
+"template": "substract"
 }])
 conns = Array[Dictionary]([{
 "from_node": &"id_0006_sample_spline",
@@ -252,40 +254,10 @@ conns = Array[Dictionary]([{
 "to_node": &"id_0008_select",
 "to_port": 0
 }, {
-"from_node": &"id_0008_select",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0009_substract",
-"to_port": 0
-}, {
-"from_node": &"id_0003_transform",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0009_substract",
-"to_port": 1
-}, {
-"from_node": &"id_0009_substract",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0014_substract",
-"to_port": 0
-}, {
-"from_node": &"id_0011_scan_nodes",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0014_substract",
-"to_port": 1
-}, {
 "from_node": &"id_0011_scan_nodes",
 "from_port": 0,
 "keep_alive": false,
 "to_node": &"id_0015_math_op",
-"to_port": 0
-}, {
-"from_node": &"id_0014_substract",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0016_transform",
 "to_port": 0
 }, {
 "from_node": &"id_0016_transform",
@@ -293,10 +265,40 @@ conns = Array[Dictionary]([{
 "keep_alive": false,
 "to_node": &"id_0019_self_pruning",
 "to_port": 0
+}, {
+"from_node": &"id_0008_select",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0020_substract",
+"to_port": 0
+}, {
+"from_node": &"id_0003_transform",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0020_substract",
+"to_port": 1
+}, {
+"from_node": &"id_0020_substract",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0023_substract",
+"to_port": 0
+}, {
+"from_node": &"id_0011_scan_nodes",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0023_substract",
+"to_port": 1
+}, {
+"from_node": &"id_0023_substract",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0016_transform",
+"to_port": 0
 }])
-view_zoom = 0.879409
-view_offset = Vector2(892.45, 99.177)
-new_name_counter = 19
+view_zoom = 0.96735
+view_offset = Vector2(620.661, 26.9899)
+new_name_counter = 24
 inputs = SubResource("Resource_psfr8")
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 
