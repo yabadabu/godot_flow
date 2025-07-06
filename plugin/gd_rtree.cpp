@@ -10,7 +10,7 @@ using namespace godot;
 void GDRTree::_bind_methods() {
   ClassDB::bind_method(D_METHOD("clear"), &GDRTree::clear);
   ClassDB::bind_method(D_METHOD("add", "centers", "sizes"), &GDRTree::add);
-  ClassDB::bind_method(D_METHOD("overlaps", "others_centers", "others_sizes", "return_overlapped"), &GDRTree::overlaps);
+  ClassDB::bind_method(D_METHOD("overlaps", "others_centers", "others_sizes", "return_overlapped", "self_prunning"), &GDRTree::overlaps);
 }
 
 GDRTree::GDRTree() {
@@ -48,7 +48,7 @@ bool GDRTree::add( const PackedVector3Array& in_centers, const PackedVector3Arra
   return true;
 }
 
-Dictionary GDRTree::overlaps( const PackedVector3Array& others_centers, const PackedVector3Array& others_sizes, bool return_overlapped ) const {
+Dictionary GDRTree::overlaps( const PackedVector3Array& others_centers, const PackedVector3Array& others_sizes, bool return_overlapped, bool self_prunning ) const {
 
   BitBuffer bb_my_idxs_overlapped_by_others;
   //PackedInt32Array other_idxs_overlapping_me;
@@ -65,8 +65,12 @@ Dictionary GDRTree::overlaps( const PackedVector3Array& others_centers, const Pa
       float pmin[3] = { center[0] - size[0] * 0.5f, center[1] - size[1] * 0.5f, center[2] - size[2] * 0.5f };
       float pmax[3] = { center[0] + size[0] * 0.5f, center[1] + size[1] * 0.5f, center[2] + size[2] * 0.5f };
 
-      if( tree.Search(pmin, pmax, [&bb_my_idxs_overlapped_by_others,i](const int& id) -> bool {
+      if( tree.Search(pmin, pmax, [&](const int& id) -> bool {
         dbg( "  Overlaps of ", i, " with!! ", id );
+
+        // When used as part of the self_pruning, skip ourselves
+        if( self_prunning && id == i ) 
+          return false;
         bb_my_idxs_overlapped_by_others.set_bit( id, true );
         return true;
         })) {
