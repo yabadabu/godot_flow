@@ -1,8 +1,11 @@
-[gd_scene load_steps=2 format=3 uid="uid://b6q4l56g02tqn"]
+[gd_scene load_steps=3 format=3 uid="uid://b6q4l56g02tqn"]
+
+[ext_resource type="Script" uid="uid://dbtbo3vh5nl2c" path="res://scenes/scene_3p.gd" id="1_1udty"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_yv18n"]
 
 [node name="Node3D" type="Node3D"]
+script = ExtResource("1_1udty")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.456713, 0)
@@ -13,7 +16,12 @@ transform = Transform3D(0.5, 0, 0, 0, 0.490308, 0, 0, 0, 0.5, 0, 0.724225, 0)
 mesh = SubResource("SphereMesh_yv18n")
 skeleton = NodePath("../..")
 
-[node name="MeshInstance3D3" type="MeshInstance3D" parent="MeshInstance3D"]
-transform = Transform3D(0.193903, 0, 0, 0, 0.212652, 0, 0, 0, 0.5, 0.00371492, 0.718879, 0.191482)
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="MeshInstance3D/MeshInstance3D2"]
+transform = Transform3D(0.387806, 0, 0, 0, 0.433711, 0, 0, 0, 1, 0.00742984, -0.0109036, 0.382964)
+mesh = SubResource("SphereMesh_yv18n")
+skeleton = NodePath("../../..")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="MeshInstance3D"]
+transform = Transform3D(0.193903, 0, 0, 0, 0.212652, 0, 0, 0, 0.5, 0.0389063, 0.108424, 0.30197)
 mesh = SubResource("SphereMesh_yv18n")
 skeleton = NodePath("../..")

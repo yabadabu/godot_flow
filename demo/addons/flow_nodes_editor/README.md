@@ -1,21 +1,21 @@
 === TODO
 
 [ ] Spline sampling interior in non grid pattern
-[ ] Confirm I can set values of the generated instances
 [ ] Add noise to position
 [ ] Math Node. Should hide/not require some inputs when not needed. Like Abs
 [ ] Math Node. Should be easier to add a constant +float/+int/-vector at least
 [ ] Math Node. Accept a stream feeding a single size element -> Promote it
 [ ] Support for Vector4/Color -> Read SubAttributes / MathNode / SetAttribute / Use in Debug if exists
-[ ] Test random colors for each node
+[ ] Test random colors for each node -> Graph Editor Settings
 [ ] Promote input pin to graph input
 [ ] use inputs on all settings
 [ ] Custom inputs to the pcg
-[ ] spatial operations
-	[X] A - B
-	[ ] A + B (Union)
 [ ] nodes to filter A/B
 [ ] undo/redo
+[x] Confirm I can set values of the generated instances
+[X] spatial operations
+	[X] A minus B
+	[X] A intersection B
 [X] Remove self intersections
 [X] When changing scene, the registered nodes should be removed
 [X] Confirm I can use Index as part of the streams

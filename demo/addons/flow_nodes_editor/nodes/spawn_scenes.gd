@@ -75,7 +75,15 @@ func execute( ctx : FlowData.EvaluationContext ):
 		while owner_of_spawned_nodes.get_parent() and owner_of_spawned_nodes.owner:
 			owner_of_spawned_nodes = owner_of_spawned_nodes.get_parent()
 
-	# Collect which indices use the samee by resource type
+	var streams_to_assign = []
+	for node_property in settings.assign_attributes:
+		var stream_name = settings.assign_attributes[ node_property ]
+		var stream = in_data.findStream( stream_name )
+		if stream:
+			streams_to_assign.append( { "node_property" : node_property, "container" : stream.container } )
+	print( streams_to_assign )
+
+	# Collect which indices use the same by resource type
 	for idx in range( in_size ):
 		var packed_scene : PackedScene = scenes[idx] if scenes else settings.scene
 		if not packed_scene:
@@ -85,7 +93,9 @@ func execute( ctx : FlowData.EvaluationContext ):
 		node.name = "Scene_%04d" % idx
 		root.add_child( node )
 		node.owner = owner_of_spawned_nodes
-		node.set_meta("flow_owner", name )	
+		node.set_meta("flow_owner", name )
+		for s in streams_to_assign:
+			node.set( s.node_property, s.container[ idx ])
 	
 	EditorInterface.mark_scene_as_unsaved()
 
