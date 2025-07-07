@@ -1,12 +1,13 @@
 @tool
 extends FlowNodeBase
 
-func getMeta() -> Dictionary :
-	return {
+func _init():
+	meta_node = {
 		"title" : "Sample Spline",
 		"settings" : SampleSplineNodeSettings,
 		"ins" : [],
 		"outs" : [{ "label" : "Out" }],
+		#"trace" : true
 	}
 	
 func get_polygon_bounds(polygon: PackedVector2Array) -> Rect2:
