@@ -17,6 +17,8 @@ env.Append(CPPPATH=["plugins/"])
 common_sources = Glob("plugin/*.cpp")
 
 if env["platform"] == "macos":
+    
+    env.Append(CXXFLAGS=['-fexceptions'])
 
     # Add MacOS frameworks
     frameworks = [ 
