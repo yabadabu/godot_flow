@@ -49,7 +49,9 @@ func execute( _ctx : FlowData.EvaluationContext ):
 		num_elemsB = in_dataB.size()
 		sB = in_dataB.findStream( settings.in_nameB )
 		
+	# B is not connected
 	if sB == null:
+		# Check if the name looks like a float
 		if settings.in_nameB.is_valid_float():
 			var v = settings.in_nameB.to_float()
 			sB = newFloatStream( in_dataA.size(), "Constant %s" % settings.in_nameB, v )
@@ -57,9 +59,15 @@ func execute( _ctx : FlowData.EvaluationContext ):
 			setError( "Input B %s not found, and can't be interpreted as a constant number" % [settings.in_nameB])
 			return
 
+	# The number of elements should match, unless the B channel has just 1 element
+	# in which case we will expand it. Wwe might need in the future A to be just one 
+	# element and B having lots of elements, or the type not to be float...
 	if num_elemsA != num_elemsB:
-		setError( "Num elements from A nd B do not match (%d vs %d)" % [num_elemsA, num_elemsB])
-		return
+		if num_elemsB == 1 and num_elemsA > 0 and sB.data_type == FlowData.DataType.Float:
+			sB = newFloatStream( num_elemsA, sA.name + " as float", sB.container[0])
+		else:
+			setError( "Num elements from A nd B do not match (%d vs %d)" % [num_elemsA, num_elemsB])
+			return
 	var num_elems := num_elemsA
 	
 	var out_data_type
