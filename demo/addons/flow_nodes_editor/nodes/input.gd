@@ -74,4 +74,12 @@ func execute( ctx : FlowData.EvaluationContext ):
 			container.resize( 1 )
 			container[0] = input.cte_vector
 		
+		FlowData.DataType.String:
+			var container : PackedStringArray = output.addStream( settings.name, input.data_type )
+			if container == null:
+				setError( "Invalid name %s or data_type %d (string)" % [settings.name, input.data_type ])
+				return
+			container.resize( 1 )
+			container[0] = input.cte_string
+		
 	set_output( 0, output )

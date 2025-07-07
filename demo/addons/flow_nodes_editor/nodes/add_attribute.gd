@@ -45,7 +45,7 @@ func execute( _ctx : FlowData.EvaluationContext ):
 				
 		FlowData.DataType.String:
 			var new_val : String = settings.cte_string
-			var sout : Array[String] = out_data.addStream( settings.name, settings.data_type )
+			var sout : PackedStringArray = out_data.addStream( settings.name, settings.data_type )
 			for i in sout.size():
 				sout[i] = new_val
 				

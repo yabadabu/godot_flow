@@ -81,7 +81,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 		var stream = in_data.findStream( stream_name )
 		if stream:
 			streams_to_assign.append( { "node_property" : node_property, "container" : stream.container } )
-	print( streams_to_assign )
+	#print( streams_to_assign )
 
 	# Collect which indices use the same by resource type
 	for idx in range( in_size ):

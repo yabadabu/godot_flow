@@ -58,10 +58,10 @@ class Data:
 				return PackedFloat32Array()
 			DataType.Vector:
 				return PackedVector3Array()
+			DataType.String:
+				return PackedStringArray()
 			DataType.Resource:
 				return Array([], TYPE_OBJECT, "Resource", null)
-			DataType.String:
-				return Array([], TYPE_STRING, "", null)
 		return null
 	
 	func numFields() -> int:
@@ -206,7 +206,9 @@ class Data:
 			DataType.Float:
 				new_container = PackedFloat32Array( prev_stream.container )
 			DataType.Vector:
-				new_container = PackedVector3Array( prev_stream.container )		
+				new_container = PackedVector3Array( prev_stream.container )
+			DataType.String:
+				new_container = PackedStringArray( prev_stream.container )
 			_:  # String, Resource
 				new_container = prev_stream.container.duplicate()	
 		prev_stream.container = new_container

@@ -219,6 +219,7 @@ func getFlowDataTypeFromGdScriptType( gd_type : int  ) -> FlowData.DataType:
 
 func initFromScript():
 	var meta := getMeta()
+	var trace = meta.get( "trace", false )
 	
 	var ins = meta.get( "ins", [] )
 	var outs = meta.get( "outs", [] )
@@ -247,6 +248,8 @@ func initFromScript():
 	if !meta.get( "hide_inputs", false ):
 		if !meta.has( "input_slots" ):
 			meta.input_slots = {}
+			if trace:
+				print( "%s : Created empty input_slots" % name )
 		var inputs = settings.get_property_list()
 		var slot_idx = num_rows
 		var inside_my_vars := false
@@ -260,7 +263,8 @@ func initFromScript():
 				continue
 			if !inside_my_vars:
 				continue
-			print( input )
+			if trace:
+				print( "%s : Input is %s" % [ name, input ] )
 			var ictrl = connectors_row_prefab.instantiate()
 			add_child( ictrl )
 			var lbl_in = ictrl.get_child(0) as Label
@@ -273,7 +277,8 @@ func initFromScript():
 			slot_idx += 1
 			
 			meta.input_slots[ input.name ] = num_inputs
-			#print( "Assigning slot %d for input %s when %d" % [ meta.input_slots[ input.name ], input.name, num_inputs ])
+			if trace:
+				print( "%s : Assigning slot %d for input %s when %d" % [ name, meta.input_slots[ input.name ], input.name, num_inputs ])
 			num_inputs += 1
 
 func setupDebugDraw():
@@ -330,14 +335,17 @@ func setupColors( out_data : FlowData.Data ):
 func getSettingValue( ctx : FlowData.EvaluationContext, in_name : String ):
 	var meta = getMeta()
 	var inputs_by_name = meta.get( "input_slots", {})
-	#print( "Searching the current value of input %s in %d inputs at node %s. ByName:%s vs %s" % [ in_name, inputs.size(), name, inputs_by_name, inputs ] )
+	var trace = meta.get( "trace", false )
+	if trace:
+		print( "Searching the current value of input %s in %d inputs at node %s. ByName:%s vs %s.   Meta:%s" % [ in_name, inputs.size(), name, inputs_by_name, inputs, meta ] )
 	var idx = inputs_by_name.get( in_name, -1 )
 	if idx != -1 and idx < inputs.size():
 		#print( "  Meta input %s is at slot %d " % [ in_name, idx ] )
 		var input = inputs[ idx ] as FlowData.Data
 		if input:
 			var in_streams = input.streams
-			#print( "Got the input for %s : %s" % [ in_name, in_streams.keys() ] )
+			if trace:
+				print( "Got the input for %s : %s" % [ in_name, in_streams.keys() ] )
 			if in_streams and in_streams.size() == 1:
 				var stream = in_streams.values()[0]
 				var in_size = in_streams.size()
@@ -347,7 +355,8 @@ func getSettingValue( ctx : FlowData.EvaluationContext, in_name : String ):
 					setError( "Input %s has too many data (%d)" % [ in_name, in_size ])
 				else:
 					var value = stream.container[0]
-					#print( "  -> Using %s = %s" % [ in_name, value ])
+					if trace:
+						print( "  -> Using %s = %s" % [ in_name, value ])
 					return value
 			
 	return settings.get( in_name )
