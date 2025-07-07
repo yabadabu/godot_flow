@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=3 uid="uid://bl32jt5udtf08"]
+[gd_scene load_steps=38 format=3 uid="uid://bl32jt5udtf08"]
 
 [ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_2l584"]
 [ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="2_dxf0c"]
@@ -15,6 +15,7 @@
 [ext_resource type="PackedScene" uid="uid://b6q4l56g02tqn" path="res://scenes/scene_3p.tscn" id="11_h10xn"]
 [ext_resource type="Script" uid="uid://dqd74l1ewnh0g" path="res://addons/flow_nodes_editor/nodes/spawn_scenes_settings.gd" id="12_i2drj"]
 [ext_resource type="Script" uid="uid://du3c8wxq0r2fl" path="res://addons/flow_nodes_editor/nodes/input_settings.gd" id="13_7k55o"]
+[ext_resource type="Script" uid="uid://runa6a3koevg" path="res://addons/flow_nodes_editor/nodes/add_attribute_settings.gd" id="14_2yywp"]
 [ext_resource type="Script" uid="uid://dbtbo3vh5nl2c" path="res://scenes/scene_3p.gd" id="14_i2drj"]
 
 [sub_resource type="Curve3D" id="Curve3D_36lll"]
@@ -32,7 +33,7 @@ name = "road_width"
 data_type = 2
 cte_bool = false
 cte_int = 0
-cte_float = 2.875
+cte_float = 2.935
 cte_vector = Vector3(0, 0, 0)
 cte_string = ""
 metadata/_custom_type_script = "uid://co0f3ugd2wj1y"
@@ -253,6 +254,43 @@ debug_modulate_by = ""
 title = "Input"
 enabled = true
 
+[sub_resource type="Resource" id="Resource_ol2su"]
+resource_name = "Add Attribute"
+script = ExtResource("14_2yywp")
+name = "v0"
+data_type = 2
+cte_bool = false
+cte_int = 0
+cte_float = 1.0
+cte_vector = Vector3(0, 0, 0)
+cte_string = ""
+random_seed = 3968999207
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Add Attribute"
+enabled = true
+
+[sub_resource type="Resource" id="Resource_6s8jo"]
+resource_name = "Math Op"
+script = ExtResource("9_dbqvf")
+operation = 3
+in_nameA = "size.X"
+in_nameB = "3"
+out_name = "deltax"
+random_seed = 3899755672
+inspect_enabled = true
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Math"
+enabled = true
+
 [sub_resource type="Resource" id="Resource_5uxx2"]
 resource_local_to_scene = true
 script = ExtResource("4_2jbe2")
@@ -313,14 +351,24 @@ nodes = Array[Dictionary]([{
 "template": "transform"
 }, {
 "name": &"id_0006_sample_spline",
-"position_offset": Vector2(20, 120),
+"position_offset": Vector2(-40, 120),
 "settings": SubResource("Resource_2jbe2"),
 "template": "sample_spline"
 }, {
 "name": &"id_0032_input_road_width",
-"position_offset": Vector2(-200, 140),
+"position_offset": Vector2(30, -50),
 "settings": SubResource("Resource_syw2u"),
 "template": "input_road_width"
+}, {
+"name": &"id_0033_add_attribute",
+"position_offset": Vector2(200, -110),
+"settings": SubResource("Resource_ol2su"),
+"template": "add_attribute"
+}, {
+"name": &"id_0034_math_op",
+"position_offset": Vector2(360, -70),
+"settings": SubResource("Resource_6s8jo"),
+"template": "math_op"
 }])
 conns = Array[Dictionary]([{
 "from_node": &"id_0006_sample_spline",
@@ -383,20 +431,32 @@ conns = Array[Dictionary]([{
 "to_node": &"id_0028_spawn_scenes",
 "to_port": 0
 }, {
+"from_node": &"id_0006_sample_spline",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0033_add_attribute",
+"to_port": 0
+}, {
+"from_node": &"id_0033_add_attribute",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0034_math_op",
+"to_port": 0
+}, {
 "from_node": &"id_0032_input_road_width",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0006_sample_spline",
-"to_port": 0
+"to_node": &"id_0034_math_op",
+"to_port": 1
 }])
-view_zoom = 0.660711
-view_offset = Vector2(-193.693, -368.637)
-new_name_counter = 32
+view_zoom = 0.743227
+view_offset = Vector2(-179.942, -377.324)
+new_name_counter = 34
 inputs = SubResource("Resource_psfr8")
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 
 [sub_resource type="Curve3D" id="Curve3D_nuuxb"]
-bake_interval = 2.875
+bake_interval = 3.0
 _data = {
 "points": PackedVector3Array(0, 0, 0, 0, 0, 0, -24.8343, 0, 5.68748, -6.06478, 0, 0.294408, 6.06478, 0, -0.294408, -12.1454, 0, 1.71299, -5.03436, 0, 0.706576, 5.03436, 0, -0.706576, 4.91215, 1.90735e-06, 4.94331, 0, 0, 0, 0, 0, 0, 21.3287, 0, -2.4087),
 "tilts": PackedFloat32Array(0, 0, 0, 0)
