@@ -33,6 +33,17 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "...Node Title..."
 
+[node name="OptionButton" type="OptionButton" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+selected = 0
+item_count = 3
+popup/item_0/text = "Output 1"
+popup/item_0/id = 0
+popup/item_1/text = "Output 2"
+popup/item_1/id = 1
+popup/item_2/text = "Input 1"
+popup/item_2/id = 2
+
 [node name="LabelStats" type="Label" parent="VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2

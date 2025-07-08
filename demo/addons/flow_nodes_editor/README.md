@@ -1,17 +1,18 @@
 === TODO
 
 [ ] Spline sampling interior in non grid pattern
+[ ] Allow the inspector to show all outputs/inputs
 [ ] Add noise to position
 [ ] Math Node. Should hide/not require some inputs when not needed. Like Abs
 [ ] Math Node. Should be easier to add a constant +float/+int/-vector at least
-[ ] Math Node. Accept a stream feeding a single size element -> Promote it
 [ ] Support for Vector4/Color/PackedVector4Array -> Read SubAttributes / MathNode / SetAttribute / Use in Debug if exists
 [ ] Test random colors for each node -> Graph Editor Settings
 [ ] Promote input pin to graph input
 [ ] use inputs on all settings
 [ ] Custom inputs to the pcg
-[ ] nodes to filter A/B
 [ ] undo/redo
+[X] nodes to filter A/B
+[X] Math Node. Accept a stream feeding a single size element -> Promote it
 [X] Confirm if we are using PackedStringArray for streams of type Strings
 [X] Confirm I can set values of the generated instances
 [X] spatial operations
