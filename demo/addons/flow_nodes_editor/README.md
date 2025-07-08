@@ -2,6 +2,7 @@
 
 [ ] Spline sampling interior in non grid pattern
 [ ] Allow the inspector to show all outputs/inputs
+[ ] ALlow to filter rows in the instpector
 [ ] Add noise to position
 [ ] Math Node. Should hide/not require some inputs when not needed. Like Abs
 [ ] Math Node. Should be easier to add a constant +float/+int/-vector at least
