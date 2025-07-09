@@ -207,10 +207,10 @@ class Data:
 				new_container = PackedFloat32Array( prev_stream.container )
 			DataType.Vector:
 				new_container = PackedVector3Array( prev_stream.container )
-				print( "Duped container vec3 %s %s" % [ name, new_container ])
+				#print( "Duped container vec3 %s %s" % [ name, new_container ])
 			DataType.String:
 				new_container = PackedStringArray( prev_stream.container )
-			_:  # String, Resource
+			_:  # Resource
 				new_container = prev_stream.container.duplicate()	
 		prev_stream.container = new_container
 		return new_container
@@ -270,8 +270,8 @@ class Data:
 		return null
 
 	func duplicate():
-		# This is not a deep close, the packed*arrays are shared,
-		# use cloneStream to create an independent cpy
+		# This is not a deep clone, the packed*arrays are shared,
+		# use cloneStream to create an independent copy
 		var s := Data.new()
 		s.streams = streams.duplicate()
 		return s

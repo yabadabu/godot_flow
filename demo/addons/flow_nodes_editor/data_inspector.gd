@@ -7,6 +7,7 @@ extends Control
 		refresh()
 
 @onready var tv : TableView = %TableView
+@onready var slot_selector : OptionButton = %SlotSelector
 
 var node : FlowNodeBase
 var num_rows : int = 0
@@ -14,6 +15,9 @@ var num_cols : int = 0
 var col_titles : Array[String]
 var col_streams_names : Array[String]
 var data : FlowData.Data 
+
+var current_slot_index := 0
+var is_output : bool = true
 
 var container
 
@@ -32,19 +36,7 @@ func setNode( new_node : FlowNodeBase ):
 	else:
 		node = null
 		refresh()
-
-func addLabel( gc : Container, str_data : String ):
-	var c = Label.new()
-	c.text = str_data
-	gc.add_child( c )
-	return c
-	
-func addColor( gc : Container, data : Color ):
-	var c = ColorRect.new()
-	c.custom_minimum_size = Vector2( 16,16 )
-	c.color = data
-	gc.add_child( c )
-	return c
+	populateSlots()
 	
 func setLabelNumber( label : Label, value : float ):
 	var new_text = fmt( value )
@@ -151,8 +143,14 @@ func refresh():
 	tv.clearColumns()
 	tv.setColumnCallback( onColumnBegins )
 	
+	data = null
 	
-	data = node.get_output(0) if node else null
+	if node:
+		if is_output:
+			data = node.get_output( current_slot_index )
+		else:
+			data = node.get_input( current_slot_index )
+		
 	if data:
 
 		updateNumRowsAndCols()
@@ -165,6 +163,7 @@ func refresh():
 		tv.setRowHeight( row_height )
 		for title in col_titles:
 			tv.addColumn( title, 120 )
+			
 	tv.commitColumns()
 
 func onCellClicked( row : int, col : int ):
@@ -176,3 +175,34 @@ func _ready():
 
 func _on_btn_refresh_pressed():
 	refresh()
+
+func _on_slot_selector_item_selected(index: int) -> void:
+	if not node:
+		return
+		
+	var meta = node.getMeta()
+	if index < meta.outs.size():
+		is_output = true
+		current_slot_index = index
+	else:
+		current_slot_index = index - meta.outs.size()
+		is_output = false
+	#print( "Selected slot %d -> Output:%s %d" % [ index, is_output, current_slot_index ] )
+	refresh()
+
+func populateSlots():
+	slot_selector.clear()
+	
+	if not node:
+		return
+	
+	var meta = node.getMeta()
+	
+	var idx = 0
+	for slot in meta.outs:
+		slot_selector.add_item( slot.label, idx )
+		idx +=1
+
+	for slot in meta.ins:
+		slot_selector.add_item( slot.label, idx )
+		idx +=1

@@ -282,7 +282,7 @@ in_nameA = "size.X"
 in_nameB = "3"
 out_name = "deltax"
 random_seed = 3899755672
-inspect_enabled = true
+inspect_enabled = false
 debug_enabled = false
 debug_mode = 0
 debug_scale = 1.0
@@ -450,7 +450,7 @@ conns = Array[Dictionary]([{
 "to_port": 1
 }])
 view_zoom = 0.743227
-view_offset = Vector2(-179.942, -377.324)
+view_offset = Vector2(-59.4582, -363.51)
 new_name_counter = 34
 inputs = SubResource("Resource_psfr8")
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"

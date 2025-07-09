@@ -1,7 +1,7 @@
 === TODO
 
 [ ] Spline sampling interior in non grid pattern
-[ ] Allow the inspector to show all outputs/inputs
+[ ] There is but where transforms seems to be updating the input
 [ ] ALlow to filter rows in the instpector
 [ ] Add noise to position
 [ ] Math Node. Should hide/not require some inputs when not needed. Like Abs
@@ -12,6 +12,7 @@
 [ ] use inputs on all settings
 [ ] Custom inputs to the pcg
 [ ] undo/redo
+[X] Allow the inspector to show all outputs/inputs
 [X] nodes to filter A/B
 [X] Math Node. Accept a stream feeding a single size element -> Promote it
 [X] Confirm if we are using PackedStringArray for streams of type Strings
