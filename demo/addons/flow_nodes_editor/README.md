@@ -2,6 +2,8 @@
 
 [ ] Spline sampling interior in non grid pattern
 [ ] Add noise to position
+[ ] Make vector from float's, maybe autopromote float -> vector3 
+[ ] The sample spline is not honoring the uniform interval override value
 [ ] Math Node. Should hide/not require some inputs when not needed. Like Abs
 [ ] Math Node. Should be easier to add a constant +float/+int/-vector at least
 [ ] Math Node. Accept a stream feeding a single size element -> Promote it
