@@ -10,22 +10,7 @@ func _init():
 	}
 	
 func getTitle() -> String:
-	return MathOpNodeSettings.eOperation.keys()[settings.operation]
-
-func newFloatStream( size : int, new_name : String, init_value ):
-	var new_container = PackedFloat32Array()
-	new_container.resize( size )
-	if typeof(init_value) == TYPE_CALLABLE:
-		var fn : Callable = init_value
-		for idx in size:
-			new_container[idx] = fn.call(idx)
-	else:
-		new_container.fill( init_value )
-	return { 
-		"data_type" : FlowData.DataType.Float,
-		"container" : new_container,
-		"name" : new_name
-	}	
+	return MathOpNodeSettings.eOperation.keys()[settings.operation]	
 
 func execute( _ctx : FlowData.EvaluationContext ):
 		
@@ -49,7 +34,7 @@ func execute( _ctx : FlowData.EvaluationContext ):
 		num_elemsB = in_dataB.size()
 		sB = in_dataB.findStream( settings.in_nameB )
 		
-	# B is not connected
+	# if B is not connected, we might have a constant
 	if sB == null:
 		# Check if the name looks like a float
 		if settings.in_nameB.is_valid_float():
