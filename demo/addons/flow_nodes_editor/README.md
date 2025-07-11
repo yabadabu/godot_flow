@@ -1,13 +1,19 @@
 === TODO
 
+[ ] There is bug where transforms seems to be updating the input
+[ ] support for @last?
+[ ] Support for multiple streams?
+	[ ] Debug
+	[ ] Generic Loop
+	[ ] Node to group
+	[ ] Node to split by condition/field
+[ ] Generate reduction of metrics. Avg, Min, Max, etc of a numeric stream
+[ ] Get N property as a independent value. Get first, get last, etc.
 [ ] Improve self prunning so more objects are kept
 [ ] Spline sampling interior in non grid pattern
-[ ] There is but where transforms seems to be updating the input
 [ ] ALlow to filter rows in the instpector
 [ ] Hightlight the selector row from the inspector in the 3D
 [ ] Add noise to position
-[ ] Make vector from float's, maybe autopromote float -> vector3 
-[ ] The sample spline is not honoring the uniform interval override value
 [ ] Math Node. Should hide/not require some inputs when not needed. Like Abs
 [ ] Math Node. Should be easier to add a constant +float/+int/-vector at least
 [ ] Support for Vector4/Color/PackedVector4Array -> Read SubAttributes / MathNode / SetAttribute / Use in Debug if exists
@@ -16,6 +22,7 @@
 [ ] use inputs on all settings
 [ ] Custom inputs to the pcg
 [ ] undo/redo
+[X] Make vector from float's, maybe autopromote float -> vector3 
 [X] Allow the inspector to show all outputs/inputs
 [X] nodes to filter A/B
 [X] Math Node. Accept a stream feeding a single size element -> Promote it

@@ -188,59 +188,6 @@ debug_modulate_by = ""
 title = "Self Pruning"
 enabled = true
 
-[sub_resource type="Resource" id="Resource_ol2su"]
-resource_name = "Add Attribute"
-script = ExtResource("14_2yywp")
-name = "v0"
-data_type = 2
-cte_bool = false
-cte_int = 0
-cte_float = 1.0
-cte_vector = Vector3(0, 0, 0)
-cte_string = ""
-random_seed = 3968999207
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Add Attribute"
-enabled = true
-
-[sub_resource type="Resource" id="Resource_6s8jo"]
-resource_name = "Math Op"
-script = ExtResource("9_dbqvf")
-operation = 3
-in_nameA = "size.X"
-in_nameB = "3"
-out_name = "deltax"
-random_seed = 3899755672
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Math"
-enabled = true
-
-[sub_resource type="Resource" id="Resource_2jbe2"]
-resource_name = "Sample Spline Settings"
-script = ExtResource("4_qf0nw")
-uniform_interval = 3.0
-fill_curve = false
-required_meta_bool = &"is_road"
-random_seed = 2623515292
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Sample Spline"
-enabled = true
-
 [sub_resource type="Resource" id="Resource_qt8uc"]
 resource_name = "Sample Spline Settings"
 script = ExtResource("4_qf0nw")
@@ -255,6 +202,23 @@ debug_scale = 1.0
 debug_color = Color(1, 1, 1, 1)
 debug_modulate_by = ""
 title = "Sample Spline"
+enabled = true
+
+[sub_resource type="Resource" id="Resource_pf313"]
+resource_name = "Make Vector Settings"
+script = ExtResource("15_fhyap")
+x = 0.0
+y = 2.385
+z = 0.0
+out_name = "Vector"
+random_seed = 1811310913
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Make Vector"
 enabled = true
 
 [sub_resource type="Resource" id="Resource_2lc4x"]
@@ -277,6 +241,59 @@ debug_modulate_by = ""
 title = "Transform"
 enabled = true
 
+[sub_resource type="Resource" id="Resource_6s8jo"]
+resource_name = "Math Op"
+script = ExtResource("9_dbqvf")
+operation = 3
+in_nameA = "size.X"
+in_nameB = "3"
+out_name = "deltax"
+random_seed = 3899755672
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Math"
+enabled = true
+
+[sub_resource type="Resource" id="Resource_ol2su"]
+resource_name = "Add Attribute"
+script = ExtResource("14_2yywp")
+name = "v0"
+data_type = 2
+cte_bool = false
+cte_int = 0
+cte_float = 1.0
+cte_vector = Vector3(0, 0, 0)
+cte_string = ""
+random_seed = 3968999207
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Add Attribute"
+enabled = true
+
+[sub_resource type="Resource" id="Resource_2jbe2"]
+resource_name = "Sample Spline Settings"
+script = ExtResource("4_qf0nw")
+uniform_interval = 3.28
+fill_curve = false
+required_meta_bool = &"is_road"
+random_seed = 2623515292
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Sample Spline"
+enabled = true
+
 [sub_resource type="Resource" id="Resource_syw2u"]
 resource_name = "Input"
 script = ExtResource("13_7k55o")
@@ -290,23 +307,6 @@ debug_scale = 1.0
 debug_color = Color(1, 1, 1, 1)
 debug_modulate_by = ""
 title = "Input"
-enabled = true
-
-[sub_resource type="Resource" id="Resource_pf313"]
-resource_name = "Make Vector Settings"
-script = ExtResource("15_fhyap")
-x = 0.0
-y = 2.385
-z = 0.0
-out_name = "Vector"
-random_seed = 1811310913
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Make Vector"
 enabled = true
 
 [sub_resource type="Resource" id="Resource_5uxx2"]
@@ -358,40 +358,40 @@ nodes = Array[Dictionary]([{
 "settings": SubResource("Resource_2yywp"),
 "template": "self_pruning"
 }, {
-"name": &"id_0033_add_attribute",
-"position_offset": Vector2(200, -110),
-"settings": SubResource("Resource_ol2su"),
-"template": "add_attribute"
-}, {
-"name": &"id_0034_math_op",
-"position_offset": Vector2(360, -70),
-"settings": SubResource("Resource_6s8jo"),
-"template": "math_op"
-}, {
-"name": &"id_0006_sample_spline",
-"position_offset": Vector2(-100, 100),
-"settings": SubResource("Resource_2jbe2"),
-"template": "sample_spline"
-}, {
 "name": &"id_0007_sample_spline",
 "position_offset": Vector2(60, 600),
 "settings": SubResource("Resource_qt8uc"),
 "template": "sample_spline"
+}, {
+"name": &"id_0066_make_vector",
+"position_offset": Vector2(200, 280),
+"settings": SubResource("Resource_pf313"),
+"template": "make_vector"
 }, {
 "name": &"id_0003_transform",
 "position_offset": Vector2(380, 100),
 "settings": SubResource("Resource_2lc4x"),
 "template": "transform"
 }, {
+"name": &"id_0034_math_op",
+"position_offset": Vector2(360, -70),
+"settings": SubResource("Resource_6s8jo"),
+"template": "math_op"
+}, {
+"name": &"id_0033_add_attribute",
+"position_offset": Vector2(200, -110),
+"settings": SubResource("Resource_ol2su"),
+"template": "add_attribute"
+}, {
+"name": &"id_0006_sample_spline",
+"position_offset": Vector2(-100, 100),
+"settings": SubResource("Resource_2jbe2"),
+"template": "sample_spline"
+}, {
 "name": &"id_0032_input_road_width",
-"position_offset": Vector2(-80, 280),
+"position_offset": Vector2(-280, 300),
 "settings": SubResource("Resource_syw2u"),
 "template": "input_road_width"
-}, {
-"name": &"id_0066_make_vector",
-"position_offset": Vector2(140, 340),
-"settings": SubResource("Resource_pf313"),
-"template": "make_vector"
 }])
 conns = Array[Dictionary]([{
 "from_node": &"id_0006_sample_spline",
@@ -497,13 +497,13 @@ conns = Array[Dictionary]([{
 "to_port": 6
 }])
 view_zoom = 0.989235
-view_offset = Vector2(-169.923, -84.609)
+view_offset = Vector2(-279.664, -161.378)
 new_name_counter = 66
 inputs = SubResource("Resource_psfr8")
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 
 [sub_resource type="Curve3D" id="Curve3D_nuuxb"]
-bake_interval = 3.0
+bake_interval = 3.28
 _data = {
 "points": PackedVector3Array(0, 0, 0, 0, 0, 0, -24.8343, 0, 5.68748, -6.06478, 0, 0.294408, 6.06478, 0, -0.294408, -12.1454, 0, 1.71299, -5.03436, 0, 0.706576, 5.03436, 0, -0.706576, 4.91215, 1.90735e-06, 4.94331, 0, 0, 0, 0, 0, 0, 21.3287, 0, -2.4087),
 "tilts": PackedFloat32Array(0, 0, 0, 0)
