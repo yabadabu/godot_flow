@@ -1,4 +1,4 @@
-[gd_scene load_steps=38 format=3 uid="uid://bl32jt5udtf08"]
+[gd_scene load_steps=40 format=3 uid="uid://bl32jt5udtf08"]
 
 [ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_2l584"]
 [ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="2_dxf0c"]
@@ -17,6 +17,7 @@
 [ext_resource type="Script" uid="uid://du3c8wxq0r2fl" path="res://addons/flow_nodes_editor/nodes/input_settings.gd" id="13_7k55o"]
 [ext_resource type="Script" uid="uid://runa6a3koevg" path="res://addons/flow_nodes_editor/nodes/add_attribute_settings.gd" id="14_2yywp"]
 [ext_resource type="Script" uid="uid://dbtbo3vh5nl2c" path="res://scenes/scene_3p.gd" id="14_i2drj"]
+[ext_resource type="Script" uid="uid://dhryaxkxmtaui" path="res://addons/flow_nodes_editor/nodes/make_vector_settings.gd" id="15_fhyap"]
 
 [sub_resource type="Curve3D" id="Curve3D_36lll"]
 closed = true
@@ -33,7 +34,7 @@ name = "road_width"
 data_type = 2
 cte_bool = false
 cte_int = 0
-cte_float = 2.935
+cte_float = 1.15
 cte_vector = Vector3(0, 0, 0)
 cte_string = ""
 metadata/_custom_type_script = "uid://co0f3ugd2wj1y"
@@ -173,22 +174,6 @@ debug_modulate_by = ""
 title = "Math"
 enabled = true
 
-[sub_resource type="Resource" id="Resource_qt8uc"]
-resource_name = "Sample Spline Settings"
-script = ExtResource("4_qf0nw")
-uniform_interval = 1.0
-fill_curve = true
-required_meta_bool = &"is_grass"
-random_seed = 2797604824
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Sample Spline"
-enabled = true
-
 [sub_resource type="Resource" id="Resource_2yywp"]
 resource_name = "Self Pruning"
 script = ExtResource("10_qe4ar")
@@ -201,57 +186,6 @@ debug_scale = 1.0
 debug_color = Color(0.0823529, 0, 1, 1)
 debug_modulate_by = ""
 title = "Self Pruning"
-enabled = true
-
-[sub_resource type="Resource" id="Resource_2lc4x"]
-resource_name = "Transform Settings"
-script = ExtResource("5_2jbe2")
-offset_min = Vector3(0, 0, 0)
-offset_max = Vector3(0, 0, 0)
-rotation_min = Vector3(0, 0, 0)
-rotation_max = Vector3(0, 0, 0)
-scale_min = Vector3(3, 1, 1)
-scale_max = Vector3(3, 1, 1)
-uniform_scale = true
-random_seed = 4192799995
-inspect_enabled = false
-debug_enabled = true
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Transform"
-enabled = true
-
-[sub_resource type="Resource" id="Resource_2jbe2"]
-resource_name = "Sample Spline Settings"
-script = ExtResource("4_qf0nw")
-uniform_interval = 3.0
-fill_curve = false
-required_meta_bool = &"is_road"
-random_seed = 2623515292
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Sample Spline"
-enabled = true
-
-[sub_resource type="Resource" id="Resource_syw2u"]
-resource_name = "Input"
-script = ExtResource("13_7k55o")
-name = "road_width"
-data_type = 2
-random_seed = 3347556143
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Input"
 enabled = true
 
 [sub_resource type="Resource" id="Resource_ol2su"]
@@ -289,6 +223,90 @@ debug_scale = 1.0
 debug_color = Color(1, 1, 1, 1)
 debug_modulate_by = ""
 title = "Math"
+enabled = true
+
+[sub_resource type="Resource" id="Resource_2jbe2"]
+resource_name = "Sample Spline Settings"
+script = ExtResource("4_qf0nw")
+uniform_interval = 3.0
+fill_curve = false
+required_meta_bool = &"is_road"
+random_seed = 2623515292
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Sample Spline"
+enabled = true
+
+[sub_resource type="Resource" id="Resource_qt8uc"]
+resource_name = "Sample Spline Settings"
+script = ExtResource("4_qf0nw")
+uniform_interval = 1.0
+fill_curve = true
+required_meta_bool = &"is_grass"
+random_seed = 2797604824
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Sample Spline"
+enabled = true
+
+[sub_resource type="Resource" id="Resource_2lc4x"]
+resource_name = "Transform Settings"
+script = ExtResource("5_2jbe2")
+offset_min = Vector3(0, 0, 0)
+offset_max = Vector3(0, 0, 0)
+rotation_min = Vector3(0, 0, 0)
+rotation_max = Vector3(0, 0, 0)
+scale_min = Vector3(3, 1, 1)
+scale_max = Vector3(3, 1, 1)
+uniform_scale = false
+random_seed = 4192799995
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Transform"
+enabled = true
+
+[sub_resource type="Resource" id="Resource_syw2u"]
+resource_name = "Input"
+script = ExtResource("13_7k55o")
+name = "road_width"
+data_type = 2
+random_seed = 3347556143
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Input"
+enabled = true
+
+[sub_resource type="Resource" id="Resource_pf313"]
+resource_name = "Make Vector Settings"
+script = ExtResource("15_fhyap")
+x = 0.0
+y = 2.385
+z = 0.0
+out_name = "Vector"
+random_seed = 1811310913
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Make Vector"
 enabled = true
 
 [sub_resource type="Resource" id="Resource_5uxx2"]
@@ -335,30 +353,10 @@ nodes = Array[Dictionary]([{
 "settings": SubResource("Resource_jiljv"),
 "template": "math_op"
 }, {
-"name": &"id_0007_sample_spline",
-"position_offset": Vector2(-40, 520),
-"settings": SubResource("Resource_qt8uc"),
-"template": "sample_spline"
-}, {
 "name": &"id_0019_self_pruning",
 "position_offset": Vector2(1500, 620),
 "settings": SubResource("Resource_2yywp"),
 "template": "self_pruning"
-}, {
-"name": &"id_0003_transform",
-"position_offset": Vector2(360, 120),
-"settings": SubResource("Resource_2lc4x"),
-"template": "transform"
-}, {
-"name": &"id_0006_sample_spline",
-"position_offset": Vector2(-40, 120),
-"settings": SubResource("Resource_2jbe2"),
-"template": "sample_spline"
-}, {
-"name": &"id_0032_input_road_width",
-"position_offset": Vector2(30, -50),
-"settings": SubResource("Resource_syw2u"),
-"template": "input_road_width"
 }, {
 "name": &"id_0033_add_attribute",
 "position_offset": Vector2(200, -110),
@@ -369,6 +367,31 @@ nodes = Array[Dictionary]([{
 "position_offset": Vector2(360, -70),
 "settings": SubResource("Resource_6s8jo"),
 "template": "math_op"
+}, {
+"name": &"id_0006_sample_spline",
+"position_offset": Vector2(-100, 100),
+"settings": SubResource("Resource_2jbe2"),
+"template": "sample_spline"
+}, {
+"name": &"id_0007_sample_spline",
+"position_offset": Vector2(60, 600),
+"settings": SubResource("Resource_qt8uc"),
+"template": "sample_spline"
+}, {
+"name": &"id_0003_transform",
+"position_offset": Vector2(380, 100),
+"settings": SubResource("Resource_2lc4x"),
+"template": "transform"
+}, {
+"name": &"id_0032_input_road_width",
+"position_offset": Vector2(-80, 280),
+"settings": SubResource("Resource_syw2u"),
+"template": "input_road_width"
+}, {
+"name": &"id_0066_make_vector",
+"position_offset": Vector2(140, 340),
+"settings": SubResource("Resource_pf313"),
+"template": "make_vector"
 }])
 conns = Array[Dictionary]([{
 "from_node": &"id_0006_sample_spline",
@@ -448,10 +471,34 @@ conns = Array[Dictionary]([{
 "keep_alive": false,
 "to_node": &"id_0034_math_op",
 "to_port": 1
+}, {
+"from_node": &"id_0032_input_road_width",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0066_make_vector",
+"to_port": 0
+}, {
+"from_node": &"id_0032_input_road_width",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0066_make_vector",
+"to_port": 2
+}, {
+"from_node": &"id_0066_make_vector",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0003_transform",
+"to_port": 5
+}, {
+"from_node": &"id_0066_make_vector",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0003_transform",
+"to_port": 6
 }])
-view_zoom = 0.743227
-view_offset = Vector2(-59.4582, -363.51)
-new_name_counter = 34
+view_zoom = 0.989235
+view_offset = Vector2(-169.923, -84.609)
+new_name_counter = 66
 inputs = SubResource("Resource_psfr8")
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 
