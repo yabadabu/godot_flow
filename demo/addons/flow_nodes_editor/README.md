@@ -1,8 +1,10 @@
 === TODO
 
+[ ] Improve self prunning so more objects are kept
 [ ] Spline sampling interior in non grid pattern
 [ ] There is but where transforms seems to be updating the input
 [ ] ALlow to filter rows in the instpector
+[ ] Hightlight the selector row from the inspector in the 3D
 [ ] Add noise to position
 [ ] Make vector from float's, maybe autopromote float -> vector3 
 [ ] The sample spline is not honoring the uniform interval override value

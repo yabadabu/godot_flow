@@ -192,7 +192,7 @@ func populatePopupMenu():
 		if not node_type.get( "auto_register", true):
 			print( "Adding menu %s skip (id:%d)" % [ label, max_id ])
 			continue
-		print( "Adding menu %s -> %d" % [ label, max_id ])
+		#print( "Adding menu %s -> %d" % [ label, max_id ])
 		menu_ids[ max_id ] = key
 		pm.add_item(label, max_id, KEY_NONE )
 	return pm
@@ -313,7 +313,7 @@ func addNodeFromTemplate( node_template, node_name : String, settings = null ):
 		push_error("node_type %s is not registered" % node_template)
 		print( node_types.keys() )
 		return null	
-	print( "Meta:", str(meta) )
+	# print( "Meta:", str(meta) )
 		
 	node.set_script(meta.factory)
 

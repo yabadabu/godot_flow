@@ -240,22 +240,30 @@ func initFromScript():
 			lbl_in.text = ""
 			
 		if idx < num_outs:
-			lbl_out.text = outs[ idx ].label
+			var out = outs[idx]
+			lbl_out.text = out.label
 			set_slot_enabled_right( idx, true )
+			if out.has( "type"):
+				var color = getColorForGDScriptType( out.type )
+				set_slot_color_right( idx, color )
 		else:
 			lbl_out.text = ""
 			
 	if !meta.get( "hide_inputs", false ):
+		var my_title : String = meta.title
 		if !meta.has( "input_slots" ):
 			meta.input_slots = {}
 			if trace:
-				print( "%s : Created empty input_slots" % name )
+				print( "%s : Created empty input_slots %s" % [ name, my_title ] )
 		var inputs = settings.get_property_list()
 		var slot_idx = num_rows
 		var inside_my_vars := false
-		var my_title : String = meta.title
 		for input in inputs:
+			if trace:
+				print( "Input.", input.name)
 			if input.name == "node_settings.gd":
+				break
+			if input.name == "HiddenFromThisPoint":
 				break
 			if input.name == my_title:
 				inside_my_vars = true
