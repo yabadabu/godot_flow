@@ -8,6 +8,10 @@
 	[ ] Node to group
 	[ ] Node to split by condition/field
 [ ] Generate reduction of metrics. Avg, Min, Max, etc of a numeric stream
+[ ] Sort
+[ ] Sample Nth
+[ ] No need to regenerate the menu every time
+[ ] Allow the add menu to have sections
 [ ] Get N property as a independent value. Get first, get last, etc.
 [ ] Improve self prunning so more objects are kept
 [ ] Spline sampling interior in non grid pattern
