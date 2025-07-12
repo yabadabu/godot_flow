@@ -9,13 +9,12 @@
 	[ ] Node to split by condition/field
 [ ] Generate reduction of metrics. Avg, Min, Max, etc of a numeric stream
 [ ] Sort
-[ ] Sample Nth
-[ ] No need to regenerate the menu every time
+[ ] Volume Sample in 3D
+[ ] Sample Nth, offset, max
 [ ] Allow the add menu to have sections
 [ ] Get N property as a independent value. Get first, get last, etc.
-[ ] Improve self prunning so more objects are kept
 [ ] Spline sampling interior in non grid pattern
-[ ] ALlow to filter rows in the instpector
+[ ] Allow to filter rows in the inspector
 [ ] Add noise to position
 [ ] Math Node. Should hide/not require some inputs when not needed. Like Abs
 [ ] Math Node. Should be easier to add a constant +float/+int/-vector at least
@@ -25,6 +24,8 @@
 [ ] use inputs on all settings
 [ ] Custom inputs to the pcg
 [ ] undo/redo
+[X] Improve self prunning so more objects are kept
+[X] No need to regenerate the menu every time
 [X] Hightlight the selector row from the inspector in the 3D
 [X] Make vector from float's, maybe autopromote float -> vector3 
 [X] Allow the inspector to show all outputs/inputs

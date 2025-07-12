@@ -45,6 +45,8 @@ var gedit_nodes_by_name = {}
 var ui_scale = 1.0
 var node_types = { }
 
+var popup_menu = null
+
 func setResourceToEdit( new_resource : FlowGraphResource, new_resource_owner : Node3D ):
 	print( "setResourceToEdit %s" % new_resource )
 	
@@ -438,9 +440,10 @@ func _on_graph_edit_node_selected(node):
 func _on_graph_edit_popup_request(at_position):
 	local_drop_position = at_position
 	
-	var p = populatePopupMenu()
+	if not popup_menu:
+		popup_menu = populatePopupMenu()
+	var p = popup_menu
 	p.size = Vector2( 400,200 )
-	#p.popup_centered( Vector2( 400, 200 ))
 	p.position = get_screen_position() + at_position
 	p.popup()
 	
@@ -578,6 +581,7 @@ func evalGraph():
 
 func _on_button_reload_pressed() -> void:
 	scanAvailableNodes()
+	popup_menu = null
 
 func _on_button_save_pressed() -> void:
 	if current_resource:
