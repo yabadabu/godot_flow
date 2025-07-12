@@ -1,4 +1,4 @@
-[gd_scene load_steps=40 format=3 uid="uid://bl32jt5udtf08"]
+[gd_scene load_steps=37 format=3 uid="uid://bl32jt5udtf08"]
 
 [ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_2l584"]
 [ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="2_dxf0c"]
@@ -7,7 +7,6 @@
 [ext_resource type="Script" uid="uid://cbj3mmuatfk1v" path="res://addons/flow_nodes_editor/nodes/sample_spline_settings.gd" id="4_qf0nw"]
 [ext_resource type="Script" uid="uid://dt7o3moxddt4h" path="res://addons/flow_nodes_editor/nodes/transform_settings.gd" id="5_2jbe2"]
 [ext_resource type="Script" uid="uid://cnhqpivgscgff" path="res://addons/flow_nodes_editor/nodes/select_settings.gd" id="6_5uxx2"]
-[ext_resource type="Script" uid="uid://bw3x7p10afvc7" path="res://addons/flow_nodes_editor/nodes/substract_settings.gd" id="7_2lc4x"]
 [ext_resource type="Script" uid="uid://oocaue4cyte2" path="res://addons/flow_nodes_editor/nodes/scan_nodes_settings.gd" id="8_qt8uc"]
 [ext_resource type="PackedScene" uid="uid://bhacwufn13rf6" path="res://scenes/totem.tscn" id="9_2lc4x"]
 [ext_resource type="Script" uid="uid://ckff4og6eip3" path="res://addons/flow_nodes_editor/nodes/math_op_settings.gd" id="9_dbqvf"]
@@ -34,7 +33,7 @@ name = "road_width"
 data_type = 2
 cte_bool = false
 cte_int = 0
-cte_float = 1.15
+cte_float = 3.85
 cte_vector = Vector3(0, 0, 0)
 cte_string = ""
 metadata/_custom_type_script = "uid://co0f3ugd2wj1y"
@@ -42,22 +41,6 @@ metadata/_custom_type_script = "uid://co0f3ugd2wj1y"
 [sub_resource type="Resource" id="Resource_psfr8"]
 script = ExtResource("3_qf0nw")
 inputs = Array[ExtResource("2_dxf0c")]([SubResource("Resource_4j7uw")])
-
-[sub_resource type="Resource" id="Resource_banft"]
-resource_name = "Scan Nodes Settings"
-script = ExtResource("8_qt8uc")
-group_name = "totem"
-import_metadata = true
-import_properties = Array[StringName]([&"num_enemies"])
-random_seed = 1619377703
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Scan Nodes"
-enabled = true
 
 [sub_resource type="Resource" id="Resource_dbqvf"]
 resource_name = "Select Settings"
@@ -71,34 +54,6 @@ debug_scale = 1.0
 debug_color = Color(1, 1, 1, 1)
 debug_modulate_by = ""
 title = "Select"
-enabled = true
-
-[sub_resource type="Resource" id="Resource_qe4ar"]
-resource_name = "Substract"
-script = ExtResource("7_2lc4x")
-operation = 0
-random_seed = 468738614
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Substract"
-enabled = true
-
-[sub_resource type="Resource" id="Resource_h10xn"]
-resource_name = "Substract"
-script = ExtResource("7_2lc4x")
-operation = 0
-random_seed = 3661329179
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Substract"
 enabled = true
 
 [sub_resource type="Resource" id="Resource_7k55o"]
@@ -121,25 +76,6 @@ debug_modulate_by = ""
 title = "Transform"
 enabled = true
 
-[sub_resource type="Resource" id="Resource_fhyap"]
-resource_name = "Spawn Scenes Settings"
-script = ExtResource("12_i2drj")
-scene = ExtResource("11_h10xn")
-scene_attribute = ""
-assign_attributes = {
-"head_rotation": "dx",
-"visible": "is_big"
-}
-random_seed = 862666864
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Spawn Scenes"
-enabled = true
-
 [sub_resource type="Resource" id="Resource_i2drj"]
 resource_name = "Math Op"
 script = ExtResource("9_dbqvf")
@@ -155,53 +91,6 @@ debug_scale = 1.0
 debug_color = Color(1, 1, 1, 1)
 debug_modulate_by = ""
 title = "Math"
-enabled = true
-
-[sub_resource type="Resource" id="Resource_jiljv"]
-resource_name = "Math Op"
-script = ExtResource("9_dbqvf")
-operation = 2
-in_nameA = "dx"
-in_nameB = "40"
-out_name = "dx"
-random_seed = 1411851728
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Math"
-enabled = true
-
-[sub_resource type="Resource" id="Resource_2yywp"]
-resource_name = "Self Pruning"
-script = ExtResource("10_qe4ar")
-keep_self_intersections = false
-random_seed = 2100417751
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(0.0823529, 0, 1, 1)
-debug_modulate_by = ""
-title = "Self Pruning"
-enabled = true
-
-[sub_resource type="Resource" id="Resource_qt8uc"]
-resource_name = "Sample Spline Settings"
-script = ExtResource("4_qf0nw")
-uniform_interval = 1.0
-fill_curve = true
-required_meta_bool = &"is_grass"
-random_seed = 2797604824
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Sample Spline"
 enabled = true
 
 [sub_resource type="Resource" id="Resource_pf313"]
@@ -258,6 +147,110 @@ debug_modulate_by = ""
 title = "Add Attribute"
 enabled = true
 
+[sub_resource type="Resource" id="Resource_fhyap"]
+resource_name = "Spawn Scenes Settings"
+script = ExtResource("12_i2drj")
+scene = ExtResource("11_h10xn")
+scene_attribute = ""
+assign_attributes = {
+"head_rotation": "dx",
+"visible": "is_big"
+}
+random_seed = 862666864
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Spawn Scenes"
+enabled = true
+
+[sub_resource type="Resource" id="Resource_jiljv"]
+resource_name = "Math Op"
+script = ExtResource("9_dbqvf")
+operation = 2
+in_nameA = "dx"
+in_nameB = "40"
+out_name = "dx"
+random_seed = 1411851728
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Math"
+enabled = true
+
+[sub_resource type="Resource" id="Resource_qt8uc"]
+resource_name = "Sample Spline Settings"
+script = ExtResource("4_qf0nw")
+uniform_interval = 1.0
+fill_curve = true
+required_meta_bool = &"is_grass"
+random_seed = 2797604824
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Sample Spline"
+enabled = true
+
+[sub_resource type="Resource" id="Resource_banft"]
+resource_name = "Scan Nodes Settings"
+script = ExtResource("8_qt8uc")
+group_name = "totem"
+import_metadata = true
+import_properties = Array[StringName]([&"num_enemies"])
+random_seed = 1619377703
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Scan Nodes"
+enabled = true
+
+[sub_resource type="Resource" id="Resource_2jbe2"]
+resource_name = "Sample Spline Settings"
+script = ExtResource("4_qf0nw")
+uniform_interval = 3.28
+fill_curve = false
+required_meta_bool = &"is_road"
+random_seed = 2623515292
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Sample Spline"
+enabled = true
+
+[sub_resource type="Resource" id="Resource_2lc4x"]
+resource_name = "Transform Settings"
+script = ExtResource("5_2jbe2")
+offset_min = Vector3(0.04, 0, 0)
+offset_max = Vector3(0, 0, 0)
+rotation_min = Vector3(0, 0, 0)
+rotation_max = Vector3(0, 0, 0)
+scale_min = Vector3(3, 1, 1)
+scale_max = Vector3(3, 1, 1)
+uniform_scale = false
+random_seed = 4192799995
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Transform"
+enabled = true
+
 [sub_resource type="Resource" id="Resource_syw2u"]
 resource_name = "Input"
 script = ExtResource("13_7k55o")
@@ -273,95 +266,38 @@ debug_modulate_by = ""
 title = "Input"
 enabled = true
 
-[sub_resource type="Resource" id="Resource_2lc4x"]
-resource_name = "Transform Settings"
-script = ExtResource("5_2jbe2")
-offset_min = Vector3(0, 0, 0)
-offset_max = Vector3(0, 0, 0)
-rotation_min = Vector3(0, 0, 0)
-rotation_max = Vector3(0, 0, 0)
-scale_min = Vector3(3, 1, 1)
-scale_max = Vector3(3, 1, 1)
-uniform_scale = false
-random_seed = 4192799995
-inspect_enabled = false
+[sub_resource type="Resource" id="Resource_2yywp"]
+resource_name = "Self Pruning"
+script = ExtResource("10_qe4ar")
+keep_self_intersections = false
+random_seed = 3556067674
+inspect_enabled = true
 debug_enabled = true
 debug_mode = 0
 debug_scale = 1.0
 debug_color = Color(1, 1, 1, 1)
 debug_modulate_by = ""
-title = "Transform"
-enabled = true
-
-[sub_resource type="Resource" id="Resource_2jbe2"]
-resource_name = "Sample Spline Settings"
-script = ExtResource("4_qf0nw")
-uniform_interval = 3.28
-fill_curve = false
-required_meta_bool = &"is_road"
-random_seed = 2623515292
-inspect_enabled = true
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Sample Spline"
+title = "Self Pruning"
 enabled = true
 
 [sub_resource type="Resource" id="Resource_5uxx2"]
 resource_local_to_scene = true
 script = ExtResource("4_2jbe2")
 nodes = Array[Dictionary]([{
-"name": &"id_0011_scan_nodes",
-"position_offset": Vector2(40, 820),
-"settings": SubResource("Resource_banft"),
-"template": "scan_nodes"
-}, {
 "name": &"id_0008_select",
 "position_offset": Vector2(400, 520),
 "settings": SubResource("Resource_dbqvf"),
 "template": "select"
-}, {
-"name": &"id_0020_substract",
-"position_offset": Vector2(740, 320),
-"settings": SubResource("Resource_qe4ar"),
-"template": "substract"
-}, {
-"name": &"id_0023_substract",
-"position_offset": Vector2(1000, 500),
-"settings": SubResource("Resource_h10xn"),
-"template": "substract"
 }, {
 "name": &"id_0016_transform",
 "position_offset": Vector2(1260, 620),
 "settings": SubResource("Resource_7k55o"),
 "template": "transform"
 }, {
-"name": &"id_0028_spawn_scenes",
-"position_offset": Vector2(880, 1140),
-"settings": SubResource("Resource_fhyap"),
-"template": "spawn_scenes"
-}, {
 "name": &"id_0015_math_op",
 "position_offset": Vector2(360, 1020),
 "settings": SubResource("Resource_i2drj"),
 "template": "math_op"
-}, {
-"name": &"id_0030_math_op",
-"position_offset": Vector2(580, 1160),
-"settings": SubResource("Resource_jiljv"),
-"template": "math_op"
-}, {
-"name": &"id_0019_self_pruning",
-"position_offset": Vector2(1500, 620),
-"settings": SubResource("Resource_2yywp"),
-"template": "self_pruning"
-}, {
-"name": &"id_0007_sample_spline",
-"position_offset": Vector2(60, 600),
-"settings": SubResource("Resource_qt8uc"),
-"template": "sample_spline"
 }, {
 "name": &"id_0066_make_vector",
 "position_offset": Vector2(200, 280),
@@ -378,20 +314,45 @@ nodes = Array[Dictionary]([{
 "settings": SubResource("Resource_ol2su"),
 "template": "add_attribute"
 }, {
-"name": &"id_0032_input_road_width",
-"position_offset": Vector2(-20, 310),
-"settings": SubResource("Resource_syw2u"),
-"template": "input_road_width"
+"name": &"id_0028_spawn_scenes",
+"position_offset": Vector2(880, 1140),
+"settings": SubResource("Resource_fhyap"),
+"template": "spawn_scenes"
+}, {
+"name": &"id_0030_math_op",
+"position_offset": Vector2(580, 1160),
+"settings": SubResource("Resource_jiljv"),
+"template": "math_op"
+}, {
+"name": &"id_0007_sample_spline",
+"position_offset": Vector2(60, 600),
+"settings": SubResource("Resource_qt8uc"),
+"template": "sample_spline"
+}, {
+"name": &"id_0011_scan_nodes",
+"position_offset": Vector2(40, 820),
+"settings": SubResource("Resource_banft"),
+"template": "scan_nodes"
+}, {
+"name": &"id_0006_sample_spline",
+"position_offset": Vector2(-100, 100),
+"settings": SubResource("Resource_2jbe2"),
+"template": "sample_spline"
 }, {
 "name": &"id_0003_transform",
 "position_offset": Vector2(380, 100),
 "settings": SubResource("Resource_2lc4x"),
 "template": "transform"
 }, {
-"name": &"id_0006_sample_spline",
-"position_offset": Vector2(-100, 100),
-"settings": SubResource("Resource_2jbe2"),
-"template": "sample_spline"
+"name": &"id_0032_input_road_width",
+"position_offset": Vector2(-20, 310),
+"settings": SubResource("Resource_syw2u"),
+"template": "input_road_width"
+}, {
+"name": &"id_0071_self_pruning",
+"position_offset": Vector2(610.561, 104.041),
+"settings": SubResource("Resource_2yywp"),
+"template": "self_pruning"
 }])
 conns = Array[Dictionary]([{
 "from_node": &"id_0006_sample_spline",
@@ -410,36 +371,6 @@ conns = Array[Dictionary]([{
 "from_port": 0,
 "keep_alive": false,
 "to_node": &"id_0015_math_op",
-"to_port": 0
-}, {
-"from_node": &"id_0016_transform",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0019_self_pruning",
-"to_port": 0
-}, {
-"from_node": &"id_0008_select",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0020_substract",
-"to_port": 0
-}, {
-"from_node": &"id_0020_substract",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0023_substract",
-"to_port": 0
-}, {
-"from_node": &"id_0011_scan_nodes",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0023_substract",
-"to_port": 1
-}, {
-"from_node": &"id_0023_substract",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0016_transform",
 "to_port": 0
 }, {
 "from_node": &"id_0015_math_op",
@@ -495,10 +426,16 @@ conns = Array[Dictionary]([{
 "keep_alive": false,
 "to_node": &"id_0003_transform",
 "to_port": 6
+}, {
+"from_node": &"id_0003_transform",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0071_self_pruning",
+"to_port": 0
 }])
-view_zoom = 0.989235
-view_offset = Vector2(-197.847, -417.632)
-new_name_counter = 66
+view_zoom = 0.759481
+view_offset = Vector2(308.419, -385.965)
+new_name_counter = 71
 inputs = SubResource("Resource_psfr8")
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 

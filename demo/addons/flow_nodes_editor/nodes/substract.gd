@@ -34,7 +34,7 @@ func execute( _ctx : FlowData.EvaluationContext ):
 	var szB = in_dataB.getVector3Container( FlowData.AttrSize )
 	
 	var inverse_result = settings.operation == SubstractSettings.eOperation.A_Intersection_B
-	var result = tA.overlaps( posB, szB, inverse_result, false )
+	var result = tA.overlaps( posB, szB, inverse_result )
 	
 	var out_data : FlowData.Data = in_dataA.filter( result.idxs_overlapped )
 		

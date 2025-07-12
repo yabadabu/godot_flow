@@ -19,9 +19,7 @@ func execute( _ctx : FlowData.EvaluationContext ):
 	var tA := GDRTree.new()
 	var posA = in_dataA.getVector3Container( FlowData.AttrPosition )
 	var szA = in_dataA.getVector3Container( FlowData.AttrSize )
-	tA.add( posA, szA )
-	
-	var result = tA.overlaps( posA, szA, settings.keep_self_intersections, true )
+	var result = tA.self_prune( posA, szA, settings.keep_self_intersections )
 	
 	var out_data : FlowData.Data = in_dataA.filter( result.idxs_overlapped )
 		
