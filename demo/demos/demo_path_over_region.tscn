@@ -16,8 +16,8 @@
 [ext_resource type="Script" uid="uid://dqd74l1ewnh0g" path="res://addons/flow_nodes_editor/nodes/spawn_scenes_settings.gd" id="12_i2drj"]
 [ext_resource type="Script" uid="uid://du3c8wxq0r2fl" path="res://addons/flow_nodes_editor/nodes/input_settings.gd" id="13_7k55o"]
 [ext_resource type="Script" uid="uid://runa6a3koevg" path="res://addons/flow_nodes_editor/nodes/add_attribute_settings.gd" id="14_2yywp"]
-[ext_resource type="Script" uid="uid://dbtbo3vh5nl2c" path="res://scenes/scene_3p.gd" id="14_i2drj"]
 [ext_resource type="Script" uid="uid://dhryaxkxmtaui" path="res://addons/flow_nodes_editor/nodes/make_vector_settings.gd" id="15_fhyap"]
+[ext_resource type="Script" uid="uid://dbtbo3vh5nl2c" path="res://scenes/scene_3p.gd" id="17_fhyap"]
 
 [sub_resource type="Curve3D" id="Curve3D_36lll"]
 closed = true
@@ -221,26 +221,6 @@ debug_modulate_by = ""
 title = "Make Vector"
 enabled = true
 
-[sub_resource type="Resource" id="Resource_2lc4x"]
-resource_name = "Transform Settings"
-script = ExtResource("5_2jbe2")
-offset_min = Vector3(0, 0, 0)
-offset_max = Vector3(0, 0, 0)
-rotation_min = Vector3(0, 0, 0)
-rotation_max = Vector3(0, 0, 0)
-scale_min = Vector3(3, 1, 1)
-scale_max = Vector3(3, 1, 1)
-uniform_scale = false
-random_seed = 4192799995
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Transform"
-enabled = true
-
 [sub_resource type="Resource" id="Resource_6s8jo"]
 resource_name = "Math Op"
 script = ExtResource("9_dbqvf")
@@ -278,22 +258,6 @@ debug_modulate_by = ""
 title = "Add Attribute"
 enabled = true
 
-[sub_resource type="Resource" id="Resource_2jbe2"]
-resource_name = "Sample Spline Settings"
-script = ExtResource("4_qf0nw")
-uniform_interval = 3.28
-fill_curve = false
-required_meta_bool = &"is_road"
-random_seed = 2623515292
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Sample Spline"
-enabled = true
-
 [sub_resource type="Resource" id="Resource_syw2u"]
 resource_name = "Input"
 script = ExtResource("13_7k55o")
@@ -307,6 +271,42 @@ debug_scale = 1.0
 debug_color = Color(1, 1, 1, 1)
 debug_modulate_by = ""
 title = "Input"
+enabled = true
+
+[sub_resource type="Resource" id="Resource_2lc4x"]
+resource_name = "Transform Settings"
+script = ExtResource("5_2jbe2")
+offset_min = Vector3(0, 0, 0)
+offset_max = Vector3(0, 0, 0)
+rotation_min = Vector3(0, 0, 0)
+rotation_max = Vector3(0, 0, 0)
+scale_min = Vector3(3, 1, 1)
+scale_max = Vector3(3, 1, 1)
+uniform_scale = false
+random_seed = 4192799995
+inspect_enabled = false
+debug_enabled = true
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Transform"
+enabled = true
+
+[sub_resource type="Resource" id="Resource_2jbe2"]
+resource_name = "Sample Spline Settings"
+script = ExtResource("4_qf0nw")
+uniform_interval = 3.28
+fill_curve = false
+required_meta_bool = &"is_road"
+random_seed = 2623515292
+inspect_enabled = true
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Sample Spline"
 enabled = true
 
 [sub_resource type="Resource" id="Resource_5uxx2"]
@@ -368,11 +368,6 @@ nodes = Array[Dictionary]([{
 "settings": SubResource("Resource_pf313"),
 "template": "make_vector"
 }, {
-"name": &"id_0003_transform",
-"position_offset": Vector2(380, 100),
-"settings": SubResource("Resource_2lc4x"),
-"template": "transform"
-}, {
 "name": &"id_0034_math_op",
 "position_offset": Vector2(360, -70),
 "settings": SubResource("Resource_6s8jo"),
@@ -383,15 +378,20 @@ nodes = Array[Dictionary]([{
 "settings": SubResource("Resource_ol2su"),
 "template": "add_attribute"
 }, {
+"name": &"id_0032_input_road_width",
+"position_offset": Vector2(-20, 310),
+"settings": SubResource("Resource_syw2u"),
+"template": "input_road_width"
+}, {
+"name": &"id_0003_transform",
+"position_offset": Vector2(380, 100),
+"settings": SubResource("Resource_2lc4x"),
+"template": "transform"
+}, {
 "name": &"id_0006_sample_spline",
 "position_offset": Vector2(-100, 100),
 "settings": SubResource("Resource_2jbe2"),
 "template": "sample_spline"
-}, {
-"name": &"id_0032_input_road_width",
-"position_offset": Vector2(-280, 300),
-"settings": SubResource("Resource_syw2u"),
-"template": "input_road_width"
 }])
 conns = Array[Dictionary]([{
 "from_node": &"id_0006_sample_spline",
@@ -497,7 +497,7 @@ conns = Array[Dictionary]([{
 "to_port": 6
 }])
 view_zoom = 0.989235
-view_offset = Vector2(-279.664, -161.378)
+view_offset = Vector2(-197.847, -417.632)
 new_name_counter = 66
 inputs = SubResource("Resource_psfr8")
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
@@ -526,13 +526,13 @@ metadata/_custom_type_script = "uid://d1krtmb1urldl"
 [node name="Scene_0000" type="Node3D" parent="FlowGraphNode3D" instance=ExtResource("11_h10xn")]
 transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, -9.48803, -1.71658, 10.4651)
 visible = false
-script = ExtResource("14_i2drj")
+script = ExtResource("17_fhyap")
 head_rotation = 40.0
 metadata/flow_owner = &"id_0028_spawn_scenes"
 
 [node name="Scene_0001" type="Node3D" parent="FlowGraphNode3D" instance=ExtResource("11_h10xn")]
 transform = Transform3D(0.957354, 0, 1.56877, 0, 1.83781, 0, -1.56877, 0, 0.957354, 7.52767, -9.53674e-07, -2.50066)
-script = ExtResource("14_i2drj")
+script = ExtResource("17_fhyap")
 head_rotation = 80.0
 metadata/flow_owner = &"id_0028_spawn_scenes"
 

@@ -568,8 +568,7 @@ func evalGraph():
 		
 		if node.settings.inspect_enabled:
 			data_inspector.refresh()
-		if node.settings.debug_enabled:
-			node.setupDebugDraw()
+		node.setupDebugDraw()
 
 	regen_pending = false
 	#print( "regen_pending is now false")

@@ -28,6 +28,9 @@ var mesh_resource: Mesh = preload( "res://addons/flow_nodes_editor/resources/uni
 var ui_scale = 1.0
 var marker_radius : float = 9
 
+var debug_row : int = -1
+var selection_color := Color.MAGENTA
+
 func _ready():
 	refreshInspectMark()
 	refreshDebugMark()
@@ -290,6 +293,9 @@ func initFromScript():
 			num_inputs += 1
 
 func setupDebugDraw():
+	if !settings.debug_enabled:
+		return
+
 	var out_data : FlowData.Data = get_output(0)
 	if not out_data || !out_data.hasStream( FlowData.AttrPosition ):
 		print( "setupDebugDraw failed - out_data" )
@@ -307,15 +313,19 @@ func setupDebugDraw():
 		return
 	
 	var instance_count = out_data.size()
+	var allocated_count = instance_count
+	if debug_row != -1 and debug_row < instance_count:
+		allocated_count += 1
+		
 	var current_count = RenderingServer.multimesh_get_instance_count(multimesh_rid)
-	if instance_count != current_count:
-		RenderingServer.multimesh_allocate_data(multimesh_rid, instance_count, RenderingServer.MultimeshTransformFormat.MULTIMESH_TRANSFORM_3D, true )
+	if allocated_count != current_count:
+		RenderingServer.multimesh_allocate_data(multimesh_rid, allocated_count, RenderingServer.MultimeshTransformFormat.MULTIMESH_TRANSFORM_3D, true )
 	
 	if settings.debug_mode == NodeSettings.eDebugMode.EXTENDS:
 		for idx in range( instance_count ):
 			var t := transforms.atIndex( idx )
 			RenderingServer.multimesh_instance_set_transform( multimesh_rid, idx, t)
-			
+
 	elif settings.debug_mode == NodeSettings.eDebugMode.ABSOLUTE:
 		var abs_scale := settings.debug_scale
 		for idx in range( instance_count ):
@@ -323,6 +333,13 @@ func setupDebugDraw():
 			RenderingServer.multimesh_instance_set_transform( multimesh_rid, idx, t)
 		
 	setupColors( out_data )
+
+	# Copy the transform and color at Nth and paste it at the end
+	if allocated_count != instance_count:
+		var t = RenderingServer.multimesh_instance_get_transform( multimesh_rid, debug_row)
+		t = t.scaled_local( Vector3.ONE * 1.01 )
+		RenderingServer.multimesh_instance_set_transform( multimesh_rid, instance_count, t)
+		RenderingServer.multimesh_instance_set_color( multimesh_rid, instance_count, selection_color )
 
 func setupColors( out_data : FlowData.Data ):
 	var instance_count = out_data.size()

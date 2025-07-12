@@ -10,7 +10,8 @@ var num_rows : int = 0
 var selected_row : int = -1
 var font_size : int = 16
 
-var vertical_lines_color = Color.WHITE
+var selection_bg_color := Color.CORNFLOWER_BLUE
+var vertical_lines_color := Color.WHITE
 
 class CellContents:
 	var row : int
@@ -100,7 +101,7 @@ func drawBackgrounds( y0 : float, row_idx : int ):
 	var pos := Vector2( 0, y0 )
 	while y0 < y1:
 		if row_idx == selected_row:
-			draw_rect( Rect2( pos, Vector2( w, line_height )), Color.CORNFLOWER_BLUE )
+			draw_rect( Rect2( pos, Vector2( w, line_height )), selection_bg_color )
 		else:
 			if row_idx & 1:
 				draw_rect( Rect2( pos, Vector2( w, line_height )), bg_color_odd )

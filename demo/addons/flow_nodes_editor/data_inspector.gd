@@ -16,6 +16,8 @@ var col_titles : Array[String]
 var col_streams_names : Array[String]
 var data : FlowData.Data 
 
+# The slot corresponds to InA, InB, or Out streams for example
+# The setetings are not included
 var current_slot_index := 0
 var is_output : bool = true
 
@@ -33,6 +35,7 @@ func setNode( new_node : FlowNodeBase ):
 		%LabelTitle.text = new_node.get_title()
 		new_node.settings.inspect_enabled = true
 		node = new_node
+		node.setupDebugDraw()
 	else:
 		node = null
 		refresh()
@@ -66,6 +69,9 @@ func updateNumRowsAndCols():
 func fmt( v : float ) -> String:
 	return "%1.4f" % v
 
+# When the draw of a column starts, we choose which fn will be used
+# to display the data of that column. As all the datas of that column
+# have the same type
 func onColumnBegins( cell : DataTableContainer.CellContents ):
 	cell.alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	
@@ -168,6 +174,9 @@ func refresh():
 
 func onCellClicked( row : int, col : int ):
 	tv.setSelectedRow( row )
+	if node:
+		node.debug_row = row
+		node.setupDebugDraw()
 
 func _ready():
 	tv.cell_clicked.connect( onCellClicked )

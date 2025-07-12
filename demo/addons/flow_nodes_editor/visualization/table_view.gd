@@ -8,6 +8,7 @@ var num_rows : int = 0
 var col_starts : Array[ float ] = []
 var col_widths : Array[ float ] = []
 var style_titles = StyleBoxFlat.new()
+var dragging := false
 
 var separator : PackedScene = preload("res://addons/flow_nodes_editor/visualization/draggable_separator.tscn") 
 
@@ -128,16 +129,28 @@ func findColAtX( ex : float ):
 		if ex >= col_starts[ col ] and ex < col_starts[ col+ 1 ]:
 			return col
 	return -1
+
+func checkSelectedRow( event : InputEvent ):
+	if dragging:
+		var ex = event.position.x
+		var col = findColAtX( ex )
+		if col != -1:
+			var row = int( ( event.position.y ) / $ScrollContainer.line_height )
+			cell_clicked.emit( row, col )
+	
 	
 func _on_contents_gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT:
 			if event.pressed:
-				var ex = event.position.x
-				var col = findColAtX( ex )
-				if col != -1:
-					var row = int( ( event.position.y ) / $ScrollContainer.line_height )
-					cell_clicked.emit( row, col )
+				dragging = true
+				checkSelectedRow( event )
+			else:
+				dragging = false
+	elif event is InputEventMouseMotion:
+		if dragging:
+			checkSelectedRow( event )
+				
 
 func _on_column_titles_gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:

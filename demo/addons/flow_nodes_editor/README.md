@@ -16,7 +16,6 @@
 [ ] Improve self prunning so more objects are kept
 [ ] Spline sampling interior in non grid pattern
 [ ] ALlow to filter rows in the instpector
-[ ] Hightlight the selector row from the inspector in the 3D
 [ ] Add noise to position
 [ ] Math Node. Should hide/not require some inputs when not needed. Like Abs
 [ ] Math Node. Should be easier to add a constant +float/+int/-vector at least
@@ -26,6 +25,7 @@
 [ ] use inputs on all settings
 [ ] Custom inputs to the pcg
 [ ] undo/redo
+[X] Hightlight the selector row from the inspector in the 3D
 [X] Make vector from float's, maybe autopromote float -> vector3 
 [X] Allow the inspector to show all outputs/inputs
 [X] nodes to filter A/B
