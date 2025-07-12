@@ -16,7 +16,7 @@
 [ext_resource type="Script" uid="uid://du3c8wxq0r2fl" path="res://addons/flow_nodes_editor/nodes/input_settings.gd" id="13_7k55o"]
 [ext_resource type="Script" uid="uid://runa6a3koevg" path="res://addons/flow_nodes_editor/nodes/add_attribute_settings.gd" id="14_2yywp"]
 [ext_resource type="Script" uid="uid://dhryaxkxmtaui" path="res://addons/flow_nodes_editor/nodes/make_vector_settings.gd" id="15_fhyap"]
-[ext_resource type="Script" uid="uid://dbtbo3vh5nl2c" path="res://scenes/scene_3p.gd" id="17_fhyap"]
+[ext_resource type="Script" uid="uid://dbtbo3vh5nl2c" path="res://scenes/scene_3p.gd" id="17_4j7uw"]
 
 [sub_resource type="Curve3D" id="Curve3D_36lll"]
 closed = true
@@ -215,22 +215,6 @@ debug_modulate_by = ""
 title = "Scan Nodes"
 enabled = true
 
-[sub_resource type="Resource" id="Resource_2jbe2"]
-resource_name = "Sample Spline Settings"
-script = ExtResource("4_qf0nw")
-uniform_interval = 3.28
-fill_curve = false
-required_meta_bool = &"is_road"
-random_seed = 2623515292
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Sample Spline"
-enabled = true
-
 [sub_resource type="Resource" id="Resource_2lc4x"]
 resource_name = "Transform Settings"
 script = ExtResource("5_2jbe2")
@@ -278,6 +262,22 @@ debug_scale = 1.0
 debug_color = Color(1, 1, 1, 1)
 debug_modulate_by = ""
 title = "Self Pruning"
+enabled = true
+
+[sub_resource type="Resource" id="Resource_2jbe2"]
+resource_name = "Sample Spline Settings"
+script = ExtResource("4_qf0nw")
+uniform_interval = 3.28
+fill_curve = false
+required_meta_bool = &"is_road"
+random_seed = 2623515292
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Sample Spline"
 enabled = true
 
 [sub_resource type="Resource" id="Resource_5uxx2"]
@@ -334,11 +334,6 @@ nodes = Array[Dictionary]([{
 "settings": SubResource("Resource_banft"),
 "template": "scan_nodes"
 }, {
-"name": &"id_0006_sample_spline",
-"position_offset": Vector2(-100, 100),
-"settings": SubResource("Resource_2jbe2"),
-"template": "sample_spline"
-}, {
 "name": &"id_0003_transform",
 "position_offset": Vector2(380, 100),
 "settings": SubResource("Resource_2lc4x"),
@@ -353,6 +348,11 @@ nodes = Array[Dictionary]([{
 "position_offset": Vector2(610.561, 104.041),
 "settings": SubResource("Resource_2yywp"),
 "template": "self_pruning"
+}, {
+"name": &"id_0006_sample_spline",
+"position_offset": Vector2(-100, 100),
+"settings": SubResource("Resource_2jbe2"),
+"template": "sample_spline"
 }])
 conns = Array[Dictionary]([{
 "from_node": &"id_0006_sample_spline",
@@ -432,10 +432,16 @@ conns = Array[Dictionary]([{
 "keep_alive": false,
 "to_node": &"id_0071_self_pruning",
 "to_port": 0
+}, {
+"from_node": &"id_0006_sample_spline",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0072_sort",
+"to_port": 0
 }])
 view_zoom = 0.759481
-view_offset = Vector2(308.419, -385.965)
-new_name_counter = 71
+view_offset = Vector2(-100.541, -30.765)
+new_name_counter = 72
 inputs = SubResource("Resource_psfr8")
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 
@@ -463,13 +469,13 @@ metadata/_custom_type_script = "uid://d1krtmb1urldl"
 [node name="Scene_0000" type="Node3D" parent="FlowGraphNode3D" instance=ExtResource("11_h10xn")]
 transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, -9.48803, -1.71658, 10.4651)
 visible = false
-script = ExtResource("17_fhyap")
+script = ExtResource("17_4j7uw")
 head_rotation = 40.0
 metadata/flow_owner = &"id_0028_spawn_scenes"
 
 [node name="Scene_0001" type="Node3D" parent="FlowGraphNode3D" instance=ExtResource("11_h10xn")]
 transform = Transform3D(0.957354, 0, 1.56877, 0, 1.83781, 0, -1.56877, 0, 0.957354, 7.52767, -9.53674e-07, -2.50066)
-script = ExtResource("17_fhyap")
+script = ExtResource("17_4j7uw")
 head_rotation = 80.0
 metadata/flow_owner = &"id_0028_spawn_scenes"
 

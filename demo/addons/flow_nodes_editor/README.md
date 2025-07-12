@@ -7,23 +7,25 @@
 	[ ] Generic Loop
 	[ ] Node to group
 	[ ] Node to split by condition/field
+	[ ] Substruct will read all input nodes..
 [ ] Generate reduction of metrics. Avg, Min, Max, etc of a numeric stream
-[ ] Sort
-[ ] Volume Sample in 3D
+[X] Sort by some condition
 [ ] Sample Nth, offset, max
+[ ] drop some streams
+[ ] Volume Sample in 3D
 [ ] Allow the add menu to have sections
 [ ] Get N property as a independent value. Get first, get last, etc.
 [ ] Spline sampling interior in non grid pattern
 [ ] Allow to filter rows in the inspector
 [ ] Add noise to position
 [ ] Math Node. Should hide/not require some inputs when not needed. Like Abs
-[ ] Math Node. Should be easier to add a constant +float/+int/-vector at least
 [ ] Support for Vector4/Color/PackedVector4Array -> Read SubAttributes / MathNode / SetAttribute / Use in Debug if exists
 [ ] Test random colors for each node -> Graph Editor Settings
 [ ] Promote input pin to graph input
 [ ] use inputs on all settings
 [ ] Custom inputs to the pcg
 [ ] undo/redo
+[X] Math Node. Should be easier to add a constant +float/+int/-vector at least. Use make_vector for vector
 [X] Improve self prunning so more objects are kept
 [X] No need to regenerate the menu every time
 [X] Hightlight the selector row from the inspector in the 3D
