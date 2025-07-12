@@ -5,7 +5,7 @@ func _init():
 	meta_node = {
 		"title" : "Self Pruning",
 		"settings" : SelfPruningSettings,
-		"ins" : [{"label": "In A" }], 
+		"ins" : [{"label": "In" }], 
 		"outs" : [{ "label" : "Out" }],
 	}
 
@@ -13,7 +13,7 @@ func execute( _ctx : FlowData.EvaluationContext ):
 	var in_dataA: FlowData.Data = get_input(0)
 	
 	if in_dataA == null:
-		setError( "Input A not found")
+		setError( "Input not found")
 		return
 		
 	var tA := GDRTree.new()
