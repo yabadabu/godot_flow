@@ -1,5 +1,6 @@
 #include "gd_stream_utils.h"
 #include <godot_cpp/core/class_db.hpp>
+#include <algorithm>
 
 using namespace godot;
 
