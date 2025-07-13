@@ -13,6 +13,8 @@ enum eOperation {
 	Absolute,
 	Saturate,
 	Floor,
+	FloorAsInt,
+	Copy,
 }
 
 @export var operation : eOperation = eOperation.Add
