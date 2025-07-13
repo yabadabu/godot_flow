@@ -8,6 +8,7 @@
 	[ ] Node to group
 	[ ] Node to split by condition/field
 	[ ] Substruct will read all input nodes..
+	[ ] partition
 [ ] Generate reduction of metrics. Avg, Min, Max, etc of a numeric stream
 [X] Sort a stream by some condition
 	[X] Floats
