@@ -17,8 +17,16 @@ func execute( ctx : FlowData.EvaluationContext ):
 	if sA == null:
 		setError( "Input %s not found" % [settings.sort_by])
 		return
-	var indices := GDStreamUtils.get_sorted_indices_f32( sA.container )
+	var indices : PackedInt32Array
+	if sA.data_type == FlowData.DataType.Float:
+		indices = GDStreamUtils.get_sorted_indices_f32( sA.container )
+	elif sA.data_type == FlowData.DataType.Int:
+		indices = GDStreamUtils.get_sorted_indices_i32( sA.container )
+	elif sA.data_type == FlowData.DataType.String:
+		indices = GDStreamUtils.get_sorted_indices_string( sA.container )
+
 	if settings.reverse_descending:
 		indices.reverse()
+		
 	var out_data = in_data.filter( indices )
 	set_output( 0, out_data )

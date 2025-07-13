@@ -12,6 +12,7 @@ enum eOperation {
 	Negate,
 	Absolute,
 	Saturate,
+	Floor,
 }
 
 @export var operation : eOperation = eOperation.Add
