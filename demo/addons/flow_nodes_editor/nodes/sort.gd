@@ -25,7 +25,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 	elif sA.data_type == FlowData.DataType.String:
 		indices = GDStreamUtils.get_sorted_indices_string( sA.container )
 
-	if settings.reverse_descending:
+	if settings.sort_descending:
 		indices.reverse()
 		
 	var out_data = in_data.filter( indices )

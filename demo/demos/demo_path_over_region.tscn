@@ -1,4 +1,4 @@
-[gd_scene load_steps=41 format=3 uid="uid://bl32jt5udtf08"]
+[gd_scene load_steps=44 format=3 uid="uid://bl32jt5udtf08"]
 
 [ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_2l584"]
 [ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="2_dxf0c"]
@@ -16,6 +16,7 @@
 [ext_resource type="Script" uid="uid://du3c8wxq0r2fl" path="res://addons/flow_nodes_editor/nodes/input_settings.gd" id="13_7k55o"]
 [ext_resource type="Script" uid="uid://runa6a3koevg" path="res://addons/flow_nodes_editor/nodes/add_attribute_settings.gd" id="14_2yywp"]
 [ext_resource type="Script" uid="uid://dhryaxkxmtaui" path="res://addons/flow_nodes_editor/nodes/make_vector_settings.gd" id="15_fhyap"]
+[ext_resource type="Script" uid="uid://bhnderip4tx0c" path="res://addons/flow_nodes_editor/nodes/sort_settings.gd" id="15_jiljv"]
 [ext_resource type="Script" uid="uid://dbtbo3vh5nl2c" path="res://scenes/scene_3p.gd" id="17_4j7uw"]
 
 [sub_resource type="Curve3D" id="Curve3D_36lll"]
@@ -159,20 +160,6 @@ debug_scale = 1.0
 debug_color = Color(1, 1, 1, 1)
 debug_modulate_by = ""
 title = "Select"
-enabled = true
-
-[sub_resource type="Resource" id="Resource_2yywp"]
-resource_name = "Self Pruning"
-script = ExtResource("10_qe4ar")
-keep_self_intersections = false
-random_seed = 3556067674
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Self Pruning"
 enabled = true
 
 [sub_resource type="Resource" id="Resource_pf313"]
@@ -325,14 +312,60 @@ debug_modulate_by = ""
 title = "Add Attribute"
 enabled = true
 
+[sub_resource type="Resource" id="Resource_2yywp"]
+resource_name = "Self Pruning"
+script = ExtResource("10_qe4ar")
+keep_self_intersections = false
+random_seed = 3556067674
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Self Pruning"
+enabled = true
+
+[sub_resource type="Resource" id="Resource_n1ipx"]
+resource_name = "Sort Settings"
+script = ExtResource("15_jiljv")
+sort_by = "ipos"
+sort_descending = null
+random_seed = 1357577668
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Sort"
+enabled = true
+
 [sub_resource type="Resource" id="Resource_4k8gr"]
 resource_name = "Math Op"
 script = ExtResource("9_dbqvf")
-operation = 7
+operation = 0
 in_nameA = "position.Z"
-in_nameB = ""
+in_nameB = "2.1"
 out_name = "ipos"
-random_seed = 671512586
+random_seed = 3352303003
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Math"
+enabled = true
+
+[sub_resource type="Resource" id="Resource_2vt0m"]
+resource_name = "Math Op"
+script = ExtResource("9_dbqvf")
+operation = 9
+in_nameA = "new_attr"
+in_nameB = ""
+out_name = "ipos2"
+random_seed = 4253731558
 inspect_enabled = true
 debug_enabled = false
 debug_mode = 0
@@ -381,11 +414,6 @@ nodes = Array[Dictionary]([{
 "settings": SubResource("Resource_dbqvf"),
 "template": "select"
 }, {
-"name": &"id_0071_self_pruning",
-"position_offset": Vector2(610, 100),
-"settings": SubResource("Resource_2yywp"),
-"template": "self_pruning"
-}, {
 "name": &"id_0066_make_vector",
 "position_offset": Vector2(200, 280),
 "settings": SubResource("Resource_pf313"),
@@ -426,9 +454,24 @@ nodes = Array[Dictionary]([{
 "settings": SubResource("Resource_xt6rs"),
 "template": "add_attribute"
 }, {
-"name": &"id_0085_math_op",
-"position_offset": Vector2(363.365, -187.825),
+"name": &"id_0071_self_pruning",
+"position_offset": Vector2(610, 100),
+"settings": SubResource("Resource_2yywp"),
+"template": "self_pruning"
+}, {
+"name": &"id_0087_sort",
+"position_offset": Vector2(550, -240),
+"settings": SubResource("Resource_n1ipx"),
+"template": "sort"
+}, {
+"name": &"id_0086_math_op",
+"position_offset": Vector2(410, -240),
 "settings": SubResource("Resource_4k8gr"),
+"template": "math_op"
+}, {
+"name": &"id_0089_math_op",
+"position_offset": Vector2(701.649, -199.572),
+"settings": SubResource("Resource_2vt0m"),
 "template": "math_op"
 }])
 conns = Array[Dictionary]([{
@@ -504,15 +547,27 @@ conns = Array[Dictionary]([{
 "to_node": &"id_0081_add_attribute",
 "to_port": 0
 }, {
+"from_node": &"id_0086_math_op",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0087_sort",
+"to_port": 0
+}, {
 "from_node": &"id_0081_add_attribute",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0085_math_op",
+"to_node": &"id_0086_math_op",
+"to_port": 0
+}, {
+"from_node": &"id_0087_sort",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0089_math_op",
 "to_port": 0
 }])
-view_zoom = 2.0736
-view_offset = Vector2(1212.95, -1144.95)
-new_name_counter = 85
+view_zoom = 0.686669
+view_offset = Vector2(760.6, -714.08)
+new_name_counter = 89
 inputs = SubResource("Resource_psfr8")
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 
