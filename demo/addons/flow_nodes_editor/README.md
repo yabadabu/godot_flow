@@ -9,7 +9,11 @@
 	[ ] Node to split by condition/field
 	[ ] Substruct will read all input nodes..
 [ ] Generate reduction of metrics. Avg, Min, Max, etc of a numeric stream
-[X] Sort by some condition
+[X] Sort a stream by some condition
+	[ ] Floats
+	[ ] Ints
+	[ ] Strings
+	[ ] How does it behave with multiple streams
 [ ] Sample Nth, offset, max
 [ ] drop some streams
 [ ] Volume Sample in 3D
@@ -25,6 +29,8 @@
 [ ] use inputs on all settings
 [ ] Custom inputs to the pcg
 [ ] undo/redo
+[ ] make_int
+[X] make_float
 [X] Math Node. Should be easier to add a constant +float/+int/-vector at least. Use make_vector for vector
 [X] Improve self prunning so more objects are kept
 [X] No need to regenerate the menu every time
