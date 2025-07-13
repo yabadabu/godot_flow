@@ -29,8 +29,8 @@
 [ ] use inputs on all settings
 [ ] Custom inputs to the pcg
 [ ] undo/redo
-[ ] make_int
-[X] make_float
+[ ] add_attribute, if output is single stream with a type, set the color. Maybe make it generic
+[X] add_attribute, input is optional
 [X] Math Node. Should be easier to add a constant +float/+int/-vector at least. Use make_vector for vector
 [X] Improve self prunning so more objects are kept
 [X] No need to regenerate the menu every time

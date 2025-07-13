@@ -5,7 +5,7 @@ func _init():
 	meta_node = {
 		"title" : "Add Attribute",
 		"settings" : AddAttributeNodeSettings,
-		"ins" : [{"label": "In A" }], 
+		"ins" : [{"label": "In" }], 
 		"outs" : [{ "label" : "Out" }],
 		"hide_inputs" : true,
 	}
@@ -14,45 +14,31 @@ func getTitle() -> String:
 	return "%s - %s" % [ settings.name, FlowData.DataType.keys()[settings.data_type] ]
 
 func execute( _ctx : FlowData.EvaluationContext ):
-	var in_data : FlowData.Data = get_input(0)
-	var out_data : FlowData.Data = in_data.duplicate()
+	var in_data : FlowData.Data = get_optional_input(0)
+	var out_data : FlowData.Data
+	var out_size := 1
+	if in_data:
+		out_data = in_data.duplicate()
+		out_size = in_data.size()
+	else:
+		out_data = FlowData.Data.new()
 	
+	var new_val
 	match settings.data_type:
-				
 		FlowData.DataType.Bool:
-			var new_val : bool = settings.cte_bool
-			var sout : PackedByteArray = out_data.addStream( settings.name, settings.data_type )
-			for i in sout.size():
-				sout[i] = 1 if new_val else 0
-				
+			new_val = 1 if settings.cte_bool else 0
 		FlowData.DataType.Int:
-			var new_val : int = settings.cte_int
-			var sout : PackedInt32Array = out_data.addStream( settings.name, settings.data_type )
-			for i in sout.size():
-				sout[i] = new_val
-		
+			new_val = settings.cte_int
 		FlowData.DataType.Float:
-			var new_val : float = settings.cte_float
-			var sout : PackedFloat32Array = out_data.addStream( settings.name, settings.data_type )
-			for i in sout.size():
-				sout[i] = new_val
-				
+			new_val = settings.cte_float
 		FlowData.DataType.Vector:
-			var new_val : Vector3 = settings.cte_vector
-			var sout : PackedVector3Array = out_data.addStream( settings.name, settings.data_type )
-			for i in sout.size():
-				sout[i] = new_val
-				
+			new_val = settings.cte_vector
 		FlowData.DataType.String:
-			var new_val : String = settings.cte_string
-			var sout : PackedStringArray = out_data.addStream( settings.name, settings.data_type )
-			for i in sout.size():
-				sout[i] = new_val
-				
+			new_val = settings.cte_string
 		FlowData.DataType.Resource:
-			var new_val : Resource = settings.cte_resource
-			var sout : Array[Resource] = out_data.addStream( settings.name, settings.data_type )
-			for i in sout.size():
-				sout[i] = new_val
-				
+			new_val = settings.cte_resource
+
+	var sout = out_data.addStream( settings.name, settings.data_type )
+	sout.resize( out_size )
+	sout.fill( new_val )
 	set_output( 0, out_data )
