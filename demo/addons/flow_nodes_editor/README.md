@@ -10,9 +10,9 @@
 	[ ] Substruct will read all input nodes..
 [ ] Generate reduction of metrics. Avg, Min, Max, etc of a numeric stream
 [X] Sort a stream by some condition
-	[ ] Floats
-	[ ] Ints
-	[ ] Strings
+	[X] Floats
+	[-] Ints
+	[-] Strings
 	[ ] How does it behave with multiple streams
 [ ] Sample Nth, offset, max
 [ ] drop some streams
