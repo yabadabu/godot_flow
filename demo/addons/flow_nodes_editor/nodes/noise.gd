@@ -38,6 +38,6 @@ func execute( _ctx : FlowData.EvaluationContext ):
 		var nval = clampf( noise_01, 0.0, 1.0 )
 		sout[i] = noise_bias + nval * noise_amplitude
 	
-	out_data.registerStream( settings.out_name, FlowData.DataType.Float, sout )
+	out_data.registerStream( settings.out_name, sout )
 	
 	set_output( 0, out_data )

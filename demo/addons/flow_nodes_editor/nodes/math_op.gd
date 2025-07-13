@@ -197,14 +197,13 @@ func execute( _ctx : FlowData.EvaluationContext ):
 					for i in num_elems:
 						outC[i] = inA[i] / inB[i]
 			out_container = outC
-			out_data_type = FlowData.DataType.Vector
 			
 		else:
 			setError( "Input A and B have incompatible/unsupported data types (%s vs %s)" % [sA.data_type, sB.data_type])
 			return
 		
 	# This will override the existing stream if exists or update a substream
-	var err = out_data.registerStream( settings.out_name, out_data_type, out_container )
+	var err = out_data.registerStream( settings.out_name, out_container )
 	if err:
 		setError( err )
 		return

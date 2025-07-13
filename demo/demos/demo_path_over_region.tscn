@@ -1,4 +1,4 @@
-[gd_scene load_steps=44 format=3 uid="uid://bl32jt5udtf08"]
+[gd_scene load_steps=48 format=3 uid="uid://bl32jt5udtf08"]
 
 [ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_2l584"]
 [ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="2_dxf0c"]
@@ -17,6 +17,7 @@
 [ext_resource type="Script" uid="uid://runa6a3koevg" path="res://addons/flow_nodes_editor/nodes/add_attribute_settings.gd" id="14_2yywp"]
 [ext_resource type="Script" uid="uid://dhryaxkxmtaui" path="res://addons/flow_nodes_editor/nodes/make_vector_settings.gd" id="15_fhyap"]
 [ext_resource type="Script" uid="uid://bhnderip4tx0c" path="res://addons/flow_nodes_editor/nodes/sort_settings.gd" id="15_jiljv"]
+[ext_resource type="Texture2D" uid="uid://d2hg4bxm2gqij" path="res://icon.svg" id="16_jiljv"]
 [ext_resource type="Script" uid="uid://dbtbo3vh5nl2c" path="res://scenes/scene_3p.gd" id="17_4j7uw"]
 
 [sub_resource type="Curve3D" id="Curve3D_36lll"]
@@ -326,13 +327,13 @@ debug_modulate_by = ""
 title = "Self Pruning"
 enabled = true
 
-[sub_resource type="Resource" id="Resource_n1ipx"]
+[sub_resource type="Resource" id="Resource_byowy"]
 resource_name = "Sort Settings"
 script = ExtResource("15_jiljv")
-sort_by = "ipos"
-sort_descending = null
-random_seed = 1357577668
-inspect_enabled = false
+sort_by = "ipos2"
+sort_descending = false
+random_seed = 2132804344
+inspect_enabled = true
 debug_enabled = false
 debug_mode = 0
 debug_scale = 1.0
@@ -358,21 +359,79 @@ debug_modulate_by = ""
 title = "Math"
 enabled = true
 
+[sub_resource type="Resource" id="Resource_n1ipx"]
+resource_name = "Add Attribute"
+script = ExtResource("14_2yywp")
+name = "name"
+data_type = 4
+cte_bool = false
+cte_int = 0
+cte_float = 0.0
+cte_vector = Vector3(0, 0, 0)
+cte_string = "Super"
+random_seed = 1942164646
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Add Attribute"
+enabled = true
+
 [sub_resource type="Resource" id="Resource_2vt0m"]
 resource_name = "Math Op"
 script = ExtResource("9_dbqvf")
-operation = 9
-in_nameA = "new_attr"
+operation = 8
+in_nameA = "ipos"
 in_nameB = ""
 out_name = "ipos2"
 random_seed = 4253731558
-inspect_enabled = true
+inspect_enabled = false
 debug_enabled = false
 debug_mode = 0
 debug_scale = 1.0
 debug_color = Color(1, 1, 1, 1)
 debug_modulate_by = ""
 title = "Math"
+enabled = true
+
+[sub_resource type="Resource" id="Resource_xl81d"]
+resource_name = "Math Op"
+script = ExtResource("9_dbqvf")
+operation = 9
+in_nameA = "index"
+in_nameB = ""
+out_name = "idx"
+random_seed = 714903121
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Math"
+enabled = true
+
+[sub_resource type="Resource" id="Resource_87sea"]
+resource_name = "Add Attribute"
+script = ExtResource("14_2yywp")
+name = "icon"
+data_type = 5
+cte_bool = false
+cte_int = 0
+cte_float = 0.0
+cte_vector = Vector3(0, 0, 0)
+cte_resource = ExtResource("16_jiljv")
+cte_string = ""
+random_seed = 3416891289
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Add Attribute"
 enabled = true
 
 [sub_resource type="Resource" id="Resource_5uxx2"]
@@ -459,20 +518,35 @@ nodes = Array[Dictionary]([{
 "settings": SubResource("Resource_2yywp"),
 "template": "self_pruning"
 }, {
-"name": &"id_0087_sort",
-"position_offset": Vector2(550, -240),
-"settings": SubResource("Resource_n1ipx"),
+"name": &"id_0090_sort",
+"position_offset": Vector2(1110, -230),
+"settings": SubResource("Resource_byowy"),
 "template": "sort"
 }, {
 "name": &"id_0086_math_op",
-"position_offset": Vector2(410, -240),
+"position_offset": Vector2(370, -230),
 "settings": SubResource("Resource_4k8gr"),
 "template": "math_op"
 }, {
+"name": &"id_0092_add_attribute",
+"position_offset": Vector2(510, -230),
+"settings": SubResource("Resource_n1ipx"),
+"template": "add_attribute"
+}, {
 "name": &"id_0089_math_op",
-"position_offset": Vector2(701.649, -199.572),
+"position_offset": Vector2(660, -230),
 "settings": SubResource("Resource_2vt0m"),
 "template": "math_op"
+}, {
+"name": &"id_0091_math_op",
+"position_offset": Vector2(970, -230),
+"settings": SubResource("Resource_xl81d"),
+"template": "math_op"
+}, {
+"name": &"id_0093_add_attribute",
+"position_offset": Vector2(800, -340),
+"settings": SubResource("Resource_87sea"),
+"template": "add_attribute"
 }])
 conns = Array[Dictionary]([{
 "from_node": &"id_0006_sample_spline",
@@ -547,27 +621,45 @@ conns = Array[Dictionary]([{
 "to_node": &"id_0081_add_attribute",
 "to_port": 0
 }, {
-"from_node": &"id_0086_math_op",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0087_sort",
-"to_port": 0
-}, {
 "from_node": &"id_0081_add_attribute",
 "from_port": 0,
 "keep_alive": false,
 "to_node": &"id_0086_math_op",
 "to_port": 0
 }, {
-"from_node": &"id_0087_sort",
+"from_node": &"id_0091_math_op",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0090_sort",
+"to_port": 0
+}, {
+"from_node": &"id_0086_math_op",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0092_add_attribute",
+"to_port": 0
+}, {
+"from_node": &"id_0092_add_attribute",
 "from_port": 0,
 "keep_alive": false,
 "to_node": &"id_0089_math_op",
 "to_port": 0
+}, {
+"from_node": &"id_0089_math_op",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0093_add_attribute",
+"to_port": 0
+}, {
+"from_node": &"id_0093_add_attribute",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0091_math_op",
+"to_port": 0
 }])
-view_zoom = 0.686669
-view_offset = Vector2(760.6, -714.08)
-new_name_counter = 89
+view_zoom = 0.970564
+view_offset = Vector2(1456.21, -1195.95)
+new_name_counter = 93
 inputs = SubResource("Resource_psfr8")
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 

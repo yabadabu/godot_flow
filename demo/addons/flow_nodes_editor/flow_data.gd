@@ -159,7 +159,7 @@ class Data:
 			return null
 		return streams.get( name, null )
 	
-	func registerStream( name : String, data_type : DataType, container ):
+	func registerStream( name : String, container, data_type : DataType = FlowData.DataType.Invalid ):
 		if not name:
 			push_error("registerStream name can't be empty" )
 			return null
@@ -173,6 +173,19 @@ class Data:
 		elif parts.size() > 2:
 			return "Too many '.' in stream name"
 		else:
+			if container is PackedFloat32Array:
+				data_type = FlowData.DataType.Float
+			elif container is PackedInt32Array:
+				data_type = FlowData.DataType.Int
+			elif container is PackedStringArray:
+				data_type = FlowData.DataType.String
+			elif container is PackedByteArray:
+				data_type = FlowData.DataType.Bool
+			
+			if data_type == FlowData.DataType.Invalid:
+				print( "Invalid data type ", name, container)
+				return "Invalid container type"
+				
 			streams[ name ] = { 
 				"container" : container,
 				"name" : name,
@@ -187,16 +200,16 @@ class Data:
 			return null
 		var sz := size()
 		var new_container = newContainerOfType(data_type)
-		registerStream( name, data_type, new_container )
+		registerStream( name, new_container, data_type )
 		if sz:
 			new_container.resize( sz )
 		return new_container
 		
 	func cloneStream( name : String ):
-		if not streams.has( name ):
+		var prev_stream = findStream( name )
+		if not prev_stream:
 			push_error("cloneStream: Data does not have a stream named %s" % name )
 			return null
-		var prev_stream = streams[ name ]
 		var new_container
 		match prev_stream.data_type:
 			DataType.Bool:
@@ -252,8 +265,8 @@ class Data:
 				return new_container
 				
 			DataType.String:
-				var old_container : Array[ String ] = old_stream.container
-				var new_container : Array[ String ] = []
+				var old_container : PackedStringArray = old_stream.container
+				var new_container : PackedStringArray
 				new_container.resize( new_size )
 				for idx in range( new_size ):
 					new_container[idx] = old_container[ indices[idx] ]
@@ -280,7 +293,7 @@ class Data:
 		var new_data := Data.new()
 		for old_stream in streams.values():
 			var new_container = filteredStream( old_stream, indices )
-			new_data.registerStream( old_stream.name, old_stream.data_type, new_container )
+			new_data.registerStream( old_stream.name, new_container, old_stream.data_type )
 		return new_data
 
 	func dump( title : String ):
