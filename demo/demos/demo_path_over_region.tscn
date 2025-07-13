@@ -1,4 +1,4 @@
-[gd_scene load_steps=48 format=3 uid="uid://bl32jt5udtf08"]
+[gd_scene load_steps=49 format=3 uid="uid://bl32jt5udtf08"]
 
 [ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_2l584"]
 [ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="2_dxf0c"]
@@ -327,21 +327,6 @@ debug_modulate_by = ""
 title = "Self Pruning"
 enabled = true
 
-[sub_resource type="Resource" id="Resource_byowy"]
-resource_name = "Sort Settings"
-script = ExtResource("15_jiljv")
-sort_by = "ipos2"
-sort_descending = false
-random_seed = 2132804344
-inspect_enabled = true
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Sort"
-enabled = true
-
 [sub_resource type="Resource" id="Resource_4k8gr"]
 resource_name = "Math Op"
 script = ExtResource("9_dbqvf")
@@ -396,23 +381,6 @@ debug_modulate_by = ""
 title = "Math"
 enabled = true
 
-[sub_resource type="Resource" id="Resource_xl81d"]
-resource_name = "Math Op"
-script = ExtResource("9_dbqvf")
-operation = 9
-in_nameA = "index"
-in_nameB = ""
-out_name = "idx"
-random_seed = 714903121
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Math"
-enabled = true
-
 [sub_resource type="Resource" id="Resource_87sea"]
 resource_name = "Add Attribute"
 script = ExtResource("14_2yywp")
@@ -432,6 +400,55 @@ debug_scale = 1.0
 debug_color = Color(1, 1, 1, 1)
 debug_modulate_by = ""
 title = "Add Attribute"
+enabled = true
+
+[sub_resource type="Resource" id="Resource_byowy"]
+resource_name = "Sort Settings"
+script = ExtResource("15_jiljv")
+sort_by = "ipos2"
+sort_descending = false
+random_seed = 2132804344
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Sort"
+enabled = true
+
+[sub_resource type="Resource" id="Resource_xl81d"]
+resource_name = "Math Op"
+script = ExtResource("9_dbqvf")
+operation = 9
+in_nameA = "index"
+in_nameB = ""
+out_name = "idx"
+random_seed = 714903121
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Math"
+enabled = true
+
+[sub_resource type="Resource" id="Resource_euihk"]
+resource_name = "Math Op"
+script = ExtResource("9_dbqvf")
+operation = 9
+in_nameA = "position"
+in_nameB = ""
+out_name = "ppos"
+random_seed = 4293648122
+inspect_enabled = true
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Math"
 enabled = true
 
 [sub_resource type="Resource" id="Resource_5uxx2"]
@@ -518,11 +535,6 @@ nodes = Array[Dictionary]([{
 "settings": SubResource("Resource_2yywp"),
 "template": "self_pruning"
 }, {
-"name": &"id_0090_sort",
-"position_offset": Vector2(1110, -230),
-"settings": SubResource("Resource_byowy"),
-"template": "sort"
-}, {
 "name": &"id_0086_math_op",
 "position_offset": Vector2(370, -230),
 "settings": SubResource("Resource_4k8gr"),
@@ -538,15 +550,25 @@ nodes = Array[Dictionary]([{
 "settings": SubResource("Resource_2vt0m"),
 "template": "math_op"
 }, {
+"name": &"id_0093_add_attribute",
+"position_offset": Vector2(800, -230),
+"settings": SubResource("Resource_87sea"),
+"template": "add_attribute"
+}, {
+"name": &"id_0090_sort",
+"position_offset": Vector2(1110, -230),
+"settings": SubResource("Resource_byowy"),
+"template": "sort"
+}, {
 "name": &"id_0091_math_op",
 "position_offset": Vector2(970, -230),
 "settings": SubResource("Resource_xl81d"),
 "template": "math_op"
 }, {
-"name": &"id_0093_add_attribute",
-"position_offset": Vector2(800, -340),
-"settings": SubResource("Resource_87sea"),
-"template": "add_attribute"
+"name": &"id_0094_math_op",
+"position_offset": Vector2(1240, -230),
+"settings": SubResource("Resource_euihk"),
+"template": "math_op"
 }])
 conns = Array[Dictionary]([{
 "from_node": &"id_0006_sample_spline",
@@ -656,10 +678,16 @@ conns = Array[Dictionary]([{
 "keep_alive": false,
 "to_node": &"id_0091_math_op",
 "to_port": 0
+}, {
+"from_node": &"id_0090_sort",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0094_math_op",
+"to_port": 0
 }])
 view_zoom = 0.970564
-view_offset = Vector2(1456.21, -1195.95)
-new_name_counter = 93
+view_offset = Vector2(2095.57, -1259.31)
+new_name_counter = 94
 inputs = SubResource("Resource_psfr8")
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 

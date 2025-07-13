@@ -177,13 +177,15 @@ class Data:
 				data_type = FlowData.DataType.Float
 			elif container is PackedInt32Array:
 				data_type = FlowData.DataType.Int
+			elif container is PackedVector3Array:
+				data_type = FlowData.DataType.Vector
 			elif container is PackedStringArray:
 				data_type = FlowData.DataType.String
 			elif container is PackedByteArray:
 				data_type = FlowData.DataType.Bool
 			
 			if data_type == FlowData.DataType.Invalid:
-				print( "Invalid data type ", name, container)
+				print( "Invalid data type ", name, " Container:", container)
 				return "Invalid container type"
 				
 			streams[ name ] = { 
