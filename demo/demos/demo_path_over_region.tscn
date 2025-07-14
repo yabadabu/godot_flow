@@ -442,7 +442,7 @@ in_nameA = "position"
 in_nameB = ""
 out_name = "ppos"
 random_seed = 4293648122
-inspect_enabled = true
+inspect_enabled = false
 debug_enabled = false
 debug_mode = 0
 debug_scale = 1.0
@@ -686,7 +686,7 @@ conns = Array[Dictionary]([{
 "to_port": 0
 }])
 view_zoom = 0.970564
-view_offset = Vector2(2095.57, -1259.31)
+view_offset = Vector2(1381.67, -1244.23)
 new_name_counter = 94
 inputs = SubResource("Resource_psfr8")
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
