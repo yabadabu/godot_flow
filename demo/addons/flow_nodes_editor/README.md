@@ -2,6 +2,7 @@
 
 [ ] There is bug where transforms seems to be updating the input
 [ ] support for @last?
+[ ] Distance to curve
 [ ] Support for multiple streams?
 	[ ] Debug
 	[ ] Generic Loop
@@ -10,11 +11,6 @@
 	[ ] Substruct will read all input nodes..
 	[ ] partition
 [ ] Generate reduction of metrics. Avg, Min, Max, etc of a numeric stream
-[X] Sort a stream by some condition
-	[X] Floats
-	[-] Ints
-	[-] Strings
-	[ ] How does it behave with multiple streams
 [ ] Sample Nth, offset, max
 [ ] drop some streams
 [ ] Volume Sample in 3D
@@ -31,6 +27,11 @@
 [ ] Custom inputs to the pcg
 [ ] undo/redo
 [ ] add_attribute, if output is single stream with a type, set the color. Maybe make it generic
+[X] Sort a stream by some condition
+	[X] Floats
+	[X] Ints
+	[X] Strings
+	[X] How does it behave with multiple streams
 [X] add_attribute, input is optional
 [X] Math Node. Should be easier to add a constant +float/+int/-vector at least. Use make_vector for vector
 [X] Improve self prunning so more objects are kept
