@@ -39,11 +39,11 @@ PackedInt32Array GDKdTree::find_nearest_indices( const PackedVector3Array& in_po
   nanoflann::KNNResultSet<float> results(1);
   size_t nearest_idx;
   float out_distance;
-  results.init(&nearest_idx, &out_distance);
 
   // This could be executed in parallel
   const Vector3* pos_addr = in_pos.ptr();
   for( size_t i=0; i<num_elems; ++i, ++pos_addr ) {
+    results.init(&nearest_idx, &out_distance);
     tree->findNeighbors(results, &pos_addr->x, nanoflann::SearchParams(3));
     idxs[ i ] = nearest_idx;
   }

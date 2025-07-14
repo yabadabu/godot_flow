@@ -144,17 +144,24 @@ debug_modulate_by = "distance"
 title = "Distance"
 enabled = true
 
-[sub_resource type="Resource" id="Resource_5q8kf"]
-resource_name = "Node Settings"
-script = ExtResource("11_1f6x3")
-random_seed = 260367654
-inspect_enabled = true
-debug_enabled = true
-debug_mode = 1
-debug_scale = 0.16
-debug_color = Color(1, 0.235294, 1, 1)
-debug_modulate_by = "distance"
-title = "Debug"
+[sub_resource type="Resource" id="Resource_gexxf"]
+resource_name = "Add Attribute"
+script = ExtResource("8_fnofy")
+name = "Threshold"
+data_type = 2
+cte_bool = false
+cte_int = 0
+cte_float = 1.22
+cte_vector = Vector3(0, 0, 0)
+cte_string = ""
+random_seed = 3924440885
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Add Attribute"
 enabled = true
 
 [sub_resource type="Resource" id="Resource_f70y0"]
@@ -174,24 +181,17 @@ debug_modulate_by = ""
 title = "Filter"
 enabled = true
 
-[sub_resource type="Resource" id="Resource_gexxf"]
-resource_name = "Add Attribute"
-script = ExtResource("8_fnofy")
-name = "Threshold"
-data_type = 2
-cte_bool = false
-cte_int = 0
-cte_float = 1.42
-cte_vector = Vector3(0, 0, 0)
-cte_string = ""
-random_seed = 3924440885
+[sub_resource type="Resource" id="Resource_5q8kf"]
+resource_name = "Node Settings"
+script = ExtResource("11_1f6x3")
+random_seed = 260367654
 inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Add Attribute"
+debug_enabled = true
+debug_mode = 1
+debug_scale = 0.16
+debug_color = Color(1, 0.235294, 1, 1)
+debug_modulate_by = "distance"
+title = "Debug"
 enabled = true
 
 [sub_resource type="Resource" id="Resource_o2vll"]
@@ -233,20 +233,20 @@ nodes = Array[Dictionary]([{
 "settings": SubResource("Resource_ildus"),
 "template": "distance"
 }, {
-"name": &"id_0010_debug",
-"position_offset": Vector2(1220, 620),
-"settings": SubResource("Resource_5q8kf"),
-"template": "debug"
+"name": &"id_0011_add_attribute",
+"position_offset": Vector2(858.801, 699.692),
+"settings": SubResource("Resource_gexxf"),
+"template": "add_attribute"
 }, {
 "name": &"id_0009_filter",
 "position_offset": Vector2(1000, 480),
 "settings": SubResource("Resource_f70y0"),
 "template": "filter"
 }, {
-"name": &"id_0011_add_attribute",
-"position_offset": Vector2(858.801, 699.692),
-"settings": SubResource("Resource_gexxf"),
-"template": "add_attribute"
+"name": &"id_0010_debug",
+"position_offset": Vector2(1240, 600),
+"settings": SubResource("Resource_5q8kf"),
+"template": "debug"
 }])
 conns = Array[Dictionary]([{
 "from_node": &"id_0001_sample_spline",
@@ -297,20 +297,20 @@ conns = Array[Dictionary]([{
 "to_node": &"id_0009_filter",
 "to_port": 0
 }, {
-"from_node": &"id_0009_filter",
-"from_port": 1,
-"keep_alive": false,
-"to_node": &"id_0010_debug",
-"to_port": 0
-}, {
 "from_node": &"id_0011_add_attribute",
 "from_port": 0,
 "keep_alive": false,
 "to_node": &"id_0009_filter",
 "to_port": 1
+}, {
+"from_node": &"id_0009_filter",
+"from_port": 1,
+"keep_alive": false,
+"to_node": &"id_0010_debug",
+"to_port": 0
 }])
-view_zoom = 0.826446
-view_offset = Vector2(466.753, -66.7422)
+view_zoom = 0.908301
+view_offset = Vector2(1785.55, 377.784)
 new_name_counter = 11
 inputs = SubResource("Resource_hh6fu")
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"

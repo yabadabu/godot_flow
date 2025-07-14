@@ -31,8 +31,8 @@ func execute( ctx : FlowData.EvaluationContext ):
 		
 	var kdtree = GDKdTree.new()
 	kdtree.set_points( sB )
-	print( "Populated kdtree with %d points. WIll check %d" % [in_dataB.size(), size_A])
-	#var nearest_indices : PackedInt32Array = kdtree.find_nearest_indices( sA )
+	#print( "Populated kdtree with %d points. WIll check %d" % [in_dataB.size(), size_A])
+	var nearest_indices : PackedInt32Array = kdtree.find_nearest_indices( sA )
 	
 	var inv_max_distance : float = 1.0 / settings.max_distance if settings.max_distance > 0 else 1.0
 	
@@ -40,7 +40,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 	var out_container := PackedFloat32Array()
 	out_container.resize( size_A )
 	for idx in range(size_A):
-		var idxB := kdtree.find_nearest_idx( sA[ idx ] )
+		var idxB := nearest_indices[ idx ]
 		var delta := sA[ idx ] - sB[ idxB ]
 		out_container[ idx ] = delta.length() * inv_max_distance
 	
