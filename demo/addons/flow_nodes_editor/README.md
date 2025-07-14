@@ -10,6 +10,10 @@
 	[ ] Node to split by condition/field
 	[ ] Substruct will read all input nodes..
 	[ ] partition
+[ ] Introduce the spline data type
+	[ ] Node to gather
+	[ ] Node to create
+	[ ] Node to sample (the current one)
 [ ] Generate reduction of metrics. Avg, Min, Max, etc of a numeric stream
 [ ] Sample Nth, offset, max
 [ ] drop some streams
@@ -19,12 +23,11 @@
 [ ] Spline sampling interior in non grid pattern
 [ ] Allow to filter rows in the inspector
 [ ] Add noise to position
-[ ] Math Node. Should hide/not require some inputs when not needed. Like Abs
+[ ] Math Node. Should hide inputs when not needed. Like Abs
 [ ] Support for Vector4/Color/PackedVector4Array -> Read SubAttributes / MathNode / SetAttribute / Use in Debug if exists
 [ ] Test random colors for each node -> Graph Editor Settings
 [ ] Promote input pin to graph input
-[ ] use inputs on all settings
-[ ] Custom inputs to the pcg
+[ ] Custom inputs values in the pcg node 3d, not in the resource
 [ ] undo/redo
 [ ] add_attribute, if output is single stream with a type, set the color. Maybe make it generic
 [X] Sort a stream by some condition

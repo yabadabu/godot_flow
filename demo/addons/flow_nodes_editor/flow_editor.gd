@@ -73,6 +73,7 @@ func setResourceToEdit( new_resource : FlowGraphResource, new_resource_owner : N
 	gedit_nodes_by_name.clear()
 	inspector.edit( null )
 	inspected_node = null
+	var node_in_data_inspector = null
 	
 	if current_resource != null:
 		
@@ -91,6 +92,8 @@ func setResourceToEdit( new_resource : FlowGraphResource, new_resource_owner : N
 				push_error( "Failed to recover node %s" % [ res_node ])
 				continue
 			node.position_offset = res_node.position_offset * ui_scale
+			if node.settings.inspect_enabled:
+				node_in_data_inspector = node
 		
 		print( "Recovering %d conns" % current_resource.conns.size() )
 		for conn in current_resource.conns:
@@ -102,6 +105,8 @@ func setResourceToEdit( new_resource : FlowGraphResource, new_resource_owner : N
 		gedit.zoom = current_resource.view_zoom
 		gedit.scroll_offset = current_resource.view_offset
 		new_name_counter = current_resource.new_name_counter
+
+	data_inspector.setNode( node_in_data_inspector )
 
 	queueRegen()
 	ctx.graph = current_resource
