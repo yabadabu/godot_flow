@@ -21,8 +21,8 @@ step = Vector3(1, 1, 1)
 random_seed = 1520961383
 inspect_enabled = false
 debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
+debug_mode = 1
+debug_scale = 0.845
 debug_color = Color(1, 1, 1, 1)
 debug_modulate_by = ""
 title = "Grid"
@@ -36,8 +36,8 @@ in_nameA = "position.X"
 in_nameB = "1.0"
 threshold = 0.1
 random_seed = 466698300
-inspect_enabled = true
-debug_enabled = false
+inspect_enabled = false
+debug_enabled = true
 debug_mode = 0
 debug_scale = 1.0
 debug_color = Color(1, 1, 1, 1)
@@ -55,7 +55,7 @@ nodes = Array[Dictionary]([{
 "template": "grid"
 }, {
 "name": &"id_0007_filter",
-"position_offset": Vector2(110, 200),
+"position_offset": Vector2(120, 200),
 "settings": SubResource("Resource_om314"),
 "template": "filter"
 }])
@@ -65,15 +65,9 @@ conns = Array[Dictionary]([{
 "keep_alive": false,
 "to_node": &"id_0007_filter",
 "to_port": 0
-}, {
-"from_node": &"id_0007_filter",
-"from_port": 1,
-"keep_alive": false,
-"to_node": &"id_0008_debug",
-"to_port": 0
 }])
-view_zoom = 1.0
-view_offset = Vector2(-97.92, 0)
+view_zoom = 0.909091
+view_offset = Vector2(-118.564, -32.6364)
 new_name_counter = 8
 inputs = SubResource("Resource_knkyk")
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"

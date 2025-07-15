@@ -57,7 +57,7 @@ enabled = true
 [sub_resource type="Resource" id="Resource_72pfr"]
 resource_name = "Sample Spline Settings"
 script = ExtResource("4_3kbeu")
-uniform_interval = 0.395
+uniform_interval = 0.295
 fill_curve = false
 required_meta_bool = &""
 random_seed = 1282431794
@@ -130,13 +130,13 @@ enabled = true
 [sub_resource type="Resource" id="Resource_ildus"]
 resource_name = "Distance Settings"
 script = ExtResource("9_72pfr")
-max_distance = 0.41
+max_distance = 0.4
 out_name = "distance"
 in_nameA = "position"
 in_nameB = "position"
 random_seed = 2858792388
 inspect_enabled = false
-debug_enabled = false
+debug_enabled = true
 debug_mode = 1
 debug_scale = 0.15
 debug_color = Color(0, 1, 1, 1)
@@ -151,7 +151,7 @@ name = "Threshold"
 data_type = 2
 cte_bool = false
 cte_int = 0
-cte_float = 1.22
+cte_float = 1.08
 cte_vector = Vector3(0, 0, 0)
 cte_string = ""
 random_seed = 3924440885
@@ -184,11 +184,11 @@ enabled = true
 [sub_resource type="Resource" id="Resource_5q8kf"]
 resource_name = "Node Settings"
 script = ExtResource("11_1f6x3")
-random_seed = 260367654
-inspect_enabled = false
+random_seed = 260367329
+inspect_enabled = true
 debug_enabled = true
 debug_mode = 1
-debug_scale = 0.16
+debug_scale = 0.175
 debug_color = Color(1, 0.235294, 1, 1)
 debug_modulate_by = "distance"
 title = "Debug"
@@ -316,9 +316,9 @@ inputs = SubResource("Resource_hh6fu")
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 
 [sub_resource type="Curve3D" id="Curve3D_pkkv1"]
-bake_interval = 0.395
+bake_interval = 0.295
 _data = {
-"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 1.88385, 1.19209e-07, -0.00449657, -0.67675, 0, 0.520576, 0.67675, 0, -0.520576, 2.87687, 1.19209e-07, -1.49626, 0.0260296, 0, 0.32536, -0.0260296, 0, -0.32536, 4.96264, 0.164568, -1.60938, 0.182201, 0, 0.344882, -0.182201, 0, -0.344882, 4.53879, 1.19209e-07, -3.51188, -0.0260286, 0, 0.292825, 0.0260286, 0, -0.292825, 2.97706, 1.19209e-07, -4.20164, -0.884979, 0, -0.071579, 0.884979, 0, 0.071579, 4.59085, 1.19209e-07, -4.8003, -0.273302, 0, -0.468518, 0.273302, 0, 0.468518, 7.13494, -0.0202721, -4.22287, -0.292825, 0, -0.422968, 0.292825, 0, 0.422968, 7.36019, 1.19209e-07, -2.49675, 0, 0, 0, 0, 0, 0, 6.74473, 1.19209e-07, -0.57713),
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 1.88385, 1.19209e-07, -0.00449657, -0.67675, 0, 0.520576, 0.67675, 0, -0.520576, 2.87687, 1.19209e-07, -1.49626, -0.994457, -0.0564849, 0.299922, 0.994457, 0.0564849, -0.299922, 5.54694, -0.0733792, -0.216296, 0.182201, 0, 0.344882, -0.182201, 0, -0.344882, 4.53879, 1.19209e-07, -3.51188, -0.0260286, 0, 0.292825, 0.0260286, 0, -0.292825, 2.97706, 1.19209e-07, -4.20164, -0.884979, 0, -0.071579, 0.884979, 0, 0.071579, 4.59085, 1.19209e-07, -4.8003, -0.273302, 0, -0.468518, 0.273302, 0, 0.468518, 7.13494, -0.0202721, -4.22287, -0.292825, 0, -0.422968, 0.292825, 0, 0.422968, 7.36019, 1.19209e-07, -2.49675, 0, 0, 0, 0, 0, 0, 6.74473, 1.19209e-07, -0.57713),
 "tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0)
 }
 point_count = 9
