@@ -2,7 +2,6 @@
 
 [ ] There is bug where transforms seems to be updating the input
 [ ] support for @last?
-[ ] Distance to curve
 [ ] Support for multiple streams?
 	[ ] Debug
 	[ ] Generic Loop
@@ -30,6 +29,9 @@
 [ ] Custom inputs values in the pcg node 3d, not in the resource
 [ ] undo/redo
 [ ] add_attribute, if output is single stream with a type, set the color. Maybe make it generic
+[X] Ctrl+C will not add a comment. Only if pressing C alone
+[X] E will toggle the data inspector but also make data_visualization visible in the editor
+[X] Distance to curve
 [X] Sort a stream by some condition
 	[X] Floats
 	[X] Ints

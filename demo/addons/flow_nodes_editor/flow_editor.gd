@@ -19,6 +19,7 @@ var num_non_nodes_children = 0
 # The inspector shows the settings property of the current node
 var inspector: EditorInspector
 var inspected_node : Node
+var make_inspector_visible : Callable
 
 # This is the default graph-node instantiated, the script contains the logic
 var packed_node = preload("res://addons/flow_nodes_editor/node.tscn")
@@ -379,13 +380,15 @@ func _on_graph_edit_gui_input(event):
 		elif key == KEY_A:
 			openAddMenu()
 		elif key == KEY_C:
-			addComment()
+			if not evt_key.ctrl_pressed and not evt_key.alt_pressed and not evt_key.shift_pressed:
+				addComment()
 		elif key == KEY_D:
 			toggleDebug()
 			evalGraph()
 		elif key == KEY_E:
 			toggleInspection()
 			evalGraph()
+			make_inspector_visible.call()
 		elif key == KEY_R:
 			evalGraph()
 

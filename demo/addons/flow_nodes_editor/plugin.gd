@@ -32,6 +32,7 @@ func _enter_tree():
 	graph_dock = spawnDock("res://addons/flow_nodes_editor/flow_editor.tscn", "Data Flow", false ) as FlowGraphEditor
 	data_inspector_dock = spawnDock("res://addons/flow_nodes_editor/data_inspector.tscn", "Data Inspector", true)
 	graph_dock.data_inspector = data_inspector_dock
+	graph_dock.make_inspector_visible = func(): make_bottom_panel_item_visible( data_inspector_dock )
 	
 	add_attribute_inspector_plugin = load("res://addons/flow_nodes_editor/attribute_inspector_plugin.gd").new()
 	add_inspector_plugin(add_attribute_inspector_plugin)
