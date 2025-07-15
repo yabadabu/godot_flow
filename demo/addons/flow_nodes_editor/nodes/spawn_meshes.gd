@@ -79,10 +79,12 @@ func execute( ctx : FlowData.EvaluationContext ):
 		while owner_of_mmis.get_parent() and owner_of_mmis.owner:
 			owner_of_mmis = owner_of_mmis.get_parent()
 
+	var default_mesh = getSettingValue(ctx, "mesh")
+
 	# Collect which indices use the samee by resource type
 	var mmis := {}
 	for idx in range( in_size ):
-		var mesh = meshes[idx] if meshes else settings.mesh
+		var mesh = meshes[idx] if meshes else default_mesh
 		var key = mesh.resource_path
 		var mmi = mmis.get( key, null )
 		if mmi == null:
