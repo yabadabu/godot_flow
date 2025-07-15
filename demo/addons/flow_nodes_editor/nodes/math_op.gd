@@ -158,6 +158,9 @@ func execute( _ctx : FlowData.EvaluationContext ):
 				MathOpNodeSettings.eOperation.Divide:
 					for i in num_elems:
 						outC[i] = inA[i] / inB[i]
+				MathOpNodeSettings.eOperation.Modulo:
+					for i in num_elems:
+						outC[i] = fmod(inA[i], inB[i])
 
 			out_container = outC
 			out_data_type = FlowData.DataType.Float

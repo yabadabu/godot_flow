@@ -15,6 +15,7 @@ enum eOperation {
 	Floor,
 	FloorAsInt,
 	Copy,
+	Modulo,
 }
 
 @export var operation : eOperation = eOperation.Add
