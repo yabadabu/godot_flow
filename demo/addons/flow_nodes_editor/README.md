@@ -1,6 +1,7 @@
 === TODO
 
 [ ] There is bug where transforms seems to be updating the input
+[ ] Show performance numbers somewhere
 [ ] support for @last?
 [ ] Support for multiple streams?
 	[ ] Debug
@@ -15,7 +16,6 @@
 	[ ] Node to sample (the current one)
 [ ] Generate reduction of metrics. Avg, Min, Max, etc of a numeric stream
 [ ] Sample Nth, offset, max
-[ ] drop some streams
 [ ] Volume Sample in 3D
 [ ] Allow the add menu to have sections
 [ ] Get N property as a independent value. Get first, get last, etc.
@@ -29,6 +29,7 @@
 [ ] Custom inputs values in the pcg node 3d, not in the resource
 [ ] undo/redo
 [ ] add_attribute, if output is single stream with a type, set the color. Maybe make it generic
+[X] drop some streams
 [X] Ctrl+C will not add a comment. Only if pressing C alone
 [X] E will toggle the data inspector but also make data_visualization visible in the editor
 [X] Distance to curve

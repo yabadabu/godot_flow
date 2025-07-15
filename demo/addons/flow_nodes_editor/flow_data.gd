@@ -206,6 +206,10 @@ class Data:
 		if sz:
 			new_container.resize( sz )
 		return new_container
+	
+	func delStream( name : String):
+		if streams.has( name ):
+			streams.erase( name )
 		
 	func cloneStream( name : String ):
 		var prev_stream = findStream( name )
