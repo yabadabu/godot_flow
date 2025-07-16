@@ -20,8 +20,9 @@ class EvaluationContext:
 	var eval_id : int = 0
 	var graph : FlowGraphResource
 
+# basis.get_euler() * 180.0 / PI		# <-- This is much faster
 static func basisToEuler( basis : Basis ) -> Vector3:
-	var euler = basis.get_euler() 
+	var euler = basis.get_euler()
 	euler.x = rad_to_deg( euler.x )
 	euler.y = rad_to_deg( euler.y )
 	euler.z = rad_to_deg( euler.z )
