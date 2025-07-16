@@ -16,6 +16,7 @@
 	[ ] Node to gather
 	[ ] Node to create
 	[ ] Node to sample (the current one)
+[ ] if condition is null/emtpy
 [ ] Generate reduction of metrics. Avg, Min, Max, etc of a numeric stream
 [ ] Sample Nth, offset, max
 [ ] Volume Sample in 3D
