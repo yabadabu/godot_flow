@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://b6mgnfbjovkil"]
+[gd_scene load_steps=36 format=3 uid="uid://b6mgnfbjovkil"]
 
 [ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_kf2sw"]
 [ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="2_frxqg"]
@@ -9,179 +9,15 @@
 [ext_resource type="Script" uid="uid://cka12nenjlwgx" path="res://addons/flow_nodes_editor/nodes/filter_settings.gd" id="7_c5783"]
 [ext_resource type="Script" uid="uid://bnpohx6mm4hdh" path="res://addons/flow_nodes_editor/nodes/spawn_meshes_settings.gd" id="7_tyqfr"]
 [ext_resource type="Script" uid="uid://dt7o3moxddt4h" path="res://addons/flow_nodes_editor/nodes/transform_settings.gd" id="8_dk6st"]
+[ext_resource type="Script" uid="uid://dhryaxkxmtaui" path="res://addons/flow_nodes_editor/nodes/make_vector_settings.gd" id="8_tov8o"]
 [ext_resource type="BoxMesh" uid="uid://7flu82pqtc5d" path="res://addons/flow_nodes_editor/resources/unit_cube.tres" id="9_c5783"]
 [ext_resource type="Script" uid="uid://runa6a3koevg" path="res://addons/flow_nodes_editor/nodes/add_attribute_settings.gd" id="10_i010f"]
+[ext_resource type="Script" uid="uid://vqi6gspjuhot" path="res://addons/flow_nodes_editor/nodes/copy_settings.gd" id="10_xarnj"]
 [ext_resource type="Script" uid="uid://diw40w1clst46" path="res://addons/flow_nodes_editor/nodes/merge_settings.gd" id="11_i010f"]
 
 [sub_resource type="Resource" id="Resource_tyqfr"]
 script = ExtResource("3_42t3g")
 inputs = Array[ExtResource("2_frxqg")]([])
-
-[sub_resource type="Resource" id="Resource_i010f"]
-resource_name = "Sample Spline Settings"
-script = ExtResource("4_tyqfr")
-uniform_interval = 0.2
-fill_curve = true
-required_meta_bool = &""
-random_seed = 1671569818
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 1
-debug_scale = 0.175
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Sample Spline"
-enabled = true
-
-[sub_resource type="Resource" id="Resource_tov8o"]
-resource_name = "Math Op"
-script = ExtResource("6_mq44t")
-operation = 3
-in_nameA = "position.Z"
-in_nameB = "size.Z"
-out_name = "row"
-random_seed = 1562873858
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Math"
-enabled = true
-
-[sub_resource type="Resource" id="Resource_mq44t"]
-resource_name = "Math Op"
-script = ExtResource("6_mq44t")
-operation = 10
-in_nameA = "row"
-in_nameB = "2"
-out_name = "is_odd"
-random_seed = 2452785012
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Math"
-enabled = true
-
-[sub_resource type="Resource" id="Resource_c5783"]
-resource_name = "Math Op"
-script = ExtResource("6_mq44t")
-operation = 5
-in_nameA = "is_odd"
-in_nameB = ""
-out_name = "is_odd"
-random_seed = 1733103425
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Math"
-enabled = true
-
-[sub_resource type="Resource" id="Resource_i5d73"]
-resource_name = "Math Op"
-script = ExtResource("6_mq44t")
-operation = 2
-in_nameA = "position.Z"
-in_nameB = "-0.18"
-out_name = "offset"
-random_seed = 3775680099
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Math"
-enabled = true
-
-[sub_resource type="Resource" id="Resource_jvlto"]
-resource_name = "Math Op"
-script = ExtResource("6_mq44t")
-operation = 0
-in_nameA = "position.Z"
-in_nameB = "offset"
-out_name = "position.Z"
-random_seed = 1076949034
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Math"
-enabled = true
-
-[sub_resource type="Resource" id="Resource_iefgn"]
-resource_name = "Filter Settings"
-script = ExtResource("7_c5783")
-condition = 0
-in_nameA = "is_odd"
-in_nameB = "1"
-threshold = 0.1
-random_seed = 2060095070
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Filter"
-enabled = true
-
-[sub_resource type="Resource" id="Resource_6p47p"]
-resource_name = "Transform Settings"
-script = ExtResource("8_dk6st")
-offset_min = Vector3(-0.1, 0, 0)
-offset_max = Vector3(-0.1, 0, 0)
-rotation_min = Vector3(0, 0, 0)
-rotation_max = Vector3(0, 0, 0)
-scale_min = Vector3(1, 1, 1)
-scale_max = Vector3(1, 1, 1)
-uniform_scale = true
-random_seed = 1268655514
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Transform"
-enabled = true
-
-[sub_resource type="Resource" id="Resource_xarnj"]
-resource_name = "Spawn Meshes Settings"
-script = ExtResource("7_tyqfr")
-mesh = ExtResource("9_c5783")
-mesh_attribute = ""
-random_seed = 1724922222
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Spawn Meshes"
-enabled = true
-
-[sub_resource type="Resource" id="Resource_kt7ln"]
-resource_name = "Merge Settings"
-script = ExtResource("11_i010f")
-random_seed = 3770833658
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Merge"
-enabled = true
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_i010f"]
 resource_local_to_scene = true
@@ -211,13 +47,290 @@ debug_modulate_by = ""
 title = "Add Attribute"
 enabled = true
 
+[sub_resource type="Resource" id="Resource_1i0v5"]
+resource_name = "Make Vector Settings"
+script = ExtResource("8_tov8o")
+x = 0.0
+y = 0.0
+z = 0.0
+out_name = "Vector"
+random_seed = 2074028266
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Make Vector"
+enabled = true
+
+[sub_resource type="Resource" id="Resource_7jvsr"]
+resource_name = "Math Op"
+script = ExtResource("6_mq44t")
+operation = 2
+in_nameA = "interval"
+in_nameB = "0.5"
+out_name = "interval"
+random_seed = 2479760030
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Math"
+enabled = true
+
+[sub_resource type="Resource" id="Resource_6p47p"]
+resource_name = "Transform Settings"
+script = ExtResource("8_dk6st")
+offset_min = Vector3(-0.2, 0, 0)
+offset_max = Vector3(-0.2, 0, 0)
+rotation_min = Vector3(0, 0, 0)
+rotation_max = Vector3(0, 0, 0)
+scale_min = Vector3(1, 1, 1)
+scale_max = Vector3(1, 1, 1)
+uniform_scale = true
+random_seed = 1268655514
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Transform"
+enabled = true
+
+[sub_resource type="Resource" id="Resource_i010f"]
+resource_name = "Sample Spline Settings"
+script = ExtResource("4_tyqfr")
+uniform_interval = 1.0
+fill_curve = true
+required_meta_bool = &""
+random_seed = 1671569818
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 1
+debug_scale = 0.175
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Sample Spline"
+enabled = true
+
+[sub_resource type="Resource" id="Resource_tov8o"]
+resource_name = "Math Op"
+script = ExtResource("6_mq44t")
+operation = 3
+in_nameA = "position.Z"
+in_nameB = "size.Z"
+out_name = "row"
+random_seed = 1562873858
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 1
+debug_scale = 0.265
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Math"
+enabled = true
+
+[sub_resource type="Resource" id="Resource_wcj2q"]
+resource_name = "Copy Settings"
+script = ExtResource("10_xarnj")
+num_copies = 3
+translation = Vector3(0, 10, 0)
+rotation = Vector3(0, 0, 0)
+generate_copy_id = "copy"
+random_seed = 4206647135
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Copy"
+enabled = true
+
+[sub_resource type="Resource" id="Resource_c5783"]
+resource_name = "Math Op"
+script = ExtResource("6_mq44t")
+operation = 5
+in_nameA = "row"
+in_nameB = ""
+out_name = "is_odd"
+random_seed = 1733103425
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 1
+debug_scale = 0.295
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Math"
+enabled = true
+
+[sub_resource type="Resource" id="Resource_1v1y5"]
+resource_name = "Add Attribute"
+script = ExtResource("10_i010f")
+name = "new_attr"
+data_type = 2
+cte_bool = false
+cte_int = 0
+cte_float = -0.18
+cte_vector = Vector3(0, 0, 0)
+cte_string = ""
+random_seed = 1033885169
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Add Attribute"
+enabled = true
+
+[sub_resource type="Resource" id="Resource_jvlto"]
+resource_name = "Math Op"
+script = ExtResource("6_mq44t")
+operation = 0
+in_nameA = "position.Z"
+in_nameB = "offset"
+out_name = "position.Z"
+random_seed = 1076949034
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Math"
+enabled = true
+
+[sub_resource type="Resource" id="Resource_i5d73"]
+resource_name = "Math Op"
+script = ExtResource("6_mq44t")
+operation = 2
+in_nameA = "position.Z"
+in_nameB = "new_attr"
+out_name = "offset"
+random_seed = 3775680099
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 1
+debug_scale = 0.295
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Math"
+enabled = true
+
+[sub_resource type="Resource" id="Resource_gmir0"]
+resource_name = "Math Op"
+script = ExtResource("6_mq44t")
+operation = 11
+in_nameA = "is_odd"
+in_nameB = "2"
+out_name = "is_odd"
+random_seed = 3801886254
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Math"
+enabled = true
+
+[sub_resource type="Resource" id="Resource_iefgn"]
+resource_name = "Filter Settings"
+script = ExtResource("7_c5783")
+condition = 0
+in_nameA = "is_odd"
+in_nameB = "1"
+threshold = 0.1
+random_seed = 2060095070
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Filter"
+enabled = true
+
+[sub_resource type="Resource" id="Resource_qj1k2"]
+resource_name = "Add Attribute"
+script = ExtResource("10_i010f")
+name = "interval"
+data_type = 2
+cte_bool = false
+cte_int = 0
+cte_float = 0.2
+cte_vector = Vector3(0, 0, 0)
+cte_string = ""
+random_seed = 3770217984
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Add Attribute"
+enabled = true
+
+[sub_resource type="Resource" id="Resource_kt7ln"]
+resource_name = "Merge Settings"
+script = ExtResource("11_i010f")
+random_seed = 3770833658
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 1
+debug_scale = 0.125
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Merge"
+enabled = true
+
+[sub_resource type="Resource" id="Resource_5kys7"]
+resource_name = "Spawn Meshes Settings"
+script = ExtResource("7_tyqfr")
+mesh = ExtResource("9_c5783")
+mesh_attribute = ""
+random_seed = 1935723741
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Spawn Meshes"
+enabled = true
+
 [sub_resource type="Resource" id="Resource_dk6st"]
 resource_local_to_scene = true
 resource_name = "fallguys"
 script = ExtResource("4_l5ca6")
 nodes = Array[Dictionary]([{
+"name": &"id_0020_add_attribute",
+"position_offset": Vector2(2520, 380),
+"settings": SubResource("Resource_v7wvy"),
+"template": "add_attribute"
+}, {
+"name": &"id_0035_make_vector",
+"position_offset": Vector2(1500, 480),
+"settings": SubResource("Resource_1i0v5"),
+"template": "make_vector"
+}, {
+"name": &"id_0036_math_op",
+"position_offset": Vector2(1320, 500),
+"settings": SubResource("Resource_7jvsr"),
+"template": "math_op"
+}, {
+"name": &"id_0013_transform",
+"position_offset": Vector2(1740, 440),
+"settings": SubResource("Resource_6p47p"),
+"template": "transform"
+}, {
 "name": &"id_0001_sample_spline",
-"position_offset": Vector2(140, 300),
+"position_offset": Vector2(220, 300),
 "settings": SubResource("Resource_i010f"),
 "template": "sample_spline"
 }, {
@@ -226,14 +339,24 @@ nodes = Array[Dictionary]([{
 "settings": SubResource("Resource_tov8o"),
 "template": "math_op"
 }, {
-"name": &"id_0009_math_op",
-"position_offset": Vector2(720, 300),
-"settings": SubResource("Resource_mq44t"),
-"template": "math_op"
+"name": &"id_0032_copy",
+"position_offset": Vector2(2240, 300),
+"settings": SubResource("Resource_wcj2q"),
+"template": "copy"
 }, {
 "name": &"id_0011_math_op",
-"position_offset": Vector2(920, 300),
+"position_offset": Vector2(720, 300),
 "settings": SubResource("Resource_c5783"),
+"template": "math_op"
+}, {
+"name": &"id_0033_add_attribute",
+"position_offset": Vector2(980, 460),
+"settings": SubResource("Resource_1v1y5"),
+"template": "add_attribute"
+}, {
+"name": &"id_0019_math_op",
+"position_offset": Vector2(1340, 300),
+"settings": SubResource("Resource_jvlto"),
 "template": "math_op"
 }, {
 "name": &"id_0018_math_op",
@@ -241,9 +364,9 @@ nodes = Array[Dictionary]([{
 "settings": SubResource("Resource_i5d73"),
 "template": "math_op"
 }, {
-"name": &"id_0019_math_op",
-"position_offset": Vector2(1340, 300),
-"settings": SubResource("Resource_jvlto"),
+"name": &"id_0037_math_op",
+"position_offset": Vector2(940, 300),
+"settings": SubResource("Resource_gmir0"),
 "template": "math_op"
 }, {
 "name": &"id_0008_filter",
@@ -251,25 +374,20 @@ nodes = Array[Dictionary]([{
 "settings": SubResource("Resource_iefgn"),
 "template": "filter"
 }, {
-"name": &"id_0013_transform",
-"position_offset": Vector2(1760, 460),
-"settings": SubResource("Resource_6p47p"),
-"template": "transform"
-}, {
-"name": &"id_0022_spawn_meshes",
-"position_offset": Vector2(2300, 300),
-"settings": SubResource("Resource_xarnj"),
-"template": "spawn_meshes"
+"name": &"id_0034_add_attribute",
+"position_offset": Vector2(-20, 500),
+"settings": SubResource("Resource_qj1k2"),
+"template": "add_attribute"
 }, {
 "name": &"id_0027_merge",
-"position_offset": Vector2(2020, 300),
+"position_offset": Vector2(2000, 300),
 "settings": SubResource("Resource_kt7ln"),
 "template": "merge"
 }, {
-"name": &"id_0020_add_attribute",
-"position_offset": Vector2(2100, 440),
-"settings": SubResource("Resource_v7wvy"),
-"template": "add_attribute"
+"name": &"id_0038_spawn_meshes",
+"position_offset": Vector2(2793.31, 364.776),
+"settings": SubResource("Resource_5kys7"),
+"template": "spawn_meshes"
 }])
 conns = Array[Dictionary]([{
 "from_node": &"id_0001_sample_spline",
@@ -284,28 +402,10 @@ conns = Array[Dictionary]([{
 "to_node": &"id_0003_math_op",
 "to_port": 1
 }, {
-"from_node": &"id_0003_math_op",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0009_math_op",
-"to_port": 0
-}, {
-"from_node": &"id_0009_math_op",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0011_math_op",
-"to_port": 0
-}, {
 "from_node": &"id_0008_filter",
 "from_port": 1,
 "keep_alive": false,
 "to_node": &"id_0013_transform",
-"to_port": 0
-}, {
-"from_node": &"id_0011_math_op",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0018_math_op",
 "to_port": 0
 }, {
 "from_node": &"id_0018_math_op",
@@ -326,12 +426,6 @@ conns = Array[Dictionary]([{
 "to_node": &"id_0019_math_op",
 "to_port": 1
 }, {
-"from_node": &"id_0020_add_attribute",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0022_spawn_meshes",
-"to_port": 1
-}, {
 "from_node": &"id_0008_filter",
 "from_port": 0,
 "keep_alive": false,
@@ -344,23 +438,89 @@ conns = Array[Dictionary]([{
 "to_node": &"id_0027_merge",
 "to_port": 1
 }, {
+"from_node": &"id_0033_add_attribute",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0018_math_op",
+"to_port": 1
+}, {
+"from_node": &"id_0034_add_attribute",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0001_sample_spline",
+"to_port": 0
+}, {
+"from_node": &"id_0035_make_vector",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0013_transform",
+"to_port": 1
+}, {
+"from_node": &"id_0035_make_vector",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0013_transform",
+"to_port": 2
+}, {
+"from_node": &"id_0034_add_attribute",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0036_math_op",
+"to_port": 0
+}, {
+"from_node": &"id_0036_math_op",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0035_make_vector",
+"to_port": 0
+}, {
+"from_node": &"id_0003_math_op",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0011_math_op",
+"to_port": 0
+}, {
+"from_node": &"id_0011_math_op",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0037_math_op",
+"to_port": 0
+}, {
+"from_node": &"id_0037_math_op",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0018_math_op",
+"to_port": 0
+}, {
 "from_node": &"id_0027_merge",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0022_spawn_meshes",
+"to_node": &"id_0032_copy",
 "to_port": 0
+}, {
+"from_node": &"id_0032_copy",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0038_spawn_meshes",
+"to_port": 0
+}, {
+"from_node": &"id_0020_add_attribute",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0038_spawn_meshes",
+"to_port": 1
 }])
-view_zoom = 1.1
-view_offset = Vector2(1840.74, -56.8022)
-new_name_counter = 27
+view_zoom = 0.683013
+view_offset = Vector2(1335.87, -214.853)
+new_name_counter = 38
 inputs = SubResource("Resource_tyqfr")
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 
-[sub_resource type="MultiMesh" id="MultiMesh_i5d73"]
+[sub_resource type="MultiMesh" id="MultiMesh_tov8o"]
 transform_format = 1
-instance_count = 303
+instance_count = 909
 mesh = SubResource("CylinderMesh_i010f")
-buffer = PackedFloat32Array(0.2, 0, 0, 0.989712, 0, 0.2, 0, 0, 0, 0, 0.2, -1.476, 0.2, 0, 0, 1.18971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.476, 0.2, 0, 0, 1.38971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.476, 0.2, 0, 0, 1.58971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.476, 0.2, 0, 0, 1.78971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.476, 0.2, 0, 0, 1.98971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.476, 0.2, 0, 0, 2.18971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.476, 0.2, 0, 0, 2.38971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.476, 0.2, 0, 0, 2.58971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.476, 0.2, 0, 0, 2.78971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.476, 0.2, 0, 0, 2.98971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.476, 0.2, 0, 0, 0.789712, 0, 0.2, 0, 0, 0, 0, 0.2, -1.148, 0.2, 0, 0, 0.989712, 0, 0.2, 0, 0, 0, 0, 0.2, -1.148, 0.2, 0, 0, 1.18971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.148, 0.2, 0, 0, 1.38971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.148, 0.2, 0, 0, 1.58971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.148, 0.2, 0, 0, 1.78971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.148, 0.2, 0, 0, 1.98971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.148, 0.2, 0, 0, 2.18971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.148, 0.2, 0, 0, 2.38971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.148, 0.2, 0, 0, 2.58971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.148, 0.2, 0, 0, 2.78971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.148, 0.2, 0, 0, 2.98971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.148, 0.2, 0, 0, 3.18971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.148, 0.2, 0, 0, 0.589712, 0, 0.2, 0, 0, 0, 0, 0.2, -0.82, 0.2, 0, 0, 0.789712, 0, 0.2, 0, 0, 0, 0, 0.2, -0.82, 0.2, 0, 0, 0.989712, 0, 0.2, 0, 0, 0, 0, 0.2, -0.82, 0.2, 0, 0, 1.18971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.82, 0.2, 0, 0, 1.38971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.82, 0.2, 0, 0, 1.58971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.82, 0.2, 0, 0, 1.78971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.82, 0.2, 0, 0, 1.98971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.82, 0.2, 0, 0, 2.18971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.82, 0.2, 0, 0, 2.38971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.82, 0.2, 0, 0, 2.58971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.82, 0.2, 0, 0, 2.78971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.82, 0.2, 0, 0, 2.98971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.82, 0.2, 0, 0, 3.18971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.82, 0.2, 0, 0, 3.38971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.82, 0.2, 0, 0, 0.389712, 0, 0.2, 0, 0, 0, 0, 0.2, -0.492, 0.2, 0, 0, 0.589712, 0, 0.2, 0, 0, 0, 0, 0.2, -0.492, 0.2, 0, 0, 0.789712, 0, 0.2, 0, 0, 0, 0, 0.2, -0.492, 0.2, 0, 0, 0.989712, 0, 0.2, 0, 0, 0, 0, 0.2, -0.492, 0.2, 0, 0, 1.18971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.492, 0.2, 0, 0, 1.38971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.492, 0.2, 0, 0, 1.58971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.492, 0.2, 0, 0, 1.78971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.492, 0.2, 0, 0, 1.98971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.492, 0.2, 0, 0, 2.18971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.492, 0.2, 0, 0, 2.38971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.492, 0.2, 0, 0, 2.58971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.492, 0.2, 0, 0, 2.78971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.492, 0.2, 0, 0, 2.98971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.492, 0.2, 0, 0, 3.18971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.492, 0.2, 0, 0, 3.38971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.492, 0.2, 0, 0, 3.58971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.492, 0.2, 0, 0, 0.189712, 0, 0.2, 0, 0, 0, 0, 0.2, -0.164, 0.2, 0, 0, 0.389712, 0, 0.2, 0, 0, 0, 0, 0.2, -0.164, 0.2, 0, 0, 0.589712, 0, 0.2, 0, 0, 0, 0, 0.2, -0.164, 0.2, 0, 0, 0.789712, 0, 0.2, 0, 0, 0, 0, 0.2, -0.164, 0.2, 0, 0, 0.989712, 0, 0.2, 0, 0, 0, 0, 0.2, -0.164, 0.2, 0, 0, 1.18971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.164, 0.2, 0, 0, 1.38971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.164, 0.2, 0, 0, 1.58971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.164, 0.2, 0, 0, 1.78971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.164, 0.2, 0, 0, 1.98971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.164, 0.2, 0, 0, 2.18971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.164, 0.2, 0, 0, 2.38971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.164, 0.2, 0, 0, 2.58971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.164, 0.2, 0, 0, 2.78971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.164, 0.2, 0, 0, 2.98971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.164, 0.2, 0, 0, 3.18971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.164, 0.2, 0, 0, 3.38971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.164, 0.2, 0, 0, 3.58971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.164, 0.2, 0, 0, 3.78971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.164, 0.2, 0, 0, 0.189712, 0, 0.2, 0, 0, 0, 0, 0.2, 0.164, 0.2, 0, 0, 0.389712, 0, 0.2, 0, 0, 0, 0, 0.2, 0.164, 0.2, 0, 0, 0.589712, 0, 0.2, 0, 0, 0, 0, 0.2, 0.164, 0.2, 0, 0, 0.789712, 0, 0.2, 0, 0, 0, 0, 0.2, 0.164, 0.2, 0, 0, 0.989712, 0, 0.2, 0, 0, 0, 0, 0.2, 0.164, 0.2, 0, 0, 1.18971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.164, 0.2, 0, 0, 1.38971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.164, 0.2, 0, 0, 1.58971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.164, 0.2, 0, 0, 1.78971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.164, 0.2, 0, 0, 1.98971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.164, 0.2, 0, 0, 2.18971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.164, 0.2, 0, 0, 2.38971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.164, 0.2, 0, 0, 2.58971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.164, 0.2, 0, 0, 2.78971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.164, 0.2, 0, 0, 2.98971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.164, 0.2, 0, 0, 3.18971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.164, 0.2, 0, 0, 3.38971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.164, 0.2, 0, 0, 3.58971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.164, 0.2, 0, 0, 3.78971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.164, 0.2, 0, 0, 0.389712, 0, 0.2, 0, 0, 0, 0, 0.2, 0.492, 0.2, 0, 0, 0.589712, 0, 0.2, 0, 0, 0, 0, 0.2, 0.492, 0.2, 0, 0, 0.789712, 0, 0.2, 0, 0, 0, 0, 0.2, 0.492, 0.2, 0, 0, 0.989712, 0, 0.2, 0, 0, 0, 0, 0.2, 0.492, 0.2, 0, 0, 1.18971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.492, 0.2, 0, 0, 1.38971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.492, 0.2, 0, 0, 1.58971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.492, 0.2, 0, 0, 1.78971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.492, 0.2, 0, 0, 1.98971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.492, 0.2, 0, 0, 2.18971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.492, 0.2, 0, 0, 2.38971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.492, 0.2, 0, 0, 2.58971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.492, 0.2, 0, 0, 2.78971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.492, 0.2, 0, 0, 2.98971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.492, 0.2, 0, 0, 3.18971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.492, 0.2, 0, 0, 3.38971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.492, 0.2, 0, 0, 3.58971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.492, 0.2, 0, 0, 0.589712, 0, 0.2, 0, 0, 0, 0, 0.2, 0.82, 0.2, 0, 0, 0.789712, 0, 0.2, 0, 0, 0, 0, 0.2, 0.82, 0.2, 0, 0, 0.989712, 0, 0.2, 0, 0, 0, 0, 0.2, 0.82, 0.2, 0, 0, 1.18971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.82, 0.2, 0, 0, 1.38971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.82, 0.2, 0, 0, 1.58971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.82, 0.2, 0, 0, 1.78971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.82, 0.2, 0, 0, 1.98971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.82, 0.2, 0, 0, 2.18971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.82, 0.2, 0, 0, 2.38971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.82, 0.2, 0, 0, 2.58971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.82, 0.2, 0, 0, 2.78971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.82, 0.2, 0, 0, 2.98971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.82, 0.2, 0, 0, 3.18971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.82, 0.2, 0, 0, 3.38971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.82, 0.2, 0, 0, 0.789712, 0, 0.2, 0, 0, 0, 0, 0.2, 1.148, 0.2, 0, 0, 0.989712, 0, 0.2, 0, 0, 0, 0, 0.2, 1.148, 0.2, 0, 0, 1.18971, 0, 0.2, 0, 0, 0, 0, 0.2, 1.148, 0.2, 0, 0, 1.38971, 0, 0.2, 0, 0, 0, 0, 0.2, 1.148, 0.2, 0, 0, 1.58971, 0, 0.2, 0, 0, 0, 0, 0.2, 1.148, 0.2, 0, 0, 1.78971, 0, 0.2, 0, 0, 0, 0, 0.2, 1.148, 0.2, 0, 0, 1.98971, 0, 0.2, 0, 0, 0, 0, 0.2, 1.148, 0.2, 0, 0, 2.18971, 0, 0.2, 0, 0, 0, 0, 0.2, 1.148, 0.2, 0, 0, 2.38971, 0, 0.2, 0, 0, 0, 0, 0.2, 1.148, 0.2, 0, 0, 2.58971, 0, 0.2, 0, 0, 0, 0, 0.2, 1.148, 0.2, 0, 0, 2.78971, 0, 0.2, 0, 0, 0, 0, 0.2, 1.148, 0.2, 0, 0, 2.98971, 0, 0.2, 0, 0, 0, 0, 0.2, 1.148, 0.2, 0, 0, 3.18971, 0, 0.2, 0, 0, 0, 0, 0.2, 1.148, 0.2, 0, 0, 0.989712, 0, 0.2, 0, 0, 0, 0, 0.2, 1.476, 0.2, 0, 0, 1.18971, 0, 0.2, 0, 0, 0, 0, 0.2, 1.476, 0.2, 0, 0, 1.38971, 0, 0.2, 0, 0, 0, 0, 0.2, 1.476, 0.2, 0, 0, 1.58971, 0, 0.2, 0, 0, 0, 0, 0.2, 1.476, 0.2, 0, 0, 1.78971, 0, 0.2, 0, 0, 0, 0, 0.2, 1.476, 0.2, 0, 0, 1.98971, 0, 0.2, 0, 0, 0, 0, 0.2, 1.476, 0.2, 0, 0, 2.18971, 0, 0.2, 0, 0, 0, 0, 0.2, 1.476, 0.2, 0, 0, 2.38971, 0, 0.2, 0, 0, 0, 0, 0.2, 1.476, 0.2, 0, 0, 2.58971, 0, 0.2, 0, 0, 0, 0, 0.2, 1.476, 0.2, 0, 0, 2.78971, 0, 0.2, 0, 0, 0, 0, 0.2, 1.476, 0.2, 0, 0, 2.98971, 0, 0.2, 0, 0, 0, 0, 0.2, 1.476, 0.2, 0, 0, 1.08971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.64, 0.2, 0, 0, 1.28971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.64, 0.2, 0, 0, 1.48971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.64, 0.2, 0, 0, 1.68971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.64, 0.2, 0, 0, 1.88971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.64, 0.2, 0, 0, 2.08971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.64, 0.2, 0, 0, 2.28971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.64, 0.2, 0, 0, 2.48971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.64, 0.2, 0, 0, 2.68971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.64, 0.2, 0, 0, 0.889712, 0, 0.2, 0, 0, 0, 0, 0.2, -1.312, 0.2, 0, 0, 1.08971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.312, 0.2, 0, 0, 1.28971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.312, 0.2, 0, 0, 1.48971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.312, 0.2, 0, 0, 1.68971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.312, 0.2, 0, 0, 1.88971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.312, 0.2, 0, 0, 2.08971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.312, 0.2, 0, 0, 2.28971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.312, 0.2, 0, 0, 2.48971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.312, 0.2, 0, 0, 2.68971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.312, 0.2, 0, 0, 2.88971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.312, 0.2, 0, 0, 3.08971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.312, 0.2, 0, 0, 0.489712, 0, 0.2, 0, 0, 0, 0, 0.2, -0.984, 0.2, 0, 0, 0.689712, 0, 0.2, 0, 0, 0, 0, 0.2, -0.984, 0.2, 0, 0, 0.889712, 0, 0.2, 0, 0, 0, 0, 0.2, -0.984, 0.2, 0, 0, 1.08971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.984, 0.2, 0, 0, 1.28971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.984, 0.2, 0, 0, 1.48971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.984, 0.2, 0, 0, 1.68971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.984, 0.2, 0, 0, 1.88971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.984, 0.2, 0, 0, 2.08971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.984, 0.2, 0, 0, 2.28971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.984, 0.2, 0, 0, 2.48971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.984, 0.2, 0, 0, 2.68971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.984, 0.2, 0, 0, 2.88971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.984, 0.2, 0, 0, 3.08971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.984, 0.2, 0, 0, 3.28971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.984, 0.2, 0, 0, 0.289712, 0, 0.2, 0, 0, 0, 0, 0.2, -0.656, 0.2, 0, 0, 0.489712, 0, 0.2, 0, 0, 0, 0, 0.2, -0.656, 0.2, 0, 0, 0.689712, 0, 0.2, 0, 0, 0, 0, 0.2, -0.656, 0.2, 0, 0, 0.889712, 0, 0.2, 0, 0, 0, 0, 0.2, -0.656, 0.2, 0, 0, 1.08971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.656, 0.2, 0, 0, 1.28971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.656, 0.2, 0, 0, 1.48971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.656, 0.2, 0, 0, 1.68971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.656, 0.2, 0, 0, 1.88971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.656, 0.2, 0, 0, 2.08971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.656, 0.2, 0, 0, 2.28971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.656, 0.2, 0, 0, 2.48971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.656, 0.2, 0, 0, 2.68971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.656, 0.2, 0, 0, 2.88971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.656, 0.2, 0, 0, 3.08971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.656, 0.2, 0, 0, 3.28971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.656, 0.2, 0, 0, 3.48971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.656, 0.2, 0, 0, 0.0897123, 0, 0.2, 0, 0, 0, 0, 0.2, -0.328, 0.2, 0, 0, 0.289712, 0, 0.2, 0, 0, 0, 0, 0.2, -0.328, 0.2, 0, 0, 0.489712, 0, 0.2, 0, 0, 0, 0, 0.2, -0.328, 0.2, 0, 0, 0.689712, 0, 0.2, 0, 0, 0, 0, 0.2, -0.328, 0.2, 0, 0, 0.889712, 0, 0.2, 0, 0, 0, 0, 0.2, -0.328, 0.2, 0, 0, 1.08971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.328, 0.2, 0, 0, 1.28971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.328, 0.2, 0, 0, 1.48971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.328, 0.2, 0, 0, 1.68971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.328, 0.2, 0, 0, 1.88971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.328, 0.2, 0, 0, 2.08971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.328, 0.2, 0, 0, 2.28971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.328, 0.2, 0, 0, 2.48971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.328, 0.2, 0, 0, 2.68971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.328, 0.2, 0, 0, 2.88971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.328, 0.2, 0, 0, 3.08971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.328, 0.2, 0, 0, 3.28971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.328, 0.2, 0, 0, 3.48971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.328, 0.2, 0, 0, 3.68971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.328, 0.2, 0, 0, 0.0897123, 0, 0.2, 0, 0, 0, 0, 0.2, -2.27596e-16, 0.2, 0, 0, 0.289712, 0, 0.2, 0, 0, 0, 0, 0.2, -2.27596e-16, 0.2, 0, 0, 0.489712, 0, 0.2, 0, 0, 0, 0, 0.2, -2.27596e-16, 0.2, 0, 0, 0.689712, 0, 0.2, 0, 0, 0, 0, 0.2, -2.27596e-16, 0.2, 0, 0, 0.889712, 0, 0.2, 0, 0, 0, 0, 0.2, -2.27596e-16, 0.2, 0, 0, 1.08971, 0, 0.2, 0, 0, 0, 0, 0.2, -2.27596e-16, 0.2, 0, 0, 1.28971, 0, 0.2, 0, 0, 0, 0, 0.2, -2.27596e-16, 0.2, 0, 0, 1.48971, 0, 0.2, 0, 0, 0, 0, 0.2, -2.27596e-16, 0.2, 0, 0, 1.68971, 0, 0.2, 0, 0, 0, 0, 0.2, -2.27596e-16, 0.2, 0, 0, 1.88971, 0, 0.2, 0, 0, 0, 0, 0.2, -2.27596e-16, 0.2, 0, 0, 2.08971, 0, 0.2, 0, 0, 0, 0, 0.2, -2.27596e-16, 0.2, 0, 0, 2.28971, 0, 0.2, 0, 0, 0, 0, 0.2, -2.27596e-16, 0.2, 0, 0, 2.48971, 0, 0.2, 0, 0, 0, 0, 0.2, -2.27596e-16, 0.2, 0, 0, 2.68971, 0, 0.2, 0, 0, 0, 0, 0.2, -2.27596e-16, 0.2, 0, 0, 2.88971, 0, 0.2, 0, 0, 0, 0, 0.2, -2.27596e-16, 0.2, 0, 0, 3.08971, 0, 0.2, 0, 0, 0, 0, 0.2, -2.27596e-16, 0.2, 0, 0, 3.28971, 0, 0.2, 0, 0, 0, 0, 0.2, -2.27596e-16, 0.2, 0, 0, 3.48971, 0, 0.2, 0, 0, 0, 0, 0.2, -2.27596e-16, 0.2, 0, 0, 3.68971, 0, 0.2, 0, 0, 0, 0, 0.2, -2.27596e-16, 0.2, 0, 0, 0.0897123, 0, 0.2, 0, 0, 0, 0, 0.2, 0.328, 0.2, 0, 0, 0.289712, 0, 0.2, 0, 0, 0, 0, 0.2, 0.328, 0.2, 0, 0, 0.489712, 0, 0.2, 0, 0, 0, 0, 0.2, 0.328, 0.2, 0, 0, 0.689712, 0, 0.2, 0, 0, 0, 0, 0.2, 0.328, 0.2, 0, 0, 0.889712, 0, 0.2, 0, 0, 0, 0, 0.2, 0.328, 0.2, 0, 0, 1.08971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.328, 0.2, 0, 0, 1.28971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.328, 0.2, 0, 0, 1.48971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.328, 0.2, 0, 0, 1.68971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.328, 0.2, 0, 0, 1.88971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.328, 0.2, 0, 0, 2.08971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.328, 0.2, 0, 0, 2.28971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.328, 0.2, 0, 0, 2.48971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.328, 0.2, 0, 0, 2.68971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.328, 0.2, 0, 0, 2.88971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.328, 0.2, 0, 0, 3.08971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.328, 0.2, 0, 0, 3.28971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.328, 0.2, 0, 0, 3.48971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.328, 0.2, 0, 0, 3.68971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.328, 0.2, 0, 0, 0.289712, 0, 0.2, 0, 0, 0, 0, 0.2, 0.656, 0.2, 0, 0, 0.489712, 0, 0.2, 0, 0, 0, 0, 0.2, 0.656, 0.2, 0, 0, 0.689712, 0, 0.2, 0, 0, 0, 0, 0.2, 0.656, 0.2, 0, 0, 0.889712, 0, 0.2, 0, 0, 0, 0, 0.2, 0.656, 0.2, 0, 0, 1.08971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.656, 0.2, 0, 0, 1.28971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.656, 0.2, 0, 0, 1.48971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.656, 0.2, 0, 0, 1.68971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.656, 0.2, 0, 0, 1.88971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.656, 0.2, 0, 0, 2.08971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.656, 0.2, 0, 0, 2.28971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.656, 0.2, 0, 0, 2.48971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.656, 0.2, 0, 0, 2.68971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.656, 0.2, 0, 0, 2.88971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.656, 0.2, 0, 0, 3.08971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.656, 0.2, 0, 0, 3.28971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.656, 0.2, 0, 0, 3.48971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.656, 0.2, 0, 0, 0.689712, 0, 0.2, 0, 0, 0, 0, 0.2, 0.984, 0.2, 0, 0, 0.889712, 0, 0.2, 0, 0, 0, 0, 0.2, 0.984, 0.2, 0, 0, 1.08971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.984, 0.2, 0, 0, 1.28971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.984, 0.2, 0, 0, 1.48971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.984, 0.2, 0, 0, 1.68971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.984, 0.2, 0, 0, 1.88971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.984, 0.2, 0, 0, 2.08971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.984, 0.2, 0, 0, 2.28971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.984, 0.2, 0, 0, 2.48971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.984, 0.2, 0, 0, 2.68971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.984, 0.2, 0, 0, 2.88971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.984, 0.2, 0, 0, 3.08971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.984, 0.2, 0, 0, 3.28971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.984, 0.2, 0, 0, 0.889712, 0, 0.2, 0, 0, 0, 0, 0.2, 1.312, 0.2, 0, 0, 1.08971, 0, 0.2, 0, 0, 0, 0, 0.2, 1.312, 0.2, 0, 0, 1.28971, 0, 0.2, 0, 0, 0, 0, 0.2, 1.312, 0.2, 0, 0, 1.48971, 0, 0.2, 0, 0, 0, 0, 0.2, 1.312, 0.2, 0, 0, 1.68971, 0, 0.2, 0, 0, 0, 0, 0.2, 1.312, 0.2, 0, 0, 1.88971, 0, 0.2, 0, 0, 0, 0, 0.2, 1.312, 0.2, 0, 0, 2.08971, 0, 0.2, 0, 0, 0, 0, 0.2, 1.312, 0.2, 0, 0, 2.28971, 0, 0.2, 0, 0, 0, 0, 0.2, 1.312, 0.2, 0, 0, 2.48971, 0, 0.2, 0, 0, 0, 0, 0.2, 1.312, 0.2, 0, 0, 2.68971, 0, 0.2, 0, 0, 0, 0, 0.2, 1.312, 0.2, 0, 0, 2.88971, 0, 0.2, 0, 0, 0, 0, 0.2, 1.312, 0.2, 0, 0, 3.08971, 0, 0.2, 0, 0, 0, 0, 0.2, 1.312)
+buffer = PackedFloat32Array(0.2, 0, 0, 0.989712, 0, 0.2, 0, 0, 0, 0, 0.2, -1.476, 0.2, 0, 0, 1.18971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.476, 0.2, 0, 0, 1.38971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.476, 0.2, 0, 0, 1.58971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.476, 0.2, 0, 0, 1.78971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.476, 0.2, 0, 0, 1.98971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.476, 0.2, 0, 0, 2.18971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.476, 0.2, 0, 0, 2.38971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.476, 0.2, 0, 0, 2.58971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.476, 0.2, 0, 0, 2.78971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.476, 0.2, 0, 0, 2.98971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.476, 0.2, 0, 0, 0.789712, 0, 0.2, 0, 0, 0, 0, 0.2, -1.148, 0.2, 0, 0, 0.989712, 0, 0.2, 0, 0, 0, 0, 0.2, -1.148, 0.2, 0, 0, 1.18971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.148, 0.2, 0, 0, 1.38971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.148, 0.2, 0, 0, 1.58971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.148, 0.2, 0, 0, 1.78971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.148, 0.2, 0, 0, 1.98971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.148, 0.2, 0, 0, 2.18971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.148, 0.2, 0, 0, 2.38971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.148, 0.2, 0, 0, 2.58971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.148, 0.2, 0, 0, 2.78971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.148, 0.2, 0, 0, 2.98971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.148, 0.2, 0, 0, 3.18971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.148, 0.2, 0, 0, 0.589712, 0, 0.2, 0, 0, 0, 0, 0.2, -0.82, 0.2, 0, 0, 0.789712, 0, 0.2, 0, 0, 0, 0, 0.2, -0.82, 0.2, 0, 0, 0.989712, 0, 0.2, 0, 0, 0, 0, 0.2, -0.82, 0.2, 0, 0, 1.18971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.82, 0.2, 0, 0, 1.38971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.82, 0.2, 0, 0, 1.58971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.82, 0.2, 0, 0, 1.78971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.82, 0.2, 0, 0, 1.98971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.82, 0.2, 0, 0, 2.18971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.82, 0.2, 0, 0, 2.38971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.82, 0.2, 0, 0, 2.58971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.82, 0.2, 0, 0, 2.78971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.82, 0.2, 0, 0, 2.98971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.82, 0.2, 0, 0, 3.18971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.82, 0.2, 0, 0, 3.38971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.82, 0.2, 0, 0, 0.389712, 0, 0.2, 0, 0, 0, 0, 0.2, -0.492, 0.2, 0, 0, 0.589712, 0, 0.2, 0, 0, 0, 0, 0.2, -0.492, 0.2, 0, 0, 0.789712, 0, 0.2, 0, 0, 0, 0, 0.2, -0.492, 0.2, 0, 0, 0.989712, 0, 0.2, 0, 0, 0, 0, 0.2, -0.492, 0.2, 0, 0, 1.18971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.492, 0.2, 0, 0, 1.38971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.492, 0.2, 0, 0, 1.58971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.492, 0.2, 0, 0, 1.78971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.492, 0.2, 0, 0, 1.98971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.492, 0.2, 0, 0, 2.18971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.492, 0.2, 0, 0, 2.38971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.492, 0.2, 0, 0, 2.58971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.492, 0.2, 0, 0, 2.78971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.492, 0.2, 0, 0, 2.98971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.492, 0.2, 0, 0, 3.18971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.492, 0.2, 0, 0, 3.38971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.492, 0.2, 0, 0, 3.58971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.492, 0.2, 0, 0, 0.189712, 0, 0.2, 0, 0, 0, 0, 0.2, -0.164, 0.2, 0, 0, 0.389712, 0, 0.2, 0, 0, 0, 0, 0.2, -0.164, 0.2, 0, 0, 0.589712, 0, 0.2, 0, 0, 0, 0, 0.2, -0.164, 0.2, 0, 0, 0.789712, 0, 0.2, 0, 0, 0, 0, 0.2, -0.164, 0.2, 0, 0, 0.989712, 0, 0.2, 0, 0, 0, 0, 0.2, -0.164, 0.2, 0, 0, 1.18971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.164, 0.2, 0, 0, 1.38971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.164, 0.2, 0, 0, 1.58971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.164, 0.2, 0, 0, 1.78971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.164, 0.2, 0, 0, 1.98971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.164, 0.2, 0, 0, 2.18971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.164, 0.2, 0, 0, 2.38971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.164, 0.2, 0, 0, 2.58971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.164, 0.2, 0, 0, 2.78971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.164, 0.2, 0, 0, 2.98971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.164, 0.2, 0, 0, 3.18971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.164, 0.2, 0, 0, 3.38971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.164, 0.2, 0, 0, 3.58971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.164, 0.2, 0, 0, 3.78971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.164, 0.2, 0, 0, 0.189712, 0, 0.2, 0, 0, 0, 0, 0.2, 0.164, 0.2, 0, 0, 0.389712, 0, 0.2, 0, 0, 0, 0, 0.2, 0.164, 0.2, 0, 0, 0.589712, 0, 0.2, 0, 0, 0, 0, 0.2, 0.164, 0.2, 0, 0, 0.789712, 0, 0.2, 0, 0, 0, 0, 0.2, 0.164, 0.2, 0, 0, 0.989712, 0, 0.2, 0, 0, 0, 0, 0.2, 0.164, 0.2, 0, 0, 1.18971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.164, 0.2, 0, 0, 1.38971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.164, 0.2, 0, 0, 1.58971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.164, 0.2, 0, 0, 1.78971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.164, 0.2, 0, 0, 1.98971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.164, 0.2, 0, 0, 2.18971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.164, 0.2, 0, 0, 2.38971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.164, 0.2, 0, 0, 2.58971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.164, 0.2, 0, 0, 2.78971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.164, 0.2, 0, 0, 2.98971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.164, 0.2, 0, 0, 3.18971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.164, 0.2, 0, 0, 3.38971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.164, 0.2, 0, 0, 3.58971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.164, 0.2, 0, 0, 3.78971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.164, 0.2, 0, 0, 0.389712, 0, 0.2, 0, 0, 0, 0, 0.2, 0.492, 0.2, 0, 0, 0.589712, 0, 0.2, 0, 0, 0, 0, 0.2, 0.492, 0.2, 0, 0, 0.789712, 0, 0.2, 0, 0, 0, 0, 0.2, 0.492, 0.2, 0, 0, 0.989712, 0, 0.2, 0, 0, 0, 0, 0.2, 0.492, 0.2, 0, 0, 1.18971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.492, 0.2, 0, 0, 1.38971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.492, 0.2, 0, 0, 1.58971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.492, 0.2, 0, 0, 1.78971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.492, 0.2, 0, 0, 1.98971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.492, 0.2, 0, 0, 2.18971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.492, 0.2, 0, 0, 2.38971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.492, 0.2, 0, 0, 2.58971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.492, 0.2, 0, 0, 2.78971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.492, 0.2, 0, 0, 2.98971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.492, 0.2, 0, 0, 3.18971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.492, 0.2, 0, 0, 3.38971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.492, 0.2, 0, 0, 3.58971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.492, 0.2, 0, 0, 0.589712, 0, 0.2, 0, 0, 0, 0, 0.2, 0.82, 0.2, 0, 0, 0.789712, 0, 0.2, 0, 0, 0, 0, 0.2, 0.82, 0.2, 0, 0, 0.989712, 0, 0.2, 0, 0, 0, 0, 0.2, 0.82, 0.2, 0, 0, 1.18971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.82, 0.2, 0, 0, 1.38971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.82, 0.2, 0, 0, 1.58971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.82, 0.2, 0, 0, 1.78971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.82, 0.2, 0, 0, 1.98971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.82, 0.2, 0, 0, 2.18971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.82, 0.2, 0, 0, 2.38971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.82, 0.2, 0, 0, 2.58971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.82, 0.2, 0, 0, 2.78971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.82, 0.2, 0, 0, 2.98971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.82, 0.2, 0, 0, 3.18971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.82, 0.2, 0, 0, 3.38971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.82, 0.2, 0, 0, 0.789712, 0, 0.2, 0, 0, 0, 0, 0.2, 1.148, 0.2, 0, 0, 0.989712, 0, 0.2, 0, 0, 0, 0, 0.2, 1.148, 0.2, 0, 0, 1.18971, 0, 0.2, 0, 0, 0, 0, 0.2, 1.148, 0.2, 0, 0, 1.38971, 0, 0.2, 0, 0, 0, 0, 0.2, 1.148, 0.2, 0, 0, 1.58971, 0, 0.2, 0, 0, 0, 0, 0.2, 1.148, 0.2, 0, 0, 1.78971, 0, 0.2, 0, 0, 0, 0, 0.2, 1.148, 0.2, 0, 0, 1.98971, 0, 0.2, 0, 0, 0, 0, 0.2, 1.148, 0.2, 0, 0, 2.18971, 0, 0.2, 0, 0, 0, 0, 0.2, 1.148, 0.2, 0, 0, 2.38971, 0, 0.2, 0, 0, 0, 0, 0.2, 1.148, 0.2, 0, 0, 2.58971, 0, 0.2, 0, 0, 0, 0, 0.2, 1.148, 0.2, 0, 0, 2.78971, 0, 0.2, 0, 0, 0, 0, 0.2, 1.148, 0.2, 0, 0, 2.98971, 0, 0.2, 0, 0, 0, 0, 0.2, 1.148, 0.2, 0, 0, 3.18971, 0, 0.2, 0, 0, 0, 0, 0.2, 1.148, 0.2, 0, 0, 0.989712, 0, 0.2, 0, 0, 0, 0, 0.2, 1.476, 0.2, 0, 0, 1.18971, 0, 0.2, 0, 0, 0, 0, 0.2, 1.476, 0.2, 0, 0, 1.38971, 0, 0.2, 0, 0, 0, 0, 0.2, 1.476, 0.2, 0, 0, 1.58971, 0, 0.2, 0, 0, 0, 0, 0.2, 1.476, 0.2, 0, 0, 1.78971, 0, 0.2, 0, 0, 0, 0, 0.2, 1.476, 0.2, 0, 0, 1.98971, 0, 0.2, 0, 0, 0, 0, 0.2, 1.476, 0.2, 0, 0, 2.18971, 0, 0.2, 0, 0, 0, 0, 0.2, 1.476, 0.2, 0, 0, 2.38971, 0, 0.2, 0, 0, 0, 0, 0.2, 1.476, 0.2, 0, 0, 2.58971, 0, 0.2, 0, 0, 0, 0, 0.2, 1.476, 0.2, 0, 0, 2.78971, 0, 0.2, 0, 0, 0, 0, 0.2, 1.476, 0.2, 0, 0, 2.98971, 0, 0.2, 0, 0, 0, 0, 0.2, 1.476, 0.2, 0, 0, 1.28971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.64, 0.2, 0, 0, 1.48971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.64, 0.2, 0, 0, 1.68971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.64, 0.2, 0, 0, 1.88971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.64, 0.2, 0, 0, 2.08971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.64, 0.2, 0, 0, 2.28971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.64, 0.2, 0, 0, 2.48971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.64, 0.2, 0, 0, 2.68971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.64, 0.2, 0, 0, 2.88971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.64, 0.2, 0, 0, 1.08971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.312, 0.2, 0, 0, 1.28971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.312, 0.2, 0, 0, 1.48971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.312, 0.2, 0, 0, 1.68971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.312, 0.2, 0, 0, 1.88971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.312, 0.2, 0, 0, 2.08971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.312, 0.2, 0, 0, 2.28971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.312, 0.2, 0, 0, 2.48971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.312, 0.2, 0, 0, 2.68971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.312, 0.2, 0, 0, 2.88971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.312, 0.2, 0, 0, 3.08971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.312, 0.2, 0, 0, 3.28971, 0, 0.2, 0, 0, 0, 0, 0.2, -1.312, 0.2, 0, 0, 0.689712, 0, 0.2, 0, 0, 0, 0, 0.2, -0.984, 0.2, 0, 0, 0.889712, 0, 0.2, 0, 0, 0, 0, 0.2, -0.984, 0.2, 0, 0, 1.08971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.984, 0.2, 0, 0, 1.28971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.984, 0.2, 0, 0, 1.48971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.984, 0.2, 0, 0, 1.68971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.984, 0.2, 0, 0, 1.88971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.984, 0.2, 0, 0, 2.08971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.984, 0.2, 0, 0, 2.28971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.984, 0.2, 0, 0, 2.48971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.984, 0.2, 0, 0, 2.68971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.984, 0.2, 0, 0, 2.88971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.984, 0.2, 0, 0, 3.08971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.984, 0.2, 0, 0, 3.28971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.984, 0.2, 0, 0, 3.48971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.984, 0.2, 0, 0, 0.489712, 0, 0.2, 0, 0, 0, 0, 0.2, -0.656, 0.2, 0, 0, 0.689712, 0, 0.2, 0, 0, 0, 0, 0.2, -0.656, 0.2, 0, 0, 0.889712, 0, 0.2, 0, 0, 0, 0, 0.2, -0.656, 0.2, 0, 0, 1.08971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.656, 0.2, 0, 0, 1.28971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.656, 0.2, 0, 0, 1.48971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.656, 0.2, 0, 0, 1.68971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.656, 0.2, 0, 0, 1.88971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.656, 0.2, 0, 0, 2.08971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.656, 0.2, 0, 0, 2.28971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.656, 0.2, 0, 0, 2.48971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.656, 0.2, 0, 0, 2.68971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.656, 0.2, 0, 0, 2.88971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.656, 0.2, 0, 0, 3.08971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.656, 0.2, 0, 0, 3.28971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.656, 0.2, 0, 0, 3.48971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.656, 0.2, 0, 0, 3.68971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.656, 0.2, 0, 0, 0.289712, 0, 0.2, 0, 0, 0, 0, 0.2, -0.328, 0.2, 0, 0, 0.489712, 0, 0.2, 0, 0, 0, 0, 0.2, -0.328, 0.2, 0, 0, 0.689712, 0, 0.2, 0, 0, 0, 0, 0.2, -0.328, 0.2, 0, 0, 0.889712, 0, 0.2, 0, 0, 0, 0, 0.2, -0.328, 0.2, 0, 0, 1.08971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.328, 0.2, 0, 0, 1.28971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.328, 0.2, 0, 0, 1.48971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.328, 0.2, 0, 0, 1.68971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.328, 0.2, 0, 0, 1.88971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.328, 0.2, 0, 0, 2.08971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.328, 0.2, 0, 0, 2.28971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.328, 0.2, 0, 0, 2.48971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.328, 0.2, 0, 0, 2.68971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.328, 0.2, 0, 0, 2.88971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.328, 0.2, 0, 0, 3.08971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.328, 0.2, 0, 0, 3.28971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.328, 0.2, 0, 0, 3.48971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.328, 0.2, 0, 0, 3.68971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.328, 0.2, 0, 0, 3.88971, 0, 0.2, 0, 0, 0, 0, 0.2, -0.328, 0.2, 0, 0, 0.289712, 0, 0.2, 0, 0, 0, 0, 0.2, 2.44379e-08, 0.2, 0, 0, 0.489712, 0, 0.2, 0, 0, 0, 0, 0.2, 2.44379e-08, 0.2, 0, 0, 0.689712, 0, 0.2, 0, 0, 0, 0, 0.2, 2.44379e-08, 0.2, 0, 0, 0.889712, 0, 0.2, 0, 0, 0, 0, 0.2, 2.44379e-08, 0.2, 0, 0, 1.08971, 0, 0.2, 0, 0, 0, 0, 0.2, 2.44379e-08, 0.2, 0, 0, 1.28971, 0, 0.2, 0, 0, 0, 0, 0.2, 2.44379e-08, 0.2, 0, 0, 1.48971, 0, 0.2, 0, 0, 0, 0, 0.2, 2.44379e-08, 0.2, 0, 0, 1.68971, 0, 0.2, 0, 0, 0, 0, 0.2, 2.44379e-08, 0.2, 0, 0, 1.88971, 0, 0.2, 0, 0, 0, 0, 0.2, 2.44379e-08, 0.2, 0, 0, 2.08971, 0, 0.2, 0, 0, 0, 0, 0.2, 2.44379e-08, 0.2, 0, 0, 2.28971, 0, 0.2, 0, 0, 0, 0, 0.2, 2.44379e-08, 0.2, 0, 0, 2.48971, 0, 0.2, 0, 0, 0, 0, 0.2, 2.44379e-08, 0.2, 0, 0, 2.68971, 0, 0.2, 0, 0, 0, 0, 0.2, 2.44379e-08, 0.2, 0, 0, 2.88971, 0, 0.2, 0, 0, 0, 0, 0.2, 2.44379e-08, 0.2, 0, 0, 3.08971, 0, 0.2, 0, 0, 0, 0, 0.2, 2.44379e-08, 0.2, 0, 0, 3.28971, 0, 0.2, 0, 0, 0, 0, 0.2, 2.44379e-08, 0.2, 0, 0, 3.48971, 0, 0.2, 0, 0, 0, 0, 0.2, 2.44379e-08, 0.2, 0, 0, 3.68971, 0, 0.2, 0, 0, 0, 0, 0.2, 2.44379e-08, 0.2, 0, 0, 3.88971, 0, 0.2, 0, 0, 0, 0, 0.2, 2.44379e-08, 0.2, 0, 0, 0.289712, 0, 0.2, 0, 0, 0, 0, 0.2, 0.328, 0.2, 0, 0, 0.489712, 0, 0.2, 0, 0, 0, 0, 0.2, 0.328, 0.2, 0, 0, 0.689712, 0, 0.2, 0, 0, 0, 0, 0.2, 0.328, 0.2, 0, 0, 0.889712, 0, 0.2, 0, 0, 0, 0, 0.2, 0.328, 0.2, 0, 0, 1.08971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.328, 0.2, 0, 0, 1.28971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.328, 0.2, 0, 0, 1.48971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.328, 0.2, 0, 0, 1.68971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.328, 0.2, 0, 0, 1.88971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.328, 0.2, 0, 0, 2.08971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.328, 0.2, 0, 0, 2.28971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.328, 0.2, 0, 0, 2.48971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.328, 0.2, 0, 0, 2.68971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.328, 0.2, 0, 0, 2.88971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.328, 0.2, 0, 0, 3.08971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.328, 0.2, 0, 0, 3.28971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.328, 0.2, 0, 0, 3.48971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.328, 0.2, 0, 0, 3.68971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.328, 0.2, 0, 0, 3.88971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.328, 0.2, 0, 0, 0.489712, 0, 0.2, 0, 0, 0, 0, 0.2, 0.656, 0.2, 0, 0, 0.689712, 0, 0.2, 0, 0, 0, 0, 0.2, 0.656, 0.2, 0, 0, 0.889712, 0, 0.2, 0, 0, 0, 0, 0.2, 0.656, 0.2, 0, 0, 1.08971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.656, 0.2, 0, 0, 1.28971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.656, 0.2, 0, 0, 1.48971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.656, 0.2, 0, 0, 1.68971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.656, 0.2, 0, 0, 1.88971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.656, 0.2, 0, 0, 2.08971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.656, 0.2, 0, 0, 2.28971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.656, 0.2, 0, 0, 2.48971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.656, 0.2, 0, 0, 2.68971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.656, 0.2, 0, 0, 2.88971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.656, 0.2, 0, 0, 3.08971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.656, 0.2, 0, 0, 3.28971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.656, 0.2, 0, 0, 3.48971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.656, 0.2, 0, 0, 3.68971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.656, 0.2, 0, 0, 0.889712, 0, 0.2, 0, 0, 0, 0, 0.2, 0.984, 0.2, 0, 0, 1.08971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.984, 0.2, 0, 0, 1.28971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.984, 0.2, 0, 0, 1.48971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.984, 0.2, 0, 0, 1.68971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.984, 0.2, 0, 0, 1.88971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.984, 0.2, 0, 0, 2.08971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.984, 0.2, 0, 0, 2.28971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.984, 0.2, 0, 0, 2.48971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.984, 0.2, 0, 0, 2.68971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.984, 0.2, 0, 0, 2.88971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.984, 0.2, 0, 0, 3.08971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.984, 0.2, 0, 0, 3.28971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.984, 0.2, 0, 0, 3.48971, 0, 0.2, 0, 0, 0, 0, 0.2, 0.984, 0.2, 0, 0, 1.08971, 0, 0.2, 0, 0, 0, 0, 0.2, 1.312, 0.2, 0, 0, 1.28971, 0, 0.2, 0, 0, 0, 0, 0.2, 1.312, 0.2, 0, 0, 1.48971, 0, 0.2, 0, 0, 0, 0, 0.2, 1.312, 0.2, 0, 0, 1.68971, 0, 0.2, 0, 0, 0, 0, 0.2, 1.312, 0.2, 0, 0, 1.88971, 0, 0.2, 0, 0, 0, 0, 0.2, 1.312, 0.2, 0, 0, 2.08971, 0, 0.2, 0, 0, 0, 0, 0.2, 1.312, 0.2, 0, 0, 2.28971, 0, 0.2, 0, 0, 0, 0, 0.2, 1.312, 0.2, 0, 0, 2.48971, 0, 0.2, 0, 0, 0, 0, 0.2, 1.312, 0.2, 0, 0, 2.68971, 0, 0.2, 0, 0, 0, 0, 0.2, 1.312, 0.2, 0, 0, 2.88971, 0, 0.2, 0, 0, 0, 0, 0.2, 1.312, 0.2, 0, 0, 3.08971, 0, 0.2, 0, 0, 0, 0, 0.2, 1.312, 0.2, 0, 0, 3.28971, 0, 0.2, 0, 0, 0, 0, 0.2, 1.312, 0.2, 0, 0, 0.989712, 0, 0.2, 0, 2, 0, 0, 0.2, -1.476, 0.2, 0, 0, 1.18971, 0, 0.2, 0, 2, 0, 0, 0.2, -1.476, 0.2, 0, 0, 1.38971, 0, 0.2, 0, 2, 0, 0, 0.2, -1.476, 0.2, 0, 0, 1.58971, 0, 0.2, 0, 2, 0, 0, 0.2, -1.476, 0.2, 0, 0, 1.78971, 0, 0.2, 0, 2, 0, 0, 0.2, -1.476, 0.2, 0, 0, 1.98971, 0, 0.2, 0, 2, 0, 0, 0.2, -1.476, 0.2, 0, 0, 2.18971, 0, 0.2, 0, 2, 0, 0, 0.2, -1.476, 0.2, 0, 0, 2.38971, 0, 0.2, 0, 2, 0, 0, 0.2, -1.476, 0.2, 0, 0, 2.58971, 0, 0.2, 0, 2, 0, 0, 0.2, -1.476, 0.2, 0, 0, 2.78971, 0, 0.2, 0, 2, 0, 0, 0.2, -1.476, 0.2, 0, 0, 2.98971, 0, 0.2, 0, 2, 0, 0, 0.2, -1.476, 0.2, 0, 0, 0.789712, 0, 0.2, 0, 2, 0, 0, 0.2, -1.148, 0.2, 0, 0, 0.989712, 0, 0.2, 0, 2, 0, 0, 0.2, -1.148, 0.2, 0, 0, 1.18971, 0, 0.2, 0, 2, 0, 0, 0.2, -1.148, 0.2, 0, 0, 1.38971, 0, 0.2, 0, 2, 0, 0, 0.2, -1.148, 0.2, 0, 0, 1.58971, 0, 0.2, 0, 2, 0, 0, 0.2, -1.148, 0.2, 0, 0, 1.78971, 0, 0.2, 0, 2, 0, 0, 0.2, -1.148, 0.2, 0, 0, 1.98971, 0, 0.2, 0, 2, 0, 0, 0.2, -1.148, 0.2, 0, 0, 2.18971, 0, 0.2, 0, 2, 0, 0, 0.2, -1.148, 0.2, 0, 0, 2.38971, 0, 0.2, 0, 2, 0, 0, 0.2, -1.148, 0.2, 0, 0, 2.58971, 0, 0.2, 0, 2, 0, 0, 0.2, -1.148, 0.2, 0, 0, 2.78971, 0, 0.2, 0, 2, 0, 0, 0.2, -1.148, 0.2, 0, 0, 2.98971, 0, 0.2, 0, 2, 0, 0, 0.2, -1.148, 0.2, 0, 0, 3.18971, 0, 0.2, 0, 2, 0, 0, 0.2, -1.148, 0.2, 0, 0, 0.589712, 0, 0.2, 0, 2, 0, 0, 0.2, -0.82, 0.2, 0, 0, 0.789712, 0, 0.2, 0, 2, 0, 0, 0.2, -0.82, 0.2, 0, 0, 0.989712, 0, 0.2, 0, 2, 0, 0, 0.2, -0.82, 0.2, 0, 0, 1.18971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.82, 0.2, 0, 0, 1.38971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.82, 0.2, 0, 0, 1.58971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.82, 0.2, 0, 0, 1.78971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.82, 0.2, 0, 0, 1.98971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.82, 0.2, 0, 0, 2.18971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.82, 0.2, 0, 0, 2.38971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.82, 0.2, 0, 0, 2.58971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.82, 0.2, 0, 0, 2.78971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.82, 0.2, 0, 0, 2.98971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.82, 0.2, 0, 0, 3.18971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.82, 0.2, 0, 0, 3.38971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.82, 0.2, 0, 0, 0.389712, 0, 0.2, 0, 2, 0, 0, 0.2, -0.492, 0.2, 0, 0, 0.589712, 0, 0.2, 0, 2, 0, 0, 0.2, -0.492, 0.2, 0, 0, 0.789712, 0, 0.2, 0, 2, 0, 0, 0.2, -0.492, 0.2, 0, 0, 0.989712, 0, 0.2, 0, 2, 0, 0, 0.2, -0.492, 0.2, 0, 0, 1.18971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.492, 0.2, 0, 0, 1.38971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.492, 0.2, 0, 0, 1.58971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.492, 0.2, 0, 0, 1.78971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.492, 0.2, 0, 0, 1.98971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.492, 0.2, 0, 0, 2.18971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.492, 0.2, 0, 0, 2.38971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.492, 0.2, 0, 0, 2.58971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.492, 0.2, 0, 0, 2.78971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.492, 0.2, 0, 0, 2.98971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.492, 0.2, 0, 0, 3.18971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.492, 0.2, 0, 0, 3.38971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.492, 0.2, 0, 0, 3.58971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.492, 0.2, 0, 0, 0.189712, 0, 0.2, 0, 2, 0, 0, 0.2, -0.164, 0.2, 0, 0, 0.389712, 0, 0.2, 0, 2, 0, 0, 0.2, -0.164, 0.2, 0, 0, 0.589712, 0, 0.2, 0, 2, 0, 0, 0.2, -0.164, 0.2, 0, 0, 0.789712, 0, 0.2, 0, 2, 0, 0, 0.2, -0.164, 0.2, 0, 0, 0.989712, 0, 0.2, 0, 2, 0, 0, 0.2, -0.164, 0.2, 0, 0, 1.18971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.164, 0.2, 0, 0, 1.38971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.164, 0.2, 0, 0, 1.58971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.164, 0.2, 0, 0, 1.78971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.164, 0.2, 0, 0, 1.98971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.164, 0.2, 0, 0, 2.18971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.164, 0.2, 0, 0, 2.38971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.164, 0.2, 0, 0, 2.58971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.164, 0.2, 0, 0, 2.78971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.164, 0.2, 0, 0, 2.98971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.164, 0.2, 0, 0, 3.18971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.164, 0.2, 0, 0, 3.38971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.164, 0.2, 0, 0, 3.58971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.164, 0.2, 0, 0, 3.78971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.164, 0.2, 0, 0, 0.189712, 0, 0.2, 0, 2, 0, 0, 0.2, 0.164, 0.2, 0, 0, 0.389712, 0, 0.2, 0, 2, 0, 0, 0.2, 0.164, 0.2, 0, 0, 0.589712, 0, 0.2, 0, 2, 0, 0, 0.2, 0.164, 0.2, 0, 0, 0.789712, 0, 0.2, 0, 2, 0, 0, 0.2, 0.164, 0.2, 0, 0, 0.989712, 0, 0.2, 0, 2, 0, 0, 0.2, 0.164, 0.2, 0, 0, 1.18971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.164, 0.2, 0, 0, 1.38971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.164, 0.2, 0, 0, 1.58971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.164, 0.2, 0, 0, 1.78971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.164, 0.2, 0, 0, 1.98971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.164, 0.2, 0, 0, 2.18971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.164, 0.2, 0, 0, 2.38971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.164, 0.2, 0, 0, 2.58971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.164, 0.2, 0, 0, 2.78971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.164, 0.2, 0, 0, 2.98971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.164, 0.2, 0, 0, 3.18971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.164, 0.2, 0, 0, 3.38971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.164, 0.2, 0, 0, 3.58971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.164, 0.2, 0, 0, 3.78971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.164, 0.2, 0, 0, 0.389712, 0, 0.2, 0, 2, 0, 0, 0.2, 0.492, 0.2, 0, 0, 0.589712, 0, 0.2, 0, 2, 0, 0, 0.2, 0.492, 0.2, 0, 0, 0.789712, 0, 0.2, 0, 2, 0, 0, 0.2, 0.492, 0.2, 0, 0, 0.989712, 0, 0.2, 0, 2, 0, 0, 0.2, 0.492, 0.2, 0, 0, 1.18971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.492, 0.2, 0, 0, 1.38971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.492, 0.2, 0, 0, 1.58971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.492, 0.2, 0, 0, 1.78971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.492, 0.2, 0, 0, 1.98971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.492, 0.2, 0, 0, 2.18971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.492, 0.2, 0, 0, 2.38971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.492, 0.2, 0, 0, 2.58971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.492, 0.2, 0, 0, 2.78971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.492, 0.2, 0, 0, 2.98971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.492, 0.2, 0, 0, 3.18971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.492, 0.2, 0, 0, 3.38971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.492, 0.2, 0, 0, 3.58971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.492, 0.2, 0, 0, 0.589712, 0, 0.2, 0, 2, 0, 0, 0.2, 0.82, 0.2, 0, 0, 0.789712, 0, 0.2, 0, 2, 0, 0, 0.2, 0.82, 0.2, 0, 0, 0.989712, 0, 0.2, 0, 2, 0, 0, 0.2, 0.82, 0.2, 0, 0, 1.18971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.82, 0.2, 0, 0, 1.38971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.82, 0.2, 0, 0, 1.58971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.82, 0.2, 0, 0, 1.78971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.82, 0.2, 0, 0, 1.98971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.82, 0.2, 0, 0, 2.18971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.82, 0.2, 0, 0, 2.38971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.82, 0.2, 0, 0, 2.58971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.82, 0.2, 0, 0, 2.78971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.82, 0.2, 0, 0, 2.98971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.82, 0.2, 0, 0, 3.18971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.82, 0.2, 0, 0, 3.38971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.82, 0.2, 0, 0, 0.789712, 0, 0.2, 0, 2, 0, 0, 0.2, 1.148, 0.2, 0, 0, 0.989712, 0, 0.2, 0, 2, 0, 0, 0.2, 1.148, 0.2, 0, 0, 1.18971, 0, 0.2, 0, 2, 0, 0, 0.2, 1.148, 0.2, 0, 0, 1.38971, 0, 0.2, 0, 2, 0, 0, 0.2, 1.148, 0.2, 0, 0, 1.58971, 0, 0.2, 0, 2, 0, 0, 0.2, 1.148, 0.2, 0, 0, 1.78971, 0, 0.2, 0, 2, 0, 0, 0.2, 1.148, 0.2, 0, 0, 1.98971, 0, 0.2, 0, 2, 0, 0, 0.2, 1.148, 0.2, 0, 0, 2.18971, 0, 0.2, 0, 2, 0, 0, 0.2, 1.148, 0.2, 0, 0, 2.38971, 0, 0.2, 0, 2, 0, 0, 0.2, 1.148, 0.2, 0, 0, 2.58971, 0, 0.2, 0, 2, 0, 0, 0.2, 1.148, 0.2, 0, 0, 2.78971, 0, 0.2, 0, 2, 0, 0, 0.2, 1.148, 0.2, 0, 0, 2.98971, 0, 0.2, 0, 2, 0, 0, 0.2, 1.148, 0.2, 0, 0, 3.18971, 0, 0.2, 0, 2, 0, 0, 0.2, 1.148, 0.2, 0, 0, 0.989712, 0, 0.2, 0, 2, 0, 0, 0.2, 1.476, 0.2, 0, 0, 1.18971, 0, 0.2, 0, 2, 0, 0, 0.2, 1.476, 0.2, 0, 0, 1.38971, 0, 0.2, 0, 2, 0, 0, 0.2, 1.476, 0.2, 0, 0, 1.58971, 0, 0.2, 0, 2, 0, 0, 0.2, 1.476, 0.2, 0, 0, 1.78971, 0, 0.2, 0, 2, 0, 0, 0.2, 1.476, 0.2, 0, 0, 1.98971, 0, 0.2, 0, 2, 0, 0, 0.2, 1.476, 0.2, 0, 0, 2.18971, 0, 0.2, 0, 2, 0, 0, 0.2, 1.476, 0.2, 0, 0, 2.38971, 0, 0.2, 0, 2, 0, 0, 0.2, 1.476, 0.2, 0, 0, 2.58971, 0, 0.2, 0, 2, 0, 0, 0.2, 1.476, 0.2, 0, 0, 2.78971, 0, 0.2, 0, 2, 0, 0, 0.2, 1.476, 0.2, 0, 0, 2.98971, 0, 0.2, 0, 2, 0, 0, 0.2, 1.476, 0.2, 0, 0, 1.28971, 0, 0.2, 0, 2, 0, 0, 0.2, -1.64, 0.2, 0, 0, 1.48971, 0, 0.2, 0, 2, 0, 0, 0.2, -1.64, 0.2, 0, 0, 1.68971, 0, 0.2, 0, 2, 0, 0, 0.2, -1.64, 0.2, 0, 0, 1.88971, 0, 0.2, 0, 2, 0, 0, 0.2, -1.64, 0.2, 0, 0, 2.08971, 0, 0.2, 0, 2, 0, 0, 0.2, -1.64, 0.2, 0, 0, 2.28971, 0, 0.2, 0, 2, 0, 0, 0.2, -1.64, 0.2, 0, 0, 2.48971, 0, 0.2, 0, 2, 0, 0, 0.2, -1.64, 0.2, 0, 0, 2.68971, 0, 0.2, 0, 2, 0, 0, 0.2, -1.64, 0.2, 0, 0, 2.88971, 0, 0.2, 0, 2, 0, 0, 0.2, -1.64, 0.2, 0, 0, 1.08971, 0, 0.2, 0, 2, 0, 0, 0.2, -1.312, 0.2, 0, 0, 1.28971, 0, 0.2, 0, 2, 0, 0, 0.2, -1.312, 0.2, 0, 0, 1.48971, 0, 0.2, 0, 2, 0, 0, 0.2, -1.312, 0.2, 0, 0, 1.68971, 0, 0.2, 0, 2, 0, 0, 0.2, -1.312, 0.2, 0, 0, 1.88971, 0, 0.2, 0, 2, 0, 0, 0.2, -1.312, 0.2, 0, 0, 2.08971, 0, 0.2, 0, 2, 0, 0, 0.2, -1.312, 0.2, 0, 0, 2.28971, 0, 0.2, 0, 2, 0, 0, 0.2, -1.312, 0.2, 0, 0, 2.48971, 0, 0.2, 0, 2, 0, 0, 0.2, -1.312, 0.2, 0, 0, 2.68971, 0, 0.2, 0, 2, 0, 0, 0.2, -1.312, 0.2, 0, 0, 2.88971, 0, 0.2, 0, 2, 0, 0, 0.2, -1.312, 0.2, 0, 0, 3.08971, 0, 0.2, 0, 2, 0, 0, 0.2, -1.312, 0.2, 0, 0, 3.28971, 0, 0.2, 0, 2, 0, 0, 0.2, -1.312, 0.2, 0, 0, 0.689712, 0, 0.2, 0, 2, 0, 0, 0.2, -0.984, 0.2, 0, 0, 0.889712, 0, 0.2, 0, 2, 0, 0, 0.2, -0.984, 0.2, 0, 0, 1.08971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.984, 0.2, 0, 0, 1.28971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.984, 0.2, 0, 0, 1.48971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.984, 0.2, 0, 0, 1.68971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.984, 0.2, 0, 0, 1.88971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.984, 0.2, 0, 0, 2.08971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.984, 0.2, 0, 0, 2.28971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.984, 0.2, 0, 0, 2.48971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.984, 0.2, 0, 0, 2.68971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.984, 0.2, 0, 0, 2.88971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.984, 0.2, 0, 0, 3.08971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.984, 0.2, 0, 0, 3.28971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.984, 0.2, 0, 0, 3.48971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.984, 0.2, 0, 0, 0.489712, 0, 0.2, 0, 2, 0, 0, 0.2, -0.656, 0.2, 0, 0, 0.689712, 0, 0.2, 0, 2, 0, 0, 0.2, -0.656, 0.2, 0, 0, 0.889712, 0, 0.2, 0, 2, 0, 0, 0.2, -0.656, 0.2, 0, 0, 1.08971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.656, 0.2, 0, 0, 1.28971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.656, 0.2, 0, 0, 1.48971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.656, 0.2, 0, 0, 1.68971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.656, 0.2, 0, 0, 1.88971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.656, 0.2, 0, 0, 2.08971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.656, 0.2, 0, 0, 2.28971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.656, 0.2, 0, 0, 2.48971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.656, 0.2, 0, 0, 2.68971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.656, 0.2, 0, 0, 2.88971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.656, 0.2, 0, 0, 3.08971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.656, 0.2, 0, 0, 3.28971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.656, 0.2, 0, 0, 3.48971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.656, 0.2, 0, 0, 3.68971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.656, 0.2, 0, 0, 0.289712, 0, 0.2, 0, 2, 0, 0, 0.2, -0.328, 0.2, 0, 0, 0.489712, 0, 0.2, 0, 2, 0, 0, 0.2, -0.328, 0.2, 0, 0, 0.689712, 0, 0.2, 0, 2, 0, 0, 0.2, -0.328, 0.2, 0, 0, 0.889712, 0, 0.2, 0, 2, 0, 0, 0.2, -0.328, 0.2, 0, 0, 1.08971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.328, 0.2, 0, 0, 1.28971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.328, 0.2, 0, 0, 1.48971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.328, 0.2, 0, 0, 1.68971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.328, 0.2, 0, 0, 1.88971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.328, 0.2, 0, 0, 2.08971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.328, 0.2, 0, 0, 2.28971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.328, 0.2, 0, 0, 2.48971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.328, 0.2, 0, 0, 2.68971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.328, 0.2, 0, 0, 2.88971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.328, 0.2, 0, 0, 3.08971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.328, 0.2, 0, 0, 3.28971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.328, 0.2, 0, 0, 3.48971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.328, 0.2, 0, 0, 3.68971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.328, 0.2, 0, 0, 3.88971, 0, 0.2, 0, 2, 0, 0, 0.2, -0.328, 0.2, 0, 0, 0.289712, 0, 0.2, 0, 2, 0, 0, 0.2, 2.44379e-08, 0.2, 0, 0, 0.489712, 0, 0.2, 0, 2, 0, 0, 0.2, 2.44379e-08, 0.2, 0, 0, 0.689712, 0, 0.2, 0, 2, 0, 0, 0.2, 2.44379e-08, 0.2, 0, 0, 0.889712, 0, 0.2, 0, 2, 0, 0, 0.2, 2.44379e-08, 0.2, 0, 0, 1.08971, 0, 0.2, 0, 2, 0, 0, 0.2, 2.44379e-08, 0.2, 0, 0, 1.28971, 0, 0.2, 0, 2, 0, 0, 0.2, 2.44379e-08, 0.2, 0, 0, 1.48971, 0, 0.2, 0, 2, 0, 0, 0.2, 2.44379e-08, 0.2, 0, 0, 1.68971, 0, 0.2, 0, 2, 0, 0, 0.2, 2.44379e-08, 0.2, 0, 0, 1.88971, 0, 0.2, 0, 2, 0, 0, 0.2, 2.44379e-08, 0.2, 0, 0, 2.08971, 0, 0.2, 0, 2, 0, 0, 0.2, 2.44379e-08, 0.2, 0, 0, 2.28971, 0, 0.2, 0, 2, 0, 0, 0.2, 2.44379e-08, 0.2, 0, 0, 2.48971, 0, 0.2, 0, 2, 0, 0, 0.2, 2.44379e-08, 0.2, 0, 0, 2.68971, 0, 0.2, 0, 2, 0, 0, 0.2, 2.44379e-08, 0.2, 0, 0, 2.88971, 0, 0.2, 0, 2, 0, 0, 0.2, 2.44379e-08, 0.2, 0, 0, 3.08971, 0, 0.2, 0, 2, 0, 0, 0.2, 2.44379e-08, 0.2, 0, 0, 3.28971, 0, 0.2, 0, 2, 0, 0, 0.2, 2.44379e-08, 0.2, 0, 0, 3.48971, 0, 0.2, 0, 2, 0, 0, 0.2, 2.44379e-08, 0.2, 0, 0, 3.68971, 0, 0.2, 0, 2, 0, 0, 0.2, 2.44379e-08, 0.2, 0, 0, 3.88971, 0, 0.2, 0, 2, 0, 0, 0.2, 2.44379e-08, 0.2, 0, 0, 0.289712, 0, 0.2, 0, 2, 0, 0, 0.2, 0.328, 0.2, 0, 0, 0.489712, 0, 0.2, 0, 2, 0, 0, 0.2, 0.328, 0.2, 0, 0, 0.689712, 0, 0.2, 0, 2, 0, 0, 0.2, 0.328, 0.2, 0, 0, 0.889712, 0, 0.2, 0, 2, 0, 0, 0.2, 0.328, 0.2, 0, 0, 1.08971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.328, 0.2, 0, 0, 1.28971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.328, 0.2, 0, 0, 1.48971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.328, 0.2, 0, 0, 1.68971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.328, 0.2, 0, 0, 1.88971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.328, 0.2, 0, 0, 2.08971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.328, 0.2, 0, 0, 2.28971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.328, 0.2, 0, 0, 2.48971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.328, 0.2, 0, 0, 2.68971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.328, 0.2, 0, 0, 2.88971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.328, 0.2, 0, 0, 3.08971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.328, 0.2, 0, 0, 3.28971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.328, 0.2, 0, 0, 3.48971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.328, 0.2, 0, 0, 3.68971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.328, 0.2, 0, 0, 3.88971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.328, 0.2, 0, 0, 0.489712, 0, 0.2, 0, 2, 0, 0, 0.2, 0.656, 0.2, 0, 0, 0.689712, 0, 0.2, 0, 2, 0, 0, 0.2, 0.656, 0.2, 0, 0, 0.889712, 0, 0.2, 0, 2, 0, 0, 0.2, 0.656, 0.2, 0, 0, 1.08971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.656, 0.2, 0, 0, 1.28971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.656, 0.2, 0, 0, 1.48971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.656, 0.2, 0, 0, 1.68971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.656, 0.2, 0, 0, 1.88971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.656, 0.2, 0, 0, 2.08971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.656, 0.2, 0, 0, 2.28971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.656, 0.2, 0, 0, 2.48971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.656, 0.2, 0, 0, 2.68971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.656, 0.2, 0, 0, 2.88971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.656, 0.2, 0, 0, 3.08971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.656, 0.2, 0, 0, 3.28971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.656, 0.2, 0, 0, 3.48971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.656, 0.2, 0, 0, 3.68971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.656, 0.2, 0, 0, 0.889712, 0, 0.2, 0, 2, 0, 0, 0.2, 0.984, 0.2, 0, 0, 1.08971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.984, 0.2, 0, 0, 1.28971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.984, 0.2, 0, 0, 1.48971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.984, 0.2, 0, 0, 1.68971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.984, 0.2, 0, 0, 1.88971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.984, 0.2, 0, 0, 2.08971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.984, 0.2, 0, 0, 2.28971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.984, 0.2, 0, 0, 2.48971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.984, 0.2, 0, 0, 2.68971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.984, 0.2, 0, 0, 2.88971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.984, 0.2, 0, 0, 3.08971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.984, 0.2, 0, 0, 3.28971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.984, 0.2, 0, 0, 3.48971, 0, 0.2, 0, 2, 0, 0, 0.2, 0.984, 0.2, 0, 0, 1.08971, 0, 0.2, 0, 2, 0, 0, 0.2, 1.312, 0.2, 0, 0, 1.28971, 0, 0.2, 0, 2, 0, 0, 0.2, 1.312, 0.2, 0, 0, 1.48971, 0, 0.2, 0, 2, 0, 0, 0.2, 1.312, 0.2, 0, 0, 1.68971, 0, 0.2, 0, 2, 0, 0, 0.2, 1.312, 0.2, 0, 0, 1.88971, 0, 0.2, 0, 2, 0, 0, 0.2, 1.312, 0.2, 0, 0, 2.08971, 0, 0.2, 0, 2, 0, 0, 0.2, 1.312, 0.2, 0, 0, 2.28971, 0, 0.2, 0, 2, 0, 0, 0.2, 1.312, 0.2, 0, 0, 2.48971, 0, 0.2, 0, 2, 0, 0, 0.2, 1.312, 0.2, 0, 0, 2.68971, 0, 0.2, 0, 2, 0, 0, 0.2, 1.312, 0.2, 0, 0, 2.88971, 0, 0.2, 0, 2, 0, 0, 0.2, 1.312, 0.2, 0, 0, 3.08971, 0, 0.2, 0, 2, 0, 0, 0.2, 1.312, 0.2, 0, 0, 3.28971, 0, 0.2, 0, 2, 0, 0, 0.2, 1.312, 0.2, 0, 0, 0.989712, 0, 0.2, 0, 4, 0, 0, 0.2, -1.476, 0.2, 0, 0, 1.18971, 0, 0.2, 0, 4, 0, 0, 0.2, -1.476, 0.2, 0, 0, 1.38971, 0, 0.2, 0, 4, 0, 0, 0.2, -1.476, 0.2, 0, 0, 1.58971, 0, 0.2, 0, 4, 0, 0, 0.2, -1.476, 0.2, 0, 0, 1.78971, 0, 0.2, 0, 4, 0, 0, 0.2, -1.476, 0.2, 0, 0, 1.98971, 0, 0.2, 0, 4, 0, 0, 0.2, -1.476, 0.2, 0, 0, 2.18971, 0, 0.2, 0, 4, 0, 0, 0.2, -1.476, 0.2, 0, 0, 2.38971, 0, 0.2, 0, 4, 0, 0, 0.2, -1.476, 0.2, 0, 0, 2.58971, 0, 0.2, 0, 4, 0, 0, 0.2, -1.476, 0.2, 0, 0, 2.78971, 0, 0.2, 0, 4, 0, 0, 0.2, -1.476, 0.2, 0, 0, 2.98971, 0, 0.2, 0, 4, 0, 0, 0.2, -1.476, 0.2, 0, 0, 0.789712, 0, 0.2, 0, 4, 0, 0, 0.2, -1.148, 0.2, 0, 0, 0.989712, 0, 0.2, 0, 4, 0, 0, 0.2, -1.148, 0.2, 0, 0, 1.18971, 0, 0.2, 0, 4, 0, 0, 0.2, -1.148, 0.2, 0, 0, 1.38971, 0, 0.2, 0, 4, 0, 0, 0.2, -1.148, 0.2, 0, 0, 1.58971, 0, 0.2, 0, 4, 0, 0, 0.2, -1.148, 0.2, 0, 0, 1.78971, 0, 0.2, 0, 4, 0, 0, 0.2, -1.148, 0.2, 0, 0, 1.98971, 0, 0.2, 0, 4, 0, 0, 0.2, -1.148, 0.2, 0, 0, 2.18971, 0, 0.2, 0, 4, 0, 0, 0.2, -1.148, 0.2, 0, 0, 2.38971, 0, 0.2, 0, 4, 0, 0, 0.2, -1.148, 0.2, 0, 0, 2.58971, 0, 0.2, 0, 4, 0, 0, 0.2, -1.148, 0.2, 0, 0, 2.78971, 0, 0.2, 0, 4, 0, 0, 0.2, -1.148, 0.2, 0, 0, 2.98971, 0, 0.2, 0, 4, 0, 0, 0.2, -1.148, 0.2, 0, 0, 3.18971, 0, 0.2, 0, 4, 0, 0, 0.2, -1.148, 0.2, 0, 0, 0.589712, 0, 0.2, 0, 4, 0, 0, 0.2, -0.82, 0.2, 0, 0, 0.789712, 0, 0.2, 0, 4, 0, 0, 0.2, -0.82, 0.2, 0, 0, 0.989712, 0, 0.2, 0, 4, 0, 0, 0.2, -0.82, 0.2, 0, 0, 1.18971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.82, 0.2, 0, 0, 1.38971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.82, 0.2, 0, 0, 1.58971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.82, 0.2, 0, 0, 1.78971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.82, 0.2, 0, 0, 1.98971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.82, 0.2, 0, 0, 2.18971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.82, 0.2, 0, 0, 2.38971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.82, 0.2, 0, 0, 2.58971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.82, 0.2, 0, 0, 2.78971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.82, 0.2, 0, 0, 2.98971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.82, 0.2, 0, 0, 3.18971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.82, 0.2, 0, 0, 3.38971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.82, 0.2, 0, 0, 0.389712, 0, 0.2, 0, 4, 0, 0, 0.2, -0.492, 0.2, 0, 0, 0.589712, 0, 0.2, 0, 4, 0, 0, 0.2, -0.492, 0.2, 0, 0, 0.789712, 0, 0.2, 0, 4, 0, 0, 0.2, -0.492, 0.2, 0, 0, 0.989712, 0, 0.2, 0, 4, 0, 0, 0.2, -0.492, 0.2, 0, 0, 1.18971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.492, 0.2, 0, 0, 1.38971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.492, 0.2, 0, 0, 1.58971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.492, 0.2, 0, 0, 1.78971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.492, 0.2, 0, 0, 1.98971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.492, 0.2, 0, 0, 2.18971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.492, 0.2, 0, 0, 2.38971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.492, 0.2, 0, 0, 2.58971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.492, 0.2, 0, 0, 2.78971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.492, 0.2, 0, 0, 2.98971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.492, 0.2, 0, 0, 3.18971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.492, 0.2, 0, 0, 3.38971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.492, 0.2, 0, 0, 3.58971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.492, 0.2, 0, 0, 0.189712, 0, 0.2, 0, 4, 0, 0, 0.2, -0.164, 0.2, 0, 0, 0.389712, 0, 0.2, 0, 4, 0, 0, 0.2, -0.164, 0.2, 0, 0, 0.589712, 0, 0.2, 0, 4, 0, 0, 0.2, -0.164, 0.2, 0, 0, 0.789712, 0, 0.2, 0, 4, 0, 0, 0.2, -0.164, 0.2, 0, 0, 0.989712, 0, 0.2, 0, 4, 0, 0, 0.2, -0.164, 0.2, 0, 0, 1.18971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.164, 0.2, 0, 0, 1.38971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.164, 0.2, 0, 0, 1.58971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.164, 0.2, 0, 0, 1.78971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.164, 0.2, 0, 0, 1.98971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.164, 0.2, 0, 0, 2.18971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.164, 0.2, 0, 0, 2.38971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.164, 0.2, 0, 0, 2.58971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.164, 0.2, 0, 0, 2.78971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.164, 0.2, 0, 0, 2.98971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.164, 0.2, 0, 0, 3.18971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.164, 0.2, 0, 0, 3.38971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.164, 0.2, 0, 0, 3.58971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.164, 0.2, 0, 0, 3.78971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.164, 0.2, 0, 0, 0.189712, 0, 0.2, 0, 4, 0, 0, 0.2, 0.164, 0.2, 0, 0, 0.389712, 0, 0.2, 0, 4, 0, 0, 0.2, 0.164, 0.2, 0, 0, 0.589712, 0, 0.2, 0, 4, 0, 0, 0.2, 0.164, 0.2, 0, 0, 0.789712, 0, 0.2, 0, 4, 0, 0, 0.2, 0.164, 0.2, 0, 0, 0.989712, 0, 0.2, 0, 4, 0, 0, 0.2, 0.164, 0.2, 0, 0, 1.18971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.164, 0.2, 0, 0, 1.38971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.164, 0.2, 0, 0, 1.58971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.164, 0.2, 0, 0, 1.78971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.164, 0.2, 0, 0, 1.98971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.164, 0.2, 0, 0, 2.18971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.164, 0.2, 0, 0, 2.38971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.164, 0.2, 0, 0, 2.58971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.164, 0.2, 0, 0, 2.78971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.164, 0.2, 0, 0, 2.98971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.164, 0.2, 0, 0, 3.18971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.164, 0.2, 0, 0, 3.38971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.164, 0.2, 0, 0, 3.58971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.164, 0.2, 0, 0, 3.78971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.164, 0.2, 0, 0, 0.389712, 0, 0.2, 0, 4, 0, 0, 0.2, 0.492, 0.2, 0, 0, 0.589712, 0, 0.2, 0, 4, 0, 0, 0.2, 0.492, 0.2, 0, 0, 0.789712, 0, 0.2, 0, 4, 0, 0, 0.2, 0.492, 0.2, 0, 0, 0.989712, 0, 0.2, 0, 4, 0, 0, 0.2, 0.492, 0.2, 0, 0, 1.18971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.492, 0.2, 0, 0, 1.38971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.492, 0.2, 0, 0, 1.58971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.492, 0.2, 0, 0, 1.78971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.492, 0.2, 0, 0, 1.98971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.492, 0.2, 0, 0, 2.18971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.492, 0.2, 0, 0, 2.38971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.492, 0.2, 0, 0, 2.58971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.492, 0.2, 0, 0, 2.78971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.492, 0.2, 0, 0, 2.98971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.492, 0.2, 0, 0, 3.18971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.492, 0.2, 0, 0, 3.38971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.492, 0.2, 0, 0, 3.58971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.492, 0.2, 0, 0, 0.589712, 0, 0.2, 0, 4, 0, 0, 0.2, 0.82, 0.2, 0, 0, 0.789712, 0, 0.2, 0, 4, 0, 0, 0.2, 0.82, 0.2, 0, 0, 0.989712, 0, 0.2, 0, 4, 0, 0, 0.2, 0.82, 0.2, 0, 0, 1.18971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.82, 0.2, 0, 0, 1.38971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.82, 0.2, 0, 0, 1.58971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.82, 0.2, 0, 0, 1.78971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.82, 0.2, 0, 0, 1.98971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.82, 0.2, 0, 0, 2.18971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.82, 0.2, 0, 0, 2.38971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.82, 0.2, 0, 0, 2.58971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.82, 0.2, 0, 0, 2.78971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.82, 0.2, 0, 0, 2.98971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.82, 0.2, 0, 0, 3.18971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.82, 0.2, 0, 0, 3.38971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.82, 0.2, 0, 0, 0.789712, 0, 0.2, 0, 4, 0, 0, 0.2, 1.148, 0.2, 0, 0, 0.989712, 0, 0.2, 0, 4, 0, 0, 0.2, 1.148, 0.2, 0, 0, 1.18971, 0, 0.2, 0, 4, 0, 0, 0.2, 1.148, 0.2, 0, 0, 1.38971, 0, 0.2, 0, 4, 0, 0, 0.2, 1.148, 0.2, 0, 0, 1.58971, 0, 0.2, 0, 4, 0, 0, 0.2, 1.148, 0.2, 0, 0, 1.78971, 0, 0.2, 0, 4, 0, 0, 0.2, 1.148, 0.2, 0, 0, 1.98971, 0, 0.2, 0, 4, 0, 0, 0.2, 1.148, 0.2, 0, 0, 2.18971, 0, 0.2, 0, 4, 0, 0, 0.2, 1.148, 0.2, 0, 0, 2.38971, 0, 0.2, 0, 4, 0, 0, 0.2, 1.148, 0.2, 0, 0, 2.58971, 0, 0.2, 0, 4, 0, 0, 0.2, 1.148, 0.2, 0, 0, 2.78971, 0, 0.2, 0, 4, 0, 0, 0.2, 1.148, 0.2, 0, 0, 2.98971, 0, 0.2, 0, 4, 0, 0, 0.2, 1.148, 0.2, 0, 0, 3.18971, 0, 0.2, 0, 4, 0, 0, 0.2, 1.148, 0.2, 0, 0, 0.989712, 0, 0.2, 0, 4, 0, 0, 0.2, 1.476, 0.2, 0, 0, 1.18971, 0, 0.2, 0, 4, 0, 0, 0.2, 1.476, 0.2, 0, 0, 1.38971, 0, 0.2, 0, 4, 0, 0, 0.2, 1.476, 0.2, 0, 0, 1.58971, 0, 0.2, 0, 4, 0, 0, 0.2, 1.476, 0.2, 0, 0, 1.78971, 0, 0.2, 0, 4, 0, 0, 0.2, 1.476, 0.2, 0, 0, 1.98971, 0, 0.2, 0, 4, 0, 0, 0.2, 1.476, 0.2, 0, 0, 2.18971, 0, 0.2, 0, 4, 0, 0, 0.2, 1.476, 0.2, 0, 0, 2.38971, 0, 0.2, 0, 4, 0, 0, 0.2, 1.476, 0.2, 0, 0, 2.58971, 0, 0.2, 0, 4, 0, 0, 0.2, 1.476, 0.2, 0, 0, 2.78971, 0, 0.2, 0, 4, 0, 0, 0.2, 1.476, 0.2, 0, 0, 2.98971, 0, 0.2, 0, 4, 0, 0, 0.2, 1.476, 0.2, 0, 0, 1.28971, 0, 0.2, 0, 4, 0, 0, 0.2, -1.64, 0.2, 0, 0, 1.48971, 0, 0.2, 0, 4, 0, 0, 0.2, -1.64, 0.2, 0, 0, 1.68971, 0, 0.2, 0, 4, 0, 0, 0.2, -1.64, 0.2, 0, 0, 1.88971, 0, 0.2, 0, 4, 0, 0, 0.2, -1.64, 0.2, 0, 0, 2.08971, 0, 0.2, 0, 4, 0, 0, 0.2, -1.64, 0.2, 0, 0, 2.28971, 0, 0.2, 0, 4, 0, 0, 0.2, -1.64, 0.2, 0, 0, 2.48971, 0, 0.2, 0, 4, 0, 0, 0.2, -1.64, 0.2, 0, 0, 2.68971, 0, 0.2, 0, 4, 0, 0, 0.2, -1.64, 0.2, 0, 0, 2.88971, 0, 0.2, 0, 4, 0, 0, 0.2, -1.64, 0.2, 0, 0, 1.08971, 0, 0.2, 0, 4, 0, 0, 0.2, -1.312, 0.2, 0, 0, 1.28971, 0, 0.2, 0, 4, 0, 0, 0.2, -1.312, 0.2, 0, 0, 1.48971, 0, 0.2, 0, 4, 0, 0, 0.2, -1.312, 0.2, 0, 0, 1.68971, 0, 0.2, 0, 4, 0, 0, 0.2, -1.312, 0.2, 0, 0, 1.88971, 0, 0.2, 0, 4, 0, 0, 0.2, -1.312, 0.2, 0, 0, 2.08971, 0, 0.2, 0, 4, 0, 0, 0.2, -1.312, 0.2, 0, 0, 2.28971, 0, 0.2, 0, 4, 0, 0, 0.2, -1.312, 0.2, 0, 0, 2.48971, 0, 0.2, 0, 4, 0, 0, 0.2, -1.312, 0.2, 0, 0, 2.68971, 0, 0.2, 0, 4, 0, 0, 0.2, -1.312, 0.2, 0, 0, 2.88971, 0, 0.2, 0, 4, 0, 0, 0.2, -1.312, 0.2, 0, 0, 3.08971, 0, 0.2, 0, 4, 0, 0, 0.2, -1.312, 0.2, 0, 0, 3.28971, 0, 0.2, 0, 4, 0, 0, 0.2, -1.312, 0.2, 0, 0, 0.689712, 0, 0.2, 0, 4, 0, 0, 0.2, -0.984, 0.2, 0, 0, 0.889712, 0, 0.2, 0, 4, 0, 0, 0.2, -0.984, 0.2, 0, 0, 1.08971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.984, 0.2, 0, 0, 1.28971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.984, 0.2, 0, 0, 1.48971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.984, 0.2, 0, 0, 1.68971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.984, 0.2, 0, 0, 1.88971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.984, 0.2, 0, 0, 2.08971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.984, 0.2, 0, 0, 2.28971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.984, 0.2, 0, 0, 2.48971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.984, 0.2, 0, 0, 2.68971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.984, 0.2, 0, 0, 2.88971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.984, 0.2, 0, 0, 3.08971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.984, 0.2, 0, 0, 3.28971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.984, 0.2, 0, 0, 3.48971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.984, 0.2, 0, 0, 0.489712, 0, 0.2, 0, 4, 0, 0, 0.2, -0.656, 0.2, 0, 0, 0.689712, 0, 0.2, 0, 4, 0, 0, 0.2, -0.656, 0.2, 0, 0, 0.889712, 0, 0.2, 0, 4, 0, 0, 0.2, -0.656, 0.2, 0, 0, 1.08971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.656, 0.2, 0, 0, 1.28971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.656, 0.2, 0, 0, 1.48971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.656, 0.2, 0, 0, 1.68971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.656, 0.2, 0, 0, 1.88971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.656, 0.2, 0, 0, 2.08971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.656, 0.2, 0, 0, 2.28971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.656, 0.2, 0, 0, 2.48971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.656, 0.2, 0, 0, 2.68971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.656, 0.2, 0, 0, 2.88971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.656, 0.2, 0, 0, 3.08971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.656, 0.2, 0, 0, 3.28971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.656, 0.2, 0, 0, 3.48971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.656, 0.2, 0, 0, 3.68971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.656, 0.2, 0, 0, 0.289712, 0, 0.2, 0, 4, 0, 0, 0.2, -0.328, 0.2, 0, 0, 0.489712, 0, 0.2, 0, 4, 0, 0, 0.2, -0.328, 0.2, 0, 0, 0.689712, 0, 0.2, 0, 4, 0, 0, 0.2, -0.328, 0.2, 0, 0, 0.889712, 0, 0.2, 0, 4, 0, 0, 0.2, -0.328, 0.2, 0, 0, 1.08971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.328, 0.2, 0, 0, 1.28971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.328, 0.2, 0, 0, 1.48971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.328, 0.2, 0, 0, 1.68971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.328, 0.2, 0, 0, 1.88971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.328, 0.2, 0, 0, 2.08971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.328, 0.2, 0, 0, 2.28971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.328, 0.2, 0, 0, 2.48971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.328, 0.2, 0, 0, 2.68971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.328, 0.2, 0, 0, 2.88971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.328, 0.2, 0, 0, 3.08971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.328, 0.2, 0, 0, 3.28971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.328, 0.2, 0, 0, 3.48971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.328, 0.2, 0, 0, 3.68971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.328, 0.2, 0, 0, 3.88971, 0, 0.2, 0, 4, 0, 0, 0.2, -0.328, 0.2, 0, 0, 0.289712, 0, 0.2, 0, 4, 0, 0, 0.2, 2.44379e-08, 0.2, 0, 0, 0.489712, 0, 0.2, 0, 4, 0, 0, 0.2, 2.44379e-08, 0.2, 0, 0, 0.689712, 0, 0.2, 0, 4, 0, 0, 0.2, 2.44379e-08, 0.2, 0, 0, 0.889712, 0, 0.2, 0, 4, 0, 0, 0.2, 2.44379e-08, 0.2, 0, 0, 1.08971, 0, 0.2, 0, 4, 0, 0, 0.2, 2.44379e-08, 0.2, 0, 0, 1.28971, 0, 0.2, 0, 4, 0, 0, 0.2, 2.44379e-08, 0.2, 0, 0, 1.48971, 0, 0.2, 0, 4, 0, 0, 0.2, 2.44379e-08, 0.2, 0, 0, 1.68971, 0, 0.2, 0, 4, 0, 0, 0.2, 2.44379e-08, 0.2, 0, 0, 1.88971, 0, 0.2, 0, 4, 0, 0, 0.2, 2.44379e-08, 0.2, 0, 0, 2.08971, 0, 0.2, 0, 4, 0, 0, 0.2, 2.44379e-08, 0.2, 0, 0, 2.28971, 0, 0.2, 0, 4, 0, 0, 0.2, 2.44379e-08, 0.2, 0, 0, 2.48971, 0, 0.2, 0, 4, 0, 0, 0.2, 2.44379e-08, 0.2, 0, 0, 2.68971, 0, 0.2, 0, 4, 0, 0, 0.2, 2.44379e-08, 0.2, 0, 0, 2.88971, 0, 0.2, 0, 4, 0, 0, 0.2, 2.44379e-08, 0.2, 0, 0, 3.08971, 0, 0.2, 0, 4, 0, 0, 0.2, 2.44379e-08, 0.2, 0, 0, 3.28971, 0, 0.2, 0, 4, 0, 0, 0.2, 2.44379e-08, 0.2, 0, 0, 3.48971, 0, 0.2, 0, 4, 0, 0, 0.2, 2.44379e-08, 0.2, 0, 0, 3.68971, 0, 0.2, 0, 4, 0, 0, 0.2, 2.44379e-08, 0.2, 0, 0, 3.88971, 0, 0.2, 0, 4, 0, 0, 0.2, 2.44379e-08, 0.2, 0, 0, 0.289712, 0, 0.2, 0, 4, 0, 0, 0.2, 0.328, 0.2, 0, 0, 0.489712, 0, 0.2, 0, 4, 0, 0, 0.2, 0.328, 0.2, 0, 0, 0.689712, 0, 0.2, 0, 4, 0, 0, 0.2, 0.328, 0.2, 0, 0, 0.889712, 0, 0.2, 0, 4, 0, 0, 0.2, 0.328, 0.2, 0, 0, 1.08971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.328, 0.2, 0, 0, 1.28971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.328, 0.2, 0, 0, 1.48971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.328, 0.2, 0, 0, 1.68971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.328, 0.2, 0, 0, 1.88971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.328, 0.2, 0, 0, 2.08971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.328, 0.2, 0, 0, 2.28971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.328, 0.2, 0, 0, 2.48971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.328, 0.2, 0, 0, 2.68971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.328, 0.2, 0, 0, 2.88971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.328, 0.2, 0, 0, 3.08971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.328, 0.2, 0, 0, 3.28971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.328, 0.2, 0, 0, 3.48971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.328, 0.2, 0, 0, 3.68971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.328, 0.2, 0, 0, 3.88971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.328, 0.2, 0, 0, 0.489712, 0, 0.2, 0, 4, 0, 0, 0.2, 0.656, 0.2, 0, 0, 0.689712, 0, 0.2, 0, 4, 0, 0, 0.2, 0.656, 0.2, 0, 0, 0.889712, 0, 0.2, 0, 4, 0, 0, 0.2, 0.656, 0.2, 0, 0, 1.08971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.656, 0.2, 0, 0, 1.28971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.656, 0.2, 0, 0, 1.48971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.656, 0.2, 0, 0, 1.68971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.656, 0.2, 0, 0, 1.88971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.656, 0.2, 0, 0, 2.08971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.656, 0.2, 0, 0, 2.28971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.656, 0.2, 0, 0, 2.48971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.656, 0.2, 0, 0, 2.68971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.656, 0.2, 0, 0, 2.88971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.656, 0.2, 0, 0, 3.08971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.656, 0.2, 0, 0, 3.28971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.656, 0.2, 0, 0, 3.48971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.656, 0.2, 0, 0, 3.68971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.656, 0.2, 0, 0, 0.889712, 0, 0.2, 0, 4, 0, 0, 0.2, 0.984, 0.2, 0, 0, 1.08971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.984, 0.2, 0, 0, 1.28971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.984, 0.2, 0, 0, 1.48971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.984, 0.2, 0, 0, 1.68971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.984, 0.2, 0, 0, 1.88971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.984, 0.2, 0, 0, 2.08971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.984, 0.2, 0, 0, 2.28971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.984, 0.2, 0, 0, 2.48971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.984, 0.2, 0, 0, 2.68971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.984, 0.2, 0, 0, 2.88971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.984, 0.2, 0, 0, 3.08971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.984, 0.2, 0, 0, 3.28971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.984, 0.2, 0, 0, 3.48971, 0, 0.2, 0, 4, 0, 0, 0.2, 0.984, 0.2, 0, 0, 1.08971, 0, 0.2, 0, 4, 0, 0, 0.2, 1.312, 0.2, 0, 0, 1.28971, 0, 0.2, 0, 4, 0, 0, 0.2, 1.312, 0.2, 0, 0, 1.48971, 0, 0.2, 0, 4, 0, 0, 0.2, 1.312, 0.2, 0, 0, 1.68971, 0, 0.2, 0, 4, 0, 0, 0.2, 1.312, 0.2, 0, 0, 1.88971, 0, 0.2, 0, 4, 0, 0, 0.2, 1.312, 0.2, 0, 0, 2.08971, 0, 0.2, 0, 4, 0, 0, 0.2, 1.312, 0.2, 0, 0, 2.28971, 0, 0.2, 0, 4, 0, 0, 0.2, 1.312, 0.2, 0, 0, 2.48971, 0, 0.2, 0, 4, 0, 0, 0.2, 1.312, 0.2, 0, 0, 2.68971, 0, 0.2, 0, 4, 0, 0, 0.2, 1.312, 0.2, 0, 0, 2.88971, 0, 0.2, 0, 4, 0, 0, 0.2, 1.312, 0.2, 0, 0, 3.08971, 0, 0.2, 0, 4, 0, 0, 0.2, 1.312, 0.2, 0, 0, 3.28971, 0, 0.2, 0, 4, 0, 0, 0.2, 1.312)
 
 [sub_resource type="Curve3D" id="Curve3D_mq44t"]
 closed = true
@@ -377,9 +537,9 @@ script = ExtResource("1_kf2sw")
 graph = SubResource("Resource_dk6st")
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
 
-[node name="@MultiMeshInstance3D@31781" type="MultiMeshInstance3D" parent="FlowGraphNode3D"]
-multimesh = SubResource("MultiMesh_i5d73")
-metadata/flow_owner = &"id_0022_spawn_meshes"
+[node name="@MultiMeshInstance3D@94012" type="MultiMeshInstance3D" parent="FlowGraphNode3D"]
+multimesh = SubResource("MultiMesh_tov8o")
+metadata/flow_owner = &"id_0038_spawn_meshes"
 
 [node name="Path3D" type="Path3D" parent="."]
 curve = SubResource("Curve3D_mq44t")
