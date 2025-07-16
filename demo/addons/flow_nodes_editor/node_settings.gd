@@ -22,6 +22,7 @@ enum eDebugMode {
 # Add any other common properties here
 @export var title: String = ""
 @export var enabled: bool = true
+@export var trace: bool = false
 
 func _init():
 	# Set default values when resource is created

@@ -12,9 +12,10 @@ func _init():
 func execute( ctx : FlowData.EvaluationContext ):
 	var in_data : FlowData.Data = get_input(0)
 	var out_data := FlowData.Data.new()
+	var trace := settings.trace
 	
 	var num_copies : int = getSettingValue( ctx, "num_copies" )
-	print( "Copy.num_copies %d" % [ num_copies ] )
+	if trace: print( "Copy.num_copies %d" % [ num_copies ] )
 
 	var time_start = Time.get_ticks_usec()	
 	# First create all the containers with the correct type
@@ -34,7 +35,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 	# Transform data of each copy
 	var isize := in_data.size()
 	var in_trs := in_data.getTransformsStream()
-	print( "Copy.Setup: %f (%d)" % [ Time.get_ticks_usec() - time_start, isize ] )
+	if trace: print( "Copy.Setup: %f (%d)" % [ Time.get_ticks_usec() - time_start, isize ] )
 	
 	if in_trs:
 		var step3d : Transform3D = Transform3D.IDENTITY
@@ -64,7 +65,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 				var otrans : Transform3D = acc_transforms[ n ] * itrans
 				spos[ base + j ] = otrans.origin
 				srot[ base + j ] = otrans.basis.get_euler() * 180.0 / PI	# FlowData.basisToEuler( otrans.basis )
-		print( "Copy.Transform: %f" % [ Time.get_ticks_usec() - time_start_trs ] )
+		if trace: print( "Copy.Transform: %f" % [ Time.get_ticks_usec() - time_start_trs ] )
 			
 	if settings.generate_copy_id:
 		var time_start_id = Time.get_ticks_usec()
@@ -75,6 +76,6 @@ func execute( ctx : FlowData.EvaluationContext ):
 			for j in range( isize ):
 				container[base+j] = n
 		out_data.registerStream( settings.generate_copy_id, container )
-		print( "Copy.GenerateId: %f" % [ Time.get_ticks_usec() - time_start_id ] )
+		if trace: print( "Copy.GenerateId: %f" % [ Time.get_ticks_usec() - time_start_id ] )
 
 	set_output( 0, out_data )
