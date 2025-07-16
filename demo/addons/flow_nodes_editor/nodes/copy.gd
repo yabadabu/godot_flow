@@ -62,7 +62,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 			# For each copy
 			for n in range( num_copies ):
 				var base := n * isize
-				var otrans : Transform3D = acc_transforms[ n ] * itrans
+				var otrans : Transform3D = itrans * acc_transforms[ n ]
 				spos[ base + j ] = otrans.origin
 				srot[ base + j ] = otrans.basis.get_euler() * 180.0 / PI	# FlowData.basisToEuler( otrans.basis )
 		if trace: print( "Copy.Transform: %f" % [ Time.get_ticks_usec() - time_start_trs ] )
