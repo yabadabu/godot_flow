@@ -15,31 +15,47 @@ func execute( ctx : FlowData.EvaluationContext ):
 	var in_dataB : FlowData.Data = get_input(1)
 	var in_datas = [ in_dataA, in_dataB ]
 
-	var total_points := 0
-	for in_data in in_datas:
-		total_points += in_data.size()
+	var merge_all = getSettingValue( ctx, "merge_all_attributes" )
 
-	var out_data : FlowData.Data.new()
+	var out_data := FlowData.Data.new()
 	var offset = 0
 	for in_data in in_datas:
+		# print( "Processing input data with size %d: (Offset:%d)" % [ in_data.size(), offset ] )
 
 		# For each stream
-		for stream in in_data.streams:
+		for stream_name in in_data.streams:
+			var stream = in_data.streams[ stream_name ]
+			# print( "  Checking stream %s" % [ stream_name ] )
 
-			# if not found in out_data, 
-			var out_stream = out_data.findStream( stream.name )
-			if not out_stream:
-				# clone or crete or duplicate with the current size 'offset'
-				pass
+			# Check if already exists
+			if not out_data.hasStream( stream_name ):
+				# Create an empty container with the current offset (just before us adding our content)
+				var container = in_data.newContainerOfType( stream.data_type )
+				container.resize( offset )
+				var err = out_data.registerStream( stream_name, container )
+				# print( "    Created new stream %s" % err )
+			
+			# Now... access it	
+			var out_stream = out_data.findStream( stream_name )
 
 			# else, if data_type matches...
-			elif stream.data_type != out_data.streams[ stream_name ].data_type:
-				continue
-
-			# copy elements of stream in target stream at the end
-			out_stream.container.append_array( stream.container )
-			pass
+			if stream.data_type != out_stream.data_type:
+				print( "    Stream %s is already defined with type %s, but new data has the same stream with name %s" % [ stream_name, out_stream.data_type, stream.data_type ] )
+				# Try cast?
+								
+			elif out_stream:
+				# copy elements of stream in target stream at the end
+				# print( "   Appending %d elems from input container" % [ stream.container.size() ] )
+				out_stream.container.append_array( stream.container )
+			
 
 		offset += in_data.size()
+		
+		# Ensure we have all the containers with the same size (in case in_data does not provide a stream for example
+		for stream_name in out_data.streams:
+			var stream = out_data.streams[ stream_name ]
+			if stream.container.size() < offset:
+				# print( " Appending %d elems from input container -> %d" % [ stream.container.size(), offset ] )
+				stream.container.resize( offset )
 
 	set_output( 0, out_data )
