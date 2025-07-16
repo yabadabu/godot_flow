@@ -67,7 +67,6 @@ func execute( _ctx : FlowData.EvaluationContext ):
 			return
 	var num_elems := num_elemsA
 	
-	var out_data_type
 	var out_container
 	var out_data : FlowData.Data = in_dataA.duplicate()
 	
@@ -78,7 +77,6 @@ func execute( _ctx : FlowData.EvaluationContext ):
 	if is_single_arg:
 		if settings.operation == MathOpNodeSettings.eOperation.Copy:
 			out_container = in_dataA.cloneStream( settings.in_nameA )
-			out_data_type = sA.data_type
 			
 		else:
 			if sA.data_type == FlowData.DataType.Float:
@@ -90,7 +88,6 @@ func execute( _ctx : FlowData.EvaluationContext ):
 					for i in num_elems:
 						outI[i] = floori(inA[i])
 					out_container = outI
-					out_data_type = FlowData.DataType.Int
 					
 				else:
 					var outC := PackedFloat32Array()
@@ -109,7 +106,6 @@ func execute( _ctx : FlowData.EvaluationContext ):
 							for i in num_elems:
 								outC[i] = floorf(inA[i])
 					out_container = outC
-					out_data_type = FlowData.DataType.Float
 			
 			elif sA.data_type == FlowData.DataType.Vector:
 				var inA : PackedVector3Array = sA.container
@@ -131,7 +127,6 @@ func execute( _ctx : FlowData.EvaluationContext ):
 							outC[i].y = clampf(inA[i].y, 0.0, 1.0)
 							outC[i].z = clampf(inA[i].z, 0.0, 1.0)
 				out_container = outC
-				out_data_type = FlowData.DataType.Vector
 				
 			else:
 				setError( "Input A has incompatible/unsupported data types (%s vs %s)" % [sA.data_type])
@@ -144,6 +139,7 @@ func execute( _ctx : FlowData.EvaluationContext ):
 			var inB : PackedFloat32Array = sB.container
 			var outC := PackedFloat32Array()
 			outC.resize( num_elems )
+			out_container = outC
 			
 			match settings.operation:
 				MathOpNodeSettings.eOperation.Multiply:
@@ -161,9 +157,14 @@ func execute( _ctx : FlowData.EvaluationContext ):
 				MathOpNodeSettings.eOperation.Modulo:
 					for i in num_elems:
 						outC[i] = fmod(inA[i], inB[i])
-
-			out_container = outC
-			out_data_type = FlowData.DataType.Float
+				MathOpNodeSettings.eOperation.ModuloInt:
+					var outI := PackedInt32Array()
+					outI.resize( num_elems )
+					out_container = outI
+					for i in num_elems:
+						var iA := int( inA[i] + 1e-6 )
+						var iB := int( inB[i] + 1e-6 )
+						outI[i] = iA % iB
 				
 		elif sA.data_type == FlowData.DataType.Vector && sB.data_type == FlowData.DataType.Vector:
 			var inA : PackedVector3Array = sA.container
@@ -185,7 +186,6 @@ func execute( _ctx : FlowData.EvaluationContext ):
 					for i in num_elems:
 						outC[i] = inA[i] / inB[i]
 			out_container = outC
-			out_data_type = FlowData.DataType.Vector
 
 		elif sA.data_type == FlowData.DataType.Vector && sB.data_type == FlowData.DataType.Float:
 			var inA : PackedVector3Array = sA.container

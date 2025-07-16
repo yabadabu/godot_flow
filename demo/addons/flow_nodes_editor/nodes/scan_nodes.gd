@@ -7,7 +7,7 @@ func _init():
 		"settings" : ScanNodesNodeSettings,
 		"ins" : [],
 		"outs" : [{ "label" : "Out" }],
-		"tooltip" :"Generate points from existing nodes",
+		"tooltip" :"Generate points from existing non-graph nodes in the scene",
 	}
 
 func find_nodes_in_custom_group( ctx : FlowData.EvaluationContext, group_name: String) -> Array[ Node3D ]:
