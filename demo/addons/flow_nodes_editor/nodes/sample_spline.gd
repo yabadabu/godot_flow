@@ -34,29 +34,7 @@ func curve_to_polygon(curve: Curve3D, resolution: int = 100) -> PackedVector2Arr
 		var pos = curve.sample_baked(t * curve.get_baked_length())
 		polygon.append(Vector2( pos.x, pos.z ))
 	return polygon
-	
-func point_to_line_segment_distance(point: Vector2, line_start: Vector2, line_end: Vector2) -> float:
-	var line_vec = line_end - line_start
-	var point_vec = point - line_start
-	
-	if line_vec.length_squared() == 0:
-		return point_vec.length()
-	
-	var t = clamp(point_vec.dot(line_vec) / line_vec.length_squared(), 0.0, 1.0)
-	var projection = line_start + t * line_vec
-	
-	return point.distance_to(projection)
 		
-func point_to_polygon_distance(point: Vector2, polygon: PackedVector2Array) -> float:
-	var min_distance = INF
-	
-	for i in range(polygon.size()):
-		var p1 = polygon[i]
-		var p2 = polygon[(i + 1) % polygon.size()]
-		var distance = point_to_line_segment_distance(point, p1, p2)
-		min_distance = min(min_distance, distance)
-	
-	return min_distance	
 	
 func rasterize_line(p1: Vector2, p2: Vector2) -> Array[Vector2]:
 	var points : Array[Vector2] = []
@@ -82,6 +60,8 @@ func rasterize_line(p1: Vector2, p2: Vector2) -> Array[Vector2]:
 func compute_optimized_sdf(curve: Curve3D, bounds: Rect2, res_x: int, res_y : int) -> Array:
 	var polygon = curve_to_polygon(curve, 50)
 	var sdf_grid = []
+	
+	var time_start := Time.get_ticks_usec()	
 	
 	# Initialize grid
 	for y in range(res_y):
@@ -113,12 +93,19 @@ func compute_optimized_sdf(curve: Curve3D, bounds: Rect2, res_x: int, res_y : in
 		var line_points = rasterize_line(grid_p1, grid_p2)
 		edge_points.append_array(line_points)
 	
+	if settings.trace: print( "spline.grid: %f" % [ Time.get_ticks_usec() - time_start ])
 	# Compute distances using fast sweeping or similar algorithm
 	return compute_distance_transform(sdf_grid, edge_points, polygon, bounds, res_x, res_y)
 
 func compute_distance_transform(grid: Array, edge_points: Array, polygon: PackedVector2Array, bounds: Rect2, res_x: int, res_y: int) -> Array:
 	var step_x = bounds.size.x / res_x
 	var step_y = bounds.size.y / res_y
+	
+	var p3d : PackedVector3Array
+	for ep in polygon:
+		p3d.append( Vector3( ep.x, 0, ep.y ))
+	var kdtree := GDKdTree.new()
+	kdtree.set_points( p3d )
 	
 	# Use efficient distance transform algorithm
 	for y in range(res_y):
@@ -131,9 +118,12 @@ func compute_distance_transform(grid: Array, edge_points: Array, polygon: Packed
 			var is_inside = Geometry2D.is_point_in_polygon(world_pos, polygon)
 			if not is_inside:
 				continue
-			var distance = point_to_polygon_distance(world_pos, polygon)
 			
-			grid[y][x] = distance * (-1 if is_inside else 1)
+			var world_pos3d = Vector3( world_pos.x, 0, world_pos.y )
+			var nearest_idx = kdtree.find_nearest_idx( world_pos3d )
+			var distance = ( world_pos3d - p3d[nearest_idx] ).length()
+			
+			grid[y][x] = -distance
 	
 	return grid
 
@@ -159,6 +149,8 @@ func execute( ctx : FlowData.EvaluationContext ):
 	if not root:
 		return null
 		
+	var trace := settings.trace
+		
 	var path3d_nodes = findNodesOfType(root, "Path3D")
 
 	var output := FlowData.Data.new()
@@ -174,12 +166,16 @@ func execute( ctx : FlowData.EvaluationContext ):
 		var sdists : PackedFloat32Array = output.addStream( "distance", FlowData.DataType.Float )
 		for path_3d in path3d_nodes:
 			var curve : Curve3D = path_3d.curve
+			var time_start_c2p := Time.get_ticks_usec()	
 			var polygon = curve_to_polygon(curve)
+			if trace: print( "spline.eCurve to polygon: %f" % [ Time.get_ticks_usec() - time_start_c2p ])
 			var bounds = get_polygon_bounds(polygon)
 			var dim_x = round( bounds.size.x / uniform_interval )
 			var dim_z = round( bounds.size.y / uniform_interval )
 			#print( "bounds", bounds )
+			var time_start_sdf := Time.get_ticks_usec()	
 			var grid = compute_optimized_sdf( curve, bounds, dim_x, dim_z )
+			if trace: print( "spline.sdf: %f" % [ Time.get_ticks_usec() - time_start_sdf ])
 			#print( grid )
 			var dy = uniform_interval
 			var dx = uniform_interval
