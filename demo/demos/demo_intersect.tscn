@@ -28,6 +28,7 @@ debug_color = Color(1, 1, 1, 1)
 debug_modulate_by = ""
 title = "Grid"
 enabled = true
+trace = false
 
 [sub_resource type="Resource" id="Resource_jn5vr"]
 resource_name = "Grid Settings"
@@ -45,6 +46,7 @@ debug_color = Color(1, 1, 1, 1)
 debug_modulate_by = ""
 title = "Grid"
 enabled = true
+trace = false
 
 [sub_resource type="Resource" id="Resource_lu65l"]
 resource_name = "Transform Settings"
@@ -65,10 +67,12 @@ debug_color = Color(1, 1, 1, 1)
 debug_modulate_by = ""
 title = "Transform"
 enabled = true
+trace = false
 
 [sub_resource type="Resource" id="Resource_s0see"]
 resource_name = "Substract"
 script = ExtResource("6_xx7ch")
+operation = 0
 random_seed = 3590355377
 inspect_enabled = false
 debug_enabled = true
@@ -78,6 +82,7 @@ debug_color = Color(0.239216, 1, 1, 1)
 debug_modulate_by = ""
 title = "Substract"
 enabled = true
+trace = false
 
 [sub_resource type="Resource" id="Resource_gj6dq"]
 script = ExtResource("4_jn5vr")
