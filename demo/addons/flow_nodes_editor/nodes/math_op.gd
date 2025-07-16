@@ -18,7 +18,10 @@ func isSingleArgument( ) -> bool:
 	   settings.operation == MathOpNodeSettings.eOperation.FloorAsInt or \
 	   settings.operation == MathOpNodeSettings.eOperation.Negate or \
 	   settings.operation == MathOpNodeSettings.eOperation.Saturate or \
-	   settings.operation == MathOpNodeSettings.eOperation.Copy or \
+	   settings.operation == MathOpNodeSettings.eOperation.Set or \
+	   settings.operation == MathOpNodeSettings.eOperation.OneMinus or \
+	   settings.operation == MathOpNodeSettings.eOperation.Sign or \
+	   settings.operation == MathOpNodeSettings.eOperation.Sqrt or \
 	   false
 
 func execute( _ctx : FlowData.EvaluationContext ):
@@ -70,12 +73,12 @@ func execute( _ctx : FlowData.EvaluationContext ):
 	var out_container
 	var out_data : FlowData.Data = in_dataA.duplicate()
 	
-	if settings.operation != MathOpNodeSettings.eOperation.Copy:
+	if settings.operation != MathOpNodeSettings.eOperation.Set:
 		if sA.data_type == FlowData.DataType.Int and (is_single_arg or sB.data_type == FlowData.DataType.Float):
 			sA = newFloatStream( num_elemsA, sA.name + " as float", func( idx : int ) -> float: return sA.container[idx] )
 		
 	if is_single_arg:
-		if settings.operation == MathOpNodeSettings.eOperation.Copy:
+		if settings.operation == MathOpNodeSettings.eOperation.Set:
 			out_container = in_dataA.cloneStream( settings.in_nameA )
 			
 		else:
@@ -105,6 +108,18 @@ func execute( _ctx : FlowData.EvaluationContext ):
 						MathOpNodeSettings.eOperation.Floor:
 							for i in num_elems:
 								outC[i] = floorf(inA[i])
+						MathOpNodeSettings.eOperation.Round:
+							for i in num_elems:
+								outC[i] = roundf(inA[i])
+						MathOpNodeSettings.eOperation.OneMinus:
+							for i in num_elems:
+								outC[i] = 1.0 - inA[i]
+						MathOpNodeSettings.eOperation.Sign:
+							for i in num_elems:
+								outC[i] = -1 if inA[i] < 0 else ( 1.0 if inA[i] > 0 else 0)
+						MathOpNodeSettings.eOperation.Sqrt:
+							for i in num_elems:
+								outC[i] = sqrt( max( 0.0, inA[i] ) )
 					out_container = outC
 			
 			elif sA.data_type == FlowData.DataType.Vector:
@@ -157,6 +172,12 @@ func execute( _ctx : FlowData.EvaluationContext ):
 				MathOpNodeSettings.eOperation.Modulo:
 					for i in num_elems:
 						outC[i] = fmod(inA[i], inB[i])
+				MathOpNodeSettings.eOperation.Min:
+					for i in num_elems:
+						outC[i] = minf(inA[i], inB[i])
+				MathOpNodeSettings.eOperation.Max:
+					for i in num_elems:
+						outC[i] = maxf(inA[i], inB[i])
 				MathOpNodeSettings.eOperation.ModuloInt:
 					var outI := PackedInt32Array()
 					outI.resize( num_elems )

@@ -14,9 +14,16 @@ enum eOperation {
 	Saturate,
 	Floor,
 	FloorAsInt,
-	Copy,
+	Set,
 	Modulo,
 	ModuloInt,
+	Frac,
+	Max,
+	Min,
+	OneMinus,
+	Round,
+	Sign,
+	Sqrt,
 }
 
 @export var operation : eOperation = eOperation.Add
