@@ -7,6 +7,7 @@ var resource_owner : Node3D
 var ctx := FlowData.EvaluationContext.new()
 var regen_pending := false
 var auto_regen := true
+var dump_performance := true
 
 # Regen needs to take place once the graph nodes have been added/removed
 # from the actual scene, but there are more nodes child of the graph-edit
@@ -559,6 +560,7 @@ func evalGraph():
 	# print( "evalGraph %d starts from %s" % [ ctx.eval_id, resource_owner.name if resource_owner else "null" ] )
 	removeGeneratedNodes()
 	
+	var performance = []
 	#print( "getEvalOrder..." )
 	var nodes_to_eval = getEvalOrder( )
 	for node in nodes_to_eval:
@@ -568,6 +570,7 @@ func evalGraph():
 		if node.eval_id == ctx.eval_id:
 			continue
 		
+		var time_node_start = Time.get_ticks_usec()
 		node.clearInputs()
 		for req in node.deps:
 			var req_node = gedit_nodes_by_name.get( req.from_node )
@@ -580,12 +583,20 @@ func evalGraph():
 		if node.settings.inspect_enabled:
 			data_inspector.refresh()
 		node.setupDebugDraw()
+		var time_node_ends = Time.get_ticks_usec()
+		
+		if dump_performance:
+			performance.append( { "name": node.name, "time": time_node_ends - time_node_start })
 
 	regen_pending = false
 	#print( "regen_pending is now false")
 	
 	var elapsed_usec = Time.get_ticks_usec() - time_start
 	info.text = "%d evals in %.3f ms" % [ ctx.eval_id, elapsed_usec / 1000.0 ]
+	if dump_performance:
+		for entry in performance:
+			var formatted := "%8.1s" % String.num(entry.time, 1)
+			print( "%s usecs %s" % [ formatted, entry.name ] )
 
 func _on_button_reload_pressed() -> void:
 	scanAvailableNodes()
