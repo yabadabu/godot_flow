@@ -7,7 +7,7 @@ var resource_owner : Node3D
 var ctx := FlowData.EvaluationContext.new()
 var regen_pending := false
 var auto_regen := true
-var dump_performance := true
+var dump_performance := false
 
 # Regen needs to take place once the graph nodes have been added/removed
 # from the actual scene, but there are more nodes child of the graph-edit
@@ -597,6 +597,7 @@ func evalGraph():
 		for entry in performance:
 			var formatted := "%8.1s" % String.num(entry.time, 1)
 			print( "%s usecs %s" % [ formatted, entry.name ] )
+		dump_performance = false
 
 func _on_button_reload_pressed() -> void:
 	scanAvailableNodes()
@@ -607,6 +608,7 @@ func _on_button_save_pressed() -> void:
 		ResourceSaver.save(current_resource)
 
 func _on_button_regenerate_pressed() -> void:
+	dump_performance = true
 	queueRegen()
 
 func _on_auto_regen_toggled(toggled_on: bool) -> void:
