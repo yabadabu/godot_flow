@@ -324,15 +324,17 @@ func setupDebugDraw():
 	
 	var time_start_loop = Time.get_ticks_usec()
 	if settings.debug_mode == NodeSettings.eDebugMode.EXTENDS:
+		var positions := transforms.positions
+		var eulers := transforms.eulers
+		var sizes := transforms.sizes
 		for idx in range( instance_count ):
-			var t := transforms.atIndex( idx )
+			var t := Transform3D( Basis.from_euler( eulers[idx] * PI / 180.0 ).scaled( sizes[idx] ), positions[idx] )
 			RenderingServer.multimesh_instance_set_transform( multimesh_rid, idx, t)
 
 	elif settings.debug_mode == NodeSettings.eDebugMode.ABSOLUTE:
 		var abs_scale := Vector3.ONE * settings.debug_scale
 		var positions := transforms.positions
 		var eulers := transforms.eulers
-		var sizes := transforms.sizes
 		for idx in range( instance_count ):
 			# Inlining the calls reduced from 40ms to 16ms
 			var t := Transform3D( Basis.from_euler( eulers[idx] * PI / 180.0 ).scaled( abs_scale ), positions[idx] )
