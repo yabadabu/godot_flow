@@ -1,6 +1,8 @@
 @tool
 extends FlowNodeBase
 
+const min_interval := 0.1
+
 func _init():
 	meta_node = {
 		"title" : "Sample Spline",
@@ -26,106 +28,6 @@ func get_polygon_bounds(polygon: PackedVector2Array) -> Rect2:
 		max_y = max(max_y, point.y)
 	
 	return Rect2(min_x, min_y, max_x - min_x, max_y - min_y)	
-
-func curve_to_polygon(curve: Curve3D, resolution: int = 100) -> PackedVector2Array:
-	var polygon = PackedVector2Array()
-	for i in range(resolution + 1):
-		var t = float(i) / resolution
-		var pos = curve.sample_baked(t * curve.get_baked_length())
-		polygon.append(Vector2( pos.x, pos.z ))
-	return polygon
-		
-	
-func rasterize_line(p1: Vector2, p2: Vector2) -> Array[Vector2]:
-	var points : Array[Vector2] = []
-	var dx = abs(p2.x - p1.x)
-	var dy = abs(p2.y - p1.y)
-	var steps = max(dx, dy)
-	
-	if steps == 0:
-		return [p1]
-	
-	var x_inc = (p2.x - p1.x) / steps
-	var y_inc = (p2.y - p1.y) / steps
-	
-	for i in range(int(steps) + 1):
-		var point = Vector2(
-			round(p1.x + i * x_inc),
-			round(p1.y + i * y_inc)
-		)
-		points.append(point)
-	
-	return points	
-	
-func compute_optimized_sdf(curve: Curve3D, bounds: Rect2, res_x: int, res_y : int) -> Array:
-	var polygon = curve_to_polygon(curve, 50)
-	var sdf_grid = []
-	
-	var time_start := Time.get_ticks_usec()	
-	
-	# Initialize grid
-	for y in range(res_y):
-		var row = []
-		for x in range(res_x):
-			row.append(INF)
-		sdf_grid.append(row)
-	
-	var step_x = bounds.size.x / res_x
-	var step_y = bounds.size.y / res_y
-	
-	# Rasterize polygon edges to grid
-	var edge_points = []
-	for i in range(polygon.size()):
-		var p1 = polygon[i]
-		var p2 = polygon[(i + 1) % polygon.size()]
-		
-		# Convert world coordinates to grid coordinates
-		var grid_p1 = Vector2(
-			(p1.x - bounds.position.x) / step_x,
-			(p1.y - bounds.position.y) / step_y
-		)
-		var grid_p2 = Vector2(
-			(p2.x - bounds.position.x) / step_x,
-			(p2.y - bounds.position.y) / step_y
-		)
-		
-		# Rasterize line segment
-		var line_points = rasterize_line(grid_p1, grid_p2)
-		edge_points.append_array(line_points)
-	
-	if settings.trace: print( "spline.grid: %f" % [ Time.get_ticks_usec() - time_start ])
-	# Compute distances using fast sweeping or similar algorithm
-	return compute_distance_transform(sdf_grid, edge_points, polygon, bounds, res_x, res_y)
-
-func compute_distance_transform(grid: Array, edge_points: Array, polygon: PackedVector2Array, bounds: Rect2, res_x: int, res_y: int) -> Array:
-	var step_x = bounds.size.x / res_x
-	var step_y = bounds.size.y / res_y
-	
-	var p3d : PackedVector3Array
-	for ep in polygon:
-		p3d.append( Vector3( ep.x, 0, ep.y ))
-	var kdtree := GDKdTree.new()
-	kdtree.set_points( p3d )
-	
-	# Use efficient distance transform algorithm
-	for y in range(res_y):
-		for x in range(res_x):
-			var world_pos = Vector2(
-				bounds.position.x + x * step_x,
-				bounds.position.y + y * step_y
-			)
-			
-			var is_inside = Geometry2D.is_point_in_polygon(world_pos, polygon)
-			if not is_inside:
-				continue
-			
-			var world_pos3d = Vector3( world_pos.x, 0, world_pos.y )
-			var nearest_idx = kdtree.find_nearest_idx( world_pos3d )
-			var distance = ( world_pos3d - p3d[nearest_idx] ).length()
-			
-			grid[y][x] = -distance
-	
-	return grid
 
 func findNodesOfType(root: Node, type_name: String) -> Array[Node]:
 	var found_nodes: Array[Node] = []
@@ -234,11 +136,13 @@ func execute( ctx : FlowData.EvaluationContext ):
 	var spos := output.getVector3Container( FlowData.AttrPosition )
 	var srot := output.getVector3Container( FlowData.AttrRotation )
 
+	
 	var uniform_interval = getSettingValue( ctx, "uniform_interval" )
-	uniform_interval = maxf( uniform_interval, 0.01 )
+	if uniform_interval < min_interval:
+		uniform_interval = min_interval
+		settings.uniform_interval = uniform_interval
 	
 	if getSettingValue( ctx, "fill_curve" ):
-		var sdists : PackedFloat32Array = output.addStream( "distance", FlowData.DataType.Float )
 		for path_3d in path3d_nodes:
 			var curve : Curve3D = path_3d.curve
 			var base = spos.size()

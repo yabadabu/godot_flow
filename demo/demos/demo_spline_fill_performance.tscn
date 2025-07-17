@@ -10,42 +10,42 @@
 script = ExtResource("3_uvmq1")
 inputs = Array[ExtResource("2_1wmd1")]([])
 
-[sub_resource type="Resource" id="Resource_0uiub"]
+[sub_resource type="Resource" id="Resource_ph7w0"]
 resource_name = "Sample Spline Settings"
 script = ExtResource("8_miu1c")
-uniform_interval = 1.725
-fill_curve = false
+uniform_interval = 0.1
+fill_curve = true
 required_meta_bool = &""
-distance_attribute = "distance"
-random_seed = 1104016555
+distance_attribute = ""
+random_seed = 3855891501
 inspect_enabled = true
 debug_enabled = true
 debug_mode = 0
-debug_scale = 0.41
-debug_color = Color(1, 0, 0, 1)
-debug_modulate_by = "distance"
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
 title = "Sample Spline"
 enabled = true
-trace = true
+trace = false
 
 [sub_resource type="Resource" id="Resource_ahfh6"]
 script = ExtResource("12_w4m8r")
 nodes = Array[Dictionary]([{
-"name": &"id_0002_sample_spline",
-"position_offset": Vector2(-40, 20),
-"settings": SubResource("Resource_0uiub"),
+"name": &"id_0036_sample_spline",
+"position_offset": Vector2(-68.08, 42.1299),
+"settings": SubResource("Resource_ph7w0"),
 "template": "sample_spline"
 }])
 conns = Array[Dictionary]([])
 view_zoom = 0.909092
-view_offset = Vector2(-80.891, -151.7)
-new_name_counter = 35
+view_offset = Vector2(-270.891, -258.7)
+new_name_counter = 36
 inputs = SubResource("Resource_qydfx")
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 
 [sub_resource type="Curve3D" id="Curve3D_ph7w0"]
 closed = true
-bake_interval = 1.725
+bake_interval = 0.47
 _data = {
 "points": PackedVector3Array(10.7106, 0, -1.85651, -10.7106, 0, 1.85651, -5.7514, 0, -22.7671, 2.33254, 0, -1.23767, -2.33254, 0, 1.23767, -14.2571, 0, -9.83, -4.66508, 0, -3.09419, 4.66508, 0, 3.09419, -22.3496, 0, -2.26114, 7.42605, 0, -3.95104, -7.42605, 0, 3.95104, -23.254, 0, 10.4488, -4.18905, 0, -0.190411, 4.18905, 0, 0.190411, -7.6552, 0, 25.8498, -4.66508, 0, 0.904455, 4.66508, 0, -0.904455, 5.53093, 9.53674e-07, 20.7542, -2.18974, 0, 2.85617, 2.18974, 0, -2.85617, 21.2047, 0, 11.9245, 1.71371, 0, 1.95172, -1.71371, 0, -1.95172, 26.7318, 2.38419e-06, -1.20149, 0, 0, 0, 0, 0, 0, 8.68179, -1.90735e-06, 0.616858, 0, 0, 0, 0, 0, 0, 11.8769, 0, -8.83034, -3.90343, 0, 2.57056, 3.90343, 0, -2.57056, 22.8256, 0, -9.35397, 3.66543, 0, 0.856853, -3.66543, 0, -0.856853, 22.0639, 0, -14.4951),
 "tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
