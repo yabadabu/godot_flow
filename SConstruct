@@ -37,6 +37,7 @@ if env["platform"] == "macos":
 
 else:
     env.Append(CFLAGS=["/std:c11"])
+    env.Append(CXXFLAGS=["-O2"])
     library = env.SharedLibrary(
         "demo/bin/libflow{}{}".format(env["suffix"], env["SHLIBSUFFIX"]),
         source=common_sources,

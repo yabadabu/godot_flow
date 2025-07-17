@@ -143,6 +143,14 @@ func findNodesOfType(root: Node, type_name: String) -> Array[Node]:
 	
 	return found_nodes	
 
+func points3d_to_polygon2d(points3d : PackedVector3Array) -> PackedVector2Array:
+	var num_points := points3d.size()
+	var polygon := PackedVector2Array()
+	polygon.resize( num_points )
+	for i in range(num_points):
+		polygon[i] = Vector2( points3d[i].x, points3d[i].z )
+	return polygon
+
 func execute( ctx : FlowData.EvaluationContext ):
 	
 	var root = EditorInterface.get_edited_scene_root()
@@ -198,19 +206,95 @@ func execute( ctx : FlowData.EvaluationContext ):
 			var curve : Curve3D = path_3d.curve
 			curve.bake_interval = uniform_interval
 			var base = spos.size()
-			var curve_length := curve.get_baked_length()
-			var num_samples = curve.get_baked_points().size()
-			spos.resize( base + num_samples )
-			srot.resize( base + num_samples )
-			ssize.resize( base + num_samples)
-			for idx in range( num_samples ):
-				var offset = idx * curve_length / float(num_samples)
-				var t : Transform3D = curve.sample_baked_with_rotation( offset )
-				spos[base + idx] = path_3d.transform * t.origin
+			
+			var points := curve.tessellate(2, 4)
+			#var points := curve.get_baked_points()
+			var points_size := points.size()
+			var new_size = base + points_size
+			
+			var poly2d := points3d_to_polygon2d( points )
+			var bounds = get_polygon_bounds( poly2d )
+			bounds.position -= Vector2( 0.1, 0.1 )
+			bounds.end += Vector2( 0.1, 0.1 )
+			
+			var new_points := PackedVector2Array()
+			var hits := PackedFloat32Array()
+			
+			var time_start_grid := Time.get_ticks_usec()
+			var height : float = bounds.size.y
+			var num_steps : int = round( height / settings.uniform_interval )
+			var py : float = bounds.position.y
+			var dy : float = settings.uniform_interval
+			var dx : float = settings.uniform_interval
+			for y in range( num_steps ):
+
+				var left := Vector2( bounds.position.x, py )
+				var right  := Vector2( bounds.end.x, py )
+				var p0 := poly2d[ points_size - 1 ]
+				hits.clear()
+				for segment_id in range( points_size ):
+					var p1 := poly2d[ segment_id ]
+					var hit = Geometry2D.segment_intersects_segment( p0, p1, left, right )
+					if hit:
+						hits.append( hit.x )
+					p0 = p1
 				
-				var b : Basis = path_3d.transform.basis * t.basis
-				srot[base + idx] = FlowData.basisToEuler( b )
+				var num_hits = hits.size()
+				if num_hits > 0 && (num_hits % 2 == 0):
+					hits.sort()
+					for q0 in range( 0, num_hits, 2 ):
+						var px0 := hits[q0]
+						var px1 := hits[q0+1]
+						px0 = round( px0 / dx ) * dx
+						px1 = round( px1 / dx ) * dx
+						var width = px1 - px0
+						var idx = int( width / dx )
+						for x in range( idx ):
+							new_points.append( Vector2( px0, py ) )
+							px0 += dx 
+						new_points.append( Vector2( px0, py ) )
+				py += dy
+			if settings.trace: print( "spline.grid: %f" % [ Time.get_ticks_usec() - time_start_grid ])
+			
+			for hit in new_points:
+				var hit3d = path_3d.transform * Vector3( hit.x, 0.0, hit.y )
+				spos.append( hit3d )
+				srot.append( Vector3.ZERO )
+				ssize.append( Vector3.ONE )
 				
-				ssize[base + idx] = Vector3.ONE
+			var sdists : PackedFloat32Array = output.addStream( "distance", FlowData.DataType.Float )
+			sdists.resize( new_points.size() )
+			curve.bake_interval = 1.0
+			var equi_borders = curve.get_baked_points()
+			
+			var time_start_kdtree := Time.get_ticks_usec()
+			var kdtree := GDKdTree.new()
+			kdtree.set_points( equi_borders )
+			if settings.trace: print( "spline.kdtree: %f (%d)" % [ Time.get_ticks_usec() - time_start_kdtree, equi_borders.size() ])
+			
+			var time_start_distance := Time.get_ticks_usec()
+			var nearest_indices := kdtree.find_nearest_indices( spos )
+			for src_idx in range( nearest_indices.size() ):
+				var nearest_idx = nearest_indices[src_idx]
+				sdists[src_idx] = ( spos[src_idx] - equi_borders[nearest_idx] ).length()
+			if settings.trace: print( "spline.dist: %f" % [ Time.get_ticks_usec() - time_start_distance ])
+				
+			#var curve_length := curve.get_baked_length()
+			#var num_samples = curve.get_baked_points().size()
+			#
+			#
+			#
+			#spos.resize( base + num_samples )
+			#srot.resize( base + num_samples )
+			#ssize.resize( base + num_samples)
+			#for idx in range( num_samples ):
+				#var offset = idx * curve_length / float(num_samples)
+				#var t : Transform3D = curve.sample_baked_with_rotation( offset )
+				#spos[base + idx] = path_3d.transform * t.origin
+				#
+				#var b : Basis = path_3d.transform.basis * t.basis
+				#srot[base + idx] = FlowData.basisToEuler( b )
+				#
+				#ssize[base + idx] = Vector3.ONE
 
 	set_output( 0, output )
