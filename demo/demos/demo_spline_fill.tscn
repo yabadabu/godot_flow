@@ -42,6 +42,7 @@ debug_color = Color(1, 1, 1, 1)
 debug_modulate_by = ""
 title = "Math"
 enabled = true
+trace = false
 
 [sub_resource type="Resource" id="Resource_aw52y"]
 resource_name = "Select Settings"
@@ -56,6 +57,7 @@ debug_color = Color(1, 0, 1, 1)
 debug_modulate_by = ""
 title = "Select"
 enabled = true
+trace = false
 
 [sub_resource type="Resource" id="Resource_ow8g4"]
 resource_name = "Math Op"
@@ -73,6 +75,7 @@ debug_color = Color(1, 1, 0, 1)
 debug_modulate_by = "distance"
 title = "Math"
 enabled = true
+trace = false
 
 [sub_resource type="Resource" id="Resource_eyxb4"]
 resource_name = "Math Op"
@@ -90,6 +93,7 @@ debug_color = Color(0.847287, 0.896652, 0.999998, 1)
 debug_modulate_by = "distance"
 title = "Math"
 enabled = true
+trace = false
 
 [sub_resource type="Resource" id="Resource_tvg7p"]
 resource_name = "Noise Settings"
@@ -107,6 +111,7 @@ debug_color = Color(1, 1, 1, 1)
 debug_modulate_by = ""
 title = "Noise"
 enabled = true
+trace = false
 
 [sub_resource type="Resource" id="Resource_0gfmn"]
 resource_name = "Add Attribute"
@@ -127,22 +132,7 @@ debug_color = Color(1, 1, 1, 1)
 debug_modulate_by = ""
 title = "Add Attribute"
 enabled = true
-
-[sub_resource type="Resource" id="Resource_0uiub"]
-resource_name = "Sample Spline Settings"
-script = ExtResource("4_0uiub")
-uniform_interval = 0.5
-fill_curve = true
-required_meta_bool = &""
-random_seed = 1104016555
-inspect_enabled = true
-debug_enabled = false
-debug_mode = 1
-debug_scale = 0.32
-debug_color = Color(0.781464, 0.568812, 0.443646, 1)
-debug_modulate_by = "distance"
-title = "Sample Spline"
-enabled = true
+trace = false
 
 [sub_resource type="Resource" id="Resource_82f8x"]
 resource_name = "Select Settings"
@@ -157,6 +147,7 @@ debug_color = Color(1, 1, 1, 1)
 debug_modulate_by = ""
 title = "Select"
 enabled = true
+trace = false
 
 [sub_resource type="Resource" id="Resource_k8ckv"]
 resource_name = "Substract"
@@ -171,6 +162,7 @@ debug_color = Color(1, 1, 1, 1)
 debug_modulate_by = ""
 title = "Substract"
 enabled = true
+trace = false
 
 [sub_resource type="Resource" id="Resource_4ebyb"]
 resource_name = "Transform Settings"
@@ -191,6 +183,7 @@ debug_color = Color(1, 1, 1, 1)
 debug_modulate_by = ""
 title = "Transform"
 enabled = true
+trace = false
 
 [sub_resource type="Resource" id="Resource_pskb1"]
 resource_name = "Remove Attribute Settings"
@@ -206,6 +199,24 @@ debug_color = Color(1, 1, 1, 1)
 debug_modulate_by = ""
 title = "Remove Attributes"
 enabled = true
+trace = false
+
+[sub_resource type="Resource" id="Resource_0uiub"]
+resource_name = "Sample Spline Settings"
+script = ExtResource("4_0uiub")
+uniform_interval = 0.15
+fill_curve = true
+required_meta_bool = &""
+random_seed = 1104016555
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 1
+debug_scale = 0.32
+debug_color = Color(0.781464, 0.568812, 0.443646, 1)
+debug_modulate_by = "distance"
+title = "Sample Spline"
+enabled = true
+trace = false
 
 [sub_resource type="Resource" id="Resource_ahfh6"]
 script = ExtResource("4_ow8g4")
@@ -240,11 +251,6 @@ nodes = Array[Dictionary]([{
 "settings": SubResource("Resource_0gfmn"),
 "template": "add_attribute"
 }, {
-"name": &"id_0002_sample_spline",
-"position_offset": Vector2(-60, 120),
-"settings": SubResource("Resource_0uiub"),
-"template": "sample_spline"
-}, {
 "name": &"id_0023_select",
 "position_offset": Vector2(1340, 240),
 "settings": SubResource("Resource_82f8x"),
@@ -264,6 +270,11 @@ nodes = Array[Dictionary]([{
 "position_offset": Vector2(698.282, -173.883),
 "settings": SubResource("Resource_pskb1"),
 "template": "remove_attribute"
+}, {
+"name": &"id_0002_sample_spline",
+"position_offset": Vector2(-60, 120),
+"settings": SubResource("Resource_0uiub"),
+"template": "sample_spline"
 }])
 conns = Array[Dictionary]([{
 "from_node": &"id_0008_add_attribute",
@@ -351,7 +362,7 @@ conns = Array[Dictionary]([{
 "to_port": 0
 }])
 view_zoom = 0.826447
-view_offset = Vector2(384.092, -443.705)
+view_offset = Vector2(-127.908, -435.705)
 new_name_counter = 29
 inputs = SubResource("Resource_qydfx")
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
