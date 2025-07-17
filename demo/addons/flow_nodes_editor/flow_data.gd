@@ -76,6 +76,9 @@ class Data:
 	
 	func hasStream( name : StringName ) -> bool:
 		return streams.has( name )
+		
+	func hasStreamOfType( name : StringName, data_type : DataType ) -> bool:
+		return streams.has( name ) and streams[ name ].data_type == data_type
 	
 	func getContainerChecked( name : String, data_type : DataType ):
 		var stream = streams.get( name, null )

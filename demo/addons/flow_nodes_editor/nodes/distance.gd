@@ -16,16 +16,17 @@ func execute( ctx : FlowData.EvaluationContext ):
 		return
 		
 	var in_dataA : FlowData.Data = get_input(0)
-	var sA := in_dataA.getVector3Container( settings.in_nameA )
-	if sA == null:
+	if not in_dataA.hasStreamOfType( settings.in_nameA, FlowData.DataType.Vector ):
 		setError( "Input A %s not found" % [settings.in_nameA])
 		return
 		
 	var in_dataB : FlowData.Data = get_input(1)
-	var sB := in_dataB.getVector3Container( settings.in_nameB )
-	if sB == null:
+	if not  in_dataB.hasStreamOfType( settings.in_nameB, FlowData.DataType.Vector ):
 		setError( "Input B %s not found" % [settings.in_nameB])
 		return
+		
+	var sA := in_dataA.getVector3Container( settings.in_nameA )
+	var sB := in_dataB.getVector3Container( settings.in_nameB )
 		
 	var size_A = in_dataA.size()
 		
