@@ -264,7 +264,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 				
 			var sdists : PackedFloat32Array = output.addStream( "distance", FlowData.DataType.Float )
 			sdists.resize( new_points.size() )
-			curve.bake_interval = 1.0
+			curve.bake_interval = uniform_interval * 2.0
 			var equi_borders = curve.get_baked_points()
 			
 			var time_start_kdtree := Time.get_ticks_usec()
