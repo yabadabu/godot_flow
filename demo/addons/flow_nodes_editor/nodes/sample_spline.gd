@@ -151,6 +151,74 @@ func points3d_to_polygon2d(points3d : PackedVector3Array) -> PackedVector2Array:
 		polygon[i] = Vector2( points3d[i].x, points3d[i].z )
 	return polygon
 
+func addDistanceAttribute( output : FlowData.Data, target_points : PackedVector3Array ):
+	var spos := output.getVector3Container( FlowData.AttrPosition )
+	var sdists : PackedFloat32Array = output.addStream( "distance", FlowData.DataType.Float )
+	sdists.resize( output.size() )
+	
+	var time_start_kdtree := Time.get_ticks_usec()
+	var kdtree := GDKdTree.new()
+	kdtree.set_points( target_points )
+	if settings.trace: print( "spline.kdtree: %f (%d)" % [ Time.get_ticks_usec() - time_start_kdtree, target_points.size() ])
+	
+	var time_start_distance := Time.get_ticks_usec()
+	var nearest_indices := kdtree.find_nearest_indices( spos )
+	for src_idx in range( nearest_indices.size() ):
+		var nearest_idx = nearest_indices[src_idx]
+		sdists[src_idx] = ( spos[src_idx] - target_points[nearest_idx] ).length()
+	if settings.trace: print( "spline.dist: %f" % [ Time.get_ticks_usec() - time_start_distance ])	
+
+func rasterizeCurveInXZ( curve : Curve3D, uniform_interval : float, base : int ) -> PackedVector2Array:
+	var points := curve.tessellate(2, 5)
+	var points_size := points.size()
+	var new_size = base + points_size
+	
+	# This uses XZ coords of input points
+	var poly2d := points3d_to_polygon2d( points )
+	var bounds = get_polygon_bounds( poly2d )
+	bounds.position -= Vector2( 0.1, 0.1 )
+	bounds.end += Vector2( 0.1, 0.1 )	
+	
+	var new_points := PackedVector2Array()
+	var hits := PackedFloat32Array()
+	
+	var time_start_grid := Time.get_ticks_usec()
+	var height : float = bounds.size.y
+	var num_steps : int = round( height / uniform_interval )
+	var py : float = bounds.position.y
+	var dy : float = uniform_interval
+	var dx : float = uniform_interval
+	for y in range( num_steps ):
+
+		var left := Vector2( bounds.position.x, py )
+		var right  := Vector2( bounds.end.x, py )
+		var p0 := poly2d[ points_size - 1 ]
+		hits.clear()
+		for segment_id in range( points_size ):
+			var p1 := poly2d[ segment_id ]
+			var hit = Geometry2D.segment_intersects_segment( p0, p1, left, right )
+			if hit:
+				hits.append( hit.x )
+			p0 = p1
+		
+		var num_hits = hits.size()
+		if num_hits > 0 && (num_hits % 2 == 0):
+			hits.sort()
+			for q0 in range( 0, num_hits, 2 ):
+				var px0 := hits[q0]
+				var px1 := hits[q0+1]
+				px0 = round( px0 / dx ) * dx
+				px1 = round( px1 / dx ) * dx
+				var width = px1 - px0
+				var idx = int( width / dx )
+				for x in range( idx ):
+					new_points.append( Vector2( px0, py ) )
+					px0 += dx 
+				new_points.append( Vector2( px0, py ) )
+		py += dy
+	if settings.trace: print( "spline.grid: %f" % [ Time.get_ticks_usec() - time_start_grid ])	
+	return new_points
+
 func execute( ctx : FlowData.EvaluationContext ):
 	
 	var root = EditorInterface.get_edited_scene_root()
@@ -165,136 +233,51 @@ func execute( ctx : FlowData.EvaluationContext ):
 	output.addCommonStreams( 0 )
 	var spos := output.getVector3Container( FlowData.AttrPosition )
 	var srot := output.getVector3Container( FlowData.AttrRotation )
-	var ssize := output.getVector3Container( FlowData.AttrSize )
 
 	var uniform_interval = getSettingValue( ctx, "uniform_interval" )
 	uniform_interval = maxf( uniform_interval, 0.01 )
-
+	
 	if getSettingValue( ctx, "fill_curve" ):
 		var sdists : PackedFloat32Array = output.addStream( "distance", FlowData.DataType.Float )
 		for path_3d in path3d_nodes:
 			var curve : Curve3D = path_3d.curve
-			var time_start_c2p := Time.get_ticks_usec()	
-			var polygon = curve_to_polygon(curve)
-			if trace: print( "spline.eCurve to polygon: %f" % [ Time.get_ticks_usec() - time_start_c2p ])
-			var bounds = get_polygon_bounds(polygon)
-			var dim_x = round( bounds.size.x / uniform_interval )
-			var dim_z = round( bounds.size.y / uniform_interval )
-			#print( "bounds", bounds )
-			var time_start_sdf := Time.get_ticks_usec()	
-			var grid = compute_optimized_sdf( curve, bounds, dim_x, dim_z )
-			if trace: print( "spline.sdf: %f" % [ Time.get_ticks_usec() - time_start_sdf ])
-			#print( grid )
-			var dy = uniform_interval
-			var dx = uniform_interval
-			var py = bounds.position.y
-			for gy in grid:
-				#print( "New line..", py)
-				var px = bounds.position.x
-				for d in gy:
-					if d <= 0:
-						var pos = Vector3( px, 0.0, py )
-						spos.append( path_3d.transform * pos )
-						srot.append( Vector3.ZERO )
-						ssize.append( Vector3.ONE * uniform_interval )
-						sdists.append( -d )
-					px += dx
-				py += dy
+			var base = spos.size()
+
+			var new_points := rasterizeCurveInXZ( curve, uniform_interval, base )
+			
+			for hit in new_points:
+				var hit3d = path_3d.transform * Vector3( hit.x, 0.0, hit.y )
+				spos.append( hit3d )
+				srot.append( Vector3.ZERO )
+				
+			if settings.distance_attribute:
+				curve.bake_interval = uniform_interval * 2.0
+				var border_points = curve.get_baked_points()
+				addDistanceAttribute( output, border_points )
 		
 	else:
 		for path_3d in path3d_nodes:
 			var curve : Curve3D = path_3d.curve
 			curve.bake_interval = uniform_interval
 			var base = spos.size()
+			var curve_length := curve.get_baked_length()
+			var num_samples = curve.get_baked_points().size()
 			
-			var points := curve.tessellate(2, 4)
-			#var points := curve.get_baked_points()
-			var points_size := points.size()
-			var new_size = base + points_size
-			
-			var poly2d := points3d_to_polygon2d( points )
-			var bounds = get_polygon_bounds( poly2d )
-			bounds.position -= Vector2( 0.1, 0.1 )
-			bounds.end += Vector2( 0.1, 0.1 )
-			
-			var new_points := PackedVector2Array()
-			var hits := PackedFloat32Array()
-			
-			var time_start_grid := Time.get_ticks_usec()
-			var height : float = bounds.size.y
-			var num_steps : int = round( height / settings.uniform_interval )
-			var py : float = bounds.position.y
-			var dy : float = settings.uniform_interval
-			var dx : float = settings.uniform_interval
-			for y in range( num_steps ):
-
-				var left := Vector2( bounds.position.x, py )
-				var right  := Vector2( bounds.end.x, py )
-				var p0 := poly2d[ points_size - 1 ]
-				hits.clear()
-				for segment_id in range( points_size ):
-					var p1 := poly2d[ segment_id ]
-					var hit = Geometry2D.segment_intersects_segment( p0, p1, left, right )
-					if hit:
-						hits.append( hit.x )
-					p0 = p1
+			spos.resize( base + num_samples )
+			srot.resize( base + num_samples )
+			for idx in range( num_samples ):
+				var offset = idx * curve_length / float(num_samples)
+				var t : Transform3D = curve.sample_baked_with_rotation( offset )
+				spos[base + idx] = path_3d.transform * t.origin
 				
-				var num_hits = hits.size()
-				if num_hits > 0 && (num_hits % 2 == 0):
-					hits.sort()
-					for q0 in range( 0, num_hits, 2 ):
-						var px0 := hits[q0]
-						var px1 := hits[q0+1]
-						px0 = round( px0 / dx ) * dx
-						px1 = round( px1 / dx ) * dx
-						var width = px1 - px0
-						var idx = int( width / dx )
-						for x in range( idx ):
-							new_points.append( Vector2( px0, py ) )
-							px0 += dx 
-						new_points.append( Vector2( px0, py ) )
-				py += dy
-			if settings.trace: print( "spline.grid: %f" % [ Time.get_ticks_usec() - time_start_grid ])
-			
-			for hit in new_points:
-				var hit3d = path_3d.transform * Vector3( hit.x, 0.0, hit.y )
-				spos.append( hit3d )
-				srot.append( Vector3.ZERO )
-				ssize.append( Vector3.ONE )
+				var b : Basis = path_3d.transform.basis * t.basis
+				srot[base + idx] = FlowData.basisToEuler( b )
+		uniform_interval = 1.0
 				
-			var sdists : PackedFloat32Array = output.addStream( "distance", FlowData.DataType.Float )
-			sdists.resize( new_points.size() )
-			curve.bake_interval = uniform_interval * 2.0
-			var equi_borders = curve.get_baked_points()
-			
-			var time_start_kdtree := Time.get_ticks_usec()
-			var kdtree := GDKdTree.new()
-			kdtree.set_points( equi_borders )
-			if settings.trace: print( "spline.kdtree: %f (%d)" % [ Time.get_ticks_usec() - time_start_kdtree, equi_borders.size() ])
-			
-			var time_start_distance := Time.get_ticks_usec()
-			var nearest_indices := kdtree.find_nearest_indices( spos )
-			for src_idx in range( nearest_indices.size() ):
-				var nearest_idx = nearest_indices[src_idx]
-				sdists[src_idx] = ( spos[src_idx] - equi_borders[nearest_idx] ).length()
-			if settings.trace: print( "spline.dist: %f" % [ Time.get_ticks_usec() - time_start_distance ])
-				
-			#var curve_length := curve.get_baked_length()
-			#var num_samples = curve.get_baked_points().size()
-			#
-			#
-			#
-			#spos.resize( base + num_samples )
-			#srot.resize( base + num_samples )
-			#ssize.resize( base + num_samples)
-			#for idx in range( num_samples ):
-				#var offset = idx * curve_length / float(num_samples)
-				#var t : Transform3D = curve.sample_baked_with_rotation( offset )
-				#spos[base + idx] = path_3d.transform * t.origin
-				#
-				#var b : Basis = path_3d.transform.basis * t.basis
-				#srot[base + idx] = FlowData.basisToEuler( b )
-				#
-				#ssize[base + idx] = Vector3.ONE
+	# All the samples have the same size
+	var ssize := output.getVector3Container( FlowData.AttrSize )
+	ssize.resize( spos.size() )
+	var sample_size = Vector3.ONE * uniform_interval
+	ssize.fill(sample_size)
 
 	set_output( 0, output )
