@@ -300,8 +300,10 @@ func setupDebugDraw():
 	if not out_data || !out_data.hasStream( FlowData.AttrPosition ):
 		print( "setupDebugDraw failed - out_data" )
 		return
+	var instance_count = out_data.size()
 		
-	create_multimesh_direct()
+	if not multimesh_rid.is_valid() or RenderingServer.multimesh_get_instance_count(multimesh_rid) < instance_count:
+		create_multimesh_direct()
 		
 	if not multimesh_rid.is_valid():
 		print( "setupDebugDraw failed - multimesh_rid" )
@@ -312,7 +314,6 @@ func setupDebugDraw():
 		print( "setupDebugDraw failed - positions/eulers" )
 		return
 	
-	var instance_count = out_data.size()
 	var allocated_count = instance_count
 	if debug_row != -1 and debug_row < instance_count:
 		allocated_count += 1
@@ -321,17 +322,22 @@ func setupDebugDraw():
 	if allocated_count != current_count:
 		RenderingServer.multimesh_allocate_data(multimesh_rid, allocated_count, RenderingServer.MultimeshTransformFormat.MULTIMESH_TRANSFORM_3D, true )
 	
+	var time_start_loop = Time.get_ticks_usec()
 	if settings.debug_mode == NodeSettings.eDebugMode.EXTENDS:
 		for idx in range( instance_count ):
 			var t := transforms.atIndex( idx )
 			RenderingServer.multimesh_instance_set_transform( multimesh_rid, idx, t)
 
 	elif settings.debug_mode == NodeSettings.eDebugMode.ABSOLUTE:
-		var abs_scale := settings.debug_scale
+		var abs_scale := Vector3.ONE * settings.debug_scale
+		var positions := transforms.positions
+		var eulers := transforms.eulers
+		var sizes := transforms.sizes
 		for idx in range( instance_count ):
-			var t := transforms.atIndexAbsScale( idx, abs_scale )
+			# Inlining the calls reduced from 40ms to 16ms
+			var t := Transform3D( Basis.from_euler( eulers[idx] * PI / 180.0 ).scaled( abs_scale ), positions[idx] )
 			RenderingServer.multimesh_instance_set_transform( multimesh_rid, idx, t)
-		
+	if settings.trace: print( "Debug.Loop: %f (%d)" % [ Time.get_ticks_usec() - time_start_loop, instance_count ] )
 	setupColors( out_data )
 
 	# Copy the transform and color at Nth and paste it at the end
