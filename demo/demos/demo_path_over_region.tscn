@@ -1,11 +1,10 @@
-[gd_scene load_steps=51 format=3 uid="uid://bl32jt5udtf08"]
+[gd_scene load_steps=53 format=3 uid="uid://bl32jt5udtf08"]
 
 [ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_2l584"]
 [ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="2_dxf0c"]
 [ext_resource type="Script" uid="uid://ctvo7a7lud8bn" path="res://addons/flow_nodes_editor/graph_input_parameters.gd" id="3_qf0nw"]
 [ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="4_2jbe2"]
 [ext_resource type="Script" uid="uid://cbj3mmuatfk1v" path="res://addons/flow_nodes_editor/nodes/sample_spline_settings.gd" id="4_qf0nw"]
-[ext_resource type="Script" uid="uid://dt7o3moxddt4h" path="res://addons/flow_nodes_editor/nodes/transform_settings.gd" id="5_2jbe2"]
 [ext_resource type="Script" uid="uid://cnhqpivgscgff" path="res://addons/flow_nodes_editor/nodes/select_settings.gd" id="6_5uxx2"]
 [ext_resource type="Script" uid="uid://oocaue4cyte2" path="res://addons/flow_nodes_editor/nodes/scan_nodes_settings.gd" id="8_qt8uc"]
 [ext_resource type="PackedScene" uid="uid://bhacwufn13rf6" path="res://scenes/totem.tscn" id="9_2lc4x"]
@@ -15,15 +14,17 @@
 [ext_resource type="Script" uid="uid://dqd74l1ewnh0g" path="res://addons/flow_nodes_editor/nodes/spawn_scenes_settings.gd" id="12_i2drj"]
 [ext_resource type="Script" uid="uid://du3c8wxq0r2fl" path="res://addons/flow_nodes_editor/nodes/input_settings.gd" id="13_7k55o"]
 [ext_resource type="Script" uid="uid://runa6a3koevg" path="res://addons/flow_nodes_editor/nodes/add_attribute_settings.gd" id="14_2yywp"]
-[ext_resource type="Script" uid="uid://dhryaxkxmtaui" path="res://addons/flow_nodes_editor/nodes/make_vector_settings.gd" id="15_fhyap"]
 [ext_resource type="Script" uid="uid://bhnderip4tx0c" path="res://addons/flow_nodes_editor/nodes/sort_settings.gd" id="15_jiljv"]
 [ext_resource type="Script" uid="uid://bw3x7p10afvc7" path="res://addons/flow_nodes_editor/nodes/substract_settings.gd" id="16_4j7uw"]
 [ext_resource type="Texture2D" uid="uid://d2hg4bxm2gqij" path="res://icon.svg" id="16_jiljv"]
+[ext_resource type="Script" uid="uid://cka12nenjlwgx" path="res://addons/flow_nodes_editor/nodes/filter_settings.gd" id="16_ol2su"]
 [ext_resource type="Script" uid="uid://dbtbo3vh5nl2c" path="res://scenes/scene_3p.gd" id="17_4j7uw"]
+[ext_resource type="Script" uid="uid://bo5aaecpx1tsp" path="res://addons/flow_nodes_editor/nodes/distance_settings.gd" id="17_syw2u"]
+[ext_resource type="Script" uid="uid://ctpeiiq5p30rt" path="res://addons/flow_nodes_editor/nodes/noise_settings.gd" id="18_6s8jo"]
 
 [sub_resource type="Curve3D" id="Curve3D_36lll"]
 closed = true
-bake_interval = 1.0
+bake_interval = 0.36
 _data = {
 "points": PackedVector3Array(-2.87821, 0, 0.0274496, 2.87821, 0, -0.0274496, -10.3826, 0, -5.85868, -3.1811, 0, 0.229375, 3.1811, 0, -0.229375, -0.160163, 0, -8.9128, -2.60057, 0, -1.46175, 2.60057, 0, 1.46175, 9.91085, 0, -7.75173, -0.0910978, 0, -4.14596, 0.0910978, 0, 4.14596, 14.6308, 0, 2.77362, 3.53368, 0, -2.77641, -3.53368, 0, 2.77641, 9.08778, 0, 12.939, 4.18995, 0, 0.201923, -4.18995, 0, -0.201923, -4.54217, 0, 14.3526, 2.87743, 0, 2.2969, -2.87743, 0, -2.2969, -18.3236, 0, 10.2888, -2.12021, 0, 3.357, 2.12021, 0, -3.357, -19.1817, 0, -2.78582),
 "tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0)
@@ -45,38 +46,6 @@ metadata/_custom_type_script = "uid://co0f3ugd2wj1y"
 script = ExtResource("3_qf0nw")
 inputs = Array[ExtResource("2_dxf0c")]([SubResource("Resource_4j7uw")])
 
-[sub_resource type="Resource" id="Resource_pf313"]
-resource_name = "Make Vector Settings"
-script = ExtResource("15_fhyap")
-x = 0.0
-y = 2.385
-z = 0.0
-out_name = "Vector"
-random_seed = 1811310913
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Make Vector"
-enabled = true
-
-[sub_resource type="Resource" id="Resource_syw2u"]
-resource_name = "Input"
-script = ExtResource("13_7k55o")
-name = "road_width"
-data_type = 2
-random_seed = 3347556143
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Input"
-enabled = true
-
 [sub_resource type="Resource" id="Resource_4k8gr"]
 resource_name = "Math Op"
 script = ExtResource("9_dbqvf")
@@ -93,6 +62,7 @@ debug_color = Color(1, 1, 1, 1)
 debug_modulate_by = ""
 title = "Math"
 enabled = true
+trace = false
 
 [sub_resource type="Resource" id="Resource_n1ipx"]
 resource_name = "Add Attribute"
@@ -113,6 +83,7 @@ debug_color = Color(1, 1, 1, 1)
 debug_modulate_by = ""
 title = "Add Attribute"
 enabled = true
+trace = false
 
 [sub_resource type="Resource" id="Resource_2vt0m"]
 resource_name = "Math Op"
@@ -130,6 +101,7 @@ debug_color = Color(1, 1, 1, 1)
 debug_modulate_by = ""
 title = "Math"
 enabled = true
+trace = false
 
 [sub_resource type="Resource" id="Resource_87sea"]
 resource_name = "Add Attribute"
@@ -151,6 +123,7 @@ debug_color = Color(1, 1, 1, 1)
 debug_modulate_by = ""
 title = "Add Attribute"
 enabled = true
+trace = false
 
 [sub_resource type="Resource" id="Resource_byowy"]
 resource_name = "Sort Settings"
@@ -166,6 +139,7 @@ debug_color = Color(1, 1, 1, 1)
 debug_modulate_by = ""
 title = "Sort"
 enabled = true
+trace = false
 
 [sub_resource type="Resource" id="Resource_xl81d"]
 resource_name = "Math Op"
@@ -183,6 +157,7 @@ debug_color = Color(1, 1, 1, 1)
 debug_modulate_by = ""
 title = "Math"
 enabled = true
+trace = false
 
 [sub_resource type="Resource" id="Resource_euihk"]
 resource_name = "Math Op"
@@ -200,31 +175,7 @@ debug_color = Color(1, 1, 1, 1)
 debug_modulate_by = ""
 title = "Math"
 enabled = true
-
-[sub_resource type="QuadMesh" id="QuadMesh_2yywp"]
-resource_local_to_scene = true
-resource_name = "pep"
-
-[sub_resource type="Resource" id="Resource_f6aqs"]
-resource_name = "Add Attribute"
-script = ExtResource("14_2yywp")
-name = "Road Width"
-data_type = 2
-cte_bool = false
-cte_int = 250
-cte_float = 3.43
-cte_vector = Vector3(0, 0.21, 0.36)
-cte_resource = SubResource("QuadMesh_2yywp")
-cte_string = "John"
-random_seed = 2216251910
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Add Attribute"
-enabled = true
+trace = false
 
 [sub_resource type="Resource" id="Resource_ol2su"]
 resource_name = "Add Attribute"
@@ -245,6 +196,7 @@ debug_color = Color(1, 1, 1, 1)
 debug_modulate_by = ""
 title = "Add Attribute"
 enabled = true
+trace = false
 
 [sub_resource type="Resource" id="Resource_6s8jo"]
 resource_name = "Math Op"
@@ -262,6 +214,7 @@ debug_color = Color(1, 1, 1, 1)
 debug_modulate_by = ""
 title = "Math"
 enabled = true
+trace = false
 
 [sub_resource type="Resource" id="Resource_xt6rs"]
 resource_name = "Add Attribute"
@@ -282,88 +235,7 @@ debug_color = Color(1, 1, 1, 1)
 debug_modulate_by = ""
 title = "Add Attribute"
 enabled = true
-
-[sub_resource type="Resource" id="Resource_2jbe2"]
-resource_name = "Sample Spline Settings"
-script = ExtResource("4_qf0nw")
-uniform_interval = 3.28
-fill_curve = false
-required_meta_bool = &"is_road"
-random_seed = 2623515292
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Sample Spline"
-enabled = true
-
-[sub_resource type="Resource" id="Resource_qt8uc"]
-resource_name = "Sample Spline Settings"
-script = ExtResource("4_qf0nw")
-uniform_interval = 1.0
-fill_curve = true
-required_meta_bool = &"is_grass"
-random_seed = 2797604824
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Sample Spline"
-enabled = true
-
-[sub_resource type="Resource" id="Resource_dbqvf"]
-resource_name = "Select Settings"
-script = ExtResource("6_5uxx2")
-ratio = 0.2
-random_seed = 1388504677
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Select"
-enabled = true
-
-[sub_resource type="Resource" id="Resource_2lc4x"]
-resource_name = "Transform Settings"
-script = ExtResource("5_2jbe2")
-offset_min = Vector3(0.04, 0, 0)
-offset_max = Vector3(0, 0, 0)
-rotation_min = Vector3(0, 0, 0)
-rotation_max = Vector3(0, 0, 0)
-scale_min = Vector3(3, 1, 1)
-scale_max = Vector3(3, 1, 1)
-uniform_scale = false
-random_seed = 4192799995
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Transform"
-enabled = true
-
-[sub_resource type="Resource" id="Resource_banft"]
-resource_name = "Scan Nodes Settings"
-script = ExtResource("8_qt8uc")
-group_name = "totem"
-import_metadata = true
-import_properties = Array[StringName]([&"num_enemies"])
-random_seed = 1619377703
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Scan Nodes"
-enabled = true
+trace = false
 
 [sub_resource type="Resource" id="Resource_i2drj"]
 resource_name = "Math Op"
@@ -381,23 +253,22 @@ debug_color = Color(1, 1, 1, 1)
 debug_modulate_by = ""
 title = "Math"
 enabled = true
+trace = false
 
-[sub_resource type="Resource" id="Resource_jiljv"]
-resource_name = "Math Op"
-script = ExtResource("9_dbqvf")
-operation = 2
-in_nameA = "dx"
-in_nameB = "40"
-out_name = "dx"
-random_seed = 1411851728
+[sub_resource type="Resource" id="Resource_2yywp"]
+resource_name = "Self Pruning"
+script = ExtResource("10_qe4ar")
+keep_self_intersections = false
+random_seed = 3556067674
 inspect_enabled = false
-debug_enabled = false
+debug_enabled = true
 debug_mode = 0
 debug_scale = 1.0
 debug_color = Color(1, 1, 1, 1)
 debug_modulate_by = ""
-title = "Math"
+title = "Self Pruning"
 enabled = true
+trace = false
 
 [sub_resource type="Resource" id="Resource_fhyap"]
 resource_name = "Spawn Scenes Settings"
@@ -417,34 +288,109 @@ debug_color = Color(1, 1, 1, 1)
 debug_modulate_by = ""
 title = "Spawn Scenes"
 enabled = true
+trace = false
 
-[sub_resource type="Resource" id="Resource_2yywp"]
-resource_name = "Self Pruning"
-script = ExtResource("10_qe4ar")
-keep_self_intersections = false
-random_seed = 3556067674
-inspect_enabled = false
-debug_enabled = true
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Self Pruning"
-enabled = true
-
-[sub_resource type="Resource" id="Resource_4utxu"]
-resource_name = "Substract"
-script = ExtResource("16_4j7uw")
-operation = 0
-random_seed = 1562436322
+[sub_resource type="Resource" id="Resource_jiljv"]
+resource_name = "Math Op"
+script = ExtResource("9_dbqvf")
+operation = 2
+in_nameA = "dx"
+in_nameB = "40"
+out_name = "dx"
+random_seed = 1411851728
 inspect_enabled = false
 debug_enabled = false
 debug_mode = 0
 debug_scale = 1.0
 debug_color = Color(1, 1, 1, 1)
 debug_modulate_by = ""
-title = "Substract"
+title = "Math"
 enabled = true
+trace = false
+
+[sub_resource type="Resource" id="Resource_banft"]
+resource_name = "Scan Nodes Settings"
+script = ExtResource("8_qt8uc")
+group_name = "totem"
+import_metadata = true
+import_properties = Array[StringName]([&"num_enemies"])
+random_seed = 1619377703
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Scan Nodes"
+enabled = true
+trace = false
+
+[sub_resource type="Resource" id="Resource_qt8uc"]
+resource_name = "Sample Spline Settings"
+script = ExtResource("4_qf0nw")
+uniform_interval = 0.18
+fill_curve = true
+required_meta_bool = &"is_grass"
+distance_attribute = "distance"
+random_seed = 2797604824
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Sample Spline"
+enabled = true
+trace = false
+
+[sub_resource type="Resource" id="Resource_2jbe2"]
+resource_name = "Sample Spline Settings"
+script = ExtResource("4_qf0nw")
+uniform_interval = 2.22
+fill_curve = false
+required_meta_bool = &"is_road"
+distance_attribute = "distance"
+random_seed = 2623515292
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Sample Spline"
+enabled = true
+trace = false
+
+[sub_resource type="Resource" id="Resource_syw2u"]
+resource_name = "Input"
+script = ExtResource("13_7k55o")
+name = "road_width"
+data_type = 2
+random_seed = 3347556143
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Input"
+enabled = true
+trace = false
+
+[sub_resource type="Resource" id="Resource_dbqvf"]
+resource_name = "Select Settings"
+script = ExtResource("6_5uxx2")
+ratio = 0.2
+random_seed = 1388504677
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Select"
+enabled = true
+trace = false
 
 [sub_resource type="Resource" id="Resource_yalli"]
 resource_name = "Substract"
@@ -459,21 +405,110 @@ debug_color = Color(1, 1, 1, 1)
 debug_modulate_by = ""
 title = "Substract"
 enabled = true
+trace = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_2yywp"]
+resource_local_to_scene = true
+resource_name = "pep"
+
+[sub_resource type="Resource" id="Resource_f6aqs"]
+resource_name = "Add Attribute"
+script = ExtResource("14_2yywp")
+name = "Road Width"
+data_type = 2
+cte_bool = false
+cte_int = 250
+cte_float = 5.155
+cte_vector = Vector3(0, 0.21, 0.36)
+cte_resource = SubResource("QuadMesh_2yywp")
+cte_string = "John"
+random_seed = 2216251910
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Add Attribute"
+enabled = true
+trace = false
+
+[sub_resource type="Resource" id="Resource_pf313"]
+resource_name = "Filter Settings"
+script = ExtResource("16_ol2su")
+condition = 2
+in_nameA = "distance"
+in_nameB = "Road Width"
+threshold = 0.1
+random_seed = 107031582
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Filter"
+enabled = true
+trace = false
+
+[sub_resource type="Resource" id="Resource_4utxu"]
+resource_name = "Distance Settings"
+script = ExtResource("17_syw2u")
+max_distance = 0.605
+out_name = "distance"
+in_nameA = "position"
+in_nameB = "position"
+random_seed = 3893480554
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Distance"
+enabled = true
+trace = false
+
+[sub_resource type="Resource" id="Resource_8qpq4"]
+resource_name = "Noise Settings"
+script = ExtResource("18_6s8jo")
+out_name = "noise"
+in_scale = 12415.1
+noise_bias = -1.46
+noise_amplitude = 6.45
+random_seed = 2098406315
+inspect_enabled = true
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Noise"
+enabled = true
+trace = false
+
+[sub_resource type="Resource" id="Resource_rp5rq"]
+resource_name = "Math Op"
+script = ExtResource("9_dbqvf")
+operation = 0
+in_nameA = "noise"
+in_nameB = "distance"
+out_name = "distance"
+random_seed = 1984223721
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Math"
+enabled = true
+trace = false
 
 [sub_resource type="Resource" id="Resource_5uxx2"]
 resource_local_to_scene = true
 script = ExtResource("4_2jbe2")
 nodes = Array[Dictionary]([{
-"name": &"id_0066_make_vector",
-"position_offset": Vector2(200, 280),
-"settings": SubResource("Resource_pf313"),
-"template": "make_vector"
-}, {
-"name": &"id_0032_input_road_width",
-"position_offset": Vector2(-20, 310),
-"settings": SubResource("Resource_syw2u"),
-"template": "input_road_width"
-}, {
 "name": &"id_0086_math_op",
 "position_offset": Vector2(370, -230),
 "settings": SubResource("Resource_4k8gr"),
@@ -509,11 +544,6 @@ nodes = Array[Dictionary]([{
 "settings": SubResource("Resource_euihk"),
 "template": "math_op"
 }, {
-"name": &"id_0078_add_attribute",
-"position_offset": Vector2(-40, 420),
-"settings": SubResource("Resource_f6aqs"),
-"template": "add_attribute"
-}, {
 "name": &"id_0033_add_attribute",
 "position_offset": Vector2(200, -110),
 "settings": SubResource("Resource_ol2su"),
@@ -529,68 +559,82 @@ nodes = Array[Dictionary]([{
 "settings": SubResource("Resource_xt6rs"),
 "template": "add_attribute"
 }, {
-"name": &"id_0006_sample_spline",
-"position_offset": Vector2(-100, 100),
-"settings": SubResource("Resource_2jbe2"),
-"template": "sample_spline"
-}, {
-"name": &"id_0007_sample_spline",
-"position_offset": Vector2(60, 600),
-"settings": SubResource("Resource_qt8uc"),
-"template": "sample_spline"
-}, {
-"name": &"id_0008_select",
-"position_offset": Vector2(400, 520),
-"settings": SubResource("Resource_dbqvf"),
-"template": "select"
-}, {
-"name": &"id_0003_transform",
-"position_offset": Vector2(380, 100),
-"settings": SubResource("Resource_2lc4x"),
-"template": "transform"
-}, {
-"name": &"id_0011_scan_nodes",
-"position_offset": Vector2(40, 820),
-"settings": SubResource("Resource_banft"),
-"template": "scan_nodes"
-}, {
 "name": &"id_0015_math_op",
 "position_offset": Vector2(360, 820),
 "settings": SubResource("Resource_i2drj"),
 "template": "math_op"
-}, {
-"name": &"id_0030_math_op",
-"position_offset": Vector2(620, 920),
-"settings": SubResource("Resource_jiljv"),
-"template": "math_op"
-}, {
-"name": &"id_0028_spawn_scenes",
-"position_offset": Vector2(840, 980),
-"settings": SubResource("Resource_fhyap"),
-"template": "spawn_scenes"
 }, {
 "name": &"id_0071_self_pruning",
 "position_offset": Vector2(1400, 540),
 "settings": SubResource("Resource_2yywp"),
 "template": "self_pruning"
 }, {
-"name": &"id_0095_substract",
-"position_offset": Vector2(780, 380),
-"settings": SubResource("Resource_4utxu"),
-"template": "substract"
+"name": &"id_0028_spawn_scenes",
+"position_offset": Vector2(840, 980),
+"settings": SubResource("Resource_fhyap"),
+"template": "spawn_scenes"
+}, {
+"name": &"id_0030_math_op",
+"position_offset": Vector2(620, 920),
+"settings": SubResource("Resource_jiljv"),
+"template": "math_op"
+}, {
+"name": &"id_0011_scan_nodes",
+"position_offset": Vector2(40, 820),
+"settings": SubResource("Resource_banft"),
+"template": "scan_nodes"
+}, {
+"name": &"id_0007_sample_spline",
+"position_offset": Vector2(60, 600),
+"settings": SubResource("Resource_qt8uc"),
+"template": "sample_spline"
+}, {
+"name": &"id_0006_sample_spline",
+"position_offset": Vector2(-100, 100),
+"settings": SubResource("Resource_2jbe2"),
+"template": "sample_spline"
+}, {
+"name": &"id_0032_input_road_width",
+"position_offset": Vector2(-20, 310),
+"settings": SubResource("Resource_syw2u"),
+"template": "input_road_width"
+}, {
+"name": &"id_0008_select",
+"position_offset": Vector2(400, 520),
+"settings": SubResource("Resource_dbqvf"),
+"template": "select"
 }, {
 "name": &"id_0096_substract",
-"position_offset": Vector2(1135.49, 726.083),
+"position_offset": Vector2(1240, 640),
 "settings": SubResource("Resource_yalli"),
 "template": "substract"
+}, {
+"name": &"id_0078_add_attribute",
+"position_offset": Vector2(740, 320),
+"settings": SubResource("Resource_f6aqs"),
+"template": "add_attribute"
+}, {
+"name": &"id_0099_filter",
+"position_offset": Vector2(1060, 340),
+"settings": SubResource("Resource_pf313"),
+"template": "filter"
+}, {
+"name": &"id_0097_distance",
+"position_offset": Vector2(620, 80),
+"settings": SubResource("Resource_4utxu"),
+"template": "distance"
+}, {
+"name": &"id_0100_noise",
+"position_offset": Vector2(960, 20),
+"settings": SubResource("Resource_8qpq4"),
+"template": "noise"
+}, {
+"name": &"id_0101_math_op",
+"position_offset": Vector2(1280, 200),
+"settings": SubResource("Resource_rp5rq"),
+"template": "math_op"
 }])
 conns = Array[Dictionary]([{
-"from_node": &"id_0006_sample_spline",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0003_transform",
-"to_port": 0
-}, {
 "from_node": &"id_0007_sample_spline",
 "from_port": 0,
 "keep_alive": false,
@@ -632,18 +676,6 @@ conns = Array[Dictionary]([{
 "keep_alive": false,
 "to_node": &"id_0034_math_op",
 "to_port": 1
-}, {
-"from_node": &"id_0066_make_vector",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0003_transform",
-"to_port": 5
-}, {
-"from_node": &"id_0066_make_vector",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0003_transform",
-"to_port": 6
 }, {
 "from_node": &"id_0006_sample_spline",
 "from_port": 0,
@@ -693,36 +725,6 @@ conns = Array[Dictionary]([{
 "to_node": &"id_0094_math_op",
 "to_port": 0
 }, {
-"from_node": &"id_0078_add_attribute",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0066_make_vector",
-"to_port": 0
-}, {
-"from_node": &"id_0078_add_attribute",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0066_make_vector",
-"to_port": 2
-}, {
-"from_node": &"id_0008_select",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0095_substract",
-"to_port": 0
-}, {
-"from_node": &"id_0003_transform",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0095_substract",
-"to_port": 1
-}, {
-"from_node": &"id_0095_substract",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0096_substract",
-"to_port": 0
-}, {
 "from_node": &"id_0028_spawn_scenes",
 "from_port": 0,
 "keep_alive": false,
@@ -734,15 +736,63 @@ conns = Array[Dictionary]([{
 "keep_alive": false,
 "to_node": &"id_0071_self_pruning",
 "to_port": 0
+}, {
+"from_node": &"id_0008_select",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0097_distance",
+"to_port": 0
+}, {
+"from_node": &"id_0006_sample_spline",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0097_distance",
+"to_port": 1
+}, {
+"from_node": &"id_0078_add_attribute",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0099_filter",
+"to_port": 1
+}, {
+"from_node": &"id_0099_filter",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0096_substract",
+"to_port": 0
+}, {
+"from_node": &"id_0097_distance",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0100_noise",
+"to_port": 0
+}, {
+"from_node": &"id_0100_noise",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0101_math_op",
+"to_port": 0
+}, {
+"from_node": &"id_0097_distance",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0101_math_op",
+"to_port": 1
+}, {
+"from_node": &"id_0101_math_op",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0099_filter",
+"to_port": 0
 }])
-view_zoom = 0.882331
-view_offset = Vector2(557.874, 40.6456)
-new_name_counter = 96
+view_zoom = 0.970564
+view_offset = Vector2(590.061, -132.99)
+new_name_counter = 101
 inputs = SubResource("Resource_psfr8")
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 
 [sub_resource type="Curve3D" id="Curve3D_nuuxb"]
-bake_interval = 3.28
+bake_interval = 2.22
 _data = {
 "points": PackedVector3Array(0, 0, 0, 0, 0, 0, -24.8343, 0, 5.68748, -6.06478, 0, 0.294408, 6.06478, 0, -0.294408, -12.1454, 0, 1.71299, -5.03436, 0, 0.706576, 5.03436, 0, -0.706576, 4.91215, 1.90735e-06, 4.94331, 0, 0, 0, 0, 0, 0, 21.3287, 0, -2.4087),
 "tilts": PackedFloat32Array(0, 0, 0, 0)

@@ -24,18 +24,19 @@ offset_min = Vector3(0, 0, 0)
 offset_max = Vector3(0, 0, 0)
 rotation_min = Vector3(0, 0, 0)
 rotation_max = Vector3(0, 0, 0)
-scale_min = Vector3(0.1, 1, 1)
-scale_max = Vector3(0.1, 1, 1)
-uniform_scale = true
+scale_min = Vector3(0.1, 0.5, 0.1)
+scale_max = Vector3(0.1, 0.5, 0.1)
+uniform_scale = false
 random_seed = 345771434
 inspect_enabled = false
-debug_enabled = true
+debug_enabled = false
 debug_mode = 0
 debug_scale = 1.0
 debug_color = Color(1, 1, 1, 1)
 debug_modulate_by = ""
 title = "Transform"
 enabled = true
+trace = false
 
 [sub_resource type="Resource" id="Resource_7yb35"]
 resource_name = "Make Vector Settings"
@@ -53,6 +54,7 @@ debug_color = Color(1, 1, 1, 1)
 debug_modulate_by = ""
 title = "Make Vector"
 enabled = true
+trace = false
 
 [sub_resource type="Resource" id="Resource_72pfr"]
 resource_name = "Sample Spline Settings"
@@ -60,6 +62,7 @@ script = ExtResource("4_3kbeu")
 uniform_interval = 0.295
 fill_curve = false
 required_meta_bool = &""
+distance_attribute = "distance"
 random_seed = 1282431794
 inspect_enabled = false
 debug_enabled = false
@@ -69,6 +72,7 @@ debug_color = Color(1, 1, 1, 1)
 debug_modulate_by = ""
 title = "Sample Spline"
 enabled = true
+trace = false
 
 [sub_resource type="Resource" id="Resource_1f6x3"]
 resource_name = "Grid Settings"
@@ -86,6 +90,7 @@ debug_color = Color(1, 1, 1, 1)
 debug_modulate_by = ""
 title = "Grid"
 enabled = true
+trace = false
 
 [sub_resource type="Resource" id="Resource_i4esb"]
 resource_name = "Transform Settings"
@@ -106,6 +111,7 @@ debug_color = Color(1, 1, 1, 1)
 debug_modulate_by = ""
 title = "Transform"
 enabled = true
+trace = false
 
 [sub_resource type="Resource" id="Resource_lewgr"]
 resource_name = "Add Attribute"
@@ -126,6 +132,7 @@ debug_color = Color(1, 1, 1, 1)
 debug_modulate_by = ""
 title = "Add Attribute"
 enabled = true
+trace = false
 
 [sub_resource type="Resource" id="Resource_ildus"]
 resource_name = "Distance Settings"
@@ -136,13 +143,14 @@ in_nameA = "position"
 in_nameB = "position"
 random_seed = 2858792388
 inspect_enabled = false
-debug_enabled = true
+debug_enabled = false
 debug_mode = 1
 debug_scale = 0.15
 debug_color = Color(0, 1, 1, 1)
 debug_modulate_by = "distance"
 title = "Distance"
 enabled = true
+trace = false
 
 [sub_resource type="Resource" id="Resource_gexxf"]
 resource_name = "Add Attribute"
@@ -163,6 +171,7 @@ debug_color = Color(1, 1, 1, 1)
 debug_modulate_by = ""
 title = "Add Attribute"
 enabled = true
+trace = false
 
 [sub_resource type="Resource" id="Resource_f70y0"]
 resource_name = "Filter Settings"
@@ -180,12 +189,13 @@ debug_color = Color(1, 1, 1, 1)
 debug_modulate_by = ""
 title = "Filter"
 enabled = true
+trace = false
 
 [sub_resource type="Resource" id="Resource_5q8kf"]
 resource_name = "Node Settings"
 script = ExtResource("11_1f6x3")
 random_seed = 260367329
-inspect_enabled = true
+inspect_enabled = false
 debug_enabled = true
 debug_mode = 1
 debug_scale = 0.175
@@ -193,6 +203,7 @@ debug_color = Color(1, 0.235294, 1, 1)
 debug_modulate_by = "distance"
 title = "Debug"
 enabled = true
+trace = false
 
 [sub_resource type="Resource" id="Resource_o2vll"]
 resource_name = "graph_distance"

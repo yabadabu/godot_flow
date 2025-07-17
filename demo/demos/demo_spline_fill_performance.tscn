@@ -1,9 +1,8 @@
-[gd_scene load_steps=12 format=3 uid="uid://cwc34bawmmgaj"]
+[gd_scene load_steps=10 format=3 uid="uid://cwc34bawmmgaj"]
 
 [ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_yfg15"]
 [ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="2_1wmd1"]
 [ext_resource type="Script" uid="uid://ctvo7a7lud8bn" path="res://addons/flow_nodes_editor/graph_input_parameters.gd" id="3_uvmq1"]
-[ext_resource type="Script" uid="uid://ckff4og6eip3" path="res://addons/flow_nodes_editor/nodes/math_op_settings.gd" id="4_8wbym"]
 [ext_resource type="Script" uid="uid://cbj3mmuatfk1v" path="res://addons/flow_nodes_editor/nodes/sample_spline_settings.gd" id="8_miu1c"]
 [ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="12_w4m8r"]
 
@@ -11,35 +10,18 @@
 script = ExtResource("3_uvmq1")
 inputs = Array[ExtResource("2_1wmd1")]([])
 
-[sub_resource type="Resource" id="Resource_exu11"]
-resource_name = "Math Op"
-script = ExtResource("4_8wbym")
-operation = 2
-in_nameA = "distance"
-in_nameB = "0.01"
-out_name = "distance"
-random_seed = 4002076522
-inspect_enabled = false
-debug_enabled = true
-debug_mode = 1
-debug_scale = 0.145
-debug_color = Color(1, 0, 1, 1)
-debug_modulate_by = "distance"
-title = "Math"
-enabled = true
-trace = true
-
 [sub_resource type="Resource" id="Resource_0uiub"]
 resource_name = "Sample Spline Settings"
 script = ExtResource("8_miu1c")
-uniform_interval = 0.2
+uniform_interval = 1.725
 fill_curve = false
 required_meta_bool = &""
+distance_attribute = "distance"
 random_seed = 1104016555
 inspect_enabled = true
-debug_enabled = false
-debug_mode = 1
-debug_scale = 0.11
+debug_enabled = true
+debug_mode = 0
+debug_scale = 0.41
 debug_color = Color(1, 0, 0, 1)
 debug_modulate_by = "distance"
 title = "Sample Spline"
@@ -49,34 +31,23 @@ trace = true
 [sub_resource type="Resource" id="Resource_ahfh6"]
 script = ExtResource("12_w4m8r")
 nodes = Array[Dictionary]([{
-"name": &"id_0030_math_op",
-"position_offset": Vector2(260, 20),
-"settings": SubResource("Resource_exu11"),
-"template": "math_op"
-}, {
 "name": &"id_0002_sample_spline",
 "position_offset": Vector2(-40, 20),
 "settings": SubResource("Resource_0uiub"),
 "template": "sample_spline"
 }])
-conns = Array[Dictionary]([{
-"from_node": &"id_0002_sample_spline",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0030_math_op",
-"to_port": 0
-}])
-view_zoom = 0.826447
-view_offset = Vector2(-99.1736, -200)
-new_name_counter = 30
+conns = Array[Dictionary]([])
+view_zoom = 0.909092
+view_offset = Vector2(-80.891, -151.7)
+new_name_counter = 35
 inputs = SubResource("Resource_qydfx")
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 
 [sub_resource type="Curve3D" id="Curve3D_ph7w0"]
 closed = true
-bake_interval = 0.4
+bake_interval = 1.725
 _data = {
-"points": PackedVector3Array(10.7106, 0, -1.85651, -10.7106, 0, 1.85651, -5.7514, 0, -22.7671, 2.33254, 0, -1.23767, -2.33254, 0, 1.23767, -14.2571, 0, -9.83, -4.66508, 0, -3.09419, 4.66508, 0, 3.09419, -22.3496, 0, -2.26114, 7.42605, 0, -3.95104, -7.42605, 0, 3.95104, -23.254, 0, 10.4488, -4.18905, 0, -0.190411, 4.18905, 0, 0.190411, -7.6552, 0, 25.8498, -4.66508, 0, 0.904455, 4.66508, 0, -0.904455, 5.59334, 0, 19.2078, -2.18974, 0, 2.85617, 2.18974, 0, -2.85617, 21.2047, 0, 11.9245, 1.71371, 0, 1.95172, -1.71371, 0, -1.95172, 26.7318, 2.38419e-06, -1.20149, 0, 0, 0, 0, 0, 0, 8.68179, -1.90735e-06, 0.616858, 0, 0, 0, 0, 0, 0, 11.8769, 0, -8.83034, -3.90343, 0, 2.57056, 3.90343, 0, -2.57056, 22.8256, 0, -9.35397, 3.66543, 0, 0.856853, -3.66543, 0, -0.856853, 22.0639, 0, -14.4951),
+"points": PackedVector3Array(10.7106, 0, -1.85651, -10.7106, 0, 1.85651, -5.7514, 0, -22.7671, 2.33254, 0, -1.23767, -2.33254, 0, 1.23767, -14.2571, 0, -9.83, -4.66508, 0, -3.09419, 4.66508, 0, 3.09419, -22.3496, 0, -2.26114, 7.42605, 0, -3.95104, -7.42605, 0, 3.95104, -23.254, 0, 10.4488, -4.18905, 0, -0.190411, 4.18905, 0, 0.190411, -7.6552, 0, 25.8498, -4.66508, 0, 0.904455, 4.66508, 0, -0.904455, 5.53093, 9.53674e-07, 20.7542, -2.18974, 0, 2.85617, 2.18974, 0, -2.85617, 21.2047, 0, 11.9245, 1.71371, 0, 1.95172, -1.71371, 0, -1.95172, 26.7318, 2.38419e-06, -1.20149, 0, 0, 0, 0, 0, 0, 8.68179, -1.90735e-06, 0.616858, 0, 0, 0, 0, 0, 0, 11.8769, 0, -8.83034, -3.90343, 0, 2.57056, 3.90343, 0, -2.57056, 22.8256, 0, -9.35397, 3.66543, 0, 0.856853, -3.66543, 0, -0.856853, 22.0639, 0, -14.4951),
 "tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 }
 point_count = 12
