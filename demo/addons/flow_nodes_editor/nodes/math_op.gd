@@ -25,6 +25,7 @@ func isSingleArgument( ) -> bool:
 	   false
 
 func execute( _ctx : FlowData.EvaluationContext ):
+	var time_start_init = Time.get_ticks_usec()	
 	
 	var is_single_arg = isSingleArgument()
 		
@@ -72,6 +73,8 @@ func execute( _ctx : FlowData.EvaluationContext ):
 	
 	var out_container
 	var out_data : FlowData.Data = in_dataA.duplicate()
+	
+	if settings.trace: print( "Math.init: %f (%d)" % [ Time.get_ticks_usec() - time_start_init, num_elems ] )
 	
 	if settings.operation != MathOpNodeSettings.eOperation.Set:
 		if sA.data_type == FlowData.DataType.Int and (is_single_arg or sB.data_type == FlowData.DataType.Float):
@@ -149,6 +152,8 @@ func execute( _ctx : FlowData.EvaluationContext ):
 			
 	else:
 		if sA.data_type == FlowData.DataType.Float and sB.data_type == FlowData.DataType.Float:
+			var time_start = Time.get_ticks_usec()
+
 			var inA : PackedFloat32Array = sA.container
 			
 			var inB : PackedFloat32Array = sB.container
@@ -186,7 +191,8 @@ func execute( _ctx : FlowData.EvaluationContext ):
 						var iA := int( inA[i] + 1e-6 )
 						var iB := int( inB[i] + 1e-6 )
 						outI[i] = iA % iB
-				
+			if settings.trace: print( "Math.Loop: %f (%d)" % [ Time.get_ticks_usec() - time_start, num_elems ] )
+			
 		elif sA.data_type == FlowData.DataType.Vector && sB.data_type == FlowData.DataType.Vector:
 			var inA : PackedVector3Array = sA.container
 			var inB : PackedVector3Array = sB.container
@@ -225,7 +231,8 @@ func execute( _ctx : FlowData.EvaluationContext ):
 		else:
 			setError( "Input A and B have incompatible/unsupported data types (%s vs %s)" % [sA.data_type, sB.data_type])
 			return
-		
+
+	var time_start_end = Time.get_ticks_usec()
 	# This will override the existing stream if exists or update a substream
 	var err = out_data.registerStream( settings.out_name, out_container )
 	if err:
@@ -233,3 +240,4 @@ func execute( _ctx : FlowData.EvaluationContext ):
 		return
 		
 	set_output( 0, out_data )
+	if settings.trace: print( "Math.end:  %f (%d)" % [ Time.get_ticks_usec() - time_start_end, num_elems ] )
