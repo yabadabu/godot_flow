@@ -191,6 +191,9 @@ func execute( _ctx : FlowData.EvaluationContext ):
 						var iA := int( inA[i] + 1e-6 )
 						var iB := int( inB[i] + 1e-6 )
 						outI[i] = iA % iB
+				MathOpNodeSettings.eOperation.Pow:
+					for i in num_elems:
+						outC[i] = pow( inA[i], inB[i] )
 			if settings.trace: print( "Math.Loop: %f (%d)" % [ Time.get_ticks_usec() - time_start, num_elems ] )
 			
 		elif sA.data_type == FlowData.DataType.Vector && sB.data_type == FlowData.DataType.Vector:

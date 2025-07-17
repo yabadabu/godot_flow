@@ -21,6 +21,7 @@ enum eOperation {
 	Max,
 	Min,
 	OneMinus,
+	Pow,
 	Round,
 	Sign,
 	Sqrt,
