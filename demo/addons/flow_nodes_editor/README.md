@@ -1,9 +1,7 @@
 === TODO
 
 [ ] There is bug where transforms seems to be updating the input
-[ ] Show performance numbers somewhere
 [ ] support for @last?
-[ ] Copy with offset N times. Export attribute
 [ ] Merge accept N inputs in the same In
 [ ] Support for multiple streams?
 	[ ] Debug
@@ -16,15 +14,13 @@
 	[ ] Node to gather
 	[ ] Node to create
 	[ ] Node to sample (the current one)
-[ ] if condition is null/emtpy
 [ ] Generate reduction of metrics. Avg, Min, Max, etc of a numeric stream
-[ ] Sample Nth, offset, max
 [ ] Volume Sample in 3D
 [ ] Allow the add menu to have sections
 [ ] Get N property as a independent value. Get first, get last, etc.
 [ ] Spline sampling interior in non grid pattern
 [ ] Allow to filter rows in the inspector
-[ ] Add noise to position
+[ ] Add noise to position <-- Improve noise
 [ ] Math Node. Should hide inputs when not needed. Like Abs
 [ ] Support for Vector4/Color/PackedVector4Array -> Read SubAttributes / MathNode / SetAttribute / Use in Debug if exists
 [ ] Test random colors for each node -> Graph Editor Settings
@@ -32,7 +28,10 @@
 [ ] Custom inputs values in the pcg node 3d, not in the resource
 [ ] undo/redo
 [ ] add_attribute, if output is single stream with a type, set the color. Maybe make it generic
-[ ] Merge node
+[X] Copy with offset N times. Export attribute
+[X] Show performance numbers somewhere
+[X] Merge node
+[X] if condition is null/emtpy
 [X] drop some streams
 [X] Ctrl+C will not add a comment. Only if pressing C alone
 [X] E will toggle the data inspector but also make data_visualization visible in the editor

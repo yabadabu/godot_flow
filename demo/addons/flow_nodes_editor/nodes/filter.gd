@@ -26,6 +26,8 @@ func execute( ctx : FlowData.EvaluationContext ):
 	if in_dataB:
 		num_elemsB = in_dataB.size()
 		sB = in_dataB.findStream( settings.in_nameB )
+		
+	var requires_two_operands = settings.condition != FilterNodeSettings.eCondition.IsNull
 
 	# if B is not connected, we might have a constant
 	if sB == null:
@@ -34,13 +36,14 @@ func execute( ctx : FlowData.EvaluationContext ):
 			var v = settings.in_nameB.to_float()
 			sB = newFloatStream( in_dataA.size(), "Constant %s" % settings.in_nameB, v )
 		else:
-			setError( "Input B %s not found, and can't be interpreted as a constant number" % [settings.in_nameB])
-			return
+			if requires_two_operands:
+				setError( "Input B %s not found, and can't be interpreted as a constant number (Op:%d)" % [settings.in_nameB, settings.condition])
+				return
 
 	# The number of elements should match, unless the B channel has just 1 element
 	# in which case we will expand it. Wwe might need in the future A to be just one 
 	# element and B having lots of elements, or the type not to be float...
-	if num_elemsA != num_elemsB:
+	if requires_two_operands and num_elemsA != num_elemsB:
 		if num_elemsB == 1 and num_elemsA > 0 and sB.data_type == FlowData.DataType.Float:
 			sB = newFloatStream( num_elemsA, sA.name + " as float", sB.container[0])
 		else:
@@ -49,14 +52,14 @@ func execute( ctx : FlowData.EvaluationContext ):
 	var num_elems := num_elemsA
 	
 	# When comparing int vs floats, promote the ints to float to reduce the casuistics
-	if sA.data_type == FlowData.DataType.Int and sB.data_type == FlowData.DataType.Float:
+	if requires_two_operands and sA.data_type == FlowData.DataType.Int and sB.data_type == FlowData.DataType.Float:
 		sA = newFloatStream( num_elemsA, sA.name + " as float", func( idx : int ) -> float: return sA.container[idx] )
 
 	# This will store the indices that pass the test
 	var indices_true = PackedInt32Array( )
 	var indices_false = PackedInt32Array( )
 		
-	if sA.data_type == FlowData.DataType.Float and sB.data_type == FlowData.DataType.Float:
+	if requires_two_operands and sA.data_type == FlowData.DataType.Float and sB.data_type == FlowData.DataType.Float:
 		var inA : PackedFloat32Array = sA.container
 		var inB : PackedFloat32Array = sB.container
 		match settings.condition:
@@ -132,6 +135,22 @@ func execute( ctx : FlowData.EvaluationContext ):
 					else:
 						indices_false.append(i)
 
+			FilterNodeSettings.eCondition.IsNull:
+				for i in num_elems:
+					if !inA[i]:
+						indices_true.append(i)
+					else:
+						indices_false.append(i)
+
+	elif not requires_two_operands:
+		var inA = sA.container
+		match settings.condition:
+			FilterNodeSettings.eCondition.IsNull:
+				for i in num_elems:
+					if !inA[i]:
+						indices_true.append(i)
+					else:
+						indices_false.append(i)
 	else:
 		setError( "Input A and B must have int/float type" )
 		return

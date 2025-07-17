@@ -15,6 +15,7 @@ enum eCondition {
 	LogicalAND,
 	LogicalOR,
 	LogicalXOR,
+	IsNull
 }
 
 @export var condition : eCondition = eCondition.Equal
