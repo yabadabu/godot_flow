@@ -14,7 +14,7 @@
 	[ ] Node to gather
 	[ ] Node to create
 	[ ] Node to sample (the current one)
-[ ] Generate reduction of metrics. Avg, Min, Max, etc of a numeric stream
+[ ] Allow meta to define input requirements. Single vs Multiple/Accepted Types/Required
 [ ] Volume Sample in 3D
 [ ] Allow the add menu to have sections
 [ ] Get N property as a independent value. Get first, get last, etc.
@@ -28,6 +28,7 @@
 [ ] Custom inputs values in the pcg node 3d, not in the resource
 [ ] undo/redo
 [ ] add_attribute, if output is single stream with a type, set the color. Maybe make it generic
+[X] Generate reduction of metrics. Avg, Min, Max, etc of a numeric stream
 [X] Copy with offset N times. Export attribute
 [X] Show performance numbers somewhere
 [X] Merge node
