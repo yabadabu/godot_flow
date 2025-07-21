@@ -1,5 +1,5 @@
 # Build
 
-$ git submodule update --init
-$ scons
+    $ git submodule update --init
+    $ scons
 
