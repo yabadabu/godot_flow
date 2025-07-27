@@ -1,4 +1,4 @@
-[gd_scene load_steps=53 format=3 uid="uid://bl32jt5udtf08"]
+[gd_scene load_steps=56 format=3 uid="uid://bl32jt5udtf08"]
 
 [ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_2l584"]
 [ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="2_dxf0c"]
@@ -18,9 +18,9 @@
 [ext_resource type="Script" uid="uid://bw3x7p10afvc7" path="res://addons/flow_nodes_editor/nodes/substract_settings.gd" id="16_4j7uw"]
 [ext_resource type="Texture2D" uid="uid://d2hg4bxm2gqij" path="res://icon.svg" id="16_jiljv"]
 [ext_resource type="Script" uid="uid://cka12nenjlwgx" path="res://addons/flow_nodes_editor/nodes/filter_settings.gd" id="16_ol2su"]
-[ext_resource type="Script" uid="uid://dbtbo3vh5nl2c" path="res://scenes/scene_3p.gd" id="17_4j7uw"]
 [ext_resource type="Script" uid="uid://bo5aaecpx1tsp" path="res://addons/flow_nodes_editor/nodes/distance_settings.gd" id="17_syw2u"]
 [ext_resource type="Script" uid="uid://ctpeiiq5p30rt" path="res://addons/flow_nodes_editor/nodes/noise_settings.gd" id="18_6s8jo"]
+[ext_resource type="Script" uid="uid://diw40w1clst46" path="res://addons/flow_nodes_editor/nodes/merge_settings.gd" id="19_6s8jo"]
 
 [sub_resource type="Curve3D" id="Curve3D_36lll"]
 closed = true
@@ -255,21 +255,6 @@ title = "Math"
 enabled = true
 trace = false
 
-[sub_resource type="Resource" id="Resource_2yywp"]
-resource_name = "Self Pruning"
-script = ExtResource("10_qe4ar")
-keep_self_intersections = false
-random_seed = 3556067674
-inspect_enabled = false
-debug_enabled = true
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Self Pruning"
-enabled = true
-trace = false
-
 [sub_resource type="Resource" id="Resource_fhyap"]
 resource_name = "Spawn Scenes Settings"
 script = ExtResource("12_i2drj")
@@ -407,32 +392,6 @@ title = "Substract"
 enabled = true
 trace = false
 
-[sub_resource type="QuadMesh" id="QuadMesh_2yywp"]
-resource_local_to_scene = true
-resource_name = "pep"
-
-[sub_resource type="Resource" id="Resource_f6aqs"]
-resource_name = "Add Attribute"
-script = ExtResource("14_2yywp")
-name = "Road Width"
-data_type = 2
-cte_bool = false
-cte_int = 250
-cte_float = 5.155
-cte_vector = Vector3(0, 0.21, 0.36)
-cte_resource = SubResource("QuadMesh_2yywp")
-cte_string = "John"
-random_seed = 2216251910
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Add Attribute"
-enabled = true
-trace = false
-
 [sub_resource type="Resource" id="Resource_pf313"]
 resource_name = "Filter Settings"
 script = ExtResource("16_ol2su")
@@ -448,6 +407,39 @@ debug_scale = 1.0
 debug_color = Color(1, 1, 1, 1)
 debug_modulate_by = ""
 title = "Filter"
+enabled = true
+trace = false
+
+[sub_resource type="Resource" id="Resource_rp5rq"]
+resource_name = "Math Op"
+script = ExtResource("9_dbqvf")
+operation = 0
+in_nameA = "noise"
+in_nameB = "distance"
+out_name = "distance"
+random_seed = 1984223721
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Math"
+enabled = true
+trace = false
+
+[sub_resource type="Resource" id="Resource_2yywp"]
+resource_name = "Self Pruning"
+script = ExtResource("10_qe4ar")
+keep_self_intersections = false
+random_seed = 3556067674
+inspect_enabled = false
+debug_enabled = true
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Self Pruning"
 enabled = true
 trace = false
 
@@ -477,7 +469,7 @@ in_scale = 12415.1
 noise_bias = -1.46
 noise_amplitude = 6.45
 random_seed = 2098406315
-inspect_enabled = true
+inspect_enabled = false
 debug_enabled = false
 debug_mode = 0
 debug_scale = 1.0
@@ -487,21 +479,85 @@ title = "Noise"
 enabled = true
 trace = false
 
-[sub_resource type="Resource" id="Resource_rp5rq"]
-resource_name = "Math Op"
-script = ExtResource("9_dbqvf")
-operation = 0
-in_nameA = "noise"
-in_nameB = "distance"
-out_name = "distance"
-random_seed = 1984223721
+[sub_resource type="Resource" id="Resource_2vprb"]
+resource_name = "Merge Settings"
+script = ExtResource("19_6s8jo")
+random_seed = 2827870609
 inspect_enabled = false
 debug_enabled = false
 debug_mode = 0
 debug_scale = 1.0
 debug_color = Color(1, 1, 1, 1)
 debug_modulate_by = ""
-title = "Math"
+title = "Merge"
+enabled = true
+trace = false
+
+[sub_resource type="Resource" id="Resource_fxqdy"]
+resource_name = "Add Attribute"
+script = ExtResource("14_2yywp")
+name = "new_attr"
+data_type = 1
+cte_bool = false
+cte_int = 200
+cte_float = 0.0
+cte_vector = Vector3(0, 0, 0)
+cte_string = ""
+random_seed = 3417441686
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Add Attribute"
+enabled = true
+trace = false
+
+[sub_resource type="Resource" id="Resource_1kwg4"]
+resource_name = "Add Attribute"
+script = ExtResource("14_2yywp")
+name = "new_attr"
+data_type = 1
+cte_bool = false
+cte_int = 50
+cte_float = 0.0
+cte_vector = Vector3(0, 0, 0)
+cte_string = ""
+random_seed = 2605141521
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Add Attribute"
+enabled = true
+trace = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_2yywp"]
+resource_local_to_scene = true
+resource_name = "pep"
+
+[sub_resource type="Resource" id="Resource_f6aqs"]
+resource_name = "Add Attribute"
+script = ExtResource("14_2yywp")
+name = "Road Width"
+data_type = 2
+cte_bool = false
+cte_int = 250
+cte_float = 5.155
+cte_vector = Vector3(0, 0.21, 0.36)
+cte_resource = SubResource("QuadMesh_2yywp")
+cte_string = "John"
+random_seed = 2216251910
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Add Attribute"
 enabled = true
 trace = false
 
@@ -564,11 +620,6 @@ nodes = Array[Dictionary]([{
 "settings": SubResource("Resource_i2drj"),
 "template": "math_op"
 }, {
-"name": &"id_0071_self_pruning",
-"position_offset": Vector2(1400, 540),
-"settings": SubResource("Resource_2yywp"),
-"template": "self_pruning"
-}, {
 "name": &"id_0028_spawn_scenes",
 "position_offset": Vector2(840, 980),
 "settings": SubResource("Resource_fhyap"),
@@ -609,15 +660,20 @@ nodes = Array[Dictionary]([{
 "settings": SubResource("Resource_yalli"),
 "template": "substract"
 }, {
-"name": &"id_0078_add_attribute",
-"position_offset": Vector2(740, 320),
-"settings": SubResource("Resource_f6aqs"),
-"template": "add_attribute"
-}, {
 "name": &"id_0099_filter",
 "position_offset": Vector2(1060, 340),
 "settings": SubResource("Resource_pf313"),
 "template": "filter"
+}, {
+"name": &"id_0101_math_op",
+"position_offset": Vector2(1280, 200),
+"settings": SubResource("Resource_rp5rq"),
+"template": "math_op"
+}, {
+"name": &"id_0071_self_pruning",
+"position_offset": Vector2(1400, 520),
+"settings": SubResource("Resource_2yywp"),
+"template": "self_pruning"
 }, {
 "name": &"id_0097_distance",
 "position_offset": Vector2(620, 80),
@@ -629,10 +685,25 @@ nodes = Array[Dictionary]([{
 "settings": SubResource("Resource_8qpq4"),
 "template": "noise"
 }, {
-"name": &"id_0101_math_op",
-"position_offset": Vector2(1280, 200),
-"settings": SubResource("Resource_rp5rq"),
-"template": "math_op"
+"name": &"id_0104_merge",
+"position_offset": Vector2(900, 540),
+"settings": SubResource("Resource_2vprb"),
+"template": "merge"
+}, {
+"name": &"id_0102_add_attribute",
+"position_offset": Vector2(740.869, 499.72),
+"settings": SubResource("Resource_fxqdy"),
+"template": "add_attribute"
+}, {
+"name": &"id_0103_add_attribute",
+"position_offset": Vector2(720, 600),
+"settings": SubResource("Resource_1kwg4"),
+"template": "add_attribute"
+}, {
+"name": &"id_0078_add_attribute",
+"position_offset": Vector2(740, 320),
+"settings": SubResource("Resource_f6aqs"),
+"template": "add_attribute"
 }])
 conns = Array[Dictionary]([{
 "from_node": &"id_0007_sample_spline",
@@ -784,10 +855,34 @@ conns = Array[Dictionary]([{
 "keep_alive": false,
 "to_node": &"id_0099_filter",
 "to_port": 0
+}, {
+"from_node": &"id_0102_add_attribute",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0104_merge",
+"to_port": 0
+}, {
+"from_node": &"id_0103_add_attribute",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0104_merge",
+"to_port": 1
+}, {
+"from_node": &"id_0078_add_attribute",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0105_reduce",
+"to_port": 0
+}, {
+"from_node": &"id_0097_distance",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0105_reduce",
+"to_port": 0
 }])
 view_zoom = 0.970564
-view_offset = Vector2(590.061, -132.99)
-new_name_counter = 101
+view_offset = Vector2(512.061, -130.99)
+new_name_counter = 105
 inputs = SubResource("Resource_psfr8")
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 
@@ -812,16 +907,14 @@ script = ExtResource("1_2l584")
 graph = SubResource("Resource_5uxx2")
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
 
-[node name="Scene_0000" type="Node3D" parent="FlowGraphNode3D" instance=ExtResource("11_h10xn")]
+[node name="Scene_0000" parent="FlowGraphNode3D" instance=ExtResource("11_h10xn")]
 transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, -9.03623, -1.71658, 10.1062)
 visible = false
-script = ExtResource("17_4j7uw")
 head_rotation = 40.0
 metadata/flow_owner = &"id_0028_spawn_scenes"
 
-[node name="Scene_0001" type="Node3D" parent="FlowGraphNode3D" instance=ExtResource("11_h10xn")]
+[node name="Scene_0001" parent="FlowGraphNode3D" instance=ExtResource("11_h10xn")]
 transform = Transform3D(0.957354, 0, 1.56877, 0, 1.83781, 0, -1.56877, 0, 0.957354, 7.52767, -9.53674e-07, -2.50066)
-script = ExtResource("17_4j7uw")
 head_rotation = 80.0
 metadata/flow_owner = &"id_0028_spawn_scenes"
 

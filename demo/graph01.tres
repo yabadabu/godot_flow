@@ -16,6 +16,7 @@ script = ExtResource("4_840wp")
 uniform_interval = 0.25
 fill_curve = false
 required_meta_bool = &""
+distance_attribute = "distance"
 random_seed = 1977794624
 inspect_enabled = false
 debug_enabled = false
@@ -25,6 +26,7 @@ debug_color = Color(1, 1, 1, 1)
 debug_modulate_by = ""
 title = "Sample Spline"
 enabled = true
+trace = false
 
 [sub_resource type="Resource" id="Resource_6r1i8"]
 resource_name = "Transform Settings"
@@ -45,6 +47,7 @@ debug_color = Color(1, 1, 1, 1)
 debug_modulate_by = ""
 title = "Transform"
 enabled = true
+trace = false
 
 [resource]
 script = ExtResource("1_pwag0")

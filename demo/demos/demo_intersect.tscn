@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://dc8qy4ejmlaip"]
+[gd_scene load_steps=16 format=3 uid="uid://dc8qy4ejmlaip"]
 
 [ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_5ex6f"]
 [ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="2_50g47"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://dwtm2hr5nh78h" path="res://addons/flow_nodes_editor/nodes/grid_settings.gd" id="4_lacnk"]
 [ext_resource type="Script" uid="uid://dt7o3moxddt4h" path="res://addons/flow_nodes_editor/nodes/transform_settings.gd" id="5_jn5vr"]
 [ext_resource type="Script" uid="uid://bw3x7p10afvc7" path="res://addons/flow_nodes_editor/nodes/substract_settings.gd" id="6_xx7ch"]
+[ext_resource type="Script" uid="uid://dacqkd6wb3kul" path="res://addons/flow_nodes_editor/nodes/reduce_settings.gd" id="7_38n7t"]
 
 [sub_resource type="Resource" id="Resource_xx7ch"]
 script = ExtResource("3_lacnk")
@@ -84,6 +85,22 @@ title = "Substract"
 enabled = true
 trace = false
 
+[sub_resource type="Resource" id="Resource_38n7t"]
+resource_name = "Reduce Settings"
+script = ExtResource("7_38n7t")
+in_name = "position"
+out_prefix = ""
+random_seed = 1519025600
+inspect_enabled = true
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Reduce"
+enabled = true
+trace = false
+
 [sub_resource type="Resource" id="Resource_gj6dq"]
 script = ExtResource("4_jn5vr")
 nodes = Array[Dictionary]([{
@@ -106,6 +123,11 @@ nodes = Array[Dictionary]([{
 "position_offset": Vector2(531, 210),
 "settings": SubResource("Resource_s0see"),
 "template": "substract"
+}, {
+"name": &"id_0007_reduce",
+"position_offset": Vector2(748, 408),
+"settings": SubResource("Resource_38n7t"),
+"template": "reduce"
 }])
 conns = Array[Dictionary]([{
 "from_node": &"id_0002_grid",
@@ -125,10 +147,16 @@ conns = Array[Dictionary]([{
 "keep_alive": false,
 "to_node": &"id_0004_substract",
 "to_port": 1
+}, {
+"from_node": &"id_0004_substract",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0007_reduce",
+"to_port": 0
 }])
 view_zoom = 1.0
-view_offset = Vector2(68, -99)
-new_name_counter = 4
+view_offset = Vector2(0, -99)
+new_name_counter = 7
 inputs = SubResource("Resource_xx7ch")
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 

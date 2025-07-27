@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://c1b6ke05vpb8r"]
+[gd_scene load_steps=29 format=3 uid="uid://c1b6ke05vpb8r"]
 
 [ext_resource type="Script" uid="uid://dsft6ocvh7yuk" path="res://demos/demo_scene.gd" id="1_1hm1i"]
 [ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_iapjp"]
@@ -9,12 +9,11 @@
 [ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="6_4qc3i"]
 [ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="6_h7mfa"]
 [ext_resource type="Script" uid="uid://dwtm2hr5nh78h" path="res://addons/flow_nodes_editor/nodes/grid_settings.gd" id="6_mssda"]
-[ext_resource type="Script" uid="uid://cjfky1m4j3nl" path="res://tree_data.gd" id="6_om45m"]
+[ext_resource type="Script" uid="uid://cjfky1m4j3nl" path="res://scenes/tree_data.gd" id="6_om45m"]
 [ext_resource type="PackedScene" uid="uid://b6q4l56g02tqn" path="res://scenes/scene_3p.tscn" id="7_yg6rb"]
 [ext_resource type="Script" uid="uid://dqd74l1ewnh0g" path="res://addons/flow_nodes_editor/nodes/spawn_scenes_settings.gd" id="8_6qj3o"]
 [ext_resource type="Script" uid="uid://dt7o3moxddt4h" path="res://addons/flow_nodes_editor/nodes/transform_settings.gd" id="9_6qj3o"]
 [ext_resource type="Script" uid="uid://du3c8wxq0r2fl" path="res://addons/flow_nodes_editor/nodes/input_settings.gd" id="13_scy3m"]
-[ext_resource type="Script" uid="uid://dbtbo3vh5nl2c" path="res://scenes/scene_3p.gd" id="14_3iidn"]
 
 [sub_resource type="Resource" id="Resource_ragla"]
 script = ExtResource("6_h7mfa")
@@ -69,6 +68,7 @@ debug_color = Color(1, 1, 1, 1)
 debug_modulate_by = ""
 title = "Spawn Scenes"
 enabled = true
+trace = false
 
 [sub_resource type="Resource" id="Resource_6qj3o"]
 resource_name = "Transform Settings"
@@ -89,6 +89,7 @@ debug_color = Color(1, 1, 1, 1)
 debug_modulate_by = ""
 title = "Transform"
 enabled = true
+trace = false
 
 [sub_resource type="Resource" id="Resource_5hhy1"]
 resource_name = "Grid Settings"
@@ -106,6 +107,7 @@ debug_color = Color(1, 1, 1, 1)
 debug_modulate_by = ""
 title = "Grid"
 enabled = true
+trace = false
 
 [sub_resource type="Resource" id="Resource_cyigx"]
 resource_name = "Input"
@@ -121,6 +123,7 @@ debug_color = Color(1, 1, 1, 1)
 debug_modulate_by = ""
 title = "Input"
 enabled = true
+trace = false
 
 [sub_resource type="Resource" id="Resource_8ei73"]
 resource_name = "Input"
@@ -136,6 +139,7 @@ debug_color = Color(1, 1, 1, 1)
 debug_modulate_by = ""
 title = "Input"
 enabled = true
+trace = false
 
 [sub_resource type="Resource" id="Resource_mssda"]
 script = ExtResource("6_4qc3i")
@@ -247,49 +251,40 @@ metadata/_custom_type_script = "uid://d1krtmb1urldl"
 [node name="Path3D" type="Path3D" parent="PCG_4"]
 curve = SubResource("Curve3D_ayuu8")
 
-[node name="Scene_0000" type="Node3D" parent="PCG_4" instance=ExtResource("7_yg6rb")]
+[node name="Scene_0000" parent="PCG_4" instance=ExtResource("7_yg6rb")]
 transform = Transform3D(-0.202695, 0, 0.979242, 0, 1, 0, -0.979242, 0, -0.202695, 0, 0, 0)
-script = ExtResource("14_3iidn")
 metadata/flow_owner = &"id_0016_spawn_scenes"
 
-[node name="Scene_0001" type="Node3D" parent="PCG_4" instance=ExtResource("7_yg6rb")]
+[node name="Scene_0001" parent="PCG_4" instance=ExtResource("7_yg6rb")]
 transform = Transform3D(-0.0732157, 0, -0.997316, 0, 1, 0, 0.997316, 0, -0.0732157, 1.425, 0, 0)
-script = ExtResource("14_3iidn")
 metadata/flow_owner = &"id_0016_spawn_scenes"
 
-[node name="Scene_0002" type="Node3D" parent="PCG_4" instance=ExtResource("7_yg6rb")]
+[node name="Scene_0002" parent="PCG_4" instance=ExtResource("7_yg6rb")]
 transform = Transform3D(-0.636898, 0, 0.770948, 0, 1, 0, -0.770948, 0, -0.636898, 2.85, 0, 0)
-script = ExtResource("14_3iidn")
 metadata/flow_owner = &"id_0016_spawn_scenes"
 
-[node name="Scene_0003" type="Node3D" parent="PCG_4" instance=ExtResource("7_yg6rb")]
+[node name="Scene_0003" parent="PCG_4" instance=ExtResource("7_yg6rb")]
 transform = Transform3D(0.43015, 0, 0.902758, 0, 1, 0, -0.902758, 0, 0.43015, 0, 0, 1.2)
-script = ExtResource("14_3iidn")
 metadata/flow_owner = &"id_0016_spawn_scenes"
 
-[node name="Scene_0004" type="Node3D" parent="PCG_4" instance=ExtResource("7_yg6rb")]
+[node name="Scene_0004" parent="PCG_4" instance=ExtResource("7_yg6rb")]
 transform = Transform3D(0.0674995, 0, 0.997719, 0, 1, 0, -0.997719, 0, 0.0674995, 1.425, 0, 1.2)
-script = ExtResource("14_3iidn")
 metadata/flow_owner = &"id_0016_spawn_scenes"
 
-[node name="Scene_0005" type="Node3D" parent="PCG_4" instance=ExtResource("7_yg6rb")]
+[node name="Scene_0005" parent="PCG_4" instance=ExtResource("7_yg6rb")]
 transform = Transform3D(0.64715, 0, 0.762363, 0, 1, 0, -0.762363, 0, 0.64715, 2.85, 0, 1.2)
-script = ExtResource("14_3iidn")
 metadata/flow_owner = &"id_0016_spawn_scenes"
 
-[node name="Scene_0006" type="Node3D" parent="PCG_4" instance=ExtResource("7_yg6rb")]
+[node name="Scene_0006" parent="PCG_4" instance=ExtResource("7_yg6rb")]
 transform = Transform3D(-0.279847, 0, 0.960045, 0, 1, 0, -0.960045, 0, -0.279847, 0, 0, 2.4)
-script = ExtResource("14_3iidn")
 metadata/flow_owner = &"id_0016_spawn_scenes"
 
-[node name="Scene_0007" type="Node3D" parent="PCG_4" instance=ExtResource("7_yg6rb")]
+[node name="Scene_0007" parent="PCG_4" instance=ExtResource("7_yg6rb")]
 transform = Transform3D(0.607491, 0, 0.794327, 0, 1, 0, -0.794327, 0, 0.607491, 1.425, 0, 2.4)
-script = ExtResource("14_3iidn")
 metadata/flow_owner = &"id_0016_spawn_scenes"
 
-[node name="Scene_0008" type="Node3D" parent="PCG_4" instance=ExtResource("7_yg6rb")]
+[node name="Scene_0008" parent="PCG_4" instance=ExtResource("7_yg6rb")]
 transform = Transform3D(0.438548, 0, 0.898708, 0, 1, 0, -0.898708, 0, 0.438548, 2.85, 0, 2.4)
-script = ExtResource("14_3iidn")
 metadata/flow_owner = &"id_0016_spawn_scenes"
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]

@@ -30,6 +30,7 @@ script = ExtResource("1_bd8sb")
 uniform_interval = 0.31
 fill_curve = false
 required_meta_bool = &""
+distance_attribute = "distance"
 random_seed = 2842677187
 inspect_enabled = false
 debug_enabled = false
@@ -39,6 +40,7 @@ debug_color = Color(1, 1, 1, 1)
 debug_modulate_by = ""
 title = "Sample Spline"
 enabled = true
+trace = false
 
 [sub_resource type="Resource" id="Resource_1xbvu"]
 resource_name = "Transform Settings"
@@ -59,6 +61,7 @@ debug_color = Color(1, 1, 1, 1)
 debug_modulate_by = ""
 title = "Transform"
 enabled = true
+trace = false
 
 [resource]
 script = ExtResource("1_4ly6f")
@@ -80,8 +83,8 @@ conns = Array[Dictionary]([{
 "to_node": &"id_0002_transform",
 "to_port": 0
 }])
-view_zoom = 1.05371
-view_offset = Vector2(107.52, 199.36)
+view_zoom = 0.791668
+view_offset = Vector2(-62.8367, -230.368)
 new_name_counter = 0
 inputs = SubResource("Resource_ao7vp")
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
