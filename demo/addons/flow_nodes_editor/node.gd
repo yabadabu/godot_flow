@@ -232,10 +232,10 @@ func initFromScript():
 	var num_inputs = num_ins
 	
 	for idx in range( 0, num_rows ):
-		var ctrl = connectors_row_prefab.instantiate()
+		var ctrl = connectors_row_prefab.instantiate() as FlowConnectorRow
 		add_child( ctrl )
-		var lbl_in = ctrl.get_child(0) as Label
-		var lbl_out = ctrl.get_child(2) as Label
+		var lbl_in = ctrl.getInLabel()
+		var lbl_out = ctrl.getOutLabel()
 		if idx < num_ins:
 			lbl_in.text = ins[ idx ].label
 			set_slot_enabled_left( idx, true )
@@ -244,6 +244,8 @@ func initFromScript():
 			
 		if idx < num_outs:
 			var out = outs[idx]
+			if not out:
+				continue
 			lbl_out.text = out.label
 			set_slot_enabled_right( idx, true )
 			if out.has( "type"):
@@ -278,8 +280,8 @@ func initFromScript():
 				print( "%s : Input is %s" % [ name, input ] )
 			var ictrl = connectors_row_prefab.instantiate()
 			add_child( ictrl )
-			var lbl_in = ictrl.get_child(0) as Label
-			var lbl_out = ictrl.get_child(2) as Label
+			var lbl_in = ictrl.getInLabel()
+			var lbl_out = ictrl.getOutLabel()
 			set_slot_enabled_left( slot_idx, true )
 			var color = getColorForGDScriptType( input.type )
 			set_slot_color_left( slot_idx, color )

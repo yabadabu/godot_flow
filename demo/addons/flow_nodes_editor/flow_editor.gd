@@ -48,6 +48,8 @@ var ui_scale = 1.0
 var node_types = { }
 
 var popup_menu = null
+var popup_on_over_input = null
+const IDM_PROMOTE_TO_PARAMETER : int = 100
 
 func setResourceToEdit( new_resource : FlowGraphResource, new_resource_owner : Node3D ):
 	print( "setResourceToEdit %s" % new_resource )
@@ -314,6 +316,13 @@ func localToGraphCoords( local_coords : Vector2 ):
 	#var view_zero_in_scroll_offset = gedit.scroll_offset / gedit.zoom
 	return ( gedit.scroll_offset + local_coords ) / gedit.zoom
 
+func set_on_over_in_param( node, row ):
+	#print( "On over %s.%s" % [ node.name, row.getInLabel().text ])
+	popup_on_over_input = row
+
+func clear_on_over_in_param( ):
+	popup_on_over_input = null
+
 func addNodeFromTemplate( node_template, node_name : String, settings = null ):
 	print( "addNode %s (%s : %s)" % [ node_template, node_name, str(settings) ])
 	var node = packed_node.instantiate() as GraphNode
@@ -346,6 +355,14 @@ func addNodeFromTemplate( node_template, node_name : String, settings = null ):
 	node.size = Vector2(32,32)
 	node.tooltip_text = meta.get( "tooltip", "" )
 	node.refreshFromSettings()
+	
+	for child in node.get_children():
+		var row = child as FlowConnectorRow
+		if not row:
+			continue
+		row.in_popup.connect( set_on_over_in_param.bind( node, row ) )
+		row.out_popup.connect( clear_on_over_in_param)
+	
 	gedit.add_child(node)
 	gedit_nodes_by_name[ node.name ] = node
 	return node
@@ -446,8 +463,24 @@ func _on_graph_edit_node_selected(node):
 	#EditorInterface.inspect_object(node)
 	#EditorInterface.set_main_screen_editor("3D")
 
+func _on_in_popup_menu_pressed(id: int, row ) -> void:
+	if id == IDM_PROMOTE_TO_PARAMETER and row:
+		print( "Promoting to parameter %s.%s" % [ row.getNode().name, row.getInLabel().text ] )
+
 func _on_graph_edit_popup_request(at_position):
 	local_drop_position = at_position
+	
+	if popup_on_over_input:
+		var node = popup_on_over_input.getNode()
+		var pm := PopupMenu.new()
+		add_child( pm )
+		pm.name = "InPopupMenu"
+		pm.add_item( "Promote To Parameter", IDM_PROMOTE_TO_PARAMETER, KEY_NONE )
+		pm.id_pressed.connect( _on_in_popup_menu_pressed.bind( popup_on_over_input ) )
+		pm.position = get_screen_position() + at_position
+		pm.popup()
+		#print( "Show popup associated to %s.%s" % [ node.name, popup_on_over_input.getInLabel().text ] )
+		return
 	
 	if not popup_menu:
 		popup_menu = populatePopupMenu()
@@ -615,5 +648,6 @@ func _on_auto_regen_toggled(toggled_on: bool) -> void:
 	auto_regen = toggled_on
 
 func _on_button_inputs_pressed():
-	inspector.edit( current_resource.inputs )
+	if current_resource:
+		inspector.edit( current_resource.inputs )
 	inspected_node = null

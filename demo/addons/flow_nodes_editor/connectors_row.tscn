@@ -1,9 +1,13 @@
-[gd_scene format=3 uid="uid://bqsqn8mid7ofd"]
+[gd_scene load_steps=2 format=3 uid="uid://bqsqn8mid7ofd"]
+
+[ext_resource type="Script" uid="uid://uxgag1b66gtj" path="res://addons/flow_nodes_editor/connectors_row.gd" id="1_0cbnu"]
 
 [node name="ConnectorRows" type="HBoxContainer"]
+script = ExtResource("1_0cbnu")
 
 [node name="LabelIn" type="Label" parent="."]
 layout_mode = 2
+mouse_filter = 1
 text = "IN"
 
 [node name="Spacer" type="Control" parent="."]
@@ -15,3 +19,7 @@ size_flags_horizontal = 3
 layout_mode = 2
 text = "OUT"
 horizontal_alignment = 2
+
+[connection signal="gui_input" from="LabelIn" to="." method="_on_label_in_gui_input"]
+[connection signal="mouse_entered" from="LabelIn" to="." method="_on_label_in_mouse_entered"]
+[connection signal="mouse_exited" from="LabelIn" to="." method="_on_label_in_mouse_exited"]
