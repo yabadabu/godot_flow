@@ -48,6 +48,7 @@ var ui_scale = 1.0
 var node_types = { }
 
 var popup_menu = null
+var popup_menu_inputs : PopupMenu
 var popup_on_over_input = null
 const IDM_PROMOTE_TO_PARAMETER : int = 100
 
@@ -83,10 +84,7 @@ func setResourceToEdit( new_resource : FlowGraphResource, new_resource_owner : N
 		
 		# Register the input_* nodes before trying to load the nodes
 		for input in current_resource.inputs.inputs:
-			print( "Registering get_graph_input %s" % input.name )
-			var node_type_name := "input_%s" % input.name
-			registerNodeType( node_type_name, "input.gd")
-			print( "done" )
+			registerInputNodeType( input )
 		
 		print( "Recovering %d nodes" % current_resource.nodes.size() )
 		for res_node in current_resource.nodes:
@@ -115,6 +113,7 @@ func setResourceToEdit( new_resource : FlowGraphResource, new_resource_owner : N
 	queueRegen()
 	ctx.graph = current_resource
 	print( "regen_pending is now true (%d)" % [num_non_nodes_children])
+	populatePopupInputsMenu()
 
 func saveResource():
 	if current_resource == null:
@@ -163,6 +162,10 @@ func registerNodeType( node_type_name, file ):
 	#print( "Registering node type %s" % node_type_name )
 	node_types[ node_type_name ] = meta
 
+func registerInputNodeType( input ):
+	var node_type_name := "input_%s" % input.name
+	registerNodeType( node_type_name, "input.gd")
+
 func scanAvailableNodes():
 	var files := ResourceLoader.list_directory(directory_path) 
 	for file in files:
@@ -170,6 +173,20 @@ func scanAvailableNodes():
 		if stem.ends_with("_settings"):
 			continue
 		registerNodeType( stem, file )
+
+func populatePopupInputsMenu():
+	if not popup_menu_inputs:
+		return
+	popup_menu_inputs.clear()
+
+	if current_resource && current_resource.inputs:
+		for idx in range(current_resource.inputs.inputs.size()):
+			var label : String = current_resource.inputs.inputs[idx].name
+			popup_menu_inputs.add_item( FlowNodeBase.editorDisplayName( label ), idx)
+
+	if popup_menu_inputs.get_item_count() == 0:
+		popup_menu_inputs.add_item( "No inputs defined", -1 )
+		popup_menu_inputs.set_item_disabled(0, true)
 
 func populatePopupMenu():
 	min_id = 1000
@@ -181,20 +198,20 @@ func populatePopupMenu():
 	add_child( pm )
 	pm.name = "MainMenu"
 	pm.clear();
-	pm.add_item( "Clear", 0, KEY_NONE )
-	pm.id_pressed.connect( _on_popup_menu_id_pressed )
-	pm.add_separator( "", -1 )
+	#pm.add_item( "Clear", 0, KEY_NONE )
+	#pm.id_pressed.connect( _on_popup_menu_id_pressed )
+	#pm.add_separator( "", -1 )
 	
 	# A submenu to invoke the inputs declared in the pcg
-	if current_resource && current_resource.inputs:
-		var inputs_menu := PopupMenu.new()
-		pm.add_child(inputs_menu)
-		for idx in range(current_resource.inputs.inputs.size()):
-			var label : String = current_resource.inputs.inputs[idx].name
-			inputs_menu.add_item( FlowNodeBase.editorDisplayName( label ), idx)
-		inputs_menu.id_pressed.connect( _on_inputs_menu_id_pressed )
-		pm.add_submenu_item("Inputs...", inputs_menu.name)
-		pm.add_separator( "", -1 )
+	if popup_menu_inputs:
+		popup_menu_inputs.queue_free()
+	popup_menu_inputs = PopupMenu.new()
+	popup_menu_inputs.name = "inputs_menu"
+	popup_menu_inputs.id_pressed.connect( _on_inputs_menu_id_pressed )
+	pm.add_child(popup_menu_inputs)
+	pm.add_submenu_item("Inputs...", popup_menu_inputs.name)
+	pm.add_separator( "", -1 )
+	populatePopupInputsMenu()
 	
 	for key in node_types.keys():
 		var node_type = node_types[ key ]
@@ -387,6 +404,7 @@ func addNode( node_template, settings = null ):
 	node.visible = true
 	saveResource()
 	queueRegen()
+	return node
 
 # ------------------------------------------------
 func _on_graph_edit_gui_input(event):
@@ -468,15 +486,24 @@ func registerAsParameter( name : String, data_type : FlowData.DataType ):
 	new_input.name = name
 	new_input.data_type = data_type
 	current_resource.inputs.inputs.append( new_input )
+	registerInputNodeType( current_resource.inputs.inputs.back() )
 
 func _on_in_popup_menu_pressed( id: int, row : FlowConnectorRow ) -> void:
 	if id == IDM_PROMOTE_TO_PARAMETER and row:
-		print( "Promoting to parameter %s.%s (%s)" % [ row.getNode().name, row.getInLabel().text, row.data ] )
-		var in_name = row.getNode().getMeta().title + " - " + row.data.in_label
+		var node = row.getNode()
+		print( "Promoting to parameter %s.%s (%s)" % [ node.name, row.getInLabel().text, row.data ] )
+		var in_name = node.getMeta().title + " - " + row.data.in_label
 		registerAsParameter( in_name, row.data.in_type )
-		popup_menu = null
 		# Instantiate the input
-		# Connect the input to the node
+		var new_input_node = _on_inputs_menu_id_pressed( current_resource.inputs.inputs.size() - 1 )
+		if new_input_node:
+			# Adjust the positions, the size is correct, our left is the parent left - size
+			new_input_node.position_offset.x = node.position_offset.x - new_input_node.size.x - 40
+			new_input_node.position_offset.y -= new_input_node.size.y - 15
+			# Connect the input to the node
+			_on_graph_edit_connection_request( new_input_node.name, 0, node.name, row.data.in_index )
+		populatePopupInputsMenu()
+		
 
 func is_parameter( ) -> bool:
 	return false
@@ -507,14 +534,14 @@ func openAddMenu():
 	var pos = get_local_mouse_position()
 	_on_graph_edit_popup_request( pos )
 
-func _on_inputs_menu_id_pressed(id: int) -> void:
+func _on_inputs_menu_id_pressed(id: int):
 	var input = current_resource.inputs.inputs[id]
 	var node_type = "input_%s" % input.name
 	print( "Creating a input node: %s (%d) -> %s" % [ input.name, input.data_type, node_type] )
 	var settings := InputNodeSettings.new()
 	settings.name = input.name
 	settings.data_type = input.data_type
-	addNode( node_type, settings )
+	return addNode( node_type, settings )
 
 func _on_popup_menu_id_pressed(id: int) -> void:
 	if menu_ids.has( id ):
@@ -529,6 +556,7 @@ func _on_popup_menu_id_pressed(id: int) -> void:
 			gedit.set_connection_activity( node.name, 0, target.name, 0, 1.0)
 
 func _on_graph_edit_connection_request(from_node: StringName, from_port: int, to_node: StringName, to_port: int) -> void:
+	# print( "_on_graph_edit_connection_request %s:%d <-> %s:%d" % [ from_node, from_port, to_node, to_port ] )
 	gedit.connect_node(from_node, from_port, to_node, to_port)
 	saveResource()
 	queueRegen()

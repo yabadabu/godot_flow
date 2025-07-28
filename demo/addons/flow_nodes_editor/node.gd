@@ -285,6 +285,7 @@ func initFromScript():
 			ictrl.setData( {
 				"in_label" : editorDisplayName( input.name ),
 				"in_type"  : getFlowDataTypeFromGdScriptType( input.type ),
+				"in_index" : num_inputs, 
 				"is_parameter" : true
 			} )
 			add_child( ictrl )

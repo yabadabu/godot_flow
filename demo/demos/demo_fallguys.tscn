@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=3 uid="uid://b6mgnfbjovkil"]
+[gd_scene load_steps=39 format=3 uid="uid://b6mgnfbjovkil"]
 
 [ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_kf2sw"]
 [ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="2_frxqg"]
@@ -14,10 +14,21 @@
 [ext_resource type="Script" uid="uid://runa6a3koevg" path="res://addons/flow_nodes_editor/nodes/add_attribute_settings.gd" id="10_i010f"]
 [ext_resource type="Script" uid="uid://vqi6gspjuhot" path="res://addons/flow_nodes_editor/nodes/copy_settings.gd" id="10_xarnj"]
 [ext_resource type="Script" uid="uid://diw40w1clst46" path="res://addons/flow_nodes_editor/nodes/merge_settings.gd" id="11_i010f"]
+[ext_resource type="Script" uid="uid://du3c8wxq0r2fl" path="res://addons/flow_nodes_editor/nodes/input_settings.gd" id="14_6p47p"]
+
+[sub_resource type="Resource" id="Resource_sdw1c"]
+script = ExtResource("2_frxqg")
+name = "Sample Spline - Distance Attribute"
+data_type = 4
+cte_bool = false
+cte_int = 0
+cte_float = 0.0
+cte_vector = Vector3(0, 0, 0)
+cte_string = ""
 
 [sub_resource type="Resource" id="Resource_tyqfr"]
 script = ExtResource("3_42t3g")
-inputs = Array[ExtResource("2_frxqg")]([])
+inputs = Array[ExtResource("2_frxqg")]([SubResource("Resource_sdw1c")])
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_i010f"]
 resource_local_to_scene = true
@@ -321,6 +332,22 @@ title = "Transform"
 enabled = true
 trace = false
 
+[sub_resource type="Resource" id="Resource_1vmd6"]
+resource_name = "Input"
+script = ExtResource("14_6p47p")
+name = "Sample Spline - Distance Attribute"
+data_type = 4
+random_seed = 1713025785
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Input"
+enabled = true
+trace = false
+
 [sub_resource type="Resource" id="Resource_dk6st"]
 resource_local_to_scene = true
 resource_name = "fallguys"
@@ -405,6 +432,11 @@ nodes = Array[Dictionary]([{
 "position_offset": Vector2(1740, 440),
 "settings": SubResource("Resource_6p47p"),
 "template": "transform"
+}, {
+"name": &"id_0049_input_Sample Spline - Distance Attribute",
+"position_offset": Vector2(13.2258, 105.875),
+"settings": SubResource("Resource_1vmd6"),
+"template": "input_Sample Spline - Distance Attribute"
 }])
 conns = Array[Dictionary]([{
 "from_node": &"id_0001_sample_spline",
@@ -526,14 +558,20 @@ conns = Array[Dictionary]([{
 "keep_alive": false,
 "to_node": &"id_0038_spawn_meshes",
 "to_port": 1
+}, {
+"from_node": &"id_0049_input_Sample Spline - Distance Attribute",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0001_sample_spline",
+"to_port": 3
 }])
-view_zoom = 1.21
-view_offset = Vector2(-661.434, -957)
-new_name_counter = 42
+view_zoom = 1.0
+view_offset = Vector2(-101.774, -79.1246)
+new_name_counter = 49
 inputs = SubResource("Resource_tyqfr")
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 
-[sub_resource type="MultiMesh" id="MultiMesh_tov8o"]
+[sub_resource type="MultiMesh" id="MultiMesh_4e1et"]
 transform_format = 1
 instance_count = 927
 mesh = SubResource("CylinderMesh_i010f")
@@ -555,8 +593,8 @@ script = ExtResource("1_kf2sw")
 graph = SubResource("Resource_dk6st")
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
 
-[node name="@MultiMeshInstance3D@102115" type="MultiMeshInstance3D" parent="FlowGraphNode3D"]
-multimesh = SubResource("MultiMesh_tov8o")
+[node name="@MultiMeshInstance3D@127949" type="MultiMeshInstance3D" parent="FlowGraphNode3D"]
+multimesh = SubResource("MultiMesh_4e1et")
 metadata/flow_owner = &"id_0038_spawn_meshes"
 
 [node name="Path3D" type="Path3D" parent="."]
