@@ -83,7 +83,7 @@ func setResourceToEdit( new_resource : FlowGraphResource, new_resource_owner : N
 		
 		# Register the input_* nodes before trying to load the nodes
 		for input in current_resource.inputs.inputs:
-			print( "Regiistering get_graph_input %s" % input.name )
+			print( "Registering get_graph_input %s" % input.name )
 			var node_type_name := "input_%s" % input.name
 			registerNodeType( node_type_name, "input.gd")
 			print( "done" )
@@ -316,11 +316,11 @@ func localToGraphCoords( local_coords : Vector2 ):
 	#var view_zero_in_scroll_offset = gedit.scroll_offset / gedit.zoom
 	return ( gedit.scroll_offset + local_coords ) / gedit.zoom
 
-func set_on_over_in_param( node, row ):
+func setOnOverInParam( node, row ):
 	#print( "On over %s.%s" % [ node.name, row.getInLabel().text ])
 	popup_on_over_input = row
 
-func clear_on_over_in_param( ):
+func clearOnOverInParam( ):
 	popup_on_over_input = null
 
 func addNodeFromTemplate( node_template, node_name : String, settings = null ):
@@ -358,10 +358,10 @@ func addNodeFromTemplate( node_template, node_name : String, settings = null ):
 	
 	for child in node.get_children():
 		var row = child as FlowConnectorRow
-		if not row:
+		if not row or not row.isParameter():
 			continue
-		row.in_popup.connect( set_on_over_in_param.bind( node, row ) )
-		row.out_popup.connect( clear_on_over_in_param)
+		row.in_popup.connect( setOnOverInParam.bind( node, row ) )
+		row.out_popup.connect( clearOnOverInParam)
 	
 	gedit.add_child(node)
 	gedit_nodes_by_name[ node.name ] = node
@@ -463,9 +463,23 @@ func _on_graph_edit_node_selected(node):
 	#EditorInterface.inspect_object(node)
 	#EditorInterface.set_main_screen_editor("3D")
 
-func _on_in_popup_menu_pressed(id: int, row ) -> void:
+func registerAsParameter( name : String, data_type : FlowData.DataType ):
+	var new_input = GraphInputParameter.new()
+	new_input.name = name
+	new_input.data_type = data_type
+	current_resource.inputs.inputs.append( new_input )
+
+func _on_in_popup_menu_pressed( id: int, row : FlowConnectorRow ) -> void:
 	if id == IDM_PROMOTE_TO_PARAMETER and row:
-		print( "Promoting to parameter %s.%s" % [ row.getNode().name, row.getInLabel().text ] )
+		print( "Promoting to parameter %s.%s (%s)" % [ row.getNode().name, row.getInLabel().text, row.data ] )
+		var in_name = row.getNode().getMeta().title + " - " + row.data.in_label
+		registerAsParameter( in_name, row.data.in_type )
+		popup_menu = null
+		# Instantiate the input
+		# Connect the input to the node
+
+func is_parameter( ) -> bool:
+	return false
 
 func _on_graph_edit_popup_request(at_position):
 	local_drop_position = at_position
@@ -477,7 +491,7 @@ func _on_graph_edit_popup_request(at_position):
 		pm.name = "InPopupMenu"
 		pm.add_item( "Promote To Parameter", IDM_PROMOTE_TO_PARAMETER, KEY_NONE )
 		pm.id_pressed.connect( _on_in_popup_menu_pressed.bind( popup_on_over_input ) )
-		pm.position = get_screen_position() + at_position
+		pm.position = get_screen_position() + at_position + Vector2( 20, 20 )
 		pm.popup()
 		#print( "Show popup associated to %s.%s" % [ node.name, popup_on_over_input.getInLabel().text ] )
 		return

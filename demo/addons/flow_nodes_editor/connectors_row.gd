@@ -2,6 +2,7 @@
 extends HBoxContainer
 class_name FlowConnectorRow
 
+var data : Dictionary = {}
 signal in_popup
 signal out_popup
 
@@ -19,3 +20,11 @@ func _on_label_in_mouse_entered():
 
 func _on_label_in_mouse_exited():
 	out_popup.emit()
+
+func setData( new_data : Dictionary ):
+	data = new_data
+	getInLabel().text = data.in_label
+	getOutLabel().text = ""
+
+func isParameter() -> bool:
+	return data && data.get( "is_parameter", false )

@@ -278,15 +278,16 @@ func initFromScript():
 				continue
 			if trace:
 				print( "%s : Input is %s" % [ name, input ] )
-			var ictrl = connectors_row_prefab.instantiate()
-			add_child( ictrl )
-			var lbl_in = ictrl.getInLabel()
-			var lbl_out = ictrl.getOutLabel()
 			set_slot_enabled_left( slot_idx, true )
 			var color = getColorForGDScriptType( input.type )
 			set_slot_color_left( slot_idx, color )
-			lbl_in.text = editorDisplayName( input.name )
-			lbl_out.text = ""
+			var ictrl := connectors_row_prefab.instantiate() as FlowConnectorRow
+			ictrl.setData( {
+				"in_label" : editorDisplayName( input.name ),
+				"in_type"  : getFlowDataTypeFromGdScriptType( input.type ),
+				"is_parameter" : true
+			} )
+			add_child( ictrl )
 			slot_idx += 1
 			
 			meta.input_slots[ input.name ] = num_inputs
