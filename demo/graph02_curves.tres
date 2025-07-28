@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="FlowGraphResource" load_steps=11 format=3 uid="uid://c6tic21gyki1f"]
+[gd_resource type="Resource" script_class="FlowGraphResource" load_steps=10 format=3 uid="uid://c6tic21gyki1f"]
 
 [ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="1_4ly6f"]
 [ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="1_a1se2"]
@@ -6,41 +6,19 @@
 [ext_resource type="Script" uid="uid://dt7o3moxddt4h" path="res://addons/flow_nodes_editor/nodes/transform_settings.gd" id="2_2h21p"]
 [ext_resource type="Script" uid="uid://ctvo7a7lud8bn" path="res://addons/flow_nodes_editor/graph_input_parameters.gd" id="2_albun"]
 
-[sub_resource type="QuadMesh" id="QuadMesh_a1se2"]
-
-[sub_resource type="Resource" id="Resource_albun"]
+[sub_resource type="Resource" id="Resource_a1se2"]
 script = ExtResource("1_a1se2")
-name = "arg_name"
-data_type = 4
+name = "Sample Spline - Uniform Interval"
+data_type = 2
 cte_bool = false
 cte_int = 0
 cte_float = 0.0
 cte_vector = Vector3(0, 0, 0)
-cte_resource = SubResource("QuadMesh_a1se2")
 cte_string = ""
-metadata/_custom_type_script = "uid://co0f3ugd2wj1y"
 
 [sub_resource type="Resource" id="Resource_ao7vp"]
 script = ExtResource("2_albun")
-inputs = Array[ExtResource("1_a1se2")]([SubResource("Resource_albun")])
-
-[sub_resource type="Resource" id="Resource_2h21p"]
-resource_name = "Sample Spline Settings"
-script = ExtResource("1_bd8sb")
-uniform_interval = 0.31
-fill_curve = false
-required_meta_bool = &""
-distance_attribute = "distance"
-random_seed = 2842677187
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Sample Spline"
-enabled = true
-trace = false
+inputs = Array[ExtResource("1_a1se2")]([SubResource("Resource_a1se2")])
 
 [sub_resource type="Resource" id="Resource_1xbvu"]
 resource_name = "Transform Settings"
@@ -63,18 +41,36 @@ title = "Transform"
 enabled = true
 trace = false
 
+[sub_resource type="Resource" id="Resource_2h21p"]
+resource_name = "Sample Spline Settings"
+script = ExtResource("1_bd8sb")
+uniform_interval = 0.1
+fill_curve = false
+required_meta_bool = &""
+distance_attribute = "distance"
+random_seed = 2842677187
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Sample Spline"
+enabled = true
+trace = false
+
 [resource]
 script = ExtResource("1_4ly6f")
 nodes = Array[Dictionary]([{
-"name": &"id_0001_sample_spline",
-"position_offset": Vector2(40, 140),
-"settings": SubResource("Resource_2h21p"),
-"template": "sample_spline"
-}, {
 "name": &"id_0002_transform",
 "position_offset": Vector2(320, 140),
 "settings": SubResource("Resource_1xbvu"),
 "template": "transform"
+}, {
+"name": &"id_0001_sample_spline",
+"position_offset": Vector2(40, 140),
+"settings": SubResource("Resource_2h21p"),
+"template": "sample_spline"
 }])
 conns = Array[Dictionary]([{
 "from_node": &"id_0001_sample_spline",
@@ -83,8 +79,8 @@ conns = Array[Dictionary]([{
 "to_node": &"id_0002_transform",
 "to_port": 0
 }])
-view_zoom = 0.791668
-view_offset = Vector2(-62.8367, -230.368)
-new_name_counter = 0
+view_zoom = 0.957918
+view_offset = Vector2(-400.332, -276.405)
+new_name_counter = 1
 inputs = SubResource("Resource_ao7vp")
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
