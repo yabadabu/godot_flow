@@ -8,6 +8,7 @@ extends NodeSettings
 @export var filter_by_class_name : String
 @export var import_metadata : bool = false
 @export var import_properties : Array[ StringName ]
+@export var size_to_bounds : bool = false
 
 func _init():
 	super._init()

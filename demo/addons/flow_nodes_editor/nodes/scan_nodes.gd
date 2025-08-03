@@ -23,7 +23,9 @@ func find_nodes_matching_filters( ctx : FlowData.EvaluationContext, group_name: 
 	elif ctx.owner:
 		var root = get_scene_root_node3d( ctx.owner )
 		all_nodes = root.get_children()
-	print( "all_nodes", all_nodes )
+	
+	if settings.trace:
+		print( "all_nodes", all_nodes )
 	
 	# Filter to only include nodes in the current scene
 	var scene_nodes : Array[ Node3D ] = []
@@ -31,11 +33,11 @@ func find_nodes_matching_filters( ctx : FlowData.EvaluationContext, group_name: 
 		var node3d := node as Node3D
 		if node3d:
 			if filter_by_class_name and not node3d.is_class( filter_by_class_name ):
-				print( "%s.%s discarted by class_name %s" % [ node3d.name, node3d.get_class(), filter_by_class_name ])
+				if settings.trace:
+					print( "%s.%s discarted by class_name %s" % [ node3d.name, node3d.get_class(), filter_by_class_name ])
 				continue
 		#if scene_root.is_ancestor_of(node):
 			scene_nodes.append(node3d)
-	print( "scene_nodes", scene_nodes)
 	return scene_nodes
 
 func importMetaData( output, nodes ):
@@ -97,6 +99,33 @@ func importProperty( output, nodes, prop_path ):
 			value = 1 if value else 0
 		stream.container[ idx ] = value	
 
+func get_aabb_of_node( node3d : Node3D ) -> AABB:
+	if node3d is MeshInstance3D:
+		if node3d.mesh:
+			return node3d.mesh.get_aabb()
+	var combined_aabb := AABB()  # Starts as invalid (zero size)
+	if node3d is Path3D:
+		var points : PackedVector3Array = node3d.curve.get_baked_points()
+		if points.size() > 0:
+			var pmin = points[0]
+			var pmax = points[0]
+			for p in points:
+				pmin = pmin.min( p )
+				pmax = pmax.max( p )
+			var half = ( pmax - pmin )
+			return AABB( pmin, half )
+	return combined_aabb
+
+func get_combined_aabb(root: Node3D) -> AABB:
+	var combined_aabb := get_aabb_of_node( root )
+	for child in root.get_children():
+		var child_aabb := get_aabb_of_node( child )
+		if combined_aabb.size == Vector3.ZERO:
+			combined_aabb = child_aabb
+		else:
+			combined_aabb = combined_aabb.merge(child_aabb)
+	return combined_aabb
+
 func execute( ctx : FlowData.EvaluationContext ):
 	var output := FlowData.Data.new()
 	
@@ -117,6 +146,11 @@ func execute( ctx : FlowData.EvaluationContext ):
 		var b : Basis = node.global_transform.basis
 		srot[idx] = FlowData.basisToEuler( b )
 		
+		if settings.size_to_bounds:
+			var aabb = get_combined_aabb( node )
+			ssize[idx] = aabb.size
+			spos[idx] = node.transform * ( aabb.position + aabb.size * 0.5 )
+			
 	if getSettingValue( ctx, "import_metadata" ) as bool:
 		importMetaData( output, nodes )
 	
