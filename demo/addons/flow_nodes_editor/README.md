@@ -26,6 +26,7 @@
 [ ] Test random colors for each node -> Graph Editor Settings
 [ ] undo/redo
 [ ] add_attribute, if output is single stream with a type, set the color. Maybe make it generic
+[X] Resource properties are correctly imported as Resources in the scan node
 [X] Promote input pin to graph input
 [X] Custom inputs values in the pcg node 3d, not in the resource
 [X] Generate reduction of metrics. Avg, Min, Max, etc of a numeric stream

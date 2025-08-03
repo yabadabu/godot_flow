@@ -1,15 +1,50 @@
-[gd_scene load_steps=4 format=3 uid="uid://bxyhxlabiwwag"]
+[gd_scene load_steps=9 format=3 uid="uid://bxyhxlabiwwag"]
 
 [ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_pkkv1"]
 [ext_resource type="Resource" uid="uid://chy06hdyr5neh" path="res://graphs/graph_distance.tres" id="2_66ode"]
+[ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="3_pkkv1"]
+[ext_resource type="Script" uid="uid://oocaue4cyte2" path="res://addons/flow_nodes_editor/nodes/scan_nodes_settings.gd" id="4_3kbeu"]
+[ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="4_scy5f"]
 
 [sub_resource type="Curve3D" id="Curve3D_pkkv1"]
 bake_interval = 0.295
 _data = {
-"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 1.88385, 1.19209e-07, -0.00449657, -0.67675, 0, 0.520576, 0.67675, 0, -0.520576, 2.7481, 1.19209e-07, -1.74432, -0.994457, -0.0564849, 0.299922, 0.994457, 0.0564849, -0.299922, 5.54694, -0.0733792, -0.216296, 0.182201, 0, 0.344882, -0.182201, 0, -0.344882, 4.53879, 1.19209e-07, -3.51188, -0.0260286, 0, 0.292825, 0.0260286, 0, -0.292825, 2.97706, 1.19209e-07, -4.20164, -0.884979, 0, -0.071579, 0.884979, 0, 0.071579, 4.59085, 1.19209e-07, -4.8003, -0.273302, 0, -0.468518, 0.273302, 0, 0.468518, 7.13494, -0.0202721, -4.22287, -0.292825, 0, -0.422968, 0.292825, 0, 0.422968, 7.36019, 1.19209e-07, -2.49675, 0, 0, 0, 0, 0, 0, 6.74473, 1.19209e-07, -0.57713),
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 1.88385, 1.19209e-07, -0.00449657, -0.67675, 0, 0.520576, 0.67675, 0, -0.520576, 2.7481, 1.19209e-07, -1.74432, -0.994457, -0.0564849, 0.299922, 0.994457, 0.0564849, -0.299922, 5.54694, -0.0733792, -0.216296, -0.000522614, -0.0656033, 1.02695, 0.000522614, 0.0656033, -1.02695, 4.53879, 1.19209e-07, -3.51188, -0.0260286, 0, 0.292825, 0.0260286, 0, -0.292825, 2.59611, 0.0692798, -3.86471, -0.883456, 0.124848, -0.731672, 0.883456, -0.124848, 0.731672, 4.72015, 0.139324, -5.77189, -0.273302, 0, -0.468518, 0.273302, 0, 0.468518, 7.13494, -0.0202721, -4.22287, -1.02678, 0.288164, -0.588561, 1.02678, -0.288164, 0.588561, 7.36019, 1.19209e-07, -2.49675, 0, 0, 0, 0, 0, 0, 6.74473, 1.19209e-07, -0.57713),
 "tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0)
 }
 point_count = 9
+
+[sub_resource type="Resource" id="Resource_rs64b"]
+resource_name = "Scan Nodes Settings"
+script = ExtResource("4_3kbeu")
+group_name = "Curves"
+import_metadata = true
+import_properties = Array[StringName]([&"curve"])
+random_seed = 1320925935
+inspect_enabled = false
+debug_enabled = true
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Scan Nodes"
+enabled = true
+trace = false
+
+[sub_resource type="Resource" id="Resource_3kbeu"]
+script = ExtResource("4_scy5f")
+nodes = Array[Dictionary]([{
+"name": &"id_0001_scan_nodes",
+"position_offset": Vector2(200, 300),
+"settings": SubResource("Resource_rs64b"),
+"template": "scan_nodes"
+}])
+conns = Array[Dictionary]([])
+view_zoom = 1.0
+view_offset = Vector2(0, 0)
+new_name_counter = 1
+in_params = Array[ExtResource("3_pkkv1")]([])
+metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 
 [node name="DemoDistance" type="Node3D"]
 
@@ -23,16 +58,12 @@ args = {
 refresh_inputs = Callable()
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
 
-[node name="PathA" type="Path3D" parent="."]
+[node name="PathA" type="Path3D" parent="." groups=["Curves"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.35888, -1.19209e-07, 2.09656)
 curve = SubResource("Curve3D_pkkv1")
-metadata/is_a = false
 
 [node name="FlowGraphNode3D2" type="Node3D" parent="."]
 script = ExtResource("1_pkkv1")
-graph = ExtResource("2_66ode")
-args = {
-"Make Vector - Y": 0.47
-}
+graph = SubResource("Resource_3kbeu")
 refresh_inputs = Callable()
 metadata/_custom_type_script = "uid://d1krtmb1urldl"

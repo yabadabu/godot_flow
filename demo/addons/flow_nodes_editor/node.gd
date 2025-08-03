@@ -205,7 +205,7 @@ static func getGdScriptTypeForFlowDataType( data_type : FlowData.DataType ) -> i
 		FlowData.DataType.Vector:
 			return TYPE_VECTOR3
 	return TYPE_NIL
-
+	
 static func getFlowDataTypeFromGdScriptType( gd_type : int  ) -> FlowData.DataType:
 	match( gd_type ):
 		TYPE_BOOL:
@@ -219,6 +219,14 @@ static func getFlowDataTypeFromGdScriptType( gd_type : int  ) -> FlowData.DataTy
 		TYPE_VECTOR3:
 			return FlowData.DataType.Vector
 	return FlowData.DataType.Invalid
+
+static func getFlowDataTypeFromObject( obj  ) -> FlowData.DataType:
+	var data_type = getFlowDataTypeFromGdScriptType( typeof(obj) ) 
+	if data_type != FlowData.DataType.Invalid:
+		return data_type
+	if obj is Resource:
+		return FlowData.DataType.Resource
+	return data_type
 
 func initFromScript():
 	var meta := getMeta()

@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="FlowGraphResource" load_steps=24 format=3 uid="uid://chy06hdyr5neh"]
+[gd_resource type="Resource" script_class="FlowGraphResource" load_steps=26 format=3 uid="uid://chy06hdyr5neh"]
 
 [ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="1_ym11o"]
 [ext_resource type="Script" uid="uid://dt7o3moxddt4h" path="res://addons/flow_nodes_editor/nodes/transform_settings.gd" id="3_0wyvu"]
@@ -8,6 +8,7 @@
 [ext_resource type="Script" uid="uid://dwtm2hr5nh78h" path="res://addons/flow_nodes_editor/nodes/grid_settings.gd" id="7_vba52"]
 [ext_resource type="Script" uid="uid://cbj3mmuatfk1v" path="res://addons/flow_nodes_editor/nodes/sample_spline_settings.gd" id="8_4xbv3"]
 [ext_resource type="Script" uid="uid://bo5aaecpx1tsp" path="res://addons/flow_nodes_editor/nodes/distance_settings.gd" id="10_b6e1b"]
+[ext_resource type="Script" uid="uid://fq4pca63mdph" path="res://addons/flow_nodes_editor/node_settings.gd" id="10_ym11o"]
 [ext_resource type="Script" uid="uid://du3c8wxq0r2fl" path="res://addons/flow_nodes_editor/nodes/input_settings.gd" id="11_lgr5u"]
 [ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="11_ox7wi"]
 
@@ -156,24 +157,6 @@ title = "Grid"
 enabled = true
 trace = false
 
-[sub_resource type="Resource" id="Resource_72pfr"]
-resource_name = "Sample Spline Settings"
-script = ExtResource("8_4xbv3")
-uniform_interval = 0.295
-fill_curve = false
-required_meta_bool = &""
-distance_attribute = "distance"
-random_seed = 1282431794
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Sample Spline"
-enabled = true
-trace = false
-
 [sub_resource type="Resource" id="Resource_fnofy"]
 resource_name = "Transform Settings"
 script = ExtResource("3_0wyvu")
@@ -187,27 +170,6 @@ uniform_scale = false
 random_seed = 345771434
 inspect_enabled = false
 debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Transform"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_lgr5u"]
-resource_name = "Transform Settings"
-script = ExtResource("3_0wyvu")
-offset_min = Vector3(0, 0, 0)
-offset_max = Vector3(0, 0, 0)
-rotation_min = Vector3(0, 0, 0)
-rotation_max = Vector3(0, 0, 0)
-scale_min = Vector3(1, 1, 1)
-scale_max = Vector3(1, 1, 1)
-uniform_scale = true
-random_seed = 3953013428
-inspect_enabled = false
-debug_enabled = true
 debug_mode = 0
 debug_scale = 1.0
 debug_color = Color(1, 1, 1, 1)
@@ -250,6 +212,59 @@ title = "Input"
 enabled = true
 trace = false
 
+[sub_resource type="Resource" id="Resource_72pfr"]
+resource_name = "Sample Spline Settings"
+script = ExtResource("8_4xbv3")
+uniform_interval = 0.295
+fill_curve = false
+required_meta_bool = &""
+distance_attribute = "distance"
+random_seed = 1282431794
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Sample Spline"
+enabled = true
+trace = false
+
+[sub_resource type="Resource" id="Resource_lgr5u"]
+resource_name = "Transform Settings"
+script = ExtResource("3_0wyvu")
+offset_min = Vector3(0, 0, 0)
+offset_max = Vector3(0, 0, 0)
+rotation_min = Vector3(0, 0, 0)
+rotation_max = Vector3(0, 0, 0)
+scale_min = Vector3(1, 1, 1)
+scale_max = Vector3(1, 1, 1)
+uniform_scale = true
+random_seed = 3953013428
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Transform"
+enabled = true
+trace = false
+
+[sub_resource type="Resource" id="Resource_6hd3x"]
+resource_name = "Node Settings"
+script = ExtResource("10_ym11o")
+random_seed = 4136855197
+inspect_enabled = false
+debug_enabled = true
+debug_mode = 1
+debug_scale = 0.175
+debug_color = Color(0, 1, 1, 1)
+debug_modulate_by = "distance"
+title = "Debug"
+enabled = true
+trace = false
+
 [resource]
 resource_name = "graph_distance"
 script = ExtResource("11_ox7wi")
@@ -289,19 +304,9 @@ nodes = Array[Dictionary]([{
 "settings": SubResource("Resource_1f6x3"),
 "template": "grid"
 }, {
-"name": &"id_0001_sample_spline",
-"position_offset": Vector2(60, 620),
-"settings": SubResource("Resource_72pfr"),
-"template": "sample_spline"
-}, {
 "name": &"id_0002_transform",
 "position_offset": Vector2(360, 620),
 "settings": SubResource("Resource_fnofy"),
-"template": "transform"
-}, {
-"name": &"id_0023_transform",
-"position_offset": Vector2(1440, 560),
-"settings": SubResource("Resource_lgr5u"),
 "template": "transform"
 }, {
 "name": &"id_0022_make_vector",
@@ -313,6 +318,21 @@ nodes = Array[Dictionary]([{
 "position_offset": Vector2(1114, 699.003),
 "settings": SubResource("Resource_hglf1"),
 "template": "input_Make Vector - Y"
+}, {
+"name": &"id_0001_sample_spline",
+"position_offset": Vector2(60, 620),
+"settings": SubResource("Resource_72pfr"),
+"template": "sample_spline"
+}, {
+"name": &"id_0023_transform",
+"position_offset": Vector2(1440, 560),
+"settings": SubResource("Resource_lgr5u"),
+"template": "transform"
+}, {
+"name": &"id_0028_debug",
+"position_offset": Vector2(1771.55, 745.196),
+"settings": SubResource("Resource_6hd3x"),
+"template": "debug"
 }])
 conns = Array[Dictionary]([{
 "from_node": &"id_0001_sample_spline",
@@ -392,9 +412,15 @@ conns = Array[Dictionary]([{
 "keep_alive": false,
 "to_node": &"id_0022_make_vector",
 "to_port": 1
+}, {
+"from_node": &"id_0023_transform",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0028_debug",
+"to_port": 0
 }])
 view_zoom = 1.09904
-view_offset = Vector2(0, 0)
-new_name_counter = 26
+view_offset = Vector2(1362, 214)
+new_name_counter = 28
 in_params = Array[ExtResource("1_ym11o")]([SubResource("Resource_0wyvu")])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"

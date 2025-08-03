@@ -33,7 +33,7 @@ func importMetaData( output, nodes ):
 			var value = node.get_meta( meta )
 			if value == null:
 				continue
-			var value_data_type = getFlowDataTypeFromGdScriptType( typeof(value) )
+			var value_data_type = getFlowDataTypeFromObject( value )
 			if value_data_type == FlowData.DataType.Invalid:
 				continue
 			if not output.hasStream( meta ):
@@ -56,7 +56,7 @@ func importProperty( output, nodes, prop_name ):
 		var value = node.get( prop_name )
 		if value == null:
 			continue
-		var value_data_type = getFlowDataTypeFromGdScriptType( typeof(value) )
+		var value_data_type = getFlowDataTypeFromObject( value )
 		if value_data_type == FlowData.DataType.Invalid:
 			continue
 		if not stream:
