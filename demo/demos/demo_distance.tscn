@@ -66,19 +66,19 @@ trace = false
 script = ExtResource("4_scy5f")
 nodes = Array[Dictionary]([{
 "name": &"id_0005_scan_nodes",
-"position_offset": Vector2(-720, 100),
+"position_offset": Vector2(-1000, 0),
 "settings": SubResource("Resource_rs64b"),
 "template": "scan_nodes"
 }, {
 "name": &"id_0004_scan_nodes",
-"position_offset": Vector2(-720, -200),
+"position_offset": Vector2(-1000, -300),
 "settings": SubResource("Resource_scy5f"),
 "template": "scan_nodes"
 }])
 conns = Array[Dictionary]([])
-view_zoom = 1.0
-view_offset = Vector2(-835.6, -368.8)
-new_name_counter = 5
+view_zoom = 0.909091
+view_offset = Vector2(-1001.8, -393.854)
+new_name_counter = 11
 in_params = Array[ExtResource("3_pkkv1")]([])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 

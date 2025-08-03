@@ -78,37 +78,8 @@ func setResourceToEdit( new_resource : FlowGraphResource, new_resource_owner : F
 	gedit_nodes_by_name.clear()
 	inspector.edit( null )
 	inspected_node = null
-	var node_in_data_inspector = null
 	
-	if current_resource != null:
-		
-		# Register the input_* nodes before trying to load the nodes
-		for input in current_resource.in_params:
-			registerInputNodeType( input )
-		
-		print( "Recovering %d nodes" % current_resource.nodes.size() )
-		for res_node in current_resource.nodes:
-			#print( "Recovering node %s" % [ res_node ])
-			var node = addNodeFromTemplate( res_node.template, res_node.name, res_node.settings )
-			if not node:
-				push_error( "Failed to recover node %s" % [ res_node ])
-				continue
-			node.position_offset = res_node.position_offset * ui_scale
-			if node.settings.inspect_enabled:
-				node_in_data_inspector = node
-		
-		print( "Recovering %d conns" % current_resource.conns.size() )
-		for conn in current_resource.conns:
-			#print( "Regenerating conn %s" % [conn])
-			var err = gedit.connect_node( conn.from_node, conn.from_port, conn.to_node, conn.to_port )	
-			if err:
-				push_error("Error adding conn %s from %s" % [err, conn])
-				
-		gedit.zoom = current_resource.view_zoom
-		gedit.scroll_offset = current_resource.view_offset
-		new_name_counter = current_resource.new_name_counter
-
-	data_inspector.setNode( node_in_data_inspector )
+	FlowNodeIO.loadFromResource( self )
 
 	queueRegen()
 	ctx.graph = current_resource
@@ -117,29 +88,7 @@ func setResourceToEdit( new_resource : FlowGraphResource, new_resource_owner : F
 	populatePopupInputsMenu()
 
 func saveResource():
-	if current_resource == null:
-		return
-	current_resource.nodes.clear()
-	current_resource.conns.clear()
-	for child in gedit.get_children():
-		var node = child as FlowNodeBase
-		if not node:
-			continue
-		var stored_data = {
-			"position_offset" : node.position_offset / node.ui_scale,
-			"name" : node.name,
-			"template" : node.node_template,
-			"settings" : node.settings,
-			}
-		#print( "Saving node %s" % [stored_data])
-		current_resource.nodes.append(stored_data)
-
-	for connection in gedit.get_connection_list():
-		current_resource.conns.append( connection.duplicate() )
-
-	current_resource.view_zoom = gedit.zoom
-	current_resource.view_offset = gedit.scroll_offset
-	current_resource.new_name_counter = new_name_counter
+	FlowNodeIO.saveToResource( self )
 	
 func _process(delta: float) -> void:
 	if regen_pending and current_resource:
@@ -716,154 +665,16 @@ func _on_button_inputs_pressed():
 	inspected_node = null
 
 # Cut/Copy/Paste/Dupe
-func resource_to_dict(resource: Resource) -> Dictionary:
-	var dict := {}
-	for prop in resource.get_property_list():
-		if prop.name in FlowNodeAssets.discardted_props:
-			continue
-		if prop.usage & PROPERTY_USAGE_STORAGE != 0:
-			var name = prop.name
-			dict[name] = resource.get(name)
-	return dict
-
-func split_floats(in_str : String) -> Array:
-	var parts = in_str.lstrip("(").rstrip(")").split(",")
-	var vfloats = []
-	for part in parts:
-		vfloats.append( part.to_float() )
-	return vfloats
-
-func _parse_color(value) -> Color:
-	if typeof(value) == TYPE_STRING:
-		var parts = split_floats(value)
-		return Color(parts[0], parts[1], parts[2], parts[3])
-	return value
-
-func _parse_vector2(value) -> Vector2:
-	if typeof(value) == TYPE_STRING:
-		var parts = split_floats(value)
-		return Vector2(parts[0], parts[1])
-	return value
-
-func _parse_vector3(value) -> Vector3:
-	if typeof(value) == TYPE_STRING:
-		var parts = split_floats(value)
-		return Vector3(parts[0], parts[1], parts[2])
-	return value
-
-func dict_to_resource(data: Dictionary, resource: Resource) -> void:
-	for prop in resource.get_property_list():
-		var name = prop.name
-		if name in FlowNodeAssets.discardted_props:
-			continue
-		if not data.has(name):
-			continue
-		var value = data[name]
-		var type = prop.type
-		match type:
-			TYPE_COLOR:
-				resource.set(name, _parse_color(value))
-			TYPE_VECTOR2:
-				resource.set(name, _parse_vector2(value))
-			TYPE_VECTOR3:
-				resource.set(name, _parse_vector3(value))
-			_:
-				resource.set(name, value)
-
-func nodes_as_dict( nodes ):
-	var exported_node_names = {}
-	
-	var min_pos = null
-	for node in nodes:
-		var pos = node.position_offset / ui_scale
-		if min_pos == null:
-			min_pos = pos
-		else:
-			min_pos.x = minf( min_pos.x, pos.x )
-			min_pos.y = minf( min_pos.y, pos.y )
-	
-	var nodes_clean = nodes.map( func( node ):
-		exported_node_names[ node.name ] = 1
-		return {
-			"position" : ( node.position_offset - min_pos ) / ui_scale,
-			"name" : node.name,
-			"template" : node.node_template,
-			"settings" : resource_to_dict( node.settings ),
-		}
-	)
-	var links = []
-	for connection in gedit.get_connection_list():
-		if connection.from_node in exported_node_names and connection.to_node in exported_node_names:
-			links.append( connection )
-	var data := {
-		"type" : "flow_graph_nodes",
-		"nodes" : nodes_clean,
-		"links" : links
-	}
-	return data
-
 func _on_graph_edit_copy_nodes_request():
-	var nodes = getSelectedNodes()
-	var json_str = JSON.stringify(nodes_as_dict(nodes), "\t")
-	DisplayServer.clipboard_set( json_str )
+	FlowNodeIO.copySelectionToClipboard( self )
 
 func _on_graph_edit_cut_nodes_request():
 	_on_graph_edit_copy_nodes_request()
 	deleteSelectedNodes()
 
 func _on_graph_edit_paste_nodes_request():
-	print( "_on_graph_edit_paste_nodes_request" )
-	var json_str = DisplayServer.clipboard_get( )
-	var dict := JSON.parse_string(json_str)
-	paste_nodes_from_dict( dict )
+	FlowNodeIO.pasteNodeFromClipboard( self )
 
 func _on_graph_edit_duplicate_nodes_request():
-	print( "_on_graph_edit_duplicate_nodes_request" )
-	var nodes = getSelectedNodes()
-	var dict = nodes_as_dict(nodes)
-	paste_nodes_from_dict( dict )
+	FlowNodeIO.duplicateSelecteddNodes( self )
 	
-func paste_nodes_from_dict( dict ):
-	var mouse_pos = get_local_mouse_position()
-	var graph_coords : Vector2 = localToGraphCoords( mouse_pos )
-	if typeof(dict) != TYPE_DICTIONARY:
-		return []
-	if dict.get( "type", null) != "flow_graph_nodes":
-		push_error( "Invalid dict to paste nodes from" )
-		return []
-	var paste_offset := graph_coords
-	var new_nodes = []
-	var old_to_new_names = {}
-	for in_node in dict.nodes:
-		var in_name = in_node.name
-		var new_name = getNewName(in_node.template)
-		var node = addNodeFromTemplate( in_node.template, new_name )
-		if not node:
-			return null
-		var in_pos = _parse_vector2( in_node.position )
-		node.position_offset = ( in_pos + paste_offset ) * ui_scale
-		
-		# Apply saved settings...
-		dict_to_resource( in_node.settings, node.settings )
-		
-		node.refreshFromSettings()
-		
-		# Update relation old -> new for the links
-		old_to_new_names[ in_name ] = new_name
-		new_nodes.append( node )
-		
-	# Recreate the links
-	for link in dict.links:
-		var new_from = old_to_new_names.get( link.from_node, null )
-		var new_to = old_to_new_names.get( link.to_node, null )
-		if new_from == null or new_to == null:
-			push_error( "Failed to identify params links", link)
-			continue
-		gedit.connect_node(new_from, link.from_port, new_to, link.to_port )
-
-	# Update selection
-	for node in getSelectedNodes():
-		node.selected = false
-	for node in new_nodes:
-		node.selected = true
-	return new_nodes

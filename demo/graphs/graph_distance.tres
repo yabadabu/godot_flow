@@ -420,7 +420,7 @@ conns = Array[Dictionary]([{
 "to_port": 0
 }])
 view_zoom = 0.908297
-view_offset = Vector2(695.213, 7.96155)
-new_name_counter = 79
+view_offset = Vector2(-190.787, 33.9616)
+new_name_counter = 84
 in_params = Array[ExtResource("1_ym11o")]([SubResource("Resource_0wyvu")])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"

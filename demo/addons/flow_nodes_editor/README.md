@@ -2,7 +2,7 @@
 
 [?] There is bug where transforms seems to be updating the input
 [ ] support for @last?
-[ ] Support for multiple streams?
+[ ] Support for multiple data in stream evaluation?
 	[ ] Debug
 	[ ] Generic Loop
 	[ ] Node to group
@@ -15,17 +15,19 @@
 	[ ] Node to sample (the current one)
 [ ] Allow meta to define input requirements. Single vs Multiple/Accepted Types/Required
 [ ] Volume Sample in 3D
+[ ] Allow the grid to have an offset or it's useless
 [ ] Allow the add menu to have sections
 [ ] Get N property as a independent value. Get first, get last, etc.
 [ ] Spline sampling interior in non grid pattern
 [ ] Allow to filter rows in the inspector
 [ ] Add noise to position <-- Improve noise
 [ ] Math Node. Should hide inputs when not needed. Like Abs
-[ ] scan nodes, option to resize to node limits
 [ ] Support for Vector4/Color/PackedVector4Array -> Read SubAttributes / MathNode / SetAttribute / Use in Debug if exists
 [ ] Test random colors for each node -> Graph Editor Settings
 [ ] undo/redo
 [ ] add_attribute, if output is single stream with a type, set the color. Maybe make it generic
+[X] scan nodes, filter by class_name
+[X] scan nodes, option to resize to node limits
 [X] Support for copy/paste/clone
 [X] Resource properties are correctly imported as Resources in the scan node
 [X] Promote input pin to graph input
