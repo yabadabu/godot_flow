@@ -1,5 +1,9 @@
 === TODO
-
+[ ] Demos
+	[ ] Wall of rocks, picking a random point on the top
+	[ ] Path with random subscene, filter by attribute with rotations
+	[ ] Sample surface of a mesh, create flowers or similar in the horizontal ground
+	
 [?] There is bug where transforms seems to be updating the input
 [ ] support for @last?
 [ ] Support for multiple data in stream evaluation?

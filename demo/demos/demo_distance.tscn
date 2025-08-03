@@ -1,12 +1,10 @@
-[gd_scene load_steps=18 format=3 uid="uid://bxyhxlabiwwag"]
+[gd_scene load_steps=17 format=3 uid="uid://bxyhxlabiwwag"]
 
 [ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_pkkv1"]
 [ext_resource type="Resource" uid="uid://chy06hdyr5neh" path="res://graphs/graph_distance.tres" id="2_66ode"]
 [ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="3_pkkv1"]
 [ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="4_scy5f"]
 [ext_resource type="Script" uid="uid://oocaue4cyte2" path="res://addons/flow_nodes_editor/nodes/scan_nodes_settings.gd" id="5_3kbeu"]
-[ext_resource type="Script" uid="uid://dwtm2hr5nh78h" path="res://addons/flow_nodes_editor/nodes/grid_settings.gd" id="5_rs64b"]
-[ext_resource type="Script" uid="uid://du3c8wxq0r2fl" path="res://addons/flow_nodes_editor/nodes/input_settings.gd" id="6_rs64b"]
 
 [sub_resource type="Curve3D" id="Curve3D_pkkv1"]
 bake_interval = 0.295
@@ -16,7 +14,10 @@ _data = {
 }
 point_count = 9
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_scy5f"]
+
 [sub_resource type="TextMesh" id="TextMesh_3kbeu"]
+material = SubResource("StandardMaterial3D_scy5f")
 text = "Hello 2"
 vertical_alignment = 2
 pixel_size = 0.0375
@@ -25,6 +26,10 @@ pixel_size = 0.0375
 text = "Hello & Look"
 horizontal_alignment = 2
 pixel_size = 0.0375
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3kbeu"]
+vertex_color_use_as_albedo = true
+albedo_color = Color(0, 1, 1, 1)
 
 [sub_resource type="Resource" id="Resource_o2vll"]
 script = ExtResource("3_pkkv1")
@@ -46,7 +51,7 @@ import_properties = Array[StringName]([])
 size_to_bounds = true
 random_seed = 957086464
 inspect_enabled = false
-debug_enabled = true
+debug_enabled = false
 debug_mode = 0
 debug_scale = 1.0
 debug_color = Color(1, 1, 1, 1)
@@ -74,42 +79,6 @@ title = "Scan Nodes"
 enabled = true
 trace = false
 
-[sub_resource type="Resource" id="Resource_hh6fu"]
-resource_name = "Grid Settings"
-script = ExtResource("5_rs64b")
-x = 12
-y = 1
-z = 3
-step = Vector3(1, 1, 1)
-origin = Vector3(1, 0, 3)
-rotation = Vector3(0, 0, 0)
-random_seed = 1040625229
-inspect_enabled = false
-debug_enabled = true
-debug_mode = 1
-debug_scale = 0.885
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Grid"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_72pfr"]
-resource_name = "Input"
-script = ExtResource("6_rs64b")
-name = "Grid - Rotation"
-data_type = 3
-random_seed = 2554460270
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Input"
-enabled = true
-trace = false
-
 [sub_resource type="Resource" id="Resource_3kbeu"]
 script = ExtResource("4_scy5f")
 nodes = Array[Dictionary]([{
@@ -122,27 +91,11 @@ nodes = Array[Dictionary]([{
 "position_offset": Vector2(-1000, 0),
 "settings": SubResource("Resource_rs64b"),
 "template": "scan_nodes"
-}, {
-"name": &"id_0019_grid",
-"position_offset": Vector2(-660, -40),
-"settings": SubResource("Resource_hh6fu"),
-"template": "grid"
-}, {
-"name": &"id_0020_input_Grid - Rotation",
-"position_offset": Vector2(-820, 240),
-"settings": SubResource("Resource_72pfr"),
-"template": "input_Grid - Rotation"
 }])
-conns = Array[Dictionary]([{
-"from_node": &"id_0020_input_Grid - Rotation",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0019_grid",
-"to_port": 5
-}])
+conns = Array[Dictionary]([])
 view_zoom = 0.909091
-view_offset = Vector2(-909.091, -393.854)
-new_name_counter = 21
+view_offset = Vector2(-988.091, -387.854)
+new_name_counter = 23
 in_params = Array[ExtResource("3_pkkv1")]([SubResource("Resource_o2vll")])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 
@@ -153,6 +106,9 @@ _data = {
 "tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0)
 }
 point_count = 6
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_o2vll"]
+size = Vector3(2.89209, 1, 3.21997)
 
 [node name="DemoDistance" type="Node3D"]
 
@@ -177,6 +133,7 @@ mesh = SubResource("TextMesh_3kbeu")
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.0435421, -0.960624, -0.274418, -0.15054, -0.277851, 0.948755, -0.987645, 0, -0.15671, -2.5913, 1.0137, 2.67705)
 mesh = SubResource("TextMesh_scy5f")
+surface_material_override/0 = SubResource("StandardMaterial3D_3kbeu")
 
 [node name="FlowGraphNode3D2" type="Node3D" parent="."]
 transform = Transform3D(0.228889, 0, 0.660545, 0, 0.699078, 0, -0.660545, 0, 0.228889, 0, 0, 0)
@@ -191,3 +148,9 @@ metadata/_custom_type_script = "uid://d1krtmb1urldl"
 [node name="Path3D" type="Path3D" parent="."]
 transform = Transform3D(0.505326, -0.380873, 0.774326, 0.601899, 0.798572, 2.49242e-08, -0.618356, 0.466066, 0.632786, 6.26422, 0, 0)
 curve = SubResource("Curve3D_scy5f")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(0.942104, 0, 0.33532, 0, 1, 0, -0.33532, 0, 0.942104, 3.17407, -0.0201243, 6.09114)
+shape = SubResource("BoxShape3D_o2vll")
