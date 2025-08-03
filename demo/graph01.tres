@@ -1,14 +1,9 @@
-[gd_resource type="Resource" script_class="FlowGraphResource" load_steps=9 format=3 uid="uid://doldqxmlcvh80"]
+[gd_resource type="Resource" script_class="FlowGraphResource" load_steps=7 format=3 uid="uid://doldqxmlcvh80"]
 
 [ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="1_hovoc"]
 [ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="1_pwag0"]
-[ext_resource type="Script" uid="uid://ctvo7a7lud8bn" path="res://addons/flow_nodes_editor/graph_input_parameters.gd" id="2_840wp"]
 [ext_resource type="Script" uid="uid://dt7o3moxddt4h" path="res://addons/flow_nodes_editor/nodes/transform_settings.gd" id="3_hlk1a"]
 [ext_resource type="Script" uid="uid://cbj3mmuatfk1v" path="res://addons/flow_nodes_editor/nodes/sample_spline_settings.gd" id="4_840wp"]
-
-[sub_resource type="Resource" id="Resource_78rjk"]
-script = ExtResource("2_840wp")
-inputs = Array[ExtResource("1_hovoc")]([])
 
 [sub_resource type="Resource" id="Resource_pcyhw"]
 resource_name = "Sample Spline Settings"
@@ -72,5 +67,5 @@ conns = Array[Dictionary]([{
 view_zoom = 0.833901
 view_offset = Vector2(-283.526, -71.953)
 new_name_counter = 1
-inputs = SubResource("Resource_78rjk")
+in_params = Array[ExtResource("1_hovoc")]([])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"

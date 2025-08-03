@@ -14,6 +14,7 @@
 	[ ] Node to create
 	[ ] Node to sample (the current one)
 [ ] Allow meta to define input requirements. Single vs Multiple/Accepted Types/Required
+[ ] Support for copy/paste/clone
 [ ] Volume Sample in 3D
 [ ] Allow the add menu to have sections
 [ ] Get N property as a independent value. Get first, get last, etc.
@@ -23,10 +24,10 @@
 [ ] Math Node. Should hide inputs when not needed. Like Abs
 [ ] Support for Vector4/Color/PackedVector4Array -> Read SubAttributes / MathNode / SetAttribute / Use in Debug if exists
 [ ] Test random colors for each node -> Graph Editor Settings
-[X] Promote input pin to graph input
-[ ] Custom inputs values in the pcg node 3d, not in the resource
 [ ] undo/redo
 [ ] add_attribute, if output is single stream with a type, set the color. Maybe make it generic
+[X] Promote input pin to graph input
+[X] Custom inputs values in the pcg node 3d, not in the resource
 [X] Generate reduction of metrics. Avg, Min, Max, etc of a numeric stream
 [X] Copy with offset N times. Export attribute
 [X] Show performance numbers somewhere

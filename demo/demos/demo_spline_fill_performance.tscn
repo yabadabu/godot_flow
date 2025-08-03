@@ -1,19 +1,14 @@
-[gd_scene load_steps=10 format=3 uid="uid://cwc34bawmmgaj"]
+[gd_scene load_steps=8 format=3 uid="uid://cwc34bawmmgaj"]
 
 [ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_yfg15"]
 [ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="2_1wmd1"]
-[ext_resource type="Script" uid="uid://ctvo7a7lud8bn" path="res://addons/flow_nodes_editor/graph_input_parameters.gd" id="3_uvmq1"]
 [ext_resource type="Script" uid="uid://cbj3mmuatfk1v" path="res://addons/flow_nodes_editor/nodes/sample_spline_settings.gd" id="8_miu1c"]
 [ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="12_w4m8r"]
-
-[sub_resource type="Resource" id="Resource_qydfx"]
-script = ExtResource("3_uvmq1")
-inputs = Array[ExtResource("2_1wmd1")]([])
 
 [sub_resource type="Resource" id="Resource_ph7w0"]
 resource_name = "Sample Spline Settings"
 script = ExtResource("8_miu1c")
-uniform_interval = 0.1
+uniform_interval = 0.4
 fill_curve = true
 required_meta_bool = &""
 distance_attribute = ""
@@ -40,7 +35,7 @@ conns = Array[Dictionary]([])
 view_zoom = 0.909092
 view_offset = Vector2(-270.891, -258.7)
 new_name_counter = 36
-inputs = SubResource("Resource_qydfx")
+in_params = Array[ExtResource("2_1wmd1")]([])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 
 [sub_resource type="Curve3D" id="Curve3D_ph7w0"]

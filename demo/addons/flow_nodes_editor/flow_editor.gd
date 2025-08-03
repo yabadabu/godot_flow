@@ -3,7 +3,7 @@ extends Control
 class_name FlowGraphEditor
 
 var current_resource: FlowGraphResource
-var resource_owner : Node3D
+var resource_owner : FlowGraphNode3D
 var ctx := FlowData.EvaluationContext.new()
 var regen_pending := false
 var auto_regen := true
@@ -52,7 +52,7 @@ var popup_menu_inputs : PopupMenu
 var popup_on_over_input = null
 const IDM_PROMOTE_TO_PARAMETER : int = 100
 
-func setResourceToEdit( new_resource : FlowGraphResource, new_resource_owner : Node3D ):
+func setResourceToEdit( new_resource : FlowGraphResource, new_resource_owner : FlowGraphNode3D ):
 	print( "setResourceToEdit %s" % new_resource )
 	
 	# Time to save the current resource
@@ -83,7 +83,7 @@ func setResourceToEdit( new_resource : FlowGraphResource, new_resource_owner : N
 	if current_resource != null:
 		
 		# Register the input_* nodes before trying to load the nodes
-		for input in current_resource.inputs.inputs:
+		for input in current_resource.in_params:
 			registerInputNodeType( input )
 		
 		print( "Recovering %d nodes" % current_resource.nodes.size() )
@@ -112,6 +112,7 @@ func setResourceToEdit( new_resource : FlowGraphResource, new_resource_owner : N
 
 	queueRegen()
 	ctx.graph = current_resource
+	ctx.owner = resource_owner
 	print( "regen_pending is now true (%d)" % [num_non_nodes_children])
 	populatePopupInputsMenu()
 
@@ -179,9 +180,9 @@ func populatePopupInputsMenu():
 		return
 	popup_menu_inputs.clear()
 
-	if current_resource && current_resource.inputs:
-		for idx in range(current_resource.inputs.inputs.size()):
-			var label : String = current_resource.inputs.inputs[idx].name
+	if current_resource:
+		for idx in range(current_resource.in_params.size()):
+			var label : String = current_resource.in_params[idx].name
 			popup_menu_inputs.add_item( FlowNodeBase.editorDisplayName( label ), idx)
 
 	if popup_menu_inputs.get_item_count() == 0:
@@ -492,8 +493,8 @@ func registerAsParameter( name : String, data_type : FlowData.DataType ):
 	var new_input = GraphInputParameter.new()
 	new_input.name = name
 	new_input.data_type = data_type
-	current_resource.inputs.inputs.append( new_input )
-	registerInputNodeType( current_resource.inputs.inputs.back() )
+	current_resource.in_params.append( new_input )
+	registerInputNodeType( current_resource.in_params.back() )
 
 func _on_in_popup_menu_pressed( id: int, row : FlowConnectorRow ) -> void:
 	if id == IDM_PROMOTE_TO_PARAMETER and row:
@@ -502,7 +503,7 @@ func _on_in_popup_menu_pressed( id: int, row : FlowConnectorRow ) -> void:
 		var in_name = node.getMeta().title + " - " + row.data.in_label
 		registerAsParameter( in_name, row.data.in_type )
 		# Instantiate the input
-		var new_input_node = _on_inputs_menu_id_pressed( current_resource.inputs.inputs.size() - 1 )
+		var new_input_node = _on_inputs_menu_id_pressed( current_resource.in_params.size() - 1 )
 		if new_input_node:
 			# Adjust the positions, the size is correct, our left is the parent left - size
 			new_input_node.position_offset.x = node.position_offset.x - new_input_node.size.x - 40
@@ -557,7 +558,7 @@ func openAddMenu():
 	_on_graph_edit_popup_request( pos )
 
 func _on_inputs_menu_id_pressed(id: int):
-	var input = current_resource.inputs.inputs[id]
+	var input = current_resource.in_params[id]
 	var node_type = "input_%s" % input.name
 	print( "Creating a input node: %s (%d) -> %s" % [ input.name, input.data_type, node_type] )
 	var settings := InputNodeSettings.new()
@@ -649,7 +650,6 @@ func removeGeneratedNodes():
 		child.queue_free()
 
 func evalGraph():
-	ctx.owner = resource_owner
 	ctx.eval_id += 1
 	
 	var time_start = Time.get_ticks_usec()
@@ -713,7 +713,7 @@ func _on_auto_regen_toggled(toggled_on: bool) -> void:
 
 func _on_button_inputs_pressed():
 	if current_resource:
-		inspector.edit( current_resource.inputs )
+		inspector.edit( current_resource )
 	inspected_node = null
 
 func _on_graph_edit_duplicate_nodes_request():

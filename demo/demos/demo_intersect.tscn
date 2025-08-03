@@ -1,27 +1,12 @@
-[gd_scene load_steps=17 format=3 uid="uid://dc8qy4ejmlaip"]
+[gd_scene load_steps=14 format=3 uid="uid://dc8qy4ejmlaip"]
 
 [ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_5ex6f"]
 [ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="2_50g47"]
-[ext_resource type="Script" uid="uid://ctvo7a7lud8bn" path="res://addons/flow_nodes_editor/graph_input_parameters.gd" id="3_lacnk"]
 [ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="4_jn5vr"]
 [ext_resource type="Script" uid="uid://dwtm2hr5nh78h" path="res://addons/flow_nodes_editor/nodes/grid_settings.gd" id="4_lacnk"]
 [ext_resource type="Script" uid="uid://dt7o3moxddt4h" path="res://addons/flow_nodes_editor/nodes/transform_settings.gd" id="5_jn5vr"]
 [ext_resource type="Script" uid="uid://bw3x7p10afvc7" path="res://addons/flow_nodes_editor/nodes/substract_settings.gd" id="6_xx7ch"]
 [ext_resource type="Script" uid="uid://dacqkd6wb3kul" path="res://addons/flow_nodes_editor/nodes/reduce_settings.gd" id="7_38n7t"]
-
-[sub_resource type="Resource" id="Resource_8d3ec"]
-script = ExtResource("2_50g47")
-name = "Grid - X"
-data_type = 1
-cte_bool = false
-cte_int = 0
-cte_float = 0.0
-cte_vector = Vector3(0, 0, 0)
-cte_string = ""
-
-[sub_resource type="Resource" id="Resource_xx7ch"]
-script = ExtResource("3_lacnk")
-inputs = Array[ExtResource("2_50g47")]([SubResource("Resource_8d3ec")])
 
 [sub_resource type="Resource" id="Resource_hwxt1"]
 resource_name = "Grid Settings"
@@ -167,7 +152,7 @@ conns = Array[Dictionary]([{
 view_zoom = 1.0
 view_offset = Vector2(0, -99)
 new_name_counter = 7
-inputs = SubResource("Resource_xx7ch")
+in_params = Array[ExtResource("2_50g47")]([])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 
 [node name="DemoIntersect" type="Node3D"]

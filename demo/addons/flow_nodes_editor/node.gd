@@ -178,7 +178,7 @@ static func editorDisplayName(property_name: String) -> String:
 		parts[i] = parts[i].capitalize()
 	return " ".join(parts)
 
-func getColorForGDScriptType( gd_type : int ) -> Color:
+static func getColorForGDScriptType( gd_type : int ) -> Color:
 	match( gd_type ):
 		TYPE_BOOL:
 			return Color.RED
@@ -192,7 +192,7 @@ func getColorForGDScriptType( gd_type : int ) -> Color:
 			return Color.YELLOW
 	return Color.WHEAT
 
-func getGdScriptTypeForFlowDataType( data_type : FlowData.DataType ) -> int:
+static func getGdScriptTypeForFlowDataType( data_type : FlowData.DataType ) -> int:
 	match( data_type ):
 		FlowData.DataType.Bool:
 			return TYPE_BOOL
@@ -206,7 +206,7 @@ func getGdScriptTypeForFlowDataType( data_type : FlowData.DataType ) -> int:
 			return TYPE_VECTOR3
 	return TYPE_NIL
 
-func getFlowDataTypeFromGdScriptType( gd_type : int  ) -> FlowData.DataType:
+static func getFlowDataTypeFromGdScriptType( gd_type : int  ) -> FlowData.DataType:
 	match( gd_type ):
 		TYPE_BOOL:
 			return FlowData.DataType.Bool

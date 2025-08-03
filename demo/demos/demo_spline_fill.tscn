@@ -1,8 +1,7 @@
-[gd_scene load_steps=27 format=3 uid="uid://bec321f7nwi5h"]
+[gd_scene load_steps=25 format=3 uid="uid://bec321f7nwi5h"]
 
 [ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_6hs3b"]
 [ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="2_0uiub"]
-[ext_resource type="Script" uid="uid://ctvo7a7lud8bn" path="res://addons/flow_nodes_editor/graph_input_parameters.gd" id="3_f6xpl"]
 [ext_resource type="Script" uid="uid://cbj3mmuatfk1v" path="res://addons/flow_nodes_editor/nodes/sample_spline_settings.gd" id="4_0uiub"]
 [ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="4_ow8g4"]
 [ext_resource type="Script" uid="uid://ckff4og6eip3" path="res://addons/flow_nodes_editor/nodes/math_op_settings.gd" id="5_ow8g4"]
@@ -15,16 +14,12 @@
 
 [sub_resource type="Curve3D" id="Curve3D_lnu6d"]
 closed = true
-bake_interval = 0.61
+bake_interval = 0.3
 _data = {
 "points": PackedVector3Array(0, 0, 0, 0, 0, 0, -0.549417, -0.0212173, 0.666117, 0, 0, 0, 0, 0, 0, -8.61512, -3.52689, 11.7987, -7.17512, -5.62668e-05, 0.570743, 7.17512, 5.62668e-05, -0.570743, 12.0492, -8.02957, 4.52096, -0.246415, 0, 0.525253, 0.246415, 0, -0.525253, 25.1536, -6.0446, 7.08516, 0.162214, -0.00053215, 0.507052, -0.162214, 0.00053215, -0.507052, 19.5576, -1.47925, -5.52691, 1.64129, -0.0790663, 1.82922, -1.64129, 0.0790663, -1.82922, 8.97962, -0.0296631, -5.34519, 0.528495, 0, 0.103754, -0.528495, 0, -0.103754, 1.0116, 0, -2.61654, 0.0894269, 0.0361512, -0.731316, -0.0894269, -0.0361512, 0.731316, -1.66068, -0.20416, -2.40038, -0.514984, 0, -0.530699, 0.514984, 0, 0.530699, 0.5058, 0, -1.54009, 0.136177, 0, -0.333957, -0.136177, 0, 0.333957, 0.674399, 0, -0.736003),
 "tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 }
 point_count = 10
-
-[sub_resource type="Resource" id="Resource_qydfx"]
-script = ExtResource("3_f6xpl")
-inputs = Array[ExtResource("2_0uiub")]([])
 
 [sub_resource type="Resource" id="Resource_udkk1"]
 resource_name = "Math Op"
@@ -207,6 +202,7 @@ script = ExtResource("4_0uiub")
 uniform_interval = 0.15
 fill_curve = true
 required_meta_bool = &""
+distance_attribute = "distance"
 random_seed = 1104016555
 inspect_enabled = false
 debug_enabled = false
@@ -364,7 +360,7 @@ conns = Array[Dictionary]([{
 view_zoom = 0.826447
 view_offset = Vector2(-127.908, -435.705)
 new_name_counter = 29
-inputs = SubResource("Resource_qydfx")
+in_params = Array[ExtResource("2_0uiub")]([])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 
 [node name="DemoSplineFill" type="Node3D"]

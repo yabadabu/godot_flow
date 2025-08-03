@@ -16,7 +16,7 @@ const AttrRotation : StringName = &"rotation"
 const AttrSize     : StringName = &"size"
 
 class EvaluationContext:
-	var owner : Node3D
+	var owner : FlowGraphNode3D
 	var eval_id : int = 0
 	var graph : FlowGraphResource
 

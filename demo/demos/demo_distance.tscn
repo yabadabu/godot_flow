@@ -1,335 +1,12 @@
-[gd_scene load_steps=26 format=3 uid="uid://bxyhxlabiwwag"]
+[gd_scene load_steps=4 format=3 uid="uid://bxyhxlabiwwag"]
 
 [ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_pkkv1"]
-[ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="2_scy5f"]
-[ext_resource type="Script" uid="uid://ctvo7a7lud8bn" path="res://addons/flow_nodes_editor/graph_input_parameters.gd" id="3_3kbeu"]
-[ext_resource type="Script" uid="uid://cbj3mmuatfk1v" path="res://addons/flow_nodes_editor/nodes/sample_spline_settings.gd" id="4_3kbeu"]
-[ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="4_rs64b"]
-[ext_resource type="Script" uid="uid://dt7o3moxddt4h" path="res://addons/flow_nodes_editor/nodes/transform_settings.gd" id="5_rs64b"]
-[ext_resource type="Script" uid="uid://dwtm2hr5nh78h" path="res://addons/flow_nodes_editor/nodes/grid_settings.gd" id="6_o2vll"]
-[ext_resource type="Script" uid="uid://dhryaxkxmtaui" path="res://addons/flow_nodes_editor/nodes/make_vector_settings.gd" id="7_72pfr"]
-[ext_resource type="Script" uid="uid://runa6a3koevg" path="res://addons/flow_nodes_editor/nodes/add_attribute_settings.gd" id="8_fnofy"]
-[ext_resource type="Script" uid="uid://bo5aaecpx1tsp" path="res://addons/flow_nodes_editor/nodes/distance_settings.gd" id="9_72pfr"]
-[ext_resource type="Script" uid="uid://cka12nenjlwgx" path="res://addons/flow_nodes_editor/nodes/filter_settings.gd" id="10_i4esb"]
-[ext_resource type="Script" uid="uid://fq4pca63mdph" path="res://addons/flow_nodes_editor/node_settings.gd" id="11_1f6x3"]
-
-[sub_resource type="Resource" id="Resource_hh6fu"]
-script = ExtResource("3_3kbeu")
-inputs = Array[ExtResource("2_scy5f")]([])
-
-[sub_resource type="Resource" id="Resource_fnofy"]
-resource_name = "Transform Settings"
-script = ExtResource("5_rs64b")
-offset_min = Vector3(0, 0, 0)
-offset_max = Vector3(0, 0, 0)
-rotation_min = Vector3(0, 0, 0)
-rotation_max = Vector3(0, 0, 0)
-scale_min = Vector3(0.1, 0.5, 0.1)
-scale_max = Vector3(0.1, 0.5, 0.1)
-uniform_scale = false
-random_seed = 345771434
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Transform"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_7yb35"]
-resource_name = "Make Vector Settings"
-script = ExtResource("7_72pfr")
-x = 0.41
-y = 1.0
-z = 0.28
-out_name = "Vector"
-random_seed = 559977034
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Make Vector"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_72pfr"]
-resource_name = "Sample Spline Settings"
-script = ExtResource("4_3kbeu")
-uniform_interval = 0.295
-fill_curve = false
-required_meta_bool = &""
-distance_attribute = "distance"
-random_seed = 1282431794
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Sample Spline"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_1f6x3"]
-resource_name = "Grid Settings"
-script = ExtResource("6_o2vll")
-x = 32
-y = 1
-z = 32
-step = Vector3(0.5, 1, 0.5)
-random_seed = 2397165643
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Grid"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_i4esb"]
-resource_name = "Transform Settings"
-script = ExtResource("5_rs64b")
-offset_min = Vector3(-1, 0, -4)
-offset_max = Vector3(-1, 0, -4)
-rotation_min = Vector3(0, 0, 0)
-rotation_max = Vector3(0, 0, 0)
-scale_min = Vector3(0.1, 1, 1)
-scale_max = Vector3(0.1, 1, 1)
-uniform_scale = true
-random_seed = 4269736984
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Transform"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_lewgr"]
-resource_name = "Add Attribute"
-script = ExtResource("8_fnofy")
-name = "Step"
-data_type = 2
-cte_bool = false
-cte_int = 0
-cte_float = 0.21
-cte_vector = Vector3(0, 0, 0)
-cte_string = ""
-random_seed = 1435980282
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Add Attribute"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_ildus"]
-resource_name = "Distance Settings"
-script = ExtResource("9_72pfr")
-max_distance = 0.4
-out_name = "distance"
-in_nameA = "position"
-in_nameB = "position"
-random_seed = 2858792388
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 1
-debug_scale = 0.15
-debug_color = Color(0, 1, 1, 1)
-debug_modulate_by = "distance"
-title = "Distance"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_gexxf"]
-resource_name = "Add Attribute"
-script = ExtResource("8_fnofy")
-name = "Threshold"
-data_type = 2
-cte_bool = false
-cte_int = 0
-cte_float = 1.08
-cte_vector = Vector3(0, 0, 0)
-cte_string = ""
-random_seed = 3924440885
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Add Attribute"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_f70y0"]
-resource_name = "Filter Settings"
-script = ExtResource("10_i4esb")
-condition = 2
-in_nameA = "distance"
-in_nameB = "Threshold"
-threshold = 0.175
-random_seed = 934950267
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Filter"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_5q8kf"]
-resource_name = "Node Settings"
-script = ExtResource("11_1f6x3")
-random_seed = 260367329
-inspect_enabled = false
-debug_enabled = true
-debug_mode = 1
-debug_scale = 0.175
-debug_color = Color(1, 0.235294, 1, 1)
-debug_modulate_by = "distance"
-title = "Debug"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_o2vll"]
-resource_name = "graph_distance"
-script = ExtResource("4_rs64b")
-nodes = Array[Dictionary]([{
-"name": &"id_0002_transform",
-"position_offset": Vector2(360, 620),
-"settings": SubResource("Resource_fnofy"),
-"template": "transform"
-}, {
-"name": &"id_0006_make_vector",
-"position_offset": Vector2(0, 360),
-"settings": SubResource("Resource_7yb35"),
-"template": "make_vector"
-}, {
-"name": &"id_0001_sample_spline",
-"position_offset": Vector2(60, 620),
-"settings": SubResource("Resource_72pfr"),
-"template": "sample_spline"
-}, {
-"name": &"id_0003_grid",
-"position_offset": Vector2(160, 240),
-"settings": SubResource("Resource_1f6x3"),
-"template": "grid"
-}, {
-"name": &"id_0005_transform",
-"position_offset": Vector2(360, 240),
-"settings": SubResource("Resource_i4esb"),
-"template": "transform"
-}, {
-"name": &"id_0007_add_attribute",
-"position_offset": Vector2(-200, 420),
-"settings": SubResource("Resource_lewgr"),
-"template": "add_attribute"
-}, {
-"name": &"id_0008_distance",
-"position_offset": Vector2(680, 480),
-"settings": SubResource("Resource_ildus"),
-"template": "distance"
-}, {
-"name": &"id_0011_add_attribute",
-"position_offset": Vector2(858.801, 699.692),
-"settings": SubResource("Resource_gexxf"),
-"template": "add_attribute"
-}, {
-"name": &"id_0009_filter",
-"position_offset": Vector2(1000, 480),
-"settings": SubResource("Resource_f70y0"),
-"template": "filter"
-}, {
-"name": &"id_0010_debug",
-"position_offset": Vector2(1240, 600),
-"settings": SubResource("Resource_5q8kf"),
-"template": "debug"
-}])
-conns = Array[Dictionary]([{
-"from_node": &"id_0001_sample_spline",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0002_transform",
-"to_port": 0
-}, {
-"from_node": &"id_0003_grid",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0005_transform",
-"to_port": 0
-}, {
-"from_node": &"id_0006_make_vector",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0003_grid",
-"to_port": 3
-}, {
-"from_node": &"id_0007_add_attribute",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0006_make_vector",
-"to_port": 0
-}, {
-"from_node": &"id_0007_add_attribute",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0006_make_vector",
-"to_port": 2
-}, {
-"from_node": &"id_0005_transform",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0008_distance",
-"to_port": 0
-}, {
-"from_node": &"id_0002_transform",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0008_distance",
-"to_port": 1
-}, {
-"from_node": &"id_0008_distance",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0009_filter",
-"to_port": 0
-}, {
-"from_node": &"id_0011_add_attribute",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0009_filter",
-"to_port": 1
-}, {
-"from_node": &"id_0009_filter",
-"from_port": 1,
-"keep_alive": false,
-"to_node": &"id_0010_debug",
-"to_port": 0
-}])
-view_zoom = 0.908301
-view_offset = Vector2(1785.55, 377.784)
-new_name_counter = 11
-inputs = SubResource("Resource_hh6fu")
-metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
+[ext_resource type="Resource" uid="uid://chy06hdyr5neh" path="res://graphs/graph_distance.tres" id="2_66ode"]
 
 [sub_resource type="Curve3D" id="Curve3D_pkkv1"]
 bake_interval = 0.295
 _data = {
-"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 1.88385, 1.19209e-07, -0.00449657, -0.67675, 0, 0.520576, 0.67675, 0, -0.520576, 2.87687, 1.19209e-07, -1.49626, -0.994457, -0.0564849, 0.299922, 0.994457, 0.0564849, -0.299922, 5.54694, -0.0733792, -0.216296, 0.182201, 0, 0.344882, -0.182201, 0, -0.344882, 4.53879, 1.19209e-07, -3.51188, -0.0260286, 0, 0.292825, 0.0260286, 0, -0.292825, 2.97706, 1.19209e-07, -4.20164, -0.884979, 0, -0.071579, 0.884979, 0, 0.071579, 4.59085, 1.19209e-07, -4.8003, -0.273302, 0, -0.468518, 0.273302, 0, 0.468518, 7.13494, -0.0202721, -4.22287, -0.292825, 0, -0.422968, 0.292825, 0, 0.422968, 7.36019, 1.19209e-07, -2.49675, 0, 0, 0, 0, 0, 0, 6.74473, 1.19209e-07, -0.57713),
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 1.88385, 1.19209e-07, -0.00449657, -0.67675, 0, 0.520576, 0.67675, 0, -0.520576, 2.7481, 1.19209e-07, -1.74432, -0.994457, -0.0564849, 0.299922, 0.994457, 0.0564849, -0.299922, 5.54694, -0.0733792, -0.216296, 0.182201, 0, 0.344882, -0.182201, 0, -0.344882, 4.53879, 1.19209e-07, -3.51188, -0.0260286, 0, 0.292825, 0.0260286, 0, -0.292825, 2.97706, 1.19209e-07, -4.20164, -0.884979, 0, -0.071579, 0.884979, 0, 0.071579, 4.59085, 1.19209e-07, -4.8003, -0.273302, 0, -0.468518, 0.273302, 0, 0.468518, 7.13494, -0.0202721, -4.22287, -0.292825, 0, -0.422968, 0.292825, 0, 0.422968, 7.36019, 1.19209e-07, -2.49675, 0, 0, 0, 0, 0, 0, 6.74473, 1.19209e-07, -0.57713),
 "tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0)
 }
 point_count = 9
@@ -339,9 +16,23 @@ point_count = 9
 [node name="FlowGraphNode3D" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.999684, 0, -3.50492)
 script = ExtResource("1_pkkv1")
-graph = SubResource("Resource_o2vll")
+graph = ExtResource("2_66ode")
+args = {
+"Make Vector - Y": 0.9
+}
+refresh_inputs = Callable()
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
 
-[node name="Path3D" type="Path3D" parent="."]
+[node name="PathA" type="Path3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.35888, -1.19209e-07, 2.09656)
 curve = SubResource("Curve3D_pkkv1")
+metadata/is_a = false
+
+[node name="FlowGraphNode3D2" type="Node3D" parent="."]
+script = ExtResource("1_pkkv1")
+graph = ExtResource("2_66ode")
+args = {
+"Make Vector - Y": 0.47
+}
+refresh_inputs = Callable()
+metadata/_custom_type_script = "uid://d1krtmb1urldl"

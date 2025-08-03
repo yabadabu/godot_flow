@@ -1,15 +1,10 @@
-[gd_scene load_steps=11 format=3 uid="uid://b5t2jiuic1aoh"]
+[gd_scene load_steps=9 format=3 uid="uid://b5t2jiuic1aoh"]
 
 [ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_sv1gj"]
 [ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="2_7xpo0"]
-[ext_resource type="Script" uid="uid://ctvo7a7lud8bn" path="res://addons/flow_nodes_editor/graph_input_parameters.gd" id="3_sx5mj"]
 [ext_resource type="Script" uid="uid://dwtm2hr5nh78h" path="res://addons/flow_nodes_editor/nodes/grid_settings.gd" id="4_knkyk"]
 [ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="4_om314"]
 [ext_resource type="Script" uid="uid://cka12nenjlwgx" path="res://addons/flow_nodes_editor/nodes/filter_settings.gd" id="5_odxoa"]
-
-[sub_resource type="Resource" id="Resource_knkyk"]
-script = ExtResource("3_sx5mj")
-inputs = Array[ExtResource("2_7xpo0")]([])
 
 [sub_resource type="Resource" id="Resource_6k6c6"]
 resource_name = "Grid Settings"
@@ -27,6 +22,7 @@ debug_color = Color(1, 1, 1, 1)
 debug_modulate_by = ""
 title = "Grid"
 enabled = true
+trace = false
 
 [sub_resource type="Resource" id="Resource_om314"]
 resource_name = "Filter Settings"
@@ -44,6 +40,7 @@ debug_color = Color(1, 1, 1, 1)
 debug_modulate_by = ""
 title = "Filter"
 enabled = true
+trace = false
 
 [sub_resource type="Resource" id="Resource_odxoa"]
 resource_local_to_scene = true
@@ -69,7 +66,7 @@ conns = Array[Dictionary]([{
 view_zoom = 0.909091
 view_offset = Vector2(-118.564, -32.6364)
 new_name_counter = 8
-inputs = SubResource("Resource_knkyk")
+in_params = Array[ExtResource("2_7xpo0")]([])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 
 [node name="DemoFilter" type="Node3D"]
