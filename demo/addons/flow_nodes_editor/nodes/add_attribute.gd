@@ -8,6 +8,7 @@ func _init():
 		"ins" : [{"label": "In" }], 
 		"outs" : [{ "label" : "Out" }],
 		"hide_inputs" : true,
+		"tooltip" :"Add a new constant stream to the input set\nIf the input is not given a single entry with the constant value is created.",
 	}
 	
 func getTitle() -> String:

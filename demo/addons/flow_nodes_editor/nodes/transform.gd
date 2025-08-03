@@ -7,6 +7,7 @@ func _init():
 		"settings" : TransformNodeSettings,
 		"ins" : [{"label": "In" }], 
 		"outs" : [{ "label" : "Out" }],
+		"tooltip" : "Applies the random translation/rotation/scale to each point",
 	}
 
 func execute( ctx : FlowData.EvaluationContext ):

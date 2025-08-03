@@ -7,7 +7,8 @@ func _init():
 		"settings" : SubstractSettings,
 		"ins" : [{"label": "In A" }, {"label": "In B" }], 
 		"outs" : [{ "label" : "Out" }],
-		"hide_inputs" : true
+		"hide_inputs" : true,
+		"tooltip" : "Applies the boolean logic 'substract', where the points of A that overlap points in B are removed.\nThe same node can be changed to return only the points A intersecting the points of B",
 	}
 	
 func getTitle() -> String:

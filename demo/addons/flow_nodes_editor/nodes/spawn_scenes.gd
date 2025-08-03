@@ -7,7 +7,8 @@ func _init():
 		"settings" : SpawnScenesNodeSettings,
 		"ins" : [{ "label" : "In" }],
 		"outs" : [{ "label" : "Out" }],
-		"is_final" : true
+		"is_final" : true,
+		"tooltip" : "Similar to spawn meshes but a full scene is instantiated on each node.\nA set of properties can be transfered from the nodes to each instanced scene.",
 	}
 
 func _exit_tree():

@@ -7,6 +7,7 @@ func _init():
 		"settings" : CopyNodeSettings,
 		"ins" : [{ "label": "In" }], 
 		"outs" : [{ "label" : "Out" }],
+		"tooltip" :"Creates N copies of the current points applying\na repeated translation + rotation offset",
 	}
 
 func execute( ctx : FlowData.EvaluationContext ):

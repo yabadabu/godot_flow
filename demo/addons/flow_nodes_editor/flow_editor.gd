@@ -163,16 +163,20 @@ func populatePopupMenu():
 	pm.add_separator( "", -1 )
 	populatePopupInputsMenu()
 	
+	var idx = pm.get_child_count() + 1
 	for key in node_types.keys():
-		var node_type = node_types[ key ]
-		var label = node_type.title
+		var node_meta = node_types[ key ]
+		var label = node_meta.title
 		max_id += 1
-		if not node_type.get( "auto_register", true):
+		if not node_meta.get( "auto_register", true):
 			print( "Adding menu %s skip (id:%d)" % [ label, max_id ])
 			continue
 		#print( "Adding menu %s -> %d" % [ label, max_id ])
 		menu_ids[ max_id ] = key
 		pm.add_item(label, max_id, KEY_NONE )
+		if node_meta.has( "tooltip" ):
+			pm.set_item_tooltip( idx, node_meta.get( "tooltip" ) )
+		idx += 1
 	return pm
 
 func _ready():
@@ -494,6 +498,7 @@ func _on_graph_edit_popup_request(at_position):
 		#print( "Show popup associated to %s.%s" % [ node.name, popup_on_over_input.getInLabel().text ] )
 		return
 	
+	popup_menu = null
 	if not popup_menu:
 		popup_menu = populatePopupMenu()
 	var p = popup_menu

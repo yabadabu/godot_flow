@@ -7,6 +7,7 @@ func _init():
 		"settings" : MakeVectorNodeSettings,
 		"ins" : [], 
 		"outs" : [{ "label" : "Out", "type" : TYPE_VECTOR3 }],
+		"tooltip" :"Creates a single Vector value from 3 inmediate float values",
 		#"trace" : true
 	}
 

@@ -7,6 +7,7 @@ func _init():
 		"settings" : ReduceNodeSettings,
 		"ins" : [{ "label": "In" }], 
 		"outs" : [{ "label" : "Out" }],
+		"tooltip" :"Computes the min/max/avg values of the specified stream\nLimited to streams of type float, vector3 or ints.",
 	}
 	
 func addSingleValue( out_data : FlowData.Data, stream_name : String, value ):

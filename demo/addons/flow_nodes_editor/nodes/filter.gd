@@ -8,7 +8,7 @@ func _init():
 		"ins" : [{"label": "In A" }, {"label": "In B" }], 
 		"outs" : [{ "label" : "True" }, { "label" : "False" }],
 		"hide_inputs" : true,
-		"tooltip" :"Filter inputs based on some condition",
+		"tooltip" :"Filter inputs based on some condition.\nThis node returns splits the input stream in two substreams.",
 	}
 
 func execute( ctx : FlowData.EvaluationContext ):

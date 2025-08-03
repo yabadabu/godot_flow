@@ -7,6 +7,8 @@ func _init():
 		"settings" : SelfPruningSettings,
 		"ins" : [{"label": "In" }], 
 		"outs" : [{ "label" : "Out" }],
+		"tooltip" :"Rejects any point overlaping previous points.",
+
 	}
 
 func execute( _ctx : FlowData.EvaluationContext ):

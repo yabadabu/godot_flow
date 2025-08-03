@@ -7,7 +7,8 @@ func _init():
 		"settings" : SpawnMeshesNodeSettings,
 		"ins" : [{ "label" : "In" }],
 		"outs" : [{ "label" : "Out" }],
-		"is_final" : true
+		"is_final" : true,
+		"tooltip" : "Spawns a Mesh Instance on each point, applying the translation, rotation and scale.\nThe instanced mesh can be specified by point if a stream contains the mesh resource to be spawned.\nThe generates meshes are MultiMeshInstance3D.",
 	}
 
 func _exit_tree():

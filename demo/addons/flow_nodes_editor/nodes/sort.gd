@@ -8,7 +8,7 @@ func _init():
 		"ins" : [{"label": "In" }], 
 		"outs" : [{ "label" : "Out" }],
 		"hide_inputs" : true,
-		"tooltip" :"Sorts points based on the values of stream",
+		"tooltip" : "Sorts points based on the values of stream",
 	}
 
 func execute( ctx : FlowData.EvaluationContext ):
