@@ -298,7 +298,6 @@ func deleteGraphElementsAndRefresh( nodes : Array[GraphNode], frames : Array[Gra
 	inspector.edit(null)
 	queueRegen()
 	
-
 func deleteSelectedNodes():
 	var frames := getSelectedFrames()
 	var nodes := getSelectedNodes()
@@ -812,6 +811,10 @@ func _on_graph_edit_cut_nodes_request():
 	deleteSelectedNodes()
 
 func _on_graph_edit_paste_nodes_request():
+	
+	var mouse_pos = get_local_mouse_position()
+	var graph_coords : Vector2 = localToGraphCoords( mouse_pos )
+	
 	print( "_on_graph_edit_paste_nodes_request" )
 	var json_str = DisplayServer.clipboard_get( )
 	var dict := JSON.parse_string(json_str)
@@ -819,7 +822,7 @@ func _on_graph_edit_paste_nodes_request():
 		return
 	if dict.get( "type", null) != "flow_graph_nodes":
 		return
-	var paste_offset : = Vector2( 100, 100 )
+	var paste_offset := graph_coords
 	var new_nodes = []
 	var old_to_new_names = {}
 	for in_node in dict.nodes:
@@ -834,6 +837,8 @@ func _on_graph_edit_paste_nodes_request():
 		
 		# Apply saved settings...
 		dict_to_resource( in_node.settings, node.settings )
+		
+		node.refreshFromSettings()
 		
 		# Update relation old -> new for the links
 		old_to_new_names[ in_name ] = new_name
