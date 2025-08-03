@@ -198,8 +198,8 @@ func populatePopupMenu():
 	add_child( pm )
 	pm.name = "MainMenu"
 	pm.clear();
+	pm.id_pressed.connect( _on_popup_menu_id_pressed )
 	#pm.add_item( "Clear", 0, KEY_NONE )
-	#pm.id_pressed.connect( _on_popup_menu_id_pressed )
 	#pm.add_separator( "", -1 )
 	
 	# A submenu to invoke the inputs declared in the pcg
