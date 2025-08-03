@@ -715,9 +715,7 @@ func _on_button_inputs_pressed():
 		inspector.edit( current_resource )
 	inspected_node = null
 
-func _on_graph_edit_duplicate_nodes_request():
-	print( "_on_graph_edit_duplicate_nodes_request" )
-
+# Cut/Copy/Paste/Dupe
 func resource_to_dict(resource: Resource) -> Dictionary:
 	var dict := {}
 	for prop in resource.get_property_list():
@@ -735,17 +733,23 @@ func split_floats(in_str : String) -> Array:
 		vfloats.append( part.to_float() )
 	return vfloats
 
-func _parse_color(s: String) -> Color:
-	var parts = split_floats(s)
-	return Color(parts[0], parts[1], parts[2], parts[3])
+func _parse_color(value) -> Color:
+	if typeof(value) == TYPE_STRING:
+		var parts = split_floats(value)
+		return Color(parts[0], parts[1], parts[2], parts[3])
+	return value
 
 func _parse_vector2(value) -> Vector2:
-	var parts = split_floats(value)
-	return Vector2(parts[0], parts[1])
+	if typeof(value) == TYPE_STRING:
+		var parts = split_floats(value)
+		return Vector2(parts[0], parts[1])
+	return value
 
 func _parse_vector3(value) -> Vector3:
-	var parts = split_floats(value)
-	return Vector3(parts[0], parts[1], parts[2])
+	if typeof(value) == TYPE_STRING:
+		var parts = split_floats(value)
+		return Vector3(parts[0], parts[1], parts[2])
+	return value
 
 func dict_to_resource(data: Dictionary, resource: Resource) -> void:
 	for prop in resource.get_property_list():
@@ -758,10 +762,7 @@ func dict_to_resource(data: Dictionary, resource: Resource) -> void:
 		var type = prop.type
 		match type:
 			TYPE_COLOR:
-				if typeof(value) == TYPE_STRING:
-					resource.set(name, _parse_color(value))
-				else:
-					resource.set(name, value)
+				resource.set(name, _parse_color(value))
 			TYPE_VECTOR2:
 				resource.set(name, _parse_vector2(value))
 			TYPE_VECTOR3:
@@ -811,23 +812,30 @@ func _on_graph_edit_cut_nodes_request():
 	deleteSelectedNodes()
 
 func _on_graph_edit_paste_nodes_request():
-	
-	var mouse_pos = get_local_mouse_position()
-	var graph_coords : Vector2 = localToGraphCoords( mouse_pos )
-	
 	print( "_on_graph_edit_paste_nodes_request" )
 	var json_str = DisplayServer.clipboard_get( )
 	var dict := JSON.parse_string(json_str)
+	paste_nodes_from_dict( dict )
+
+func _on_graph_edit_duplicate_nodes_request():
+	print( "_on_graph_edit_duplicate_nodes_request" )
+	var nodes = getSelectedNodes()
+	var dict = nodes_as_dict(nodes)
+	paste_nodes_from_dict( dict )
+	
+func paste_nodes_from_dict( dict ):
+	var mouse_pos = get_local_mouse_position()
+	var graph_coords : Vector2 = localToGraphCoords( mouse_pos )
 	if typeof(dict) != TYPE_DICTIONARY:
-		return
+		return []
 	if dict.get( "type", null) != "flow_graph_nodes":
-		return
+		push_error( "Invalid dict to paste nodes from" )
+		return []
 	var paste_offset := graph_coords
 	var new_nodes = []
 	var old_to_new_names = {}
 	for in_node in dict.nodes:
 		var in_name = in_node.name
-		print( "Recreating %s" % in_node )
 		var new_name = getNewName(in_node.template)
 		var node = addNodeFromTemplate( in_node.template, new_name )
 		if not node:
@@ -844,13 +852,12 @@ func _on_graph_edit_paste_nodes_request():
 		old_to_new_names[ in_name ] = new_name
 		new_nodes.append( node )
 		
-	print( "Dict nmes", old_to_new_names )
-	
+	# Recreate the links
 	for link in dict.links:
 		var new_from = old_to_new_names.get( link.from_node, null )
 		var new_to = old_to_new_names.get( link.to_node, null )
 		if new_from == null or new_to == null:
-			print( "Failed to identify params links", link)
+			push_error( "Failed to identify params links", link)
 			continue
 		gedit.connect_node(new_from, link.from_port, new_to, link.to_port )
 
@@ -859,3 +866,4 @@ func _on_graph_edit_paste_nodes_request():
 		node.selected = false
 	for node in new_nodes:
 		node.selected = true
+	return new_nodes
