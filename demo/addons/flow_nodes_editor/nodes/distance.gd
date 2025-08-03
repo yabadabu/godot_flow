@@ -7,7 +7,7 @@ func _init():
 		"settings" : DistanceNodeSettings,
 		"ins" : [{"label": "In" }, {"label": "Target" }], 
 		"outs" : [{ "label" : "Out" }],
-		"tooltip" :"Creates a new attribute where the value is\nthe minimum distance from each point to any of the points in the second set.\nThe value can be normalized to an optional Max Distance",
+		"tooltip" : "Creates a new attribute where the value is\nthe minimum distance from each point to any of the points in the second set.\nThe value can be normalized to an optional Max Distance",
 	}
 
 func execute( ctx : FlowData.EvaluationContext ):

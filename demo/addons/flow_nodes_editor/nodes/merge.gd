@@ -6,7 +6,8 @@ func _init():
 		"title" : "Merge",
 		"settings" : MergeNodeSettings,
 		"ins" : [{ "label": "In A" }, { "label": "In B" }], 
-		"outs" : [{ "label" : "Out" }],
+		"outs" : [{ "label" : "Out" }],		
+		"tooltip" : "Merges and combines all streams of all input connections in a single output\nIf input A provides streams s1 and s2, and input B streams s1 and s3\nthe output will have streams s1,s2 and s3 and the default values will be used where the input does not define a value.",
 	}
 
 func execute( ctx : FlowData.EvaluationContext ):

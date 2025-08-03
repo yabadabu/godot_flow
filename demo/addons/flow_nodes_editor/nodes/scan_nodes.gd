@@ -7,7 +7,7 @@ func _init():
 		"settings" : ScanNodesNodeSettings,
 		"ins" : [],
 		"outs" : [{ "label" : "Out" }],
-		"tooltip" :"Generate points from existing non-graph nodes in the scene\nCan filter by class name, group.\nMetadata values can be optioanlly imported\nThe node can import properties of the nodes, even with a subpath property like mesh:text if the nodes are a MeshInstance3D with meshes of type MeshText ",
+		"tooltip" : "Generate points from existing non-graph nodes in the scene\nCan filter by class name, group.\nMetadata values can be optioanlly imported\nThe node can import properties of the nodes, even with a\nsubpath property like mesh:text if the nodes are a MeshInstance3D with meshes of type TextMesh.",
 	}
 	
 func get_scene_root_node3d( current : Node3D ) -> Node3D:

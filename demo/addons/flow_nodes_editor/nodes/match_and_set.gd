@@ -7,7 +7,7 @@ func _init():
 		"settings" : MatchAndSetNodeSettings,
 		"ins" : [{ "label" : "In" }, { "label" : "Attributes" }],
 		"outs" : [{ "label" : "Out" }],
-		"tooltip" :"Copies attributes into input data set",
+		"tooltip" : "Copies attributes into input data set based on a weight_attr.\nCurrently there is no match operation.",
 	}
 
 func execute( _ctx : FlowData.EvaluationContext ):

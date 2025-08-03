@@ -7,6 +7,7 @@ func _init():
 		"settings" : RemoveAttributeNodeSettings,
 		"ins" : [{"label": "In" }], 
 		"outs" : [{ "label" : "Out" }],
+		"tooltip" : "Remove streams from the input connection.",
 	}
 
 func execute( ctx : FlowData.EvaluationContext ):

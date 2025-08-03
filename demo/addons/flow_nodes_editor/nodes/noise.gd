@@ -7,7 +7,7 @@ func _init():
 		"settings" : NoiseNodeSettings,
 		"ins" : [{ "label" : "In" }],
 		"outs" : [{ "label" : "Out" }],
-		"tooltip" :"Outputs an attribute with Noise values",
+		"tooltip" : "Outputs an attribute with Noise values",
 	}
 
 func execute( _ctx : FlowData.EvaluationContext ):

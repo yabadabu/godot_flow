@@ -7,6 +7,7 @@ func _init():
 		"settings" : MathOpNodeSettings,
 		"ins" : [{"label": "In A" }, {"label": "In B" }], 
 		"outs" : [{ "label" : "Out" }],
+		"tooltip" : "Applies a math operation between two streams, storing the result in a new stream or overriding another.\nYou can read and write substreams like pos.X",
 	}
 	
 func getTitle() -> String:

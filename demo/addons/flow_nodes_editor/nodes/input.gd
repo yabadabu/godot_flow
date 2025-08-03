@@ -7,7 +7,7 @@ func _init():
 		"settings" : InputNodeSettings,
 		"ins" : [],
 		"outs" : [{ "label" : "Out" }],
-		"tooltip" :"Exposes an input of the Flow Graph Node into the Graph",
+		"tooltip" : "Exposes an input of the Flow Graph Node into the Graph",
 		"auto_register" : false,
 		"hide_inputs" : true
 	}

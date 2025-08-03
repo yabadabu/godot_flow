@@ -1,11 +1,12 @@
-[gd_scene load_steps=15 format=3 uid="uid://bxyhxlabiwwag"]
+[gd_scene load_steps=18 format=3 uid="uid://bxyhxlabiwwag"]
 
 [ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_pkkv1"]
 [ext_resource type="Resource" uid="uid://chy06hdyr5neh" path="res://graphs/graph_distance.tres" id="2_66ode"]
 [ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="3_pkkv1"]
 [ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="4_scy5f"]
 [ext_resource type="Script" uid="uid://oocaue4cyte2" path="res://addons/flow_nodes_editor/nodes/scan_nodes_settings.gd" id="5_3kbeu"]
-[ext_resource type="Script" uid="uid://bo5aaecpx1tsp" path="res://addons/flow_nodes_editor/nodes/distance_settings.gd" id="5_rs64b"]
+[ext_resource type="Script" uid="uid://dwtm2hr5nh78h" path="res://addons/flow_nodes_editor/nodes/grid_settings.gd" id="5_rs64b"]
+[ext_resource type="Script" uid="uid://du3c8wxq0r2fl" path="res://addons/flow_nodes_editor/nodes/input_settings.gd" id="6_rs64b"]
 
 [sub_resource type="Curve3D" id="Curve3D_pkkv1"]
 bake_interval = 0.295
@@ -25,6 +26,16 @@ text = "Hello & Look"
 horizontal_alignment = 2
 pixel_size = 0.0375
 
+[sub_resource type="Resource" id="Resource_o2vll"]
+script = ExtResource("3_pkkv1")
+name = "Grid - Rotation"
+data_type = 3
+cte_bool = false
+cte_int = 0
+cte_float = 0.0
+cte_vector = Vector3(0, 0, 0)
+cte_string = ""
+
 [sub_resource type="Resource" id="Resource_scy5f"]
 resource_name = "Scan Nodes Settings"
 script = ExtResource("5_3kbeu")
@@ -41,24 +52,6 @@ debug_scale = 1.0
 debug_color = Color(1, 1, 1, 1)
 debug_modulate_by = ""
 title = "Scan Nodes"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_hh6fu"]
-resource_name = "Distance Settings"
-script = ExtResource("5_rs64b")
-max_distance = 0.0
-out_name = "distance"
-in_nameA = "position"
-in_nameB = "position"
-random_seed = 2443647401
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Distance"
 enabled = true
 trace = false
 
@@ -81,6 +74,42 @@ title = "Scan Nodes"
 enabled = true
 trace = false
 
+[sub_resource type="Resource" id="Resource_hh6fu"]
+resource_name = "Grid Settings"
+script = ExtResource("5_rs64b")
+x = 12
+y = 1
+z = 3
+step = Vector3(1, 1, 1)
+origin = Vector3(1, 0, 3)
+rotation = Vector3(0, 0, 0)
+random_seed = 1040625229
+inspect_enabled = false
+debug_enabled = true
+debug_mode = 1
+debug_scale = 0.885
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Grid"
+enabled = true
+trace = false
+
+[sub_resource type="Resource" id="Resource_72pfr"]
+resource_name = "Input"
+script = ExtResource("6_rs64b")
+name = "Grid - Rotation"
+data_type = 3
+random_seed = 2554460270
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Input"
+enabled = true
+trace = false
+
 [sub_resource type="Resource" id="Resource_3kbeu"]
 script = ExtResource("4_scy5f")
 nodes = Array[Dictionary]([{
@@ -89,21 +118,32 @@ nodes = Array[Dictionary]([{
 "settings": SubResource("Resource_scy5f"),
 "template": "scan_nodes"
 }, {
-"name": &"id_0017_distance",
-"position_offset": Vector2(-663.4, -178.04),
-"settings": SubResource("Resource_hh6fu"),
-"template": "distance"
-}, {
 "name": &"id_0005_scan_nodes",
 "position_offset": Vector2(-1000, 0),
 "settings": SubResource("Resource_rs64b"),
 "template": "scan_nodes"
+}, {
+"name": &"id_0019_grid",
+"position_offset": Vector2(-660, -40),
+"settings": SubResource("Resource_hh6fu"),
+"template": "grid"
+}, {
+"name": &"id_0020_input_Grid - Rotation",
+"position_offset": Vector2(-820, 240),
+"settings": SubResource("Resource_72pfr"),
+"template": "input_Grid - Rotation"
 }])
-conns = Array[Dictionary]([])
+conns = Array[Dictionary]([{
+"from_node": &"id_0020_input_Grid - Rotation",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0019_grid",
+"to_port": 5
+}])
 view_zoom = 0.909091
 view_offset = Vector2(-909.091, -393.854)
-new_name_counter = 18
-in_params = Array[ExtResource("3_pkkv1")]([])
+new_name_counter = 21
+in_params = Array[ExtResource("3_pkkv1")]([SubResource("Resource_o2vll")])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 
 [sub_resource type="Curve3D" id="Curve3D_scy5f"]
@@ -142,6 +182,9 @@ mesh = SubResource("TextMesh_scy5f")
 transform = Transform3D(0.228889, 0, 0.660545, 0, 0.699078, 0, -0.660545, 0, 0.228889, 0, 0, 0)
 script = ExtResource("1_pkkv1")
 graph = SubResource("Resource_3kbeu")
+args = {
+"Grid - Rotation": Vector3(0, 0, 0)
+}
 refresh_inputs = Callable()
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
 
