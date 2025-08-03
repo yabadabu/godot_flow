@@ -1,10 +1,10 @@
-[gd_scene load_steps=9 format=3 uid="uid://bxyhxlabiwwag"]
+[gd_scene load_steps=11 format=3 uid="uid://bxyhxlabiwwag"]
 
 [ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_pkkv1"]
 [ext_resource type="Resource" uid="uid://chy06hdyr5neh" path="res://graphs/graph_distance.tres" id="2_66ode"]
 [ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="3_pkkv1"]
-[ext_resource type="Script" uid="uid://oocaue4cyte2" path="res://addons/flow_nodes_editor/nodes/scan_nodes_settings.gd" id="4_3kbeu"]
 [ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="4_scy5f"]
+[ext_resource type="Script" uid="uid://oocaue4cyte2" path="res://addons/flow_nodes_editor/nodes/scan_nodes_settings.gd" id="5_3kbeu"]
 
 [sub_resource type="Curve3D" id="Curve3D_pkkv1"]
 bake_interval = 0.295
@@ -14,14 +14,23 @@ _data = {
 }
 point_count = 9
 
-[sub_resource type="Resource" id="Resource_rs64b"]
+[sub_resource type="TextMesh" id="TextMesh_3kbeu"]
+text = "Hello 2"
+pixel_size = 0.0375
+
+[sub_resource type="TextMesh" id="TextMesh_scy5f"]
+text = "Hello & Look"
+pixel_size = 0.0375
+
+[sub_resource type="Resource" id="Resource_scy5f"]
 resource_name = "Scan Nodes Settings"
-script = ExtResource("4_3kbeu")
-group_name = "Curves"
-import_metadata = true
-import_properties = Array[StringName]([&"curve"])
-random_seed = 1320925935
-inspect_enabled = false
+script = ExtResource("5_3kbeu")
+group_name = ""
+filter_by_class_name = "MeshInstance3D"
+import_metadata = false
+import_properties = Array[StringName]([&"mesh:text"])
+random_seed = 2662869676
+inspect_enabled = true
 debug_enabled = true
 debug_mode = 0
 debug_scale = 1.0
@@ -35,13 +44,13 @@ trace = false
 script = ExtResource("4_scy5f")
 nodes = Array[Dictionary]([{
 "name": &"id_0001_scan_nodes",
-"position_offset": Vector2(200, 300),
-"settings": SubResource("Resource_rs64b"),
+"position_offset": Vector2(185, 142),
+"settings": SubResource("Resource_scy5f"),
 "template": "scan_nodes"
 }])
 conns = Array[Dictionary]([])
 view_zoom = 1.0
-view_offset = Vector2(0, 0)
+view_offset = Vector2(-2, 0)
 new_name_counter = 1
 in_params = Array[ExtResource("3_pkkv1")]([])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
@@ -61,6 +70,14 @@ metadata/_custom_type_script = "uid://d1krtmb1urldl"
 [node name="PathA" type="Path3D" parent="." groups=["Curves"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.35888, -1.19209e-07, 2.09656)
 curve = SubResource("Curve3D_pkkv1")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.87162, 0.694619, 0.842546)
+mesh = SubResource("TextMesh_3kbeu")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.53639, 1.0137, -0.538631)
+mesh = SubResource("TextMesh_scy5f")
 
 [node name="FlowGraphNode3D2" type="Node3D" parent="."]
 script = ExtResource("1_pkkv1")

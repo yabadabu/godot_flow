@@ -5,6 +5,7 @@ extends NodeSettings
 @export_group("Scan Nodes")
 
 @export var group_name : String
+@export var filter_by_class_name : String
 @export var import_metadata : bool = false
 @export var import_properties : Array[ StringName ]
 

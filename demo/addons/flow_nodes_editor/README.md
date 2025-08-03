@@ -14,7 +14,6 @@
 	[ ] Node to create
 	[ ] Node to sample (the current one)
 [ ] Allow meta to define input requirements. Single vs Multiple/Accepted Types/Required
-[ ] Support for copy/paste/clone
 [ ] Volume Sample in 3D
 [ ] Allow the add menu to have sections
 [ ] Get N property as a independent value. Get first, get last, etc.
@@ -27,6 +26,7 @@
 [ ] Test random colors for each node -> Graph Editor Settings
 [ ] undo/redo
 [ ] add_attribute, if output is single stream with a type, set the color. Maybe make it generic
+[X] Support for copy/paste/clone
 [X] Resource properties are correctly imported as Resources in the scan node
 [X] Promote input pin to graph input
 [X] Custom inputs values in the pcg node 3d, not in the resource

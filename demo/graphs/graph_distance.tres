@@ -22,24 +22,6 @@ cte_float = -1.0
 cte_vector = Vector3(0, 0, 0)
 cte_string = ""
 
-[sub_resource type="Resource" id="Resource_7yb35"]
-resource_name = "Make Vector Settings"
-script = ExtResource("4_ef0dx")
-x = 0.41
-y = 1.0
-z = 0.28
-out_name = "Vector"
-random_seed = 559977034
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Make Vector"
-enabled = true
-trace = false
-
 [sub_resource type="Resource" id="Resource_f70y0"]
 resource_name = "Filter Settings"
 script = ExtResource("5_hglf1")
@@ -58,27 +40,6 @@ title = "Filter"
 enabled = true
 trace = false
 
-[sub_resource type="Resource" id="Resource_lewgr"]
-resource_name = "Add Attribute"
-script = ExtResource("6_6hd3x")
-name = "Step"
-data_type = 2
-cte_bool = false
-cte_int = 0
-cte_float = 0.205
-cte_vector = Vector3(0, 0, 0)
-cte_string = ""
-random_seed = 1435980282
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Add Attribute"
-enabled = true
-trace = false
-
 [sub_resource type="Resource" id="Resource_i4esb"]
 resource_name = "Transform Settings"
 script = ExtResource("3_0wyvu")
@@ -90,84 +51,6 @@ scale_min = Vector3(0.1, 1, 1)
 scale_max = Vector3(0.1, 1, 1)
 uniform_scale = true
 random_seed = 4269736984
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Transform"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_gexxf"]
-resource_name = "Add Attribute"
-script = ExtResource("6_6hd3x")
-name = "Threshold"
-data_type = 2
-cte_bool = false
-cte_int = 0
-cte_float = 1.08
-cte_vector = Vector3(0, 0, 0)
-cte_string = ""
-random_seed = 3924440885
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Add Attribute"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_ildus"]
-resource_name = "Distance Settings"
-script = ExtResource("10_b6e1b")
-max_distance = 0.49
-out_name = "distance"
-in_nameA = "position"
-in_nameB = "position"
-random_seed = 2858792388
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 1
-debug_scale = 0.15
-debug_color = Color(0, 1, 1, 1)
-debug_modulate_by = "distance"
-title = "Distance"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_1f6x3"]
-resource_name = "Grid Settings"
-script = ExtResource("7_vba52")
-x = 32
-y = 1
-z = 32
-step = Vector3(0.5, 1, 0.5)
-random_seed = 2397165643
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Grid"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_fnofy"]
-resource_name = "Transform Settings"
-script = ExtResource("3_0wyvu")
-offset_min = Vector3(0, 0, 0)
-offset_max = Vector3(0, 0, 0)
-rotation_min = Vector3(0, 0, 0)
-rotation_max = Vector3(0, 0, 0)
-scale_min = Vector3(0.1, 0.5, 0.1)
-scale_max = Vector3(0.1, 0.5, 0.1)
-uniform_scale = false
-random_seed = 345771434
 inspect_enabled = false
 debug_enabled = false
 debug_mode = 0
@@ -193,22 +76,6 @@ debug_scale = 1.0
 debug_color = Color(1, 1, 1, 1)
 debug_modulate_by = ""
 title = "Make Vector"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_hglf1"]
-resource_name = "Input"
-script = ExtResource("11_lgr5u")
-name = "Make Vector - Y"
-data_type = 2
-random_seed = 3495926413
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Input"
 enabled = true
 trace = false
 
@@ -265,59 +132,157 @@ title = "Debug"
 enabled = true
 trace = false
 
+[sub_resource type="Resource" id="Resource_1f6x3"]
+resource_name = "Grid Settings"
+script = ExtResource("7_vba52")
+x = 32
+y = 1
+z = 32
+step = Vector3(0.5, 1, 0.5)
+random_seed = 2397165643
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Grid"
+enabled = true
+trace = false
+
+[sub_resource type="Resource" id="Resource_7yb35"]
+resource_name = "Make Vector Settings"
+script = ExtResource("4_ef0dx")
+x = 0.41
+y = 1.0
+z = 0.28
+out_name = "Vector"
+random_seed = 559977034
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Make Vector"
+enabled = true
+trace = false
+
+[sub_resource type="Resource" id="Resource_lewgr"]
+resource_name = "Add Attribute"
+script = ExtResource("6_6hd3x")
+name = "Step"
+data_type = 2
+cte_bool = false
+cte_int = 0
+cte_float = 0.205
+cte_vector = Vector3(0, 0, 0)
+cte_string = ""
+random_seed = 1435980282
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Add Attribute"
+enabled = true
+trace = false
+
+[sub_resource type="Resource" id="Resource_hglf1"]
+resource_name = "Input"
+script = ExtResource("11_lgr5u")
+name = "Make Vector - Y"
+data_type = 2
+random_seed = 3495926413
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Input"
+enabled = true
+trace = false
+
+[sub_resource type="Resource" id="Resource_gexxf"]
+resource_name = "Add Attribute"
+script = ExtResource("6_6hd3x")
+name = "Threshold"
+data_type = 2
+cte_bool = false
+cte_int = 0
+cte_float = 0.91
+cte_vector = Vector3(0, 0, 0)
+cte_string = ""
+random_seed = 3924440885
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Add Attribute"
+enabled = true
+trace = false
+
+[sub_resource type="Resource" id="Resource_ildus"]
+resource_name = "Distance Settings"
+script = ExtResource("10_b6e1b")
+max_distance = 0.49
+out_name = "distance"
+in_nameA = "position"
+in_nameB = "position"
+random_seed = 2858792388
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 1
+debug_scale = 0.15
+debug_color = Color(0, 1, 1, 1)
+debug_modulate_by = "distance"
+title = "Distance"
+enabled = true
+trace = false
+
+[sub_resource type="Resource" id="Resource_fnofy"]
+resource_name = "Transform Settings"
+script = ExtResource("3_0wyvu")
+offset_min = Vector3(0, 0, 0)
+offset_max = Vector3(0, 0, 0)
+rotation_min = Vector3(0, 0, 0)
+rotation_max = Vector3(0, 0, 0)
+scale_min = Vector3(0.1, 0.5, 0.1)
+scale_max = Vector3(0.1, 0.5, 0.1)
+uniform_scale = false
+random_seed = 345771434
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Transform"
+enabled = true
+trace = false
+
 [resource]
 resource_name = "graph_distance"
 script = ExtResource("11_ox7wi")
 nodes = Array[Dictionary]([{
-"name": &"id_0006_make_vector",
-"position_offset": Vector2(0, 360),
-"settings": SubResource("Resource_7yb35"),
-"template": "make_vector"
-}, {
 "name": &"id_0009_filter",
 "position_offset": Vector2(1080, 480),
 "settings": SubResource("Resource_f70y0"),
 "template": "filter"
-}, {
-"name": &"id_0007_add_attribute",
-"position_offset": Vector2(-200, 420),
-"settings": SubResource("Resource_lewgr"),
-"template": "add_attribute"
 }, {
 "name": &"id_0005_transform",
 "position_offset": Vector2(360, 240),
 "settings": SubResource("Resource_i4esb"),
 "template": "transform"
 }, {
-"name": &"id_0011_add_attribute",
-"position_offset": Vector2(940, 600),
-"settings": SubResource("Resource_gexxf"),
-"template": "add_attribute"
-}, {
-"name": &"id_0008_distance",
-"position_offset": Vector2(680, 480),
-"settings": SubResource("Resource_ildus"),
-"template": "distance"
-}, {
-"name": &"id_0003_grid",
-"position_offset": Vector2(160, 240),
-"settings": SubResource("Resource_1f6x3"),
-"template": "grid"
-}, {
-"name": &"id_0002_transform",
-"position_offset": Vector2(360, 620),
-"settings": SubResource("Resource_fnofy"),
-"template": "transform"
-}, {
 "name": &"id_0022_make_vector",
 "position_offset": Vector2(1280, 640),
 "settings": SubResource("Resource_ef0dx"),
 "template": "make_vector"
-}, {
-"name": &"id_0026_input_Make Vector - Y",
-"position_offset": Vector2(1114, 699.003),
-"settings": SubResource("Resource_hglf1"),
-"template": "input_Make Vector - Y"
 }, {
 "name": &"id_0001_sample_spline",
 "position_offset": Vector2(60, 620),
@@ -333,18 +298,47 @@ nodes = Array[Dictionary]([{
 "position_offset": Vector2(1771.55, 745.196),
 "settings": SubResource("Resource_6hd3x"),
 "template": "debug"
+}, {
+"name": &"id_0003_grid",
+"position_offset": Vector2(160, 240),
+"settings": SubResource("Resource_1f6x3"),
+"template": "grid"
+}, {
+"name": &"id_0006_make_vector",
+"position_offset": Vector2(0, 360),
+"settings": SubResource("Resource_7yb35"),
+"template": "make_vector"
+}, {
+"name": &"id_0007_add_attribute",
+"position_offset": Vector2(-200, 420),
+"settings": SubResource("Resource_lewgr"),
+"template": "add_attribute"
+}, {
+"name": &"id_0026_input_Make Vector - Y",
+"position_offset": Vector2(1114, 699.003),
+"settings": SubResource("Resource_hglf1"),
+"template": "input_Make Vector - Y"
+}, {
+"name": &"id_0011_add_attribute",
+"position_offset": Vector2(940, 620),
+"settings": SubResource("Resource_gexxf"),
+"template": "add_attribute"
+}, {
+"name": &"id_0008_distance",
+"position_offset": Vector2(680, 480),
+"settings": SubResource("Resource_ildus"),
+"template": "distance"
+}, {
+"name": &"id_0002_transform",
+"position_offset": Vector2(360, 620),
+"settings": SubResource("Resource_fnofy"),
+"template": "transform"
 }])
 conns = Array[Dictionary]([{
 "from_node": &"id_0001_sample_spline",
 "from_port": 0,
 "keep_alive": false,
 "to_node": &"id_0002_transform",
-"to_port": 0
-}, {
-"from_node": &"id_0003_grid",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0005_transform",
 "to_port": 0
 }, {
 "from_node": &"id_0006_make_vector",
@@ -418,9 +412,15 @@ conns = Array[Dictionary]([{
 "keep_alive": false,
 "to_node": &"id_0028_debug",
 "to_port": 0
+}, {
+"from_node": &"id_0003_grid",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0005_transform",
+"to_port": 0
 }])
-view_zoom = 1.09904
-view_offset = Vector2(1362, 214)
-new_name_counter = 28
+view_zoom = 0.908297
+view_offset = Vector2(695.213, 7.96155)
+new_name_counter = 79
 in_params = Array[ExtResource("1_ym11o")]([SubResource("Resource_0wyvu")])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
