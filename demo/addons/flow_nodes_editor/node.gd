@@ -340,7 +340,7 @@ func setupDebugDraw():
 		var eulers := transforms.eulers
 		var sizes := transforms.sizes
 		for idx in range( instance_count ):
-			var t := Transform3D( Basis.from_euler( eulers[idx] * PI / 180.0 ).scaled( sizes[idx] ), positions[idx] )
+			var t := Transform3D( Basis.from_euler( eulers[idx] * PI / 180.0 ), positions[idx] ).scaled_local( sizes[idx] )
 			RenderingServer.multimesh_instance_set_transform( multimesh_rid, idx, t)
 
 	elif settings.debug_mode == NodeSettings.eDebugMode.ABSOLUTE:

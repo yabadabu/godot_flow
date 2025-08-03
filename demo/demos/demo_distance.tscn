@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://bxyhxlabiwwag"]
+[gd_scene load_steps=13 format=3 uid="uid://bxyhxlabiwwag"]
 
 [ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_pkkv1"]
 [ext_resource type="Resource" uid="uid://chy06hdyr5neh" path="res://graphs/graph_distance.tres" id="2_66ode"]
@@ -16,11 +16,32 @@ point_count = 9
 
 [sub_resource type="TextMesh" id="TextMesh_3kbeu"]
 text = "Hello 2"
+vertical_alignment = 2
 pixel_size = 0.0375
 
 [sub_resource type="TextMesh" id="TextMesh_scy5f"]
 text = "Hello & Look"
+horizontal_alignment = 2
 pixel_size = 0.0375
+
+[sub_resource type="Resource" id="Resource_rs64b"]
+resource_name = "Scan Nodes Settings"
+script = ExtResource("5_3kbeu")
+group_name = ""
+filter_by_class_name = "Path3D"
+import_metadata = false
+import_properties = Array[StringName]([])
+size_to_bounds = true
+random_seed = 3384881076
+inspect_enabled = false
+debug_enabled = true
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Scan Nodes"
+enabled = true
+trace = false
 
 [sub_resource type="Resource" id="Resource_scy5f"]
 resource_name = "Scan Nodes Settings"
@@ -28,9 +49,10 @@ script = ExtResource("5_3kbeu")
 group_name = ""
 filter_by_class_name = "MeshInstance3D"
 import_metadata = false
-import_properties = Array[StringName]([&"mesh:text"])
-random_seed = 2662869676
-inspect_enabled = true
+import_properties = Array[StringName]([])
+size_to_bounds = true
+random_seed = 957086464
+inspect_enabled = false
 debug_enabled = true
 debug_mode = 0
 debug_scale = 1.0
@@ -43,17 +65,30 @@ trace = false
 [sub_resource type="Resource" id="Resource_3kbeu"]
 script = ExtResource("4_scy5f")
 nodes = Array[Dictionary]([{
-"name": &"id_0001_scan_nodes",
-"position_offset": Vector2(185, 142),
+"name": &"id_0005_scan_nodes",
+"position_offset": Vector2(-720, 100),
+"settings": SubResource("Resource_rs64b"),
+"template": "scan_nodes"
+}, {
+"name": &"id_0004_scan_nodes",
+"position_offset": Vector2(-720, -200),
 "settings": SubResource("Resource_scy5f"),
 "template": "scan_nodes"
 }])
 conns = Array[Dictionary]([])
 view_zoom = 1.0
-view_offset = Vector2(-2, 0)
-new_name_counter = 1
+view_offset = Vector2(-835.6, -368.8)
+new_name_counter = 5
 in_params = Array[ExtResource("3_pkkv1")]([])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
+
+[sub_resource type="Curve3D" id="Curve3D_scy5f"]
+bake_interval = 0.295
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 2.15305, 0, 4.27051, -0.448858, -0.114082, 0.493958, 0.448858, 0.114082, -0.493958, 6.53574, 0, 3.54701, 0, 0, 0, 0, 0, 0, 7.00879, 0, -0.0147923, 0, 0, 0, 0, 0, 0, 6.27138, 0, -4.14704, 0, 0, 0, 0, 0, 0, 1.5826, 0, -5.78881, 0, 0, 0, 0, 0, 0, -2.21573, 0, -5.55229),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0)
+}
+point_count = 6
 
 [node name="DemoDistance" type="Node3D"]
 
@@ -76,11 +111,16 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.87162, 0.694619, 0.842546)
 mesh = SubResource("TextMesh_3kbeu")
 
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.53639, 1.0137, -0.538631)
+transform = Transform3D(0.0435421, -0.960624, -0.274418, -0.15054, -0.277851, 0.948755, -0.987645, 0, -0.15671, -2.5913, 1.0137, 2.67705)
 mesh = SubResource("TextMesh_scy5f")
 
 [node name="FlowGraphNode3D2" type="Node3D" parent="."]
+transform = Transform3D(0.228889, 0, 0.660545, 0, 0.699078, 0, -0.660545, 0, 0.228889, 0, 0, 0)
 script = ExtResource("1_pkkv1")
 graph = SubResource("Resource_3kbeu")
 refresh_inputs = Callable()
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
+
+[node name="Path3D" type="Path3D" parent="."]
+transform = Transform3D(0.505326, -0.380873, 0.774326, 0.601899, 0.798572, 2.49242e-08, -0.618356, 0.466066, 0.632786, 6.26422, 0, 0)
+curve = SubResource("Curve3D_scy5f")
