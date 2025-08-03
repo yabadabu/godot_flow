@@ -22,6 +22,7 @@
 [ ] Allow to filter rows in the inspector
 [ ] Add noise to position <-- Improve noise
 [ ] Math Node. Should hide inputs when not needed. Like Abs
+[ ] scan nodes, option to resize to node limits
 [ ] Support for Vector4/Color/PackedVector4Array -> Read SubAttributes / MathNode / SetAttribute / Use in Debug if exists
 [ ] Test random colors for each node -> Graph Editor Settings
 [ ] undo/redo

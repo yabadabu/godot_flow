@@ -1,5 +1,6 @@
 @tool
 extends FlowNodeBase
+class_name FlowNodeAssets
 
 func _init():
 	meta_node = {
