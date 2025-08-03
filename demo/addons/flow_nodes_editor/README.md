@@ -1,8 +1,7 @@
 === TODO
 
-[ ] There is bug where transforms seems to be updating the input
+[?] There is bug where transforms seems to be updating the input
 [ ] support for @last?
-[ ] Merge accept N inputs in the same In
 [ ] Support for multiple streams?
 	[ ] Debug
 	[ ] Generic Loop
@@ -24,7 +23,7 @@
 [ ] Math Node. Should hide inputs when not needed. Like Abs
 [ ] Support for Vector4/Color/PackedVector4Array -> Read SubAttributes / MathNode / SetAttribute / Use in Debug if exists
 [ ] Test random colors for each node -> Graph Editor Settings
-[ ] Promote input pin to graph input
+[X] Promote input pin to graph input
 [ ] Custom inputs values in the pcg node 3d, not in the resource
 [ ] undo/redo
 [ ] add_attribute, if output is single stream with a type, set the color. Maybe make it generic

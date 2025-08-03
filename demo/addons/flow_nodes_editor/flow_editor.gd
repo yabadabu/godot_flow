@@ -289,18 +289,19 @@ func deleteNodes( nodes : Array[GraphNode] ):
 		gedit.remove_child( node )
 		node.queue_free()
 
-func deleteSelectedNodes():
-	
-	var frames := getSelectedFrames()
+func deleteGraphElementsAndRefresh( nodes : Array[GraphNode], frames : Array[GraphFrame] ):
 	deleteFrames( frames )
-	
-	var nodes := getSelectedNodes()
 	deleteNodes( nodes )
 	saveResource()
 	inspected_node = null
 	inspector.edit(null)
 	queueRegen()
 	
+
+func deleteSelectedNodes():
+	var frames := getSelectedFrames()
+	var nodes := getSelectedNodes()
+	deleteGraphElementsAndRefresh( nodes, frames )
 	
 func queueRegen():
 	regen_pending = auto_regen
@@ -410,23 +411,29 @@ func addNode( node_template, settings = null ):
 func _on_graph_edit_gui_input(event):
 	var evt_key = event as InputEventKey
 	if evt_key and evt_key.pressed:
+		var no_modifiers = not evt_key.ctrl_pressed and not evt_key.alt_pressed and not evt_key.shift_pressed
 		var key = evt_key.keycode
-		if key == KEY_X:
-			deleteSelectedNodes()
+		if key == KEY_X or key == KEY_DELETE:
+			if no_modifiers:
+				deleteSelectedNodes()
 		elif key == KEY_A:
-			openAddMenu()
+			if no_modifiers:
+				openAddMenu()
 		elif key == KEY_C:
-			if not evt_key.ctrl_pressed and not evt_key.alt_pressed and not evt_key.shift_pressed:
+			if no_modifiers:
 				addComment()
 		elif key == KEY_D:
-			toggleDebug()
-			evalGraph()
+			if no_modifiers:
+				toggleDebug()
+				evalGraph()
 		elif key == KEY_E:
-			toggleInspection()
-			evalGraph()
-			make_inspector_visible.call()
+			if no_modifiers:
+				toggleInspection()
+				evalGraph()
+				make_inspector_visible.call()
 		elif key == KEY_R:
-			evalGraph()
+			if no_modifiers:
+				evalGraph()
 
 func toggleDebug():
 	var nodes = getSelectedNodes()
@@ -507,6 +514,21 @@ func _on_in_popup_menu_pressed( id: int, row : FlowConnectorRow ) -> void:
 
 func is_parameter( ) -> bool:
 	return false
+	
+func _on_graph_edit_delete_nodes_request(node_names : Array[ String ]):
+	print( "_on_graph_edit_delete_nodes_request", node_names )
+	var frames : Array[ GraphFrame ]
+	var nodes : Array[ GraphNode ]
+	for node_name in node_names:
+		var node = gedit.get_node( node_name )
+		if not node:
+			push_error( "Failed to find node %s to be deleted" % node_name)
+			continue
+		if node is GraphNode:
+			nodes.append(node)
+		elif node is GraphFrame:
+			frames.append(node)
+	deleteGraphElementsAndRefresh( nodes, frames )
 
 func _on_graph_edit_popup_request(at_position):
 	local_drop_position = at_position
@@ -693,3 +715,17 @@ func _on_button_inputs_pressed():
 	if current_resource:
 		inspector.edit( current_resource.inputs )
 	inspected_node = null
+
+func _on_graph_edit_duplicate_nodes_request():
+	print( "_on_graph_edit_duplicate_nodes_request" )
+
+func _on_graph_edit_copy_nodes_request():
+	print( "_on_graph_edit_copy_nodes_request" )
+
+func _on_graph_edit_cut_nodes_request():
+	#_on_graph_edit_copy_nodes_request()
+	print( "_on_graph_edit_cut_nodes_request" )
+	deleteSelectedNodes()
+
+func _on_graph_edit_paste_nodes_request():
+	print( "_on_graph_edit_paste_nodes_request" )
