@@ -6,17 +6,14 @@ class_name FlowGraphNode3D
 # the generation of pcg
 @export var graph : FlowGraphResource :
 	set(new_value):
-		#if _graph:
-			#_graph.in_params_changed.disconnect(refreshInputs)
 		_graph = new_value
-		#if _graph:
-			#_graph.in_params_changed.connect(refreshInputs)
-			#refreshInputs()
+		graph_node_changed.emit( self, "graph_resource" )
 		
 	get:
 		return _graph
 		
 var _graph : FlowGraphResource
+signal graph_node_changed( graph_node : FlowGraphNode3D, prop_name : String )
 
 # custom inputs values for this instantiation
 @export var args : Dictionary

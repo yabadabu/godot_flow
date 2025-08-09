@@ -14,6 +14,7 @@ var graph_input_inspector_plugin : EditorInspectorPlugin
 
 # To detect scene changes
 var current_scene_root = null
+var current_watched_node = null
 
 @onready var selection = EditorInterface.get_selection()
 
@@ -70,12 +71,29 @@ func on_scene_changed(scene_root: Node) -> void:
 func _selection_changed():
 	
 	var scene_nodes = selection.get_selected_nodes()
-	if scene_nodes.is_empty():
-		return
+	if not scene_nodes.is_empty():
+		var scene_node = scene_nodes[0]
+		if scene_node is FlowGraphNode3D:
+			setWatchedNode( scene_node )
+			graph_dock.setResourceToEdit( scene_node.graph, scene_node )
+			return
+	setWatchedNode( null )
+
+func setWatchedNode( new_node ):
+	print( "setWatchedNode %s" % new_node )
+	if current_watched_node:
+		current_watched_node.graph_node_changed.disconnect( onSelectedGraphNodeChanged )
+		current_watched_node = null
+	if new_node:
+		current_watched_node = new_node
+		new_node.graph_node_changed.connect( onSelectedGraphNodeChanged )
+
+func onSelectedGraphNodeChanged( node : FlowGraphNode3D, prop_name: String ):
+	print( "onSelectedGraphNodeChanged %s.%s" % [node.name, prop_name] )
+	if prop_name == "graph_resource":
+		print( "  -> %s" % [node.graph] )
+		graph_dock.setResourceToEdit( node.graph, node )
 		
-	var scene_node = scene_nodes[0]
-	if scene_node is FlowGraphNode3D:
-		graph_dock.setResourceToEdit( scene_node.graph, scene_node )
 
 func _on_history_changed( ):
 	#print("Something changed in the editor (undo/redo history updated)")	
