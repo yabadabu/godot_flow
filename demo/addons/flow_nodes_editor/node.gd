@@ -77,6 +77,11 @@ func get_optional_input( idx : int ):
 	if idx >= inputs.size():
 		return null
 	return inputs[ idx ]
+	
+func get_optional_output( idx : int ):
+	if idx >= outputs.size():
+		return null
+	return outputs[ idx ]
 
 func get_output( idx : int ):
 	if idx >= outputs.size():
@@ -306,6 +311,9 @@ func initFromScript():
 
 func setupDebugDraw():
 	if !settings.debug_enabled:
+		return
+		
+	if not get_optional_output(0):
 		return
 
 	var out_data : FlowData.Data = get_output(0)
