@@ -1,0 +1,49 @@
+[gd_scene load_steps=7 format=3 uid="uid://bjgti3qpwaiwe"]
+
+[ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_dc4sx"]
+[ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="2_ldm7r"]
+[ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="3_pkajt"]
+[ext_resource type="Script" uid="uid://dwtm2hr5nh78h" path="res://addons/flow_nodes_editor/nodes/grid_settings.gd" id="3_s3erd"]
+
+[sub_resource type="Resource" id="Resource_pkajt"]
+resource_name = "Grid Settings"
+script = ExtResource("3_s3erd")
+x = 6
+y = 1
+z = 3
+step = Vector3(1, 1, 1)
+origin = Vector3(0, 0, 0)
+rotation = Vector3(0, 0, 0)
+random_seed = 4167613396
+inspect_enabled = false
+debug_enabled = true
+debug_mode = 1
+debug_scale = 0.97
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Grid"
+enabled = true
+trace = false
+
+[sub_resource type="Resource" id="Resource_1h62y"]
+script = ExtResource("3_pkajt")
+nodes = Array[Dictionary]([{
+"name": &"id_0002_grid",
+"position_offset": Vector2(184.9, 219.4),
+"settings": SubResource("Resource_pkajt"),
+"template": "grid"
+}])
+conns = Array[Dictionary]([])
+view_zoom = 0.909091
+view_offset = Vector2(-21.9091, -23.5455)
+new_name_counter = 2
+in_params = Array[ExtResource("2_ldm7r")]([])
+metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
+
+[node name="DemoGrid" type="Node3D"]
+
+[node name="FlowGraphNode3D" type="Node3D" parent="."]
+script = ExtResource("1_dc4sx")
+graph = SubResource("Resource_1h62y")
+refresh_inputs = Callable()
+metadata/_custom_type_script = "uid://d1krtmb1urldl"

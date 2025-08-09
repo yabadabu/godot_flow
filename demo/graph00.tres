@@ -1,13 +1,7 @@
-[gd_resource type="Resource" script_class="FlowGraphResource" load_steps=5 format=3 uid="uid://66ejgwppld3l"]
+[gd_resource type="Resource" script_class="FlowGraphResource" load_steps=3 format=3 uid="uid://66ejgwppld3l"]
 
 [ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="1_i7hbt"]
-[ext_resource type="Script" uid="uid://ctvo7a7lud8bn" path="res://addons/flow_nodes_editor/graph_input_parameters.gd" id="1_qjhb7"]
 [ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="1_rvt80"]
-
-[sub_resource type="Resource" id="Resource_js8uo"]
-script = ExtResource("1_qjhb7")
-inputs = Array[ExtResource("1_rvt80")]([])
-metadata/_custom_type_script = "uid://ctvo7a7lud8bn"
 
 [resource]
 script = ExtResource("1_i7hbt")
@@ -16,5 +10,5 @@ conns = Array[Dictionary]([])
 view_zoom = 0.879408
 view_offset = Vector2(-208.129, -84.48)
 new_name_counter = 24
-inputs = SubResource("Resource_js8uo")
+in_params = Array[ExtResource("1_rvt80")]([])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"

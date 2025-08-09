@@ -8,6 +8,21 @@
 [ext_resource type="Script" uid="uid://bw3x7p10afvc7" path="res://addons/flow_nodes_editor/nodes/substract_settings.gd" id="6_xx7ch"]
 [ext_resource type="Script" uid="uid://dacqkd6wb3kul" path="res://addons/flow_nodes_editor/nodes/reduce_settings.gd" id="7_38n7t"]
 
+[sub_resource type="Resource" id="Resource_s0see"]
+resource_name = "Substract"
+script = ExtResource("6_xx7ch")
+operation = 0
+random_seed = 3590355377
+inspect_enabled = false
+debug_enabled = true
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(0.239216, 1, 1, 1)
+debug_modulate_by = ""
+title = "Substract"
+enabled = true
+trace = false
+
 [sub_resource type="Resource" id="Resource_hwxt1"]
 resource_name = "Grid Settings"
 script = ExtResource("4_lacnk")
@@ -15,6 +30,8 @@ x = 1
 y = 1
 z = 1
 step = Vector3(1, 1, 1)
+origin = Vector3(0, 0, 0)
+rotation = Vector3(0, 0, 0)
 random_seed = 2464084680
 inspect_enabled = false
 debug_enabled = false
@@ -33,6 +50,8 @@ x = 3
 y = 1
 z = 3
 step = Vector3(2, 2, 2)
+origin = Vector3(0, 0, 0)
+rotation = Vector3(0, 0, 0)
 random_seed = 2166388212
 inspect_enabled = false
 debug_enabled = false
@@ -41,6 +60,22 @@ debug_scale = 1.0
 debug_color = Color(1, 1, 1, 1)
 debug_modulate_by = ""
 title = "Grid"
+enabled = true
+trace = false
+
+[sub_resource type="Resource" id="Resource_38n7t"]
+resource_name = "Reduce Settings"
+script = ExtResource("7_38n7t")
+in_name = "position"
+out_prefix = ""
+random_seed = 1519025600
+inspect_enabled = false
+debug_enabled = true
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Reduce"
 enabled = true
 trace = false
 
@@ -65,42 +100,16 @@ title = "Transform"
 enabled = true
 trace = false
 
-[sub_resource type="Resource" id="Resource_s0see"]
-resource_name = "Substract"
-script = ExtResource("6_xx7ch")
-operation = 0
-random_seed = 3590355377
-inspect_enabled = false
-debug_enabled = true
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(0.239216, 1, 1, 1)
-debug_modulate_by = ""
-title = "Substract"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_38n7t"]
-resource_name = "Reduce Settings"
-script = ExtResource("7_38n7t")
-in_name = "position"
-out_prefix = ""
-random_seed = 1519025600
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Reduce"
-enabled = true
-trace = false
-
 [sub_resource type="Resource" id="Resource_gj6dq"]
 script = ExtResource("4_jn5vr")
 nodes = Array[Dictionary]([{
+"name": &"id_0004_substract",
+"position_offset": Vector2(531, 210),
+"settings": SubResource("Resource_s0see"),
+"template": "substract"
+}, {
 "name": &"id_0002_grid",
-"position_offset": Vector2(141, 466),
+"position_offset": Vector2(60, 420),
 "settings": SubResource("Resource_hwxt1"),
 "template": "grid"
 }, {
@@ -109,20 +118,15 @@ nodes = Array[Dictionary]([{
 "settings": SubResource("Resource_jn5vr"),
 "template": "grid"
 }, {
-"name": &"id_0003_transform",
-"position_offset": Vector2(280, 480),
-"settings": SubResource("Resource_lu65l"),
-"template": "transform"
-}, {
-"name": &"id_0004_substract",
-"position_offset": Vector2(531, 210),
-"settings": SubResource("Resource_s0see"),
-"template": "substract"
-}, {
 "name": &"id_0007_reduce",
-"position_offset": Vector2(748, 408),
+"position_offset": Vector2(740, 400),
 "settings": SubResource("Resource_38n7t"),
 "template": "reduce"
+}, {
+"name": &"id_0003_transform",
+"position_offset": Vector2(240, 420),
+"settings": SubResource("Resource_lu65l"),
+"template": "transform"
 }])
 conns = Array[Dictionary]([{
 "from_node": &"id_0002_grid",
@@ -149,8 +153,8 @@ conns = Array[Dictionary]([{
 "to_node": &"id_0007_reduce",
 "to_port": 0
 }])
-view_zoom = 1.0
-view_offset = Vector2(0, -99)
+view_zoom = 0.909091
+view_offset = Vector2(117.909, -145.273)
 new_name_counter = 7
 in_params = Array[ExtResource("2_50g47")]([])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
@@ -160,4 +164,5 @@ metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 [node name="PCG_Intersect" type="Node3D" parent="."]
 script = ExtResource("1_5ex6f")
 graph = SubResource("Resource_gj6dq")
+refresh_inputs = Callable()
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
