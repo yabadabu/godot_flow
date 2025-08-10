@@ -248,6 +248,8 @@ func deleteNodes( nodes : Array[GraphNode] ):
 	for node in nodes:
 		for n in range( node.num_ports ):
 			remove_all_inputs_to_target_connection( node.name, n )
+		for n in range( node.getMeta().outs.size() ):
+			remove_all_inputs_to_source_connection( node.name, n )
 		gedit_nodes_by_name.erase( node.name )
 		gedit.remove_child( node )
 		node.queue_free()
@@ -578,6 +580,15 @@ func remove_all_inputs_to_target_connection( to_node : StringName, to_port : int
 	var key = [to_node, to_port]
 	if key in input_sources:
 		input_sources.erase(key)
+	
+func remove_all_inputs_to_source_connection( from_node : StringName, from_port : int ):
+	var conns_to_delete = []
+	for key in input_sources.keys():
+		for src in input_sources[ key ]:
+			if src[0] == from_node && src[1] == from_port:
+				conns_to_delete.append( [ src[0], src[1], key[0], key[1] ] )
+	for conn in conns_to_delete:
+		remove_input_source_target_connection( conn[0], conn[1], conn[2], conn[3])
 	
 func _on_graph_edit_disconnection_request(from_node: StringName, from_port: int, to_node: StringName, to_port: int) -> void:
 	disconnect_nodes(from_node, from_port, to_node, to_port)
