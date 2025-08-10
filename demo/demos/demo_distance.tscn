@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://bxyhxlabiwwag"]
+[gd_scene load_steps=18 format=3 uid="uid://bxyhxlabiwwag"]
 
 [ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_pkkv1"]
 [ext_resource type="Resource" uid="uid://chy06hdyr5neh" path="res://graphs/graph_distance.tres" id="2_66ode"]
@@ -79,23 +79,123 @@ title = "Scan Nodes"
 enabled = true
 trace = false
 
+[sub_resource type="Resource" id="Resource_hh6fu"]
+resource_name = "Scan Nodes Settings"
+script = ExtResource("5_3kbeu")
+group_name = ""
+filter_by_class_name = ""
+import_metadata = false
+import_properties = Array[StringName]([&"name"])
+size_to_bounds = true
+random_seed = 207574272
+inspect_enabled = true
+debug_enabled = true
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Scan Nodes"
+enabled = true
+trace = true
+
 [sub_resource type="Resource" id="Resource_3kbeu"]
 script = ExtResource("4_scy5f")
 nodes = Array[Dictionary]([{
-"name": &"id_0004_scan_nodes",
+"name": &"id_0085_scan_nodes",
 "position_offset": Vector2(-1000, -300),
 "settings": SubResource("Resource_scy5f"),
 "template": "scan_nodes"
 }, {
-"name": &"id_0005_scan_nodes",
-"position_offset": Vector2(-1000, 0),
+"name": &"id_0086_scan_nodes",
+"position_offset": Vector2(-1000, -120),
 "settings": SubResource("Resource_rs64b"),
+"template": "scan_nodes"
+}, {
+"name": &"id_0087_scan_nodes",
+"position_offset": Vector2(-1000, 60),
+"settings": SubResource("Resource_hh6fu"),
 "template": "scan_nodes"
 }])
 conns = Array[Dictionary]([])
+data = {
+"links": [],
+"min_pos": Vector2(-1000, -300),
+"nodes": [{
+"args_port": {},
+"name": &"id_0085_scan_nodes",
+"position": Vector2(0, 0),
+"settings": {
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_scale": 1.0,
+"enabled": true,
+"filter_by_class_name": "MeshInstance3D",
+"group_name": "",
+"import_metadata": false,
+"import_properties": Array[StringName]([]),
+"inspect_enabled": false,
+"random_seed": 957086464,
+"size_to_bounds": true,
+"title": "Scan Nodes",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "scan_nodes"
+}, {
+"args_port": {},
+"name": &"id_0086_scan_nodes",
+"position": Vector2(0, 180),
+"settings": {
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_scale": 1.0,
+"enabled": true,
+"filter_by_class_name": "Path3D",
+"group_name": "",
+"import_metadata": false,
+"import_properties": Array[StringName]([]),
+"inspect_enabled": false,
+"random_seed": 3384881076,
+"size_to_bounds": true,
+"title": "Scan Nodes",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "scan_nodes"
+}, {
+"args_port": {},
+"name": &"id_0087_scan_nodes",
+"position": Vector2(0, 360),
+"settings": {
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": true,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_scale": 1.0,
+"enabled": true,
+"filter_by_class_name": "",
+"group_name": "",
+"import_metadata": false,
+"import_properties": Array[StringName]([&"name"]),
+"inspect_enabled": true,
+"random_seed": 207574272,
+"size_to_bounds": true,
+"title": "Scan Nodes",
+"trace": true
+},
+"show_disconnected_inputs": false,
+"template": "scan_nodes"
+}],
+"type": "flow_graph_nodes",
+"version": 1
+}
 view_zoom = 0.909091
 view_offset = Vector2(-988.091, -387.854)
-new_name_counter = 23
+new_name_counter = 24
 in_params = Array[ExtResource("3_pkkv1")]([SubResource("Resource_o2vll")])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 
@@ -108,7 +208,7 @@ _data = {
 point_count = 6
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_o2vll"]
-size = Vector3(2.89209, 1, 3.21997)
+size = Vector3(5.07344, 1, 1.17883)
 
 [node name="DemoDistance" type="Node3D"]
 
@@ -150,7 +250,8 @@ transform = Transform3D(0.505326, -0.380873, 0.774326, 0.601899, 0.798572, 2.492
 curve = SubResource("Curve3D_scy5f")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.63, 0, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
-transform = Transform3D(0.942104, 0, 0.33532, 0, 1, 0, -0.33532, 0, 0.942104, 3.17407, -0.0201243, 6.09114)
+transform = Transform3D(0.837938, 0, 0.545766, 0, 1, 0, -0.545766, 0, 0.837938, 3.18235, -0.00626407, 7.08007)
 shape = SubResource("BoxShape3D_o2vll")

@@ -331,7 +331,6 @@ func initFromScript():
 		else:
 			lbl_in.text = ""
 			
-		print( "idx %d.  num_outs:%d" % [ idx, num_outs ] )
 		if idx < num_outs:
 			var out_data = outs[idx]
 			if out_data:

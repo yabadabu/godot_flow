@@ -6,13 +6,15 @@
 [ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="4_om314"]
 [ext_resource type="Script" uid="uid://cka12nenjlwgx" path="res://addons/flow_nodes_editor/nodes/filter_settings.gd" id="5_odxoa"]
 
-[sub_resource type="Resource" id="Resource_6k6c6"]
+[sub_resource type="Resource" id="Resource_sx5mj"]
 resource_name = "Grid Settings"
 script = ExtResource("4_knkyk")
 x = 3
 y = 1
 z = 3
 step = Vector3(1, 1, 1)
+origin = Vector3(0, 0, 0)
+rotation = Vector3(0, 0, 0)
 random_seed = 1520961383
 inspect_enabled = false
 debug_enabled = false
@@ -46,23 +48,91 @@ trace = false
 resource_local_to_scene = true
 script = ExtResource("4_om314")
 nodes = Array[Dictionary]([{
-"name": &"id_0001_grid",
+"name": &"id_0008_grid",
 "position_offset": Vector2(-20, 200),
-"settings": SubResource("Resource_6k6c6"),
+"settings": SubResource("Resource_sx5mj"),
 "template": "grid"
 }, {
-"name": &"id_0007_filter",
-"position_offset": Vector2(120, 200),
+"name": &"id_0009_filter",
+"position_offset": Vector2(180, 200),
 "settings": SubResource("Resource_om314"),
 "template": "filter"
 }])
 conns = Array[Dictionary]([{
-"from_node": &"id_0001_grid",
+"from_node": &"id_0008_grid",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0007_filter",
+"to_node": &"id_0009_filter",
 "to_port": 0
 }])
+data = {
+"links": [{
+"from_node": &"id_0008_grid",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0009_filter",
+"to_port": 0
+}],
+"min_pos": Vector2(-20, 200),
+"nodes": [{
+"args_port": {},
+"name": &"id_0008_grid",
+"position": Vector2(0, 0),
+"settings": {
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 1,
+"debug_modulate_by": "",
+"debug_scale": 0.845,
+"enabled": true,
+"inspect_enabled": false,
+"origin": Vector3(0, 0, 0),
+"random_seed": 1520961383,
+"rotation": Vector3(0, 0, 0),
+"step": Vector3(1, 1, 1),
+"title": "Grid",
+"trace": false,
+"x": 3,
+"y": 1,
+"z": 3
+},
+"show_disconnected_inputs": false,
+"template": "grid"
+}, {
+"args_port": {
+"In A": {
+"connected": true,
+"port": 0
+},
+"In B": {
+"connected": false,
+"port": 1
+}
+},
+"name": &"id_0009_filter",
+"position": Vector2(200, 0),
+"settings": {
+"condition": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": true,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_scale": 1.0,
+"enabled": true,
+"in_nameA": "position.X",
+"in_nameB": "1.0",
+"inspect_enabled": false,
+"random_seed": 466698300,
+"threshold": 0.1,
+"title": "Filter",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "filter"
+}],
+"type": "flow_graph_nodes",
+"version": 1
+}
 view_zoom = 0.909091
 view_offset = Vector2(-118.564, -32.6364)
 new_name_counter = 8
@@ -74,4 +144,5 @@ metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 [node name="FlowGraphNode3D" type="Node3D" parent="."]
 script = ExtResource("1_sv1gj")
 graph = SubResource("Resource_odxoa")
+refresh_inputs = Callable()
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
