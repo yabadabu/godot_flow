@@ -1,0 +1,28 @@
+[gd_scene load_steps=4 format=3 uid="uid://1737jo8aawva"]
+
+[ext_resource type="Script" uid="uid://4siakh3adnqb" path="res://addons/flow_nodes_editor/connectors_options.gd" id="1_ho2fk"]
+[ext_resource type="Texture2D" uid="uid://br0stvdaafafa" path="res://addons/flow_nodes_editor/resources/arrow_down.png" id="2_1akfu"]
+[ext_resource type="Texture2D" uid="uid://bfxgdfjlifh5b" path="res://addons/flow_nodes_editor/resources/arrow_up.png" id="3_kglxo"]
+
+[node name="ConnectorsOptions" type="HBoxContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+script = ExtResource("1_ho2fk")
+
+[node name="ToggleButton" type="TextureButton" parent="."]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+focus_mode = 0
+toggle_mode = true
+texture_normal = ExtResource("2_1akfu")
+texture_pressed = ExtResource("3_kglxo")
+stretch_mode = 3
+
+[connection signal="toggled" from="ToggleButton" to="." method="_on_toggle_button_toggled"]

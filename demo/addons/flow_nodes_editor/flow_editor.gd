@@ -6,6 +6,7 @@ var current_resource: FlowGraphResource
 var resource_owner : FlowGraphNode3D
 var ctx := FlowData.EvaluationContext.new()
 var regen_pending := false
+var save_pending := false
 var auto_regen := true
 var dump_performance := false
 
@@ -43,6 +44,7 @@ var comment_padding = Vector2( 40, 40 )
 
 # Required during evaluation
 var gedit_nodes_by_name = {}
+var input_sources := {} # key: Pair(to_node, to_port) -> value: Array[(from_node, from_port)]
 
 var ui_scale = 1.0
 var node_types = { }
@@ -69,7 +71,8 @@ func setResourceToEdit( new_resource : FlowGraphResource, new_resource_owner : F
 		if child is GraphNode:
 			child.queue_free()
 			children.append( child )
-			
+	
+	input_sources.clear()
 	gedit.clear_connections()
 	for child in children:
 		gedit.remove_child( child )
@@ -89,12 +92,16 @@ func setResourceToEdit( new_resource : FlowGraphResource, new_resource_owner : F
 
 func saveResource():
 	FlowNodeIO.saveToResource( self )
+	save_pending = false
 	
 func _process(delta: float) -> void:
-	if regen_pending and current_resource:
-		#print( "Waiting %d == %d + %d (%d)" % [ gedit.get_child_count(), num_non_nodes_children, current_resource.nodes.size(), gedit_nodes_by_name.size()])
-		if gedit.get_child_count() == num_non_nodes_children + current_resource.nodes.size():
-			evalGraph()
+	if current_resource:
+		if save_pending:
+			saveResource()
+		if regen_pending:
+			#print( "Waiting %d == %d + %d (%d)" % [ gedit.get_child_count(), num_non_nodes_children, current_resource.nodes.size(), gedit_nodes_by_name.size()])
+			if gedit.get_child_count() == num_non_nodes_children + current_resource.nodes.size():
+				evalGraph()
 
 func getNewName( suffix : String ):
 	new_name_counter += 1
@@ -239,6 +246,9 @@ func getSelectedNodes() -> Array[GraphNode]:
 
 func deleteNodes( nodes : Array[GraphNode] ):
 	for node in nodes:
+		for n in range( 16 ):
+			remove_all_inputs_to_target_connection( node.name, n )
+			
 		gedit_nodes_by_name.erase( node.name )
 		gedit.remove_child( node )
 		node.queue_free()
@@ -246,7 +256,7 @@ func deleteNodes( nodes : Array[GraphNode] ):
 func deleteGraphElementsAndRefresh( nodes : Array[GraphNode], frames : Array[GraphFrame] ):
 	deleteFrames( frames )
 	deleteNodes( nodes )
-	saveResource()
+	queueSave()
 	inspected_node = null
 	inspector.edit(null)
 	queueRegen()
@@ -255,6 +265,9 @@ func deleteSelectedNodes():
 	var frames := getSelectedFrames()
 	var nodes := getSelectedNodes()
 	deleteGraphElementsAndRefresh( nodes, frames )
+	
+func queueSave():
+	save_pending = true
 	
 func queueRegen():
 	regen_pending = auto_regen
@@ -298,7 +311,7 @@ func addNodeFromTemplate( node_template, node_name : String, settings = null ):
 		push_error("node_type %s is not registered" % node_template)
 		print( node_types.keys() )
 		return null	
-	# print( "Meta:", str(meta) )
+	print( "Meta:", str(meta) )
 		
 	node.set_script(meta.factory)
 
@@ -341,18 +354,18 @@ func addNode( node_template, settings = null ):
 		return null
 		
 	if auto_connect_from_node:
-		gedit.connect_node(auto_connect_from_node, auto_connect_from_port, node.name, 0)
+		connect_nodes(auto_connect_from_node, auto_connect_from_port, node.name, 0)
 		auto_connect_from_node = ""
 		
 	if auto_connect_to_node:
-		gedit.connect_node(node.name, 0, auto_connect_to_node, auto_connect_to_port )
+		connect_nodes(node.name, 0, auto_connect_to_node, auto_connect_to_port )
 		auto_connect_to_node = ""
 	
 	for prev_node in getSelectedNodes():
 		prev_node.selected = false
 	node.selected = true
 	node.visible = true
-	saveResource()
+	queueSave()
 	queueRegen()
 	return node
 
@@ -527,15 +540,45 @@ func _on_popup_menu_id_pressed(id: int) -> void:
 			var target = nodes[1]
 			gedit.set_connection_activity( node.name, 0, target.name, 0, 1.0)
 
-func _on_graph_edit_connection_request(from_node: StringName, from_port: int, to_node: StringName, to_port: int) -> void:
-	# print( "_on_graph_edit_connection_request %s:%d <-> %s:%d" % [ from_node, from_port, to_node, to_port ] )
+func disconnect_nodes(from_node: StringName, from_port: int, to_node: StringName, to_port: int) -> void:
+	print( "disconnect_nodes From:%s:%d To:%s:%d" % [ from_node, from_port, to_node, to_port ])
+	gedit.disconnect_node(from_node, from_port, to_node, to_port)
+	remove_input_source_target_connection( from_node, from_port, to_node, to_port )
+	
+func connect_nodes(from_node: StringName, from_port: int, to_node: StringName, to_port: int) -> void:
+	print( "connect_nodes %s:%d -> %s:%d" % [ from_node, from_port, to_node, to_port ] )
 	gedit.connect_node(from_node, from_port, to_node, to_port)
-	saveResource()
+	var key = [to_node, to_port]
+	if not input_sources.has(key):
+		input_sources.set( key, [])
+	input_sources[key].append([from_node, from_port])
+
+func _on_graph_edit_connection_request(from_node: StringName, from_port: int, to_node: StringName, to_port: int) -> void:
+	connect_nodes( from_node, from_port, to_node, to_port )
+	queueSave()
 	queueRegen()
 	
+func get_connected_sources(to_node: StringName, to_port: int) -> Array:
+	return input_sources.get([to_node, to_port], [])
+	
+func is_node_port_connected( to_node: StringName, to_port: int ) -> bool:
+	return not input_sources.get([to_node, to_port], []).is_empty()
+	
+func remove_input_source_target_connection( from_node: StringName, from_port: int, to_node : StringName, to_port : int ):
+	var key = [to_node, to_port]
+	if key in input_sources:
+		input_sources[key].erase([from_node, from_port])
+		if input_sources[key].is_empty():
+			input_sources.erase(key)
+	
+func remove_all_inputs_to_target_connection( to_node : StringName, to_port : int ):
+	var key = [to_node, to_port]
+	if key in input_sources:
+		input_sources.erase(key)
+	
 func _on_graph_edit_disconnection_request(from_node: StringName, from_port: int, to_node: StringName, to_port: int) -> void:
-	gedit.disconnect_node(from_node, from_port, to_node, to_port)
-	saveResource()
+	disconnect_nodes(from_node, from_port, to_node, to_port)
+	queueSave()
 	queueRegen()
 
 func _on_graph_edit_connection_to_empty(from_node: StringName, from_port: int, release_position: Vector2) -> void:
@@ -588,6 +631,8 @@ func getEvalOrder():
 	return all_deps
 
 func removeGeneratedNodes():
+	if not resource_owner:
+		return
 	# Remove instances from prev execution
 	var nodes_to_remove = []
 	for child in resource_owner.get_children():
@@ -654,8 +699,14 @@ func _on_button_save_pressed() -> void:
 		ResourceSaver.save(current_resource)
 
 func _on_button_regenerate_pressed() -> void:
-	dump_performance = true
-	queueRegen()
+	for key in input_sources.keys():
+		print( key )	
+		for val in input_sources[ key ]:
+			print( "  %s" % [ val ] )	
+	for conn in gedit.connections:
+		print( conn )
+	#dump_performance = true
+	#queueRegen()
 
 func _on_auto_regen_toggled(toggled_on: bool) -> void:
 	auto_regen = toggled_on

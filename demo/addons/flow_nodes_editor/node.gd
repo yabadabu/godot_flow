@@ -9,18 +9,23 @@ var rng : RandomNumberGenerator = RandomNumberGenerator.new()
 var inputs = []
 var outputs = []
 
+var args_ports_by_name = {}
+var num_ports : int = 0
 var meta_node: Dictionary = {}
 
 var node_template : String
+var show_disconnected_inputs : bool = false
 
 # Helper to create the UI
 var connectors_row_prefab = preload( "res://addons/flow_nodes_editor/connectors_row.tscn" )
+var connectors_options_prefab = preload( "res://addons/flow_nodes_editor/connectors_options.tscn" )
 
 # Filled during runtime
 var deps : Array[ Dictionary ]
 var eval_id : int = 0
 var err : String
 
+# Render
 var scenario_rid : RID
 var multimesh_rid : RID
 var instance_rid : RID
@@ -233,6 +238,45 @@ static func getFlowDataTypeFromObject( obj  ) -> FlowData.DataType:
 		return FlowData.DataType.Resource
 	return data_type
 
+func get_exposed_params():
+	var meta := getMeta()
+	if meta.get( "hide_inputs", false ):
+		return []
+	var trace = meta.get( "trace", false )
+	var my_title : String = meta.title
+	var props = settings.get_property_list()
+	var inside_my_vars := false
+	var params = []
+	for prop in props:
+		if trace:
+			print( "Input.", prop.name)
+		if prop.name == "node_settings.gd":
+			break
+		if prop.name == "HiddenFromThisPoint":
+			break
+		if prop.name == my_title:
+			inside_my_vars = true
+		if !(prop.usage & PROPERTY_USAGE_STORAGE) || !(prop.usage & PROPERTY_USAGE_EDITOR):
+			continue
+		if !inside_my_vars:
+			continue
+			
+		var data = {
+			"name" : prop.name,
+			"label" : editorDisplayName( prop.name ),
+			"type" : prop.type,
+			"data_type" : getFlowDataTypeFromGdScriptType( prop.type ),
+			"is_parameter" : true,
+			"port" : -1,
+		}
+		params.append( data )
+	return params
+
+func getEditor():
+	var gedit = get_parent_control() as GraphEdit
+	var flow_editor = gedit.get_parent_control().get_parent_control().get_parent_control() as FlowGraphEditor if gedit else null
+	return flow_editor
+
 func initFromScript():
 	var meta := getMeta()
 	var trace = meta.get( "trace", false )
@@ -241,73 +285,128 @@ func initFromScript():
 	var outs = meta.get( "outs", [] )
 	var num_ins = ins.size()
 	var num_outs = outs.size()
-	var num_rows = max( num_ins, num_outs )
-	var num_inputs = num_ins
 	
+	var exposed_params = get_exposed_params()
+	var has_exposed_params = exposed_params.size() > 0
+	
+	# Access to my parent container editor
+	var flow_editor = getEditor()
+	var connected_inputs_by_name = {}
+	if flow_editor:
+		for arg_name in args_ports_by_name:
+			var arg_port = args_ports_by_name[ arg_name ].port
+			var curr_connections = flow_editor.get_connected_sources( name, arg_port )
+			print( "Checking if %s is connected at port %d -> %d conns" % [ arg_name, arg_port, curr_connections.size() ] )
+			if not curr_connections.is_empty():
+				connected_inputs_by_name[ arg_name ] = { "port" : arg_port, "conns" : curr_connections.duplicate() }
+				for old_conn in curr_connections:
+					var from_node = old_conn[0]
+					var from_port = old_conn[1]
+					flow_editor.disconnect_nodes( from_node, from_port, name, arg_port )
+		
+		if not show_disconnected_inputs:
+			exposed_params = exposed_params.filter( func( data ):
+				return args_ports_by_name.has( data.name ) and args_ports_by_name[ data.name ].connected
+			)
+	else:
+		exposed_params = []
+		
+	if trace:
+		print( "flow_editor: %s" % flow_editor)
+		print( "show_disconnected_inputs: %s" % show_disconnected_inputs)
+		print( "all_exposed_params: %s" % exposed_params.size())
+		print( "exposed_params: %s" % exposed_params.size())
+		print( "args_ports_by_name: %s" % args_ports_by_name)
+		
+	# Total inputs are flow in streams + exposed parameters of the node
+	var num_inputs = num_ins + exposed_params.size()
+	var num_rows = max( num_inputs, num_outs )
+	
+	# Delete current children
+	self.get_input_port_count()
+	clear_all_slots()
+	for child in get_children():
+		child.queue_free()
+		remove_child( child )
+	
+	args_ports_by_name = {}
 	for idx in range( 0, num_rows ):
 		var ctrl = connectors_row_prefab.instantiate() as FlowConnectorRow
 		add_child( ctrl )
 		var lbl_in = ctrl.getInLabel()
 		var lbl_out = ctrl.getOutLabel()
-		if idx < num_ins:
-			lbl_in.text = ins[ idx ].label
+		
+		# Is there an input active
+		if idx < num_inputs:
+			var in_data
+			# Decide if it's a flow input, or just a param input
+			if idx < num_ins:
+				in_data = ins[idx]
+			else:
+				in_data = exposed_params[ idx - num_ins ]
+			lbl_in.text = in_data.label
+			
 			set_slot_enabled_left( idx, true )
+			if in_data.has( "type"):
+				var color = getColorForGDScriptType( in_data.type )	
+				set_slot_color_left( idx, color )
+			in_data.port = idx
+			ctrl.setData( in_data )
+			
+			args_ports_by_name[ in_data.name ] = { "port" : idx, "connected" : connected_inputs_by_name.has( in_data.name ) }
+			if trace:
+				print( "%s : Assigning slot %d for input %s" % [ name, idx, in_data.name ])
 		else:
 			lbl_in.text = ""
 			
 		if idx < num_outs:
-			var out = outs[idx]
-			if not out:
-				continue
-			lbl_out.text = out.label
-			set_slot_enabled_right( idx, true )
-			if out.has( "type"):
-				var color = getColorForGDScriptType( out.type )
-				set_slot_color_right( idx, color )
+			var out_data = outs[idx]
+			if out_data:
+				lbl_out.text = out_data.label
+				set_slot_enabled_right( idx, true )
+				if out_data.has( "type"):
+					var color = getColorForGDScriptType( out_data.type )
+					set_slot_color_right( idx, color )
 		else:
 			lbl_out.text = ""
 			
-	if !meta.get( "hide_inputs", false ):
-		var my_title : String = meta.title
-		if !meta.has( "input_slots" ):
-			meta.input_slots = {}
-			if trace:
-				print( "%s : Created empty input_slots %s" % [ name, my_title ] )
-		var inputs = settings.get_property_list()
-		var slot_idx = num_rows
-		var inside_my_vars := false
-		for input in inputs:
-			if trace:
-				print( "Input.", input.name)
-			if input.name == "node_settings.gd":
-				break
-			if input.name == "HiddenFromThisPoint":
-				break
-			if input.name == my_title:
-				inside_my_vars = true
-			if !(input.usage & PROPERTY_USAGE_STORAGE) || !(input.usage & PROPERTY_USAGE_EDITOR):
-				continue
-			if !inside_my_vars:
-				continue
-			if trace:
-				print( "%s : Input is %s" % [ name, input ] )
-			set_slot_enabled_left( slot_idx, true )
-			var color = getColorForGDScriptType( input.type )
-			set_slot_color_left( slot_idx, color )
-			var ictrl := connectors_row_prefab.instantiate() as FlowConnectorRow
-			ictrl.setData( {
-				"in_label" : editorDisplayName( input.name ),
-				"in_type"  : getFlowDataTypeFromGdScriptType( input.type ),
-				"in_index" : num_inputs, 
-				"is_parameter" : true
-			} )
-			add_child( ictrl )
-			slot_idx += 1
-			
-			meta.input_slots[ input.name ] = num_inputs
-			if trace:
-				print( "%s : Assigning slot %d for input %s when %d" % [ name, meta.input_slots[ input.name ], input.name, num_inputs ])
-			num_inputs += 1
+	num_ports = num_rows
+	
+	# Add a button to show/hide all props and maybe more options in the future
+	if has_exposed_params:
+		var ctrl = connectors_options_prefab.instantiate() as FlowConnectorOptions
+		ctrl.setShowDisconnectedInputs( show_disconnected_inputs )
+		ctrl.expand_toggled.connect( nodeOptionsChanged )
+		add_child( ctrl )
+
+	# Force a readjust of the node in the flow editor
+	size = get_combined_minimum_size()
+	
+	if trace:
+		for arg_name in args_ports_by_name.keys():
+			print( "  %s : %s" % [ arg_name, args_ports_by_name[ arg_name ] ] )
+	
+	# Reconnect nodes
+	for arg_name in connected_inputs_by_name.keys():
+		var old_data = connected_inputs_by_name[ arg_name ]
+		var old_port = old_data.port
+		var new_port = args_ports_by_name[ arg_name ].port
+		for old_conn in old_data.conns:
+			var from_node = old_conn[0]
+			var from_port = old_conn[1]
+			flow_editor.connect_nodes( from_node, from_port, name, new_port )
+		flow_editor.queueSave()
+	
+func refreshConnectionFlags( ):	
+	var editor = getEditor()
+	if editor:
+		for arg_name in args_ports_by_name:
+			args_ports_by_name[ arg_name ].connected = editor.is_node_port_connected( name, args_ports_by_name[ arg_name ].port )
+		
+func nodeOptionsChanged( expanded : bool ):
+	show_disconnected_inputs = not show_disconnected_inputs
+	refreshConnectionFlags( )
+	initFromScript()
 
 func setupDebugDraw():
 	if !settings.debug_enabled:
@@ -387,31 +486,30 @@ func setupColors( out_data : FlowData.Data ):
 # This returns the current value of the input configuration taking into account potencial connections and overrides of the inputs
 func getSettingValue( ctx : FlowData.EvaluationContext, in_name : String ):
 	var meta = getMeta()
-	var inputs_by_name = meta.get( "input_slots", {})
 	var trace = meta.get( "trace", false )
 	if trace:
-		print( "Searching the current value of input %s in %d inputs at node %s. ByName:%s vs %s.   Meta:%s" % [ in_name, inputs.size(), name, inputs_by_name, inputs, meta ] )
-	var idx = inputs_by_name.get( in_name, -1 )
-	if idx != -1 and idx < inputs.size():
-		#print( "  Meta input %s is at slot %d " % [ in_name, idx ] )
-		var input = inputs[ idx ] as FlowData.Data
-		if input:
-			var in_streams = input.streams
-			if trace:
-				print( "Got the input for %s : %s" % [ in_name, in_streams.keys() ] )
-			if in_streams and in_streams.size() == 1:
-				var stream = in_streams.values()[0]
-				var in_size = in_streams.size()
-				if in_size == 0:
-					setError( "Input %s has no data" % in_name)
-				elif in_size > 1:
-					setError( "Input %s has too many data (%d)" % [ in_name, in_size ])
-				else:
-					var value = stream.container[0]
-					if trace:
-						print( "  -> Using %s = %s" % [ in_name, value ])
-					return value
-			
+		print( "Searching the current value of input %s in %d inputs at node %s. ByName:%s vs %s.   Meta:%s" % [ in_name, inputs.size(), name, args_ports_by_name, inputs, meta ] )
+	if args_ports_by_name.has( in_name ):
+		var port = args_ports_by_name[ in_name ].port
+		if port >= 0 and port < inputs.size():
+			var input = inputs[ port ] as FlowData.Data
+			if input:
+				var in_streams = input.streams
+				if trace:
+					print( "Got the input for %s : %s" % [ in_name, in_streams.keys() ] )
+				if in_streams and in_streams.size() == 1:
+					var stream = in_streams.values()[0]
+					var in_size = in_streams.size()
+					if in_size == 0:
+						setError( "Input %s has no data" % in_name)
+					elif in_size > 1:
+						setError( "Input %s has too many data (%d)" % [ in_name, in_size ])
+					else:
+						var value = stream.container[0]
+						if trace:
+							print( "  -> Using %s = %s" % [ in_name, value ])
+						return value
+				
 	return settings.get( in_name )
 
 func newFloatStream( size : int, new_name : String, init_value ):

@@ -8,17 +8,17 @@
 [sub_resource type="Resource" id="Resource_pkajt"]
 resource_name = "Grid Settings"
 script = ExtResource("3_s3erd")
-x = 6
+x = 3
 y = 1
 z = 3
 step = Vector3(1, 1, 1)
 origin = Vector3(0, 0, 0)
 rotation = Vector3(0, 0, 0)
-random_seed = 4167613396
+random_seed = 1729314867
 inspect_enabled = false
-debug_enabled = true
-debug_mode = 1
-debug_scale = 0.97
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
 debug_color = Color(1, 1, 1, 1)
 debug_modulate_by = ""
 title = "Grid"
@@ -28,15 +28,15 @@ trace = false
 [sub_resource type="Resource" id="Resource_1h62y"]
 script = ExtResource("3_pkajt")
 nodes = Array[Dictionary]([{
-"name": &"id_0002_grid",
-"position_offset": Vector2(184.9, 219.4),
+"name": &"id_0158_grid",
+"position_offset": Vector2(377.159, -51.5193),
 "settings": SubResource("Resource_pkajt"),
 "template": "grid"
 }])
 conns = Array[Dictionary]([])
-view_zoom = 0.909091
-view_offset = Vector2(-21.9091, -23.5455)
-new_name_counter = 2
+view_zoom = 1.1
+view_offset = Vector2(59.8744, -246.671)
+new_name_counter = 158
 in_params = Array[ExtResource("2_ldm7r")]([])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 

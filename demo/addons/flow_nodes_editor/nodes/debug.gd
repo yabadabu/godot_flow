@@ -1,5 +1,6 @@
 @tool
 extends FlowNodeBase
+class_name FlowNodeDebug
 
 func _init():
 	meta_node = {

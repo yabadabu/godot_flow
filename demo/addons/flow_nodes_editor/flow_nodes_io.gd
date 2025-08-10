@@ -70,10 +70,14 @@ static func nodes_as_dict( nodes, editor : FlowGraphEditor ):
 	
 	var nodes_clean = nodes.map( func( node ):
 		exported_node_names[ node.name ] = 1
+		node.refreshConnectionFlags()
+		
 		return {
 			"position" : ( node.position_offset - min_pos ) / editor.ui_scale,
 			"name" : node.name,
 			"template" : node.node_template,
+			"show_disconnected_inputs" : node.show_disconnected_inputs,
+			"args_port" : node.args_ports_by_name,
 			"settings" : resource_to_dict( node.settings ),
 		}
 	)
@@ -108,9 +112,13 @@ static func _paste_nodes_from_dict( dict, editor : FlowGraphEditor ):
 			return null
 		var in_pos = _parse_vector2( in_node.position )
 		node.position_offset = ( in_pos + paste_offset ) * editor.ui_scale
+		node.show_disconnected_inputs = in_node.show_disconnected_inputs
+		node.args_ports_by_name = in_node.args_port
 		
 		# Apply saved settings...
 		dict_to_resource( in_node.settings, node.settings )
+		
+		node.initFromScript();
 		
 		node.refreshFromSettings()
 		
@@ -125,7 +133,8 @@ static func _paste_nodes_from_dict( dict, editor : FlowGraphEditor ):
 		if new_from == null or new_to == null:
 			push_error( "Failed to identify params links", link)
 			continue
-		editor.gedit.connect_node(new_from, link.from_port, new_to, link.to_port )
+		print( "link:", link )
+		editor.connect_nodes(new_from, link.from_port, new_to, link.to_port )
 
 	# Update selection
 	for node in editor.getSelectedNodes():
