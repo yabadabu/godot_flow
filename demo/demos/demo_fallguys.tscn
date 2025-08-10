@@ -21,7 +21,7 @@ height = 0.086
 radial_segments = 6
 rings = 1
 
-[sub_resource type="Resource" id="Resource_v7wvy"]
+[sub_resource type="Resource" id="Resource_xarnj"]
 resource_name = "Add Attribute"
 script = ExtResource("10_i010f")
 name = "mesh"
@@ -43,7 +43,7 @@ title = "Add Attribute"
 enabled = true
 trace = false
 
-[sub_resource type="Resource" id="Resource_1i0v5"]
+[sub_resource type="Resource" id="Resource_tov8o"]
 resource_name = "Make Vector Settings"
 script = ExtResource("8_tov8o")
 x = 0.0
@@ -61,7 +61,7 @@ title = "Make Vector"
 enabled = true
 trace = false
 
-[sub_resource type="Resource" id="Resource_7jvsr"]
+[sub_resource type="Resource" id="Resource_6p47p"]
 resource_name = "Math Op"
 script = ExtResource("6_mq44t")
 operation = 2
@@ -79,25 +79,7 @@ title = "Math"
 enabled = true
 trace = false
 
-[sub_resource type="Resource" id="Resource_tov8o"]
-resource_name = "Math Op"
-script = ExtResource("6_mq44t")
-operation = 3
-in_nameA = "position.Z"
-in_nameB = "size.Z"
-out_name = "row"
-random_seed = 1562873858
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 1
-debug_scale = 0.265
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Math"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_c5783"]
+[sub_resource type="Resource" id="Resource_iefgn"]
 resource_name = "Math Op"
 script = ExtResource("6_mq44t")
 operation = 5
@@ -115,28 +97,7 @@ title = "Math"
 enabled = true
 trace = false
 
-[sub_resource type="Resource" id="Resource_1v1y5"]
-resource_name = "Add Attribute"
-script = ExtResource("10_i010f")
-name = "new_attr"
-data_type = 2
-cte_bool = false
-cte_int = 0
-cte_float = -0.18
-cte_vector = Vector3(0, 0, 0)
-cte_string = ""
-random_seed = 1033885169
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Add Attribute"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_jvlto"]
+[sub_resource type="Resource" id="Resource_kt7ln"]
 resource_name = "Math Op"
 script = ExtResource("6_mq44t")
 operation = 0
@@ -172,7 +133,7 @@ title = "Math"
 enabled = true
 trace = false
 
-[sub_resource type="Resource" id="Resource_gmir0"]
+[sub_resource type="Resource" id="Resource_jvlto"]
 resource_name = "Math Op"
 script = ExtResource("6_mq44t")
 operation = 11
@@ -190,80 +151,7 @@ title = "Math"
 enabled = true
 trace = false
 
-[sub_resource type="Resource" id="Resource_5kys7"]
-resource_name = "Spawn Meshes Settings"
-script = ExtResource("7_tyqfr")
-mesh = ExtResource("9_c5783")
-mesh_attribute = ""
-random_seed = 1935723741
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Spawn Meshes"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_i010f"]
-resource_name = "Sample Spline Settings"
-script = ExtResource("4_tyqfr")
-uniform_interval = 1.0
-fill_curve = true
-required_meta_bool = &""
-distance_attribute = "distance"
-random_seed = 1671569818
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 1
-debug_scale = 0.175
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = "distance"
-title = "Sample Spline"
-enabled = true
-trace = true
-
-[sub_resource type="Resource" id="Resource_qj1k2"]
-resource_name = "Add Attribute"
-script = ExtResource("10_i010f")
-name = "interval"
-data_type = 2
-cte_bool = false
-cte_int = 0
-cte_float = 0.2
-cte_vector = Vector3(0, 0, 0)
-cte_string = ""
-random_seed = 3770217984
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Add Attribute"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_wcj2q"]
-resource_name = "Copy Settings"
-script = ExtResource("10_xarnj")
-num_copies = 3
-translation = Vector3(0, 10, 0)
-rotation = Vector3(0, 0, 0)
-generate_copy_id = "copy"
-random_seed = 4206647135
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Copy"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_kt7ln"]
+[sub_resource type="Resource" id="Resource_v7wvy"]
 resource_name = "Merge Settings"
 script = ExtResource("11_i010f")
 random_seed = 3770833658
@@ -277,7 +165,7 @@ title = "Merge"
 enabled = true
 trace = false
 
-[sub_resource type="Resource" id="Resource_iefgn"]
+[sub_resource type="Resource" id="Resource_wcj2q"]
 resource_name = "Filter Settings"
 script = ExtResource("7_c5783")
 condition = 0
@@ -295,7 +183,7 @@ title = "Filter"
 enabled = true
 trace = false
 
-[sub_resource type="Resource" id="Resource_6p47p"]
+[sub_resource type="Resource" id="Resource_1v1y5"]
 resource_name = "Transform Settings"
 script = ExtResource("8_dk6st")
 offset_min = Vector3(-0.2, 0, 0)
@@ -316,219 +204,943 @@ title = "Transform"
 enabled = true
 trace = false
 
+[sub_resource type="Resource" id="Resource_1i0v5"]
+resource_name = "Add Attribute"
+script = ExtResource("10_i010f")
+name = "interval"
+data_type = 2
+cte_bool = false
+cte_int = 0
+cte_float = 0.2
+cte_vector = Vector3(0, 0, 0)
+cte_string = ""
+random_seed = 3770217984
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Add Attribute"
+enabled = true
+trace = false
+
+[sub_resource type="Resource" id="Resource_7jvsr"]
+resource_name = "Add Attribute"
+script = ExtResource("10_i010f")
+name = "new_attr"
+data_type = 2
+cte_bool = false
+cte_int = 0
+cte_float = -0.18
+cte_vector = Vector3(0, 0, 0)
+cte_string = ""
+random_seed = 1033885169
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Add Attribute"
+enabled = true
+trace = false
+
+[sub_resource type="Resource" id="Resource_qj1k2"]
+resource_name = "Spawn Meshes Settings"
+script = ExtResource("7_tyqfr")
+mesh = ExtResource("9_c5783")
+mesh_attribute = ""
+random_seed = 1935723741
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Spawn Meshes"
+enabled = true
+trace = false
+
+[sub_resource type="Resource" id="Resource_5kys7"]
+resource_name = "Math Op"
+script = ExtResource("6_mq44t")
+operation = 3
+in_nameA = "position.Z"
+in_nameB = "size.Z"
+out_name = "row"
+random_seed = 1562873858
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 1
+debug_scale = 0.265
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Math"
+enabled = true
+trace = false
+
+[sub_resource type="Resource" id="Resource_sdw1c"]
+resource_name = "Copy Settings"
+script = ExtResource("10_xarnj")
+num_copies = 3
+translation = Vector3(0, 10, 0)
+rotation = Vector3(0, 0, 0)
+generate_copy_id = "copy"
+random_seed = 4206647135
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 0
+debug_scale = 1.0
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = ""
+title = "Copy"
+enabled = true
+trace = false
+
+[sub_resource type="Resource" id="Resource_gmir0"]
+resource_name = "Sample Spline Settings"
+script = ExtResource("4_tyqfr")
+uniform_interval = 1.0
+fill_curve = true
+required_meta_bool = &""
+distance_attribute = "distance"
+random_seed = 1671569818
+inspect_enabled = false
+debug_enabled = false
+debug_mode = 1
+debug_scale = 0.175
+debug_color = Color(1, 1, 1, 1)
+debug_modulate_by = "distance"
+title = "Sample Spline"
+enabled = true
+trace = true
+
 [sub_resource type="Resource" id="Resource_dk6st"]
 resource_local_to_scene = true
 resource_name = "fallguys"
 script = ExtResource("4_l5ca6")
 nodes = Array[Dictionary]([{
-"name": &"id_0020_add_attribute",
+"name": &"id_0050_add_attribute",
 "position_offset": Vector2(2520, 380),
-"settings": SubResource("Resource_v7wvy"),
+"settings": SubResource("Resource_xarnj"),
 "template": "add_attribute"
 }, {
-"name": &"id_0035_make_vector",
+"name": &"id_0051_make_vector",
 "position_offset": Vector2(1500, 480),
-"settings": SubResource("Resource_1i0v5"),
+"settings": SubResource("Resource_tov8o"),
 "template": "make_vector"
 }, {
-"name": &"id_0036_math_op",
+"name": &"id_0052_math_op",
 "position_offset": Vector2(1320, 500),
-"settings": SubResource("Resource_7jvsr"),
+"settings": SubResource("Resource_6p47p"),
 "template": "math_op"
 }, {
-"name": &"id_0003_math_op",
-"position_offset": Vector2(520, 300),
-"settings": SubResource("Resource_tov8o"),
-"template": "math_op"
-}, {
-"name": &"id_0011_math_op",
+"name": &"id_0053_math_op",
 "position_offset": Vector2(720, 300),
-"settings": SubResource("Resource_c5783"),
+"settings": SubResource("Resource_iefgn"),
 "template": "math_op"
 }, {
-"name": &"id_0033_add_attribute",
-"position_offset": Vector2(980, 460),
-"settings": SubResource("Resource_1v1y5"),
-"template": "add_attribute"
-}, {
-"name": &"id_0019_math_op",
+"name": &"id_0054_math_op",
 "position_offset": Vector2(1340, 300),
-"settings": SubResource("Resource_jvlto"),
+"settings": SubResource("Resource_kt7ln"),
 "template": "math_op"
 }, {
-"name": &"id_0018_math_op",
+"name": &"id_0055_math_op",
 "position_offset": Vector2(1140, 300),
 "settings": SubResource("Resource_i5d73"),
 "template": "math_op"
 }, {
-"name": &"id_0037_math_op",
+"name": &"id_0056_math_op",
 "position_offset": Vector2(940, 300),
-"settings": SubResource("Resource_gmir0"),
+"settings": SubResource("Resource_jvlto"),
 "template": "math_op"
 }, {
-"name": &"id_0038_spawn_meshes",
-"position_offset": Vector2(2760, 300),
-"settings": SubResource("Resource_5kys7"),
-"template": "spawn_meshes"
-}, {
-"name": &"id_0001_sample_spline",
-"position_offset": Vector2(220, 300),
-"settings": SubResource("Resource_i010f"),
-"template": "sample_spline"
-}, {
-"name": &"id_0034_add_attribute",
-"position_offset": Vector2(-20, 500),
-"settings": SubResource("Resource_qj1k2"),
-"template": "add_attribute"
-}, {
-"name": &"id_0032_copy",
-"position_offset": Vector2(2240, 300),
-"settings": SubResource("Resource_wcj2q"),
-"template": "copy"
-}, {
-"name": &"id_0027_merge",
+"name": &"id_0058_merge",
 "position_offset": Vector2(2000, 300),
-"settings": SubResource("Resource_kt7ln"),
+"settings": SubResource("Resource_v7wvy"),
 "template": "merge"
 }, {
-"name": &"id_0008_filter",
+"name": &"id_0059_filter",
 "position_offset": Vector2(1560, 300),
-"settings": SubResource("Resource_iefgn"),
+"settings": SubResource("Resource_wcj2q"),
 "template": "filter"
 }, {
-"name": &"id_0013_transform",
+"name": &"id_0060_transform",
 "position_offset": Vector2(1740, 440),
-"settings": SubResource("Resource_6p47p"),
+"settings": SubResource("Resource_1v1y5"),
 "template": "transform"
+}, {
+"name": &"id_0061_add_attribute",
+"position_offset": Vector2(-20, 500),
+"settings": SubResource("Resource_1i0v5"),
+"template": "add_attribute"
+}, {
+"name": &"id_0062_add_attribute",
+"position_offset": Vector2(980, 460),
+"settings": SubResource("Resource_7jvsr"),
+"template": "add_attribute"
+}, {
+"name": &"id_0063_spawn_meshes",
+"position_offset": Vector2(2760, 300),
+"settings": SubResource("Resource_qj1k2"),
+"template": "spawn_meshes"
+}, {
+"name": &"id_0065_math_op",
+"position_offset": Vector2(520, 300),
+"settings": SubResource("Resource_5kys7"),
+"template": "math_op"
+}, {
+"name": &"id_0057_copy",
+"position_offset": Vector2(2240, 300),
+"settings": SubResource("Resource_sdw1c"),
+"template": "copy"
+}, {
+"name": &"id_0064_sample_spline",
+"position_offset": Vector2(220, 300),
+"settings": SubResource("Resource_gmir0"),
+"template": "sample_spline"
 }])
 conns = Array[Dictionary]([{
-"from_node": &"id_0001_sample_spline",
+"from_node": &"id_0064_sample_spline",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0003_math_op",
+"to_node": &"id_0065_math_op",
 "to_port": 0
 }, {
-"from_node": &"id_0001_sample_spline",
+"from_node": &"id_0064_sample_spline",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0003_math_op",
+"to_node": &"id_0065_math_op",
 "to_port": 1
 }, {
-"from_node": &"id_0008_filter",
+"from_node": &"id_0055_math_op",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0054_math_op",
+"to_port": 0
+}, {
+"from_node": &"id_0054_math_op",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0059_filter",
+"to_port": 0
+}, {
+"from_node": &"id_0055_math_op",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0054_math_op",
+"to_port": 1
+}, {
+"from_node": &"id_0059_filter",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0058_merge",
+"to_port": 0
+}, {
+"from_node": &"id_0060_transform",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0058_merge",
+"to_port": 1
+}, {
+"from_node": &"id_0062_add_attribute",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0055_math_op",
+"to_port": 1
+}, {
+"from_node": &"id_0061_add_attribute",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0052_math_op",
+"to_port": 0
+}, {
+"from_node": &"id_0065_math_op",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0053_math_op",
+"to_port": 0
+}, {
+"from_node": &"id_0053_math_op",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0056_math_op",
+"to_port": 0
+}, {
+"from_node": &"id_0056_math_op",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0055_math_op",
+"to_port": 0
+}, {
+"from_node": &"id_0052_math_op",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0051_make_vector",
+"to_port": 0
+}, {
+"from_node": &"id_0059_filter",
 "from_port": 1,
 "keep_alive": false,
-"to_node": &"id_0013_transform",
+"to_node": &"id_0060_transform",
 "to_port": 0
 }, {
-"from_node": &"id_0018_math_op",
+"from_node": &"id_0051_make_vector",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0019_math_op",
-"to_port": 0
-}, {
-"from_node": &"id_0019_math_op",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0008_filter",
-"to_port": 0
-}, {
-"from_node": &"id_0018_math_op",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0019_math_op",
+"to_node": &"id_0060_transform",
 "to_port": 1
 }, {
-"from_node": &"id_0008_filter",
+"from_node": &"id_0051_make_vector",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0027_merge",
-"to_port": 0
-}, {
-"from_node": &"id_0013_transform",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0027_merge",
-"to_port": 1
-}, {
-"from_node": &"id_0033_add_attribute",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0018_math_op",
-"to_port": 1
-}, {
-"from_node": &"id_0034_add_attribute",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0001_sample_spline",
-"to_port": 0
-}, {
-"from_node": &"id_0035_make_vector",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0013_transform",
-"to_port": 1
-}, {
-"from_node": &"id_0035_make_vector",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0013_transform",
+"to_node": &"id_0060_transform",
 "to_port": 2
 }, {
-"from_node": &"id_0034_add_attribute",
+"from_node": &"id_0058_merge",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0036_math_op",
+"to_node": &"id_0057_copy",
 "to_port": 0
 }, {
-"from_node": &"id_0036_math_op",
+"from_node": &"id_0057_copy",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0035_make_vector",
+"to_node": &"id_0063_spawn_meshes",
 "to_port": 0
 }, {
-"from_node": &"id_0003_math_op",
+"from_node": &"id_0050_add_attribute",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0011_math_op",
-"to_port": 0
-}, {
-"from_node": &"id_0011_math_op",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0037_math_op",
-"to_port": 0
-}, {
-"from_node": &"id_0037_math_op",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0018_math_op",
-"to_port": 0
-}, {
-"from_node": &"id_0027_merge",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0032_copy",
-"to_port": 0
-}, {
-"from_node": &"id_0032_copy",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0038_spawn_meshes",
-"to_port": 0
-}, {
-"from_node": &"id_0020_add_attribute",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0038_spawn_meshes",
+"to_node": &"id_0063_spawn_meshes",
 "to_port": 1
+}, {
+"from_node": &"id_0061_add_attribute",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0064_sample_spline",
+"to_port": 0
 }])
-view_zoom = 1.0
-view_offset = Vector2(-101.774, -79.1246)
+data = {
+"links": [{
+"from_node": &"id_0064_sample_spline",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0065_math_op",
+"to_port": 0
+}, {
+"from_node": &"id_0064_sample_spline",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0065_math_op",
+"to_port": 1
+}, {
+"from_node": &"id_0055_math_op",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0054_math_op",
+"to_port": 0
+}, {
+"from_node": &"id_0054_math_op",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0059_filter",
+"to_port": 0
+}, {
+"from_node": &"id_0055_math_op",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0054_math_op",
+"to_port": 1
+}, {
+"from_node": &"id_0059_filter",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0058_merge",
+"to_port": 0
+}, {
+"from_node": &"id_0060_transform",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0058_merge",
+"to_port": 1
+}, {
+"from_node": &"id_0062_add_attribute",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0055_math_op",
+"to_port": 1
+}, {
+"from_node": &"id_0061_add_attribute",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0052_math_op",
+"to_port": 0
+}, {
+"from_node": &"id_0065_math_op",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0053_math_op",
+"to_port": 0
+}, {
+"from_node": &"id_0053_math_op",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0056_math_op",
+"to_port": 0
+}, {
+"from_node": &"id_0056_math_op",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0055_math_op",
+"to_port": 0
+}, {
+"from_node": &"id_0052_math_op",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0051_make_vector",
+"to_port": 0
+}, {
+"from_node": &"id_0059_filter",
+"from_port": 1,
+"keep_alive": false,
+"to_node": &"id_0060_transform",
+"to_port": 0
+}, {
+"from_node": &"id_0051_make_vector",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0060_transform",
+"to_port": 1
+}, {
+"from_node": &"id_0051_make_vector",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0060_transform",
+"to_port": 2
+}, {
+"from_node": &"id_0058_merge",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0057_copy",
+"to_port": 0
+}, {
+"from_node": &"id_0057_copy",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0063_spawn_meshes",
+"to_port": 0
+}, {
+"from_node": &"id_0050_add_attribute",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0063_spawn_meshes",
+"to_port": 1
+}, {
+"from_node": &"id_0061_add_attribute",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0064_sample_spline",
+"to_port": 0
+}],
+"min_pos": Vector2(-20, 300),
+"nodes": [{
+"args_port": {
+"In": {
+"connected": false,
+"port": 0
+}
+},
+"name": &"id_0050_add_attribute",
+"position": Vector2(2540, 80),
+"settings": {
+"cte_bool": false,
+"cte_float": 0.0,
+"cte_int": 0,
+"cte_resource": SubResource("CylinderMesh_i010f"),
+"cte_string": "",
+"cte_vector": Vector3(0, 0, 0),
+"data_type": 5,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_scale": 1.0,
+"enabled": true,
+"inspect_enabled": false,
+"name": "mesh",
+"random_seed": 962094854,
+"title": "Add Attribute",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "add_attribute"
+}, {
+"args_port": {
+"x": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0051_make_vector",
+"position": Vector2(1520, 180),
+"settings": {
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_scale": 1.0,
+"enabled": true,
+"inspect_enabled": false,
+"out_name": "Vector",
+"random_seed": 2074028266,
+"title": "Make Vector",
+"trace": false,
+"x": 0.0,
+"y": 0.0,
+"z": 0.0
+},
+"show_disconnected_inputs": false,
+"template": "make_vector"
+}, {
+"args_port": {
+"In A": {
+"connected": true,
+"port": 0
+},
+"In B": {
+"connected": false,
+"port": 1
+}
+},
+"name": &"id_0052_math_op",
+"position": Vector2(1340, 200),
+"settings": {
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_scale": 1.0,
+"enabled": true,
+"in_nameA": "interval",
+"in_nameB": "0.5",
+"inspect_enabled": false,
+"operation": 2,
+"out_name": "interval",
+"random_seed": 2479760030,
+"title": "Math",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "math_op"
+}, {
+"args_port": {
+"In A": {
+"connected": true,
+"port": 0
+},
+"In B": {
+"connected": false,
+"port": 1
+}
+},
+"name": &"id_0053_math_op",
+"position": Vector2(740, 0),
+"settings": {
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 1,
+"debug_modulate_by": "",
+"debug_scale": 0.295,
+"enabled": true,
+"in_nameA": "row",
+"in_nameB": "",
+"inspect_enabled": false,
+"operation": 5,
+"out_name": "is_odd",
+"random_seed": 1733103425,
+"title": "Math",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "math_op"
+}, {
+"args_port": {
+"In A": {
+"connected": true,
+"port": 0
+},
+"In B": {
+"connected": true,
+"port": 1
+}
+},
+"name": &"id_0054_math_op",
+"position": Vector2(1360, 0),
+"settings": {
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_scale": 1.0,
+"enabled": true,
+"in_nameA": "position.Z",
+"in_nameB": "offset",
+"inspect_enabled": false,
+"operation": 0,
+"out_name": "position.Z",
+"random_seed": 1076949034,
+"title": "Math",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "math_op"
+}, {
+"args_port": {
+"In A": {
+"connected": true,
+"port": 0
+},
+"In B": {
+"connected": true,
+"port": 1
+}
+},
+"name": &"id_0055_math_op",
+"position": Vector2(1160, 0),
+"settings": {
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 1,
+"debug_modulate_by": "",
+"debug_scale": 0.295,
+"enabled": true,
+"in_nameA": "position.Z",
+"in_nameB": "new_attr",
+"inspect_enabled": false,
+"operation": 2,
+"out_name": "offset",
+"random_seed": 3775680099,
+"title": "Math",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "math_op"
+}, {
+"args_port": {
+"In A": {
+"connected": true,
+"port": 0
+},
+"In B": {
+"connected": false,
+"port": 1
+}
+},
+"name": &"id_0056_math_op",
+"position": Vector2(960, 0),
+"settings": {
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_scale": 1.0,
+"enabled": true,
+"in_nameA": "is_odd",
+"in_nameB": "2",
+"inspect_enabled": false,
+"operation": 11,
+"out_name": "is_odd",
+"random_seed": 3801886254,
+"title": "Math",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "math_op"
+}, {
+"args_port": {
+"In A": {
+"connected": true,
+"port": 0
+},
+"In B": {
+"connected": true,
+"port": 1
+}
+},
+"name": &"id_0058_merge",
+"position": Vector2(2020, 0),
+"settings": {
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 1,
+"debug_modulate_by": "",
+"debug_scale": 0.125,
+"enabled": true,
+"inspect_enabled": false,
+"random_seed": 3770833658,
+"title": "Merge",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "merge"
+}, {
+"args_port": {
+"In A": {
+"connected": true,
+"port": 0
+},
+"In B": {
+"connected": false,
+"port": 1
+}
+},
+"name": &"id_0059_filter",
+"position": Vector2(1580, 0),
+"settings": {
+"condition": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_scale": 1.0,
+"enabled": true,
+"in_nameA": "is_odd",
+"in_nameB": "1",
+"inspect_enabled": false,
+"random_seed": 2060095070,
+"threshold": 0.1,
+"title": "Filter",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "filter"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+},
+"offset_max": {
+"connected": true,
+"port": 2
+},
+"offset_min": {
+"connected": true,
+"port": 1
+}
+},
+"name": &"id_0060_transform",
+"position": Vector2(1760, 140),
+"settings": {
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_scale": 1.0,
+"enabled": true,
+"inspect_enabled": false,
+"offset_max": Vector3(-0.2, 0, 0),
+"offset_min": Vector3(-0.2, 0, 0),
+"random_seed": 1268655514,
+"rotation_max": Vector3(0, 0, 0),
+"rotation_min": Vector3(0, 0, 0),
+"scale_max": Vector3(1, 1, 1),
+"scale_min": Vector3(1, 1, 1),
+"title": "Transform",
+"trace": false,
+"uniform_scale": true
+},
+"show_disconnected_inputs": false,
+"template": "transform"
+}, {
+"args_port": {
+"In": {
+"connected": false,
+"port": 0
+}
+},
+"name": &"id_0061_add_attribute",
+"position": Vector2(0, 200),
+"settings": {
+"cte_bool": false,
+"cte_float": 0.2,
+"cte_int": 0,
+"cte_resource": null,
+"cte_string": "",
+"cte_vector": Vector3(0, 0, 0),
+"data_type": 2,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_scale": 1.0,
+"enabled": true,
+"inspect_enabled": false,
+"name": "interval",
+"random_seed": 3770217984,
+"title": "Add Attribute",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "add_attribute"
+}, {
+"args_port": {
+"In": {
+"connected": false,
+"port": 0
+}
+},
+"name": &"id_0062_add_attribute",
+"position": Vector2(1000, 160),
+"settings": {
+"cte_bool": false,
+"cte_float": -0.18,
+"cte_int": 0,
+"cte_resource": null,
+"cte_string": "",
+"cte_vector": Vector3(0, 0, 0),
+"data_type": 2,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_scale": 1.0,
+"enabled": true,
+"inspect_enabled": false,
+"name": "new_attr",
+"random_seed": 1033885169,
+"title": "Add Attribute",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "add_attribute"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+},
+"mesh": {
+"connected": true,
+"port": 1
+}
+},
+"name": &"id_0063_spawn_meshes",
+"position": Vector2(2780, 0),
+"settings": {
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_scale": 1.0,
+"enabled": true,
+"inspect_enabled": false,
+"mesh": ExtResource("9_c5783"),
+"mesh_attribute": "",
+"random_seed": 1935723741,
+"title": "Spawn Meshes",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "spawn_meshes"
+}, {
+"args_port": {
+"In A": {
+"connected": true,
+"port": 0
+},
+"In B": {
+"connected": true,
+"port": 1
+}
+},
+"name": &"id_0065_math_op",
+"position": Vector2(540, 0),
+"settings": {
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 1,
+"debug_modulate_by": "",
+"debug_scale": 0.265,
+"enabled": true,
+"in_nameA": "position.Z",
+"in_nameB": "size.Z",
+"inspect_enabled": false,
+"operation": 3,
+"out_name": "row",
+"random_seed": 1562873858,
+"title": "Math",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "math_op"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0057_copy",
+"position": Vector2(2260, 0),
+"settings": {
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_scale": 1.0,
+"enabled": true,
+"generate_copy_id": "copy",
+"inspect_enabled": false,
+"num_copies": 3,
+"random_seed": 4206647135,
+"rotation": Vector3(0, 0, 0),
+"title": "Copy",
+"trace": false,
+"translation": Vector3(0, 10, 0)
+},
+"show_disconnected_inputs": false,
+"template": "copy"
+}, {
+"args_port": {
+"uniform_interval": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0064_sample_spline",
+"position": Vector2(240, 0),
+"settings": {
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 1,
+"debug_modulate_by": "distance",
+"debug_scale": 0.175,
+"distance_attribute": "distance",
+"enabled": true,
+"fill_curve": true,
+"inspect_enabled": false,
+"random_seed": 1671569818,
+"required_meta_bool": &"",
+"title": "Sample Spline",
+"trace": true,
+"uniform_interval": 1.0
+},
+"show_disconnected_inputs": false,
+"template": "sample_spline"
+}],
+"type": "flow_graph_nodes",
+"version": 1
+}
+view_zoom = 1.21
+view_offset = Vector2(-137.226, -110.212)
 new_name_counter = 49
 in_params = Array[ExtResource("2_frxqg")]([])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 
-[sub_resource type="MultiMesh" id="MultiMesh_xarnj"]
+[sub_resource type="MultiMesh" id="MultiMesh_1vmd6"]
 transform_format = 1
 instance_count = 927
 mesh = SubResource("CylinderMesh_i010f")
@@ -548,11 +1160,12 @@ point_count = 6
 [node name="FlowGraphNode3D" type="Node3D" parent="."]
 script = ExtResource("1_kf2sw")
 graph = SubResource("Resource_dk6st")
+refresh_inputs = Callable()
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
 
-[node name="@MultiMeshInstance3D@30743" type="MultiMeshInstance3D" parent="FlowGraphNode3D"]
-multimesh = SubResource("MultiMesh_xarnj")
-metadata/flow_owner = &"id_0038_spawn_meshes"
+[node name="@MultiMeshInstance3D@123850" type="MultiMeshInstance3D" parent="FlowGraphNode3D"]
+multimesh = SubResource("MultiMesh_1vmd6")
+metadata/flow_owner = &"id_0063_spawn_meshes"
 
 [node name="Path3D" type="Path3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.29069, 0, 0)
