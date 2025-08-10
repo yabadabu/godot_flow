@@ -322,7 +322,7 @@ func addNodeFromTemplate( node_template, node_name : String, settings = null ):
 		push_error("node_type %s is not registered" % node_template)
 		print( node_types.keys() )
 		return null	
-	print( "Meta:", str(meta) )
+	#print( "Meta:", str(meta) )
 		
 	node.set_script(meta.factory)
 
@@ -334,11 +334,11 @@ func addNodeFromTemplate( node_template, node_name : String, settings = null ):
 		node.settings = settings
 	else:
 		if meta.has( "settings" ):
-			print( "Assigning settings of type %s" % meta.settings )
-			print( "node is %s" % node )
+			#print( "Assigning settings of type %s" % meta.settings )
+			#print( "node is %s" % node )
 			node.settings = meta.settings.new()
 		else:
-			print( "Assigning default settings" )
+			#print( "Assigning default settings" )
 			node.settings = NodeSettings.new()
 	node.settings.title = meta.title
 	node.initFromScript()
@@ -546,12 +546,12 @@ func _on_popup_menu_id_pressed(id: int) -> void:
 			gedit.set_connection_activity( node.name, 0, target.name, 0, 1.0)
 
 func disconnect_nodes(from_node: StringName, from_port: int, to_node: StringName, to_port: int) -> void:
-	print( "disconnect_nodes From:%s:%d To:%s:%d" % [ from_node, from_port, to_node, to_port ])
+	#print( "disconnect_nodes From:%s:%d To:%s:%d" % [ from_node, from_port, to_node, to_port ])
 	gedit.disconnect_node(from_node, from_port, to_node, to_port)
 	remove_input_source_target_connection( from_node, from_port, to_node, to_port )
 	
 func connect_nodes(from_node: StringName, from_port: int, to_node: StringName, to_port: int) -> void:
-	print( "connect_nodes %s:%d -> %s:%d" % [ from_node, from_port, to_node, to_port ] )
+	#print( "connect_nodes %s:%d -> %s:%d" % [ from_node, from_port, to_node, to_port ] )
 	gedit.connect_node(from_node, from_port, to_node, to_port)
 	var key = [to_node, to_port]
 	if not input_sources.has(key):

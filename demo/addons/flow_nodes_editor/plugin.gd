@@ -62,12 +62,15 @@ func _ready():
 	selection.selection_changed.connect(_selection_changed)
 	_selection_changed()
 
+# This is called after the a new scene is loaded, but the 'selection' event of the new
+# scene is called first.
 func on_scene_changed(scene_root: Node) -> void:
-	# Clear the current resource in the prev scene
-	graph_dock.setResourceToEdit( null, null )
-	# Refresh if the current scene is a pcg
-	_selection_changed()
-
+	print( "Scene Changed detected")
+	# Check if we still have a resource but the owner is no longer in the scene
+	if graph_dock && graph_dock.current_resource && not graph_dock.resource_owner:
+		print( "Removing old flow resource")
+		graph_dock.setResourceToEdit( null, null )
+		
 func _selection_changed():
 	
 	var scene_nodes = selection.get_selected_nodes()

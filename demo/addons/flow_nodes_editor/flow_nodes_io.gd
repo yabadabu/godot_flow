@@ -147,7 +147,6 @@ static func create_nodes_from_dict( dict, editor : FlowGraphEditor, paste_offset
 		if new_from == null or new_to == null:
 			push_error( "Failed to identify params links", link)
 			continue
-		print( "link:", link )
 		editor.connect_nodes(new_from, link.from_port, new_to, link.to_port )
 
 	return new_nodes
