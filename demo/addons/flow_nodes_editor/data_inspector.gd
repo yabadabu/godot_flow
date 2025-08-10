@@ -35,7 +35,7 @@ func setNode( new_node : FlowNodeBase ):
 		%LabelTitle.text = new_node.get_title()
 		new_node.settings.inspect_enabled = true
 		node = new_node
-		node.setupDebugDraw()
+		node.setupDrawDebug()
 	else:
 		node = null
 		refresh()
@@ -176,7 +176,7 @@ func onCellClicked( row : int, col : int ):
 	tv.setSelectedRow( row )
 	if node:
 		node.debug_row = row
-		node.setupDebugDraw()
+		node.setupDrawDebug()
 
 func _ready():
 	tv.cell_clicked.connect( onCellClicked )

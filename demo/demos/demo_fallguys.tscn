@@ -1140,7 +1140,7 @@ new_name_counter = 49
 in_params = Array[ExtResource("2_frxqg")]([])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 
-[sub_resource type="MultiMesh" id="MultiMesh_1vmd6"]
+[sub_resource type="MultiMesh" id="MultiMesh_xarnj"]
 transform_format = 1
 instance_count = 927
 mesh = SubResource("CylinderMesh_i010f")
@@ -1163,9 +1163,9 @@ graph = SubResource("Resource_dk6st")
 refresh_inputs = Callable()
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
 
-[node name="@MultiMeshInstance3D@123850" type="MultiMeshInstance3D" parent="FlowGraphNode3D"]
-multimesh = SubResource("MultiMesh_1vmd6")
-metadata/flow_owner = &"id_0063_spawn_meshes"
+[node name="@MultiMeshInstance3D@26107" type="MultiMeshInstance3D" parent="FlowGraphNode3D"]
+multimesh = SubResource("MultiMesh_xarnj")
+metadata/flow_owner = &"id_0230_spawn_meshes"
 
 [node name="Path3D" type="Path3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.29069, 0, 0)
