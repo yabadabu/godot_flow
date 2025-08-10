@@ -168,8 +168,6 @@ func execute( ctx : FlowData.EvaluationContext ):
 	if not root:
 		return null
 		
-	var trace := settings.trace
-		
 	var nodes = findNodesOfType(root, "MeshInstance3D")
 
 	var output := FlowData.Data.new()
@@ -183,12 +181,18 @@ func execute( ctx : FlowData.EvaluationContext ):
 		#settings.uniform_interval = uniform_interval
 
 	var num_samples = getSettingValue(ctx, "num_samples" )
+	var density = getSettingValue(ctx, "density")
+
+	if settings.mode == SampleMeshNodeSettings.eMode.UseDensity:
+		num_samples = -1
+	elif settings.mode == SampleMeshNodeSettings.eMode.UseNumSamples:
+		density = -1.0
 
 	for node in nodes:
 		var mesh : Mesh = node.mesh
 		if mesh == null:
 			continue
-		var ans = sampleMeshSurface( node, num_samples, -1.0, settings.random_seed )
+		var ans = sampleMeshSurface( node, num_samples, density, settings.random_seed )
 		var points : PackedVector3Array = ans.points
 		var normals : PackedVector3Array = ans.normals
 		var num_points := points.size()

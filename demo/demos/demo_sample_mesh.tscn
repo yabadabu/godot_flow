@@ -8,47 +8,28 @@
 script = ExtResource("3_i06iv")
 data = {
 "links": [{
-"from_node": &"id_0003_sample_mesh",
+"from_node": &"id_0013_self_pruning",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0006_self_pruning",
+"to_node": &"id_0015_filter",
 "to_port": 0
 }, {
-"from_node": &"id_0006_self_pruning",
+"from_node": &"id_0014_sample_mesh",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0007_filter",
+"to_node": &"id_0013_self_pruning",
 "to_port": 0
 }],
-"min_pos": Vector2(220, 260),
+"min_pos": Vector2(200, 260),
 "nodes": [{
-"args_port": {},
-"name": &"id_0003_sample_mesh",
-"position": Vector2(0, 0),
-"settings": {
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 1,
-"debug_modulate_by": "",
-"debug_scale": 0.37,
-"enabled": true,
-"inspect_enabled": false,
-"num_samples": 4374,
-"random_seed": 1407499193,
-"title": "Sample Mesh",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "sample_mesh"
-}, {
 "args_port": {
 "In": {
 "connected": true,
 "port": 0
 }
 },
-"name": &"id_0006_self_pruning",
-"position": Vector2(160, 0),
+"name": &"id_0013_self_pruning",
+"position": Vector2(200, 0),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
@@ -65,6 +46,27 @@ data = {
 "show_disconnected_inputs": false,
 "template": "self_pruning"
 }, {
+"args_port": {},
+"name": &"id_0014_sample_mesh",
+"position": Vector2(0, 0),
+"settings": {
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_scale": 1.0,
+"density": 0.5,
+"enabled": true,
+"inspect_enabled": false,
+"mode": 0,
+"num_samples": 100,
+"random_seed": 773502599,
+"title": "Sample Mesh",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "sample_mesh"
+}, {
 "args_port": {
 "In A": {
 "connected": true,
@@ -75,12 +77,12 @@ data = {
 "port": 1
 }
 },
-"name": &"id_0007_filter",
-"position": Vector2(400, 60),
+"name": &"id_0015_filter",
+"position": Vector2(400, 0),
 "settings": {
 "condition": 2,
 "debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
+"debug_enabled": true,
 "debug_mode": 0,
 "debug_modulate_by": "",
 "debug_scale": 1.0,
@@ -99,9 +101,9 @@ data = {
 "type": "flow_graph_nodes",
 "version": 1
 }
-view_zoom = 1.1
-view_offset = Vector2(486.7, -86.1)
-new_name_counter = 8
+view_zoom = 0.909091
+view_offset = Vector2(100.421, -230.372)
+new_name_counter = 12
 in_params = Array[ExtResource("2_0ulet")]([])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 
@@ -121,5 +123,5 @@ refresh_inputs = Callable()
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.999991, 0.00304993, -0.00291681, -0.00302737, 0.999966, 0.00770941, 0.00294023, -0.00770052, 0.999966, 0, 0, 0)
+transform = Transform3D(1.81633, 0.00448315, -0.0210605, -0.00549875, 1.46987, 0.055665, 0.00534047, -0.0113191, 7.22015, 0, 0, 0)
 mesh = SubResource("TextMesh_12aa2")
