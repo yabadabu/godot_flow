@@ -24,11 +24,11 @@ z = 3
 step = Vector3(1, 1, 1)
 origin = Vector3(0, 0, 0)
 rotation = Vector3(0, 0, 0)
-random_seed = 3865087035
+random_seed = 1946600235
 inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
+debug_enabled = true
+debug_mode = 1
+debug_scale = 0.965
 debug_color = Color(1, 1, 1, 1)
 debug_modulate_by = ""
 title = "Grid"
@@ -38,15 +38,15 @@ trace = false
 [sub_resource type="Resource" id="Resource_1h62y"]
 script = ExtResource("3_pkajt")
 nodes = Array[Dictionary]([{
-"name": &"id_0173_grid",
-"position_offset": Vector2(280, -160),
+"name": &"id_0187_grid",
+"position_offset": Vector2(300, -240),
 "settings": SubResource("Resource_s3erd"),
 "template": "grid"
 }])
 conns = Array[Dictionary]([])
 view_zoom = 0.683013
 view_offset = Vector2(-124.186, -335.495)
-new_name_counter = 174
+new_name_counter = 187
 in_params = Array[ExtResource("2_ldm7r")]([SubResource("Resource_pkajt")])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 

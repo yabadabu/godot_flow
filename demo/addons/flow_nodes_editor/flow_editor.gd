@@ -687,7 +687,7 @@ func evalGraph():
 		
 		if node.settings.inspect_enabled:
 			data_inspector.refresh()
-		node.setupDebugDraw()
+		node.draw_debug.setupDraw()
 		var time_node_ends = Time.get_ticks_usec()
 		
 		if dump_performance:
