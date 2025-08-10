@@ -1,0 +1,125 @@
+[gd_scene load_steps=6 format=3 uid="uid://gr6wud0eqi2g"]
+
+[ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_k33i0"]
+[ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="2_0ulet"]
+[ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="3_i06iv"]
+
+[sub_resource type="Resource" id="Resource_u7ew1"]
+script = ExtResource("3_i06iv")
+data = {
+"links": [{
+"from_node": &"id_0003_sample_mesh",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0006_self_pruning",
+"to_port": 0
+}, {
+"from_node": &"id_0006_self_pruning",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0007_filter",
+"to_port": 0
+}],
+"min_pos": Vector2(220, 260),
+"nodes": [{
+"args_port": {},
+"name": &"id_0003_sample_mesh",
+"position": Vector2(0, 0),
+"settings": {
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 1,
+"debug_modulate_by": "",
+"debug_scale": 0.37,
+"enabled": true,
+"inspect_enabled": false,
+"num_samples": 4374,
+"random_seed": 1407499193,
+"title": "Sample Mesh",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "sample_mesh"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0006_self_pruning",
+"position": Vector2(160, 0),
+"settings": {
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_scale": 1.0,
+"enabled": true,
+"inspect_enabled": false,
+"keep_self_intersections": false,
+"random_seed": 1138506605,
+"title": "Self Pruning",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "self_pruning"
+}, {
+"args_port": {
+"In A": {
+"connected": true,
+"port": 0
+},
+"In B": {
+"connected": false,
+"port": 1
+}
+},
+"name": &"id_0007_filter",
+"position": Vector2(400, 60),
+"settings": {
+"condition": 2,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_scale": 1.0,
+"enabled": true,
+"in_nameA": "Pitch",
+"in_nameB": "20",
+"inspect_enabled": false,
+"random_seed": 1383308309,
+"threshold": 0.1,
+"title": "Filter",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "filter"
+}],
+"type": "flow_graph_nodes",
+"version": 1
+}
+view_zoom = 1.1
+view_offset = Vector2(486.7, -86.1)
+new_name_counter = 8
+in_params = Array[ExtResource("2_0ulet")]([])
+metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
+
+[sub_resource type="TextMesh" id="TextMesh_12aa2"]
+text = "ABC"
+font_size = 24
+pixel_size = 0.9558
+curve_step = 0.4
+depth = 2.875
+
+[node name="DemoMeshScan" type="Node3D"]
+
+[node name="FlowGraphNode3D" type="Node3D" parent="."]
+script = ExtResource("1_k33i0")
+graph = SubResource("Resource_u7ew1")
+refresh_inputs = Callable()
+metadata/_custom_type_script = "uid://d1krtmb1urldl"
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.999991, 0.00304993, -0.00291681, -0.00302737, 0.999966, 0.00770941, 0.00294023, -0.00770052, 0.999966, 0, 0, 0)
+mesh = SubResource("TextMesh_12aa2")

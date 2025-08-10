@@ -1,0 +1,210 @@
+@tool
+extends FlowNodeBase
+
+const min_interval := 0.1
+
+func _init():
+	meta_node = {
+		"title" : "Sample Mesh",
+		"settings" : SampleMeshNodeSettings,
+		"ins" : [],
+		"outs" : [{ "label" : "Out" }],
+		#"trace" : true
+	}
+	
+func findNodesOfType(root: Node, type_name: String) -> Array[Node]:
+	var found_nodes: Array[Node] = []
+	
+	# Check if current node matches
+	if root.get_class() == type_name:
+		found_nodes.append(root)
+	
+	var required_meta_bool = false # settings.get( "required_meta_bool" )
+	
+	# Recursively check children
+	for child in root.get_children():
+		if !required_meta_bool or child.get_meta(required_meta_bool, false):
+			found_nodes.append_array(findNodesOfType(child, type_name))
+	
+	return found_nodes
+
+## Uniform surface sampling on a MeshInstance3D
+## - If `n` > 0, returns exactly n points.
+## - Else if `density` > 0, returns round(total_area * density) points.
+## Returns: { points: PackedVector3Array, normals: PackedVector3Array }
+static func sampleMeshSurface(mi: MeshInstance3D, n: int = -1, density: float = -1.0, seed: int = 0) -> Dictionary:
+	var mesh := mi.mesh
+	assert(mesh != null)
+
+	var rng := RandomNumberGenerator.new()
+	if seed != 0:
+		rng.seed = seed
+
+	var gt := mi.global_transform
+
+	# Precompute triangles (in world space) and weights (areas)
+	var tris := []            # array of [a,b,c] (Vector3s)
+	var tri_normals := []     # per-triangle unit normals
+	var tri_areas := PackedFloat32Array()
+	var total_area := 0.0
+
+	for s in mesh.get_surface_count():
+		var arrs := mesh.surface_get_arrays(s)
+		var vtx : PackedVector3Array = arrs[Mesh.ARRAY_VERTEX]
+		var nrm : PackedVector3Array = arrs[Mesh.ARRAY_NORMAL]
+		var idx : PackedInt32Array = arrs[Mesh.ARRAY_INDEX]
+
+		# If the surface is non-indexed, synthesize indices 0..N-1 (already triangles in Godot)
+		if idx.is_empty():
+			idx = PackedInt32Array()
+			idx.resize(vtx.size())
+			for i in range(vtx.size()):
+				idx[i] = i
+
+		# Walk triangles
+		for i in range(0, idx.size(), 3):
+			var a := gt * vtx[idx[i + 0]]
+			var b := gt * vtx[idx[i + 1]]
+			var c := gt * vtx[idx[i + 2]]
+
+			var area := 0.5 * ((b - a).cross(c - a)).length()
+			if area <= 0.0:
+				continue
+
+			tris.append([a, b, c])
+			tri_areas.push_back(area)
+			total_area += area
+
+			# Per-triangle normal (world space)
+			tri_normals.append(((b - a).cross(c - a)).normalized())
+
+	# Decide sample count
+	if n <= 0 and density > 0.0:
+		n = int(round(total_area * density))
+	if n <= 0:
+		return { "points": PackedVector3Array(), "normals": PackedVector3Array() }
+
+	# Cumulative distribution over triangle areas
+	var cdf := PackedFloat32Array()
+	cdf.resize(tri_areas.size())
+	var run := 0.0
+	for i in range(tri_areas.size()):
+		run += tri_areas[i]
+		cdf[i] = run
+
+	# Helper: binary search CDF
+	var pick_triangle = func(t: float) -> int:
+		var lo := 0
+		var hi := cdf.size() - 1
+		while lo < hi:
+			var mid := (lo + hi) >> 1
+			if t <= cdf[mid]:
+				hi = mid
+			else:
+				lo = mid + 1
+		return lo
+
+	# Sample points (barycentric: sqrt trick for uniform)
+	var out_pts := PackedVector3Array()
+	var out_nrm := PackedVector3Array()
+	out_pts.resize(n)
+	out_nrm.resize(n)
+
+	for k in range(n):
+		var r := rng.randf() * total_area
+		var ti := pick_triangle.call(r)
+		var tri = tris[ti]
+		var a: Vector3 = tri[0]
+		var b: Vector3 = tri[1]
+		var c: Vector3 = tri[2]
+
+		# Uniform barycentric sampling
+		var u := sqrt(rng.randf())
+		var v := rng.randf()
+		var w0 := 1.0 - u
+		var w1 := u * (1.0 - v)
+		var w2 := u * v
+
+		var p := a * w0 + b * w1 + c * w2
+
+		out_pts[k] = p
+		out_nrm[k] = tri_normals[ti]  # (fast) per-triangle normal
+
+	return { "points": out_pts, "normals": out_nrm }
+
+## Build a stable orthonormal Basis from a surface normal.
+## - `normal` is the axis you want to align (default aligns to +Z).
+## - `up` is your preferred up; a safe fallback is chosen if nearly parallel.
+## - `axis` can be "z" (default), "y", or "x" for which axis the normal should align to.
+static func basis_from_normal(normal: Vector3, up: Vector3 = Vector3.UP, axis: String = "z") -> Basis:
+	var n := normal.normalized()
+	if n.length() == 0.0 or not n.is_finite():
+		return Basis.IDENTITY
+
+	# Pick a safe up if nearly parallel to n
+	var safe_up := up
+	if abs(n.dot(safe_up)) > 0.999: # ~parallel
+		# pick the axis least aligned with n
+		safe_up = Vector3.UP if (abs(n.y) < 0.9) else Vector3.RIGHT
+
+	# Build tangent/bitangent
+	var t := safe_up.cross(n).normalized()    # tangent
+	var b := n.cross(t)                       # bitangent; already unit-length if t,n are
+
+	var basis: Basis
+	match axis:
+		"x":
+			basis = Basis(n, t, b)            # X=n, Y=t, Z=b
+		"y":
+			basis = Basis(t, n, b)            # X=t, Y=n, Z=b
+		_:
+			basis = Basis(t, b, n)            # X=t, Y=b, Z=n (default: Z=n)
+
+	return basis.orthonormalized()
+
+func execute( ctx : FlowData.EvaluationContext ):
+	
+	var root = EditorInterface.get_edited_scene_root()
+	if not root:
+		return null
+		
+	var trace := settings.trace
+		
+	var nodes = findNodesOfType(root, "MeshInstance3D")
+
+	var output := FlowData.Data.new()
+	output.addCommonStreams( 0 )
+	var spos := output.getVector3Container( FlowData.AttrPosition )
+	var srot := output.getVector3Container( FlowData.AttrRotation )
+	
+	#var uniform_interval = getSettingValue( ctx, "uniform_interval" )
+	#if uniform_interval < min_interval:
+		#uniform_interval = min_interval
+		#settings.uniform_interval = uniform_interval
+
+	var num_samples = getSettingValue(ctx, "num_samples" )
+
+	for node in nodes:
+		var mesh : Mesh = node.mesh
+		if mesh == null:
+			continue
+		var ans = sampleMeshSurface( node, num_samples, -1.0, settings.random_seed )
+		var points : PackedVector3Array = ans.points
+		var normals : PackedVector3Array = ans.normals
+		var num_points := points.size()
+		var base := spos.size()			
+		spos.resize( base + num_points )
+		srot.resize( base + num_points )
+		var up := Vector3(0,1,0)
+		for idx in range( num_points ):
+			spos[base + idx] = points[idx]
+			var n := normals[idx]
+			srot[base + idx] = FlowData.basisToEuler( basis_from_normal( n ) )
+				
+	# All the samples have the same size
+	var ssize := output.getVector3Container( FlowData.AttrSize )
+	ssize.resize( spos.size() )
+	var sample_size = Vector3.ONE
+	ssize.fill(sample_size)
+
+	set_output( 0, output )
