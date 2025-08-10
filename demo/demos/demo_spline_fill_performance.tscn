@@ -32,6 +32,7 @@ nodes = Array[Dictionary]([{
 "template": "sample_spline"
 }])
 conns = Array[Dictionary]([])
+data = {}
 view_zoom = 0.909092
 view_offset = Vector2(-270.891, -258.7)
 new_name_counter = 36
@@ -52,6 +53,7 @@ point_count = 12
 [node name="FlowGraphNode3D" type="Node3D" parent="."]
 script = ExtResource("1_yfg15")
 graph = SubResource("Resource_ahfh6")
+refresh_inputs = Callable()
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
 
 [node name="Path3D" type="Path3D" parent="."]

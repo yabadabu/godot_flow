@@ -26,7 +26,7 @@ title = "Transform"
 enabled = true
 trace = false
 
-[sub_resource type="Resource" id="Resource_2h21p"]
+[sub_resource type="Resource" id="Resource_a1se2"]
 resource_name = "Sample Spline Settings"
 script = ExtResource("1_bd8sb")
 uniform_interval = 1.94
@@ -52,18 +52,83 @@ nodes = Array[Dictionary]([{
 "settings": SubResource("Resource_1xbvu"),
 "template": "transform"
 }, {
-"name": &"id_0001_sample_spline",
+"name": &"id_0003_sample_spline",
 "position_offset": Vector2(40, 140),
-"settings": SubResource("Resource_2h21p"),
+"settings": SubResource("Resource_a1se2"),
 "template": "sample_spline"
 }])
 conns = Array[Dictionary]([{
-"from_node": &"id_0001_sample_spline",
+"from_node": &"id_0003_sample_spline",
 "from_port": 0,
 "keep_alive": false,
 "to_node": &"id_0002_transform",
 "to_port": 0
 }])
+data = {
+"links": [{
+"from_node": &"id_0003_sample_spline",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0002_transform",
+"to_port": 0
+}],
+"min_pos": Vector2(40, 140),
+"nodes": [{
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0002_transform",
+"position": Vector2(280, 0),
+"settings": {
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_scale": 1.0,
+"enabled": true,
+"inspect_enabled": false,
+"offset_max": Vector3(0, 0, 0),
+"offset_min": Vector3(0, 0, 0),
+"random_seed": 2046638687,
+"rotation_max": Vector3(0, 360, 0),
+"rotation_min": Vector3(0, 0, -0.555),
+"scale_max": Vector3(1, 1, 1),
+"scale_min": Vector3(1, 1, 1),
+"title": "Transform",
+"trace": false,
+"uniform_scale": true
+},
+"show_disconnected_inputs": false,
+"template": "transform"
+}, {
+"args_port": {},
+"name": &"id_0003_sample_spline",
+"position": Vector2(0, 0),
+"settings": {
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_scale": 1.0,
+"distance_attribute": "distance",
+"enabled": true,
+"fill_curve": false,
+"inspect_enabled": false,
+"random_seed": 2842677187,
+"required_meta_bool": &"",
+"title": "Sample Spline",
+"trace": false,
+"uniform_interval": 1.94
+},
+"show_disconnected_inputs": false,
+"template": "sample_spline"
+}],
+"type": "flow_graph_nodes",
+"version": 1
+}
 view_zoom = 0.957918
 view_offset = Vector2(-158.332, -307.405)
 new_name_counter = 1

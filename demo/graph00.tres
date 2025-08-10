@@ -7,8 +7,15 @@
 script = ExtResource("1_i7hbt")
 nodes = Array[Dictionary]([])
 conns = Array[Dictionary]([])
-view_zoom = 0.879408
-view_offset = Vector2(-208.129, -84.48)
+data = {
+"links": [],
+"min_pos": null,
+"nodes": [],
+"type": "flow_graph_nodes",
+"version": 1
+}
+view_zoom = 0.496403
+view_offset = Vector2(-263.385, -169.578)
 new_name_counter = 24
 in_params = Array[ExtResource("1_rvt80")]([])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"

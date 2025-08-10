@@ -535,454 +535,454 @@ trace = false
 resource_local_to_scene = true
 script = ExtResource("4_2jbe2")
 nodes = Array[Dictionary]([{
-"name": &"id_0106_math_op",
+"name": &"id_0091_math_op",
 "position_offset": Vector2(370, -230),
 "settings": SubResource("Resource_4j7uw"),
 "template": "math_op"
 }, {
-"name": &"id_0107_add_attribute",
+"name": &"id_0092_add_attribute",
 "position_offset": Vector2(510, -230),
 "settings": SubResource("Resource_ol2su"),
 "template": "add_attribute"
 }, {
-"name": &"id_0108_math_op",
+"name": &"id_0093_math_op",
 "position_offset": Vector2(660, -230),
 "settings": SubResource("Resource_syw2u"),
 "template": "math_op"
 }, {
-"name": &"id_0109_add_attribute",
+"name": &"id_0094_add_attribute",
 "position_offset": Vector2(800, -230),
 "settings": SubResource("Resource_6s8jo"),
 "template": "add_attribute"
 }, {
-"name": &"id_0110_sort",
+"name": &"id_0095_sort",
 "position_offset": Vector2(1110, -230),
 "settings": SubResource("Resource_pf313"),
 "template": "sort"
 }, {
-"name": &"id_0111_math_op",
+"name": &"id_0096_math_op",
 "position_offset": Vector2(970, -230),
 "settings": SubResource("Resource_f6aqs"),
 "template": "math_op"
 }, {
-"name": &"id_0112_math_op",
+"name": &"id_0097_math_op",
 "position_offset": Vector2(1240, -230),
 "settings": SubResource("Resource_xt6rs"),
 "template": "math_op"
 }, {
-"name": &"id_0113_add_attribute",
+"name": &"id_0098_add_attribute",
 "position_offset": Vector2(200, -110),
 "settings": SubResource("Resource_4k8gr"),
 "template": "add_attribute"
 }, {
-"name": &"id_0114_math_op",
+"name": &"id_0099_math_op",
 "position_offset": Vector2(360, -100),
 "settings": SubResource("Resource_n1ipx"),
 "template": "math_op"
 }, {
-"name": &"id_0115_add_attribute",
+"name": &"id_0100_add_attribute",
 "position_offset": Vector2(200, -230),
 "settings": SubResource("Resource_2vt0m"),
 "template": "add_attribute"
 }, {
-"name": &"id_0116_math_op",
+"name": &"id_0101_math_op",
 "position_offset": Vector2(360, 820),
 "settings": SubResource("Resource_byowy"),
 "template": "math_op"
 }, {
-"name": &"id_0117_spawn_scenes",
+"name": &"id_0102_spawn_scenes",
 "position_offset": Vector2(840, 980),
 "settings": SubResource("Resource_xl81d"),
 "template": "spawn_scenes"
 }, {
-"name": &"id_0118_math_op",
+"name": &"id_0103_math_op",
 "position_offset": Vector2(620, 920),
 "settings": SubResource("Resource_87sea"),
 "template": "math_op"
 }, {
-"name": &"id_0119_sample_spline",
+"name": &"id_0104_sample_spline",
 "position_offset": Vector2(-100, 100),
 "settings": SubResource("Resource_euihk"),
 "template": "sample_spline"
 }, {
-"name": &"id_0120_select",
+"name": &"id_0105_select",
 "position_offset": Vector2(400, 520),
 "settings": SubResource("Resource_4utxu"),
 "template": "select"
 }, {
-"name": &"id_0121_substract",
+"name": &"id_0106_substract",
 "position_offset": Vector2(1240, 640),
 "settings": SubResource("Resource_yalli"),
 "template": "substract"
 }, {
-"name": &"id_0122_filter",
+"name": &"id_0107_filter",
 "position_offset": Vector2(1060, 340),
 "settings": SubResource("Resource_8qpq4"),
 "template": "filter"
 }, {
-"name": &"id_0123_math_op",
+"name": &"id_0108_math_op",
 "position_offset": Vector2(1280, 200),
 "settings": SubResource("Resource_rp5rq"),
 "template": "math_op"
 }, {
-"name": &"id_0125_distance",
+"name": &"id_0109_distance",
 "position_offset": Vector2(620, 80),
 "settings": SubResource("Resource_fxqdy"),
 "template": "distance"
 }, {
-"name": &"id_0126_noise",
+"name": &"id_0110_noise",
 "position_offset": Vector2(960, 20),
 "settings": SubResource("Resource_1kwg4"),
 "template": "noise"
 }, {
-"name": &"id_0127_merge",
+"name": &"id_0111_merge",
 "position_offset": Vector2(900, 540),
 "settings": SubResource("Resource_2vprb"),
 "template": "merge"
 }, {
-"name": &"id_0128_add_attribute",
+"name": &"id_0112_add_attribute",
 "position_offset": Vector2(740.869, 499.72),
 "settings": SubResource("Resource_lg74x"),
 "template": "add_attribute"
 }, {
-"name": &"id_0129_add_attribute",
+"name": &"id_0113_add_attribute",
 "position_offset": Vector2(720, 600),
 "settings": SubResource("Resource_5cp38"),
 "template": "add_attribute"
 }, {
-"name": &"id_0130_add_attribute",
+"name": &"id_0114_add_attribute",
 "position_offset": Vector2(740, 320),
 "settings": SubResource("Resource_luhre"),
 "template": "add_attribute"
 }, {
-"name": &"id_0131_sample_spline",
+"name": &"id_0115_sample_spline",
 "position_offset": Vector2(40, 580),
 "settings": SubResource("Resource_dlhps"),
 "template": "sample_spline"
 }, {
-"name": &"id_0132_scan_nodes",
+"name": &"id_0116_scan_nodes",
 "position_offset": Vector2(60, 820),
 "settings": SubResource("Resource_3n10b"),
 "template": "scan_nodes"
 }, {
-"name": &"id_0124_self_pruning",
+"name": &"id_0117_self_pruning",
 "position_offset": Vector2(1400, 520),
 "settings": SubResource("Resource_afs1c"),
 "template": "self_pruning"
 }])
 conns = Array[Dictionary]([{
-"from_node": &"id_0131_sample_spline",
+"from_node": &"id_0115_sample_spline",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0120_select",
+"to_node": &"id_0105_select",
 "to_port": 0
 }, {
-"from_node": &"id_0132_scan_nodes",
+"from_node": &"id_0116_scan_nodes",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0116_math_op",
+"to_node": &"id_0101_math_op",
 "to_port": 0
 }, {
-"from_node": &"id_0116_math_op",
+"from_node": &"id_0101_math_op",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0118_math_op",
+"to_node": &"id_0103_math_op",
 "to_port": 0
 }, {
-"from_node": &"id_0118_math_op",
+"from_node": &"id_0103_math_op",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0117_spawn_scenes",
+"to_node": &"id_0102_spawn_scenes",
 "to_port": 0
 }, {
-"from_node": &"id_0119_sample_spline",
+"from_node": &"id_0104_sample_spline",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0113_add_attribute",
+"to_node": &"id_0098_add_attribute",
 "to_port": 0
 }, {
-"from_node": &"id_0113_add_attribute",
+"from_node": &"id_0098_add_attribute",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0114_math_op",
+"to_node": &"id_0099_math_op",
 "to_port": 0
 }, {
-"from_node": &"id_0119_sample_spline",
+"from_node": &"id_0104_sample_spline",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0115_add_attribute",
+"to_node": &"id_0100_add_attribute",
 "to_port": 0
 }, {
-"from_node": &"id_0115_add_attribute",
+"from_node": &"id_0100_add_attribute",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0106_math_op",
+"to_node": &"id_0091_math_op",
 "to_port": 0
 }, {
-"from_node": &"id_0111_math_op",
+"from_node": &"id_0096_math_op",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0110_sort",
+"to_node": &"id_0095_sort",
 "to_port": 0
 }, {
-"from_node": &"id_0106_math_op",
+"from_node": &"id_0091_math_op",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0107_add_attribute",
+"to_node": &"id_0092_add_attribute",
 "to_port": 0
 }, {
-"from_node": &"id_0107_add_attribute",
+"from_node": &"id_0092_add_attribute",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0093_math_op",
+"to_port": 0
+}, {
+"from_node": &"id_0093_math_op",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0094_add_attribute",
+"to_port": 0
+}, {
+"from_node": &"id_0094_add_attribute",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0096_math_op",
+"to_port": 0
+}, {
+"from_node": &"id_0095_sort",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0097_math_op",
+"to_port": 0
+}, {
+"from_node": &"id_0102_spawn_scenes",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0106_substract",
+"to_port": 1
+}, {
+"from_node": &"id_0105_select",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0109_distance",
+"to_port": 0
+}, {
+"from_node": &"id_0104_sample_spline",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0109_distance",
+"to_port": 1
+}, {
+"from_node": &"id_0114_add_attribute",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0107_filter",
+"to_port": 1
+}, {
+"from_node": &"id_0107_filter",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0106_substract",
+"to_port": 0
+}, {
+"from_node": &"id_0109_distance",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0110_noise",
+"to_port": 0
+}, {
+"from_node": &"id_0110_noise",
 "from_port": 0,
 "keep_alive": false,
 "to_node": &"id_0108_math_op",
 "to_port": 0
 }, {
+"from_node": &"id_0109_distance",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0108_math_op",
+"to_port": 1
+}, {
 "from_node": &"id_0108_math_op",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0109_add_attribute",
+"to_node": &"id_0107_filter",
 "to_port": 0
 }, {
-"from_node": &"id_0109_add_attribute",
+"from_node": &"id_0112_add_attribute",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0111_math_op",
+"to_node": &"id_0111_merge",
 "to_port": 0
 }, {
-"from_node": &"id_0110_sort",
+"from_node": &"id_0113_add_attribute",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0112_math_op",
-"to_port": 0
-}, {
-"from_node": &"id_0117_spawn_scenes",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0121_substract",
+"to_node": &"id_0111_merge",
 "to_port": 1
 }, {
-"from_node": &"id_0120_select",
+"from_node": &"id_0106_substract",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0125_distance",
-"to_port": 0
-}, {
-"from_node": &"id_0119_sample_spline",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0125_distance",
-"to_port": 1
-}, {
-"from_node": &"id_0130_add_attribute",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0122_filter",
-"to_port": 1
-}, {
-"from_node": &"id_0122_filter",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0121_substract",
-"to_port": 0
-}, {
-"from_node": &"id_0125_distance",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0126_noise",
-"to_port": 0
-}, {
-"from_node": &"id_0126_noise",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0123_math_op",
-"to_port": 0
-}, {
-"from_node": &"id_0125_distance",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0123_math_op",
-"to_port": 1
-}, {
-"from_node": &"id_0123_math_op",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0122_filter",
-"to_port": 0
-}, {
-"from_node": &"id_0128_add_attribute",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0127_merge",
-"to_port": 0
-}, {
-"from_node": &"id_0129_add_attribute",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0127_merge",
-"to_port": 1
-}, {
-"from_node": &"id_0121_substract",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0124_self_pruning",
+"to_node": &"id_0117_self_pruning",
 "to_port": 0
 }])
 data = {
 "links": [{
-"from_node": &"id_0131_sample_spline",
+"from_node": &"id_0115_sample_spline",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0120_select",
+"to_node": &"id_0105_select",
 "to_port": 0
 }, {
-"from_node": &"id_0132_scan_nodes",
+"from_node": &"id_0116_scan_nodes",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0116_math_op",
+"to_node": &"id_0101_math_op",
 "to_port": 0
 }, {
-"from_node": &"id_0116_math_op",
+"from_node": &"id_0101_math_op",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0118_math_op",
+"to_node": &"id_0103_math_op",
 "to_port": 0
 }, {
-"from_node": &"id_0118_math_op",
+"from_node": &"id_0103_math_op",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0117_spawn_scenes",
+"to_node": &"id_0102_spawn_scenes",
 "to_port": 0
 }, {
-"from_node": &"id_0119_sample_spline",
+"from_node": &"id_0104_sample_spline",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0113_add_attribute",
+"to_node": &"id_0098_add_attribute",
 "to_port": 0
 }, {
-"from_node": &"id_0113_add_attribute",
+"from_node": &"id_0098_add_attribute",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0114_math_op",
+"to_node": &"id_0099_math_op",
 "to_port": 0
 }, {
-"from_node": &"id_0119_sample_spline",
+"from_node": &"id_0104_sample_spline",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0115_add_attribute",
+"to_node": &"id_0100_add_attribute",
 "to_port": 0
 }, {
-"from_node": &"id_0115_add_attribute",
+"from_node": &"id_0100_add_attribute",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0106_math_op",
+"to_node": &"id_0091_math_op",
 "to_port": 0
 }, {
-"from_node": &"id_0111_math_op",
+"from_node": &"id_0096_math_op",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0110_sort",
+"to_node": &"id_0095_sort",
 "to_port": 0
 }, {
-"from_node": &"id_0106_math_op",
+"from_node": &"id_0091_math_op",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0107_add_attribute",
+"to_node": &"id_0092_add_attribute",
 "to_port": 0
 }, {
-"from_node": &"id_0107_add_attribute",
+"from_node": &"id_0092_add_attribute",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0093_math_op",
+"to_port": 0
+}, {
+"from_node": &"id_0093_math_op",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0094_add_attribute",
+"to_port": 0
+}, {
+"from_node": &"id_0094_add_attribute",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0096_math_op",
+"to_port": 0
+}, {
+"from_node": &"id_0095_sort",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0097_math_op",
+"to_port": 0
+}, {
+"from_node": &"id_0102_spawn_scenes",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0106_substract",
+"to_port": 1
+}, {
+"from_node": &"id_0105_select",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0109_distance",
+"to_port": 0
+}, {
+"from_node": &"id_0104_sample_spline",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0109_distance",
+"to_port": 1
+}, {
+"from_node": &"id_0114_add_attribute",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0107_filter",
+"to_port": 1
+}, {
+"from_node": &"id_0107_filter",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0106_substract",
+"to_port": 0
+}, {
+"from_node": &"id_0109_distance",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0110_noise",
+"to_port": 0
+}, {
+"from_node": &"id_0110_noise",
 "from_port": 0,
 "keep_alive": false,
 "to_node": &"id_0108_math_op",
 "to_port": 0
 }, {
+"from_node": &"id_0109_distance",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0108_math_op",
+"to_port": 1
+}, {
 "from_node": &"id_0108_math_op",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0109_add_attribute",
+"to_node": &"id_0107_filter",
 "to_port": 0
 }, {
-"from_node": &"id_0109_add_attribute",
+"from_node": &"id_0112_add_attribute",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0111_math_op",
+"to_node": &"id_0111_merge",
 "to_port": 0
 }, {
-"from_node": &"id_0110_sort",
+"from_node": &"id_0113_add_attribute",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0112_math_op",
-"to_port": 0
-}, {
-"from_node": &"id_0117_spawn_scenes",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0121_substract",
+"to_node": &"id_0111_merge",
 "to_port": 1
 }, {
-"from_node": &"id_0120_select",
+"from_node": &"id_0106_substract",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0125_distance",
-"to_port": 0
-}, {
-"from_node": &"id_0119_sample_spline",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0125_distance",
-"to_port": 1
-}, {
-"from_node": &"id_0130_add_attribute",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0122_filter",
-"to_port": 1
-}, {
-"from_node": &"id_0122_filter",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0121_substract",
-"to_port": 0
-}, {
-"from_node": &"id_0125_distance",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0126_noise",
-"to_port": 0
-}, {
-"from_node": &"id_0126_noise",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0123_math_op",
-"to_port": 0
-}, {
-"from_node": &"id_0125_distance",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0123_math_op",
-"to_port": 1
-}, {
-"from_node": &"id_0123_math_op",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0122_filter",
-"to_port": 0
-}, {
-"from_node": &"id_0128_add_attribute",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0127_merge",
-"to_port": 0
-}, {
-"from_node": &"id_0129_add_attribute",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0127_merge",
-"to_port": 1
-}, {
-"from_node": &"id_0121_substract",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0124_self_pruning",
+"to_node": &"id_0117_self_pruning",
 "to_port": 0
 }],
 "min_pos": Vector2(-100, -230),
@@ -997,7 +997,7 @@ data = {
 "port": 1
 }
 },
-"name": &"id_0106_math_op",
+"name": &"id_0091_math_op",
 "position": Vector2(470, 0),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
@@ -1024,7 +1024,7 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0107_add_attribute",
+"name": &"id_0092_add_attribute",
 "position": Vector2(610, 0),
 "settings": {
 "cte_bool": false,
@@ -1059,7 +1059,7 @@ data = {
 "port": 1
 }
 },
-"name": &"id_0108_math_op",
+"name": &"id_0093_math_op",
 "position": Vector2(760, 0),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
@@ -1086,7 +1086,7 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0109_add_attribute",
+"name": &"id_0094_add_attribute",
 "position": Vector2(900, 0),
 "settings": {
 "cte_bool": false,
@@ -1117,7 +1117,7 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0110_sort",
+"name": &"id_0095_sort",
 "position": Vector2(1210, 0),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
@@ -1146,7 +1146,7 @@ data = {
 "port": 1
 }
 },
-"name": &"id_0111_math_op",
+"name": &"id_0096_math_op",
 "position": Vector2(1070, 0),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
@@ -1177,7 +1177,7 @@ data = {
 "port": 1
 }
 },
-"name": &"id_0112_math_op",
+"name": &"id_0097_math_op",
 "position": Vector2(1340, 0),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
@@ -1204,7 +1204,7 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0113_add_attribute",
+"name": &"id_0098_add_attribute",
 "position": Vector2(300, 120),
 "settings": {
 "cte_bool": false,
@@ -1239,7 +1239,7 @@ data = {
 "port": 1
 }
 },
-"name": &"id_0114_math_op",
+"name": &"id_0099_math_op",
 "position": Vector2(460, 130),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
@@ -1266,7 +1266,7 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0115_add_attribute",
+"name": &"id_0100_add_attribute",
 "position": Vector2(300, 0),
 "settings": {
 "cte_bool": false,
@@ -1301,7 +1301,7 @@ data = {
 "port": 1
 }
 },
-"name": &"id_0116_math_op",
+"name": &"id_0101_math_op",
 "position": Vector2(460, 1050),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
@@ -1328,7 +1328,7 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0117_spawn_scenes",
+"name": &"id_0102_spawn_scenes",
 "position": Vector2(940, 1210),
 "settings": {
 "assign_attributes": {
@@ -1361,7 +1361,7 @@ data = {
 "port": 1
 }
 },
-"name": &"id_0118_math_op",
+"name": &"id_0103_math_op",
 "position": Vector2(720, 1150),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
@@ -1383,7 +1383,7 @@ data = {
 "template": "math_op"
 }, {
 "args_port": {},
-"name": &"id_0119_sample_spline",
+"name": &"id_0104_sample_spline",
 "position": Vector2(0, 330),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
@@ -1410,7 +1410,7 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0120_select",
+"name": &"id_0105_select",
 "position": Vector2(500, 750),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
@@ -1438,7 +1438,7 @@ data = {
 "port": 1
 }
 },
-"name": &"id_0121_substract",
+"name": &"id_0106_substract",
 "position": Vector2(1340, 870),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
@@ -1466,7 +1466,7 @@ data = {
 "port": 1
 }
 },
-"name": &"id_0122_filter",
+"name": &"id_0107_filter",
 "position": Vector2(1160, 570),
 "settings": {
 "condition": 2,
@@ -1497,7 +1497,7 @@ data = {
 "port": 1
 }
 },
-"name": &"id_0123_math_op",
+"name": &"id_0108_math_op",
 "position": Vector2(1380, 430),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
@@ -1528,7 +1528,7 @@ data = {
 "port": 1
 }
 },
-"name": &"id_0125_distance",
+"name": &"id_0109_distance",
 "position": Vector2(720, 310),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
@@ -1555,7 +1555,7 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0126_noise",
+"name": &"id_0110_noise",
 "position": Vector2(1060, 250),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
@@ -1586,7 +1586,7 @@ data = {
 "port": 1
 }
 },
-"name": &"id_0127_merge",
+"name": &"id_0111_merge",
 "position": Vector2(1000, 770),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
@@ -1609,7 +1609,7 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0128_add_attribute",
+"name": &"id_0112_add_attribute",
 "position": Vector2(840.869, 729.72),
 "settings": {
 "cte_bool": false,
@@ -1640,7 +1640,7 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0129_add_attribute",
+"name": &"id_0113_add_attribute",
 "position": Vector2(820, 830),
 "settings": {
 "cte_bool": false,
@@ -1671,7 +1671,7 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0130_add_attribute",
+"name": &"id_0114_add_attribute",
 "position": Vector2(840, 550),
 "settings": {
 "cte_bool": false,
@@ -1697,7 +1697,7 @@ data = {
 "template": "add_attribute"
 }, {
 "args_port": {},
-"name": &"id_0131_sample_spline",
+"name": &"id_0115_sample_spline",
 "position": Vector2(140, 810),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
@@ -1719,7 +1719,7 @@ data = {
 "template": "sample_spline"
 }, {
 "args_port": {},
-"name": &"id_0132_scan_nodes",
+"name": &"id_0116_scan_nodes",
 "position": Vector2(160, 1050),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
@@ -1747,7 +1747,7 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0124_self_pruning",
+"name": &"id_0117_self_pruning",
 "position": Vector2(1500, 750),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
@@ -1769,7 +1769,7 @@ data = {
 "version": 1
 }
 view_zoom = 0.970564
-view_offset = Vector2(892.061, 272.01)
+view_offset = Vector2(-19.939, 277.01)
 new_name_counter = 105
 in_params = Array[ExtResource("2_dxf0c")]([])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
