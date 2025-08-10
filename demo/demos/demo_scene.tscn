@@ -74,52 +74,52 @@ trace = false
 [sub_resource type="Resource" id="Resource_mssda"]
 script = ExtResource("6_4qc3i")
 nodes = Array[Dictionary]([{
-"name": &"id_0037_grid",
+"name": &"id_0106_grid",
 "position_offset": Vector2(20, 200),
 "settings": SubResource("Resource_dffkk"),
 "template": "grid"
 }, {
-"name": &"id_0038_transform",
+"name": &"id_0107_transform",
 "position_offset": Vector2(240, 180),
 "settings": SubResource("Resource_c1qst"),
 "template": "transform"
 }, {
-"name": &"id_0039_spawn_scenes",
+"name": &"id_0108_spawn_scenes",
 "position_offset": Vector2(500, 180),
 "settings": SubResource("Resource_ho47h"),
 "template": "spawn_scenes"
 }])
 conns = Array[Dictionary]([{
-"from_node": &"id_0038_transform",
+"from_node": &"id_0107_transform",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0039_spawn_scenes",
+"to_node": &"id_0108_spawn_scenes",
 "to_port": 0
 }, {
-"from_node": &"id_0037_grid",
+"from_node": &"id_0106_grid",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0038_transform",
+"to_node": &"id_0107_transform",
 "to_port": 0
 }])
 data = {
 "links": [{
-"from_node": &"id_0038_transform",
+"from_node": &"id_0107_transform",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0039_spawn_scenes",
+"to_node": &"id_0108_spawn_scenes",
 "to_port": 0
 }, {
-"from_node": &"id_0037_grid",
+"from_node": &"id_0106_grid",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0038_transform",
+"to_node": &"id_0107_transform",
 "to_port": 0
 }],
 "min_pos": Vector2(20, 180),
 "nodes": [{
 "args_port": {},
-"name": &"id_0037_grid",
+"name": &"id_0106_grid",
 "position": Vector2(0, 20),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
@@ -148,7 +148,7 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0038_transform",
+"name": &"id_0107_transform",
 "position": Vector2(220, 0),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
@@ -178,7 +178,7 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0039_spawn_scenes",
+"name": &"id_0108_spawn_scenes",
 "position": Vector2(480, 0),
 "settings": {
 "assign_attributes": {},
@@ -209,7 +209,7 @@ metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 
 [sub_resource type="Curve3D" id="Curve3D_ayuu8"]
 closed = true
-bake_interval = 1.94
+bake_interval = 0.94
 _data = {
 "points": PackedVector3Array(0, 0, 0, 0, 0, 0, -1.072, -0.055, -0.848, 0.0969775, 0.251062, -0.331849, -0.0969775, -0.251062, 0.331849, 0.20064, -0.0313487, 0.75344, 0.369206, -0.0504826, -0.0238729, -0.369206, 0.0504826, 0.0238729, -1.63264, -0.0485349, 1.67794, 0.26109, -0.0436706, 0.259869, -0.26109, 0.0436706, -0.259869, -2.64929, 0.195791, 1.27553, 0, 0, 0, 0, 0, 0, -2.53903, -0.0784302, -0.241544),
 "tilts": PackedFloat32Array(0, 0, 0, 0, 0)
@@ -222,7 +222,7 @@ point_count = 5
 data = PackedVector3Array(1, 0, 1, -1, 0, 1, 1, 0, -1, -1, 0, 1, -1, 0, -1, 1, 0, -1)
 
 [sub_resource type="Curve3D" id="Curve3D_1hm1i"]
-bake_interval = 1.94
+bake_interval = 0.94
 _data = {
 "points": PackedVector3Array(0, 0, 0, 0, 0, 0, 1.342, 0, 3.268, 1.112, 0, 0.213, -1.112, 0, -0.213, -0.708991, -0.0197018, 4.04708, 0, 0, 0, 0, 0, 0, -1.742, 0, 3.054),
 "tilts": PackedFloat32Array(0, 0, 0)
