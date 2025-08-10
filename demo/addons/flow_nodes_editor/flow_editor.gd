@@ -246,9 +246,8 @@ func getSelectedNodes() -> Array[GraphNode]:
 
 func deleteNodes( nodes : Array[GraphNode] ):
 	for node in nodes:
-		for n in range( 16 ):
+		for n in range( node.num_ports ):
 			remove_all_inputs_to_target_connection( node.name, n )
-			
 		gedit_nodes_by_name.erase( node.name )
 		gedit.remove_child( node )
 		node.queue_free()
@@ -302,6 +301,16 @@ func localToGraphCoords( local_coords : Vector2 ):
 
 func setOnOverInParam( row ):
 	popup_on_over_input = row
+	
+func refreshSignalsInputArgs( node ):
+	for child in node.get_children():
+		var row = child as FlowConnectorRow
+		if not row or not row.isParameter():
+			continue
+		if row.in_popup.get_connections().is_empty():
+			row.in_popup.connect( setOnOverInParam.bind( row ) )
+		if row.out_popup.get_connections().is_empty():
+			row.out_popup.connect( setOnOverInParam.bind( null ) )	
 
 func addNodeFromTemplate( node_template, node_name : String, settings = null ):
 	print( "addNode %s (%s : %s)" % [ node_template, node_name, str(settings) ])
@@ -335,13 +344,7 @@ func addNodeFromTemplate( node_template, node_name : String, settings = null ):
 	node.size = Vector2(32,32)
 	node.tooltip_text = meta.get( "tooltip", "" )
 	node.refreshFromSettings()
-	
-	for child in node.get_children():
-		var row = child as FlowConnectorRow
-		if not row or not row.isParameter():
-			continue
-		row.in_popup.connect( setOnOverInParam.bind( row ) )
-		row.out_popup.connect( setOnOverInParam.bind( null ) )
+	refreshSignalsInputArgs( node )
 	
 	gedit.add_child(node)
 	gedit_nodes_by_name[ node.name ] = node
@@ -461,8 +464,8 @@ func _on_in_popup_menu_pressed( id: int, row : FlowConnectorRow ) -> void:
 	if id == IDM_PROMOTE_TO_PARAMETER and row:
 		var node = row.getNode()
 		print( "Promoting to parameter %s.%s (%s)" % [ node.name, row.getInLabel().text, row.data ] )
-		var in_name = node.getMeta().title + " - " + row.data.in_label
-		registerAsParameter( in_name, row.data.in_type )
+		var in_name = node.getMeta().title + " - " + row.data.label
+		registerAsParameter( in_name, row.data.data_type )
 		# Instantiate the input
 		var new_input_node = _on_inputs_menu_id_pressed( current_resource.in_params.size() - 1 )
 		if new_input_node:
@@ -470,7 +473,7 @@ func _on_in_popup_menu_pressed( id: int, row : FlowConnectorRow ) -> void:
 			new_input_node.position_offset.x = node.position_offset.x - new_input_node.size.x - 40
 			new_input_node.position_offset.y -= new_input_node.size.y - 15
 			# Connect the input to the node
-			_on_graph_edit_connection_request( new_input_node.name, 0, node.name, row.data.in_index )
+			_on_graph_edit_connection_request( new_input_node.name, 0, node.name, row.data.port )
 		populatePopupInputsMenu()
 		
 

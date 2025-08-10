@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://bjgti3qpwaiwe"]
+[gd_scene load_steps=8 format=3 uid="uid://bjgti3qpwaiwe"]
 
 [ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_dc4sx"]
 [ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="2_ldm7r"]
@@ -6,6 +6,16 @@
 [ext_resource type="Script" uid="uid://dwtm2hr5nh78h" path="res://addons/flow_nodes_editor/nodes/grid_settings.gd" id="3_s3erd"]
 
 [sub_resource type="Resource" id="Resource_pkajt"]
+script = ExtResource("2_ldm7r")
+name = "Grid - Origin"
+data_type = 3
+cte_bool = false
+cte_int = 0
+cte_float = 0.0
+cte_vector = Vector3(0, 0, 0)
+cte_string = ""
+
+[sub_resource type="Resource" id="Resource_s3erd"]
 resource_name = "Grid Settings"
 script = ExtResource("3_s3erd")
 x = 3
@@ -14,7 +24,7 @@ z = 3
 step = Vector3(1, 1, 1)
 origin = Vector3(0, 0, 0)
 rotation = Vector3(0, 0, 0)
-random_seed = 1729314867
+random_seed = 2660677963
 inspect_enabled = false
 debug_enabled = false
 debug_mode = 0
@@ -28,16 +38,16 @@ trace = false
 [sub_resource type="Resource" id="Resource_1h62y"]
 script = ExtResource("3_pkajt")
 nodes = Array[Dictionary]([{
-"name": &"id_0158_grid",
-"position_offset": Vector2(377.159, -51.5193),
-"settings": SubResource("Resource_pkajt"),
+"name": &"id_0171_grid",
+"position_offset": Vector2(370.146, -233.517),
+"settings": SubResource("Resource_s3erd"),
 "template": "grid"
 }])
 conns = Array[Dictionary]([])
-view_zoom = 1.1
-view_offset = Vector2(59.8744, -246.671)
-new_name_counter = 158
-in_params = Array[ExtResource("2_ldm7r")]([])
+view_zoom = 0.683013
+view_offset = Vector2(-124.186, -335.495)
+new_name_counter = 172
+in_params = Array[ExtResource("2_ldm7r")]([SubResource("Resource_pkajt")])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 
 [node name="DemoGrid" type="Node3D"]
@@ -45,5 +55,8 @@ metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 [node name="FlowGraphNode3D" type="Node3D" parent="."]
 script = ExtResource("1_dc4sx")
 graph = SubResource("Resource_1h62y")
+args = {
+"Grid - Origin": Vector3(0.66, -0.685, 0)
+}
 refresh_inputs = Callable()
 metadata/_custom_type_script = "uid://d1krtmb1urldl"

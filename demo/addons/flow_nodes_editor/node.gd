@@ -296,7 +296,7 @@ func initFromScript():
 		for arg_name in args_ports_by_name:
 			var arg_port = args_ports_by_name[ arg_name ].port
 			var curr_connections = flow_editor.get_connected_sources( name, arg_port )
-			print( "Checking if %s is connected at port %d -> %d conns" % [ arg_name, arg_port, curr_connections.size() ] )
+			#print( "Checking if %s is connected at port %d -> %d conns" % [ arg_name, arg_port, curr_connections.size() ] )
 			if not curr_connections.is_empty():
 				connected_inputs_by_name[ arg_name ] = { "port" : arg_port, "conns" : curr_connections.duplicate() }
 				for old_conn in curr_connections:
@@ -396,6 +396,8 @@ func initFromScript():
 			var from_port = old_conn[1]
 			flow_editor.connect_nodes( from_node, from_port, name, new_port )
 		flow_editor.queueSave()
+	if flow_editor:
+		flow_editor.refreshSignalsInputArgs( self )
 	
 func refreshConnectionFlags( ):	
 	var editor = getEditor()
