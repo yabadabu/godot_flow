@@ -47,35 +47,35 @@ trace = false
 [resource]
 script = ExtResource("1_pwag0")
 nodes = Array[Dictionary]([{
-"name": &"id_0026_sample_spline",
+"name": &"id_0091_sample_spline",
 "position_offset": Vector2(-300, -20),
 "settings": SubResource("Resource_hlk1a"),
 "template": "sample_spline"
 }, {
-"name": &"id_0025_transform",
+"name": &"id_0092_transform",
 "position_offset": Vector2(140, -20),
 "settings": SubResource("Resource_6r1i8"),
 "template": "transform"
 }])
 conns = Array[Dictionary]([{
-"from_node": &"id_0026_sample_spline",
+"from_node": &"id_0091_sample_spline",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0025_transform",
+"to_node": &"id_0092_transform",
 "to_port": 0
 }])
 data = {
 "links": [{
-"from_node": &"id_0026_sample_spline",
+"from_node": &"id_0091_sample_spline",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0025_transform",
+"to_node": &"id_0092_transform",
 "to_port": 0
 }],
 "min_pos": Vector2(-300, -20),
 "nodes": [{
 "args_port": {},
-"name": &"id_0026_sample_spline",
+"name": &"id_0091_sample_spline",
 "position": Vector2(0, 0),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
@@ -102,7 +102,7 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0025_transform",
+"name": &"id_0092_transform",
 "position": Vector2(440, 0),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),

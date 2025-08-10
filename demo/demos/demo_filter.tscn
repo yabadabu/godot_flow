@@ -48,35 +48,35 @@ trace = false
 resource_local_to_scene = true
 script = ExtResource("4_om314")
 nodes = Array[Dictionary]([{
-"name": &"id_0008_grid",
+"name": &"id_0218_grid",
 "position_offset": Vector2(-20, 200),
 "settings": SubResource("Resource_sx5mj"),
 "template": "grid"
 }, {
-"name": &"id_0009_filter",
+"name": &"id_0219_filter",
 "position_offset": Vector2(180, 200),
 "settings": SubResource("Resource_om314"),
 "template": "filter"
 }])
 conns = Array[Dictionary]([{
-"from_node": &"id_0008_grid",
+"from_node": &"id_0218_grid",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0009_filter",
+"to_node": &"id_0219_filter",
 "to_port": 0
 }])
 data = {
 "links": [{
-"from_node": &"id_0008_grid",
+"from_node": &"id_0218_grid",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0009_filter",
+"to_node": &"id_0219_filter",
 "to_port": 0
 }],
 "min_pos": Vector2(-20, 200),
 "nodes": [{
 "args_port": {},
-"name": &"id_0008_grid",
+"name": &"id_0218_grid",
 "position": Vector2(0, 0),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
@@ -109,7 +109,7 @@ data = {
 "port": 1
 }
 },
-"name": &"id_0009_filter",
+"name": &"id_0219_filter",
 "position": Vector2(200, 0),
 "settings": {
 "condition": 0,

@@ -21,7 +21,7 @@ _data = {
 }
 point_count = 10
 
-[sub_resource type="Resource" id="Resource_udkk1"]
+[sub_resource type="Resource" id="Resource_0gfmn"]
 resource_name = "Math Op"
 script = ExtResource("5_ow8g4")
 operation = 0
@@ -39,7 +39,7 @@ title = "Math"
 enabled = true
 trace = false
 
-[sub_resource type="Resource" id="Resource_aw52y"]
+[sub_resource type="Resource" id="Resource_udkk1"]
 resource_name = "Select Settings"
 script = ExtResource("8_ahfh6")
 ratio = 0.01
@@ -54,7 +54,7 @@ title = "Select"
 enabled = true
 trace = false
 
-[sub_resource type="Resource" id="Resource_ow8g4"]
+[sub_resource type="Resource" id="Resource_tvg7p"]
 resource_name = "Math Op"
 script = ExtResource("5_ow8g4")
 operation = 6
@@ -72,7 +72,7 @@ title = "Math"
 enabled = true
 trace = false
 
-[sub_resource type="Resource" id="Resource_eyxb4"]
+[sub_resource type="Resource" id="Resource_82f8x"]
 resource_name = "Math Op"
 script = ExtResource("5_ow8g4")
 operation = 2
@@ -90,7 +90,7 @@ title = "Math"
 enabled = true
 trace = false
 
-[sub_resource type="Resource" id="Resource_tvg7p"]
+[sub_resource type="Resource" id="Resource_aw52y"]
 resource_name = "Noise Settings"
 script = ExtResource("7_qydfx")
 out_name = "dx"
@@ -108,7 +108,7 @@ title = "Noise"
 enabled = true
 trace = false
 
-[sub_resource type="Resource" id="Resource_0gfmn"]
+[sub_resource type="Resource" id="Resource_4ebyb"]
 resource_name = "Add Attribute"
 script = ExtResource("6_qydfx")
 name = "new_attr"
@@ -129,7 +129,7 @@ title = "Add Attribute"
 enabled = true
 trace = false
 
-[sub_resource type="Resource" id="Resource_82f8x"]
+[sub_resource type="Resource" id="Resource_k8ckv"]
 resource_name = "Select Settings"
 script = ExtResource("8_ahfh6")
 ratio = 0.227
@@ -144,7 +144,7 @@ title = "Select"
 enabled = true
 trace = false
 
-[sub_resource type="Resource" id="Resource_k8ckv"]
+[sub_resource type="Resource" id="Resource_pskb1"]
 resource_name = "Substract"
 script = ExtResource("10_udkk1")
 operation = 0
@@ -159,7 +159,7 @@ title = "Substract"
 enabled = true
 trace = false
 
-[sub_resource type="Resource" id="Resource_4ebyb"]
+[sub_resource type="Resource" id="Resource_un61s"]
 resource_name = "Transform Settings"
 script = ExtResource("9_0gfmn")
 offset_min = Vector3(0, 0, 0)
@@ -180,7 +180,7 @@ title = "Transform"
 enabled = true
 trace = false
 
-[sub_resource type="Resource" id="Resource_pskb1"]
+[sub_resource type="Resource" id="Resource_tcxb8"]
 resource_name = "Remove Attribute Settings"
 script = ExtResource("11_udkk1")
 names = Array[String](["distance", "position"])
@@ -196,7 +196,7 @@ title = "Remove Attributes"
 enabled = true
 trace = false
 
-[sub_resource type="Resource" id="Resource_0uiub"]
+[sub_resource type="Resource" id="Resource_1ped0"]
 resource_name = "Sample Spline Settings"
 script = ExtResource("4_0uiub")
 uniform_interval = 0.15
@@ -217,245 +217,245 @@ trace = false
 [sub_resource type="Resource" id="Resource_ahfh6"]
 script = ExtResource("4_ow8g4")
 nodes = Array[Dictionary]([{
-"name": &"id_0022_math_op",
+"name": &"id_0037_math_op",
 "position_offset": Vector2(1160, 340),
-"settings": SubResource("Resource_udkk1"),
+"settings": SubResource("Resource_0gfmn"),
 "template": "math_op"
 }, {
-"name": &"id_0024_select",
+"name": &"id_0038_select",
 "position_offset": Vector2(280, -280),
-"settings": SubResource("Resource_aw52y"),
+"settings": SubResource("Resource_udkk1"),
 "template": "select"
 }, {
-"name": &"id_0020_math_op",
+"name": &"id_0039_math_op",
 "position_offset": Vector2(660, 120),
-"settings": SubResource("Resource_ow8g4"),
-"template": "math_op"
-}, {
-"name": &"id_0006_math_op",
-"position_offset": Vector2(420, 120),
-"settings": SubResource("Resource_eyxb4"),
-"template": "math_op"
-}, {
-"name": &"id_0021_noise",
-"position_offset": Vector2(900, 340),
 "settings": SubResource("Resource_tvg7p"),
+"template": "math_op"
+}, {
+"name": &"id_0040_math_op",
+"position_offset": Vector2(420, 120),
+"settings": SubResource("Resource_82f8x"),
+"template": "math_op"
+}, {
+"name": &"id_0041_noise",
+"position_offset": Vector2(900, 340),
+"settings": SubResource("Resource_aw52y"),
 "template": "noise"
 }, {
-"name": &"id_0008_add_attribute",
+"name": &"id_0042_add_attribute",
 "position_offset": Vector2(220, 240),
-"settings": SubResource("Resource_0gfmn"),
+"settings": SubResource("Resource_4ebyb"),
 "template": "add_attribute"
 }, {
-"name": &"id_0023_select",
+"name": &"id_0043_select",
 "position_offset": Vector2(1340, 240),
-"settings": SubResource("Resource_82f8x"),
+"settings": SubResource("Resource_k8ckv"),
 "template": "select"
 }, {
-"name": &"id_0026_substract",
+"name": &"id_0044_substract",
 "position_offset": Vector2(1600, -220),
-"settings": SubResource("Resource_k8ckv"),
+"settings": SubResource("Resource_pskb1"),
 "template": "substract"
 }, {
-"name": &"id_0025_transform",
+"name": &"id_0045_transform",
 "position_offset": Vector2(440, -280),
-"settings": SubResource("Resource_4ebyb"),
+"settings": SubResource("Resource_un61s"),
 "template": "transform"
 }, {
-"name": &"id_0029_remove_attribute",
+"name": &"id_0046_remove_attribute",
 "position_offset": Vector2(698.282, -173.883),
-"settings": SubResource("Resource_pskb1"),
+"settings": SubResource("Resource_tcxb8"),
 "template": "remove_attribute"
 }, {
-"name": &"id_0002_sample_spline",
+"name": &"id_0047_sample_spline",
 "position_offset": Vector2(-60, 120),
-"settings": SubResource("Resource_0uiub"),
+"settings": SubResource("Resource_1ped0"),
 "template": "sample_spline"
 }])
 conns = Array[Dictionary]([{
-"from_node": &"id_0008_add_attribute",
+"from_node": &"id_0042_add_attribute",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0006_math_op",
+"to_node": &"id_0040_math_op",
 "to_port": 1
 }, {
-"from_node": &"id_0002_sample_spline",
+"from_node": &"id_0047_sample_spline",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0006_math_op",
+"to_node": &"id_0040_math_op",
 "to_port": 0
 }, {
-"from_node": &"id_0002_sample_spline",
+"from_node": &"id_0047_sample_spline",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0008_add_attribute",
+"to_node": &"id_0042_add_attribute",
 "to_port": 0
 }, {
-"from_node": &"id_0006_math_op",
+"from_node": &"id_0040_math_op",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0020_math_op",
+"to_node": &"id_0039_math_op",
 "to_port": 0
 }, {
-"from_node": &"id_0006_math_op",
+"from_node": &"id_0040_math_op",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0020_math_op",
+"to_node": &"id_0039_math_op",
 "to_port": 1
 }, {
-"from_node": &"id_0021_noise",
+"from_node": &"id_0041_noise",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0022_math_op",
+"to_node": &"id_0037_math_op",
 "to_port": 0
 }, {
-"from_node": &"id_0021_noise",
+"from_node": &"id_0041_noise",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0022_math_op",
+"to_node": &"id_0037_math_op",
 "to_port": 1
 }, {
-"from_node": &"id_0022_math_op",
+"from_node": &"id_0037_math_op",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0023_select",
+"to_node": &"id_0043_select",
 "to_port": 0
 }, {
-"from_node": &"id_0002_sample_spline",
+"from_node": &"id_0047_sample_spline",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0024_select",
+"to_node": &"id_0038_select",
 "to_port": 0
 }, {
-"from_node": &"id_0024_select",
+"from_node": &"id_0038_select",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0025_transform",
+"to_node": &"id_0045_transform",
 "to_port": 0
 }, {
-"from_node": &"id_0025_transform",
+"from_node": &"id_0045_transform",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0026_substract",
+"to_node": &"id_0044_substract",
 "to_port": 1
 }, {
-"from_node": &"id_0020_math_op",
+"from_node": &"id_0039_math_op",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0021_noise",
+"to_node": &"id_0041_noise",
 "to_port": 0
 }, {
-"from_node": &"id_0023_select",
+"from_node": &"id_0043_select",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0026_substract",
+"to_node": &"id_0044_substract",
 "to_port": 0
 }, {
-"from_node": &"id_0025_transform",
+"from_node": &"id_0045_transform",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0029_remove_attribute",
+"to_node": &"id_0046_remove_attribute",
 "to_port": 0
 }])
 data = {
 "links": [{
-"from_node": &"id_0008_add_attribute",
+"from_node": &"id_0042_add_attribute",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0006_math_op",
+"to_node": &"id_0040_math_op",
 "to_port": 1
 }, {
-"from_node": &"id_0002_sample_spline",
+"from_node": &"id_0047_sample_spline",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0006_math_op",
+"to_node": &"id_0040_math_op",
 "to_port": 0
 }, {
-"from_node": &"id_0002_sample_spline",
+"from_node": &"id_0047_sample_spline",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0008_add_attribute",
+"to_node": &"id_0042_add_attribute",
 "to_port": 0
 }, {
-"from_node": &"id_0006_math_op",
+"from_node": &"id_0040_math_op",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0020_math_op",
+"to_node": &"id_0039_math_op",
 "to_port": 0
 }, {
-"from_node": &"id_0006_math_op",
+"from_node": &"id_0040_math_op",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0020_math_op",
+"to_node": &"id_0039_math_op",
 "to_port": 1
 }, {
-"from_node": &"id_0021_noise",
+"from_node": &"id_0041_noise",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0022_math_op",
+"to_node": &"id_0037_math_op",
 "to_port": 0
 }, {
-"from_node": &"id_0021_noise",
+"from_node": &"id_0041_noise",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0022_math_op",
+"to_node": &"id_0037_math_op",
 "to_port": 1
 }, {
-"from_node": &"id_0022_math_op",
+"from_node": &"id_0037_math_op",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0023_select",
+"to_node": &"id_0043_select",
 "to_port": 0
 }, {
-"from_node": &"id_0002_sample_spline",
+"from_node": &"id_0047_sample_spline",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0024_select",
+"to_node": &"id_0038_select",
 "to_port": 0
 }, {
-"from_node": &"id_0024_select",
+"from_node": &"id_0038_select",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0025_transform",
+"to_node": &"id_0045_transform",
 "to_port": 0
 }, {
-"from_node": &"id_0025_transform",
+"from_node": &"id_0045_transform",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0026_substract",
+"to_node": &"id_0044_substract",
 "to_port": 1
 }, {
-"from_node": &"id_0020_math_op",
+"from_node": &"id_0039_math_op",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0021_noise",
+"to_node": &"id_0041_noise",
 "to_port": 0
 }, {
-"from_node": &"id_0023_select",
+"from_node": &"id_0043_select",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0026_substract",
+"to_node": &"id_0044_substract",
 "to_port": 0
 }, {
-"from_node": &"id_0025_transform",
+"from_node": &"id_0045_transform",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0029_remove_attribute",
+"to_node": &"id_0046_remove_attribute",
 "to_port": 0
 }],
 "min_pos": Vector2(-60, -280),
 "nodes": [{
 "args_port": {
 "In A": {
-"connected": false,
+"connected": true,
 "port": 0
 },
 "In B": {
-"connected": false,
+"connected": true,
 "port": 1
 }
 },
-"name": &"id_0022_math_op",
+"name": &"id_0037_math_op",
 "position": Vector2(1220, 620),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
@@ -478,11 +478,11 @@ data = {
 }, {
 "args_port": {
 "In": {
-"connected": false,
+"connected": true,
 "port": 0
 }
 },
-"name": &"id_0024_select",
+"name": &"id_0038_select",
 "position": Vector2(340, 0),
 "settings": {
 "debug_color": Color(1, 0, 1, 1),
@@ -502,15 +502,15 @@ data = {
 }, {
 "args_port": {
 "In A": {
-"connected": false,
+"connected": true,
 "port": 0
 },
 "In B": {
-"connected": false,
+"connected": true,
 "port": 1
 }
 },
-"name": &"id_0020_math_op",
+"name": &"id_0039_math_op",
 "position": Vector2(720, 400),
 "settings": {
 "debug_color": Color(1, 1, 0, 1),
@@ -533,15 +533,15 @@ data = {
 }, {
 "args_port": {
 "In A": {
-"connected": false,
+"connected": true,
 "port": 0
 },
 "In B": {
-"connected": false,
+"connected": true,
 "port": 1
 }
 },
-"name": &"id_0006_math_op",
+"name": &"id_0040_math_op",
 "position": Vector2(480, 400),
 "settings": {
 "debug_color": Color(0.847287, 0.896652, 0.999998, 1),
@@ -564,11 +564,11 @@ data = {
 }, {
 "args_port": {
 "In": {
-"connected": false,
+"connected": true,
 "port": 0
 }
 },
-"name": &"id_0021_noise",
+"name": &"id_0041_noise",
 "position": Vector2(960, 620),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
@@ -591,11 +591,11 @@ data = {
 }, {
 "args_port": {
 "In": {
-"connected": false,
+"connected": true,
 "port": 0
 }
 },
-"name": &"id_0008_add_attribute",
+"name": &"id_0042_add_attribute",
 "position": Vector2(280, 520),
 "settings": {
 "cte_bool": false,
@@ -622,11 +622,11 @@ data = {
 }, {
 "args_port": {
 "In": {
-"connected": false,
+"connected": true,
 "port": 0
 }
 },
-"name": &"id_0023_select",
+"name": &"id_0043_select",
 "position": Vector2(1400, 520),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
@@ -646,15 +646,15 @@ data = {
 }, {
 "args_port": {
 "In A": {
-"connected": false,
+"connected": true,
 "port": 0
 },
 "In B": {
-"connected": false,
+"connected": true,
 "port": 1
 }
 },
-"name": &"id_0026_substract",
+"name": &"id_0044_substract",
 "position": Vector2(1660, 60),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
@@ -674,11 +674,11 @@ data = {
 }, {
 "args_port": {
 "In": {
-"connected": false,
+"connected": true,
 "port": 0
 }
 },
-"name": &"id_0025_transform",
+"name": &"id_0045_transform",
 "position": Vector2(500, 0),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
@@ -704,11 +704,11 @@ data = {
 }, {
 "args_port": {
 "In": {
-"connected": false,
+"connected": true,
 "port": 0
 }
 },
-"name": &"id_0029_remove_attribute",
+"name": &"id_0046_remove_attribute",
 "position": Vector2(758.282, 106.117),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
@@ -728,7 +728,7 @@ data = {
 "template": "remove_attribute"
 }, {
 "args_port": {},
-"name": &"id_0002_sample_spline",
+"name": &"id_0047_sample_spline",
 "position": Vector2(0, 400),
 "settings": {
 "debug_color": Color(0.781464, 0.568812, 0.443646, 1),

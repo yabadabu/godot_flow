@@ -710,6 +710,7 @@ func _on_button_reload_pressed() -> void:
 
 func _on_button_save_pressed() -> void:
 	if current_resource:
+		saveResource()
 		ResourceSaver.save(current_resource)
 
 func _on_button_regenerate_pressed() -> void:

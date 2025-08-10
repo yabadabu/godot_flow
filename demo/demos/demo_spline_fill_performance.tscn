@@ -5,7 +5,7 @@
 [ext_resource type="Script" uid="uid://cbj3mmuatfk1v" path="res://addons/flow_nodes_editor/nodes/sample_spline_settings.gd" id="8_miu1c"]
 [ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="12_w4m8r"]
 
-[sub_resource type="Resource" id="Resource_ph7w0"]
+[sub_resource type="Resource" id="Resource_uqwl8"]
 resource_name = "Sample Spline Settings"
 script = ExtResource("8_miu1c")
 uniform_interval = 0.4
@@ -15,8 +15,8 @@ distance_attribute = ""
 random_seed = 3855891501
 inspect_enabled = true
 debug_enabled = true
-debug_mode = 0
-debug_scale = 1.0
+debug_mode = 1
+debug_scale = 0.375
 debug_color = Color(1, 1, 1, 1)
 debug_modulate_by = ""
 title = "Sample Spline"
@@ -26,13 +26,41 @@ trace = false
 [sub_resource type="Resource" id="Resource_ahfh6"]
 script = ExtResource("12_w4m8r")
 nodes = Array[Dictionary]([{
-"name": &"id_0036_sample_spline",
-"position_offset": Vector2(-68.08, 42.1299),
-"settings": SubResource("Resource_ph7w0"),
+"name": &"id_0037_sample_spline",
+"position_offset": Vector2(-60, 60),
+"settings": SubResource("Resource_uqwl8"),
 "template": "sample_spline"
 }])
 conns = Array[Dictionary]([])
-data = {}
+data = {
+"links": [],
+"min_pos": Vector2(-60, 60),
+"nodes": [{
+"args_port": {},
+"name": &"id_0037_sample_spline",
+"position": Vector2(0, 0),
+"settings": {
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": true,
+"debug_mode": 1,
+"debug_modulate_by": "",
+"debug_scale": 0.375,
+"distance_attribute": "",
+"enabled": true,
+"fill_curve": true,
+"inspect_enabled": false,
+"random_seed": 3855891501,
+"required_meta_bool": &"",
+"title": "Sample Spline",
+"trace": false,
+"uniform_interval": 0.4
+},
+"show_disconnected_inputs": false,
+"template": "sample_spline"
+}],
+"type": "flow_graph_nodes",
+"version": 1
+}
 view_zoom = 0.909092
 view_offset = Vector2(-270.891, -258.7)
 new_name_counter = 36

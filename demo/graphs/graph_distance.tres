@@ -271,240 +271,240 @@ trace = false
 resource_name = "graph_distance"
 script = ExtResource("11_ox7wi")
 nodes = Array[Dictionary]([{
-"name": &"id_0025_add_attribute",
+"name": &"id_0085_add_attribute",
 "position_offset": Vector2(940, 620),
 "settings": SubResource("Resource_ym11o"),
 "template": "add_attribute"
 }, {
-"name": &"id_0026_make_vector",
+"name": &"id_0086_make_vector",
 "position_offset": Vector2(0, 360),
 "settings": SubResource("Resource_lgr5u"),
 "template": "make_vector"
 }, {
-"name": &"id_0027_transform",
+"name": &"id_0087_transform",
 "position_offset": Vector2(360, 240),
 "settings": SubResource("Resource_ef0dx"),
 "template": "transform"
 }, {
-"name": &"id_0028_grid",
+"name": &"id_0088_grid",
 "position_offset": Vector2(180, 240),
 "settings": SubResource("Resource_hglf1"),
 "template": "grid"
 }, {
-"name": &"id_0029_distance",
+"name": &"id_0089_distance",
 "position_offset": Vector2(680, 480),
 "settings": SubResource("Resource_6hd3x"),
 "template": "distance"
 }, {
-"name": &"id_0030_make_vector",
+"name": &"id_0090_make_vector",
 "position_offset": Vector2(1280, 640),
 "settings": SubResource("Resource_vba52"),
 "template": "make_vector"
 }, {
-"name": &"id_0031_input_Make Vector - Y",
+"name": &"id_0091_input_Make Vector - Y",
 "position_offset": Vector2(1100, 720),
 "settings": SubResource("Resource_4xbv3"),
 "template": "input_Make Vector - Y"
 }, {
-"name": &"id_0032_sample_spline",
+"name": &"id_0092_sample_spline",
 "position_offset": Vector2(60, 620),
 "settings": SubResource("Resource_f4g4t"),
 "template": "sample_spline"
 }, {
-"name": &"id_0033_transform",
+"name": &"id_0093_transform",
 "position_offset": Vector2(360, 620),
 "settings": SubResource("Resource_b6e1b"),
 "template": "transform"
 }, {
-"name": &"id_0034_add_attribute",
+"name": &"id_0094_add_attribute",
 "position_offset": Vector2(-200, 420),
 "settings": SubResource("Resource_ox7wi"),
 "template": "add_attribute"
 }, {
-"name": &"id_0035_filter",
+"name": &"id_0095_filter",
 "position_offset": Vector2(1080, 480),
 "settings": SubResource("Resource_ug0g3"),
 "template": "filter"
 }, {
-"name": &"id_0036_debug",
+"name": &"id_0096_debug",
 "position_offset": Vector2(1720, 700),
 "settings": SubResource("Resource_imw32"),
 "template": "debug"
 }, {
-"name": &"id_0037_transform",
+"name": &"id_0097_transform",
 "position_offset": Vector2(1480, 520),
 "settings": SubResource("Resource_lhu04"),
 "template": "transform"
 }])
 conns = Array[Dictionary]([{
-"from_node": &"id_0032_sample_spline",
+"from_node": &"id_0092_sample_spline",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0033_transform",
+"to_node": &"id_0093_transform",
 "to_port": 0
 }, {
-"from_node": &"id_0034_add_attribute",
+"from_node": &"id_0094_add_attribute",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0026_make_vector",
+"to_node": &"id_0086_make_vector",
 "to_port": 0
 }, {
-"from_node": &"id_0034_add_attribute",
+"from_node": &"id_0094_add_attribute",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0026_make_vector",
+"to_node": &"id_0086_make_vector",
 "to_port": 2
 }, {
-"from_node": &"id_0027_transform",
+"from_node": &"id_0087_transform",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0029_distance",
+"to_node": &"id_0089_distance",
 "to_port": 0
 }, {
-"from_node": &"id_0033_transform",
+"from_node": &"id_0093_transform",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0029_distance",
+"to_node": &"id_0089_distance",
 "to_port": 1
 }, {
-"from_node": &"id_0029_distance",
+"from_node": &"id_0089_distance",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0035_filter",
+"to_node": &"id_0095_filter",
 "to_port": 0
 }, {
-"from_node": &"id_0025_add_attribute",
+"from_node": &"id_0085_add_attribute",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0035_filter",
+"to_node": &"id_0095_filter",
 "to_port": 1
 }, {
-"from_node": &"id_0028_grid",
+"from_node": &"id_0088_grid",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0027_transform",
+"to_node": &"id_0087_transform",
 "to_port": 0
 }, {
-"from_node": &"id_0026_make_vector",
+"from_node": &"id_0086_make_vector",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0028_grid",
+"to_node": &"id_0088_grid",
 "to_port": 3
 }, {
-"from_node": &"id_0031_input_Make Vector - Y",
+"from_node": &"id_0091_input_Make Vector - Y",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0030_make_vector",
+"to_node": &"id_0090_make_vector",
 "to_port": 1
 }, {
-"from_node": &"id_0035_filter",
+"from_node": &"id_0095_filter",
 "from_port": 1,
 "keep_alive": false,
-"to_node": &"id_0037_transform",
+"to_node": &"id_0097_transform",
 "to_port": 0
 }, {
-"from_node": &"id_0030_make_vector",
+"from_node": &"id_0090_make_vector",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0037_transform",
+"to_node": &"id_0097_transform",
 "to_port": 1
 }, {
-"from_node": &"id_0030_make_vector",
+"from_node": &"id_0090_make_vector",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0037_transform",
+"to_node": &"id_0097_transform",
 "to_port": 2
 }, {
-"from_node": &"id_0037_transform",
+"from_node": &"id_0097_transform",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0036_debug",
+"to_node": &"id_0096_debug",
 "to_port": 0
 }])
 data = {
 "links": [{
-"from_node": &"id_0032_sample_spline",
+"from_node": &"id_0092_sample_spline",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0033_transform",
+"to_node": &"id_0093_transform",
 "to_port": 0
 }, {
-"from_node": &"id_0034_add_attribute",
+"from_node": &"id_0094_add_attribute",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0026_make_vector",
+"to_node": &"id_0086_make_vector",
 "to_port": 0
 }, {
-"from_node": &"id_0034_add_attribute",
+"from_node": &"id_0094_add_attribute",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0026_make_vector",
+"to_node": &"id_0086_make_vector",
 "to_port": 2
 }, {
-"from_node": &"id_0027_transform",
+"from_node": &"id_0087_transform",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0029_distance",
+"to_node": &"id_0089_distance",
 "to_port": 0
 }, {
-"from_node": &"id_0033_transform",
+"from_node": &"id_0093_transform",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0029_distance",
+"to_node": &"id_0089_distance",
 "to_port": 1
 }, {
-"from_node": &"id_0029_distance",
+"from_node": &"id_0089_distance",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0035_filter",
+"to_node": &"id_0095_filter",
 "to_port": 0
 }, {
-"from_node": &"id_0025_add_attribute",
+"from_node": &"id_0085_add_attribute",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0035_filter",
+"to_node": &"id_0095_filter",
 "to_port": 1
 }, {
-"from_node": &"id_0028_grid",
+"from_node": &"id_0088_grid",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0027_transform",
+"to_node": &"id_0087_transform",
 "to_port": 0
 }, {
-"from_node": &"id_0026_make_vector",
+"from_node": &"id_0086_make_vector",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0028_grid",
+"to_node": &"id_0088_grid",
 "to_port": 3
 }, {
-"from_node": &"id_0031_input_Make Vector - Y",
+"from_node": &"id_0091_input_Make Vector - Y",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0030_make_vector",
+"to_node": &"id_0090_make_vector",
 "to_port": 1
 }, {
-"from_node": &"id_0035_filter",
+"from_node": &"id_0095_filter",
 "from_port": 1,
 "keep_alive": false,
-"to_node": &"id_0037_transform",
+"to_node": &"id_0097_transform",
 "to_port": 0
 }, {
-"from_node": &"id_0030_make_vector",
+"from_node": &"id_0090_make_vector",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0037_transform",
+"to_node": &"id_0097_transform",
 "to_port": 1
 }, {
-"from_node": &"id_0030_make_vector",
+"from_node": &"id_0090_make_vector",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0037_transform",
+"to_node": &"id_0097_transform",
 "to_port": 2
 }, {
-"from_node": &"id_0037_transform",
+"from_node": &"id_0097_transform",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0036_debug",
+"to_node": &"id_0096_debug",
 "to_port": 0
 }],
 "min_pos": Vector2(-200, 240),
@@ -515,7 +515,7 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0025_add_attribute",
+"name": &"id_0085_add_attribute",
 "position": Vector2(1140, 380),
 "settings": {
 "cte_bool": false,
@@ -554,7 +554,7 @@ data = {
 "port": 2
 }
 },
-"name": &"id_0026_make_vector",
+"name": &"id_0086_make_vector",
 "position": Vector2(200, 120),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
@@ -581,7 +581,7 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0027_transform",
+"name": &"id_0087_transform",
 "position": Vector2(560, 0),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
@@ -631,7 +631,7 @@ data = {
 "port": 2
 }
 },
-"name": &"id_0028_grid",
+"name": &"id_0088_grid",
 "position": Vector2(380, 0),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
@@ -664,7 +664,7 @@ data = {
 "port": 1
 }
 },
-"name": &"id_0029_distance",
+"name": &"id_0089_distance",
 "position": Vector2(880, 240),
 "settings": {
 "debug_color": Color(0, 1, 1, 1),
@@ -699,7 +699,7 @@ data = {
 "port": 2
 }
 },
-"name": &"id_0030_make_vector",
+"name": &"id_0090_make_vector",
 "position": Vector2(1480, 400),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
@@ -721,7 +721,7 @@ data = {
 "template": "make_vector"
 }, {
 "args_port": {},
-"name": &"id_0031_input_Make Vector - Y",
+"name": &"id_0091_input_Make Vector - Y",
 "position": Vector2(1300, 480),
 "settings": {
 "data_type": 2,
@@ -741,7 +741,7 @@ data = {
 "template": "input_Make Vector - Y"
 }, {
 "args_port": {},
-"name": &"id_0032_sample_spline",
+"name": &"id_0092_sample_spline",
 "position": Vector2(260, 380),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
@@ -768,7 +768,7 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0033_transform",
+"name": &"id_0093_transform",
 "position": Vector2(560, 380),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
@@ -798,7 +798,7 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0034_add_attribute",
+"name": &"id_0094_add_attribute",
 "position": Vector2(0, 180),
 "settings": {
 "cte_bool": false,
@@ -833,7 +833,7 @@ data = {
 "port": 1
 }
 },
-"name": &"id_0035_filter",
+"name": &"id_0095_filter",
 "position": Vector2(1280, 240),
 "settings": {
 "condition": 2,
@@ -860,7 +860,7 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0036_debug",
+"name": &"id_0096_debug",
 "position": Vector2(1920, 460),
 "settings": {
 "debug_color": Color(0, 1, 1, 1),
@@ -891,7 +891,7 @@ data = {
 "port": 1
 }
 },
-"name": &"id_0037_transform",
+"name": &"id_0097_transform",
 "position": Vector2(1680, 280),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),

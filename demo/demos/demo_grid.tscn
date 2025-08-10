@@ -76,64 +76,64 @@ trace = false
 [sub_resource type="Resource" id="Resource_1h62y"]
 script = ExtResource("3_pkajt")
 nodes = Array[Dictionary]([{
-"name": &"id_0009_make_vector",
+"name": &"id_0008_make_vector",
 "position_offset": Vector2(-40, 320),
 "settings": SubResource("Resource_olmaf"),
 "template": "make_vector"
 }, {
-"name": &"id_0010_grid",
+"name": &"id_0009_grid",
 "position_offset": Vector2(160, 40),
 "settings": SubResource("Resource_qhdd6"),
 "template": "grid"
 }, {
-"name": &"id_0011_copy",
+"name": &"id_0010_copy",
 "position_offset": Vector2(420, 140),
 "settings": SubResource("Resource_0txfs"),
 "template": "copy"
 }])
 conns = Array[Dictionary]([{
-"from_node": &"id_0009_make_vector",
+"from_node": &"id_0008_make_vector",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0010_grid",
+"to_node": &"id_0009_grid",
 "to_port": 0
 }, {
-"from_node": &"id_0010_grid",
+"from_node": &"id_0009_grid",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0011_copy",
+"to_node": &"id_0010_copy",
 "to_port": 0
 }, {
-"from_node": &"id_0009_make_vector",
+"from_node": &"id_0008_make_vector",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0011_copy",
+"to_node": &"id_0010_copy",
 "to_port": 1
 }])
 data = {
 "links": [{
-"from_node": &"id_0009_make_vector",
+"from_node": &"id_0008_make_vector",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0010_grid",
+"to_node": &"id_0009_grid",
 "to_port": 0
 }, {
-"from_node": &"id_0010_grid",
+"from_node": &"id_0009_grid",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0011_copy",
+"to_node": &"id_0010_copy",
 "to_port": 0
 }, {
-"from_node": &"id_0009_make_vector",
+"from_node": &"id_0008_make_vector",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0011_copy",
+"to_node": &"id_0010_copy",
 "to_port": 1
 }],
 "min_pos": Vector2(-40, 40),
 "nodes": [{
 "args_port": {},
-"name": &"id_0009_make_vector",
+"name": &"id_0008_make_vector",
 "position": Vector2(0, 280),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
@@ -160,7 +160,7 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0010_grid",
+"name": &"id_0009_grid",
 "position": Vector2(200, 0),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
@@ -193,7 +193,7 @@ data = {
 "port": 1
 }
 },
-"name": &"id_0011_copy",
+"name": &"id_0010_copy",
 "position": Vector2(460, 100),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),

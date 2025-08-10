@@ -103,80 +103,80 @@ trace = false
 [sub_resource type="Resource" id="Resource_gj6dq"]
 script = ExtResource("4_jn5vr")
 nodes = Array[Dictionary]([{
-"name": &"id_0218_substract",
+"name": &"id_0009_substract",
 "position_offset": Vector2(531, 210),
 "settings": SubResource("Resource_k1fwt"),
 "template": "substract"
 }, {
-"name": &"id_0219_grid",
+"name": &"id_0010_grid",
 "position_offset": Vector2(60, 420),
 "settings": SubResource("Resource_38n7t"),
 "template": "grid"
 }, {
-"name": &"id_0220_grid",
+"name": &"id_0011_grid",
 "position_offset": Vector2(140, 100),
 "settings": SubResource("Resource_8d3ec"),
 "template": "grid"
 }, {
-"name": &"id_0221_reduce",
+"name": &"id_0012_reduce",
 "position_offset": Vector2(740, 400),
 "settings": SubResource("Resource_saukb"),
 "template": "reduce"
 }, {
-"name": &"id_0222_transform",
+"name": &"id_0013_transform",
 "position_offset": Vector2(240, 420),
 "settings": SubResource("Resource_trotj"),
 "template": "transform"
 }])
 conns = Array[Dictionary]([{
-"from_node": &"id_0219_grid",
+"from_node": &"id_0010_grid",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0222_transform",
+"to_node": &"id_0013_transform",
 "to_port": 0
 }, {
-"from_node": &"id_0220_grid",
+"from_node": &"id_0011_grid",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0218_substract",
+"to_node": &"id_0009_substract",
 "to_port": 0
 }, {
-"from_node": &"id_0222_transform",
+"from_node": &"id_0013_transform",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0218_substract",
+"to_node": &"id_0009_substract",
 "to_port": 1
 }, {
-"from_node": &"id_0218_substract",
+"from_node": &"id_0009_substract",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0221_reduce",
+"to_node": &"id_0012_reduce",
 "to_port": 0
 }])
 data = {
 "links": [{
-"from_node": &"id_0219_grid",
+"from_node": &"id_0010_grid",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0222_transform",
+"to_node": &"id_0013_transform",
 "to_port": 0
 }, {
-"from_node": &"id_0220_grid",
+"from_node": &"id_0011_grid",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0218_substract",
+"to_node": &"id_0009_substract",
 "to_port": 0
 }, {
-"from_node": &"id_0222_transform",
+"from_node": &"id_0013_transform",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0218_substract",
+"to_node": &"id_0009_substract",
 "to_port": 1
 }, {
-"from_node": &"id_0218_substract",
+"from_node": &"id_0009_substract",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0221_reduce",
+"to_node": &"id_0012_reduce",
 "to_port": 0
 }],
 "min_pos": Vector2(60, 100),
@@ -191,7 +191,7 @@ data = {
 "port": 1
 }
 },
-"name": &"id_0218_substract",
+"name": &"id_0009_substract",
 "position": Vector2(471, 110),
 "settings": {
 "debug_color": Color(0.239216, 1, 1, 1),
@@ -210,7 +210,7 @@ data = {
 "template": "substract"
 }, {
 "args_port": {},
-"name": &"id_0219_grid",
+"name": &"id_0010_grid",
 "position": Vector2(0, 320),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
@@ -234,7 +234,7 @@ data = {
 "template": "grid"
 }, {
 "args_port": {},
-"name": &"id_0220_grid",
+"name": &"id_0011_grid",
 "position": Vector2(80, 0),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
@@ -263,7 +263,7 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0221_reduce",
+"name": &"id_0012_reduce",
 "position": Vector2(680, 300),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
@@ -288,7 +288,7 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0222_transform",
+"name": &"id_0013_transform",
 "position": Vector2(180, 320),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
