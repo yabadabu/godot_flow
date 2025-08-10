@@ -1,10 +1,9 @@
-[gd_scene load_steps=18 format=3 uid="uid://bxyhxlabiwwag"]
+[gd_scene load_steps=14 format=3 uid="uid://bxyhxlabiwwag"]
 
 [ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_pkkv1"]
 [ext_resource type="Resource" uid="uid://chy06hdyr5neh" path="res://graphs/graph_distance.tres" id="2_66ode"]
 [ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="3_pkkv1"]
 [ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="4_scy5f"]
-[ext_resource type="Script" uid="uid://oocaue4cyte2" path="res://addons/flow_nodes_editor/nodes/scan_nodes_settings.gd" id="5_3kbeu"]
 
 [sub_resource type="Curve3D" id="Curve3D_pkkv1"]
 bake_interval = 0.295
@@ -41,88 +40,14 @@ cte_float = 0.0
 cte_vector = Vector3(0, 0, 0)
 cte_string = ""
 
-[sub_resource type="Resource" id="Resource_scy5f"]
-resource_name = "Scan Nodes Settings"
-script = ExtResource("5_3kbeu")
-group_name = ""
-filter_by_class_name = "MeshInstance3D"
-import_metadata = false
-import_properties = Array[StringName]([])
-size_to_bounds = true
-random_seed = 957086464
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Scan Nodes"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_rs64b"]
-resource_name = "Scan Nodes Settings"
-script = ExtResource("5_3kbeu")
-group_name = ""
-filter_by_class_name = "Path3D"
-import_metadata = false
-import_properties = Array[StringName]([])
-size_to_bounds = true
-random_seed = 3384881076
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Scan Nodes"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_hh6fu"]
-resource_name = "Scan Nodes Settings"
-script = ExtResource("5_3kbeu")
-group_name = ""
-filter_by_class_name = ""
-import_metadata = false
-import_properties = Array[StringName]([&"name"])
-size_to_bounds = true
-random_seed = 207574272
-inspect_enabled = true
-debug_enabled = true
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Scan Nodes"
-enabled = true
-trace = true
-
 [sub_resource type="Resource" id="Resource_3kbeu"]
 script = ExtResource("4_scy5f")
-nodes = Array[Dictionary]([{
-"name": &"id_0085_scan_nodes",
-"position_offset": Vector2(-1000, -300),
-"settings": SubResource("Resource_scy5f"),
-"template": "scan_nodes"
-}, {
-"name": &"id_0086_scan_nodes",
-"position_offset": Vector2(-1000, -120),
-"settings": SubResource("Resource_rs64b"),
-"template": "scan_nodes"
-}, {
-"name": &"id_0087_scan_nodes",
-"position_offset": Vector2(-1000, 60),
-"settings": SubResource("Resource_hh6fu"),
-"template": "scan_nodes"
-}])
-conns = Array[Dictionary]([])
 data = {
 "links": [],
 "min_pos": Vector2(-1000, -300),
 "nodes": [{
 "args_port": {},
-"name": &"id_0085_scan_nodes",
+"name": &"id_0008_scan_nodes",
 "position": Vector2(0, 0),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
@@ -145,7 +70,7 @@ data = {
 "template": "scan_nodes"
 }, {
 "args_port": {},
-"name": &"id_0086_scan_nodes",
+"name": &"id_0009_scan_nodes",
 "position": Vector2(0, 180),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
@@ -168,7 +93,7 @@ data = {
 "template": "scan_nodes"
 }, {
 "args_port": {},
-"name": &"id_0087_scan_nodes",
+"name": &"id_0010_scan_nodes",
 "position": Vector2(0, 360),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
@@ -194,7 +119,7 @@ data = {
 "version": 1
 }
 view_zoom = 0.909091
-view_offset = Vector2(-988.091, -387.854)
+view_offset = Vector2(-884, -387.854)
 new_name_counter = 24
 in_params = Array[ExtResource("3_pkkv1")]([SubResource("Resource_o2vll")])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"

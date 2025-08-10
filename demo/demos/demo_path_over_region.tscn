@@ -1,24 +1,11 @@
-[gd_scene load_steps=52 format=3 uid="uid://bl32jt5udtf08"]
+[gd_scene load_steps=12 format=3 uid="uid://bl32jt5udtf08"]
 
 [ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_2l584"]
 [ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="2_dxf0c"]
 [ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="4_2jbe2"]
-[ext_resource type="Script" uid="uid://cbj3mmuatfk1v" path="res://addons/flow_nodes_editor/nodes/sample_spline_settings.gd" id="4_qf0nw"]
-[ext_resource type="Script" uid="uid://cnhqpivgscgff" path="res://addons/flow_nodes_editor/nodes/select_settings.gd" id="6_5uxx2"]
-[ext_resource type="Script" uid="uid://oocaue4cyte2" path="res://addons/flow_nodes_editor/nodes/scan_nodes_settings.gd" id="8_qt8uc"]
 [ext_resource type="PackedScene" uid="uid://bhacwufn13rf6" path="res://scenes/totem.tscn" id="9_2lc4x"]
-[ext_resource type="Script" uid="uid://ckff4og6eip3" path="res://addons/flow_nodes_editor/nodes/math_op_settings.gd" id="9_dbqvf"]
-[ext_resource type="Script" uid="uid://dlehtdxdlspag" path="res://addons/flow_nodes_editor/nodes/self_pruning_settings.gd" id="10_qe4ar"]
 [ext_resource type="PackedScene" uid="uid://b6q4l56g02tqn" path="res://scenes/scene_3p.tscn" id="11_h10xn"]
-[ext_resource type="Script" uid="uid://dqd74l1ewnh0g" path="res://addons/flow_nodes_editor/nodes/spawn_scenes_settings.gd" id="12_i2drj"]
-[ext_resource type="Script" uid="uid://runa6a3koevg" path="res://addons/flow_nodes_editor/nodes/add_attribute_settings.gd" id="14_2yywp"]
-[ext_resource type="Script" uid="uid://bhnderip4tx0c" path="res://addons/flow_nodes_editor/nodes/sort_settings.gd" id="15_jiljv"]
-[ext_resource type="Script" uid="uid://bw3x7p10afvc7" path="res://addons/flow_nodes_editor/nodes/substract_settings.gd" id="16_4j7uw"]
 [ext_resource type="Texture2D" uid="uid://d2hg4bxm2gqij" path="res://icon.svg" id="16_jiljv"]
-[ext_resource type="Script" uid="uid://cka12nenjlwgx" path="res://addons/flow_nodes_editor/nodes/filter_settings.gd" id="16_ol2su"]
-[ext_resource type="Script" uid="uid://bo5aaecpx1tsp" path="res://addons/flow_nodes_editor/nodes/distance_settings.gd" id="17_syw2u"]
-[ext_resource type="Script" uid="uid://ctpeiiq5p30rt" path="res://addons/flow_nodes_editor/nodes/noise_settings.gd" id="18_6s8jo"]
-[ext_resource type="Script" uid="uid://diw40w1clst46" path="res://addons/flow_nodes_editor/nodes/merge_settings.gd" id="19_6s8jo"]
 [ext_resource type="Script" uid="uid://dbtbo3vh5nl2c" path="res://scenes/scene_3p.gd" id="20_ol2su"]
 
 [sub_resource type="Curve3D" id="Curve3D_36lll"]
@@ -34,955 +21,165 @@ point_count = 8
 resource_local_to_scene = true
 resource_name = "pep"
 
-[sub_resource type="Resource" id="Resource_4j7uw"]
-resource_name = "Math Op"
-script = ExtResource("9_dbqvf")
-operation = 0
-in_nameA = "position.Z"
-in_nameB = "2.1"
-out_name = "ipos"
-random_seed = 3352303003
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Math"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_ol2su"]
-resource_name = "Add Attribute"
-script = ExtResource("14_2yywp")
-name = "name"
-data_type = 4
-cte_bool = false
-cte_int = 0
-cte_float = 0.0
-cte_vector = Vector3(0, 0, 0)
-cte_string = "Super"
-random_seed = 1942164646
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Add Attribute"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_syw2u"]
-resource_name = "Math Op"
-script = ExtResource("9_dbqvf")
-operation = 8
-in_nameA = "ipos"
-in_nameB = ""
-out_name = "ipos2"
-random_seed = 4253731558
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Math"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_6s8jo"]
-resource_name = "Add Attribute"
-script = ExtResource("14_2yywp")
-name = "icon"
-data_type = 5
-cte_bool = false
-cte_int = 0
-cte_float = 0.0
-cte_vector = Vector3(0, 0, 0)
-cte_resource = ExtResource("16_jiljv")
-cte_string = ""
-random_seed = 3416891289
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Add Attribute"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_pf313"]
-resource_name = "Sort Settings"
-script = ExtResource("15_jiljv")
-sort_by = "ipos2"
-sort_descending = false
-random_seed = 2132804344
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Sort"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_f6aqs"]
-resource_name = "Math Op"
-script = ExtResource("9_dbqvf")
-operation = 9
-in_nameA = "index"
-in_nameB = ""
-out_name = "idx"
-random_seed = 714903121
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Math"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_xt6rs"]
-resource_name = "Math Op"
-script = ExtResource("9_dbqvf")
-operation = 9
-in_nameA = "position"
-in_nameB = ""
-out_name = "ppos"
-random_seed = 4293648122
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Math"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_4k8gr"]
-resource_name = "Add Attribute"
-script = ExtResource("14_2yywp")
-name = "v0"
-data_type = 2
-cte_bool = false
-cte_int = 0
-cte_float = 1.0
-cte_vector = Vector3(0, 0, 0)
-cte_string = ""
-random_seed = 3968999207
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Add Attribute"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_n1ipx"]
-resource_name = "Math Op"
-script = ExtResource("9_dbqvf")
-operation = 3
-in_nameA = "size.X"
-in_nameB = "3"
-out_name = "deltax"
-random_seed = 3899755672
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Math"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_2vt0m"]
-resource_name = "Add Attribute"
-script = ExtResource("14_2yywp")
-name = "new_attr"
-data_type = 1
-cte_bool = false
-cte_int = 20
-cte_float = 0.0
-cte_vector = Vector3(0, 0, 0)
-cte_string = ""
-random_seed = 2743539897
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Add Attribute"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_byowy"]
-resource_name = "Math Op"
-script = ExtResource("9_dbqvf")
-operation = 0
-in_nameA = "index"
-in_nameB = "1"
-out_name = "dx"
-random_seed = 2687818424
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Math"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_xl81d"]
-resource_name = "Spawn Scenes Settings"
-script = ExtResource("12_i2drj")
-scene = ExtResource("11_h10xn")
-scene_attribute = ""
-assign_attributes = {
-"head_rotation": "dx",
-"visible": "is_big"
-}
-random_seed = 862666864
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Spawn Scenes"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_87sea"]
-resource_name = "Math Op"
-script = ExtResource("9_dbqvf")
-operation = 2
-in_nameA = "dx"
-in_nameB = "40"
-out_name = "dx"
-random_seed = 1411851728
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Math"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_euihk"]
-resource_name = "Sample Spline Settings"
-script = ExtResource("4_qf0nw")
-uniform_interval = 2.22
-fill_curve = false
-required_meta_bool = &"is_road"
-distance_attribute = "distance"
-random_seed = 2623515292
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Sample Spline"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_4utxu"]
-resource_name = "Select Settings"
-script = ExtResource("6_5uxx2")
-ratio = 0.2
-random_seed = 1388504677
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Select"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_yalli"]
-resource_name = "Substract"
-script = ExtResource("16_4j7uw")
-operation = 0
-random_seed = 3216286624
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Substract"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_8qpq4"]
-resource_name = "Filter Settings"
-script = ExtResource("16_ol2su")
-condition = 2
-in_nameA = "distance"
-in_nameB = "Road Width"
-threshold = 0.1
-random_seed = 107031582
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Filter"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_rp5rq"]
-resource_name = "Math Op"
-script = ExtResource("9_dbqvf")
-operation = 0
-in_nameA = "noise"
-in_nameB = "distance"
-out_name = "distance"
-random_seed = 1984223721
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Math"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_fxqdy"]
-resource_name = "Distance Settings"
-script = ExtResource("17_syw2u")
-max_distance = 0.605
-out_name = "distance"
-in_nameA = "position"
-in_nameB = "position"
-random_seed = 3893480554
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Distance"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_1kwg4"]
-resource_name = "Noise Settings"
-script = ExtResource("18_6s8jo")
-out_name = "noise"
-in_scale = 12415.1
-noise_bias = -1.46
-noise_amplitude = 6.45
-random_seed = 2098406315
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Noise"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_2vprb"]
-resource_name = "Merge Settings"
-script = ExtResource("19_6s8jo")
-random_seed = 2827870609
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Merge"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_lg74x"]
-resource_name = "Add Attribute"
-script = ExtResource("14_2yywp")
-name = "new_attr"
-data_type = 1
-cte_bool = false
-cte_int = 200
-cte_float = 0.0
-cte_vector = Vector3(0, 0, 0)
-cte_string = ""
-random_seed = 3417441686
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Add Attribute"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_5cp38"]
-resource_name = "Add Attribute"
-script = ExtResource("14_2yywp")
-name = "new_attr"
-data_type = 1
-cte_bool = false
-cte_int = 50
-cte_float = 0.0
-cte_vector = Vector3(0, 0, 0)
-cte_string = ""
-random_seed = 2605141521
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Add Attribute"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_luhre"]
-resource_name = "Add Attribute"
-script = ExtResource("14_2yywp")
-name = "Road Width"
-data_type = 2
-cte_bool = false
-cte_int = 250
-cte_float = 5.155
-cte_vector = Vector3(0, 0.21, 0.36)
-cte_resource = SubResource("QuadMesh_2yywp")
-cte_string = "John"
-random_seed = 2216251910
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Add Attribute"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_dlhps"]
-resource_name = "Sample Spline Settings"
-script = ExtResource("4_qf0nw")
-uniform_interval = 0.18
-fill_curve = true
-required_meta_bool = &"is_grass"
-distance_attribute = "distance"
-random_seed = 2797604824
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Sample Spline"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_3n10b"]
-resource_name = "Scan Nodes Settings"
-script = ExtResource("8_qt8uc")
-group_name = "totem"
-filter_by_class_name = ""
-import_metadata = true
-import_properties = Array[StringName]([&"num_enemies"])
-size_to_bounds = false
-random_seed = 1619377703
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Scan Nodes"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_afs1c"]
-resource_name = "Self Pruning"
-script = ExtResource("10_qe4ar")
-keep_self_intersections = false
-random_seed = 3556067674
-inspect_enabled = false
-debug_enabled = true
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Self Pruning"
-enabled = true
-trace = false
-
 [sub_resource type="Resource" id="Resource_5uxx2"]
 resource_local_to_scene = true
 script = ExtResource("4_2jbe2")
-nodes = Array[Dictionary]([{
-"name": &"id_0008_math_op",
-"position_offset": Vector2(370, -230),
-"settings": SubResource("Resource_4j7uw"),
-"template": "math_op"
-}, {
-"name": &"id_0009_add_attribute",
-"position_offset": Vector2(510, -230),
-"settings": SubResource("Resource_ol2su"),
-"template": "add_attribute"
-}, {
-"name": &"id_0010_math_op",
-"position_offset": Vector2(660, -230),
-"settings": SubResource("Resource_syw2u"),
-"template": "math_op"
-}, {
-"name": &"id_0011_add_attribute",
-"position_offset": Vector2(800, -230),
-"settings": SubResource("Resource_6s8jo"),
-"template": "add_attribute"
-}, {
-"name": &"id_0012_sort",
-"position_offset": Vector2(1110, -230),
-"settings": SubResource("Resource_pf313"),
-"template": "sort"
-}, {
-"name": &"id_0013_math_op",
-"position_offset": Vector2(970, -230),
-"settings": SubResource("Resource_f6aqs"),
-"template": "math_op"
-}, {
-"name": &"id_0014_math_op",
-"position_offset": Vector2(1240, -230),
-"settings": SubResource("Resource_xt6rs"),
-"template": "math_op"
-}, {
-"name": &"id_0015_add_attribute",
-"position_offset": Vector2(200, -110),
-"settings": SubResource("Resource_4k8gr"),
-"template": "add_attribute"
-}, {
-"name": &"id_0016_math_op",
-"position_offset": Vector2(360, -100),
-"settings": SubResource("Resource_n1ipx"),
-"template": "math_op"
-}, {
-"name": &"id_0017_add_attribute",
-"position_offset": Vector2(200, -230),
-"settings": SubResource("Resource_2vt0m"),
-"template": "add_attribute"
-}, {
-"name": &"id_0018_math_op",
-"position_offset": Vector2(360, 820),
-"settings": SubResource("Resource_byowy"),
-"template": "math_op"
-}, {
-"name": &"id_0019_spawn_scenes",
-"position_offset": Vector2(840, 980),
-"settings": SubResource("Resource_xl81d"),
-"template": "spawn_scenes"
-}, {
-"name": &"id_0020_math_op",
-"position_offset": Vector2(620, 920),
-"settings": SubResource("Resource_87sea"),
-"template": "math_op"
-}, {
-"name": &"id_0021_sample_spline",
-"position_offset": Vector2(-100, 100),
-"settings": SubResource("Resource_euihk"),
-"template": "sample_spline"
-}, {
-"name": &"id_0022_select",
-"position_offset": Vector2(400, 520),
-"settings": SubResource("Resource_4utxu"),
-"template": "select"
-}, {
-"name": &"id_0023_substract",
-"position_offset": Vector2(1240, 640),
-"settings": SubResource("Resource_yalli"),
-"template": "substract"
-}, {
-"name": &"id_0024_filter",
-"position_offset": Vector2(1060, 340),
-"settings": SubResource("Resource_8qpq4"),
-"template": "filter"
-}, {
-"name": &"id_0025_math_op",
-"position_offset": Vector2(1280, 200),
-"settings": SubResource("Resource_rp5rq"),
-"template": "math_op"
-}, {
-"name": &"id_0026_distance",
-"position_offset": Vector2(620, 80),
-"settings": SubResource("Resource_fxqdy"),
-"template": "distance"
-}, {
-"name": &"id_0027_noise",
-"position_offset": Vector2(960, 20),
-"settings": SubResource("Resource_1kwg4"),
-"template": "noise"
-}, {
-"name": &"id_0028_merge",
-"position_offset": Vector2(900, 540),
-"settings": SubResource("Resource_2vprb"),
-"template": "merge"
-}, {
-"name": &"id_0029_add_attribute",
-"position_offset": Vector2(740.869, 499.72),
-"settings": SubResource("Resource_lg74x"),
-"template": "add_attribute"
-}, {
-"name": &"id_0030_add_attribute",
-"position_offset": Vector2(720, 600),
-"settings": SubResource("Resource_5cp38"),
-"template": "add_attribute"
-}, {
-"name": &"id_0031_add_attribute",
-"position_offset": Vector2(740, 320),
-"settings": SubResource("Resource_luhre"),
-"template": "add_attribute"
-}, {
-"name": &"id_0032_sample_spline",
-"position_offset": Vector2(40, 580),
-"settings": SubResource("Resource_dlhps"),
-"template": "sample_spline"
-}, {
-"name": &"id_0033_scan_nodes",
-"position_offset": Vector2(60, 820),
-"settings": SubResource("Resource_3n10b"),
-"template": "scan_nodes"
-}, {
-"name": &"id_0034_self_pruning",
-"position_offset": Vector2(1400, 520),
-"settings": SubResource("Resource_afs1c"),
-"template": "self_pruning"
-}])
-conns = Array[Dictionary]([{
-"from_node": &"id_0032_sample_spline",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0022_select",
-"to_port": 0
-}, {
-"from_node": &"id_0033_scan_nodes",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0018_math_op",
-"to_port": 0
-}, {
-"from_node": &"id_0018_math_op",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0020_math_op",
-"to_port": 0
-}, {
-"from_node": &"id_0020_math_op",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0019_spawn_scenes",
-"to_port": 0
-}, {
-"from_node": &"id_0021_sample_spline",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0015_add_attribute",
-"to_port": 0
-}, {
-"from_node": &"id_0015_add_attribute",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0016_math_op",
-"to_port": 0
-}, {
-"from_node": &"id_0021_sample_spline",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0017_add_attribute",
-"to_port": 0
-}, {
-"from_node": &"id_0017_add_attribute",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0008_math_op",
-"to_port": 0
-}, {
-"from_node": &"id_0013_math_op",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0012_sort",
-"to_port": 0
-}, {
-"from_node": &"id_0008_math_op",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0009_add_attribute",
-"to_port": 0
-}, {
-"from_node": &"id_0009_add_attribute",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0010_math_op",
-"to_port": 0
-}, {
-"from_node": &"id_0010_math_op",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0011_add_attribute",
-"to_port": 0
-}, {
-"from_node": &"id_0011_add_attribute",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0013_math_op",
-"to_port": 0
-}, {
-"from_node": &"id_0012_sort",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0014_math_op",
-"to_port": 0
-}, {
-"from_node": &"id_0019_spawn_scenes",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0023_substract",
-"to_port": 1
-}, {
-"from_node": &"id_0022_select",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0026_distance",
-"to_port": 0
-}, {
-"from_node": &"id_0021_sample_spline",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0026_distance",
-"to_port": 1
-}, {
-"from_node": &"id_0031_add_attribute",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0024_filter",
-"to_port": 1
-}, {
-"from_node": &"id_0024_filter",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0023_substract",
-"to_port": 0
-}, {
-"from_node": &"id_0026_distance",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0027_noise",
-"to_port": 0
-}, {
-"from_node": &"id_0027_noise",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0025_math_op",
-"to_port": 0
-}, {
-"from_node": &"id_0026_distance",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0025_math_op",
-"to_port": 1
-}, {
-"from_node": &"id_0025_math_op",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0024_filter",
-"to_port": 0
-}, {
-"from_node": &"id_0029_add_attribute",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0028_merge",
-"to_port": 0
-}, {
-"from_node": &"id_0030_add_attribute",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0028_merge",
-"to_port": 1
-}, {
-"from_node": &"id_0023_substract",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0034_self_pruning",
-"to_port": 0
-}])
 data = {
 "links": [{
-"from_node": &"id_0032_sample_spline",
+"from_node": &"id_0115_sample_spline",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0022_select",
+"to_node": &"id_0105_select",
 "to_port": 0
 }, {
-"from_node": &"id_0033_scan_nodes",
+"from_node": &"id_0116_scan_nodes",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0018_math_op",
+"to_node": &"id_0101_math_op",
 "to_port": 0
 }, {
-"from_node": &"id_0018_math_op",
+"from_node": &"id_0101_math_op",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0020_math_op",
+"to_node": &"id_0103_math_op",
 "to_port": 0
 }, {
-"from_node": &"id_0020_math_op",
+"from_node": &"id_0103_math_op",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0019_spawn_scenes",
+"to_node": &"id_0102_spawn_scenes",
 "to_port": 0
 }, {
-"from_node": &"id_0021_sample_spline",
+"from_node": &"id_0104_sample_spline",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0015_add_attribute",
+"to_node": &"id_0098_add_attribute",
 "to_port": 0
 }, {
-"from_node": &"id_0015_add_attribute",
+"from_node": &"id_0098_add_attribute",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0016_math_op",
+"to_node": &"id_0099_math_op",
 "to_port": 0
 }, {
-"from_node": &"id_0021_sample_spline",
+"from_node": &"id_0104_sample_spline",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0017_add_attribute",
+"to_node": &"id_0100_add_attribute",
 "to_port": 0
 }, {
-"from_node": &"id_0017_add_attribute",
+"from_node": &"id_0100_add_attribute",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0008_math_op",
+"to_node": &"id_0091_math_op",
 "to_port": 0
 }, {
-"from_node": &"id_0013_math_op",
+"from_node": &"id_0096_math_op",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0012_sort",
+"to_node": &"id_0095_sort",
 "to_port": 0
 }, {
-"from_node": &"id_0008_math_op",
+"from_node": &"id_0091_math_op",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0009_add_attribute",
+"to_node": &"id_0092_add_attribute",
 "to_port": 0
 }, {
-"from_node": &"id_0009_add_attribute",
+"from_node": &"id_0092_add_attribute",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0010_math_op",
+"to_node": &"id_0093_math_op",
 "to_port": 0
 }, {
-"from_node": &"id_0010_math_op",
+"from_node": &"id_0093_math_op",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0011_add_attribute",
+"to_node": &"id_0094_add_attribute",
 "to_port": 0
 }, {
-"from_node": &"id_0011_add_attribute",
+"from_node": &"id_0094_add_attribute",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0013_math_op",
+"to_node": &"id_0096_math_op",
 "to_port": 0
 }, {
-"from_node": &"id_0012_sort",
+"from_node": &"id_0095_sort",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0014_math_op",
+"to_node": &"id_0097_math_op",
 "to_port": 0
 }, {
-"from_node": &"id_0019_spawn_scenes",
+"from_node": &"id_0102_spawn_scenes",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0023_substract",
+"to_node": &"id_0106_substract",
 "to_port": 1
 }, {
-"from_node": &"id_0022_select",
+"from_node": &"id_0105_select",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0026_distance",
+"to_node": &"id_0109_distance",
 "to_port": 0
 }, {
-"from_node": &"id_0021_sample_spline",
+"from_node": &"id_0104_sample_spline",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0026_distance",
+"to_node": &"id_0109_distance",
 "to_port": 1
 }, {
-"from_node": &"id_0031_add_attribute",
+"from_node": &"id_0114_add_attribute",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0024_filter",
+"to_node": &"id_0107_filter",
 "to_port": 1
 }, {
-"from_node": &"id_0024_filter",
+"from_node": &"id_0107_filter",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0023_substract",
+"to_node": &"id_0106_substract",
 "to_port": 0
 }, {
-"from_node": &"id_0026_distance",
+"from_node": &"id_0109_distance",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0027_noise",
+"to_node": &"id_0110_noise",
 "to_port": 0
 }, {
-"from_node": &"id_0027_noise",
+"from_node": &"id_0110_noise",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0025_math_op",
+"to_node": &"id_0108_math_op",
 "to_port": 0
 }, {
-"from_node": &"id_0026_distance",
+"from_node": &"id_0109_distance",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0025_math_op",
+"to_node": &"id_0108_math_op",
 "to_port": 1
 }, {
-"from_node": &"id_0025_math_op",
+"from_node": &"id_0108_math_op",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0024_filter",
+"to_node": &"id_0107_filter",
 "to_port": 0
 }, {
-"from_node": &"id_0029_add_attribute",
+"from_node": &"id_0112_add_attribute",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0028_merge",
+"to_node": &"id_0111_merge",
 "to_port": 0
 }, {
-"from_node": &"id_0030_add_attribute",
+"from_node": &"id_0113_add_attribute",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0028_merge",
+"to_node": &"id_0111_merge",
 "to_port": 1
 }, {
-"from_node": &"id_0023_substract",
+"from_node": &"id_0106_substract",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0034_self_pruning",
+"to_node": &"id_0117_self_pruning",
 "to_port": 0
 }],
 "min_pos": Vector2(-100, -230),
@@ -997,7 +194,7 @@ data = {
 "port": 1
 }
 },
-"name": &"id_0008_math_op",
+"name": &"id_0091_math_op",
 "position": Vector2(470, 0),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
@@ -1024,7 +221,7 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0009_add_attribute",
+"name": &"id_0092_add_attribute",
 "position": Vector2(610, 0),
 "settings": {
 "cte_bool": false,
@@ -1059,7 +256,7 @@ data = {
 "port": 1
 }
 },
-"name": &"id_0010_math_op",
+"name": &"id_0093_math_op",
 "position": Vector2(760, 0),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
@@ -1086,7 +283,7 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0011_add_attribute",
+"name": &"id_0094_add_attribute",
 "position": Vector2(900, 0),
 "settings": {
 "cte_bool": false,
@@ -1117,7 +314,7 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0012_sort",
+"name": &"id_0095_sort",
 "position": Vector2(1210, 0),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
@@ -1146,7 +343,7 @@ data = {
 "port": 1
 }
 },
-"name": &"id_0013_math_op",
+"name": &"id_0096_math_op",
 "position": Vector2(1070, 0),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
@@ -1177,7 +374,7 @@ data = {
 "port": 1
 }
 },
-"name": &"id_0014_math_op",
+"name": &"id_0097_math_op",
 "position": Vector2(1340, 0),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
@@ -1204,7 +401,7 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0015_add_attribute",
+"name": &"id_0098_add_attribute",
 "position": Vector2(300, 120),
 "settings": {
 "cte_bool": false,
@@ -1239,7 +436,7 @@ data = {
 "port": 1
 }
 },
-"name": &"id_0016_math_op",
+"name": &"id_0099_math_op",
 "position": Vector2(460, 130),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
@@ -1266,7 +463,7 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0017_add_attribute",
+"name": &"id_0100_add_attribute",
 "position": Vector2(300, 0),
 "settings": {
 "cte_bool": false,
@@ -1301,7 +498,7 @@ data = {
 "port": 1
 }
 },
-"name": &"id_0018_math_op",
+"name": &"id_0101_math_op",
 "position": Vector2(460, 1050),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
@@ -1328,7 +525,7 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0019_spawn_scenes",
+"name": &"id_0102_spawn_scenes",
 "position": Vector2(940, 1210),
 "settings": {
 "assign_attributes": {
@@ -1361,7 +558,7 @@ data = {
 "port": 1
 }
 },
-"name": &"id_0020_math_op",
+"name": &"id_0103_math_op",
 "position": Vector2(720, 1150),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
@@ -1383,7 +580,7 @@ data = {
 "template": "math_op"
 }, {
 "args_port": {},
-"name": &"id_0021_sample_spline",
+"name": &"id_0104_sample_spline",
 "position": Vector2(0, 330),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
@@ -1410,7 +607,7 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0022_select",
+"name": &"id_0105_select",
 "position": Vector2(500, 750),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
@@ -1438,7 +635,7 @@ data = {
 "port": 1
 }
 },
-"name": &"id_0023_substract",
+"name": &"id_0106_substract",
 "position": Vector2(1340, 870),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
@@ -1466,7 +663,7 @@ data = {
 "port": 1
 }
 },
-"name": &"id_0024_filter",
+"name": &"id_0107_filter",
 "position": Vector2(1160, 570),
 "settings": {
 "condition": 2,
@@ -1497,7 +694,7 @@ data = {
 "port": 1
 }
 },
-"name": &"id_0025_math_op",
+"name": &"id_0108_math_op",
 "position": Vector2(1380, 430),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
@@ -1528,7 +725,7 @@ data = {
 "port": 1
 }
 },
-"name": &"id_0026_distance",
+"name": &"id_0109_distance",
 "position": Vector2(720, 310),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
@@ -1555,7 +752,7 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0027_noise",
+"name": &"id_0110_noise",
 "position": Vector2(1060, 250),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
@@ -1586,7 +783,7 @@ data = {
 "port": 1
 }
 },
-"name": &"id_0028_merge",
+"name": &"id_0111_merge",
 "position": Vector2(1000, 770),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
@@ -1609,7 +806,7 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0029_add_attribute",
+"name": &"id_0112_add_attribute",
 "position": Vector2(840.869, 729.72),
 "settings": {
 "cte_bool": false,
@@ -1640,7 +837,7 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0030_add_attribute",
+"name": &"id_0113_add_attribute",
 "position": Vector2(820, 830),
 "settings": {
 "cte_bool": false,
@@ -1671,7 +868,7 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0031_add_attribute",
+"name": &"id_0114_add_attribute",
 "position": Vector2(840, 550),
 "settings": {
 "cte_bool": false,
@@ -1697,7 +894,7 @@ data = {
 "template": "add_attribute"
 }, {
 "args_port": {},
-"name": &"id_0032_sample_spline",
+"name": &"id_0115_sample_spline",
 "position": Vector2(140, 810),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
@@ -1719,7 +916,7 @@ data = {
 "template": "sample_spline"
 }, {
 "args_port": {},
-"name": &"id_0033_scan_nodes",
+"name": &"id_0116_scan_nodes",
 "position": Vector2(160, 1050),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
@@ -1747,7 +944,7 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0034_self_pruning",
+"name": &"id_0117_self_pruning",
 "position": Vector2(1500, 750),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
@@ -1768,8 +965,8 @@ data = {
 "type": "flow_graph_nodes",
 "version": 1
 }
-view_zoom = 0.970564
-view_offset = Vector2(-19.939, 277.01)
+view_zoom = 0.374194
+view_offset = Vector2(144.856, -322.725)
 new_name_counter = 105
 in_params = Array[ExtResource("2_dxf0c")]([])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
@@ -1801,13 +998,13 @@ transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, -9.03623, -1.71658, 10.1062)
 visible = false
 script = ExtResource("20_ol2su")
 head_rotation = 40.0
-metadata/flow_owner = &"id_0117_spawn_scenes"
+metadata/flow_owner = &"id_0020_spawn_scenes"
 
 [node name="Scene_0001" type="Node3D" parent="FlowGraphNode3D" instance=ExtResource("11_h10xn")]
 transform = Transform3D(0.957354, 0, 1.56877, 0, 1.83781, 0, -1.56877, 0, 0.957354, 7.52767, -9.53674e-07, -2.50066)
 script = ExtResource("20_ol2su")
 head_rotation = 80.0
-metadata/flow_owner = &"id_0117_spawn_scenes"
+metadata/flow_owner = &"id_0020_spawn_scenes"
 
 [node name="Road" type="Path3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0883217, 0, -0.0294399)

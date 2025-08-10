@@ -100,8 +100,8 @@ func _process(delta: float) -> void:
 			saveResource()
 		if regen_pending:
 			#print( "Waiting %d == %d + %d (%d)" % [ gedit.get_child_count(), num_non_nodes_children, current_resource.nodes.size(), gedit_nodes_by_name.size()])
-			if gedit.get_child_count() == num_non_nodes_children + current_resource.nodes.size():
-				evalGraph()
+			#if gedit.get_child_count() == num_non_nodes_children + current_resource.nodes.size():
+			evalGraph()
 
 func getNewName( suffix : String ):
 	new_name_counter += 1

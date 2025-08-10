@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://c1b6ke05vpb8r"]
+[gd_scene load_steps=15 format=3 uid="uid://c1b6ke05vpb8r"]
 
 [ext_resource type="Script" uid="uid://dsft6ocvh7yuk" path="res://demos/demo_scene.gd" id="1_1hm1i"]
 [ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_iapjp"]
@@ -6,120 +6,30 @@
 [ext_resource type="Resource" uid="uid://c6tic21gyki1f" path="res://graph02_curves.tres" id="4_ctgmk"]
 [ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="6_4qc3i"]
 [ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="6_h7mfa"]
-[ext_resource type="Script" uid="uid://dwtm2hr5nh78h" path="res://addons/flow_nodes_editor/nodes/grid_settings.gd" id="6_mssda"]
 [ext_resource type="Script" uid="uid://cjfky1m4j3nl" path="res://scenes/tree_data.gd" id="6_om45m"]
 [ext_resource type="PackedScene" uid="uid://b6q4l56g02tqn" path="res://scenes/scene_3p.tscn" id="7_yg6rb"]
-[ext_resource type="Script" uid="uid://dqd74l1ewnh0g" path="res://addons/flow_nodes_editor/nodes/spawn_scenes_settings.gd" id="8_6qj3o"]
-[ext_resource type="Script" uid="uid://dt7o3moxddt4h" path="res://addons/flow_nodes_editor/nodes/transform_settings.gd" id="9_6qj3o"]
 [ext_resource type="Script" uid="uid://dbtbo3vh5nl2c" path="res://scenes/scene_3p.gd" id="11_dffkk"]
-
-[sub_resource type="Resource" id="Resource_dffkk"]
-resource_name = "Grid Settings"
-script = ExtResource("6_mssda")
-x = 3
-y = 1
-z = 3
-step = Vector3(2.235, 1.22, 1)
-origin = Vector3(0, 0, 0)
-rotation = Vector3(0, 0, 0)
-random_seed = 3740779835
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Grid"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_c1qst"]
-resource_name = "Transform Settings"
-script = ExtResource("9_6qj3o")
-offset_min = Vector3(0, 0, 0)
-offset_max = Vector3(0, 0, 0)
-rotation_min = Vector3(0, 0, 0)
-rotation_max = Vector3(0, 360, 0)
-scale_min = Vector3(1, 1, 1)
-scale_max = Vector3(1, 1, 1)
-uniform_scale = false
-random_seed = 2631886296
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Transform"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_ho47h"]
-resource_name = "Spawn Scenes Settings"
-script = ExtResource("8_6qj3o")
-scene = ExtResource("7_yg6rb")
-scene_attribute = ""
-assign_attributes = {}
-random_seed = 4115871725
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Spawn Scenes"
-enabled = true
-trace = false
 
 [sub_resource type="Resource" id="Resource_mssda"]
 script = ExtResource("6_4qc3i")
-nodes = Array[Dictionary]([{
-"name": &"id_0106_grid",
-"position_offset": Vector2(20, 200),
-"settings": SubResource("Resource_dffkk"),
-"template": "grid"
-}, {
-"name": &"id_0107_transform",
-"position_offset": Vector2(240, 180),
-"settings": SubResource("Resource_c1qst"),
-"template": "transform"
-}, {
-"name": &"id_0108_spawn_scenes",
-"position_offset": Vector2(500, 180),
-"settings": SubResource("Resource_ho47h"),
-"template": "spawn_scenes"
-}])
-conns = Array[Dictionary]([{
-"from_node": &"id_0107_transform",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0108_spawn_scenes",
-"to_port": 0
-}, {
-"from_node": &"id_0106_grid",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0107_transform",
-"to_port": 0
-}])
 data = {
 "links": [{
-"from_node": &"id_0107_transform",
+"from_node": &"id_0038_transform",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0108_spawn_scenes",
+"to_node": &"id_0039_spawn_scenes",
 "to_port": 0
 }, {
-"from_node": &"id_0106_grid",
+"from_node": &"id_0037_grid",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0107_transform",
+"to_node": &"id_0038_transform",
 "to_port": 0
 }],
 "min_pos": Vector2(20, 180),
 "nodes": [{
 "args_port": {},
-"name": &"id_0106_grid",
+"name": &"id_0037_grid",
 "position": Vector2(0, 20),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
@@ -148,7 +58,7 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0107_transform",
+"name": &"id_0038_transform",
 "position": Vector2(220, 0),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
@@ -178,7 +88,7 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0108_spawn_scenes",
+"name": &"id_0039_spawn_scenes",
 "position": Vector2(480, 0),
 "settings": {
 "assign_attributes": {},
@@ -258,47 +168,47 @@ curve = SubResource("Curve3D_ayuu8")
 [node name="Scene_0000" type="Node3D" parent="PCG_4" instance=ExtResource("7_yg6rb")]
 transform = Transform3D(-0.202695, 0, 0.979242, 0, 1, 0, -0.979242, 0, -0.202695, 0, 0, 0)
 script = ExtResource("11_dffkk")
-metadata/flow_owner = &"id_0093_spawn_scenes"
+metadata/flow_owner = &"id_0108_spawn_scenes"
 
 [node name="Scene_0001" type="Node3D" parent="PCG_4" instance=ExtResource("7_yg6rb")]
 transform = Transform3D(-0.628816, 0, 0.777554, 0, 1, 0, -0.777554, 0, -0.628816, 2.235, 0, 0)
 script = ExtResource("11_dffkk")
-metadata/flow_owner = &"id_0093_spawn_scenes"
+metadata/flow_owner = &"id_0108_spawn_scenes"
 
 [node name="Scene_0002" type="Node3D" parent="PCG_4" instance=ExtResource("7_yg6rb")]
 transform = Transform3D(-0.282614, 0, -0.959234, 0, 1, 0, 0.959234, 0, -0.282614, 4.47, 0, 0)
 script = ExtResource("11_dffkk")
-metadata/flow_owner = &"id_0093_spawn_scenes"
+metadata/flow_owner = &"id_0108_spawn_scenes"
 
 [node name="Scene_0003" type="Node3D" parent="PCG_4" instance=ExtResource("7_yg6rb")]
 transform = Transform3D(-0.382643, 0, -0.923896, 0, 1, 0, 0.923896, 0, -0.382643, 0, 0, 1)
 script = ExtResource("11_dffkk")
-metadata/flow_owner = &"id_0093_spawn_scenes"
+metadata/flow_owner = &"id_0108_spawn_scenes"
 
 [node name="Scene_0004" type="Node3D" parent="PCG_4" instance=ExtResource("7_yg6rb")]
 transform = Transform3D(0.748819, 0, -0.662774, 0, 1, 0, 0.662774, 0, 0.748819, 2.235, 0, 1)
 script = ExtResource("11_dffkk")
-metadata/flow_owner = &"id_0093_spawn_scenes"
+metadata/flow_owner = &"id_0108_spawn_scenes"
 
 [node name="Scene_0005" type="Node3D" parent="PCG_4" instance=ExtResource("7_yg6rb")]
 transform = Transform3D(-0.752382, 0, -0.658728, 0, 1, 0, 0.658728, 0, -0.752382, 4.47, 0, 1)
 script = ExtResource("11_dffkk")
-metadata/flow_owner = &"id_0093_spawn_scenes"
+metadata/flow_owner = &"id_0108_spawn_scenes"
 
 [node name="Scene_0006" type="Node3D" parent="PCG_4" instance=ExtResource("7_yg6rb")]
 transform = Transform3D(0.997146, 0, 0.0754969, 0, 1, 0, -0.0754969, 0, 0.997146, 0, 0, 2)
 script = ExtResource("11_dffkk")
-metadata/flow_owner = &"id_0093_spawn_scenes"
+metadata/flow_owner = &"id_0108_spawn_scenes"
 
 [node name="Scene_0007" type="Node3D" parent="PCG_4" instance=ExtResource("7_yg6rb")]
 transform = Transform3D(0.87491, 0, -0.484285, 0, 1, 0, 0.484285, 0, 0.87491, 2.235, 0, 2)
 script = ExtResource("11_dffkk")
-metadata/flow_owner = &"id_0093_spawn_scenes"
+metadata/flow_owner = &"id_0108_spawn_scenes"
 
 [node name="Scene_0008" type="Node3D" parent="PCG_4" instance=ExtResource("7_yg6rb")]
 transform = Transform3D(0.674192, 0, 0.738556, 0, 1, 0, -0.738556, 0, 0.674192, 4.47, 0, 2)
 script = ExtResource("11_dffkk")
-metadata/flow_owner = &"id_0093_spawn_scenes"
+metadata/flow_owner = &"id_0108_spawn_scenes"
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(3.28555, 0.0905085, -0.124378, -0.330954, 0.898526, -1.23476, 0, 0.429487, 2.60945, -0.685871, -1.56801, 0)

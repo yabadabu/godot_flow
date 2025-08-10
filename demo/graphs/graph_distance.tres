@@ -1,15 +1,6 @@
-[gd_resource type="Resource" script_class="FlowGraphResource" load_steps=26 format=3 uid="uid://chy06hdyr5neh"]
+[gd_resource type="Resource" script_class="FlowGraphResource" load_steps=4 format=3 uid="uid://chy06hdyr5neh"]
 
 [ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="1_ym11o"]
-[ext_resource type="Script" uid="uid://dt7o3moxddt4h" path="res://addons/flow_nodes_editor/nodes/transform_settings.gd" id="3_0wyvu"]
-[ext_resource type="Script" uid="uid://dhryaxkxmtaui" path="res://addons/flow_nodes_editor/nodes/make_vector_settings.gd" id="4_ef0dx"]
-[ext_resource type="Script" uid="uid://cka12nenjlwgx" path="res://addons/flow_nodes_editor/nodes/filter_settings.gd" id="5_hglf1"]
-[ext_resource type="Script" uid="uid://runa6a3koevg" path="res://addons/flow_nodes_editor/nodes/add_attribute_settings.gd" id="6_6hd3x"]
-[ext_resource type="Script" uid="uid://dwtm2hr5nh78h" path="res://addons/flow_nodes_editor/nodes/grid_settings.gd" id="7_vba52"]
-[ext_resource type="Script" uid="uid://cbj3mmuatfk1v" path="res://addons/flow_nodes_editor/nodes/sample_spline_settings.gd" id="8_4xbv3"]
-[ext_resource type="Script" uid="uid://bo5aaecpx1tsp" path="res://addons/flow_nodes_editor/nodes/distance_settings.gd" id="10_b6e1b"]
-[ext_resource type="Script" uid="uid://fq4pca63mdph" path="res://addons/flow_nodes_editor/node_settings.gd" id="10_ym11o"]
-[ext_resource type="Script" uid="uid://du3c8wxq0r2fl" path="res://addons/flow_nodes_editor/nodes/input_settings.gd" id="11_lgr5u"]
 [ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="11_ox7wi"]
 
 [sub_resource type="Resource" id="Resource_0wyvu"]
@@ -22,489 +13,93 @@ cte_float = -1.0
 cte_vector = Vector3(0, 0, 0)
 cte_string = ""
 
-[sub_resource type="Resource" id="Resource_ym11o"]
-resource_name = "Add Attribute"
-script = ExtResource("6_6hd3x")
-name = "Threshold"
-data_type = 2
-cte_bool = false
-cte_int = 0
-cte_float = 0.91
-cte_vector = Vector3(0, 0, 0)
-cte_string = ""
-random_seed = 3924440885
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Add Attribute"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_lgr5u"]
-resource_name = "Make Vector Settings"
-script = ExtResource("4_ef0dx")
-x = 0.41
-y = 1.0
-z = 0.28
-out_name = "Vector"
-random_seed = 559977034
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Make Vector"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_ef0dx"]
-resource_name = "Transform Settings"
-script = ExtResource("3_0wyvu")
-offset_min = Vector3(-1, 0, -4)
-offset_max = Vector3(-1, 0, -4)
-rotation_min = Vector3(0, 0, 0)
-rotation_max = Vector3(0, 0, 0)
-scale_min = Vector3(0.1, 1, 1)
-scale_max = Vector3(0.1, 1, 1)
-uniform_scale = true
-random_seed = 4269736984
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Transform"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_hglf1"]
-resource_name = "Grid Settings"
-script = ExtResource("7_vba52")
-x = 32
-y = 1
-z = 32
-step = Vector3(0.5, 1, 0.5)
-origin = Vector3(0, 0, 0)
-rotation = Vector3(0, 0, 0)
-random_seed = 2397165643
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Grid"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_6hd3x"]
-resource_name = "Distance Settings"
-script = ExtResource("10_b6e1b")
-max_distance = 0.49
-out_name = "distance"
-in_nameA = "position"
-in_nameB = "position"
-random_seed = 2858792388
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 1
-debug_scale = 0.15
-debug_color = Color(0, 1, 1, 1)
-debug_modulate_by = "distance"
-title = "Distance"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_vba52"]
-resource_name = "Make Vector Settings"
-script = ExtResource("4_ef0dx")
-x = 0.0
-y = 0.0
-z = 0.0
-out_name = "Vector"
-random_seed = 1783256320
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Make Vector"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_4xbv3"]
-resource_name = "Input"
-script = ExtResource("11_lgr5u")
-name = "Make Vector - Y"
-data_type = 2
-random_seed = 3495926413
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Input"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_f4g4t"]
-resource_name = "Sample Spline Settings"
-script = ExtResource("8_4xbv3")
-uniform_interval = 0.295
-fill_curve = false
-required_meta_bool = &""
-distance_attribute = "distance"
-random_seed = 1282431794
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Sample Spline"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_b6e1b"]
-resource_name = "Transform Settings"
-script = ExtResource("3_0wyvu")
-offset_min = Vector3(0, 0, 0)
-offset_max = Vector3(0, 0, 0)
-rotation_min = Vector3(0, 0, 0)
-rotation_max = Vector3(0, 0, 0)
-scale_min = Vector3(0.1, 0.5, 0.1)
-scale_max = Vector3(0.1, 0.5, 0.1)
-uniform_scale = false
-random_seed = 345771434
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Transform"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_ox7wi"]
-resource_name = "Add Attribute"
-script = ExtResource("6_6hd3x")
-name = "Step"
-data_type = 2
-cte_bool = false
-cte_int = 0
-cte_float = 0.205
-cte_vector = Vector3(0, 0, 0)
-cte_string = ""
-random_seed = 1435980282
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Add Attribute"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_ug0g3"]
-resource_name = "Filter Settings"
-script = ExtResource("5_hglf1")
-condition = 2
-in_nameA = "distance"
-in_nameB = "Threshold"
-threshold = 0.175
-random_seed = 934950267
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Filter"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_imw32"]
-resource_name = "Node Settings"
-script = ExtResource("10_ym11o")
-random_seed = 4136855197
-inspect_enabled = false
-debug_enabled = true
-debug_mode = 1
-debug_scale = 0.175
-debug_color = Color(0, 1, 1, 1)
-debug_modulate_by = "distance"
-title = "Debug"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_lhu04"]
-resource_name = "Transform Settings"
-script = ExtResource("3_0wyvu")
-offset_min = Vector3(0, 0, 0)
-offset_max = Vector3(0, 0, 0)
-rotation_min = Vector3(0, 0, 0)
-rotation_max = Vector3(0, 0, 0)
-scale_min = Vector3(1, 1, 1)
-scale_max = Vector3(1, 1, 1)
-uniform_scale = true
-random_seed = 3953013428
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Transform"
-enabled = true
-trace = false
-
 [resource]
 resource_name = "graph_distance"
 script = ExtResource("11_ox7wi")
-nodes = Array[Dictionary]([{
-"name": &"id_0085_add_attribute",
-"position_offset": Vector2(940, 620),
-"settings": SubResource("Resource_ym11o"),
-"template": "add_attribute"
-}, {
-"name": &"id_0086_make_vector",
-"position_offset": Vector2(0, 360),
-"settings": SubResource("Resource_lgr5u"),
-"template": "make_vector"
-}, {
-"name": &"id_0087_transform",
-"position_offset": Vector2(360, 240),
-"settings": SubResource("Resource_ef0dx"),
-"template": "transform"
-}, {
-"name": &"id_0088_grid",
-"position_offset": Vector2(180, 240),
-"settings": SubResource("Resource_hglf1"),
-"template": "grid"
-}, {
-"name": &"id_0089_distance",
-"position_offset": Vector2(680, 480),
-"settings": SubResource("Resource_6hd3x"),
-"template": "distance"
-}, {
-"name": &"id_0090_make_vector",
-"position_offset": Vector2(1280, 640),
-"settings": SubResource("Resource_vba52"),
-"template": "make_vector"
-}, {
-"name": &"id_0091_input_Make Vector - Y",
-"position_offset": Vector2(1100, 720),
-"settings": SubResource("Resource_4xbv3"),
-"template": "input_Make Vector - Y"
-}, {
-"name": &"id_0092_sample_spline",
-"position_offset": Vector2(60, 620),
-"settings": SubResource("Resource_f4g4t"),
-"template": "sample_spline"
-}, {
-"name": &"id_0093_transform",
-"position_offset": Vector2(360, 620),
-"settings": SubResource("Resource_b6e1b"),
-"template": "transform"
-}, {
-"name": &"id_0094_add_attribute",
-"position_offset": Vector2(-200, 420),
-"settings": SubResource("Resource_ox7wi"),
-"template": "add_attribute"
-}, {
-"name": &"id_0095_filter",
-"position_offset": Vector2(1080, 480),
-"settings": SubResource("Resource_ug0g3"),
-"template": "filter"
-}, {
-"name": &"id_0096_debug",
-"position_offset": Vector2(1720, 700),
-"settings": SubResource("Resource_imw32"),
-"template": "debug"
-}, {
-"name": &"id_0097_transform",
-"position_offset": Vector2(1480, 520),
-"settings": SubResource("Resource_lhu04"),
-"template": "transform"
-}])
-conns = Array[Dictionary]([{
-"from_node": &"id_0092_sample_spline",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0093_transform",
-"to_port": 0
-}, {
-"from_node": &"id_0094_add_attribute",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0086_make_vector",
-"to_port": 0
-}, {
-"from_node": &"id_0094_add_attribute",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0086_make_vector",
-"to_port": 2
-}, {
-"from_node": &"id_0087_transform",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0089_distance",
-"to_port": 0
-}, {
-"from_node": &"id_0093_transform",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0089_distance",
-"to_port": 1
-}, {
-"from_node": &"id_0089_distance",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0095_filter",
-"to_port": 0
-}, {
-"from_node": &"id_0085_add_attribute",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0095_filter",
-"to_port": 1
-}, {
-"from_node": &"id_0088_grid",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0087_transform",
-"to_port": 0
-}, {
-"from_node": &"id_0086_make_vector",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0088_grid",
-"to_port": 3
-}, {
-"from_node": &"id_0091_input_Make Vector - Y",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0090_make_vector",
-"to_port": 1
-}, {
-"from_node": &"id_0095_filter",
-"from_port": 1,
-"keep_alive": false,
-"to_node": &"id_0097_transform",
-"to_port": 0
-}, {
-"from_node": &"id_0090_make_vector",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0097_transform",
-"to_port": 1
-}, {
-"from_node": &"id_0090_make_vector",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0097_transform",
-"to_port": 2
-}, {
-"from_node": &"id_0097_transform",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0096_debug",
-"to_port": 0
-}])
 data = {
 "links": [{
-"from_node": &"id_0092_sample_spline",
+"from_node": &"id_0032_sample_spline",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0093_transform",
+"to_node": &"id_0033_transform",
 "to_port": 0
 }, {
-"from_node": &"id_0094_add_attribute",
+"from_node": &"id_0034_add_attribute",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0086_make_vector",
+"to_node": &"id_0026_make_vector",
 "to_port": 0
 }, {
-"from_node": &"id_0094_add_attribute",
+"from_node": &"id_0034_add_attribute",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0086_make_vector",
+"to_node": &"id_0026_make_vector",
 "to_port": 2
 }, {
-"from_node": &"id_0087_transform",
+"from_node": &"id_0027_transform",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0089_distance",
+"to_node": &"id_0029_distance",
 "to_port": 0
 }, {
-"from_node": &"id_0093_transform",
+"from_node": &"id_0033_transform",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0089_distance",
+"to_node": &"id_0029_distance",
 "to_port": 1
 }, {
-"from_node": &"id_0089_distance",
+"from_node": &"id_0029_distance",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0095_filter",
+"to_node": &"id_0035_filter",
 "to_port": 0
 }, {
-"from_node": &"id_0085_add_attribute",
+"from_node": &"id_0025_add_attribute",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0095_filter",
+"to_node": &"id_0035_filter",
 "to_port": 1
 }, {
-"from_node": &"id_0088_grid",
+"from_node": &"id_0028_grid",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0087_transform",
+"to_node": &"id_0027_transform",
 "to_port": 0
 }, {
-"from_node": &"id_0086_make_vector",
+"from_node": &"id_0026_make_vector",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0088_grid",
+"to_node": &"id_0028_grid",
 "to_port": 3
 }, {
-"from_node": &"id_0091_input_Make Vector - Y",
+"from_node": &"id_0031_input_Make Vector - Y",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0090_make_vector",
+"to_node": &"id_0030_make_vector",
 "to_port": 1
 }, {
-"from_node": &"id_0095_filter",
+"from_node": &"id_0035_filter",
 "from_port": 1,
 "keep_alive": false,
-"to_node": &"id_0097_transform",
+"to_node": &"id_0037_transform",
 "to_port": 0
 }, {
-"from_node": &"id_0090_make_vector",
+"from_node": &"id_0030_make_vector",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0097_transform",
+"to_node": &"id_0037_transform",
 "to_port": 1
 }, {
-"from_node": &"id_0090_make_vector",
+"from_node": &"id_0030_make_vector",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0097_transform",
+"to_node": &"id_0037_transform",
 "to_port": 2
 }, {
-"from_node": &"id_0097_transform",
+"from_node": &"id_0037_transform",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0096_debug",
+"to_node": &"id_0036_debug",
 "to_port": 0
 }],
 "min_pos": Vector2(-200, 240),
@@ -515,7 +110,7 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0085_add_attribute",
+"name": &"id_0025_add_attribute",
 "position": Vector2(1140, 380),
 "settings": {
 "cte_bool": false,
@@ -554,7 +149,7 @@ data = {
 "port": 2
 }
 },
-"name": &"id_0086_make_vector",
+"name": &"id_0026_make_vector",
 "position": Vector2(200, 120),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
@@ -581,7 +176,7 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0087_transform",
+"name": &"id_0027_transform",
 "position": Vector2(560, 0),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
@@ -631,7 +226,7 @@ data = {
 "port": 2
 }
 },
-"name": &"id_0088_grid",
+"name": &"id_0028_grid",
 "position": Vector2(380, 0),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
@@ -664,7 +259,7 @@ data = {
 "port": 1
 }
 },
-"name": &"id_0089_distance",
+"name": &"id_0029_distance",
 "position": Vector2(880, 240),
 "settings": {
 "debug_color": Color(0, 1, 1, 1),
@@ -699,7 +294,7 @@ data = {
 "port": 2
 }
 },
-"name": &"id_0090_make_vector",
+"name": &"id_0030_make_vector",
 "position": Vector2(1480, 400),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
@@ -721,7 +316,7 @@ data = {
 "template": "make_vector"
 }, {
 "args_port": {},
-"name": &"id_0091_input_Make Vector - Y",
+"name": &"id_0031_input_Make Vector - Y",
 "position": Vector2(1300, 480),
 "settings": {
 "data_type": 2,
@@ -741,7 +336,7 @@ data = {
 "template": "input_Make Vector - Y"
 }, {
 "args_port": {},
-"name": &"id_0092_sample_spline",
+"name": &"id_0032_sample_spline",
 "position": Vector2(260, 380),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
@@ -768,7 +363,7 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0093_transform",
+"name": &"id_0033_transform",
 "position": Vector2(560, 380),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
@@ -798,7 +393,7 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0094_add_attribute",
+"name": &"id_0034_add_attribute",
 "position": Vector2(0, 180),
 "settings": {
 "cte_bool": false,
@@ -833,7 +428,7 @@ data = {
 "port": 1
 }
 },
-"name": &"id_0095_filter",
+"name": &"id_0035_filter",
 "position": Vector2(1280, 240),
 "settings": {
 "condition": 2,
@@ -860,7 +455,7 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0096_debug",
+"name": &"id_0036_debug",
 "position": Vector2(1920, 460),
 "settings": {
 "debug_color": Color(0, 1, 1, 1),
@@ -891,7 +486,7 @@ data = {
 "port": 1
 }
 },
-"name": &"id_0097_transform",
+"name": &"id_0037_transform",
 "position": Vector2(1680, 280),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),

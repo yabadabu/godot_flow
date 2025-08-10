@@ -3,8 +3,6 @@ extends Resource
 class_name FlowGraphResource
 @export_category("Flow Graph Resource")
 
-@export var nodes: Array[Dictionary] = []
-@export var conns : Array[Dictionary] = []
 @export var data: Dictionary = {}
 @export var view_zoom : float = 1.0
 @export var view_offset : Vector2 = Vector2(0,0)
