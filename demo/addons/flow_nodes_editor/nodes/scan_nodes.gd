@@ -129,11 +129,11 @@ func importProperty( output, nodes, prop_path ):
 		stream.container[ idx ] = value	
 
 func get_aabb_of_node( node3d : Node3D ) -> AABB:
+	var combined_aabb := AABB()  # Starts as invalid (zero size)
 	if node3d is MeshInstance3D:
 		if node3d.mesh:
 			return node3d.mesh.get_aabb()
-	var combined_aabb := AABB()  # Starts as invalid (zero size)
-	if node3d is Path3D:
+	elif node3d is Path3D:
 		var points : PackedVector3Array = node3d.curve.get_baked_points()
 		if points.size() > 0:
 			var pmin = points[0]
@@ -143,6 +143,15 @@ func get_aabb_of_node( node3d : Node3D ) -> AABB:
 				pmax = pmax.max( p )
 			var half = ( pmax - pmin )
 			return AABB( pmin, half )
+			
+	# This is not working correctly
+	elif node3d is CollisionShape3D:
+		var shape = node3d.shape
+		if shape:
+			if shape is BoxShape3D:
+				var box_shape = shape as BoxShape3D
+				return AABB( node3d.position - box_shape.size * 0.5, box_shape.size )
+		
 	return combined_aabb
 
 func get_combined_aabb(root: Node3D) -> AABB:
