@@ -287,12 +287,8 @@ func localToGraphCoords( local_coords : Vector2 ):
 	#var view_zero_in_scroll_offset = gedit.scroll_offset / gedit.zoom
 	return ( gedit.scroll_offset + local_coords ) / gedit.zoom
 
-func setOnOverInParam( node, row ):
-	#print( "On over %s.%s" % [ node.name, row.getInLabel().text ])
+func setOnOverInParam( row ):
 	popup_on_over_input = row
-
-func clearOnOverInParam( ):
-	popup_on_over_input = null
 
 func addNodeFromTemplate( node_template, node_name : String, settings = null ):
 	print( "addNode %s (%s : %s)" % [ node_template, node_name, str(settings) ])
@@ -331,8 +327,8 @@ func addNodeFromTemplate( node_template, node_name : String, settings = null ):
 		var row = child as FlowConnectorRow
 		if not row or not row.isParameter():
 			continue
-		row.in_popup.connect( setOnOverInParam.bind( node, row ) )
-		row.out_popup.connect( clearOnOverInParam)
+		row.in_popup.connect( setOnOverInParam.bind( row ) )
+		row.out_popup.connect( setOnOverInParam.bind( null ) )
 	
 	gedit.add_child(node)
 	gedit_nodes_by_name[ node.name ] = node
