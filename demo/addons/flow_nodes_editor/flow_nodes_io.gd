@@ -88,20 +88,34 @@ static func nodes_as_dict( nodes, editor : FlowGraphEditor ):
 			links.append( connection )
 	var data := {
 		"type" : "flow_graph_nodes",
+		"version" : 1,
+		"min_pos" : min_pos,
 		"nodes" : nodes_clean,
 		"links" : links
 	}
 	return data
 
-static func _paste_nodes_from_dict( dict, editor : FlowGraphEditor ):
+static func _paste_nodes_from_dict( dict, editor : FlowGraphEditor, at_graph_coords = null):
 	if typeof(dict) != TYPE_DICTIONARY:
 		return []
+	# Read paste coords from mouse
 	var mouse_pos = editor.get_local_mouse_position()
 	var graph_coords : Vector2 = editor.localToGraphCoords( mouse_pos )
+	if at_graph_coords:
+		graph_coords = at_graph_coords
+		
+	var new_nodes = create_nodes_from_dict( dict, editor, graph_coords )
+	
+	# Update selection
+	for node in editor.getSelectedNodes():
+		node.selected = false
+	for node in new_nodes:
+		node.selected = true
+
+static func create_nodes_from_dict( dict, editor : FlowGraphEditor, paste_offset = null):		
 	if dict.get( "type", null) != "flow_graph_nodes":
 		push_error( "Invalid dict to paste nodes from" )
 		return []
-	var paste_offset := graph_coords
 	var new_nodes = []
 	var old_to_new_names = {}
 	for in_node in dict.nodes:
@@ -136,11 +150,6 @@ static func _paste_nodes_from_dict( dict, editor : FlowGraphEditor ):
 		print( "link:", link )
 		editor.connect_nodes(new_from, link.from_port, new_to, link.to_port )
 
-	# Update selection
-	for node in editor.getSelectedNodes():
-		node.selected = false
-	for node in new_nodes:
-		node.selected = true
 	return new_nodes
 
 static func copySelectionToClipboard( editor : FlowGraphEditor ):
@@ -163,6 +172,8 @@ static func saveToResource( editor : FlowGraphEditor ):
 	if current_resource == null:
 		return
 	var gedit = editor.gedit
+	
+	# To be deleted --------------------
 	current_resource.nodes.clear()
 	current_resource.conns.clear()
 	for child in editor.gedit.get_children():
@@ -180,7 +191,12 @@ static func saveToResource( editor : FlowGraphEditor ):
 
 	for connection in gedit.get_connection_list():
 		current_resource.conns.append( connection.duplicate() )
+	# To be deleted --------------------
 
+	var all_nodes = editor.gedit.get_children().filter( func( n ):
+		return n is FlowNodeBase
+	)
+	current_resource.data = nodes_as_dict( all_nodes, editor )
 	current_resource.view_zoom = gedit.zoom
 	current_resource.view_offset = gedit.scroll_offset
 	current_resource.new_name_counter = editor.new_name_counter
@@ -195,24 +211,32 @@ static func loadFromResource( editor : FlowGraphEditor ):
 	# Register the input_* nodes before trying to load the nodes
 	for input in current_resource.in_params:
 		editor.registerInputNodeType( input )
-	
-	print( "Recovering %d nodes" % current_resource.nodes.size() )
-	for res_node in current_resource.nodes:
-		#print( "Recovering node %s" % [ res_node ])
-		var node = editor.addNodeFromTemplate( res_node.template, res_node.name, res_node.settings )
-		if not node:
-			push_error( "Failed to recover node %s" % [ res_node ])
-			continue
-		node.position_offset = res_node.position_offset * editor.ui_scale
-		if node.settings.inspect_enabled:
-			node_in_data_inspector = node
-	
-	print( "Recovering %d conns" % current_resource.conns.size() )
-	for conn in current_resource.conns:
-		#print( "Regenerating conn %s" % [conn])
-		var err = editor.gedit.connect_node( conn.from_node, conn.from_port, conn.to_node, conn.to_port )	
-		if err:
-			push_error("Error adding conn %s from %s" % [err, conn])
+		
+	if current_resource.data and not current_resource.data.is_empty():
+		var paste_offset = _parse_vector2( current_resource.data.min_pos )
+		print( "Pasting at offset: %s" % paste_offset)
+		create_nodes_from_dict( current_resource.data, editor, paste_offset )
+		
+	else:
+		# To be deleted --------------------
+		print( "Recovering %d nodes (old school)" % current_resource.nodes.size() )
+		for res_node in current_resource.nodes:
+			#print( "Recovering node %s" % [ res_node ])
+			var node = editor.addNodeFromTemplate( res_node.template, res_node.name, res_node.settings )
+			if not node:
+				push_error( "Failed to recover node %s" % [ res_node ])
+				continue
+			node.position_offset = res_node.position_offset * editor.ui_scale
+			if node.settings.inspect_enabled:
+				node_in_data_inspector = node
+		
+		print( "Recovering %d conns" % current_resource.conns.size() )
+		for conn in current_resource.conns:
+			#print( "Regenerating conn %s" % [conn])
+			var err = editor.gedit.connect_node( conn.from_node, conn.from_port, conn.to_node, conn.to_port )	
+			if err:
+				push_error("Error adding conn %s from %s" % [err, conn])
+		# To be deleted --------------------
 			
 	editor.gedit.zoom = current_resource.view_zoom
 	editor.gedit.scroll_offset = current_resource.view_offset

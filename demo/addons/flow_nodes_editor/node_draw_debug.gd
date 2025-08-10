@@ -12,7 +12,7 @@ var selection_color := Color.MAGENTA
 	
 func _ready():
 	var viewport = get_viewport()
-	if viewport:
+	if viewport and viewport.get_world_3d():
 		scenario_rid = viewport.get_world_3d().scenario
 	
 func _exit_tree():

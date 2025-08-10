@@ -5,7 +5,7 @@ func _init():
 	meta_node = {
 		"title" : "Filter",
 		"settings" : FilterNodeSettings,
-		"ins" : [{"label": "In A" }, {"label": "In B" }], 
+		"ins" : [{ "label": "In A" }, { "label": "In B" }], 
 		"outs" : [{ "label" : "True" }, { "label" : "False" }],
 		"hide_inputs" : true,
 		"tooltip" : "Filter inputs based on some condition.\nThis node returns splits the input stream in two substreams.",

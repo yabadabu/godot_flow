@@ -33,12 +33,22 @@ var marker_radius : float = 9
 var debug_row : int = -1
 
 func _ready():
-	draw_debug = NodeDrawDebug.new()
-	draw_debug.node = self
-	add_child( draw_debug )
+	checkDrawDebug()
 	refreshInspectMark()
 	refreshDebugMark()
-
+	
+func checkDrawDebug():
+	if not is_instance_valid(draw_debug) or draw_debug.get_parent() != self:
+		draw_debug = NodeDrawDebug.new()
+		draw_debug.node = self
+		add_child(draw_debug)
+		# if the helper gets freed, clear our reference
+		draw_debug.tree_exited.connect(func(): draw_debug = null)
+		
+func setupDrawDebug():
+	checkDrawDebug()
+	draw_debug.setupDraw()
+		
 func set_output( idx : int, data ):
 	if idx >= outputs.size():
 		outputs.resize( idx + 1 )
@@ -95,7 +105,7 @@ func refreshFromSettings():
 	refreshInspectMark()
 	title = getTitle()
 	
-	if not settings.debug_enabled:
+	if not settings.debug_enabled and draw_debug:
 		draw_debug.cleanup_multimesh_direct()
 	
 func setError( new_err : String ):
@@ -106,6 +116,9 @@ func setError( new_err : String ):
 	redrawUI()
 		
 func _on_draw() -> void:
+	
+	if not settings:
+		return
 
 	if err:
 		var sz = 16 * ui_scale
@@ -261,6 +274,7 @@ func initFromScript():
 				return args_ports_by_name.has( data.name ) and args_ports_by_name[ data.name ].connected
 			)
 	else:
+		# When we just instantiate the node
 		exposed_params = []
 		
 	if trace:
@@ -291,6 +305,7 @@ func initFromScript():
 		# Is there an input active
 		if idx < num_inputs:
 			var in_data
+			
 			# Decide if it's a flow input, or just a param input
 			if idx < num_ins:
 				in_data = ins[idx]
@@ -298,19 +313,23 @@ func initFromScript():
 				in_data = exposed_params[ idx - num_ins ]
 			lbl_in.text = in_data.label
 			
+			var in_name = in_data.get( "name", in_data.label )
+			
 			set_slot_enabled_left( idx, true )
+			# Change color
 			if in_data.has( "type"):
 				var color = getColorForGDScriptType( in_data.type )	
 				set_slot_color_left( idx, color )
 			in_data.port = idx
 			ctrl.setData( in_data )
 			
-			args_ports_by_name[ in_data.name ] = { "port" : idx, "connected" : connected_inputs_by_name.has( in_data.name ) }
+			args_ports_by_name[ in_name ] = { "port" : idx, "connected" : connected_inputs_by_name.has( in_name ) }
 			if trace:
-				print( "%s : Assigning slot %d for input %s" % [ name, idx, in_data.name ])
+				print( "%s : Assigning slot %d for input %s" % [ name, idx, in_name ])
 		else:
 			lbl_in.text = ""
 			
+		print( "idx %d.  num_outs:%d" % [ idx, num_outs ] )
 		if idx < num_outs:
 			var out_data = outs[idx]
 			if out_data:
@@ -338,17 +357,17 @@ func initFromScript():
 		for arg_name in args_ports_by_name.keys():
 			print( "  %s : %s" % [ arg_name, args_ports_by_name[ arg_name ] ] )
 	
-	# Reconnect nodes
-	for arg_name in connected_inputs_by_name.keys():
-		var old_data = connected_inputs_by_name[ arg_name ]
-		var old_port = old_data.port
-		var new_port = args_ports_by_name[ arg_name ].port
-		for old_conn in old_data.conns:
-			var from_node = old_conn[0]
-			var from_port = old_conn[1]
-			flow_editor.connect_nodes( from_node, from_port, name, new_port )
-		flow_editor.queueSave()
 	if flow_editor:
+		# Reconnect nodes
+		for arg_name in connected_inputs_by_name.keys():
+			var old_data = connected_inputs_by_name[ arg_name ]
+			var old_port = old_data.port
+			var new_port = args_ports_by_name[ arg_name ].port
+			for old_conn in old_data.conns:
+				var from_node = old_conn[0]
+				var from_port = old_conn[1]
+				flow_editor.connect_nodes( from_node, from_port, name, new_port )
+			flow_editor.queueSave()
 		flow_editor.refreshSignalsInputArgs( self )
 	
 func refreshConnectionFlags( ):	
@@ -361,7 +380,7 @@ func nodeOptionsChanged( expanded : bool ):
 	show_disconnected_inputs = not show_disconnected_inputs
 	refreshConnectionFlags( )
 	initFromScript()
-
+	setupDrawDebug()
 	
 # This returns the current value of the input configuration taking into account potencial connections and overrides of the inputs
 func getSettingValue( ctx : FlowData.EvaluationContext, in_name : String ):

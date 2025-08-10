@@ -16,6 +16,7 @@ const discardted_props = {
 	"resource_name" : 1,
 	"metadata/_custom_type_script" : 1,
 	"script" : 1,
+	"data" : 1,
 }
 
 func execute( _ctx : FlowData.EvaluationContext ):
