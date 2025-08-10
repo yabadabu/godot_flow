@@ -192,7 +192,6 @@ static func loadFromResource( editor : FlowGraphEditor ):
 		
 	if current_resource.data and not current_resource.data.is_empty():
 		var paste_offset = _parse_vector2( current_resource.data.min_pos )
-		print( "Pasting at offset: %s" % paste_offset)
 		create_nodes_from_dict( current_resource.data, editor, paste_offset )
 		
 	editor.gedit.zoom = current_resource.view_zoom

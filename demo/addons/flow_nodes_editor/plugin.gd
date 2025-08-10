@@ -65,12 +65,12 @@ func _ready():
 # This is called after the a new scene is loaded, but the 'selection' event of the new
 # scene is called first.
 func on_scene_changed(scene_root: Node) -> void:
-	print( "Scene Changed detected")
-	# Check if we still have a resource but the owner is no longer in the scene
-	if graph_dock && graph_dock.current_resource && not graph_dock.resource_owner:
-		print( "Removing old flow resource")
-		graph_dock.setResourceToEdit( null, null )
-		
+	print( "Scene Changed detected %s : %s -> %s" % [graph_dock.current_resource, is_instance_valid(graph_dock.resource_owner), scene_root.name ] )
+	if graph_dock.resource_owner:
+		var node = graph_dock.resource_owner
+		if scene_root and (node.get_owner() != scene_root and not scene_root.is_ancestor_of(node)):
+			graph_dock.setResourceToEdit( null, null )
+
 func _selection_changed():
 	
 	var scene_nodes = selection.get_selected_nodes()
