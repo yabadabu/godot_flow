@@ -292,6 +292,8 @@ func initFromScript():
 	self.get_input_port_count()
 	clear_all_slots()
 	for child in get_children():
+		if child == draw_debug:
+			continue
 		child.queue_free()
 		remove_child( child )
 	
