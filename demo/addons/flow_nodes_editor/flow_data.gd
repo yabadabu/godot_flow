@@ -48,6 +48,7 @@ class TransformsStream:
 
 class Data:
 	var streams : Dictionary = {}
+	var last_added_stream_name : String
 
 	func newContainerOfType( data_type : DataType ):
 		match data_type:
@@ -88,6 +89,8 @@ class Data:
 		
 	# converts 'Yaw' into "Rotation.Y" 
 	func translateStreamName( name : String ):
+		if name == "@last":
+			return last_added_stream_name
 		if name == "Yaw":
 			return "%s.Y" % FlowData.AttrRotation
 		if name == "Pitch":
@@ -167,6 +170,9 @@ class Data:
 		if not name:
 			push_error("registerStream name can't be empty" )
 			return null
+		if container == null:
+			push_error("registerStream. Can't register a null container with name %s" %  name )
+			return null			
 		name = translateStreamName( name )
 		var parts = name.split( "." )
 		if parts.size() == 2:
@@ -197,6 +203,7 @@ class Data:
 				"name" : name,
 				"data_type" : data_type
 			}
+		last_added_stream_name = name
 		#print( "Registered stream %s : %s " % [ name, streams[ name ] ])
 		return null
 	

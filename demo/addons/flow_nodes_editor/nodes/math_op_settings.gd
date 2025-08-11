@@ -28,8 +28,8 @@ enum eOperation {
 }
 
 @export var operation : eOperation = eOperation.Add
-@export var in_nameA : String
-@export var in_nameB : String
+@export var in_nameA : String = "@last"
+@export var in_nameB : String = "@last"
 @export var out_name : String
 
 func _init():
