@@ -57,6 +57,68 @@ static func weighted_sample_without_replacement(weights: PackedFloat32Array, k: 
 	for t in k: out[t] = int(idx_arr[t])
 	return out
 
+const BIG := 1e38  # prefer finite over INF for determinism
+
+var _keys: PackedFloat32Array = PackedFloat32Array()
+var _idx_tmp: Array = []                  # plain Array for sort_custom
+var _uniform_idx: PackedInt32Array = PackedInt32Array()
+
+func cmp_by_key(a: int, b: int) -> bool:
+	# Comparator used by Array.sort_custom; uses member _keys
+	return _keys[a] < _keys[b]
+
+func uniform_sampling(n: int, k: int, rng: RandomNumberGenerator) -> PackedInt32Array:
+	# Reuse buffer
+	if _uniform_idx.size() != n:
+		_uniform_idx.resize(n)
+	for i in n:
+		_uniform_idx[i] = i
+	# Fisher–Yates
+	for i in range(n - 1, 0, -1):
+		var j := rng.randi_range(0, i)
+		var tmp := _uniform_idx[i]; _uniform_idx[i] = _uniform_idx[j]; _uniform_idx[j] = tmp
+	var out := PackedInt32Array()
+	out.resize(k)
+	for t in k:
+		out[t] = _uniform_idx[t]
+	return out
+
+## O(n log n) — simple & fast when k is not tiny
+func weighted_sampling(weights: PackedFloat32Array, k: int, rng: RandomNumberGenerator) -> PackedInt32Array:
+	var n := weights.size()
+	k = clamp(k, 0, n)
+	var out := PackedInt32Array()
+	if n == 0 or k == 0:
+		return out
+
+	# Ensure buffers sized to n
+	if _keys.size() != n:
+		_keys.resize(n)
+	if _idx_tmp.size() != n:
+		_idx_tmp.resize(n)
+
+	var all_zero := true
+	for i in n:
+		var w = weights[i]  # no maxf; your `if w > 0.0` handles negatives
+		if w > 0.0:
+			all_zero = false
+			var u := rng.randf_range(1e-12, 1.0)  # avoid ln(0)
+			_keys[i] = -log(u) / w                # smaller = better
+		else:
+			_keys[i] = BIG
+		_idx_tmp[i] = i
+
+	if all_zero:
+		return uniform_sampling(n, k, rng)
+
+	# Sort indices by key (ascending)
+	_idx_tmp.sort_custom(cmp_by_key)
+
+	out.resize(k)
+	for t in k:
+		out[t] = int(_idx_tmp[t])
+	return out
+
 
 func execute( ctx : FlowData.EvaluationContext ):
 	var in_data : FlowData.Data = get_input(0)
@@ -70,21 +132,18 @@ func execute( ctx : FlowData.EvaluationContext ):
 	var out_size = round(in_size * ratio)
 	#print( "Select: From %d, took %1.2f%% -> %d" % [ in_size, settings.ratio, out_size ])
 	
+	var rng := RandomNumberGenerator.new()
+	rng.seed = settings.random_seed
+	
 	var indices : PackedInt32Array
 	if attr_name:
 		var weight_stream = in_data.findStream( attr_name )
 		if weight_stream == null:
 			setError( "Input Weight Name %s not found" % [attr_name])
 			return
-		indices = weighted_sample_without_replacement( weight_stream.container, out_size, settings.random_seed )
+		indices = weighted_sampling( weight_stream.container, out_size, rng )
 	else:
-			
-		var pool := range(in_size)
-		shuffleArray( pool )
-		indices = PackedInt32Array( pool )
-		var subset := indices.slice(0, out_size)
-		subset.sort()
-		indices = subset
-	
+		indices = uniform_sampling( in_data.size(), out_size, rng )
+
 	var out_data = in_data.filter( indices )
 	set_output( 0, out_data )

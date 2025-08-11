@@ -56,81 +56,11 @@ data = {
 "to_node": &"id_0014_distance",
 "to_port": 0
 }],
-"min_pos": Vector2(80, 229.631),
+"min_pos": Vector2(60, 220),
 "nodes": [{
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0002_self_pruning",
-"position": Vector2(160, 150.369),
-"settings": {
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_scale": 1.0,
-"enabled": true,
-"inspect_enabled": false,
-"keep_self_intersections": false,
-"random_seed": 2830869655,
-"title": "Self Pruning",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "self_pruning"
-}, {
-"args_port": {},
-"name": &"id_0003_sample_mesh",
-"position": Vector2(0, 150.369),
-"settings": {
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_scale": 1.0,
-"density": 0.92,
-"enabled": true,
-"inspect_enabled": false,
-"mode": 0,
-"num_samples": 100,
-"point_size": 0.19,
-"random_seed": 310741729,
-"title": "Sample Mesh",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "sample_mesh"
-}, {
-"args_port": {},
-"name": &"id_0010_grid",
-"position": Vector2(31.6882, 0),
-"settings": {
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_scale": 1.0,
-"enabled": true,
-"inspect_enabled": false,
-"origin": Vector3(-4.605, -0.1, -4.505),
-"random_seed": 2702798924,
-"rotation": Vector3(0, 0, 0),
-"step": Vector3(1, 1, 1),
-"title": "Grid",
-"trace": false,
-"x": 10,
-"y": 1,
-"z": 10
-},
-"show_disconnected_inputs": false,
-"template": "grid"
-}, {
 "args_port": {},
 "name": &"id_0004_scan_nodes",
-"position": Vector2(0, 310.369),
+"position": Vector2(20, 320),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
@@ -152,6 +82,169 @@ data = {
 "template": "scan_nodes"
 }, {
 "args_port": {
+"In A": {
+"connected": true,
+"port": 0
+},
+"In B": {
+"connected": false,
+"port": 1
+}
+},
+"name": &"id_0005_math_op",
+"position": Vector2(700, 300),
+"settings": {
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "distance",
+"debug_scale": 1.0,
+"enabled": true,
+"in_nameA": "@last",
+"in_nameB": "2",
+"inspect_enabled": false,
+"operation": 2,
+"out_name": "@last",
+"random_seed": 1671374794,
+"title": "Math",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "math_op"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0002_self_pruning",
+"position": Vector2(180, 160),
+"settings": {
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_scale": 1.0,
+"enabled": true,
+"inspect_enabled": false,
+"keep_self_intersections": false,
+"random_seed": 2830869655,
+"title": "Self Pruning",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "self_pruning"
+}, {
+"args_port": {},
+"name": &"id_0010_grid",
+"position": Vector2(0, 0),
+"settings": {
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_scale": 1.0,
+"enabled": true,
+"inspect_enabled": false,
+"origin": Vector3(-4.605, -0.1, -4.505),
+"random_seed": 2702798924,
+"rotation": Vector3(0, 0, 0),
+"step": Vector3(1, 1, 1),
+"title": "Grid",
+"trace": false,
+"x": 10,
+"y": 1,
+"z": 10
+},
+"show_disconnected_inputs": false,
+"template": "grid"
+}, {
+"args_port": {
+"In A": {
+"connected": true,
+"port": 0
+},
+"In B": {
+"connected": false,
+"port": 1
+}
+},
+"name": &"id_0008_math_op",
+"position": Vector2(1260, 300),
+"settings": {
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "distance",
+"debug_scale": 1.0,
+"enabled": true,
+"in_nameA": "@last",
+"in_nameB": "4",
+"inspect_enabled": false,
+"operation": 16,
+"out_name": "@last",
+"random_seed": 2764706821,
+"title": "Math",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "math_op"
+}, {
+"args_port": {
+"In A": {
+"connected": true,
+"port": 0
+},
+"In B": {
+"connected": false,
+"port": 1
+}
+},
+"name": &"id_0009_math_op",
+"position": Vector2(1080, 300),
+"settings": {
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "distance",
+"debug_scale": 1.0,
+"enabled": true,
+"in_nameA": "@last",
+"in_nameB": "@last",
+"inspect_enabled": false,
+"operation": 6,
+"out_name": "@last",
+"random_seed": 2125795760,
+"title": "Math",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "math_op"
+}, {
+"args_port": {},
+"name": &"id_0003_sample_mesh",
+"position": Vector2(20, 160),
+"settings": {
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_scale": 1.0,
+"density": 17.045,
+"enabled": true,
+"inspect_enabled": false,
+"mode": 0,
+"num_samples": 100,
+"point_size": 0.19,
+"random_seed": 310741729,
+"title": "Sample Mesh",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "sample_mesh"
+}, {
+"args_port": {
 "In": {
 "connected": true,
 "port": 0
@@ -166,7 +259,7 @@ data = {
 }
 },
 "name": &"id_0014_distance",
-"position": Vector2(400, 290.369),
+"position": Vector2(420, 300),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
@@ -196,39 +289,8 @@ data = {
 "port": 1
 }
 },
-"name": &"id_0005_math_op",
-"position": Vector2(680, 290.369),
-"settings": {
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "distance",
-"debug_scale": 1.0,
-"enabled": true,
-"in_nameA": "@last",
-"in_nameB": "2",
-"inspect_enabled": false,
-"operation": 2,
-"out_name": "@last",
-"random_seed": 1671374794,
-"title": "Math",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "math_op"
-}, {
-"args_port": {
-"In A": {
-"connected": true,
-"port": 0
-},
-"In B": {
-"connected": false,
-"port": 1
-}
-},
 "name": &"id_0018_math_op",
-"position": Vector2(880, 290.369),
+"position": Vector2(880, 300),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
@@ -242,68 +304,6 @@ data = {
 "operation": 15,
 "out_name": "distance",
 "random_seed": 1327385603,
-"title": "Math",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "math_op"
-}, {
-"args_port": {
-"In A": {
-"connected": true,
-"port": 0
-},
-"In B": {
-"connected": false,
-"port": 1
-}
-},
-"name": &"id_0009_math_op",
-"position": Vector2(1060, 290.369),
-"settings": {
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "distance",
-"debug_scale": 1.0,
-"enabled": true,
-"in_nameA": "@last",
-"in_nameB": "@last",
-"inspect_enabled": false,
-"operation": 6,
-"out_name": "@last",
-"random_seed": 2125795760,
-"title": "Math",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "math_op"
-}, {
-"args_port": {
-"In A": {
-"connected": true,
-"port": 0
-},
-"In B": {
-"connected": false,
-"port": 1
-}
-},
-"name": &"id_0008_math_op",
-"position": Vector2(1240, 290.369),
-"settings": {
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "distance",
-"debug_scale": 1.0,
-"enabled": true,
-"in_nameA": "@last",
-"in_nameB": "4",
-"inspect_enabled": false,
-"operation": 16,
-"out_name": "@last",
-"random_seed": 2764706821,
 "title": "Math",
 "trace": false
 },
@@ -325,17 +325,17 @@ data = {
 }
 },
 "name": &"id_0007_select",
-"position": Vector2(1560, 290.369),
+"position": Vector2(1440, 300),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
-"debug_enabled": true,
+"debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "",
 "debug_scale": 1.0,
 "enabled": true,
 "inspect_enabled": false,
-"random_seed": 2664181196,
-"ratio": 0.246,
+"random_seed": 2664181666,
+"ratio": 0.2,
 "title": "Select",
 "trace": false,
 "weight_name": "distance"
@@ -347,8 +347,8 @@ data = {
 "version": 1
 }
 view_zoom = 0.751314
-view_offset = Vector2(-241.64, -338.748)
-new_name_counter = 10
+view_offset = Vector2(676.634, -153.35)
+new_name_counter = 11
 in_params = Array[ExtResource("2_1mcnb")]([])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 
@@ -367,4 +367,4 @@ transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 0, 0)
 mesh = SubResource("PlaneMesh_aj3gx")
 
 [node name="Node3D" type="Node3D" parent="." groups=["RefPoints"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.10273, -3.8147e-06, 1.16762)
+transform = Transform3D(4.09574, 0, 0, 0, 1, 0, 0, 0, 7.63447, -0.028463, -3.8147e-06, -1.30688)
