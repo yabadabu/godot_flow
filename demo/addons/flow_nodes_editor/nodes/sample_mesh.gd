@@ -182,6 +182,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 
 	var num_samples = getSettingValue(ctx, "num_samples" )
 	var density = getSettingValue(ctx, "density")
+	var point_size = getSettingValue(ctx, "point_size")
 
 	if settings.mode == SampleMeshNodeSettings.eMode.UseDensity:
 		num_samples = -1
@@ -208,7 +209,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 	# All the samples have the same size
 	var ssize := output.getVector3Container( FlowData.AttrSize )
 	ssize.resize( spos.size() )
-	var sample_size = Vector3.ONE
+	var sample_size = Vector3.ONE * point_size
 	ssize.fill(sample_size)
 
 	set_output( 0, output )

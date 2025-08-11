@@ -14,6 +14,7 @@ enum eMode {
 @export var mode : eMode = eMode.UseDensity
 @export var density : float = 0.5
 @export var num_samples : int = 100
+@export var point_size : float = 1.0
 
 func _init():
 	super._init()
