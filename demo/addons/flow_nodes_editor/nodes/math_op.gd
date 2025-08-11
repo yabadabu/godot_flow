@@ -231,7 +231,36 @@ func execute( _ctx : FlowData.EvaluationContext ):
 					for i in num_elems:
 						outC[i] = inA[i] / inB[i]
 			out_container = outC
-			
+
+		elif sA.data_type == FlowData.DataType.Int && sB.data_type == FlowData.DataType.Int:
+			var inA : PackedInt32Array = sA.container
+			var inB : PackedInt32Array = sB.container
+			var outC := PackedInt32Array()
+			outC.resize( num_elems )
+			match settings.operation:
+				MathOpNodeSettings.eOperation.Multiply:
+					for i in num_elems:
+						outC[i] = inA[i] * inB[i]
+				MathOpNodeSettings.eOperation.Add:
+					for i in num_elems:
+						outC[i] = inA[i] + inB[i]
+				MathOpNodeSettings.eOperation.Substract:
+					for i in num_elems:
+						outC[i] = inA[i] - inB[i]
+				MathOpNodeSettings.eOperation.Divide:
+					for i in num_elems:
+						outC[i] = inA[i] / inB[i]
+				MathOpNodeSettings.eOperation.ModuloInt:
+					for i in num_elems:
+						outC[i] = inA[i] % inB[i]
+				MathOpNodeSettings.eOperation.Min:
+					for i in num_elems:
+						outC[i] = mini( inA[i], inB[i] )
+				MathOpNodeSettings.eOperation.Max:
+					for i in num_elems:
+						outC[i] = maxi( inA[i], inB[i] )
+			out_container = outC
+	
 		else:
 			setError( "Input A and B have incompatible/unsupported data types (%s vs %s)" % [sA.data_type, sB.data_type])
 			return
