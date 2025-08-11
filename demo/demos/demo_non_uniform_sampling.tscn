@@ -1,0 +1,370 @@
+[gd_scene load_steps=6 format=3 uid="uid://cd1045jnwr8wg"]
+
+[ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_3she7"]
+[ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="2_1mcnb"]
+[ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="3_87gem"]
+
+[sub_resource type="Resource" id="Resource_7xx0y"]
+script = ExtResource("3_87gem")
+data = {
+"links": [{
+"from_node": &"id_0003_sample_mesh",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0002_self_pruning",
+"to_port": 0
+}, {
+"from_node": &"id_0004_scan_nodes",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0014_distance",
+"to_port": 1
+}, {
+"from_node": &"id_0005_math_op",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0018_math_op",
+"to_port": 0
+}, {
+"from_node": &"id_0014_distance",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0005_math_op",
+"to_port": 0
+}, {
+"from_node": &"id_0018_math_op",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0009_math_op",
+"to_port": 0
+}, {
+"from_node": &"id_0009_math_op",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0008_math_op",
+"to_port": 0
+}, {
+"from_node": &"id_0008_math_op",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0007_select",
+"to_port": 0
+}, {
+"from_node": &"id_0002_self_pruning",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0014_distance",
+"to_port": 0
+}],
+"min_pos": Vector2(80, 229.631),
+"nodes": [{
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0002_self_pruning",
+"position": Vector2(160, 150.369),
+"settings": {
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_scale": 1.0,
+"enabled": true,
+"inspect_enabled": false,
+"keep_self_intersections": false,
+"random_seed": 2830869655,
+"title": "Self Pruning",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "self_pruning"
+}, {
+"args_port": {},
+"name": &"id_0003_sample_mesh",
+"position": Vector2(0, 150.369),
+"settings": {
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_scale": 1.0,
+"density": 0.92,
+"enabled": true,
+"inspect_enabled": false,
+"mode": 0,
+"num_samples": 100,
+"point_size": 0.19,
+"random_seed": 310741729,
+"title": "Sample Mesh",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "sample_mesh"
+}, {
+"args_port": {},
+"name": &"id_0010_grid",
+"position": Vector2(31.6882, 0),
+"settings": {
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_scale": 1.0,
+"enabled": true,
+"inspect_enabled": false,
+"origin": Vector3(-4.605, -0.1, -4.505),
+"random_seed": 2702798924,
+"rotation": Vector3(0, 0, 0),
+"step": Vector3(1, 1, 1),
+"title": "Grid",
+"trace": false,
+"x": 10,
+"y": 1,
+"z": 10
+},
+"show_disconnected_inputs": false,
+"template": "grid"
+}, {
+"args_port": {},
+"name": &"id_0004_scan_nodes",
+"position": Vector2(0, 310.369),
+"settings": {
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_scale": 1.0,
+"enabled": true,
+"filter_by_class_name": "",
+"group_name": "RefPoints",
+"import_metadata": true,
+"import_properties": Array[StringName]([]),
+"inspect_enabled": false,
+"random_seed": 1687206785,
+"size_to_bounds": false,
+"title": "Scan Nodes",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "scan_nodes"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+},
+"Target": {
+"connected": true,
+"port": 1
+},
+"max_distance": {
+"connected": false,
+"port": 2
+}
+},
+"name": &"id_0014_distance",
+"position": Vector2(400, 290.369),
+"settings": {
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "distance",
+"debug_scale": 1.0,
+"enabled": true,
+"in_nameA": "position",
+"in_nameB": "position",
+"inspect_enabled": false,
+"max_distance": 11.0,
+"out_name": "distance",
+"random_seed": 3613997201,
+"title": "Distance",
+"trace": false
+},
+"show_disconnected_inputs": true,
+"template": "distance"
+}, {
+"args_port": {
+"In A": {
+"connected": true,
+"port": 0
+},
+"In B": {
+"connected": false,
+"port": 1
+}
+},
+"name": &"id_0005_math_op",
+"position": Vector2(680, 290.369),
+"settings": {
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "distance",
+"debug_scale": 1.0,
+"enabled": true,
+"in_nameA": "@last",
+"in_nameB": "2",
+"inspect_enabled": false,
+"operation": 2,
+"out_name": "@last",
+"random_seed": 1671374794,
+"title": "Math",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "math_op"
+}, {
+"args_port": {
+"In A": {
+"connected": true,
+"port": 0
+},
+"In B": {
+"connected": false,
+"port": 1
+}
+},
+"name": &"id_0018_math_op",
+"position": Vector2(880, 290.369),
+"settings": {
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "distance",
+"debug_scale": 1.0,
+"enabled": true,
+"in_nameA": "@last",
+"in_nameB": "2",
+"inspect_enabled": false,
+"operation": 15,
+"out_name": "distance",
+"random_seed": 1327385603,
+"title": "Math",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "math_op"
+}, {
+"args_port": {
+"In A": {
+"connected": true,
+"port": 0
+},
+"In B": {
+"connected": false,
+"port": 1
+}
+},
+"name": &"id_0009_math_op",
+"position": Vector2(1060, 290.369),
+"settings": {
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "distance",
+"debug_scale": 1.0,
+"enabled": true,
+"in_nameA": "@last",
+"in_nameB": "@last",
+"inspect_enabled": false,
+"operation": 6,
+"out_name": "@last",
+"random_seed": 2125795760,
+"title": "Math",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "math_op"
+}, {
+"args_port": {
+"In A": {
+"connected": true,
+"port": 0
+},
+"In B": {
+"connected": false,
+"port": 1
+}
+},
+"name": &"id_0008_math_op",
+"position": Vector2(1240, 290.369),
+"settings": {
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "distance",
+"debug_scale": 1.0,
+"enabled": true,
+"in_nameA": "@last",
+"in_nameB": "4",
+"inspect_enabled": false,
+"operation": 16,
+"out_name": "@last",
+"random_seed": 2764706821,
+"title": "Math",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "math_op"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+},
+"ratio": {
+"connected": false,
+"port": 1
+},
+"weight_name": {
+"connected": false,
+"port": 2
+}
+},
+"name": &"id_0007_select",
+"position": Vector2(1560, 290.369),
+"settings": {
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": true,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_scale": 1.0,
+"enabled": true,
+"inspect_enabled": false,
+"random_seed": 2664181196,
+"ratio": 0.246,
+"title": "Select",
+"trace": false,
+"weight_name": "distance"
+},
+"show_disconnected_inputs": true,
+"template": "select"
+}],
+"type": "flow_graph_nodes",
+"version": 1
+}
+view_zoom = 0.751314
+view_offset = Vector2(-241.64, -338.748)
+new_name_counter = 10
+in_params = Array[ExtResource("2_1mcnb")]([])
+metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_aj3gx"]
+
+[node name="DemoNonUniformSampling" type="Node3D"]
+
+[node name="FlowGraphNode3D" type="Node3D" parent="."]
+script = ExtResource("1_3she7")
+graph = SubResource("Resource_7xx0y")
+refresh_inputs = Callable()
+metadata/_custom_type_script = "uid://d1krtmb1urldl"
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 0, 0)
+mesh = SubResource("PlaneMesh_aj3gx")
+
+[node name="Node3D" type="Node3D" parent="." groups=["RefPoints"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.10273, -3.8147e-06, 1.16762)

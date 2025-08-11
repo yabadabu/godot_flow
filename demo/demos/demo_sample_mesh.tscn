@@ -19,30 +19,6 @@ data = {
 "keep_alive": false,
 "to_node": &"id_0013_self_pruning",
 "to_port": 0
-}, {
-"from_node": &"id_0014_distance",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"@GraphNode@33460",
-"to_port": 0
-}, {
-"from_node": &"id_0015_filter",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0014_distance",
-"to_port": 0
-}, {
-"from_node": &"id_0013_scan_nodes",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0014_distance",
-"to_port": 1
-}, {
-"from_node": &"id_0013_scan_nodes",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"@GraphNode@33460",
-"to_port": 1
 }],
 "min_pos": Vector2(200, 260),
 "nodes": [{
@@ -60,6 +36,7 @@ data = {
 "inspect_enabled": false,
 "mode": 0,
 "num_samples": 100,
+"point_size": 1.0,
 "random_seed": 773502599,
 "title": "Sample Mesh",
 "trace": false
@@ -106,7 +83,7 @@ data = {
 "settings": {
 "condition": 2,
 "debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
+"debug_enabled": true,
 "debug_mode": 0,
 "debug_modulate_by": "",
 "debug_scale": 1.0,
@@ -121,102 +98,13 @@ data = {
 },
 "show_disconnected_inputs": false,
 "template": "filter"
-}, {
-"args_port": {},
-"name": &"id_0013_scan_nodes",
-"position": Vector2(20, 200),
-"settings": {
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_scale": 1.0,
-"enabled": true,
-"filter_by_class_name": "",
-"group_name": "RefPoints",
-"import_metadata": true,
-"import_properties": Array[StringName]([]),
-"inspect_enabled": true,
-"random_seed": 3234812568,
-"size_to_bounds": false,
-"title": "Scan Nodes",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "scan_nodes"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-},
-"Target": {
-"connected": true,
-"port": 1
-},
-"max_distance": {
-"connected": false,
-"port": 2
-}
-},
-"name": &"id_0014_distance",
-"position": Vector2(680, 160),
-"settings": {
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "distance",
-"debug_scale": 1.0,
-"enabled": true,
-"in_nameA": "position",
-"in_nameB": "position",
-"inspect_enabled": false,
-"max_distance": 10.0,
-"out_name": "distance",
-"random_seed": 3613997201,
-"title": "Distance",
-"trace": false
-},
-"show_disconnected_inputs": true,
-"template": "distance"
-}, {
-"args_port": {
-"In A": {
-"connected": true,
-"port": 0
-},
-"In B": {
-"connected": true,
-"port": 1
-}
-},
-"name": &"@GraphNode@33460",
-"position": Vector2(980, 320),
-"settings": {
-"condition": 4,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": true,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_scale": 1.0,
-"enabled": true,
-"in_nameA": "@last",
-"in_nameB": "2",
-"inspect_enabled": false,
-"random_seed": 431809019,
-"threshold": 0.1,
-"title": "Filter",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "filter"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
 view_zoom = 0.683013
-view_offset = Vector2(102.714, -177.699)
-new_name_counter = 15
+view_offset = Vector2(108.568, -202.326)
+new_name_counter = 18
 in_params = Array[ExtResource("2_0ulet")]([])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 
@@ -240,5 +128,5 @@ transform = Transform3D(1.81633, 0.00448315, -0.0210605, -0.00549875, 1.46987, 0
 mesh = SubResource("TextMesh_12aa2")
 
 [node name="RefPoint" type="Node3D" parent="." groups=["RefPoints"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.72476, 14.4419, -1.02251)
-metadata/Radius = 3.205
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.9277, 9.07219, -1.45222)
+metadata/Radius = 2.76
