@@ -17,13 +17,8 @@ cte_string = ""
 [sub_resource type="Resource" id="Resource_1h62y"]
 script = ExtResource("3_pkajt")
 data = {
+"frames": [],
 "links": [{
-"from_node": &"id_0008_make_vector",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0009_grid",
-"to_port": 0
-}, {
 "from_node": &"id_0009_grid",
 "from_port": 0,
 "keep_alive": false,
@@ -70,35 +65,8 @@ data = {
 "template": "copy"
 }, {
 "args_port": {},
-"name": &"id_0008_make_vector",
-"position": Vector2(0, 280),
-"settings": {
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_scale": 1.0,
-"enabled": true,
-"inspect_enabled": false,
-"out_name": "Vector",
-"random_seed": 754367497,
-"title": "Make Vector",
-"trace": false,
-"x": 1.305,
-"y": 0.935,
-"z": 0.0
-},
-"show_disconnected_inputs": false,
-"template": "make_vector"
-}, {
-"args_port": {
-"origin": {
-"connected": true,
-"port": 0
-}
-},
 "name": &"id_0009_grid",
-"position": Vector2(200, 0),
+"position": Vector2(220, 0),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
@@ -119,13 +87,35 @@ data = {
 },
 "show_disconnected_inputs": false,
 "template": "grid"
+}, {
+"args_port": {},
+"name": &"id_0008_make_vector",
+"position": Vector2(0, 160),
+"settings": {
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_scale": 1.0,
+"enabled": true,
+"inspect_enabled": false,
+"out_name": "Vector",
+"random_seed": 754367497,
+"title": "Make Vector",
+"trace": false,
+"x": 3.005,
+"y": 0.965,
+"z": 0.0
+},
+"show_disconnected_inputs": false,
+"template": "make_vector"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
 view_zoom = 0.826447
-view_offset = Vector2(224.186, -261.709)
-new_name_counter = 225
+view_offset = Vector2(-183.415, -403.551)
+new_name_counter = 247
 in_params = Array[ExtResource("2_ldm7r")]([SubResource("Resource_pkajt")])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 

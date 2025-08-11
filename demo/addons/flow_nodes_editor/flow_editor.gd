@@ -68,7 +68,7 @@ func setResourceToEdit( new_resource : FlowGraphResource, new_resource_owner : F
 	# Remove exiting nodes
 	var children = []
 	for child in gedit.get_children():
-		if child is GraphNode:
+		if child is GraphNode or child is GraphFrame:
 			child.queue_free()
 			children.append( child )
 	

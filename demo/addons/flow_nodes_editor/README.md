@@ -29,6 +29,7 @@
 [ ] Test random colors for each node -> Graph Editor Settings
 [ ] add_attribute, if output is single stream with a type, set the color. Maybe make it generic
 [ ] Allow the add menu to have sections
+[X] weighted sampling
 [X] support for @last?
 [X] Get N property as a independent value. Get first, get last, etc.
 [X] Sampling mesh

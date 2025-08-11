@@ -55,7 +55,7 @@ static func dict_to_resource(data: Dictionary, resource: Resource) -> void:
 			_:
 				resource.set(name, value)
 
-static func nodes_as_dict( nodes, editor : FlowGraphEditor ):
+static func nodes_as_dict( nodes, frames, editor : FlowGraphEditor ):
 	var exported_node_names = {}
 	
 	# Find the top-left coord of all nodes
@@ -81,17 +81,31 @@ static func nodes_as_dict( nodes, editor : FlowGraphEditor ):
 			"settings" : resource_to_dict( node.settings ),
 		}
 	)
-	var links = []
 	
+	var links = []
 	for connection in editor.gedit.connections:
 		if connection.from_node in exported_node_names and connection.to_node in exported_node_names:
 			links.append( connection )
+			
+	var frames_clean = frames.map( func( node ):
+		var attached : Array[StringName] = editor.gedit.get_attached_nodes_of_frame(node.name)
+		return {
+			"position" : ( node.position_offset - min_pos ) / editor.ui_scale,
+			"size" : node.size,
+			"name" : node.name,
+			"tint_color" : node.tint_color,
+			"title" : node.title,
+			"attached" : attached,
+		}
+	)		
+			
 	var data := {
 		"type" : "flow_graph_nodes",
 		"version" : 1,
 		"min_pos" : min_pos,
 		"nodes" : nodes_clean,
-		"links" : links
+		"links" : links,
+		"frames" : frames_clean,
 	}
 	return data
 
@@ -151,11 +165,27 @@ static func create_nodes_from_dict( dict, editor : FlowGraphEditor, paste_offset
 			continue
 		editor.connect_nodes(new_from, link.from_port, new_to, link.to_port )
 
+	for frame_data in dict.get( "frames", [] ):
+		var frame := GraphFrame.new()
+		frame.name = frame_data.name
+		frame.title = frame_data.title
+		var in_pos = _parse_vector2( frame_data.position )
+		frame.position_offset = (in_pos + paste_offset ) * editor.ui_scale
+		frame.size = _parse_vector2( frame_data.size )
+		frame.tint_color = _parse_color( frame_data.tint_color )
+		frame.tint_color_enabled = true
+		editor.gedit.add_child(frame)
+		for old_name in frame_data.attached:
+			var new_name = old_to_new_names.get( old_name, null )
+			if new_name:
+				editor.gedit.attach_graph_element_to_frame( new_name, frame.name )
+
 	return new_nodes
 
 static func copySelectionToClipboard( editor : FlowGraphEditor ):
 	var nodes = editor.getSelectedNodes()
-	var json_str = JSON.stringify( nodes_as_dict( nodes, editor ), "\t")
+	var frames = editor.getSelectedFrames()
+	var json_str = JSON.stringify( nodes_as_dict( nodes, frames, editor ), "\t")
 	DisplayServer.clipboard_set( json_str )
 
 static func pasteNodeFromClipboard( editor : FlowGraphEditor ):
@@ -165,7 +195,8 @@ static func pasteNodeFromClipboard( editor : FlowGraphEditor ):
 
 static func duplicateSelecteddNodes( editor : FlowGraphEditor ):
 	var nodes = editor.getSelectedNodes()
-	var dict = nodes_as_dict(nodes, editor )
+	var frames = editor.getSelectedFrames()
+	var dict = nodes_as_dict(nodes, frames, editor )
 	_paste_nodes_from_dict( dict, editor )
 
 static func saveToResource( editor : FlowGraphEditor ):
@@ -176,7 +207,10 @@ static func saveToResource( editor : FlowGraphEditor ):
 	var all_nodes = gedit.get_children().filter( func( n ):
 		return n is FlowNodeBase
 	)
-	current_resource.data = nodes_as_dict( all_nodes, editor )
+	var all_frames = gedit.get_children().filter( func( n ):
+		return n is GraphFrame
+	)
+	current_resource.data = nodes_as_dict( all_nodes, all_frames, editor )
 	current_resource.view_zoom = gedit.zoom
 	current_resource.view_offset = gedit.scroll_offset
 	current_resource.new_name_counter = editor.new_name_counter

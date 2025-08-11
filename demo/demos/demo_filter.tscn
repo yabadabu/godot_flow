@@ -8,6 +8,7 @@
 resource_local_to_scene = true
 script = ExtResource("4_om314")
 data = {
+"frames": [],
 "links": [{
 "from_node": &"id_0038_grid",
 "from_port": 0,
