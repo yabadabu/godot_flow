@@ -120,7 +120,9 @@ static func create_nodes_from_dict( dict, editor : FlowGraphEditor, paste_offset
 	var old_to_new_names = {}
 	for in_node in dict.nodes:
 		var in_name = in_node.name
-		var new_name = editor.getNewName(in_node.template)
+		var new_name = in_name
+		if editor.gedit_nodes_by_name.has( in_name ):
+			new_name = editor.getNewName(in_node.template)
 		var node = editor.addNodeFromTemplate( in_node.template, new_name )
 		if not node:
 			return null
