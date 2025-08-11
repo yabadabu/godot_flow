@@ -714,14 +714,14 @@ func _on_button_save_pressed() -> void:
 		ResourceSaver.save(current_resource)
 
 func _on_button_regenerate_pressed() -> void:
-	for key in input_sources.keys():
-		print( key )	
-		for val in input_sources[ key ]:
-			print( "  %s" % [ val ] )	
-	for conn in gedit.connections:
-		print( conn )
-	#dump_performance = true
-	#queueRegen()
+	#for key in input_sources.keys():
+		#print( key )	
+		#for val in input_sources[ key ]:
+			#print( "  %s" % [ val ] )	
+	#for conn in gedit.connections:
+		#print( conn )
+	dump_performance = true
+	queueRegen()
 
 func _on_auto_regen_toggled(toggled_on: bool) -> void:
 	auto_regen = toggled_on
