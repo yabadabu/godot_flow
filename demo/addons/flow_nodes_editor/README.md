@@ -15,7 +15,7 @@
 	[ ] Node to split by condition/field
 	[ ] Substruct will read all input nodes..
 	[ ] partition
-[ ] Introduce the spline data type
+[ ] Introduce the mesh/spline data type
 	[ ] Node to gather
 	[ ] Node to create
 	[ ] Node to sample (the current one)
@@ -31,6 +31,7 @@
 [ ] Test random colors for each node -> Graph Editor Settings
 [ ] add_attribute, if output is single stream with a type, set the color. Maybe make it generic
 [ ] Allow the add menu to have sections
+[X] Sampling mesh
 [X] Allow the grid to have an offset/rotation or it's useless
 [X] scan nodes, filter by class_name
 [X] scan nodes, option to resize to node limits
