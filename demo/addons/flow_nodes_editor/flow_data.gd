@@ -90,6 +90,8 @@ class Data:
 	# converts 'Yaw' into "Rotation.Y" 
 	func translateStreamName( name : String ):
 		if name == "@last":
+			if not last_added_stream_name:
+				push_error( "@last is not valid" )
 			return last_added_stream_name
 		if name == "Yaw":
 			return "%s.Y" % FlowData.AttrRotation
@@ -168,7 +170,8 @@ class Data:
 	
 	func registerStream( name : String, container, data_type : DataType = FlowData.DataType.Invalid ):
 		if not name:
-			push_error("registerStream name can't be empty" )
+			print( "Container size:", container.size() )
+			push_error("registerStream name can't be empty of data_type %d" % [ data_type ] )
 			return null
 		if container == null:
 			push_error("registerStream. Can't register a null container with name %s" %  name )
@@ -209,7 +212,7 @@ class Data:
 	
 	func addStream( name : String, data_type : DataType):
 		if not name:
-			push_error("stream name can't be empty" )
+			push_error("addStream: name can't be empty" )
 			return null
 		var sz := size()
 		var new_container = newContainerOfType(data_type)
@@ -304,6 +307,7 @@ class Data:
 		# use cloneStream to create an independent copy
 		var s := Data.new()
 		s.streams = streams.duplicate()
+		s.last_added_stream_name = last_added_stream_name
 		return s
 		
 	func filter( indices : PackedInt32Array ):
