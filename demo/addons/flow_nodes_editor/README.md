@@ -7,7 +7,6 @@
 		[ ] Change density based on the distance to the spline contour
 	
 [?] There is bug where transforms seems to be updating the input
-[ ] support for @last?
 [ ] Support for multiple data in stream evaluation?
 	[ ] Debug
 	[ ] Generic Loop
@@ -20,7 +19,6 @@
 	[ ] Node to create
 	[ ] Node to sample (the current one)
 [ ] Volume Sample in 3D
-[ ] Get N property as a independent value. Get first, get last, etc.
 [ ] Add noise to position <-- Improve noise
 [ ] Allow meta to define input requirements. Single vs Multiple/Accepted Types/Required
 [ ] Spline sampling interior in non grid pattern
@@ -31,6 +29,8 @@
 [ ] Test random colors for each node -> Graph Editor Settings
 [ ] add_attribute, if output is single stream with a type, set the color. Maybe make it generic
 [ ] Allow the add menu to have sections
+[X] support for @last?
+[X] Get N property as a independent value. Get first, get last, etc.
 [X] Sampling mesh
 [X] Allow the grid to have an offset/rotation or it's useless
 [X] scan nodes, filter by class_name

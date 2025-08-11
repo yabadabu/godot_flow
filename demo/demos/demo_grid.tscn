@@ -38,6 +38,37 @@ data = {
 }],
 "min_pos": Vector2(-40, 40),
 "nodes": [{
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+},
+"translation": {
+"connected": true,
+"port": 1
+}
+},
+"name": &"id_0010_copy",
+"position": Vector2(500, 140),
+"settings": {
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": true,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_scale": 1.0,
+"enabled": true,
+"generate_copy_id": "",
+"inspect_enabled": false,
+"num_copies": 3,
+"random_seed": 1253837551,
+"rotation": Vector3(0, 0, 0),
+"title": "Copy",
+"trace": false,
+"translation": Vector3(0, 0, 0)
+},
+"show_disconnected_inputs": false,
+"template": "copy"
+}, {
 "args_port": {},
 "name": &"id_0008_make_vector",
 "position": Vector2(0, 280),
@@ -88,44 +119,13 @@ data = {
 },
 "show_disconnected_inputs": false,
 "template": "grid"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-},
-"translation": {
-"connected": true,
-"port": 1
-}
-},
-"name": &"id_0010_copy",
-"position": Vector2(460, 100),
-"settings": {
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_scale": 1.0,
-"enabled": true,
-"generate_copy_id": "",
-"inspect_enabled": false,
-"num_copies": 3,
-"random_seed": 1253837551,
-"rotation": Vector3(0, 0, 0),
-"title": "Copy",
-"trace": false,
-"translation": Vector3(0, 0, 0)
-},
-"show_disconnected_inputs": false,
-"template": "copy"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
-view_zoom = 1.1
-view_offset = Vector2(-94.5558, -263.731)
-new_name_counter = 217
+view_zoom = 0.826447
+view_offset = Vector2(224.186, -261.709)
+new_name_counter = 225
 in_params = Array[ExtResource("2_ldm7r")]([SubResource("Resource_pkajt")])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 
