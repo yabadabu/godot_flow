@@ -1,0 +1,90 @@
+[gd_scene load_steps=5 format=3 uid="uid://bmlwedawbsl6f"]
+
+[ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_bqsfa"]
+[ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="2_js7g5"]
+[ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="3_a7jnm"]
+
+[sub_resource type="Resource" id="Resource_pmt32"]
+script = ExtResource("3_a7jnm")
+data = {
+"frames": [],
+"links": [{
+"from_node": &"id_0001_grid",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0258_expression",
+"to_port": 0
+}],
+"min_pos": Vector2(180, 320),
+"nodes": [{
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0258_expression",
+"position": Vector2(200, 0),
+"settings": {
+"args": {
+"Freq": 0.22,
+"HeightFactor": 0.055,
+"Radius": 9.655
+},
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": true,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_scale": 1.0,
+"enabled": true,
+"expose_arrays": false,
+"expression": "Vector3( cos(Index*Freq), Index, sin(Index* Freq)) * Vector3( Radius,  HeightFactor, Radius )",
+"inspect_enabled": true,
+"out_name": "position",
+"random_seed": 1082614729,
+"title": "Spiral",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "expression"
+}, {
+"args_port": {},
+"name": &"id_0001_grid",
+"position": Vector2(0, 0),
+"settings": {
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_scale": 1.0,
+"enabled": true,
+"inspect_enabled": false,
+"origin": Vector3(0, 0, 0),
+"random_seed": 72413041,
+"rotation": Vector3(0, 0, 0),
+"step": Vector3(1, 1, 1),
+"title": "Grid",
+"trace": false,
+"x": 10,
+"y": 10,
+"z": 3
+},
+"show_disconnected_inputs": false,
+"template": "grid"
+}],
+"type": "flow_graph_nodes",
+"version": 1
+}
+view_zoom = 1.0
+view_offset = Vector2(0, 0)
+new_name_counter = 1
+in_params = Array[ExtResource("2_js7g5")]([])
+metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
+
+[node name="DemoExpression" type="Node3D"]
+
+[node name="FlowGraphNode3D" type="Node3D" parent="."]
+script = ExtResource("1_bqsfa")
+graph = SubResource("Resource_pmt32")
+refresh_inputs = Callable()
+metadata/_custom_type_script = "uid://d1krtmb1urldl"

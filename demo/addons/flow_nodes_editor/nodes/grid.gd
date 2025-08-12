@@ -19,12 +19,14 @@ func execute( ctx : FlowData.EvaluationContext ):
 	output.addCommonStreams( nsamples )
 	var spos := output.getVector3Container( FlowData.AttrPosition )
 	var srot := output.getVector3Container( FlowData.AttrRotation )
+	var ssize := output.getVector3Container( FlowData.AttrSize )
 	assert( spos != null )
 	#print( "Spos.size %d of type %s" % [ spos.size(), type_string(typeof(spos)) ])
 	var idx := 0
 	var origin : Vector3 = getSettingValue( ctx, "origin" )
 	var rotation : Vector3 = getSettingValue( ctx, "rotation" )
 	var step : Vector3 = getSettingValue( ctx, "step" )
+	var size : Vector3 = Vector3.ONE * getSettingValue( ctx, "size" )
 	var transform = Transform3D( FlowData.eulerToBasis(rotation), origin )
 	for iz in range( 0, nz ):
 		for iy in range( 0, ny ):
@@ -32,5 +34,6 @@ func execute( ctx : FlowData.EvaluationContext ):
 				var p := Vector3( ix, iy, iz ) * step
 				spos[idx] = transform * p
 				srot[idx] = rotation
+				ssize[idx] = size
 				idx += 1
 	set_output( 0, output )

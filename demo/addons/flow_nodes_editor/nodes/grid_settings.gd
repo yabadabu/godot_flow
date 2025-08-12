@@ -10,6 +10,7 @@ extends NodeSettings
 @export var step : Vector3 = Vector3( 1.0, 1.0, 1.0 )
 @export var origin : Vector3 = Vector3.ZERO
 @export var rotation : Vector3 = Vector3.ZERO
+@export var size : float = 1.0
 
 func _init():
 	super._init()

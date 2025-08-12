@@ -17,6 +17,7 @@ cte_string = ""
 resource_name = "graph_distance"
 script = ExtResource("11_ox7wi")
 data = {
+"frames": [],
 "links": [{
 "from_node": &"id_0032_sample_spline",
 "from_port": 0,

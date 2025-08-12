@@ -30,18 +30,12 @@ data = {
 "keep_alive": false,
 "to_node": &"id_0010_copy",
 "to_port": 1
-}, {
-"from_node": &"id_0009_grid",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0258_expression",
-"to_port": 0
 }],
-"min_pos": Vector2(-40, -100),
+"min_pos": Vector2(-40, 20),
 "nodes": [{
 "args_port": {},
 "name": &"id_0008_make_vector",
-"position": Vector2(0, 300),
+"position": Vector2(0, 180),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
@@ -72,7 +66,7 @@ data = {
 }
 },
 "name": &"id_0010_copy",
-"position": Vector2(500, 280),
+"position": Vector2(500, 160),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
@@ -94,7 +88,7 @@ data = {
 }, {
 "args_port": {},
 "name": &"id_0009_grid",
-"position": Vector2(120, 120),
+"position": Vector2(120, 0),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
@@ -115,43 +109,12 @@ data = {
 },
 "show_disconnected_inputs": false,
 "template": "grid"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0258_expression",
-"position": Vector2(420, 0),
-"settings": {
-"args": {
-"Freq": 0.2,
-"HeightFactor": 0.03,
-"Radius": 24.075
-},
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_scale": 1.0,
-"enabled": true,
-"expose_arrays": false,
-"expression": "Vector3( cos(Index*Freq), Index, sin(Index* Freq)) * Vector3( Radius,  HeightFactor, Radius )",
-"inspect_enabled": false,
-"out_name": "position",
-"random_seed": 1082614729,
-"title": "Spiral",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "expression"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
-view_zoom = 0.826447
-view_offset = Vector2(97.585, -459.551)
+view_zoom = 0.751315
+view_offset = Vector2(62.8954, -469.683)
 new_name_counter = 259
 in_params = Array[ExtResource("2_ldm7r")]([SubResource("Resource_pkajt")])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
