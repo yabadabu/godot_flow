@@ -1,363 +1,21 @@
-[gd_scene load_steps=25 format=3 uid="uid://bec321f7nwi5h"]
+[gd_scene load_steps=6 format=3 uid="uid://bec321f7nwi5h"]
 
 [ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_6hs3b"]
 [ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="2_0uiub"]
-[ext_resource type="Script" uid="uid://cbj3mmuatfk1v" path="res://addons/flow_nodes_editor/nodes/sample_spline_settings.gd" id="4_0uiub"]
 [ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="4_ow8g4"]
-[ext_resource type="Script" uid="uid://ckff4og6eip3" path="res://addons/flow_nodes_editor/nodes/math_op_settings.gd" id="5_ow8g4"]
-[ext_resource type="Script" uid="uid://runa6a3koevg" path="res://addons/flow_nodes_editor/nodes/add_attribute_settings.gd" id="6_qydfx"]
-[ext_resource type="Script" uid="uid://ctpeiiq5p30rt" path="res://addons/flow_nodes_editor/nodes/noise_settings.gd" id="7_qydfx"]
-[ext_resource type="Script" uid="uid://cnhqpivgscgff" path="res://addons/flow_nodes_editor/nodes/select_settings.gd" id="8_ahfh6"]
-[ext_resource type="Script" uid="uid://dt7o3moxddt4h" path="res://addons/flow_nodes_editor/nodes/transform_settings.gd" id="9_0gfmn"]
-[ext_resource type="Script" uid="uid://bw3x7p10afvc7" path="res://addons/flow_nodes_editor/nodes/substract_settings.gd" id="10_udkk1"]
-[ext_resource type="Script" uid="uid://cvjx7aevwm38s" path="res://addons/flow_nodes_editor/nodes/remove_attribute_settings.gd" id="11_udkk1"]
 
 [sub_resource type="Curve3D" id="Curve3D_lnu6d"]
 closed = true
-bake_interval = 0.3
 _data = {
-"points": PackedVector3Array(0, 0, 0, 0, 0, 0, -0.549417, -0.0212173, 0.666117, 0, 0, 0, 0, 0, 0, -8.61512, -3.52689, 11.7987, -7.17512, -5.62668e-05, 0.570743, 7.17512, 5.62668e-05, -0.570743, 12.0492, -8.02957, 4.52096, -0.246415, 0, 0.525253, 0.246415, 0, -0.525253, 25.1536, -6.0446, 7.08516, 0.162214, -0.00053215, 0.507052, -0.162214, 0.00053215, -0.507052, 19.5576, -1.47925, -5.52691, 1.64129, -0.0790663, 1.82922, -1.64129, 0.0790663, -1.82922, 8.97962, -0.0296631, -5.34519, 0.528495, 0, 0.103754, -0.528495, 0, -0.103754, 1.0116, 0, -2.61654, 0.0894269, 0.0361512, -0.731316, -0.0894269, -0.0361512, 0.731316, -1.66068, -0.20416, -2.40038, -0.514984, 0, -0.530699, 0.514984, 0, 0.530699, 0.5058, 0, -1.54009, 0.136177, 0, -0.333957, -0.136177, 0, 0.333957, 0.674399, 0, -0.736003),
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, -0.549417, -0.0212173, 0.666117, 0, 0, 0, 0, 0, 0, -8.61512, 0.201878, 11.7987, -7.17512, -5.62668e-05, 0.570743, 7.17512, 5.62668e-05, -0.570743, 8.16985, 0.0419981, 8.15565, -0.246415, 0, 0.525253, 0.246415, 0, -0.525253, 25.1536, -0.0297194, 11.4952, 0.162214, -0.00053215, 0.507052, -0.162214, 0.00053215, -0.507052, 19.3731, -0.0496001, -5.52691, 1.64129, -0.0790663, 1.82922, -1.64129, 0.0790663, -1.82922, 8.97962, -0.0296631, -5.34519, 0.528495, 0, 0.103754, -0.528495, 0, -0.103754, 1.0116, 0, -2.61654, 0.0894269, 0.0361512, -0.731316, -0.0894269, -0.0361512, 0.731316, -1.58935, -0.0658067, -2.40038, -0.514984, 0, -0.530699, 0.514984, 0, 0.530699, 0.5058, 0, -1.54009, 0.136177, 0, -0.333957, -0.136177, 0, 0.333957, 0.674399, 0, -0.736003),
 "tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 }
 point_count = 10
 
-[sub_resource type="Resource" id="Resource_0gfmn"]
-resource_name = "Math Op"
-script = ExtResource("5_ow8g4")
-operation = 0
-in_nameA = "Yaw"
-in_nameB = "dx"
-out_name = "Yaw"
-random_seed = 3239301462
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 1
-debug_scale = 0.35
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Math"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_udkk1"]
-resource_name = "Select Settings"
-script = ExtResource("8_ahfh6")
-ratio = 0.01
-random_seed = 2125821745
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 0, 1, 1)
-debug_modulate_by = ""
-title = "Select"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_tvg7p"]
-resource_name = "Math Op"
-script = ExtResource("5_ow8g4")
-operation = 6
-in_nameA = "distance"
-in_nameB = "distance"
-out_name = "distance"
-random_seed = 552337536
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 1
-debug_scale = 0.32
-debug_color = Color(1, 1, 0, 1)
-debug_modulate_by = "distance"
-title = "Math"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_82f8x"]
-resource_name = "Math Op"
-script = ExtResource("5_ow8g4")
-operation = 2
-in_nameA = "distance"
-in_nameB = "new_attr"
-out_name = "distance"
-random_seed = 2931476229
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 1
-debug_scale = 0.245
-debug_color = Color(0.847287, 0.896652, 0.999998, 1)
-debug_modulate_by = "distance"
-title = "Math"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_aw52y"]
-resource_name = "Noise Settings"
-script = ExtResource("7_qydfx")
-out_name = "dx"
-in_scale = 212422.0
-noise_bias = 4.945
-noise_amplitude = 60.62
-random_seed = 407662814
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Noise"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_4ebyb"]
-resource_name = "Add Attribute"
-script = ExtResource("6_qydfx")
-name = "new_attr"
-data_type = 2
-cte_bool = false
-cte_int = 0
-cte_float = 0.2
-cte_vector = Vector3(0, 0, 0)
-cte_string = ""
-random_seed = 1376721567
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Add Attribute"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_k8ckv"]
-resource_name = "Select Settings"
-script = ExtResource("8_ahfh6")
-ratio = 0.227
-random_seed = 673085804
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Select"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_pskb1"]
-resource_name = "Substract"
-script = ExtResource("10_udkk1")
-operation = 0
-random_seed = 649325068
-inspect_enabled = false
-debug_enabled = true
-debug_mode = 1
-debug_scale = 0.195
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Substract"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_un61s"]
-resource_name = "Transform Settings"
-script = ExtResource("9_0gfmn")
-offset_min = Vector3(0, 0, 0)
-offset_max = Vector3(0, 0, 0)
-rotation_min = Vector3(0, 0, 0)
-rotation_max = Vector3(0, 0, 0)
-scale_min = Vector3(3, 1, 1)
-scale_max = Vector3(3, 3, 1)
-uniform_scale = true
-random_seed = 54583113
-inspect_enabled = false
-debug_enabled = true
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Transform"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_tcxb8"]
-resource_name = "Remove Attribute Settings"
-script = ExtResource("11_udkk1")
-names = Array[String](["distance", "position"])
-keep_selected_attributes = true
-random_seed = 1274548189
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Remove Attributes"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_1ped0"]
-resource_name = "Sample Spline Settings"
-script = ExtResource("4_0uiub")
-uniform_interval = 0.15
-fill_curve = true
-required_meta_bool = &""
-distance_attribute = "distance"
-random_seed = 1104016555
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 1
-debug_scale = 0.32
-debug_color = Color(0.781464, 0.568812, 0.443646, 1)
-debug_modulate_by = "distance"
-title = "Sample Spline"
-enabled = true
-trace = false
-
 [sub_resource type="Resource" id="Resource_ahfh6"]
 script = ExtResource("4_ow8g4")
-nodes = Array[Dictionary]([{
-"name": &"id_0037_math_op",
-"position_offset": Vector2(1160, 340),
-"settings": SubResource("Resource_0gfmn"),
-"template": "math_op"
-}, {
-"name": &"id_0038_select",
-"position_offset": Vector2(280, -280),
-"settings": SubResource("Resource_udkk1"),
-"template": "select"
-}, {
-"name": &"id_0039_math_op",
-"position_offset": Vector2(660, 120),
-"settings": SubResource("Resource_tvg7p"),
-"template": "math_op"
-}, {
-"name": &"id_0040_math_op",
-"position_offset": Vector2(420, 120),
-"settings": SubResource("Resource_82f8x"),
-"template": "math_op"
-}, {
-"name": &"id_0041_noise",
-"position_offset": Vector2(900, 340),
-"settings": SubResource("Resource_aw52y"),
-"template": "noise"
-}, {
-"name": &"id_0042_add_attribute",
-"position_offset": Vector2(220, 240),
-"settings": SubResource("Resource_4ebyb"),
-"template": "add_attribute"
-}, {
-"name": &"id_0043_select",
-"position_offset": Vector2(1340, 240),
-"settings": SubResource("Resource_k8ckv"),
-"template": "select"
-}, {
-"name": &"id_0044_substract",
-"position_offset": Vector2(1600, -220),
-"settings": SubResource("Resource_pskb1"),
-"template": "substract"
-}, {
-"name": &"id_0045_transform",
-"position_offset": Vector2(440, -280),
-"settings": SubResource("Resource_un61s"),
-"template": "transform"
-}, {
-"name": &"id_0046_remove_attribute",
-"position_offset": Vector2(698.282, -173.883),
-"settings": SubResource("Resource_tcxb8"),
-"template": "remove_attribute"
-}, {
-"name": &"id_0047_sample_spline",
-"position_offset": Vector2(-60, 120),
-"settings": SubResource("Resource_1ped0"),
-"template": "sample_spline"
-}])
-conns = Array[Dictionary]([{
-"from_node": &"id_0042_add_attribute",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0040_math_op",
-"to_port": 1
-}, {
-"from_node": &"id_0047_sample_spline",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0040_math_op",
-"to_port": 0
-}, {
-"from_node": &"id_0047_sample_spline",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0042_add_attribute",
-"to_port": 0
-}, {
-"from_node": &"id_0040_math_op",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0039_math_op",
-"to_port": 0
-}, {
-"from_node": &"id_0040_math_op",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0039_math_op",
-"to_port": 1
-}, {
-"from_node": &"id_0041_noise",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0037_math_op",
-"to_port": 0
-}, {
-"from_node": &"id_0041_noise",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0037_math_op",
-"to_port": 1
-}, {
-"from_node": &"id_0037_math_op",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0043_select",
-"to_port": 0
-}, {
-"from_node": &"id_0047_sample_spline",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0038_select",
-"to_port": 0
-}, {
-"from_node": &"id_0038_select",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0045_transform",
-"to_port": 0
-}, {
-"from_node": &"id_0045_transform",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0044_substract",
-"to_port": 1
-}, {
-"from_node": &"id_0039_math_op",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0041_noise",
-"to_port": 0
-}, {
-"from_node": &"id_0043_select",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0044_substract",
-"to_port": 0
-}, {
-"from_node": &"id_0045_transform",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0046_remove_attribute",
-"to_port": 0
-}])
 data = {
+"frames": [],
 "links": [{
 "from_node": &"id_0042_add_attribute",
 "from_port": 0,
@@ -495,7 +153,8 @@ data = {
 "random_seed": 2125821745,
 "ratio": 0.01,
 "title": "Select",
-"trace": false
+"trace": false,
+"weight_name": ""
 },
 "show_disconnected_inputs": false,
 "template": "select"
@@ -639,7 +298,8 @@ data = {
 "random_seed": 673085804,
 "ratio": 0.227,
 "title": "Select",
-"trace": false
+"trace": false,
+"weight_name": ""
 },
 "show_disconnected_inputs": false,
 "template": "select"
@@ -761,7 +421,7 @@ metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 [node name="DemoSplineFill" type="Node3D"]
 
 [node name="Path3D" type="Path3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.44789, 0, -2.44187)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.51146, 0, -3.68545)
 curve = SubResource("Curve3D_lnu6d")
 
 [node name="FlowGraphNode3D" type="Node3D" parent="."]

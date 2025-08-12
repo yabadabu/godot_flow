@@ -6,8 +6,6 @@
 	[X] Mark an area with a spline, have a path remove all flowers
 		[ ] Change density based on the distance to the spline contour
 	
-[ ] Add expressions node
-[ ] 
 [?] There is bug where transforms seems to be updating the input
 [ ] Support for multiple data in stream evaluation?
 	[ ] Debug
@@ -30,7 +28,8 @@
 [ ] undo/redo
 [ ] Test random colors for each node -> Graph Editor Settings
 [ ] add_attribute, if output is single stream with a type, set the color. Maybe make it generic
-[ ] Allow the add menu to have sections
+[ ] Allow the popup menu to have sections
+[X] Add expressions node
 [X] weighted sampling
 [X] support for @last?
 [X] Get N property as a independent value. Get first, get last, etc.

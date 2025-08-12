@@ -135,7 +135,6 @@ func execute( ctx : FlowData.EvaluationContext ):
 	output.addCommonStreams( 0 )
 	var spos := output.getVector3Container( FlowData.AttrPosition )
 	var srot := output.getVector3Container( FlowData.AttrRotation )
-
 	
 	var uniform_interval = getSettingValue( ctx, "uniform_interval" )
 	if uniform_interval < min_interval:
@@ -157,6 +156,10 @@ func execute( ctx : FlowData.EvaluationContext ):
 			if settings.distance_attribute:
 				curve.bake_interval = uniform_interval * 2.0
 				var border_points = curve.get_baked_points()
+				
+				var path_transform = path_3d.transform
+				for i in range( border_points.size() ):
+					border_points[i] = path_transform * border_points[i]
 				addDistanceAttribute( output, border_points )
 		
 	else:
