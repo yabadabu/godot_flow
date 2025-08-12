@@ -2,10 +2,12 @@
 [ ] Demos
 	[ ] Wall of rocks, picking a random point on the top
 	[ ] Path with random subscene, filter by attribute with rotations
-	[ ] Sample surface of a mesh, create flowers or similar in the horizontal ground
+	[X] Sample surface of a mesh, create flowers or similar in the horizontal ground
 	[X] Mark an area with a spline, have a path remove all flowers
 		[ ] Change density based on the distance to the spline contour
 	
+[ ] Add expressions node
+[ ] 
 [?] There is bug where transforms seems to be updating the input
 [ ] Support for multiple data in stream evaluation?
 	[ ] Debug
