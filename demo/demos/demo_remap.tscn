@@ -199,7 +199,7 @@ data = {
 "enabled": true,
 "inspect_enabled": false,
 "random_seed": 484334038,
-"ratio": 0.109,
+"ratio": 0.138,
 "title": "Select",
 "trace": false,
 "weight_name": "distance"
@@ -211,7 +211,7 @@ data = {
 "version": 1
 }
 view_zoom = 1.0
-view_offset = Vector2(208, 149)
+view_offset = Vector2(182, 7)
 new_name_counter = 6
 in_params = Array[ExtResource("2_cwlch")]([])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"

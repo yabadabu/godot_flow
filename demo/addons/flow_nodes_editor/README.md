@@ -15,6 +15,7 @@
 	[ ] Substruct will read all input nodes..
 	[ ] partition
 [ ] Introduce the mesh/spline data type
+	[ ] Resource + Transform + Type?
 	[ ] Node to gather
 	[ ] Node to create
 	[ ] Node to sample (the current one)

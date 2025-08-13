@@ -7,58 +7,12 @@ func _init():
 		"settings" : SelectNodeSettings,
 		"ins" : [{ "label": "In" }], 
 		"outs" : [{ "label" : "Out" }],
-		"tooltip" : "Filter inputs by the ratio.\nSo when ratio = 0.2, only 20% of the input points will appear in the output (picked randomly).",
+		"tooltip" : "Filter inputs by the ratio.\nSo when ratio = 0.2, only 20% of the input points will appear in the output (picked randomly).\n" + 
+					"You can set an attribute name to control which points have more probability to be selected than others.",
 	}
 
-# Efraimidis–Spirakis
-static func weighted_sample_without_replacement(weights: PackedFloat32Array, k: int, seed: int = 0) -> PackedInt32Array:
-	var n := weights.size()
-	k = clamp(k, 0, n)
-	var out := PackedInt32Array()
-	if n == 0 or k == 0:
-		return out
-
-	var rng := RandomNumberGenerator.new()
-	if seed != 0: rng.seed = seed
-
-	# keys[i] = -ln(u)/w_i (INF for w<=0)
-	var keys := PackedFloat32Array()
-	keys.resize(n)
-	var all_zero := true
-	for i in n:
-		var w := weights[i]
-		if w > 0.0:
-			all_zero = false
-			var u := rng.randf_range(1e-12, 1.0)
-			keys[i] = -log(u) / w
-		else:
-			keys[i] = INF
-
-	# Uniform fallback if all weights are zero
-	if all_zero:
-		var idx := PackedInt32Array()
-		idx.resize(n)
-		for i in n: idx[i] = i
-		# Fisher–Yates
-		for i in range(n - 1, 0, -1):
-			var j := rng.randi_range(0, i)
-			var tmp := idx[i]; idx[i] = idx[j]; idx[j] = tmp
-		out.resize(k)
-		for t in k: out[t] = idx[t]
-		return out
-
-	# Indices 0..n-1, sort by keys ascending
-	var idx_arr: Array = []
-	idx_arr.resize(n)
-	for i in n: idx_arr[i] = i
-	idx_arr.sort_custom(func(a, b): return keys[int(a)] < keys[int(b)])
-
-	out.resize(k)
-	for t in k: out[t] = int(idx_arr[t])
-	return out
-
 var _keys: PackedFloat32Array = PackedFloat32Array()
-var _idx_tmp: Array = []                  # plain Array for sort_custom
+var _indices: Array = []                  # plain Array for sort_custom
 var _uniform_idx: PackedInt32Array = PackedInt32Array()
 
 func cmp_by_key(a: int, b: int) -> bool:
@@ -81,6 +35,7 @@ func uniform_sampling(n: int, k: int, rng: RandomNumberGenerator) -> PackedInt32
 		out[t] = _uniform_idx[t]
 	return out
 
+# Efraimidis–Spirakis
 ## O(n log n) — simple & fast when k is not tiny
 func weighted_sampling(weights: PackedFloat32Array, k: int, rng: RandomNumberGenerator) -> PackedInt32Array:
 	var n := weights.size()
@@ -92,12 +47,12 @@ func weighted_sampling(weights: PackedFloat32Array, k: int, rng: RandomNumberGen
 	# Ensure buffers sized to n
 	if _keys.size() != n:
 		_keys.resize(n)
-	if _idx_tmp.size() != n:
-		_idx_tmp.resize(n)
+	if _indices.size() != n:
+		_indices.resize(n)
 
 	var all_zero := true
-	for i in n:
-		var w = weights[i]  # no maxf; your `if w > 0.0` handles negatives
+	for i : int in n:
+		var w := weights[i]  # no maxf; your `if w > 0.0` handles negatives
 		if w > 0.0:
 			all_zero = false
 			var u := rng.randf_range(1e-6, 1.0)  # avoid ln(0)
@@ -105,30 +60,30 @@ func weighted_sampling(weights: PackedFloat32Array, k: int, rng: RandomNumberGen
 		else:
 			# This are 'big numbers' but we still want some noise
 			_keys[i] = 1e6 + rng.randf_range(0.0, 1.0)
-		_idx_tmp[i] = i
+		_indices[i] = i
 
 	if all_zero:
 		return uniform_sampling(n, k, rng)
 
 	# Sort indices by key (ascending)
-	_idx_tmp.sort_custom(cmp_by_key)
+	_indices.sort_custom(cmp_by_key)
 
 	out.resize(k)
-	for t in k:
-		out[t] = int(_idx_tmp[t])
+	for t : int in k:
+		out[t] = int(_indices[t])
 	return out
 
 
 func execute( ctx : FlowData.EvaluationContext ):
 	var in_data : FlowData.Data = get_input(0)
 	#in_data.dump( "Select.Input")
-	var in_size = in_data.size()
+	var in_size := in_data.size()
 	
 	var attr_name = getSettingValue( ctx, "weight_name")
 	var ratio = getSettingValue(ctx, "ratio")
 	ratio = clamp( ratio, 0.0, 1.0 )
 	
-	var out_size = round(in_size * ratio)
+	var out_size := round(in_size * ratio)
 	#print( "Select: From %d, took %1.2f%% -> %d" % [ in_size, settings.ratio, out_size ])
 	
 	var rng := RandomNumberGenerator.new()
