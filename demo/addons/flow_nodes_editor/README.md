@@ -18,6 +18,7 @@
 	[ ] Node to gather
 	[ ] Node to create
 	[ ] Node to sample (the current one)
+[ ] Subgraphs / Loops?
 [ ] Volume Sample in 3D
 [ ] Add noise to position <-- Improve noise
 [ ] Allow meta to define input requirements. Single vs Multiple/Accepted Types/Required
@@ -28,7 +29,8 @@
 [ ] undo/redo
 [ ] Test random colors for each node -> Graph Editor Settings
 [ ] add_attribute, if output is single stream with a type, set the color. Maybe make it generic
-[ ] Allow the popup menu to have sections
+[ ] Allow the popup menu to have sections. Custom SubGraphs/Resources/Folders maybe
+[X] Remap node
 [X] Add expressions node
 [X] weighted sampling
 [X] support for @last?

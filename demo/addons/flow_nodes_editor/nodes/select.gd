@@ -57,8 +57,6 @@ static func weighted_sample_without_replacement(weights: PackedFloat32Array, k: 
 	for t in k: out[t] = int(idx_arr[t])
 	return out
 
-const BIG := 1e38  # prefer finite over INF for determinism
-
 var _keys: PackedFloat32Array = PackedFloat32Array()
 var _idx_tmp: Array = []                  # plain Array for sort_custom
 var _uniform_idx: PackedInt32Array = PackedInt32Array()
@@ -102,10 +100,11 @@ func weighted_sampling(weights: PackedFloat32Array, k: int, rng: RandomNumberGen
 		var w = weights[i]  # no maxf; your `if w > 0.0` handles negatives
 		if w > 0.0:
 			all_zero = false
-			var u := rng.randf_range(1e-12, 1.0)  # avoid ln(0)
+			var u := rng.randf_range(1e-6, 1.0)  # avoid ln(0)
 			_keys[i] = -log(u) / w                # smaller = better
 		else:
-			_keys[i] = BIG
+			# This are 'big numbers' but we still want some noise
+			_keys[i] = 1e6 + rng.randf_range(0.0, 1.0)
 		_idx_tmp[i] = i
 
 	if all_zero:

@@ -6,7 +6,7 @@
 
 [sub_resource type="Curve" id="Curve_8ag8x"]
 _limits = [0.0, 2.0, 0.0, 4.0]
-_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.130326, 0.975369), -0.0921781, -0.0921781, 0, 0, Vector2(1.02757, 0.917152), -1.11843, -1.11843, 0, 0, Vector2(1.20301, 0.137035), 1.56952, 1.56952, 0, 0, Vector2(2.0401, 2), 0.0, 0.0, 0, 0]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.130326, 0.975369), -0.0921781, -0.0921781, 0, 0, Vector2(0.73183, 0.91133), -1.11843, -1.11843, 0, 0, Vector2(1.41855, 0.183609), 1.56952, 1.56952, 0, 0, Vector2(1.86967, 1.02194), 0.0, 0.0, 0, 0]
 point_count = 5
 
 [sub_resource type="Resource" id="Resource_b8voe"]
@@ -126,6 +126,37 @@ data = {
 "template": "distance"
 }, {
 "args_port": {
+"In A": {
+"connected": true,
+"port": 0
+},
+"In B": {
+"connected": false,
+"port": 1
+}
+},
+"name": &"id_0006_math_op",
+"position": Vector2(560, 140),
+"settings": {
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "distance",
+"debug_scale": 1.0,
+"enabled": true,
+"in_nameA": "@last",
+"in_nameB": "@last",
+"inspect_enabled": false,
+"operation": 15,
+"out_name": "@last",
+"random_seed": 2509549124,
+"title": "Math",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "math_op"
+}, {
+"args_port": {
 "In": {
 "connected": true,
 "port": 0
@@ -135,7 +166,7 @@ data = {
 "position": Vector2(400, 140),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
+"debug_enabled": true,
 "debug_mode": 0,
 "debug_modulate_by": "distance",
 "debug_scale": 1.0,
@@ -152,37 +183,6 @@ data = {
 "template": "remap"
 }, {
 "args_port": {
-"In A": {
-"connected": true,
-"port": 0
-},
-"In B": {
-"connected": false,
-"port": 1
-}
-},
-"name": &"id_0006_math_op",
-"position": Vector2(560, 140),
-"settings": {
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": true,
-"debug_mode": 0,
-"debug_modulate_by": "distance",
-"debug_scale": 1.0,
-"enabled": true,
-"in_nameA": "@last",
-"in_nameB": "@last",
-"inspect_enabled": true,
-"operation": 15,
-"out_name": "@last",
-"random_seed": 2509549124,
-"title": "Math",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "math_op"
-}, {
-"args_port": {
 "In": {
 "connected": true,
 "port": 0
@@ -191,15 +191,15 @@ data = {
 "name": &"id_0005_select",
 "position": Vector2(740, 140),
 "settings": {
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
+"debug_color": Color(1, 0, 0, 1),
+"debug_enabled": true,
+"debug_mode": 1,
 "debug_modulate_by": "",
-"debug_scale": 1.0,
+"debug_scale": 0.085,
 "enabled": true,
 "inspect_enabled": false,
-"random_seed": 484333438,
-"ratio": 0.587,
+"random_seed": 484334038,
+"ratio": 0.109,
 "title": "Select",
 "trace": false,
 "weight_name": "distance"
@@ -225,4 +225,4 @@ refresh_inputs = Callable()
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
 
 [node name="RefPoint" type="Node3D" parent="." groups=["RefPoints"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.82243, -0.0716827, 2.20832)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.84716, 0.0712216, 2.32673)
