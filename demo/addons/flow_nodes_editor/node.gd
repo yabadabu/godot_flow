@@ -10,7 +10,9 @@ var inputs = []
 var outputs = []
 
 var args_ports_by_name = {}
-var num_ports : int = 0
+var num_in_ports : int = 0
+var num_out_ports : int = 0
+var num_ports : int = 0			 # Max of (in,out)
 var meta_node: Dictionary = {}
 
 var node_template : String
@@ -286,7 +288,9 @@ func initFromScript():
 		
 	# Total inputs are flow in streams + exposed parameters of the node
 	var num_inputs = num_ins + exposed_params.size()
-	var num_rows = max( num_inputs, num_outs )
+	num_ports = max( num_inputs, num_outs )
+	num_in_ports = num_inputs
+	num_out_ports = num_outs
 	
 	# Delete current children
 	self.get_input_port_count()
@@ -298,7 +302,7 @@ func initFromScript():
 		remove_child( child )
 	
 	args_ports_by_name = {}
-	for idx in range( 0, num_rows ):
+	for idx in range( 0, num_ports ):
 		var ctrl = connectors_row_prefab.instantiate() as FlowConnectorRow
 		add_child( ctrl )
 		var lbl_in = ctrl.getInLabel()
@@ -341,8 +345,6 @@ func initFromScript():
 					set_slot_color_right( idx, color )
 		else:
 			lbl_out.text = ""
-			
-	num_ports = num_rows
 	
 	# Add a button to show/hide all props and maybe more options in the future
 	if has_exposed_params:
