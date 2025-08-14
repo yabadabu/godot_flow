@@ -52,7 +52,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 
 		var acc_transforms : Array[ Transform3D ]
 		var delta : Transform3D = Transform3D.IDENTITY
-		for j in range( isize ):
+		for j in range( num_copies ):
 			acc_transforms.push_back( delta )
 			delta = delta * step3d
 		
