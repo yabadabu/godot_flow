@@ -367,12 +367,27 @@ func addNodeFromTemplate( node_template, node_name : String, settings = null ):
 	gedit_nodes_by_name[ node.name ] = node
 	return node
 	
-func canConnect( src, src_port : int, dst, dst_port : int ):
+func canConnect( src : FlowNodeBase, src_port : int, dst : FlowNodeBase, dst_port : int ):
+	# Discard self connections and null values
+	if dst == src or src == null or dst == null:
+		push_warning( "canConnect. Invalid inputs: ", src, " <-> ", dst )
+		return false
+		
 	# Check Slot numbers
 	if dst_port >= dst.num_in_ports:
+		push_warning( "canConnect. dst_port(%d) >= num_in_ports(%d) dst:%s" % [ dst_port, dst.num_in_ports, dst.name ])
 		return false
 	if src_port >= src.num_out_ports:
+		push_warning( "canConnect. src_port(%d) >= num_out_ports(%d) src:%s" % [ src_port, src.num_out_ports, src.name ])
 		return false
+		
+	var src_type = src.get_output_port_type( src_port )
+	var dst_type = dst.get_input_port_type( dst_port )
+	if src_type and dst_type:
+		if src_type != dst_type:
+			push_warning( "Node types do not match %d vs %d" % [ src_type, dst_type ])
+			return false
+	#print( "canConnect OK %s:%d (%d)-> %s:%d (%d)" % [ src.name, src_port, src_type, dst.name, dst_port, dst_type ] )
 	return true
 	
 func addNode( node_template, settings = null ):
@@ -582,6 +597,10 @@ func connect_nodes(from_node: StringName, from_port: int, to_node: StringName, t
 	input_sources[key].append([from_node, from_port])
 
 func _on_graph_edit_connection_request(from_node: StringName, from_port: int, to_node: StringName, to_port: int) -> void:
+	var src_node = gedit_nodes_by_name.get( from_node )
+	var dst_node = gedit_nodes_by_name.get( to_node )
+	if not canConnect( src_node, from_port, dst_node, to_port ):
+		return
 	connect_nodes( from_node, from_port, to_node, to_port )
 	queueSave()
 	queueRegen()
@@ -749,6 +768,11 @@ func _on_button_regenerate_pressed() -> void:
 		#print( conn )
 	dump_performance = true
 	queueRegen()
+	#for n : FlowNodeBase in getSelectedNodes():
+		#print( "Node: %s  Ins:%d  Outs:%d" % [ n.name, n.num_in_ports, n.num_out_ports ])
+		#for idx in range( n.num_in_ports ):
+			#var type = n.get_slot_type_left( idx )
+			#print( "Left.%d = %d" % [ idx, type ] )
 
 func _on_auto_regen_toggled(toggled_on: bool) -> void:
 	auto_regen = toggled_on

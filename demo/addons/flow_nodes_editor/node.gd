@@ -35,6 +35,7 @@ var marker_radius : float = 9
 var debug_row : int = -1
 
 func _ready():
+	ignore_invalid_connection_type = true
 	checkDrawDebug()
 	refreshInspectMark()
 	refreshDebugMark()
@@ -328,6 +329,8 @@ func initFromScript():
 			if in_data.has( "type"):
 				var color = getColorForGDScriptType( in_data.type )	
 				set_slot_color_left( idx, color )
+				set_slot_type_left( idx, in_data.type )
+				
 			in_data.port = idx
 			ctrl.setData( in_data )
 			
@@ -345,6 +348,7 @@ func initFromScript():
 				if out_data.has( "type"):
 					var color = getColorForGDScriptType( out_data.type )
 					set_slot_color_right( idx, color )
+					set_slot_type_right( idx, out_data.type )
 		else:
 			lbl_out.text = ""
 	
@@ -391,6 +395,8 @@ func nodeOptionsChanged( expanded : bool ):
 func getSettingValue( ctx : FlowData.EvaluationContext, in_name : String ):
 	var meta = getMeta()
 	var trace = meta.get( "trace", false )
+	
+	var value = settings.get( in_name )
 	if trace:
 		print( "Searching the current value of input %s in %d inputs at node %s. ByName:%s vs %s.   Meta:%s" % [ in_name, inputs.size(), name, args_ports_by_name, inputs, meta ] )
 	if args_ports_by_name.has( in_name ):
@@ -409,12 +415,14 @@ func getSettingValue( ctx : FlowData.EvaluationContext, in_name : String ):
 					elif in_size > 1:
 						setError( "Input %s has too many data (%d)" % [ in_name, in_size ])
 					else:
-						var value = stream.container[0]
+						var new_value = stream.container[0]
 						if trace:
-							print( "  -> Using %s = %s" % [ in_name, value ])
-						return value
-				
-	return settings.get( in_name )
+							print( "  -> Using %s = %s" % [ in_name, new_value ])
+						if typeof( new_value ) != typeof( value ):
+							push_warning( "  Type of %s (%d) does not match the expected type (%d)" % [ in_name, typeof(new_value), typeof(value) ])
+							
+						return new_value
+	return value
 
 func newFloatStream( size : int, new_name : String, init_value ):
 	var new_container = PackedFloat32Array()
