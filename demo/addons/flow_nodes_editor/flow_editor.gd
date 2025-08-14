@@ -46,6 +46,10 @@ var comment_padding = Vector2( 40, 40 )
 var gedit_nodes_by_name = {}
 var input_sources := {} # key: Pair(to_node, to_port) -> value: Array[(from_node, from_port)]
 
+# Activate connections and nodes
+var active_conns_intensity = 0.0
+var active_conns = []
+
 var ui_scale = 1.0
 var node_types = { }
 
@@ -95,13 +99,23 @@ func saveResource():
 	save_pending = false
 	
 func _process(delta: float) -> void:
-	if current_resource:
-		if save_pending:
-			saveResource()
-		if regen_pending:
-			#print( "Waiting %d == %d + %d (%d)" % [ gedit.get_child_count(), num_non_nodes_children, current_resource.nodes.size(), gedit_nodes_by_name.size()])
-			#if gedit.get_child_count() == num_non_nodes_children + current_resource.nodes.size():
-			evalGraph()
+	if not current_resource:
+		return
+		
+	if save_pending:
+		saveResource()
+	if regen_pending:
+		#print( "Waiting %d == %d + %d (%d)" % [ gedit.get_child_count(), num_non_nodes_children, current_resource.nodes.size(), gedit_nodes_by_name.size()])
+		#if gedit.get_child_count() == num_non_nodes_children + current_resource.nodes.size():
+		evalGraph()
+
+	# Update active connections
+	if active_conns_intensity > 0.0:
+		active_conns_intensity -= 0.016 * 4
+		if active_conns_intensity < 0:
+			active_conns.clear()
+		for conn in active_conns:
+			gedit.set_connection_activity( conn[0], conn[1], conn[2], conn[3], active_conns_intensity )
 
 func getNewName( suffix : String ):
 	new_name_counter += 1
@@ -208,6 +222,7 @@ func _ready():
 	
 	gedit.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	gedit.size_flags_vertical = Control.SIZE_EXPAND_FILL	
+	gedit.add_theme_color_override("activity", Color(1, 0.2, 0.2, 1))
 	inspector.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	inspector.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	inspector.custom_minimum_size.y = 150
@@ -352,6 +367,14 @@ func addNodeFromTemplate( node_template, node_name : String, settings = null ):
 	gedit_nodes_by_name[ node.name ] = node
 	return node
 	
+func canConnect( src, src_port : int, dst, dst_port : int ):
+	# Check Slot numbers
+	if dst_port >= dst.num_in_ports:
+		return false
+	if src_port >= src.num_out_ports:
+		return false
+	return true
+	
 func addNode( node_template, settings = null ):
 	var node_name = getNewName(node_template)
 	var node = addNodeFromTemplate( node_template, node_name, settings )
@@ -359,11 +382,15 @@ func addNode( node_template, settings = null ):
 		return null
 		
 	if auto_connect_from_node:
-		connect_nodes(auto_connect_from_node, auto_connect_from_port, node.name, 0)
+		var source_node = gedit_nodes_by_name.get( auto_connect_from_node )
+		if canConnect( source_node, auto_connect_from_port, node, 0 ):
+			connect_nodes(auto_connect_from_node, auto_connect_from_port, node.name, 0)
 		auto_connect_from_node = ""
 		
 	if auto_connect_to_node:
-		connect_nodes(node.name, 0, auto_connect_to_node, auto_connect_to_port )
+		var target_node = gedit_nodes_by_name.get( auto_connect_to_node )
+		if canConnect( node, 0, target_node, auto_connect_to_port ):
+			connect_nodes(node.name, 0, auto_connect_to_node, auto_connect_to_port )
 		auto_connect_to_node = ""
 	
 	for prev_node in getSelectedNodes():
@@ -478,10 +505,6 @@ func _on_in_popup_menu_pressed( id: int, row : FlowConnectorRow ) -> void:
 			_on_graph_edit_connection_request( new_input_node.name, 0, node.name, row.data.port )
 		populatePopupInputsMenu()
 		
-
-func is_parameter( ) -> bool:
-	return false
-	
 func _on_graph_edit_delete_nodes_request(node_names : Array[ String ]):
 	print( "_on_graph_edit_delete_nodes_request", node_names )
 	var frames : Array[ GraphFrame ]
@@ -665,6 +688,9 @@ func evalGraph():
 	# print( "evalGraph %d starts from %s" % [ ctx.eval_id, resource_owner.name if resource_owner else "null" ] )
 	removeGeneratedNodes()
 	
+	active_conns_intensity = 1.0
+	active_conns.clear()
+	
 	var performance = []
 	#print( "getEvalOrder..." )
 	var nodes_to_eval = getEvalOrder( )
@@ -678,6 +704,7 @@ func evalGraph():
 		var time_node_start = Time.get_ticks_usec()
 		node.clearInputs()
 		for req in node.deps:
+			active_conns.append( [ req.from_node, req.from_port, req.to_node, req.to_port ] )
 			var req_node = gedit_nodes_by_name.get( req.from_node )
 			var data = req_node.get_output( req.from_port )
 			node.set_input( req.to_port, data )
