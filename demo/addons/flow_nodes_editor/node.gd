@@ -257,6 +257,8 @@ func initFromScript():
 	var has_exposed_params = exposed_params.size() > 0
 	
 	# Access to my parent container editor
+	# We need to remember which nodes were connected as we might be expanded/contracting the list and want to 
+	# maintain the same connected entries
 	var flow_editor = getEditor()
 	var connected_inputs_by_name = {}
 	if flow_editor:
