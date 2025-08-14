@@ -14,18 +14,6 @@ script = ExtResource("3_hsg3l")
 data = {
 "frames": [],
 "links": [{
-"from_node": &"id_0001_grid",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0002_distance",
-"to_port": 0
-}, {
-"from_node": &"id_0003_scan_nodes",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0002_distance",
-"to_port": 1
-}, {
 "from_node": &"id_0002_distance",
 "from_port": 0,
 "keep_alive": false,
@@ -43,6 +31,18 @@ data = {
 "keep_alive": false,
 "to_node": &"id_0005_select",
 "to_port": 0
+}, {
+"from_node": &"id_0001_grid",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0002_distance",
+"to_port": 0
+}, {
+"from_node": &"id_0003_scan_nodes",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0002_distance",
+"to_port": 1
 }],
 "min_pos": Vector2(80, 200),
 "nodes": [{
@@ -93,37 +93,6 @@ data = {
 },
 "show_disconnected_inputs": false,
 "template": "grid"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-},
-"Target": {
-"connected": true,
-"port": 1
-}
-},
-"name": &"id_0002_distance",
-"position": Vector2(180, 0),
-"settings": {
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "distance",
-"debug_scale": 1.0,
-"enabled": true,
-"in_nameA": "position",
-"in_nameB": "position",
-"inspect_enabled": false,
-"max_distance": 0.0,
-"out_name": "distance",
-"random_seed": 2100802008,
-"title": "Distance",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "distance"
 }, {
 "args_port": {
 "In A": {
@@ -206,13 +175,44 @@ data = {
 },
 "show_disconnected_inputs": false,
 "template": "select"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+},
+"Target": {
+"connected": true,
+"port": 1
+}
+},
+"name": &"id_0002_distance",
+"position": Vector2(180, 0),
+"settings": {
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "distance",
+"debug_scale": 1.0,
+"enabled": true,
+"in_nameA": "position",
+"in_nameB": "position",
+"inspect_enabled": false,
+"max_distance": 0.0,
+"out_name": "distance",
+"random_seed": 2100802008,
+"title": "Distance",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "distance"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
 view_zoom = 1.0
-view_offset = Vector2(182, 7)
-new_name_counter = 6
+view_offset = Vector2(0, 0)
+new_name_counter = 7
 in_params = Array[ExtResource("2_cwlch")]([])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 

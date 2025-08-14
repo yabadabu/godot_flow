@@ -1,12 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://bjgti3qpwaiwe"]
+[gd_scene load_steps=6 format=3 uid="uid://bjgti3qpwaiwe"]
 
 [ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_dc4sx"]
 [ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="2_ldm7r"]
 [ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="3_pkajt"]
-
-[sub_resource type="Curve" id="Curve_ldm7r"]
-_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.33208, 0.764219), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
-point_count = 3
 
 [sub_resource type="Resource" id="Resource_pkajt"]
 script = ExtResource("2_ldm7r")
@@ -34,74 +30,15 @@ data = {
 "keep_alive": false,
 "to_node": &"id_0010_copy",
 "to_port": 1
-}, {
-"from_node": &"id_0009_grid",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0263_remap",
-"to_port": 0
 }],
-"min_pos": Vector2(-20, -114.042),
+"min_pos": Vector2(0, -40),
 "nodes": [{
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-},
-"translation": {
-"connected": true,
-"port": 1
-}
-},
-"name": &"id_0010_copy",
-"position": Vector2(460, 274.042),
-"settings": {
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": true,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_scale": 1.0,
-"enabled": true,
-"generate_copy_id": "",
-"inspect_enabled": false,
-"num_copies": 3,
-"random_seed": 1253837551,
-"rotation": Vector3(0, 0, 0),
-"title": "Copy",
-"trace": false,
-"translation": Vector3(0, 0, 0)
-},
-"show_disconnected_inputs": false,
-"template": "copy"
-}, {
 "args_port": {},
-"name": &"id_0008_make_vector",
-"position": Vector2(0, 314.042),
+"name": &"id_0009_grid",
+"position": Vector2(0, 0),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_scale": 1.0,
-"enabled": true,
-"inspect_enabled": false,
-"out_name": "Vector",
-"random_seed": 754367497,
-"title": "Make Vector",
-"trace": false,
-"x": 2.995,
-"y": 1.0,
-"z": 0.0
-},
-"show_disconnected_inputs": false,
-"template": "make_vector"
-}, {
-"args_port": {},
-"name": &"id_0009_grid",
-"position": Vector2(40, 74.042),
-"settings": {
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": true,
 "debug_mode": 0,
 "debug_modulate_by": "",
 "debug_scale": 1.0,
@@ -121,14 +58,9 @@ data = {
 "show_disconnected_inputs": false,
 "template": "grid"
 }, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0263_remap",
-"position": Vector2(252.618, 0),
+"args_port": {},
+"name": &"id_0008_make_vector",
+"position": Vector2(0, 100),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
@@ -136,22 +68,55 @@ data = {
 "debug_modulate_by": "",
 "debug_scale": 1.0,
 "enabled": true,
-"in_name": "density",
 "inspect_enabled": false,
-"random_seed": 1654830470,
-"remap_curve": SubResource("Curve_ldm7r"),
-"title": "Remap",
-"trace": false
+"out_name": "Vector",
+"random_seed": 754367497,
+"title": "Make Vector",
+"trace": false,
+"x": 2.98,
+"y": 1.0,
+"z": 0.0
 },
 "show_disconnected_inputs": false,
-"template": "remap"
+"template": "make_vector"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+},
+"translation": {
+"connected": true,
+"port": 1
+}
+},
+"name": &"id_0010_copy",
+"position": Vector2(240, 0),
+"settings": {
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": true,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_scale": 1.0,
+"enabled": true,
+"generate_copy_id": "",
+"inspect_enabled": false,
+"num_copies": 3,
+"random_seed": 1253838636,
+"rotation": Vector3(0, 0, 0),
+"title": "Copy",
+"trace": false,
+"translation": Vector3(0, 0, 0)
+},
+"show_disconnected_inputs": false,
+"template": "copy"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
 view_zoom = 1.1
 view_offset = Vector2(-143.12, -351.446)
-new_name_counter = 263
+new_name_counter = 288
 in_params = Array[ExtResource("2_ldm7r")]([SubResource("Resource_pkajt")])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 

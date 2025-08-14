@@ -25,6 +25,7 @@ resource_name = "pep"
 resource_local_to_scene = true
 script = ExtResource("4_2jbe2")
 data = {
+"frames": [],
 "links": [{
 "from_node": &"id_0115_sample_spline",
 "from_port": 0,
@@ -620,7 +621,8 @@ data = {
 "random_seed": 1388504677,
 "ratio": 0.2,
 "title": "Select",
-"trace": false
+"trace": false,
+"weight_name": ""
 },
 "show_disconnected_inputs": false,
 "template": "select"
@@ -966,7 +968,7 @@ data = {
 "version": 1
 }
 view_zoom = 0.374194
-view_offset = Vector2(144.856, -322.725)
+view_offset = Vector2(-54.144, -298.725)
 new_name_counter = 105
 in_params = Array[ExtResource("2_dxf0c")]([])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
@@ -998,13 +1000,13 @@ transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, -9.03623, -1.71658, 10.1062)
 visible = false
 script = ExtResource("20_ol2su")
 head_rotation = 40.0
-metadata/flow_owner = &"id_0020_spawn_scenes"
+metadata/flow_owner = &"id_0102_spawn_scenes"
 
 [node name="Scene_0001" type="Node3D" parent="FlowGraphNode3D" instance=ExtResource("11_h10xn")]
 transform = Transform3D(0.957354, 0, 1.56877, 0, 1.83781, 0, -1.56877, 0, 0.957354, 7.52767, -9.53674e-07, -2.50066)
 script = ExtResource("20_ol2su")
 head_rotation = 80.0
-metadata/flow_owner = &"id_0020_spawn_scenes"
+metadata/flow_owner = &"id_0102_spawn_scenes"
 
 [node name="Road" type="Path3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0883217, 0, -0.0294399)
