@@ -12,7 +12,7 @@ class_name FlowGraphNode3D
 	get:
 		return _graph
 		
-var _graph : FlowGraphResource
+var _graph : FlowGraphResource = FlowGraphResource.new()
 signal graph_node_changed( graph_node : FlowGraphNode3D, prop_name : String )
 
 # custom inputs values for this instantiation
