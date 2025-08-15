@@ -46,6 +46,9 @@ class TransformsStream:
 		var basis := FlowData.eulerToBasis( eulers[id] )
 		return Transform3D( basis.scaled( Vector3.ONE * scale ), positions[id] )
 
+	func size() -> int:
+		return positions.size()
+
 class Data:
 	var streams : Dictionary = {}
 	var last_added_stream_name : String
