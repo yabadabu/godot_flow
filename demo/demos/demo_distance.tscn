@@ -43,6 +43,7 @@ cte_string = ""
 [sub_resource type="Resource" id="Resource_3kbeu"]
 script = ExtResource("4_scy5f")
 data = {
+"frames": [],
 "links": [],
 "min_pos": Vector2(-1000, -300),
 "nodes": [{
