@@ -20,7 +20,6 @@
 	[ ] Node to create
 	[ ] Node to sample (the current one)
 [ ] Subgraphs / Loops?
-[ ] Volume Sample in 3D
 [ ] Add noise to position <-- Improve noise
 [ ] Allow meta to define input requirements. Single vs Multiple/Accepted Types/Required
 [ ] Spline sampling interior in non grid pattern
@@ -31,6 +30,7 @@
 [ ] Test random colors for each node -> Graph Editor Settings
 [ ] add_attribute, if output is single stream with a type, set the color. Maybe make it generic
 [ ] Allow the popup menu to have sections. Custom SubGraphs/Resources/Folders maybe
+[X] Volume Sample in 3D
 [X] Remap node
 [X] Add expressions node
 [X] weighted sampling

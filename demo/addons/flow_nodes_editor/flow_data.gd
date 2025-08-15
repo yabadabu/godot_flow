@@ -325,16 +325,19 @@ class Data:
 				print( "  %s" % str(data ))
 
 	func addCommonStreams( num_points : int ):
+		
+		# Initialize with zeros
 		var spos = addStream( FlowData.AttrPosition, FlowData.DataType.Vector )
 		spos.resize( num_points )
 		var srot = addStream( FlowData.AttrRotation, FlowData.DataType.Vector )
 		srot.resize( num_points )
 		
+		# Initialize with ones
 		var ssizes : PackedVector3Array = addStream( FlowData.AttrSize, FlowData.DataType.Vector )
-		if ssizes != null:
-			ssizes.resize( num_points )
-			for idx in range( num_points ):
-				ssizes[idx] = Vector3( 1.0, 1.0, 1.0 )
+		ssizes.resize( num_points )
+		var init_value := Vector3.ONE
+		for idx : int in range( num_points ):
+			ssizes[idx] = init_value
 
 	func getVector3Container( stream_name : StringName ) -> PackedVector3Array:
 		return getContainerChecked( stream_name, DataType.Vector )
