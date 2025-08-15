@@ -64,40 +64,64 @@ func uniformDistributedSample1D( n : int, base : float) -> float:
 	const g := 1.6180339887498948482
 	const a1 : float = 1.0 / g
 	var v : float = (base + a1 * n)
-	return v - int(v);
+	return v - floor(v);
 	
 # The seed is the base, which should be a number between 0 and 1
 # the n is a seq number, starting at zero.
 func uniformDistributedSample2D( n : int, base: float) -> Vector2:
-	var g := 1.32471795724474602596
-	var a1 := 1.0 / g
-	var a2 := 1.0 / (g * g)
+	const g := 1.32471795724474602596
+	const a1 := 1.0 / g
+	const a2 := 1.0 / (g * g)
 	var t := Vector2(base + a1 * n, base + a2 * n)
-	t.x = t.x - int(t.x)
-	t.y = t.y - int(t.y)
+	t.x = t.x - floor(t.x)
+	t.y = t.y - floor(t.y)
 	return t
 
-#VEC3 uniformDistributedSample3D(int n, float base) {
-#float g = 1.2207440846057594736f;
-#float a1 = 1.0f / g;
-#float a2 = 1.0f / (g * g);
-#float a3 = 1.0f / (g * g * g);
-#VEC3 t = VEC3(base + a1 * n, base + a2 * n, base + a3 * n);
-#t.x = t.x - (int)t.x;
-#t.y = t.y - (int)t.y;
-#t.z = t.z - (int)t.z;
-#return t;
-#}
+func uniformDistributedSample2Das3D( n : int, base: float) -> Vector3:
+	var p := uniformDistributedSample2D( n, base )
+	return Vector3( p.x, 0, p.y )
 
-	
+func uniformDistributedSample3D( n : int, base : float) -> Vector3:
+	#return Vector3( uniformDistributedSample1D( n, base )
+				  #, uniformDistributedSample1D( n * 131, base )
+				  #, uniformDistributedSample1D( 341 * n, base )
+				#)
+	const g = 1.2207440846057594736
+	const a1 = 1.0 / g
+	const a2 = 1.0 / (g * g)
+	const a3 = 1.0 / (g * g * g)
+	var t := Vector3(base + a1 * n, base + a2 * n, base + a3 * n);
+	t.x = t.x - floor(t.x);
+	t.y = t.y - floor(t.y);
+	t.z = t.z - floor(t.z);
+	return t;
+
 func quasiRandomSampling( ctx : FlowData.EvaluationContext, in_trs : FlowData.TransformsStream, output : FlowData.Data ):
+	
+	var samplerFn : Callable= uniformDistributedSample2Das3D if settings.distribution == SamplePointsNodeSettings.eDistribution.QuasiRandom2D else uniformDistributedSample3D
 	
 	var spos := output.getVector3Container( FlowData.AttrPosition )
 	var srot := output.getVector3Container( FlowData.AttrRotation )
 	var ssize := output.getVector3Container( FlowData.AttrSize )
-	var num_samples : int = getSettingValue( ctx, "num_points" )
 	var phase : float = getSettingValue( ctx, "phase" )
 	var new_size_factor : Vector3 = Vector3.ONE * getSettingValue( ctx, "new_size_factor")
+	
+	if settings.groups.size() < 1:
+		setError( "Define number of points in the group array")
+		return
+		
+	var save_group_id : bool = true if settings.out_group_id else false
+	var out_group_container := PackedInt32Array()
+	if save_group_id:
+		out_group_container = output.addStream( settings.out_group_id, FlowData.DataType.Int )
+
+	var num_samples := 0
+	for val : int in settings.groups:
+		num_samples += val
+		
+	if num_samples < 0:
+		num_samples = 0
+	
 	for i in in_trs.size():
 		
 		# Alloc num_samples
@@ -106,18 +130,31 @@ func quasiRandomSampling( ctx : FlowData.EvaluationContext, in_trs : FlowData.Tr
 		spos.resize( new_size )
 		srot.resize( new_size )
 		ssize.resize( new_size )
+		if save_group_id:
+			out_group_container.resize( new_size )
 		
 		var origin : Vector3 = in_trs.positions[ i ]
 		var rotation : Vector3 = in_trs.eulers[ i ] 
 		var size : Vector3 = in_trs.sizes[i]
 		var transform = Transform3D( FlowData.eulerToBasis(rotation), origin )
 		
+		var offset := -size * 0.5
+		if settings.distribution == SamplePointsNodeSettings.eDistribution.QuasiRandom2D:
+			offset.y = 0.0
+			
+		var color_idx := 0
+		var max_j : int = settings.groups[color_idx]
+	
 		for j in num_samples:
-			var coords := uniformDistributedSample2D( j, phase )
-			var p := Vector3( coords.x - 0.5, 0.0, coords.y  - 0.5 ) * size
+			var p : Vector3 = samplerFn.call( j, phase ) * size + offset
 			spos[idx] = transform * p
 			srot[idx] = rotation
 			ssize[idx] = new_size_factor
+			if save_group_id:
+				out_group_container[idx] = color_idx
+			if j >= max_j:
+				max_j += settings.groups[ color_idx ]
+				color_idx += 1 
 			idx += 1
 
 func execute( ctx : FlowData.EvaluationContext ):
@@ -130,7 +167,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 	var out_data := FlowData.Data.new()
 	out_data.addCommonStreams( 0 )
 
-	if getSettingValue( ctx, "uniform_sampling" ):
+	if settings.distribution == SamplePointsNodeSettings.eDistribution.UniformGrid:
 		uniformSampling( ctx, in_trs, out_data )
 	else:
 		quasiRandomSampling( ctx, in_trs, out_data )
