@@ -86,12 +86,19 @@ func execute( ctx : FlowData.EvaluationContext ):
 	var mmis := {}
 	for idx in range( in_size ):
 		var mesh = meshes[idx] if meshes else default_mesh
+		#print( "Meshes[%d] is %s" % [ idx, mesh ])
+		if mesh == null:
+			continue
 		var key = mesh.resource_path
+		if key == null or not key:
+			continue
+		#print( "Meshes[%d].key is %s" % [ idx, key ])
 		var mmi = mmis.get( key, null )
 		if mmi == null:
 			mmis[ key ] = []
 		mmis[ key ].append( idx )
 	
+	#print( "mmis: ", mmis )
 	for res in mmis.keys():
 		var mmi : MultiMeshInstance3D = spawnNode( root, MultiMeshInstance3D )
 		
