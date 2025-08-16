@@ -24,12 +24,12 @@
 [ ] Allow meta to define input requirements. Single vs Multiple/Accepted Types/Required
 [ ] Spline sampling interior in non grid pattern
 [ ] Allow to filter rows in the inspector
-[ ] Math Node. Should hide inputs when not needed. Like Abs
 [ ] Support for Vector4/Color/PackedVector4Array -> Read SubAttributes / MathNode / SetAttribute / Use in Debug if exists
 [ ] undo/redo
 [ ] Test random colors for each node -> Graph Editor Settings
 [ ] add_attribute, if output is single stream with a type, set the color. Maybe make it generic
 [ ] Allow the popup menu to have sections. Custom SubGraphs/Resources/Folders maybe
+[X] Math Node. Should hide inputs when not needed. Like Abs
 [X] Volume Sample in 3D
 [X] Remap node
 [X] Add expressions node

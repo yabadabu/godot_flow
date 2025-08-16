@@ -13,22 +13,10 @@ func _init():
 func getTitle() -> String:
 	return MathOpNodeSettings.eOperation.keys()[settings.operation]	
 
-func isSingleArgument( ) -> bool:
-	return settings.operation == MathOpNodeSettings.eOperation.Absolute or \
-	   settings.operation == MathOpNodeSettings.eOperation.Floor or \
-	   settings.operation == MathOpNodeSettings.eOperation.FloorAsInt or \
-	   settings.operation == MathOpNodeSettings.eOperation.Negate or \
-	   settings.operation == MathOpNodeSettings.eOperation.Saturate or \
-	   settings.operation == MathOpNodeSettings.eOperation.Set or \
-	   settings.operation == MathOpNodeSettings.eOperation.OneMinus or \
-	   settings.operation == MathOpNodeSettings.eOperation.Sign or \
-	   settings.operation == MathOpNodeSettings.eOperation.Sqrt or \
-	   false
-
 func execute( _ctx : FlowData.EvaluationContext ):
 	var time_start_init = Time.get_ticks_usec()	
 	
-	var is_single_arg = isSingleArgument()
+	var is_single_arg = settings.isSingleArgument()
 		
 	if not settings.out_name:
 		setError( "Output name can't be empty")
