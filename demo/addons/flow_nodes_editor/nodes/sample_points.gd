@@ -80,21 +80,10 @@ func uniformDistributedSample2D( n : int, base: float) -> Vector2:
 func uniformDistributedSample2Das3D( n : int, base: float) -> Vector3:
 	var p := uniformDistributedSample2D( n, base )
 	return Vector3( p.x, 0, p.y )
-
+	
 func uniformDistributedSample3D( n : int, base : float) -> Vector3:
-	#return Vector3( uniformDistributedSample1D( n, base )
-				  #, uniformDistributedSample1D( n * 131, base )
-				  #, uniformDistributedSample1D( 341 * n, base )
-				#)
-	const g = 1.2207440846057594736
-	const a1 = 1.0 / g
-	const a2 = 1.0 / (g * g)
-	const a3 = 1.0 / (g * g * g)
-	var t := Vector3(base + a1 * n, base + a2 * n, base + a3 * n);
-	t.x = t.x - floor(t.x);
-	t.y = t.y - floor(t.y);
-	t.z = t.z - floor(t.z);
-	return t;
+	var q = uniformDistributedSample2D( n, base )
+	return Vector3(q.x, rng.randf(), q.y)
 
 func quasiRandomSampling( ctx : FlowData.EvaluationContext, in_trs : FlowData.TransformsStream, output : FlowData.Data ):
 	
