@@ -61,7 +61,7 @@ func drawVerticalLines():
 		#verticalLine( x0, Color.GREEN_YELLOW )
 		#verticalLine( x0 + col_widths[idx], Color.WHITE )	
 
-func drawCol( col_idx : int, y0 : float, row_idx : int ):
+func drawCol( col_idx : int, y0 : float, top_row_idx : int ):
 	var y1 := min( size.y, num_rows * line_height )
 	var cell_pos := Vector2( 0, y0 )
 	var w = col_widths[ col_idx ]
@@ -73,7 +73,7 @@ func drawCol( col_idx : int, y0 : float, row_idx : int ):
 	
 	var cell = CellContents.new()
 	cell.font_size = font_size
-	cell.row = row_idx
+	cell.row = top_row_idx
 	cell.col = col_idx
 	
 	if column_callback.is_valid():
@@ -90,7 +90,9 @@ func drawCol( col_idx : int, y0 : float, row_idx : int ):
 		drawCell( cell_pos, w, cell )
 		
 		y0 += line_height
-		cell.row += 1	
+		cell.row += 1
+		if cell.row >= num_rows:
+			break
 		
 
 func drawBackgrounds( y0 : float, row_idx : int ):
@@ -110,7 +112,7 @@ func drawBackgrounds( y0 : float, row_idx : int ):
 		row_idx += 1	
 
 func _draw():
-	#print( "drawing table %d - %d" % [ num_rows , col_starts.size() ])
+	#print( "drawing table Rows:%d - %d" % [ num_rows , col_starts.size() ])
 	if col_starts.size() < 2:
 		return
 	
