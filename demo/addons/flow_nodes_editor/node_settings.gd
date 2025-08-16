@@ -28,3 +28,6 @@ func _init():
 	# Set default values when resource is created
 	resource_name = "Node Settings"
 	random_seed = randi()
+
+func exposeParam( name : String ):
+	return true
