@@ -135,6 +135,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 	output.addCommonStreams( 0 )
 	var spos := output.getVector3Container( FlowData.AttrPosition )
 	var srot := output.getVector3Container( FlowData.AttrRotation )
+	var ssize := output.getVector3Container( FlowData.AttrSize )
 	
 	var uniform_interval = getSettingValue( ctx, "uniform_interval" )
 	if uniform_interval < min_interval:
@@ -170,21 +171,41 @@ func execute( ctx : FlowData.EvaluationContext ):
 			var curve_length := curve.get_baked_length()
 			var num_samples = curve.get_baked_points().size()
 			
-			spos.resize( base + num_samples )
-			srot.resize( base + num_samples )
-			for idx in range( num_samples ):
-				var offset = idx * curve_length / float(num_samples)
-				var t : Transform3D = curve.sample_baked_with_rotation( offset )
-				spos[base + idx] = path_3d.transform * t.origin
-				
-				var b : Basis = path_3d.transform.basis * t.basis
-				srot[base + idx] = FlowData.basisToEuler( b )
+			if getSettingValue( ctx, "sample_segments_centers" ):
+				if num_samples > 2:
+					num_samples -= 1
+					spos.resize( base + num_samples )
+					srot.resize( base + num_samples )
+					ssize.resize( base + num_samples )
+					for idx in range( num_samples ):
+						var offset0 = idx * curve_length / float(num_samples )
+						var offset1 = ( idx + 1 ) * curve_length / float(num_samples )
+						var t0 : Transform3D = curve.sample_baked_with_rotation( offset0 )
+						var t1 : Transform3D = curve.sample_baked_with_rotation( offset1 )
+						var p0 : Vector3 = path_3d.transform * t0.origin
+						var p1 : Vector3 = path_3d.transform * t1.origin
+						spos[base + idx] = ( p0 + p1 ) * 0.5
+						var front = p1 - p0
+						var b = Basis.looking_at( front )
+						srot[base + idx] = FlowData.basisToEuler( b )
+						ssize[base + idx] = Vector3( 1.0, 1.0, front.length() )
+			
+			else:
+				spos.resize( base + num_samples )
+				srot.resize( base + num_samples )
+				for idx in range( num_samples ):
+					var offset = idx * curve_length / float(num_samples - 1)
+					var t : Transform3D = curve.sample_baked_with_rotation( offset )
+					spos[base + idx] = path_3d.transform * t.origin
+					
+					var b : Basis = path_3d.transform.basis * t.basis
+					srot[base + idx] = FlowData.basisToEuler( b )
 		uniform_interval = 1.0
 				
 	# All the samples have the same size
-	var ssize := output.getVector3Container( FlowData.AttrSize )
-	ssize.resize( spos.size() )
-	var sample_size = Vector3.ONE * uniform_interval
-	ssize.fill(sample_size)
+	if ssize.size() != spos.size():
+		ssize.resize( spos.size() )
+		var sample_size = Vector3.ONE * uniform_interval
+		ssize.fill(sample_size)
 
 	set_output( 0, output )
