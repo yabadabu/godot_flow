@@ -4,7 +4,7 @@
 	[ ] Path with random subscene, filter by attribute with rotations
 	[X] Sample surface of a mesh, create flowers or similar in the horizontal ground
 	[X] Mark an area with a spline, have a path remove all flowers
-		[ ] Change density based on the distance to the spline contour
+		[X] Change density based on the distance to the spline contour
 	
 [ ] Support for multiple data in stream evaluation?
 	[ ] Debug

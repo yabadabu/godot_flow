@@ -450,3 +450,18 @@ func newFloatStream( size : int, new_name : String, init_value ):
 		"container" : new_container,
 		"name" : new_name
 	}
+
+func newVector3Stream( size : int, new_name : String, init_value ):
+	var new_container = PackedVector3Array()
+	new_container.resize( size )
+	if typeof(init_value) == TYPE_CALLABLE:
+		var fn : Callable = init_value
+		for idx in size:
+			new_container[idx] = fn.call(idx)
+	else:
+		new_container.fill( init_value )
+	return { 
+		"data_type" : FlowData.DataType.Vector,
+		"container" : new_container,
+		"name" : new_name
+	}

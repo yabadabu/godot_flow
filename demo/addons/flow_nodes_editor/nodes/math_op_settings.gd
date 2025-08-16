@@ -48,7 +48,6 @@ func isSingleArgument( ) -> bool:
 	   operation == eOperation.FloorAsInt or \
 	   operation == eOperation.Negate or \
 	   operation == eOperation.Saturate or \
-	   operation == eOperation.Set or \
 	   operation == eOperation.OneMinus or \
 	   operation == eOperation.Sign or \
 	   operation == eOperation.Sqrt or \

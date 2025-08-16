@@ -53,8 +53,14 @@ func execute( _ctx : FlowData.EvaluationContext ):
 	# in which case we will expand it. Wwe might need in the future A to be just one 
 	# element and B having lots of elements, or the type not to be float...
 	if num_elemsA != num_elemsB:
-		if num_elemsB == 1 and num_elemsA > 0 and sB.data_type == FlowData.DataType.Float:
-			sB = newFloatStream( num_elemsA, sA.name + " as float", sB.container[0])
+		if num_elemsB == 1 and num_elemsA > 0:
+			if sB.data_type == FlowData.DataType.Float:
+				sB = newFloatStream( num_elemsA, sA.name + " as float", sB.container[0])
+			elif sB.data_type == FlowData.DataType.Vector:
+				sB = newVector3Stream( num_elemsA, sA.name + " as vector3", sB.container[0])
+			else:
+				setError( "Num elements from A nd B do not match (%d vs %d). But In B data type must be a float or Vector3" % [num_elemsA, num_elemsB])
+				
 		else:
 			setError( "Num elements from A nd B do not match (%d vs %d)" % [num_elemsA, num_elemsB])
 			return
@@ -183,6 +189,8 @@ func execute( _ctx : FlowData.EvaluationContext ):
 				MathOpNodeSettings.eOperation.Pow:
 					for i in num_elems:
 						outC[i] = pow( inA[i], inB[i] )
+				_:
+					setError( "Float vs Float operation not supported yet")
 			if settings.trace: print( "Math.Loop: %f (%d)" % [ Time.get_ticks_usec() - time_start, num_elems ] )
 			
 		elif sA.data_type == FlowData.DataType.Vector && sB.data_type == FlowData.DataType.Vector:
@@ -204,6 +212,11 @@ func execute( _ctx : FlowData.EvaluationContext ):
 				MathOpNodeSettings.eOperation.Divide:
 					for i in num_elems:
 						outC[i] = inA[i] / inB[i]
+				MathOpNodeSettings.eOperation.Set:
+					for i in num_elems:
+						outC[i] = inB[i]
+				_:
+					setError( "Vector3 vs Vector3 operation not supported yet")
 			out_container = outC
 
 		elif sA.data_type == FlowData.DataType.Vector && sB.data_type == FlowData.DataType.Float:
@@ -218,6 +231,8 @@ func execute( _ctx : FlowData.EvaluationContext ):
 				MathOpNodeSettings.eOperation.Divide:
 					for i in num_elems:
 						outC[i] = inA[i] / inB[i]
+				_:
+					setError( "Vector3 vs Float operation not supported yet")
 			out_container = outC
 
 		elif sA.data_type == FlowData.DataType.Int && sB.data_type == FlowData.DataType.Int:
@@ -247,6 +262,8 @@ func execute( _ctx : FlowData.EvaluationContext ):
 				MathOpNodeSettings.eOperation.Max:
 					for i in num_elems:
 						outC[i] = maxi( inA[i], inB[i] )
+				_:
+					setError( "Int vs Int operation not supported yet")
 			out_container = outC
 	
 		else:
