@@ -4,6 +4,7 @@ extends NodeSettings
 
 @export_group("Match And Set")
 
+@export var match_attr : String
 @export var weight_attr : String
 
 func _init():

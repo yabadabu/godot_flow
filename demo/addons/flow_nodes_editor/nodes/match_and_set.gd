@@ -7,10 +7,13 @@ func _init():
 		"settings" : MatchAndSetNodeSettings,
 		"ins" : [{ "label" : "In" }, { "label" : "Attributes" }],
 		"outs" : [{ "label" : "Out" }],
-		"tooltip" : "Copies attributes into input data set based on a weight_attr.",
+		"tooltip" : "Copies attributes into input data set based on a match_attr." + 
+					"\nThe match_attr is used to pick an asset where the match attribute is the sample in the In and Attributes stream." + 
+					"\nThe weight_attr controls if some assets should be picked more frequently than others." + 
+					"\nIf none are set, a random point from the Attributes entry is picked and assigned to each In point" 
 	}
 
-func execute( _ctx : FlowData.EvaluationContext ):
+func execute( ctx : FlowData.EvaluationContext ):
 	var in_data : FlowData.Data = get_input(0)
 	var attrs_data : FlowData.Data = get_input(1)
 	if attrs_data == null || in_data == null:
@@ -19,14 +22,15 @@ func execute( _ctx : FlowData.EvaluationContext ):
 	var using_lut := false
 	var lut := {}
 	var input_lut_container
-	if settings.weight_attr:
-		var match_stream = attrs_data.findStream( settings.weight_attr )
+	var match_attr : String = getSettingValue( ctx, "match_attr" )
+	if match_attr:
+		var match_stream = attrs_data.findStream( match_attr )
 		if match_stream == null:
-			setError( "Can't find attribute %s in Attributes input" % settings.weight_attr )
+			setError( "Can't find attribute %s in Attributes input" % match_attr )
 			return
-		var input_lut_stream = in_data.findStream( settings.weight_attr )
+		var input_lut_stream = in_data.findStream( match_attr )
 		if input_lut_stream == null:
-			setError( "Can't find attribute %s in In input" % settings.weight_attr )
+			setError( "Can't find attribute %s in In input" % match_attr )
 			return
 		input_lut_container = input_lut_stream.container
 		var attr_index := 0
