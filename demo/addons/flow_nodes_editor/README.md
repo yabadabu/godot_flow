@@ -19,6 +19,7 @@
 	[ ] Node to create
 	[ ] Node to sample (the current one)
 [ ] Subgraphs / Loops?
+[ ] Allow to bypass a node
 [ ] Do not update what it's not dirty
 [ ] Add noise to position <-- Improve noise
 [ ] Allow meta to define input requirements. Single vs Multiple/Accepted Types/Required

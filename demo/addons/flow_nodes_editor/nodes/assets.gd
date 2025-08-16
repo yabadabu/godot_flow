@@ -98,5 +98,5 @@ func execute( _ctx : FlowData.EvaluationContext ):
 				container.resize( count )
 				for idx in range(count):
 					container[idx] = settings.assets[idx].get( prop_name )
-					
+					#print( "%s[%d] = %s" % [ prop_name, idx, container[idx]])
 	set_output( 0, output )
