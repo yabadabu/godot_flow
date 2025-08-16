@@ -147,18 +147,21 @@ func quasiRandomSampling( ctx : FlowData.EvaluationContext, in_trs : FlowData.Tr
 		var color_idx := 0
 		var max_j : int = settings.groups[color_idx]
 	
+		#print( "num_samples is %d. Max_j starts at %d " % [ num_samples, max_j ] )
 		for j : int in num_samples:
 			var p : Vector3 = samplerFn.call( j, phase ) * size + offset
 			spos[idx] = transform * p
 			srot[idx] = rotation
 			ssize[idx] = point_size
 			if save_group_id:
-				out_group_container[idx] = color_idx
 				if j >= max_j:
-					max_j += settings.groups[ color_idx ]
 					color_idx += 1 
+					#print( "  At idx %d New limit %d : %d + %d is %d" % [ idx, color_idx, max_j, settings.groups[ color_idx ], max_j + settings.groups[ color_idx ] ])
+					#if color_idx < settings.groups.size():
+					max_j += settings.groups[ color_idx ]
+				out_group_container[idx] = color_idx
 			idx += 1
-
+		
 func execute( ctx : FlowData.EvaluationContext ):
 	var in_data : FlowData.Data = get_input(0)
 	var in_trs : FlowData.TransformsStream = in_data.getTransformsStream()
