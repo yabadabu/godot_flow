@@ -33,7 +33,8 @@ func execute( _ctx : FlowData.EvaluationContext ):
 				continue
 			if discardted_props.has( prop.name ):
 				continue
-			# print( " %s " % prop )
+			if settings.trace:
+				print( "Prop: %d Name:%s" % [ prop.type, prop.name ])				
 			match prop.type:
 				TYPE_BOOL:
 					new_streams[ prop.name ] = FlowData.DataType.Bool
@@ -42,6 +43,8 @@ func execute( _ctx : FlowData.EvaluationContext ):
 				TYPE_FLOAT:
 					new_streams[ prop.name ] = FlowData.DataType.Float
 				TYPE_VECTOR3:
+					new_streams[ prop.name ] = FlowData.DataType.Vector
+				TYPE_COLOR:
 					new_streams[ prop.name ] = FlowData.DataType.Vector
 				TYPE_STRING:
 					new_streams[ prop.name ] = FlowData.DataType.String
@@ -52,6 +55,8 @@ func execute( _ctx : FlowData.EvaluationContext ):
 
 	for prop_name in new_streams.keys():
 		var prop_type = new_streams[ prop_name ]
+		if settings.trace:
+			print( "Stream: Type:%d Name:%s" % [ prop_type, prop_name ])
 		match prop_type:
 			
 			FlowData.DataType.Bool:
@@ -72,11 +77,21 @@ func execute( _ctx : FlowData.EvaluationContext ):
 				for idx in range(count):
 					container[idx] = settings.assets[idx].get( prop_name )
 					
+			FlowData.DataType.String:
+				var container : PackedStringArray = output.addStream( prop_name, prop_type )
+				container.resize( count )
+				for idx in range(count):
+					container[idx] = settings.assets[idx].get( prop_name )
+					
 			FlowData.DataType.Vector:
 				var container : PackedVector3Array = output.addStream( prop_name, prop_type )
 				container.resize( count )
 				for idx in range(count):
-					container[idx] = settings.assets[idx].get( prop_name )
+					var value = settings.assets[idx].get( prop_name )
+					if typeof( value ) == TYPE_COLOR:
+						container[idx] = Vector3( value.r, value.g, value.b )
+					else:
+						container[idx] = value
 					
 			_:
 				var container : Array = output.addStream( prop_name, prop_type )

@@ -60,13 +60,24 @@ func setupColors( out_data : FlowData.Data ):
 	var instance_count = out_data.size()
 	var color : Color = node.settings.debug_color
 	if node.settings.debug_modulate_by:
-		var smod : PackedFloat32Array = out_data.getContainerChecked( node.settings.debug_modulate_by, FlowData.DataType.Float )
-		if not smod:
+		var stream = out_data.findStream( node.settings.debug_modulate_by )
+		if not stream:
 			node.setError( "Attribute %s of type Float not found" %node. settings.debug_modulate_by )
-		else:
+			return
+		if stream.data_type == FlowData.DataType.Float:
+			var smod : PackedFloat32Array = stream.container
 			for idx in range( instance_count ):
 				RenderingServer.multimesh_instance_set_color( multimesh_rid, idx, color * smod[idx] )
 			return
+		elif stream.data_type == FlowData.DataType.Vector:
+			var smod : PackedVector3Array = stream.container
+			for idx in range( instance_count ):
+				var c := smod[idx]
+				RenderingServer.multimesh_instance_set_color( multimesh_rid, idx, color * Color( c.x, c.y, c.z, 1.0 ) )
+			return
+		else:
+			node.setError( "Attribute %s must be of type float or vector to modulate" % node.settings.debug_modulate_by )
+			
 	for idx in range( instance_count ):
 		RenderingServer.multimesh_instance_set_color( multimesh_rid, idx, color )
 

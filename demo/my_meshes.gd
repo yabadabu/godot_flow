@@ -5,3 +5,4 @@ extends FlowUserResourceData
 @export var weight: float = 1.0
 @export var type: String
 @export var asset: Mesh
+@export var color : Color = Color.WHITE

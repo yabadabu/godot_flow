@@ -91,7 +91,6 @@ func setResourceToEdit( new_resource : FlowGraphResource, new_resource_owner : F
 	queueRegen()
 	ctx.graph = current_resource
 	ctx.owner = resource_owner
-	print( "regen_pending is now true (%d)" % [num_non_nodes_children])
 	populatePopupInputsMenu()
 
 func saveResource():
@@ -104,8 +103,10 @@ func _process(delta: float) -> void:
 		
 	if save_pending:
 		saveResource()
+		
+	# This is also trigered to true by plugin.gd:_on_history_changed
 	if regen_pending:
-		#print( "Waiting %d == %d + %d (%d)" % [ gedit.get_child_count(), num_non_nodes_children, current_resource.nodes.size(), gedit_nodes_by_name.size()])
+		#print( "_process.regen_pending: %s" % [ regen_pending ])
 		#if gedit.get_child_count() == num_non_nodes_children + current_resource.nodes.size():
 		evalGraph()
 
@@ -287,6 +288,7 @@ func queueSave():
 	save_pending = true
 	
 func queueRegen():
+	#print( "queueRegen -> %s" % [ auto_regen ])
 	regen_pending = auto_regen
 	
 func getRectOfNodes( nodes : Array[GraphNode] ):
