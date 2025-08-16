@@ -1,70 +1,12 @@
-[gd_resource type="Resource" script_class="FlowGraphResource" load_steps=7 format=3 uid="uid://doldqxmlcvh80"]
+[gd_resource type="Resource" script_class="FlowGraphResource" load_steps=3 format=3 uid="uid://doldqxmlcvh80"]
 
 [ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="1_hovoc"]
 [ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="1_pwag0"]
-[ext_resource type="Script" uid="uid://dt7o3moxddt4h" path="res://addons/flow_nodes_editor/nodes/transform_settings.gd" id="3_hlk1a"]
-[ext_resource type="Script" uid="uid://cbj3mmuatfk1v" path="res://addons/flow_nodes_editor/nodes/sample_spline_settings.gd" id="4_840wp"]
-
-[sub_resource type="Resource" id="Resource_hlk1a"]
-resource_name = "Sample Spline Settings"
-script = ExtResource("4_840wp")
-uniform_interval = 0.94
-fill_curve = false
-required_meta_bool = &""
-distance_attribute = "distance"
-random_seed = 1977794624
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Sample Spline"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_6r1i8"]
-resource_name = "Transform Settings"
-script = ExtResource("3_hlk1a")
-offset_min = Vector3(0, 0, 0)
-offset_max = Vector3(0, -0.125, 0)
-rotation_min = Vector3(0, 0, 0)
-rotation_max = Vector3(0, 360, 0)
-scale_min = Vector3(0.36, 1, 1)
-scale_max = Vector3(0.335, 1, 1)
-uniform_scale = true
-random_seed = 2752293856
-inspect_enabled = false
-debug_enabled = true
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Transform"
-enabled = true
-trace = false
 
 [resource]
 script = ExtResource("1_pwag0")
-nodes = Array[Dictionary]([{
-"name": &"id_0091_sample_spline",
-"position_offset": Vector2(-300, -20),
-"settings": SubResource("Resource_hlk1a"),
-"template": "sample_spline"
-}, {
-"name": &"id_0092_transform",
-"position_offset": Vector2(140, -20),
-"settings": SubResource("Resource_6r1i8"),
-"template": "transform"
-}])
-conns = Array[Dictionary]([{
-"from_node": &"id_0091_sample_spline",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0092_transform",
-"to_port": 0
-}])
 data = {
+"frames": [],
 "links": [{
 "from_node": &"id_0091_sample_spline",
 "from_port": 0,

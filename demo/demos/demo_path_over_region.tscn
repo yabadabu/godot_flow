@@ -967,8 +967,8 @@ data = {
 "type": "flow_graph_nodes",
 "version": 1
 }
-view_zoom = 0.374194
-view_offset = Vector2(-54.144, -298.725)
+view_zoom = 0.662908
+view_offset = Vector2(-36.4155, -221.196)
 new_name_counter = 105
 in_params = Array[ExtResource("2_dxf0c")]([])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"

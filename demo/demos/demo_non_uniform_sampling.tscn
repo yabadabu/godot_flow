@@ -359,7 +359,7 @@ metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 [node name="DemoNonUniformSampling" type="Node3D"]
 
 [node name="FlowGraphNode3D" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.40434, 0, 2.64057)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.92835, 0, 0.805319)
 script = ExtResource("1_3she7")
 graph = SubResource("Resource_7xx0y")
 refresh_inputs = Callable()
@@ -370,4 +370,4 @@ transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 0, 0)
 mesh = SubResource("PlaneMesh_aj3gx")
 
 [node name="RefPoint" type="Node3D" parent="." groups=["RefPoints"]]
-transform = Transform3D(4.09574, 0, 0, 0, 1, 0, 0, 0, 7.63447, 2.56402, 0, 2.44964)
+transform = Transform3D(4.09574, 0, 0, 0, 1, 0, 0, 0, 7.63447, 1.00747, -0.668377, 1.597)

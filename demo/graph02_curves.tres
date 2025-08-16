@@ -1,70 +1,12 @@
-[gd_resource type="Resource" script_class="FlowGraphResource" load_steps=7 format=3 uid="uid://c6tic21gyki1f"]
+[gd_resource type="Resource" script_class="FlowGraphResource" load_steps=3 format=3 uid="uid://c6tic21gyki1f"]
 
 [ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="1_4ly6f"]
 [ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="1_a1se2"]
-[ext_resource type="Script" uid="uid://cbj3mmuatfk1v" path="res://addons/flow_nodes_editor/nodes/sample_spline_settings.gd" id="1_bd8sb"]
-[ext_resource type="Script" uid="uid://dt7o3moxddt4h" path="res://addons/flow_nodes_editor/nodes/transform_settings.gd" id="2_2h21p"]
-
-[sub_resource type="Resource" id="Resource_1xbvu"]
-resource_name = "Transform Settings"
-script = ExtResource("2_2h21p")
-offset_min = Vector3(0, 0, 0)
-offset_max = Vector3(0, 0, 0)
-rotation_min = Vector3(0, 0, -0.555)
-rotation_max = Vector3(0, 360, 0)
-scale_min = Vector3(1, 1, 1)
-scale_max = Vector3(1, 1, 1)
-uniform_scale = true
-random_seed = 2046638687
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Transform"
-enabled = true
-trace = false
-
-[sub_resource type="Resource" id="Resource_a1se2"]
-resource_name = "Sample Spline Settings"
-script = ExtResource("1_bd8sb")
-uniform_interval = 1.94
-fill_curve = false
-required_meta_bool = &""
-distance_attribute = "distance"
-random_seed = 2842677187
-inspect_enabled = false
-debug_enabled = false
-debug_mode = 0
-debug_scale = 1.0
-debug_color = Color(1, 1, 1, 1)
-debug_modulate_by = ""
-title = "Sample Spline"
-enabled = true
-trace = false
 
 [resource]
 script = ExtResource("1_4ly6f")
-nodes = Array[Dictionary]([{
-"name": &"id_0002_transform",
-"position_offset": Vector2(320, 140),
-"settings": SubResource("Resource_1xbvu"),
-"template": "transform"
-}, {
-"name": &"id_0003_sample_spline",
-"position_offset": Vector2(40, 140),
-"settings": SubResource("Resource_a1se2"),
-"template": "sample_spline"
-}])
-conns = Array[Dictionary]([{
-"from_node": &"id_0003_sample_spline",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0002_transform",
-"to_port": 0
-}])
 data = {
+"frames": [],
 "links": [{
 "from_node": &"id_0003_sample_spline",
 "from_port": 0,
@@ -74,36 +16,6 @@ data = {
 }],
 "min_pos": Vector2(40, 140),
 "nodes": [{
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0002_transform",
-"position": Vector2(280, 0),
-"settings": {
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_scale": 1.0,
-"enabled": true,
-"inspect_enabled": false,
-"offset_max": Vector3(0, 0, 0),
-"offset_min": Vector3(0, 0, 0),
-"random_seed": 2046638687,
-"rotation_max": Vector3(0, 360, 0),
-"rotation_min": Vector3(0, 0, -0.555),
-"scale_max": Vector3(1, 1, 1),
-"scale_min": Vector3(1, 1, 1),
-"title": "Transform",
-"trace": false,
-"uniform_scale": true
-},
-"show_disconnected_inputs": false,
-"template": "transform"
-}, {
 "args_port": {},
 "name": &"id_0003_sample_spline",
 "position": Vector2(0, 0),
@@ -125,6 +37,36 @@ data = {
 },
 "show_disconnected_inputs": false,
 "template": "sample_spline"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0002_transform",
+"position": Vector2(200, 0),
+"settings": {
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_scale": 1.0,
+"enabled": true,
+"inspect_enabled": false,
+"offset_max": Vector3(0, 0, 0),
+"offset_min": Vector3(0, 0, 0),
+"random_seed": 2046638687,
+"rotation_max": Vector3(0, 360, 0),
+"rotation_min": Vector3(0, 0, -0.555),
+"scale_max": Vector3(1, 1, 1),
+"scale_min": Vector3(1, 1, 1),
+"title": "Transform",
+"trace": false,
+"uniform_scale": true
+},
+"show_disconnected_inputs": false,
+"template": "transform"
 }],
 "type": "flow_graph_nodes",
 "version": 1

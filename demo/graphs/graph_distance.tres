@@ -210,6 +210,10 @@ data = {
 "connected": false,
 "port": 5
 },
+"size": {
+"connected": false,
+"port": 6
+},
 "step": {
 "connected": true,
 "port": 3
@@ -240,6 +244,7 @@ data = {
 "origin": Vector3(0, 0, 0),
 "random_seed": 2397165643,
 "rotation": Vector3(0, 0, 0),
+"size": 1.0,
 "step": Vector3(0.5, 1, 0.5),
 "title": "Grid",
 "trace": false,

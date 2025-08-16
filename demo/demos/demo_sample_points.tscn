@@ -579,36 +579,6 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0023_transform",
-"position": Vector2(780, 80),
-"settings": {
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_scale": 1.0,
-"enabled": true,
-"inspect_enabled": false,
-"offset_max": Vector3(0, 0, 0),
-"offset_min": Vector3(0, 0, 0),
-"random_seed": 2292551584,
-"rotation_max": Vector3(0, 360, 0),
-"rotation_min": Vector3(0, 0, 0),
-"scale_max": Vector3(2, 1, 1),
-"scale_min": Vector3(2, 1, 1),
-"title": "Transform",
-"trace": false,
-"uniform_scale": true
-},
-"show_disconnected_inputs": false,
-"template": "transform"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
 "name": &"id_0021_spawn_meshes",
 "position": Vector2(980, 80),
 "settings": {
@@ -637,9 +607,13 @@ data = {
 "connected": true,
 "port": 0
 },
-"weight_attr": {
+"match_attr": {
 "connected": false,
 "port": 2
+},
+"weight_attr": {
+"connected": false,
+"port": 3
 }
 },
 "name": &"id_0017_match_and_set",
@@ -652,10 +626,11 @@ data = {
 "debug_scale": 1.0,
 "enabled": true,
 "inspect_enabled": false,
+"match_attr": "type",
 "random_seed": 3123198780,
 "title": "Match And Set",
 "trace": false,
-"weight_attr": "type"
+"weight_attr": ""
 },
 "show_disconnected_inputs": true,
 "template": "match_and_set"
@@ -671,19 +646,49 @@ data = {
 "debug_modulate_by": "",
 "debug_scale": 1.0,
 "enabled": true,
-"inspect_enabled": true,
+"inspect_enabled": false,
 "random_seed": 604158908,
 "title": "Assets",
 "trace": true
 },
 "show_disconnected_inputs": false,
 "template": "assets"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0023_transform",
+"position": Vector2(780, 80),
+"settings": {
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_scale": 1.0,
+"enabled": true,
+"inspect_enabled": false,
+"offset_max": Vector3(0, 0, 0),
+"offset_min": Vector3(0, 0, 0),
+"random_seed": 2292551584,
+"rotation_max": Vector3(0, 360, 0),
+"rotation_min": Vector3(0, 0, 0),
+"scale_max": Vector3(2, 1, 1),
+"scale_min": Vector3(2, 1, 1),
+"title": "Transform",
+"trace": false,
+"uniform_scale": true
+},
+"show_disconnected_inputs": false,
+"template": "transform"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
-view_zoom = 0.826446
-view_offset = Vector2(335.072, -170.514)
+view_zoom = 0.564474
+view_offset = Vector2(-13.5095, -239.967)
 new_name_counter = 23
 in_params = Array[ExtResource("2_tllc8")]([SubResource("Resource_berhf"), SubResource("Resource_6f1cc"), SubResource("Resource_2t1fq"), SubResource("Resource_8r07d")])
 
@@ -733,19 +738,19 @@ graph = SubResource("Resource_tllc8")
 refresh_inputs = Callable()
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
 
-[node name="@MultiMeshInstance3D@28028" type="MultiMeshInstance3D" parent="FlowGraphNode3D2"]
+[node name="@MultiMeshInstance3D@35753" type="MultiMeshInstance3D" parent="FlowGraphNode3D2"]
 multimesh = SubResource("MultiMesh_twxpo")
 metadata/flow_owner = &"id_0021_spawn_meshes"
 
-[node name="@MultiMeshInstance3D@28029" type="MultiMeshInstance3D" parent="FlowGraphNode3D2"]
+[node name="@MultiMeshInstance3D@35754" type="MultiMeshInstance3D" parent="FlowGraphNode3D2"]
 multimesh = SubResource("MultiMesh_6f1cc")
 metadata/flow_owner = &"id_0021_spawn_meshes"
 
-[node name="@MultiMeshInstance3D@28030" type="MultiMeshInstance3D" parent="FlowGraphNode3D2"]
+[node name="@MultiMeshInstance3D@35755" type="MultiMeshInstance3D" parent="FlowGraphNode3D2"]
 multimesh = SubResource("MultiMesh_2t1fq")
 metadata/flow_owner = &"id_0021_spawn_meshes"
 
-[node name="@MultiMeshInstance3D@28031" type="MultiMeshInstance3D" parent="FlowGraphNode3D2"]
+[node name="@MultiMeshInstance3D@35756" type="MultiMeshInstance3D" parent="FlowGraphNode3D2"]
 multimesh = SubResource("MultiMesh_8r07d")
 metadata/flow_owner = &"id_0021_spawn_meshes"
 
