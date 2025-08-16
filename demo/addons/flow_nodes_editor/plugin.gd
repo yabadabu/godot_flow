@@ -11,6 +11,7 @@ var watched_nodes : Array[Node] = []
 var undo_redo: EditorUndoRedoManager
 var add_attribute_inspector_plugin : EditorInspectorPlugin
 var graph_input_inspector_plugin : EditorInspectorPlugin
+var node_settings_inspector_plugin : EditorInspectorPlugin
 
 # To detect scene changes
 var current_scene_root = null
@@ -39,6 +40,8 @@ func _enter_tree():
 	add_inspector_plugin(add_attribute_inspector_plugin)
 	graph_input_inspector_plugin = load("res://addons/flow_nodes_editor/graph_input_parameter_inspector.gd").new()
 	add_inspector_plugin(graph_input_inspector_plugin)
+	node_settings_inspector_plugin = load("res://addons/flow_nodes_editor/node_settings_inspector_plugin.gd").new()
+	add_inspector_plugin(node_settings_inspector_plugin)
 	
 	# Will refresh everytime the undo/redo subsystem saves a point
 	undo_redo = get_undo_redo()
@@ -49,6 +52,7 @@ func _enter_tree():
 func _exit_tree():
 	if undo_redo:
 		undo_redo.history_changed.disconnect(_on_history_changed)
+	remove_inspector_plugin(node_settings_inspector_plugin)
 	remove_inspector_plugin(graph_input_inspector_plugin)
 	remove_inspector_plugin(add_attribute_inspector_plugin)
 	#remove_inspector_plugin(inspector_plugin)

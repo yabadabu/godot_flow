@@ -233,6 +233,7 @@ func _ready():
 func onNodePropertyChanged( prop_name : String):
 	if inspected_node and inspected_node is FlowNodeBase:
 		#print( "Node %s.%s has changed" % [ inspected_node.name, prop_name ])
+		inspected_node.onPropChanged( prop_name )
 		inspected_node.refreshFromSettings()
 		queueRegen()
 		

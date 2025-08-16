@@ -9,6 +9,19 @@ func _init():
 		"outs" : [{ "label" : "Out" }],
 		"tooltip" : "Subdivides each int point into a subgrid of regular points with the specified sampling distance",
 	}
+	
+func isUniformGridParam( prop ) -> bool:
+	return (prop.name as String).begins_with("max") or prop.name == "sampling_distance" or prop.name == "new_size_factor"
+	
+func exposedAsInputNode( prop ):
+	if settings.distribution == SamplePointsNodeSettings.eDistribution.UniformGrid:
+		return isUniformGridParam( prop )
+	return prop.name == "phase"
+
+func onPropChanged( prop_name : String ):
+	super.onPropChanged( prop_name )
+	if prop_name == "distribution":
+		initFromScript()
 
 func uniformSampling( ctx : FlowData.EvaluationContext, in_trs : FlowData.TransformsStream, output : FlowData.Data ):
 		
@@ -88,12 +101,12 @@ func uniformDistributedSample3D( n : int, base : float) -> Vector3:
 func quasiRandomSampling( ctx : FlowData.EvaluationContext, in_trs : FlowData.TransformsStream, output : FlowData.Data ):
 	
 	var samplerFn : Callable= uniformDistributedSample2Das3D if settings.distribution == SamplePointsNodeSettings.eDistribution.QuasiRandom2D else uniformDistributedSample3D
-	
+		
 	var spos := output.getVector3Container( FlowData.AttrPosition )
 	var srot := output.getVector3Container( FlowData.AttrRotation )
 	var ssize := output.getVector3Container( FlowData.AttrSize )
 	var phase : float = getSettingValue( ctx, "phase" )
-	var new_size_factor : Vector3 = Vector3.ONE * getSettingValue( ctx, "new_size_factor")
+	var point_size : Vector3 = Vector3.ONE * getSettingValue( ctx, "size")
 	
 	if settings.groups.size() < 1:
 		setError( "Define number of points in the group array")
@@ -111,7 +124,7 @@ func quasiRandomSampling( ctx : FlowData.EvaluationContext, in_trs : FlowData.Tr
 	if num_samples < 0:
 		num_samples = 0
 	
-	for i in in_trs.size():
+	for i : int in in_trs.size():
 		
 		# Alloc num_samples
 		var idx := spos.size()
@@ -134,16 +147,16 @@ func quasiRandomSampling( ctx : FlowData.EvaluationContext, in_trs : FlowData.Tr
 		var color_idx := 0
 		var max_j : int = settings.groups[color_idx]
 	
-		for j in num_samples:
+		for j : int in num_samples:
 			var p : Vector3 = samplerFn.call( j, phase ) * size + offset
 			spos[idx] = transform * p
 			srot[idx] = rotation
-			ssize[idx] = new_size_factor
+			ssize[idx] = point_size
 			if save_group_id:
 				out_group_container[idx] = color_idx
-			if j >= max_j:
-				max_j += settings.groups[ color_idx ]
-				color_idx += 1 
+				if j >= max_j:
+					max_j += settings.groups[ color_idx ]
+					color_idx += 1 
 			idx += 1
 
 func execute( ctx : FlowData.EvaluationContext ):

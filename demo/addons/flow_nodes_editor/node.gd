@@ -18,6 +18,8 @@ var meta_node: Dictionary = {}
 var node_template : String
 var show_disconnected_inputs : bool = false
 
+var dirty : bool = false
+
 # Helper to create the UI
 var connectors_row_prefab = preload( "res://addons/flow_nodes_editor/connectors_row.tscn" )
 var connectors_options_prefab = preload( "res://addons/flow_nodes_editor/connectors_options.tscn" )
@@ -102,6 +104,9 @@ func refreshDebugMark():
 
 func refreshInspectMark():
 	redrawUI()
+	
+func onPropChanged( prop_name : String ):
+	dirty = true
 	
 func refreshFromSettings():
 	refreshDebugMark()
@@ -206,6 +211,9 @@ static func getFlowDataTypeFromObject( obj  ) -> FlowData.DataType:
 		return FlowData.DataType.Resource
 	return data_type
 
+func exposedAsInputNode( prop ):
+	return true
+
 func get_exposed_params():
 	var meta := getMeta()
 	if meta.get( "hide_inputs", false ):
@@ -237,6 +245,10 @@ func get_exposed_params():
 			"is_parameter" : true,
 			"port" : -1,
 		}
+		
+		if not exposedAsInputNode( data ):
+			continue
+		
 		params.append( data )
 	return params
 

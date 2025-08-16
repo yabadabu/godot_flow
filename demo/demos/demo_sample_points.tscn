@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://bnmvok36j8qf2"]
+[gd_scene load_steps=13 format=3 uid="uid://bnmvok36j8qf2"]
 
 [ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_wusrb"]
 [ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="2_tllc8"]
@@ -71,12 +71,6 @@ data = {
 "from_port": 0,
 "keep_alive": false,
 "to_node": &"id_0020_select",
-"to_port": 0
-}, {
-"from_node": &"id_0002_math_op",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0029_sample_points",
 "to_port": 0
 }, {
 "from_node": &"id_0002_math_op",
@@ -161,37 +155,6 @@ data = {
 },
 "show_disconnected_inputs": false,
 "template": "remap"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-},
-"Target": {
-"connected": true,
-"port": 1
-}
-},
-"name": &"id_0018_distance",
-"position": Vector2(1000, 180),
-"settings": {
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "distance",
-"debug_scale": 1.0,
-"enabled": true,
-"in_nameA": "position",
-"in_nameB": "position",
-"inspect_enabled": false,
-"max_distance": 0.0,
-"out_name": "distance",
-"random_seed": 2293053265,
-"title": "Distance",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "distance"
 }, {
 "args_port": {},
 "name": &"id_0017_sample_spline",
@@ -287,33 +250,8 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0020_select",
-"position": Vector2(1400, 180),
-"settings": {
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": true,
-"debug_mode": 1,
-"debug_modulate_by": "",
-"debug_scale": 0.1,
-"enabled": true,
-"inspect_enabled": false,
-"random_seed": 4033823075,
-"ratio": 0.194,
-"title": "Select",
-"trace": false,
-"weight_name": "distance"
-},
-"show_disconnected_inputs": false,
-"template": "select"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
 "name": &"id_0033_sample_points",
-"position": Vector2(559.492, 47.6553),
+"position": Vector2(560, 60),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
@@ -344,37 +282,61 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0029_sample_points",
-"position": Vector2(600, 580),
+"name": &"id_0020_select",
+"position": Vector2(1400, 180),
+"settings": {
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": true,
+"debug_mode": 1,
+"debug_modulate_by": "",
+"debug_scale": 0.1,
+"enabled": true,
+"inspect_enabled": false,
+"random_seed": 4033823075,
+"ratio": 0.194,
+"title": "Select",
+"trace": false,
+"weight_name": "distance"
+},
+"show_disconnected_inputs": false,
+"template": "select"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+},
+"Target": {
+"connected": true,
+"port": 1
+}
+},
+"name": &"id_0018_distance",
+"position": Vector2(1000, 180),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
-"debug_mode": 1,
-"debug_modulate_by": "",
-"debug_scale": 0.44,
-"distribution": 1,
+"debug_mode": 0,
+"debug_modulate_by": "distance",
+"debug_scale": 1.0,
 "enabled": true,
-"groups": Array[int]([12, 20, 8]),
+"in_nameA": "position",
+"in_nameB": "position",
 "inspect_enabled": false,
-"max_x": 32,
-"max_y": 32,
-"max_z": 32,
-"new_size_factor": 1.0,
-"out_group_id": "group_id",
-"phase": 0.0,
-"random_seed": 2704377380,
-"sampling_distance": 0.2,
-"title": "Sample Points",
+"max_distance": 0.0,
+"out_name": "distance",
+"random_seed": 2293053265,
+"title": "Distance",
 "trace": false
 },
 "show_disconnected_inputs": false,
-"template": "sample_points"
+"template": "distance"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
 view_zoom = 0.683013
-view_offset = Vector2(-36.9684, -156.931)
+view_offset = Vector2(182.032, -265.931)
 new_name_counter = 33
 in_params = Array[ExtResource("2_tllc8")]([SubResource("Resource_wusrb")])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
@@ -386,6 +348,159 @@ _data = {
 "tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0)
 }
 point_count = 9
+
+[sub_resource type="Resource" id="Resource_berhf"]
+script = ExtResource("2_tllc8")
+name = "Sample Points - Distribution"
+data_type = 1
+cte_bool = false
+cte_int = 0
+cte_float = 0.0
+cte_vector = Vector3(0, 0, 0)
+cte_string = ""
+
+[sub_resource type="Resource" id="Resource_6f1cc"]
+script = ExtResource("2_tllc8")
+name = "Sample Points - Groups"
+data_type = 999
+cte_bool = false
+cte_int = 0
+cte_float = 0.0
+cte_vector = Vector3(0, 0, 0)
+cte_string = ""
+
+[sub_resource type="Resource" id="Resource_2t1fq"]
+script = ExtResource("2_tllc8")
+name = "Sample Points - Out Group Id"
+data_type = 4
+cte_bool = false
+cte_int = 0
+cte_float = 0.0
+cte_vector = Vector3(0, 0, 0)
+cte_string = ""
+
+[sub_resource type="Resource" id="Resource_8r07d"]
+script = ExtResource("2_tllc8")
+name = "Sample Points - Phase"
+data_type = 2
+cte_bool = false
+cte_int = 0
+cte_float = 0.0
+cte_vector = Vector3(0, 0, 0)
+cte_string = ""
+
+[sub_resource type="Resource" id="Resource_tllc8"]
+script = ExtResource("3_berhf")
+data = {
+"frames": [],
+"links": [{
+"from_node": &"id_0002_scan_nodes",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0003_transform",
+"to_port": 0
+}, {
+"from_node": &"id_0003_transform",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0006_sample_points",
+"to_port": 0
+}],
+"min_pos": Vector2(100, 320),
+"nodes": [{
+"args_port": {},
+"name": &"id_0002_scan_nodes",
+"position": Vector2(0, 0),
+"settings": {
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_scale": 1.0,
+"enabled": true,
+"filter_by_class_name": "",
+"group_name": "BigPoint",
+"import_metadata": false,
+"import_properties": Array[StringName]([]),
+"inspect_enabled": false,
+"random_seed": 1680928419,
+"size_to_bounds": false,
+"title": "Scan Nodes",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "scan_nodes"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0003_transform",
+"position": Vector2(140, 0),
+"settings": {
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_scale": 1.0,
+"enabled": true,
+"inspect_enabled": false,
+"offset_max": Vector3(0, 0, 0),
+"offset_min": Vector3(0, 0, 0),
+"random_seed": 2232857195,
+"rotation_max": Vector3(0, 0, 0),
+"rotation_min": Vector3(0, 0, 0),
+"scale_max": Vector3(10, 4, 20),
+"scale_min": Vector3(10, 4, 20),
+"title": "Transform",
+"trace": false,
+"uniform_scale": false
+},
+"show_disconnected_inputs": false,
+"template": "transform"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0006_sample_points",
+"position": Vector2(300, 0),
+"settings": {
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": true,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_scale": 1.0,
+"distribution": 2,
+"enabled": true,
+"groups": Array[int]([-60, 55, 90, 235]),
+"inspect_enabled": false,
+"max_x": 32,
+"max_y": 32,
+"max_z": 32,
+"new_size_factor": 0.67,
+"out_group_id": "",
+"phase": 0.31,
+"random_seed": 4003151073,
+"sampling_distance": 0.2,
+"size": 0.855,
+"title": "Sample Points",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "sample_points"
+}],
+"type": "flow_graph_nodes",
+"version": 1
+}
+view_zoom = 1.1
+view_offset = Vector2(191.642, 218.219)
+new_name_counter = 14
+in_params = Array[ExtResource("2_tllc8")]([SubResource("Resource_berhf"), SubResource("Resource_6f1cc"), SubResource("Resource_2t1fq"), SubResource("Resource_8r07d")])
 
 [node name="DemoSamplePoints" type="Node3D"]
 
@@ -402,3 +517,12 @@ metadata/_custom_type_script = "uid://d1krtmb1urldl"
 [node name="Path3D" type="Path3D" parent="."]
 transform = Transform3D(0.758868, 0, 0.666659, 0, 1.01011, 0, -0.666658, 0, 0.758868, -2.15798, 4.76837e-07, 4.57601)
 curve = SubResource("Curve3D_wusrb")
+
+[node name="FlowGraphNode3D2" type="Node3D" parent="."]
+script = ExtResource("1_wusrb")
+graph = SubResource("Resource_tllc8")
+refresh_inputs = Callable()
+metadata/_custom_type_script = "uid://d1krtmb1urldl"
+
+[node name="BigPoint" type="Node3D" parent="." groups=["BigPoint"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.6558, 0, 19.2154)
