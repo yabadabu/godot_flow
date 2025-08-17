@@ -301,6 +301,7 @@ data = {
 "debug_scale": 1.0,
 "disabled": false,
 "filter_by_class_name": "Path3D",
+"filter_by_name": "",
 "group_name": "",
 "import_metadata": false,
 "import_properties": Array[StringName]([]),
@@ -347,8 +348,8 @@ data = {
 "type": "flow_graph_nodes",
 "version": 1
 }
-view_zoom = 1.1
-view_offset = Vector2(887.662, -71.9271)
+view_zoom = 0.909091
+view_offset = Vector2(340.63, -63.9976)
 new_name_counter = 34
 in_params = Array[ExtResource("2_tllc8")]([SubResource("Resource_wusrb")])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
@@ -493,8 +494,9 @@ data = {
 "debug_mode": 0,
 "debug_modulate_by": "",
 "debug_scale": 1.0,
-"enabled": true,
+"disabled": false,
 "filter_by_class_name": "",
+"filter_by_name": "",
 "group_name": "BigPoint",
 "import_metadata": false,
 "import_properties": Array[StringName]([]),
@@ -521,7 +523,7 @@ data = {
 "debug_mode": 0,
 "debug_modulate_by": "",
 "debug_scale": 1.0,
-"enabled": true,
+"disabled": false,
 "inspect_enabled": false,
 "offset_max": Vector3(0, 0, 0),
 "offset_min": Vector3(0, 0, 0),
@@ -555,8 +557,8 @@ data = {
 "debug_mode": 0,
 "debug_modulate_by": "",
 "debug_scale": 1.0,
+"disabled": false,
 "distribution": 1,
-"enabled": true,
 "groups": Array[int]([3, 20, 5]),
 "inspect_enabled": false,
 "max_x": 32,
@@ -574,30 +576,24 @@ data = {
 "show_disconnected_inputs": true,
 "template": "sample_points"
 }, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0021_spawn_meshes",
-"position": Vector2(980, 80),
+"args_port": {},
+"name": &"id_0019_assets",
+"position": Vector2(340, 200),
 "settings": {
+"assets": Array[ExtResource("4_tllc8")]([SubResource("Resource_dwp87"), SubResource("Resource_v1s42"), SubResource("Resource_tejo6"), SubResource("Resource_2u10u")]),
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "",
 "debug_scale": 1.0,
-"enabled": true,
+"disabled": false,
 "inspect_enabled": false,
-"mesh": ExtResource("6_twxpo"),
-"mesh_attribute": "asset",
-"random_seed": 4174041606,
-"title": "Spawn Meshes",
+"random_seed": 604158908,
+"title": "Assets",
 "trace": false
 },
 "show_disconnected_inputs": false,
-"template": "spawn_meshes"
+"template": "assets"
 }, {
 "args_port": {
 "Attributes": {
@@ -625,7 +621,7 @@ data = {
 "debug_mode": 0,
 "debug_modulate_by": "color",
 "debug_scale": 1.0,
-"enabled": true,
+"disabled": false,
 "inspect_enabled": false,
 "match_attr": "type",
 "random_seed": 3123198780,
@@ -635,25 +631,6 @@ data = {
 },
 "show_disconnected_inputs": true,
 "template": "match_and_set"
-}, {
-"args_port": {},
-"name": &"id_0019_assets",
-"position": Vector2(340, 200),
-"settings": {
-"assets": Array[ExtResource("4_tllc8")]([SubResource("Resource_dwp87"), SubResource("Resource_v1s42"), SubResource("Resource_tejo6"), SubResource("Resource_2u10u")]),
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_scale": 1.0,
-"enabled": true,
-"inspect_enabled": false,
-"random_seed": 604158908,
-"title": "Assets",
-"trace": true
-},
-"show_disconnected_inputs": false,
-"template": "assets"
 }, {
 "args_port": {
 "In": {
@@ -669,7 +646,7 @@ data = {
 "debug_mode": 0,
 "debug_modulate_by": "",
 "debug_scale": 1.0,
-"enabled": true,
+"disabled": false,
 "inspect_enabled": false,
 "offset_max": Vector3(0, 0, 0),
 "offset_min": Vector3(0, 0, 0),
@@ -684,12 +661,37 @@ data = {
 },
 "show_disconnected_inputs": false,
 "template": "transform"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0021_spawn_meshes",
+"position": Vector2(980, 80),
+"settings": {
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"mesh": ExtResource("6_twxpo"),
+"mesh_attribute": "asset",
+"random_seed": 4174041606,
+"title": "Spawn Meshes",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "spawn_meshes"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
-view_zoom = 0.564474
-view_offset = Vector2(-13.5095, -239.967)
+view_zoom = 0.826446
+view_offset = Vector2(406.659, -226.779)
 new_name_counter = 23
 in_params = Array[ExtResource("2_tllc8")]([SubResource("Resource_berhf"), SubResource("Resource_6f1cc"), SubResource("Resource_2t1fq"), SubResource("Resource_8r07d")])
 
@@ -739,19 +741,19 @@ graph = SubResource("Resource_tllc8")
 refresh_inputs = Callable()
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
 
-[node name="@MultiMeshInstance3D@31919" type="MultiMeshInstance3D" parent="FlowGraphNode3D2"]
+[node name="@MultiMeshInstance3D@41306" type="MultiMeshInstance3D" parent="FlowGraphNode3D2"]
 multimesh = SubResource("MultiMesh_twxpo")
 metadata/flow_owner = &"id_0021_spawn_meshes"
 
-[node name="@MultiMeshInstance3D@31920" type="MultiMeshInstance3D" parent="FlowGraphNode3D2"]
+[node name="@MultiMeshInstance3D@41307" type="MultiMeshInstance3D" parent="FlowGraphNode3D2"]
 multimesh = SubResource("MultiMesh_6f1cc")
 metadata/flow_owner = &"id_0021_spawn_meshes"
 
-[node name="@MultiMeshInstance3D@31921" type="MultiMeshInstance3D" parent="FlowGraphNode3D2"]
+[node name="@MultiMeshInstance3D@41308" type="MultiMeshInstance3D" parent="FlowGraphNode3D2"]
 multimesh = SubResource("MultiMesh_2t1fq")
 metadata/flow_owner = &"id_0021_spawn_meshes"
 
-[node name="@MultiMeshInstance3D@31922" type="MultiMeshInstance3D" parent="FlowGraphNode3D2"]
+[node name="@MultiMeshInstance3D@41309" type="MultiMeshInstance3D" parent="FlowGraphNode3D2"]
 multimesh = SubResource("MultiMesh_8r07d")
 metadata/flow_owner = &"id_0021_spawn_meshes"
 

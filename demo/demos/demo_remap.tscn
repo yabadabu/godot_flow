@@ -55,8 +55,9 @@ data = {
 "debug_mode": 0,
 "debug_modulate_by": "",
 "debug_scale": 1.0,
-"enabled": true,
+"disabled": false,
 "filter_by_class_name": "",
+"filter_by_name": "",
 "group_name": "RefPoints",
 "import_metadata": false,
 "import_properties": Array[StringName]([]),
@@ -78,7 +79,7 @@ data = {
 "debug_mode": 0,
 "debug_modulate_by": "",
 "debug_scale": 1.0,
-"enabled": true,
+"disabled": false,
 "inspect_enabled": false,
 "origin": Vector3(0.05, 0, 0.05),
 "random_seed": 2710621526,
@@ -95,63 +96,6 @@ data = {
 "template": "grid"
 }, {
 "args_port": {
-"In A": {
-"connected": true,
-"port": 0
-},
-"In B": {
-"connected": false,
-"port": 1
-}
-},
-"name": &"id_0006_math_op",
-"position": Vector2(560, 140),
-"settings": {
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "distance",
-"debug_scale": 1.0,
-"enabled": true,
-"in_nameA": "@last",
-"in_nameB": "@last",
-"inspect_enabled": false,
-"operation": 15,
-"out_name": "@last",
-"random_seed": 2509549124,
-"title": "Math",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "math_op"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0004_remap",
-"position": Vector2(400, 140),
-"settings": {
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": true,
-"debug_mode": 0,
-"debug_modulate_by": "distance",
-"debug_scale": 1.0,
-"enabled": true,
-"in_name": "distance",
-"inspect_enabled": false,
-"out_name": "@in_name",
-"random_seed": 2803866490,
-"remap_curve": SubResource("Curve_8ag8x"),
-"title": "Remap",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "remap"
-}, {
-"args_port": {
 "In": {
 "connected": true,
 "port": 0
@@ -165,7 +109,7 @@ data = {
 "debug_mode": 1,
 "debug_modulate_by": "",
 "debug_scale": 0.085,
-"enabled": true,
+"disabled": false,
 "inspect_enabled": false,
 "random_seed": 484334038,
 "ratio": 0.138,
@@ -194,7 +138,7 @@ data = {
 "debug_mode": 0,
 "debug_modulate_by": "distance",
 "debug_scale": 1.0,
-"enabled": true,
+"disabled": false,
 "in_nameA": "position",
 "in_nameB": "position",
 "inspect_enabled": false,
@@ -206,12 +150,69 @@ data = {
 },
 "show_disconnected_inputs": false,
 "template": "distance"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0004_remap",
+"position": Vector2(400, 140),
+"settings": {
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": true,
+"debug_mode": 0,
+"debug_modulate_by": "distance",
+"debug_scale": 1.0,
+"disabled": false,
+"in_name": "distance",
+"inspect_enabled": false,
+"out_name": "@in_name",
+"random_seed": 2803866490,
+"remap_curve": SubResource("Curve_8ag8x"),
+"title": "Remap",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "remap"
+}, {
+"args_port": {
+"In A": {
+"connected": true,
+"port": 0
+},
+"In B": {
+"connected": false,
+"port": 1
+}
+},
+"name": &"id_0006_math_op",
+"position": Vector2(560, 140),
+"settings": {
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "distance",
+"debug_scale": 1.0,
+"disabled": false,
+"in_nameA": "@last",
+"in_nameB": "@last",
+"inspect_enabled": false,
+"operation": 15,
+"out_name": "@last",
+"random_seed": 2509549124,
+"title": "Math",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "math_op"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
 view_zoom = 1.0
-view_offset = Vector2(0, 0)
+view_offset = Vector2(352, -88)
 new_name_counter = 7
 in_params = Array[ExtResource("2_cwlch")]([])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"

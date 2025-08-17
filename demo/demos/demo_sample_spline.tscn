@@ -14,6 +14,13 @@ data = {
 "size": Vector2(519, 379),
 "tint_color": Color(0.282353, 0.239216, 0.545098, 1),
 "title": "Walls"
+}, {
+"attached": Array[StringName]([&"id_0007_sample_spline", &"id_0010_make_vector", &"id_0011_add_attribute", &"id_0028_add_attribute"]),
+"name": &"id_0029_comment",
+"position": Vector2(240, 420),
+"size": Vector2(613, 349),
+"tint_color": Color(0.282353, 0.239216, 0.545098, 1),
+"title": "Columns"
 }],
 "links": [{
 "from_node": &"id_0014_add_attribute",
@@ -276,6 +283,37 @@ data = {
 }, {
 "args_port": {
 "In": {
+"connected": false,
+"port": 0
+}
+},
+"name": &"id_0011_add_attribute",
+"position": Vector2(280, 620),
+"settings": {
+"cte_bool": false,
+"cte_float": 0.12,
+"cte_int": 0,
+"cte_resource": null,
+"cte_string": "",
+"cte_vector": Vector3(0, 0, 0),
+"data_type": 2,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"name": "Radius",
+"random_seed": 3711800703,
+"title": "Add Attribute",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "add_attribute"
+}, {
+"args_port": {
+"In": {
 "connected": true,
 "port": 0
 },
@@ -308,44 +346,13 @@ data = {
 },
 "show_disconnected_inputs": true,
 "template": "add_attribute"
-}, {
-"args_port": {
-"In": {
-"connected": false,
-"port": 0
-}
-},
-"name": &"id_0011_add_attribute",
-"position": Vector2(280, 620),
-"settings": {
-"cte_bool": false,
-"cte_float": 0.12,
-"cte_int": 0,
-"cte_resource": null,
-"cte_string": "",
-"cte_vector": Vector3(0, 0, 0),
-"data_type": 2,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"name": "Radius",
-"random_seed": 3711800703,
-"title": "Add Attribute",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "add_attribute"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
 view_zoom = 1.0
 view_offset = Vector2(-15.3887, 99.9229)
-new_name_counter = 28
+new_name_counter = 29
 in_params = Array[ExtResource("2_ef63f")]([])
 
 [sub_resource type="Curve3D" id="Curve3D_lggi4"]
