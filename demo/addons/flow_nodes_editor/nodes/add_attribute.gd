@@ -7,14 +7,24 @@ func _init():
 		"settings" : AddAttributeNodeSettings,
 		"ins" : [{"label": "In" }], 
 		"outs" : [{ "label" : "Out" }],
-		"hide_inputs" : true,
 		"tooltip" : "Add a new constant stream to the input set\nIf the input is not given a single entry with the constant value is created.",
 	}
 	
 func getTitle() -> String:
 	return "%s - %s" % [ settings.name, FlowData.DataType.keys()[settings.data_type] ]
 
-func execute( _ctx : FlowData.EvaluationContext ):
+func exposedAsInputNode( prop ):
+	if prop.name.begins_with( "cte_" ):
+		var name_lc = FlowData.DataType.keys()[ settings.data_type ].to_lower()
+		return prop.name == "cte_" + name_lc
+	return false
+
+func onPropChanged( prop_name : String ):
+	super.onPropChanged( prop_name )
+	if prop_name == "data_type":
+		initFromScript()
+
+func execute( ctx : FlowData.EvaluationContext ):
 	var in_data : FlowData.Data = get_optional_input(0)
 	var out_data : FlowData.Data
 	var out_size := 1
@@ -27,17 +37,17 @@ func execute( _ctx : FlowData.EvaluationContext ):
 	var new_val
 	match settings.data_type:
 		FlowData.DataType.Bool:
-			new_val = 1 if settings.cte_bool else 0
+			new_val = 1 if getSettingValue( ctx, "cte_bool") else 0
 		FlowData.DataType.Int:
-			new_val = settings.cte_int
+			new_val = getSettingValue( ctx, "cte_int" )
 		FlowData.DataType.Float:
-			new_val = settings.cte_float
+			new_val = getSettingValue( ctx, "cte_float" )
 		FlowData.DataType.Vector:
-			new_val = settings.cte_vector
+			new_val = getSettingValue( ctx, "cte_vector" )
 		FlowData.DataType.String:
-			new_val = settings.cte_string
+			new_val = getSettingValue( ctx, "cte_string" )
 		FlowData.DataType.Resource:
-			new_val = settings.cte_resource
+			new_val = getSettingValue( ctx, "cte_resource" )
 
 	var container = out_data.newContainerOfType( settings.data_type )
 	container.resize( out_size )
