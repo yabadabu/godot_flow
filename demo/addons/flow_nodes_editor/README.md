@@ -30,7 +30,7 @@
 [ ] add_attribute, if output is single stream with a type, set the color. Maybe make it generic
 [ ] Allow the popup menu to have sections. Custom SubGraphs/Resources/Folders maybe
 [X] Allow to bypass a node
-[?] There is bug where transforms seems to be updating the input
+[X] There is bug where transforms seems to be updating the input
 [X] Math Node. Should hide inputs when not needed. Like Abs
 [X] Volume Sample in 3D
 [X] Remap node
