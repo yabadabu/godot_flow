@@ -219,9 +219,9 @@ class Data:
 			return null
 		var sz := size()
 		var new_container = newContainerOfType(data_type)
-		registerStream( name, new_container, data_type )
 		if sz:
 			new_container.resize( sz )
+		registerStream( name, new_container, data_type )
 		return new_container
 	
 	func delStream( name : String):
@@ -309,7 +309,8 @@ class Data:
 		# This is not a deep clone, the packed*arrays are shared,
 		# use cloneStream to create an independent copy
 		var s := Data.new()
-		s.streams = streams.duplicate()
+		for name in streams:
+			s.streams[ name ] = streams[name].duplicate()
 		s.last_added_stream_name = last_added_stream_name
 		return s
 		
