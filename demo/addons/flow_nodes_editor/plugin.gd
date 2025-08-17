@@ -9,7 +9,6 @@ var data_inspector_dock: Control
 var inspector_plugin
 var watched_nodes : Array[Node] = []
 var undo_redo: EditorUndoRedoManager
-var add_attribute_inspector_plugin : EditorInspectorPlugin
 var graph_input_inspector_plugin : EditorInspectorPlugin
 var node_settings_inspector_plugin : EditorInspectorPlugin
 
@@ -36,8 +35,6 @@ func _enter_tree():
 	graph_dock.data_inspector = data_inspector_dock
 	graph_dock.make_inspector_visible = func(): make_bottom_panel_item_visible( data_inspector_dock )
 	
-	add_attribute_inspector_plugin = load("res://addons/flow_nodes_editor/attribute_inspector_plugin.gd").new()
-	add_inspector_plugin(add_attribute_inspector_plugin)
 	graph_input_inspector_plugin = load("res://addons/flow_nodes_editor/graph_input_parameter_inspector.gd").new()
 	add_inspector_plugin(graph_input_inspector_plugin)
 	node_settings_inspector_plugin = load("res://addons/flow_nodes_editor/node_settings_inspector_plugin.gd").new()
@@ -54,7 +51,6 @@ func _exit_tree():
 		undo_redo.history_changed.disconnect(_on_history_changed)
 	remove_inspector_plugin(node_settings_inspector_plugin)
 	remove_inspector_plugin(graph_input_inspector_plugin)
-	remove_inspector_plugin(add_attribute_inspector_plugin)
 	#remove_inspector_plugin(inspector_plugin)
 	remove_control_from_docks(graph_dock)
 	graph_dock.free()

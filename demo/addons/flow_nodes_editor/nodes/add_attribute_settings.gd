@@ -20,3 +20,9 @@ extends NodeSettings
 func _init():
 	super._init()
 	resource_name = "Add Attribute"
+
+func exposeParam( name : String ):
+	var name_lc = FlowData.DataType.keys()[ data_type ].to_lower()
+	if name.begins_with( "cte_" ):
+		return name == "cte_" + name_lc
+	return true
