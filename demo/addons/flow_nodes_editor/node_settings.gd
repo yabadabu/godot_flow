@@ -21,7 +21,7 @@ enum eDebugMode {
 
 # Add any other common properties here
 @export var title: String = ""
-@export var enabled: bool = true
+@export var disabled: bool = false
 @export var trace: bool = false
 
 func _init():

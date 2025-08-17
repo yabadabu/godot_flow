@@ -19,7 +19,6 @@
 	[ ] Node to create
 	[ ] Node to sample (the current one)
 [ ] Subgraphs / Loops?
-[ ] Allow to bypass a node
 [ ] Do not update what it's not dirty
 [ ] Add noise to position <-- Improve noise
 [ ] Allow meta to define input requirements. Single vs Multiple/Accepted Types/Required
@@ -30,6 +29,7 @@
 [ ] Test random colors for each node -> Graph Editor Settings
 [ ] add_attribute, if output is single stream with a type, set the color. Maybe make it generic
 [ ] Allow the popup menu to have sections. Custom SubGraphs/Resources/Folders maybe
+[X] Allow to bypass a node
 [?] There is bug where transforms seems to be updating the input
 [X] Math Node. Should hide inputs when not needed. Like Abs
 [X] Volume Sample in 3D

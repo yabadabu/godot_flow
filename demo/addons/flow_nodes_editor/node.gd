@@ -90,6 +90,11 @@ func get_output( idx : int ):
 		return []
 	return outputs[ idx ]
 
+func executedDisabled( ctx : FlowData.EvaluationContext ):
+	if outputs.size() > 0 && inputs.size() > 0:
+		var in_data = inputs[0]
+		outputs.set( 0, in_data )
+
 func preExecute( ctx : FlowData.EvaluationContext ):
 	# clean outputs...
 	eval_id = ctx.eval_id
@@ -112,8 +117,9 @@ func refreshFromSettings():
 	refreshDebugMark()
 	refreshInspectMark()
 	title = getTitle()
+	modulate = Color( 0.7, 0.7, 0.7, 0.5 ) if settings.disabled else Color.WHITE
 	
-	if not settings.debug_enabled and draw_debug:
+	if ( not settings.debug_enabled and draw_debug ) or settings.disabled:
 		draw_debug.cleanup_multimesh_direct()
 	
 func setError( new_err : String ):

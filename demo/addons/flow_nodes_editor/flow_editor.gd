@@ -434,6 +434,10 @@ func _on_graph_edit_gui_input(event):
 		elif key == KEY_C:
 			if no_modifiers:
 				addComment()
+		elif key == KEY_G:
+			if no_modifiers:
+				toggleDisabled()
+				evalGraph()
 		elif key == KEY_D:
 			if no_modifiers:
 				toggleDebug()
@@ -451,6 +455,12 @@ func toggleDebug():
 	var nodes = getSelectedNodes()
 	for node in nodes:
 		node.settings.debug_enabled = !node.settings.debug_enabled
+		node.refreshFromSettings()
+
+func toggleDisabled():
+	var nodes = getSelectedNodes()
+	for node in nodes:
+		node.settings.disabled = !node.settings.disabled
 		node.refreshFromSettings()
 
 func toggleInspection():
@@ -669,7 +679,7 @@ func getEvalOrder():
 	var finals : Array[ FlowNodeBase ]
 	for child in gedit.get_children():
 		var node = child as FlowNodeBase
-		if not node:
+		if not node or node.settings.disabled:
 			continue
 		if node.settings.inspect_enabled or node.settings.debug_enabled or node.getMeta().get( "is_final", false ):
 			finals.append( node )
@@ -730,9 +740,12 @@ func evalGraph():
 			var req_node = gedit_nodes_by_name.get( req.from_node )
 			var data = req_node.get_output( req.from_port )
 			node.set_input( req.to_port, data )
-			
-		node.preExecute( ctx )
-		node.execute( ctx )
+	
+		if node.settings.disabled:
+			node.executedDisabled( ctx )
+		else:
+			node.preExecute( ctx )
+			node.execute( ctx )
 		
 		if node.settings.inspect_enabled:
 			data_inspector.refresh()

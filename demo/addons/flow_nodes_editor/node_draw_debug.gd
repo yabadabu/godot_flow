@@ -82,7 +82,7 @@ func setupColors( out_data : FlowData.Data ):
 		RenderingServer.multimesh_instance_set_color( multimesh_rid, idx, color )
 
 func setupDraw():
-	if !node.settings.debug_enabled:
+	if !node.settings.debug_enabled or node.settings.disabled:
 		return
 		
 	if not node.get_optional_output(0):
