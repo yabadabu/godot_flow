@@ -39,7 +39,9 @@ func execute( _ctx : FlowData.EvaluationContext ):
 		FlowData.DataType.Resource:
 			new_val = settings.cte_resource
 
-	var sout = out_data.addStream( settings.name, settings.data_type )
-	sout.resize( out_size )
-	sout.fill( new_val )
+	var container = out_data.newContainerOfType( settings.data_type )
+	container.resize( out_size )
+	container.fill( new_val )
+
+	out_data.registerStream( settings.name, container, settings.data_type )
 	set_output( 0, out_data )
