@@ -9,12 +9,11 @@ enum eOperation {
 	Substract,
 	Multiply,
 	Divide,
-	Negate,
+	Negate,			# 4
 	Absolute,
 	Saturate,
 	Floor,
 	FloorAsInt,
-	Set,
 	Modulo,
 	ModuloInt,
 	Frac,

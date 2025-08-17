@@ -71,79 +71,75 @@ func execute( _ctx : FlowData.EvaluationContext ):
 	
 	if settings.trace: print( "Math.init: %f (%d)" % [ Time.get_ticks_usec() - time_start_init, num_elems ] )
 	
-	if settings.operation != MathOpNodeSettings.eOperation.Set:
-		if sA.data_type == FlowData.DataType.Int and (is_single_arg or sB.data_type == FlowData.DataType.Float):
-			sA = newFloatStream( num_elemsA, sA.name + " as float", func( idx : int ) -> float: return sA.container[idx] )
+	if sA.data_type == FlowData.DataType.Int and (is_single_arg or sB.data_type == FlowData.DataType.Float):
+		sA = newFloatStream( num_elemsA, sA.name + " as float", func( idx : int ) -> float: return sA.container[idx] )
 		
 	if is_single_arg:
-		if settings.operation == MathOpNodeSettings.eOperation.Set:
-			out_container = in_dataA.cloneStream( settings.in_nameA )
+
+		if sA.data_type == FlowData.DataType.Float:
+			var inA : PackedFloat32Array = sA.container
 			
-		else:
-			if sA.data_type == FlowData.DataType.Float:
-				var inA : PackedFloat32Array = sA.container
+			if settings.operation == MathOpNodeSettings.eOperation.FloorAsInt:
+				var outI := PackedInt32Array()
+				outI.resize( num_elems )
+				for i in num_elems:
+					outI[i] = floori(inA[i])
+				out_container = outI
 				
-				if settings.operation == MathOpNodeSettings.eOperation.FloorAsInt:
-					var outI := PackedInt32Array()
-					outI.resize( num_elems )
-					for i in num_elems:
-						outI[i] = floori(inA[i])
-					out_container = outI
-					
-				else:
-					var outC := PackedFloat32Array()
-					outC.resize( num_elems )
-					match settings.operation:
-						MathOpNodeSettings.eOperation.Negate:
-							for i in num_elems:
-								outC[i] = -inA[i]
-						MathOpNodeSettings.eOperation.Absolute:
-							for i in num_elems:
-								outC[i] = absf(inA[i])
-						MathOpNodeSettings.eOperation.Saturate:
-							for i in num_elems:
-								outC[i] = clampf(inA[i], 0.0, 1.0)
-						MathOpNodeSettings.eOperation.Floor:
-							for i in num_elems:
-								outC[i] = floorf(inA[i])
-						MathOpNodeSettings.eOperation.Round:
-							for i in num_elems:
-								outC[i] = roundf(inA[i])
-						MathOpNodeSettings.eOperation.OneMinus:
-							for i in num_elems:
-								outC[i] = 1.0 - inA[i]
-						MathOpNodeSettings.eOperation.Sign:
-							for i in num_elems:
-								outC[i] = -1 if inA[i] < 0 else ( 1.0 if inA[i] > 0 else 0)
-						MathOpNodeSettings.eOperation.Sqrt:
-							for i in num_elems:
-								outC[i] = sqrt( max( 0.0, inA[i] ) )
-					out_container = outC
-			
-			elif sA.data_type == FlowData.DataType.Vector:
-				var inA : PackedVector3Array = sA.container
-				var outC := PackedVector3Array()
+			else:
+				var outC := PackedFloat32Array()
 				outC.resize( num_elems )
-				
 				match settings.operation:
 					MathOpNodeSettings.eOperation.Negate:
 						for i in num_elems:
 							outC[i] = -inA[i]
 					MathOpNodeSettings.eOperation.Absolute:
 						for i in num_elems:
-							outC[i].x = absf(inA[i].x)
-							outC[i].y = absf(inA[i].y)
-							outC[i].z = absf(inA[i].z)
+							outC[i] = absf(inA[i])
 					MathOpNodeSettings.eOperation.Saturate:
 						for i in num_elems:
-							outC[i].x = clampf(inA[i].x, 0.0, 1.0)
-							outC[i].y = clampf(inA[i].y, 0.0, 1.0)
-							outC[i].z = clampf(inA[i].z, 0.0, 1.0)
+							outC[i] = clampf(inA[i], 0.0, 1.0)
+					MathOpNodeSettings.eOperation.Floor:
+						for i in num_elems:
+							outC[i] = floorf(inA[i])
+					MathOpNodeSettings.eOperation.Round:
+						for i in num_elems:
+							outC[i] = roundf(inA[i])
+					MathOpNodeSettings.eOperation.OneMinus:
+						for i in num_elems:
+							outC[i] = 1.0 - inA[i]
+					MathOpNodeSettings.eOperation.Sign:
+						for i in num_elems:
+							outC[i] = -1 if inA[i] < 0 else ( 1.0 if inA[i] > 0 else 0)
+					MathOpNodeSettings.eOperation.Sqrt:
+						for i in num_elems:
+							outC[i] = sqrt( max( 0.0, inA[i] ) )
 				out_container = outC
-				
-			else:
-				setError( "Input A has incompatible/unsupported data types (%s vs %s)" % [sA.data_type])
-				return
+		
+		elif sA.data_type == FlowData.DataType.Vector:
+			var inA : PackedVector3Array = sA.container
+			var outC := PackedVector3Array()
+			outC.resize( num_elems )
+			
+			match settings.operation:
+				MathOpNodeSettings.eOperation.Negate:
+					for i in num_elems:
+						outC[i] = -inA[i]
+				MathOpNodeSettings.eOperation.Absolute:
+					for i in num_elems:
+						outC[i].x = absf(inA[i].x)
+						outC[i].y = absf(inA[i].y)
+						outC[i].z = absf(inA[i].z)
+				MathOpNodeSettings.eOperation.Saturate:
+					for i in num_elems:
+						outC[i].x = clampf(inA[i].x, 0.0, 1.0)
+						outC[i].y = clampf(inA[i].y, 0.0, 1.0)
+						outC[i].z = clampf(inA[i].z, 0.0, 1.0)
+			out_container = outC
+			
+		else:
+			setError( "Input A has incompatible/unsupported data types (%s vs %s)" % [sA.data_type])
+			return
 			
 	else:
 		if sA.data_type == FlowData.DataType.Float and sB.data_type == FlowData.DataType.Float:
@@ -212,9 +208,6 @@ func execute( _ctx : FlowData.EvaluationContext ):
 				MathOpNodeSettings.eOperation.Divide:
 					for i in num_elems:
 						outC[i] = inA[i] / inB[i]
-				MathOpNodeSettings.eOperation.Set:
-					for i in num_elems:
-						outC[i] = inB[i]
 				_:
 					setError( "Vector3 vs Vector3 operation not supported yet")
 			out_container = outC
