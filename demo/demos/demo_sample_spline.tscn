@@ -8,21 +8,45 @@
 script = ExtResource("3_3fnrd")
 data = {
 "frames": [{
+"attached": Array[StringName]([&"id_0001_sample_spline", &"id_0004_make_vector", &"id_0006_transform"]),
+"name": &"id_0013_comment",
+"position": Vector2(239, -41),
+"size": Vector2(519, 379),
+"tint_color": Color(0.282353, 0.239216, 0.545098, 1),
+"title": "Walls"
+}, {
 "attached": Array[StringName]([&"id_0009_math_op", &"id_0010_make_vector", &"id_0011_add_attribute", &"id_0007_sample_spline"]),
 "name": &"id_0012_comment",
 "position": Vector2(240, 419),
 "size": Vector2(575, 349),
 "tint_color": Color(0.282353, 0.239216, 0.545098, 1),
 "title": "Columns"
-}, {
-"attached": Array[StringName]([&"id_0001_sample_spline", &"id_0004_make_vector", &"id_0006_transform"]),
-"name": &"id_0013_comment",
-"position": Vector2(240, -41),
-"size": Vector2(518, 379),
-"tint_color": Color(0.282353, 0.239216, 0.545098, 1),
-"title": "Walls"
 }],
 "links": [{
+"from_node": &"id_0007_sample_spline",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0009_math_op",
+"to_port": 0
+}, {
+"from_node": &"id_0010_make_vector",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0009_math_op",
+"to_port": 1
+}, {
+"from_node": &"id_0014_add_attribute",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0001_sample_spline",
+"to_port": 0
+}, {
+"from_node": &"id_0014_add_attribute",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0007_sample_spline",
+"to_port": 0
+}, {
 "from_node": &"id_0001_sample_spline",
 "from_port": 0,
 "keep_alive": false,
@@ -41,18 +65,6 @@ data = {
 "to_node": &"id_0006_transform",
 "to_port": 6
 }, {
-"from_node": &"id_0007_sample_spline",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0009_math_op",
-"to_port": 0
-}, {
-"from_node": &"id_0010_make_vector",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0009_math_op",
-"to_port": 1
-}, {
 "from_node": &"id_0011_add_attribute",
 "from_port": 0,
 "keep_alive": false,
@@ -64,21 +76,71 @@ data = {
 "keep_alive": false,
 "to_node": &"id_0010_make_vector",
 "to_port": 2
-}, {
-"from_node": &"id_0014_add_attribute",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0001_sample_spline",
-"to_port": 0
-}, {
-"from_node": &"id_0014_add_attribute",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0007_sample_spline",
-"to_port": 0
 }],
 "min_pos": Vector2(-140, 260),
 "nodes": [{
+"args_port": {
+"In": {
+"connected": false,
+"port": 0
+}
+},
+"name": &"id_0011_add_attribute",
+"position": Vector2(280, 620),
+"settings": {
+"cte_bool": false,
+"cte_float": 0.155,
+"cte_int": 0,
+"cte_resource": null,
+"cte_string": "",
+"cte_vector": Vector3(0, 0, 0),
+"data_type": 2,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"name": "Radius",
+"random_seed": 3711800703,
+"title": "Add Attribute",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "add_attribute"
+}, {
+"args_port": {
+"In": {
+"connected": false,
+"port": 0
+}
+},
+"name": &"id_0014_add_attribute",
+"position": Vector2(0, 280),
+"settings": {
+"cte_bool": false,
+"cte_float": 0.965,
+"cte_int": 0,
+"cte_resource": null,
+"cte_string": "",
+"cte_vector": Vector3(0, 0, 0),
+"data_type": 2,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": true,
+"name": "Internal",
+"random_seed": 3711800703,
+"title": "Add Attribute",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "add_attribute"
+}, {
 "args_port": {
 "uniform_interval": {
 "connected": true,
@@ -86,15 +148,15 @@ data = {
 }
 },
 "name": &"id_0001_sample_spline",
-"position": Vector2(280, 0),
+"position": Vector2(279, 2),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "",
 "debug_scale": 0.085,
+"disabled": false,
 "distance_attribute": "distance",
-"enabled": true,
 "fill_curve": false,
 "inspect_enabled": false,
 "random_seed": 2565017575,
@@ -106,87 +168,6 @@ data = {
 },
 "show_disconnected_inputs": false,
 "template": "sample_spline"
-}, {
-"args_port": {
-"In A": {
-"connected": true,
-"port": 0
-},
-"In B": {
-"connected": true,
-"port": 1
-}
-},
-"name": &"id_0009_math_op",
-"position": Vector2(640, 460),
-"settings": {
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": true,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_scale": 1.0,
-"enabled": true,
-"in_nameA": "size",
-"in_nameB": "@last",
-"inspect_enabled": true,
-"operation": 9,
-"out_name": "size",
-"random_seed": 963097709,
-"title": "Math",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "math_op"
-}, {
-"args_port": {
-"uniform_interval": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0007_sample_spline",
-"position": Vector2(360, 460),
-"settings": {
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_scale": 0.085,
-"distance_attribute": "distance",
-"enabled": true,
-"fill_curve": false,
-"inspect_enabled": false,
-"random_seed": 2565017575,
-"required_meta_bool": &"",
-"sample_segments_centers": false,
-"title": "Sample Spline",
-"trace": false,
-"uniform_interval": 0.1
-},
-"show_disconnected_inputs": false,
-"template": "sample_spline"
-}, {
-"args_port": {},
-"name": &"id_0004_make_vector",
-"position": Vector2(340, 160),
-"settings": {
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_scale": 1.0,
-"enabled": true,
-"inspect_enabled": false,
-"out_name": "Vector",
-"random_seed": 1393219445,
-"title": "Make Vector",
-"trace": false,
-"x": 0.06,
-"y": 0.19,
-"z": 1.0
-},
-"show_disconnected_inputs": false,
-"template": "make_vector"
 }, {
 "args_port": {
 "In": {
@@ -230,7 +211,7 @@ data = {
 "debug_mode": 0,
 "debug_modulate_by": "",
 "debug_scale": 1.0,
-"enabled": true,
+"disabled": false,
 "inspect_enabled": false,
 "offset_max": Vector3(0, 0, 0),
 "offset_min": Vector3(0, 0, 0),
@@ -245,6 +226,56 @@ data = {
 },
 "show_disconnected_inputs": true,
 "template": "transform"
+}, {
+"args_port": {},
+"name": &"id_0004_make_vector",
+"position": Vector2(340, 160),
+"settings": {
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"out_name": "Vector",
+"random_seed": 1393219445,
+"title": "Make Vector",
+"trace": false,
+"x": 0.06,
+"y": 0.19,
+"z": 1.0
+},
+"show_disconnected_inputs": false,
+"template": "make_vector"
+}, {
+"args_port": {
+"uniform_interval": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0007_sample_spline",
+"position": Vector2(360, 460),
+"settings": {
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_scale": 0.085,
+"disabled": false,
+"distance_attribute": "distance",
+"fill_curve": false,
+"inspect_enabled": false,
+"random_seed": 2565017575,
+"required_meta_bool": &"",
+"sample_segments_centers": false,
+"title": "Sample Spline",
+"trace": false,
+"uniform_interval": 0.1
+},
+"show_disconnected_inputs": false,
+"template": "sample_spline"
 }, {
 "args_port": {
 "x": {
@@ -268,7 +299,7 @@ data = {
 "debug_mode": 0,
 "debug_modulate_by": "",
 "debug_scale": 1.0,
-"enabled": true,
+"disabled": false,
 "inspect_enabled": false,
 "out_name": "Vector",
 "random_seed": 1393219445,
@@ -282,73 +313,42 @@ data = {
 "template": "make_vector"
 }, {
 "args_port": {
-"In": {
-"connected": false,
+"In A": {
+"connected": true,
 "port": 0
+},
+"In B": {
+"connected": true,
+"port": 1
 }
 },
-"name": &"id_0011_add_attribute",
-"position": Vector2(280, 620),
+"name": &"id_0009_math_op",
+"position": Vector2(640, 460),
 "settings": {
-"cte_bool": false,
-"cte_float": 0.155,
-"cte_int": 0,
-"cte_resource": null,
-"cte_string": "",
-"cte_vector": Vector3(0, 0, 0),
-"data_type": 2,
 "debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
+"debug_enabled": true,
 "debug_mode": 0,
 "debug_modulate_by": "",
 "debug_scale": 1.0,
-"enabled": true,
-"inspect_enabled": false,
-"name": "Radius",
-"random_seed": 3711800703,
-"title": "Add Attribute",
+"disabled": false,
+"in_nameA": "size",
+"in_nameB": "@last",
+"inspect_enabled": true,
+"operation": 9,
+"out_name": "size",
+"random_seed": 963097709,
+"title": "Math",
 "trace": false
 },
 "show_disconnected_inputs": false,
-"template": "add_attribute"
-}, {
-"args_port": {
-"In": {
-"connected": false,
-"port": 0
-}
-},
-"name": &"id_0014_add_attribute",
-"position": Vector2(0, 280),
-"settings": {
-"cte_bool": false,
-"cte_float": 0.965,
-"cte_int": 0,
-"cte_resource": null,
-"cte_string": "",
-"cte_vector": Vector3(0, 0, 0),
-"data_type": 2,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_scale": 1.0,
-"enabled": true,
-"inspect_enabled": false,
-"name": "Internal",
-"random_seed": 3711800703,
-"title": "Add Attribute",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "add_attribute"
+"template": "math_op"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
-view_zoom = 1.0
-view_offset = Vector2(-256.909, 68.6364)
-new_name_counter = 14
+view_zoom = 0.751315
+view_offset = Vector2(-122.353, -213.869)
+new_name_counter = 23
 in_params = Array[ExtResource("2_ef63f")]([])
 
 [sub_resource type="Curve3D" id="Curve3D_lggi4"]
