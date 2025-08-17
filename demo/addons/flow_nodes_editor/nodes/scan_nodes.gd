@@ -18,7 +18,12 @@ func get_scene_root_node3d( current : Node3D ) -> Node3D:
 		current = current.get_parent_node_3d()
 	return current
 
-func find_nodes_matching_filters( ctx : FlowData.EvaluationContext, group_name: String, filter_by_class_name: String) -> Array[ Node3D ]:
+func find_nodes_matching_filters( ctx : FlowData.EvaluationContext ) -> Array[ Node3D ]:
+	
+	var group_name = getSettingValue( ctx, "group_name" )
+	var filter_by_name = getSettingValue( ctx, "filter_by_name" )
+	var filter_by_class_name = getSettingValue( ctx, "filter_by_class_name" )
+		
 	var all_nodes : Array[Node] = []
 	#var scene_root = ctx.owner.get_tree().root
 	if group_name:
@@ -39,6 +44,14 @@ func find_nodes_matching_filters( ctx : FlowData.EvaluationContext, group_name: 
 				if settings.trace:
 					print( "%s.%s discarted by class_name %s" % [ node3d.name, node3d.get_class(), filter_by_class_name ])
 				continue
+				
+			if filter_by_name:
+				print( "Checking if %s is in %s" % [ filter_by_name, node3d.name ])
+				if not filter_by_name in node3d.name:
+					if settings.trace:
+						print( "%s.%s discarted by name %s" % [ node3d.name, node3d.name, filter_by_name ])
+					continue
+				
 		#if scene_root.is_ancestor_of(node):
 			scene_nodes.append(node3d)
 	return scene_nodes
@@ -167,9 +180,7 @@ func get_combined_aabb(root: Node3D) -> AABB:
 func execute( ctx : FlowData.EvaluationContext ):
 	var output := FlowData.Data.new()
 	
-	var group_name = getSettingValue( ctx, "group_name" )
-	var filter_by_class_name = getSettingValue( ctx, "filter_by_class_name" )
-	var nodes = find_nodes_matching_filters( ctx, group_name, filter_by_class_name )
+	var nodes = find_nodes_matching_filters( ctx )
 	
 	var nsamples = nodes.size()
 	output.addCommonStreams( nsamples )
