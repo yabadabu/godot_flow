@@ -220,7 +220,12 @@ data = {
 "show_disconnected_inputs": false,
 "template": "select"
 }, {
-"args_port": {},
+"args_port": {
+"Splines": {
+"connected": false,
+"port": 0
+}
+},
 "name": &"id_0017_sample_spline",
 "position": Vector2(780, 460),
 "settings": {
@@ -230,11 +235,15 @@ data = {
 "debug_modulate_by": "",
 "debug_scale": 1.0,
 "disabled": false,
+"distance_attribute": "distance",
+"fill_curve": false,
 "inspect_enabled": false,
 "random_seed": 3607972186,
-"required_meta_bool": null,
+"required_meta_bool": &"",
+"sample_segments_centers": false,
 "title": "Sample Spline",
-"trace": false
+"trace": false,
+"uniform_interval": 0.2
 },
 "show_disconnected_inputs": false,
 "template": "sample_spline"
@@ -261,25 +270,6 @@ data = {
 },
 "show_disconnected_inputs": false,
 "template": "scan_nodes"
-}, {
-"args_port": {},
-"name": &"id_0038_scan_splines",
-"position": Vector2(0, 0),
-"settings": {
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": true,
-"random_seed": 4239869175,
-"required_meta_bool": &"",
-"title": "Scan Splines",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "scan_splines"
 }, {
 "args_port": {
 "In": {
@@ -345,13 +335,34 @@ data = {
 },
 "show_disconnected_inputs": false,
 "template": "distance"
+}, {
+"args_port": {},
+"name": &"id_0038_scan_splines",
+"position": Vector2(0, 0),
+"settings": {
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_scale": 1.0,
+"disabled": false,
+"filter_by_class_name": "",
+"group_name": "",
+"inspect_enabled": false,
+"random_seed": 4239869175,
+"required_meta_bool": &"",
+"title": "Scan Splines",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "scan_splines"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
-view_zoom = 1.17049
-view_offset = Vector2(863.351, 170.549)
-new_name_counter = 38
+view_zoom = 0.726782
+view_offset = Vector2(-95.0048, -82.3818)
+new_name_counter = 39
 in_params = Array[ExtResource("2_tllc8")]([SubResource("Resource_wusrb")])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 

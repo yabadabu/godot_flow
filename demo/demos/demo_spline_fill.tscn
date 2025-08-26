@@ -101,8 +101,14 @@ data = {
 "keep_alive": false,
 "to_node": &"id_0042_add_attribute",
 "to_port": 0
+}, {
+"from_node": &"id_0031_scan_splines",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0047_sample_spline",
+"to_port": 0
 }],
-"min_pos": Vector2(-140, -300),
+"min_pos": Vector2(-280, -300),
 "nodes": [{
 "args_port": {
 "In": {
@@ -111,7 +117,7 @@ data = {
 }
 },
 "name": &"id_0046_remove_attribute",
-"position": Vector2(838.282, 126.117),
+"position": Vector2(978.282, 126.117),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
@@ -140,7 +146,7 @@ data = {
 }
 },
 "name": &"id_0037_math_op",
-"position": Vector2(1300, 640),
+"position": Vector2(1440, 640),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
@@ -167,7 +173,7 @@ data = {
 }
 },
 "name": &"id_0043_select",
-"position": Vector2(1480, 540),
+"position": Vector2(1620, 540),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
@@ -192,7 +198,7 @@ data = {
 }
 },
 "name": &"id_0041_noise",
-"position": Vector2(1040, 640),
+"position": Vector2(1180, 640),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
@@ -223,7 +229,7 @@ data = {
 }
 },
 "name": &"id_0039_math_op",
-"position": Vector2(800, 420),
+"position": Vector2(940, 420),
 "settings": {
 "debug_color": Color(1, 1, 0, 1),
 "debug_enabled": false,
@@ -254,7 +260,7 @@ data = {
 }
 },
 "name": &"id_0040_math_op",
-"position": Vector2(560, 420),
+"position": Vector2(700, 420),
 "settings": {
 "debug_color": Color(0.847287, 0.896652, 0.999998, 1),
 "debug_enabled": false,
@@ -281,7 +287,7 @@ data = {
 }
 },
 "name": &"id_0042_add_attribute",
-"position": Vector2(360, 540),
+"position": Vector2(500, 540),
 "settings": {
 "cte_bool": false,
 "cte_float": 0.2,
@@ -312,7 +318,7 @@ data = {
 }
 },
 "name": &"id_0038_select",
-"position": Vector2(420, 20),
+"position": Vector2(560, 20),
 "settings": {
 "debug_color": Color(1, 0, 1, 1),
 "debug_enabled": false,
@@ -337,7 +343,7 @@ data = {
 }
 },
 "name": &"id_0045_transform",
-"position": Vector2(600, 20),
+"position": Vector2(740, 20),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
@@ -371,7 +377,7 @@ data = {
 }
 },
 "name": &"id_0044_substract",
-"position": Vector2(1720, 0),
+"position": Vector2(1860, 0),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": true,
@@ -390,12 +396,12 @@ data = {
 }, {
 "args_port": {
 "Splines": {
-"connected": false,
+"connected": true,
 "port": 0
 }
 },
 "name": &"id_0047_sample_spline",
-"position": Vector2(80, 420),
+"position": Vector2(200, 420),
 "settings": {
 "debug_color": Color(0.781464, 0.568812, 0.443646, 1),
 "debug_enabled": false,
@@ -416,37 +422,9 @@ data = {
 "show_disconnected_inputs": false,
 "template": "sample_spline"
 }, {
-"args_port": {
-"Splines": {
-"connected": false,
-"port": 0
-}
-},
-"name": &"id_0042_sample_spline",
-"position": Vector2(280, 700),
-"settings": {
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_scale": 1.0,
-"disabled": false,
-"distance_attribute": "distance",
-"fill_curve": false,
-"inspect_enabled": false,
-"random_seed": 1693069789,
-"required_meta_bool": &"",
-"sample_segments_centers": false,
-"title": "Sample Spline",
-"trace": false,
-"uniform_interval": 0.2
-},
-"show_disconnected_inputs": false,
-"template": "sample_spline"
-}, {
 "args_port": {},
 "name": &"id_0031_scan_splines",
-"position": Vector2(0, 700),
+"position": Vector2(0, 420),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
@@ -462,13 +440,36 @@ data = {
 },
 "show_disconnected_inputs": false,
 "template": "scan_splines"
+}, {
+"args_port": {},
+"name": &"id_0054_scan_nodes",
+"position": Vector2(14.9799, 260.51),
+"settings": {
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_scale": 1.0,
+"disabled": false,
+"filter_by_class_name": "",
+"group_name": "",
+"import_metadata": false,
+"import_properties": Array[StringName]([]),
+"inspect_enabled": false,
+"random_seed": 2221560598,
+"size_to_bounds": false,
+"title": "Scan Nodes",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "scan_nodes"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
 view_zoom = 0.909091
-view_offset = Vector2(-31.9274, 149.1)
-new_name_counter = 52
+view_offset = Vector2(-346.927, -150.9)
+new_name_counter = 54
 in_params = Array[ExtResource("2_0uiub")]([])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 

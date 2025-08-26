@@ -23,7 +23,8 @@ func findNodesOfType(root: Node, type_name: String) -> Array[Node]:
 		if !required_meta_bool or child.get_meta(required_meta_bool, false):
 			found_nodes.append_array(findNodesOfType(child, type_name))
 	
-	return found_nodes	
+	return found_nodes
+	
 func execute( ctx : FlowData.EvaluationContext ):
 	
 	var root = EditorInterface.get_edited_scene_root()

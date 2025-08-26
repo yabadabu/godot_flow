@@ -53,7 +53,6 @@ var active_conns = []
 var ui_scale = 1.0
 var node_types = { }
 
-var popup_menu = null
 var popup_menu_inputs : PopupMenu
 var popup_on_over_input = null
 const IDM_PROMOTE_TO_PARAMETER : int = 100
@@ -602,6 +601,10 @@ func _on_graph_edit_popup_request(at_position):
 	p.size = Vector2( 400,200 )
 	p.position = get_screen_position() + at_position
 	p.popup()
+	p.close_requested.connect( func():
+		auto_connect_from_node = ""
+		auto_connect_to_node = ""
+		)
 	
 	
 func openAddMenu():
@@ -803,7 +806,6 @@ func evalGraph():
 
 func _on_button_reload_pressed() -> void:
 	scanAvailableNodes()
-	popup_menu = null
 
 func _on_button_save_pressed() -> void:
 	if current_resource:
