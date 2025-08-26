@@ -160,7 +160,7 @@ func populatePopupInputsMenu():
 		popup_menu_inputs.add_item( "No inputs defined", -1 )
 		popup_menu_inputs.set_item_disabled(0, true)
 
-func populatePopupMenu():
+func populatePopupMenu() -> PopupMenu:
 	min_id = 1000
 	max_id = min_id
 	menu_ids = {}
@@ -174,18 +174,38 @@ func populatePopupMenu():
 	#pm.add_item( "Clear", 0, KEY_NONE )
 	#pm.add_separator( "", -1 )
 	
+	var required_input_type = -1
+	var required_output_type = -1
+	if auto_connect_from_node:
+		var from_node = gedit_nodes_by_name.get( auto_connect_from_node )
+		if from_node:
+			var meta = from_node.getMeta()
+			var oport = meta.outs[ auto_connect_from_port ]
+			required_input_type = oport.get( "type", 0 )
+		print( "auto_connect_from_node: %s:%d -> %d" % [ auto_connect_from_node, auto_connect_from_port, required_input_type])
+		
+	if auto_connect_to_node:
+		var to_node = gedit_nodes_by_name.get( auto_connect_to_node )
+		if to_node:
+			var meta = to_node.getMeta()
+			var iport = meta.ins[ auto_connect_to_port ]
+			required_output_type = iport.get( "type", 0 )
+		print( "auto_connect_to_node: %s:%d -> %d" % [auto_connect_to_node, auto_connect_to_port, required_output_type ])
+
 	# A submenu to invoke the inputs declared in the pcg
-	if popup_menu_inputs:
-		popup_menu_inputs.queue_free()
-	popup_menu_inputs = PopupMenu.new()
-	popup_menu_inputs.name = "inputs_menu"
-	popup_menu_inputs.id_pressed.connect( _on_inputs_menu_id_pressed )
-	pm.add_child(popup_menu_inputs)
-	pm.add_submenu_item("Inputs...", popup_menu_inputs.name)
-	pm.add_separator( "", -1 )
-	populatePopupInputsMenu()
-	
-	var idx = pm.get_child_count() + 1
+	var idx := 0
+	if required_input_type == -1:
+		if popup_menu_inputs:
+			popup_menu_inputs.queue_free()
+		popup_menu_inputs = PopupMenu.new()
+		popup_menu_inputs.name = "inputs_menu"
+		popup_menu_inputs.id_pressed.connect( _on_inputs_menu_id_pressed )
+		pm.add_child(popup_menu_inputs)
+		pm.add_submenu_item("Inputs...", popup_menu_inputs.name)
+		pm.add_separator( "", -1 )
+		populatePopupInputsMenu()
+		idx = pm.get_child_count() + 1
+		
 	for key in node_types.keys():
 		var node_meta = node_types[ key ]
 		var label = node_meta.title
@@ -193,9 +213,23 @@ func populatePopupMenu():
 		if not node_meta.get( "auto_register", true):
 			print( "Adding menu %s skip (id:%d)" % [ label, max_id ])
 			continue
+			
+		if required_input_type != -1 or required_output_type != -1:
+			print( "Candidate node meta: %s" % node_meta )
+			var has_compatible_port = false
+			var ports = node_meta.ins if required_input_type != -1 else node_meta.outs
+			var required_type = required_input_type if required_input_type != -1 else required_output_type
+			for port in ports:
+				var port_type = port.get( "type", 0 )
+				if port_type == required_type:
+					has_compatible_port = true
+					break
+			if not has_compatible_port:
+				continue
+				
 		#print( "Adding menu %s -> %d" % [ label, max_id ])
 		menu_ids[ max_id ] = key
-		pm.add_item(label, max_id, KEY_NONE )
+		pm.add_item(label, max_id, KEY_NONE)
 		if node_meta.has( "tooltip" ):
 			pm.set_item_tooltip( idx, node_meta.get( "tooltip" ) )
 		idx += 1
@@ -386,10 +420,11 @@ func canConnect( src : FlowNodeBase, src_port : int, dst : FlowNodeBase, dst_por
 		
 	var src_type = src.get_output_port_type( src_port )
 	var dst_type = dst.get_input_port_type( dst_port )
-	if src_type and dst_type:
+	if (src_type and dst_type) or (src_type == TYPE_NODE_PATH):
 		if src_type != dst_type:
 			push_warning( "Node types do not match %d vs %d" % [ src_type, dst_type ])
 			return false
+		
 	#print( "canConnect OK %s:%d (%d)-> %s:%d (%d)" % [ src.name, src_port, src_type, dst.name, dst_port, dst_type ] )
 	return true
 	
@@ -563,13 +598,11 @@ func _on_graph_edit_popup_request(at_position):
 		#print( "Show popup associated to %s.%s" % [ node.name, popup_on_over_input.getInLabel().text ] )
 		return
 	
-	popup_menu = null
-	if not popup_menu:
-		popup_menu = populatePopupMenu()
-	var p = popup_menu
+	var p := populatePopupMenu()
 	p.size = Vector2( 400,200 )
 	p.position = get_screen_position() + at_position
 	p.popup()
+	
 	
 func openAddMenu():
 	var pos = get_local_mouse_position()
@@ -653,12 +686,14 @@ func _on_graph_edit_disconnection_request(from_node: StringName, from_port: int,
 func _on_graph_edit_connection_to_empty(from_node: StringName, from_port: int, release_position: Vector2) -> void:
 	auto_connect_from_node = from_node
 	auto_connect_from_port = from_port
+	auto_connect_to_node = ""
 	local_drop_position = release_position
 	_on_graph_edit_popup_request( local_drop_position )
 
 func _on_graph_edit_connection_from_empty(to_node: StringName, to_port: int, release_position: Vector2) -> void:
 	auto_connect_to_node = to_node
 	auto_connect_to_port = to_port
+	auto_connect_from_node = ""
 	local_drop_position = release_position
 	_on_graph_edit_popup_request( local_drop_position )
 

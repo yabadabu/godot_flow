@@ -8,6 +8,7 @@ enum DataType {
 	Vector,
 	String,
 	Resource,
+	Node,
 	Invalid = 999
 }
 

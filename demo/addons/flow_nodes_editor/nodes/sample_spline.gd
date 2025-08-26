@@ -7,9 +7,8 @@ func _init():
 	meta_node = {
 		"title" : "Sample Spline",
 		"settings" : SampleSplineNodeSettings,
-		"ins" : [],
+		"ins" : [{ "label": "Splines", "type": TYPE_NODE_PATH}],
 		"outs" : [{ "label" : "Out" }],
-		#"trace" : true
 	}
 	
 func get_polygon_bounds(polygon: PackedVector2Array) -> Rect2:

@@ -179,6 +179,8 @@ static func getColorForGDScriptType( gd_type : int ) -> Color:
 			return Color.BLUE_VIOLET
 		TYPE_STRING:
 			return Color.YELLOW
+		TYPE_NODE_PATH:
+			return Color.SKY_BLUE
 	return Color.WHEAT
 
 static func getGdScriptTypeForFlowDataType( data_type : FlowData.DataType ) -> int:
