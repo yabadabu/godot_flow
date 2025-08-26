@@ -11,7 +11,6 @@ extends NodeSettings
 		notify_property_list_changed()
 		
 @export var sample_segments_centers : bool = false
-@export var required_meta_bool : StringName
 @export var distance_attribute : String = "distance"
 
 func _init():

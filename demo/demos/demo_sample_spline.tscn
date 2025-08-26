@@ -35,18 +35,6 @@ data = {
 "to_node": &"id_0009_math_op",
 "to_port": 1
 }, {
-"from_node": &"id_0014_add_attribute",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0001_sample_spline",
-"to_port": 0
-}, {
-"from_node": &"id_0014_add_attribute",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0007_sample_spline",
-"to_port": 0
-}, {
 "from_node": &"id_0001_sample_spline",
 "from_port": 0,
 "keep_alive": false,
@@ -76,6 +64,30 @@ data = {
 "keep_alive": false,
 "to_node": &"id_0010_make_vector",
 "to_port": 2
+}, {
+"from_node": &"id_0014_add_attribute",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0001_sample_spline",
+"to_port": 1
+}, {
+"from_node": &"id_0014_add_attribute",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0007_sample_spline",
+"to_port": 1
+}, {
+"from_node": &"id_0024_scan_splines",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0001_sample_spline",
+"to_port": 0
+}, {
+"from_node": &"id_0024_scan_splines",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0007_sample_spline",
+"to_port": 0
 }],
 "min_pos": Vector2(-140, 260),
 "nodes": [{
@@ -142,9 +154,13 @@ data = {
 "template": "add_attribute"
 }, {
 "args_port": {
-"uniform_interval": {
+"Splines": {
 "connected": true,
 "port": 0
+},
+"uniform_interval": {
+"connected": true,
+"port": 1
 }
 },
 "name": &"id_0001_sample_spline",
@@ -160,7 +176,6 @@ data = {
 "fill_curve": false,
 "inspect_enabled": false,
 "random_seed": 2565017575,
-"required_meta_bool": &"",
 "sample_segments_centers": true,
 "title": "Sample Spline",
 "trace": false,
@@ -250,9 +265,13 @@ data = {
 "template": "make_vector"
 }, {
 "args_port": {
-"uniform_interval": {
+"Splines": {
 "connected": true,
 "port": 0
+},
+"uniform_interval": {
+"connected": true,
+"port": 1
 }
 },
 "name": &"id_0007_sample_spline",
@@ -268,7 +287,6 @@ data = {
 "fill_curve": false,
 "inspect_enabled": false,
 "random_seed": 2565017575,
-"required_meta_bool": &"",
 "sample_segments_centers": false,
 "title": "Sample Spline",
 "trace": false,
@@ -342,13 +360,33 @@ data = {
 },
 "show_disconnected_inputs": false,
 "template": "math_op"
+}, {
+"args_port": {},
+"name": &"id_0024_scan_splines",
+"position": Vector2(11.3532, 98.5863),
+"settings": {
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_scale": 1.0,
+"disabled": false,
+"group_name": "",
+"inspect_enabled": false,
+"random_seed": 358875866,
+"required_meta_bool": &"",
+"title": "Scan Splines",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "scan_splines"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
-view_zoom = 0.751315
-view_offset = Vector2(-122.353, -213.869)
-new_name_counter = 23
+view_zoom = 1.0
+view_offset = Vector2(-191.647, 161.586)
+new_name_counter = 24
 in_params = Array[ExtResource("2_ef63f")]([])
 
 [sub_resource type="Curve3D" id="Curve3D_lggi4"]

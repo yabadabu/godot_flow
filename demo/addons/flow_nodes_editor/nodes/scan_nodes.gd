@@ -137,7 +137,8 @@ func get_combined_aabb(root: Node3D) -> AABB:
 func execute( ctx : FlowData.EvaluationContext ):
 	var output := FlowData.Data.new()
 	
-	var nodes = findNodesMatchingFilters( ctx )
+	var filter_by_class_name = getSettingValue( ctx, "filter_by_class_name" )
+	var nodes = findNodesMatchingFilters( ctx, filter_by_class_name )
 	
 	var nsamples = nodes.size()
 	output.addCommonStreams( nsamples )

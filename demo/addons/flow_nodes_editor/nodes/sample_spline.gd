@@ -28,22 +28,6 @@ func get_polygon_bounds(polygon: PackedVector2Array) -> Rect2:
 	
 	return Rect2(min_x, min_y, max_x - min_x, max_y - min_y)	
 
-func findNodesOfType(root: Node, type_name: String) -> Array[Node]:
-	var found_nodes: Array[Node] = []
-	
-	# Check if current node matches
-	if root.get_class() == type_name:
-		found_nodes.append(root)
-	
-	var required_meta_bool = settings.get( "required_meta_bool" )
-	
-	# Recursively check children
-	for child in root.get_children():
-		if !required_meta_bool or child.get_meta(required_meta_bool, false):
-			found_nodes.append_array(findNodesOfType(child, type_name))
-	
-	return found_nodes	
-
 func points3d_to_polygon2d(points3d : PackedVector3Array) -> PackedVector2Array:
 	var num_points := points3d.size()
 	var polygon := PackedVector2Array()
@@ -128,7 +112,12 @@ func execute( ctx : FlowData.EvaluationContext ):
 		
 	var trace := settings.trace
 		
-	var path3d_nodes = findNodesOfType(root, "Path3D")
+	var in_data = get_input(0)
+	var path3d_nodes = in_data.getContainerChecked( "node", FlowData.DataType.Node )
+	if path3d_nodes == null:
+		setError( "Input are not splines")
+		return null
+	print( "path3d_nodes", path3d_nodes)
 
 	var output := FlowData.Data.new()
 	output.addCommonStreams( 0 )

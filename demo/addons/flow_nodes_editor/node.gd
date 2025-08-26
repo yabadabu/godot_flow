@@ -480,10 +480,9 @@ func getSceneRootNode3d( current : Node3D ) -> Node3D:
 		current = current.get_parent_node_3d()
 	return current
 
-func findNodesMatchingFilters( ctx : FlowData.EvaluationContext) -> Array[ Node3D ]:
+func findNodesMatchingFilters( ctx : FlowData.EvaluationContext, filter_by_class_name : String ) -> Array[ Node3D ]:
 
 	var group_name = getSettingValue( ctx, "group_name" )
-	var filter_by_class_name = getSettingValue( ctx, "filter_by_class_name" )
 	
 	var all_nodes : Array[Node] = []
 	#var scene_root = ctx.owner.get_tree().root

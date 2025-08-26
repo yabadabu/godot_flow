@@ -33,7 +33,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 		
 	var trace := settings.trace
 		
-	var path3d_nodes = findNodesOfType(root, "Path3D")
+	var path3d_nodes = findNodesMatchingFilters( ctx, "Path3D")
 
 	var output := FlowData.Data.new()
 	output.registerStream( "node", path3d_nodes, FlowData.DataType.Node )
