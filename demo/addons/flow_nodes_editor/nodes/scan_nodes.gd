@@ -7,7 +7,7 @@ func _init():
 		"settings" : ScanNodesNodeSettings,
 		"ins" : [],
 		"outs" : [{ "label" : "Out" }],
-		"tooltip" : "Generate points from existing non-graph nodes in the scene\nCan filter by class name, group.\nMetadata values can be optioanlly imported\nThe node can import properties of the nodes, even with a\nsubpath property like mesh:text if the nodes are a MeshInstance3D with meshes of type TextMesh.",
+		"tooltip" : "Generate points from existing non-flowgraph nodes in the scene\nCan filter by class name, group.\nMetadata values can optionally be imported\nYou can also import properties of the nodes, even with a\nsubpath property like mesh:text if the nodes are a MeshInstance3D with meshes of type TextMesh.",
 	}
 	
 # material[0]:albedo_color

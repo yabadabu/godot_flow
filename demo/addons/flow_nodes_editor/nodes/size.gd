@@ -6,7 +6,7 @@ func _init():
 		"title" : "Size",
 		"settings" : SizeNodeSettings,
 		"ins" : [{ "label" : "In"}],
-		"outs" : [{ "label" : "Size", "type" : TYPE_INT }],
+		"outs" : [{ "label" : "Size", "data_type" : FlowData.DataType.Int }],
 		"tooltip" : "Returns the current size of the input sequence",
 	}
 	

@@ -127,6 +127,7 @@ func registerNodeType( node_type_name, file ):
 	if not loaded_class:
 		push_error("Failed to load class %s" % full_res_path )
 		return
+	print( "Loading class %s" % full_res_path )
 	var instance = loaded_class.new() as FlowNodeBase
 	var meta = instance.getMeta()
 	meta.factory = loaded_class
@@ -173,14 +174,14 @@ func populatePopupMenu() -> PopupMenu:
 	#pm.add_item( "Clear", 0, KEY_NONE )
 	#pm.add_separator( "", -1 )
 	
-	var required_input_type = -1
-	var required_output_type = -1
+	var required_input_type := FlowData.DataType.Invalid
+	var required_output_type := FlowData.DataType.Invalid
 	if auto_connect_from_node:
 		var from_node = gedit_nodes_by_name.get( auto_connect_from_node )
 		if from_node:
 			var meta = from_node.getMeta()
 			var oport = meta.outs[ auto_connect_from_port ]
-			required_input_type = oport.get( "type", 0 )
+			required_input_type = oport.get( "data_type", FlowData.DataType.Invalid )
 		print( "auto_connect_from_node: %s:%d -> %d" % [ auto_connect_from_node, auto_connect_from_port, required_input_type])
 		
 	if auto_connect_to_node:
@@ -188,12 +189,12 @@ func populatePopupMenu() -> PopupMenu:
 		if to_node:
 			var meta = to_node.getMeta()
 			var iport = meta.ins[ auto_connect_to_port ]
-			required_output_type = iport.get( "type", 0 )
+			required_output_type = iport.get( "data_type", FlowData.DataType.Invalid )
 		print( "auto_connect_to_node: %s:%d -> %d" % [auto_connect_to_node, auto_connect_to_port, required_output_type ])
 
 	# A submenu to invoke the inputs declared in the pcg
 	var idx := 0
-	if required_input_type == -1:
+	if required_input_type == FlowData.DataType.Invalid:
 		if popup_menu_inputs:
 			popup_menu_inputs.queue_free()
 		popup_menu_inputs = PopupMenu.new()
@@ -213,13 +214,13 @@ func populatePopupMenu() -> PopupMenu:
 			print( "Adding menu %s skip (id:%d)" % [ label, max_id ])
 			continue
 			
-		if required_input_type != -1 or required_output_type != -1:
-			print( "Candidate node meta: %s" % node_meta )
+		if required_input_type !=FlowData.DataType.Invalid or required_output_type != FlowData.DataType.Invalid:
+			#print( "Candidate node meta: %s" % node_meta )
 			var has_compatible_port = false
-			var ports = node_meta.ins if required_input_type != -1 else node_meta.outs
-			var required_type = required_input_type if required_input_type != -1 else required_output_type
+			var ports = node_meta.ins if required_input_type != FlowData.DataType.Invalid else node_meta.outs
+			var required_type = required_input_type if required_input_type != FlowData.DataType.Invalid else required_output_type
 			for port in ports:
-				var port_type = port.get( "type", 0 )
+				var port_type = port.get( "data_type", 0 )
 				if port_type == required_type:
 					has_compatible_port = true
 					break
@@ -419,7 +420,7 @@ func canConnect( src : FlowNodeBase, src_port : int, dst : FlowNodeBase, dst_por
 		
 	var src_type = src.get_output_port_type( src_port )
 	var dst_type = dst.get_input_port_type( dst_port )
-	if (src_type and dst_type) or (src_type == TYPE_NODE_PATH):
+	if (src_type and dst_type) or (src_type == FlowData.DataType.NodePath) or (src_type == FlowData.DataType.NodeMesh):
 		if src_type != dst_type:
 			push_warning( "Node types do not match %d vs %d" % [ src_type, dst_type ])
 			return false

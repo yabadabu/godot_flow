@@ -1010,7 +1010,7 @@ data = {
 "version": 1
 }
 view_zoom = 0.662908
-view_offset = Vector2(-147.415, -92.196)
+view_offset = Vector2(-186.415, -140.196)
 new_name_counter = 106
 in_params = Array[ExtResource("2_dxf0c")]([])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"

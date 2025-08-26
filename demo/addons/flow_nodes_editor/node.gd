@@ -167,20 +167,22 @@ static func editorDisplayName(property_name: String) -> String:
 		parts[i] = parts[i].capitalize()
 	return " ".join(parts)
 
-static func getColorForGDScriptType( gd_type : int ) -> Color:
-	match( gd_type ):
-		TYPE_BOOL:
+static func getColorForFlowDataType( data_type : FlowData.DataType ) -> Color:
+	match( data_type ):
+		FlowData.DataType.Bool:
 			return Color.RED
-		TYPE_INT:
+		FlowData.DataType.Int:
 			return Color.CYAN
-		TYPE_FLOAT:
+		FlowData.DataType.Float:
 			return Color.WEB_GREEN
-		TYPE_VECTOR3:
+		FlowData.DataType.Vector:
 			return Color.BLUE_VIOLET
-		TYPE_STRING:
+		FlowData.DataType.String:
 			return Color.YELLOW
-		TYPE_NODE_PATH:
+		FlowData.DataType.NodePath:
 			return Color.SKY_BLUE
+		FlowData.DataType.NodeMesh:
+			return Color.MAGENTA
 	return Color.WHEAT
 
 static func getGdScriptTypeForFlowDataType( data_type : FlowData.DataType ) -> int:
@@ -345,11 +347,15 @@ func initFromScript():
 			var in_name = in_data.get( "name", in_data.label )
 			
 			set_slot_enabled_left( idx, true )
+			
 			# Change color
-			if in_data.has( "type"):
-				var color = getColorForGDScriptType( in_data.type )	
+			var data_type = in_data.get( "data_type", FlowData.DataType.Invalid )
+			if data_type == FlowData.DataType.Invalid and in_data.has( "type"):
+				data_type = getFlowDataTypeFromGdScriptType( in_data.type )
+			if data_type != FlowData.DataType.Invalid:
+				var color = getColorForFlowDataType( data_type )	
 				set_slot_color_left( idx, color )
-				set_slot_type_left( idx, in_data.type )
+				set_slot_type_left( idx, data_type )
 				
 			in_data.port = idx
 			ctrl.setData( in_data )
@@ -365,10 +371,16 @@ func initFromScript():
 			if out_data:
 				lbl_out.text = out_data.label
 				set_slot_enabled_right( idx, true )
-				if out_data.has( "type"):
-					var color = getColorForGDScriptType( out_data.type )
+					
+				# Change color
+				var data_type = out_data.get( "data_type", FlowData.DataType.Invalid )
+				if data_type == FlowData.DataType.Invalid and out_data.has( "type"):
+					data_type = getFlowDataTypeFromGdScriptType( out_data.type )
+				if data_type != FlowData.DataType.Invalid:
+					var color = getColorForFlowDataType( data_type )	
 					set_slot_color_right( idx, color )
-					set_slot_type_right( idx, out_data.type )
+					set_slot_type_right( idx, data_type )					
+					
 		else:
 			lbl_out.text = ""
 	

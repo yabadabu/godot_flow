@@ -7,7 +7,7 @@ func _init():
 	meta_node = {
 		"title" : "Sample Spline",
 		"settings" : SampleSplineNodeSettings,
-		"ins" : [{ "label": "Splines", "type": TYPE_NODE_PATH}],
+		"ins" : [{ "label": "Splines", "data_type": FlowData.DataType.NodePath }],
 		"outs" : [{ "label" : "Out" }],
 	}
 	
@@ -113,7 +113,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 	var trace := settings.trace
 		
 	var in_data = get_input(0)
-	var path3d_nodes = in_data.getContainerChecked( "node", FlowData.DataType.Node )
+	var path3d_nodes = in_data.getContainerChecked( "node", FlowData.DataType.NodePath )
 	if path3d_nodes == null:
 		setError( "Input are not splines")
 		return null

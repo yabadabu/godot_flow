@@ -112,7 +112,7 @@ func onColumnBegins( cell : DataTableContainer.CellContents ):
 	elif stream.data_type == FlowData.DataType.Resource:
 		tv.setCellCallback( getCellContentsResource )
 		cell.alignment = HORIZONTAL_ALIGNMENT_LEFT
-	elif stream.data_type == FlowData.DataType.Node:
+	elif stream.data_type == FlowData.DataType.NodePath or stream.data_type == FlowData.DataType.NodeMesh:
 		tv.setCellCallback( getCellContentsNode )
 		cell.alignment = HORIZONTAL_ALIGNMENT_LEFT
 		

@@ -28,6 +28,9 @@ static func _parse_vector2(value) -> Vector2:
 	if typeof(value) == TYPE_STRING:
 		var parts = split_floats(value)
 		return Vector2(parts[0], parts[1])
+	if value == null:
+		return Vector2(0,0)
+	print( "returning...", value)
 	return value
 
 static  func _parse_vector3(value) -> Vector3:

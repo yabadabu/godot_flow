@@ -7,6 +7,7 @@
 [sub_resource type="Resource" id="Resource_u7ew1"]
 script = ExtResource("3_i06iv")
 data = {
+"frames": [],
 "links": [{
 "from_node": &"id_0013_self_pruning",
 "from_port": 0,
@@ -14,60 +15,20 @@ data = {
 "to_node": &"id_0015_filter",
 "to_port": 0
 }, {
-"from_node": &"id_0014_sample_mesh",
+"from_node": &"id_0020_sample_mesh",
 "from_port": 0,
 "keep_alive": false,
 "to_node": &"id_0013_self_pruning",
 "to_port": 0
+}, {
+"from_node": &"id_0041_scan_meshes",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0020_sample_mesh",
+"to_port": 0
 }],
-"min_pos": Vector2(200, 260),
+"min_pos": Vector2(80, 260),
 "nodes": [{
-"args_port": {},
-"name": &"id_0014_sample_mesh",
-"position": Vector2(0, 0),
-"settings": {
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_scale": 1.0,
-"density": 0.635,
-"enabled": true,
-"inspect_enabled": false,
-"mode": 0,
-"num_samples": 100,
-"point_size": 1.0,
-"random_seed": 773502599,
-"title": "Sample Mesh",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "sample_mesh"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0013_self_pruning",
-"position": Vector2(200, 0),
-"settings": {
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_scale": 1.0,
-"enabled": true,
-"inspect_enabled": false,
-"keep_self_intersections": false,
-"random_seed": 1138506605,
-"title": "Self Pruning",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "self_pruning"
-}, {
 "args_port": {
 "In A": {
 "connected": true,
@@ -79,7 +40,7 @@ data = {
 }
 },
 "name": &"id_0015_filter",
-"position": Vector2(400, 0),
+"position": Vector2(520, 0),
 "settings": {
 "condition": 2,
 "debug_color": Color(1, 1, 1, 1),
@@ -87,7 +48,7 @@ data = {
 "debug_mode": 0,
 "debug_modulate_by": "",
 "debug_scale": 1.0,
-"enabled": true,
+"disabled": false,
 "in_nameA": "Pitch",
 "in_nameB": "20",
 "inspect_enabled": false,
@@ -98,13 +59,84 @@ data = {
 },
 "show_disconnected_inputs": false,
 "template": "filter"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0013_self_pruning",
+"position": Vector2(320, 0),
+"settings": {
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"keep_self_intersections": false,
+"random_seed": 1138506605,
+"title": "Self Pruning",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "self_pruning"
+}, {
+"args_port": {
+"Meshes": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0020_sample_mesh",
+"position": Vector2(140, 0),
+"settings": {
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_scale": 1.0,
+"density": 0.5,
+"disabled": false,
+"inspect_enabled": false,
+"mode": 0,
+"num_samples": 100,
+"point_size": 1.0,
+"random_seed": 788672317,
+"title": "Sample Mesh",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "sample_mesh"
+}, {
+"args_port": {},
+"name": &"id_0041_scan_meshes",
+"position": Vector2(0, 0),
+"settings": {
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_scale": 1.0,
+"disabled": false,
+"group_name": "",
+"inspect_enabled": false,
+"random_seed": 3942641137,
+"required_meta_bool": &"",
+"title": "Scan Meshes",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "scan_meshes"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
-view_zoom = 0.683013
-view_offset = Vector2(108.568, -202.326)
-new_name_counter = 18
+view_zoom = 0.826446
+view_offset = Vector2(10.4509, -110.244)
+new_name_counter = 43
 in_params = Array[ExtResource("2_0ulet")]([])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 

@@ -8,7 +8,8 @@ enum DataType {
 	Vector,
 	String,
 	Resource,
-	Node,
+	NodeMesh,
+	NodePath,
 	Invalid = 999
 }
 

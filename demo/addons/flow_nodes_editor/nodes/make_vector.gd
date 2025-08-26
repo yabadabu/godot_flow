@@ -6,7 +6,7 @@ func _init():
 		"title" : "Make Vector",
 		"settings" : MakeVectorNodeSettings,
 		"ins" : [], 
-		"outs" : [{ "label" : "Out", "type" : TYPE_VECTOR3 }],
+		"outs" : [{ "label" : "Out", "data_type" : FlowData.DataType.Vector }],
 		"tooltip" : "Creates a single Vector value from 3 inmediate float values",
 		#"trace" : true
 	}
