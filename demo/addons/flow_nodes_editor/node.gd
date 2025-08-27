@@ -470,22 +470,18 @@ func newStream( size : int, new_name : String, init_value, data_type : FlowData.
 				var typed_container : PackedInt32Array = new_container
 				for idx in size:
 					typed_container[idx] = fn.call(idx)
-				return PackedInt32Array()
 			FlowData.DataType.Float:
 				var typed_container : PackedFloat32Array = new_container
 				for idx in size:
 					typed_container[idx] = fn.call(idx)
-				return PackedFloat32Array()
 			FlowData.DataType.Vector:
 				var typed_container : PackedVector3Array = new_container
 				for idx in size:
 					typed_container[idx] = fn.call(idx)
-				return PackedVector3Array()
 			FlowData.DataType.String:
 				var typed_container : PackedStringArray = new_container
 				for idx in size:
 					typed_container[idx] = fn.call(idx)
-				return PackedStringArray()
 			FlowData.DataType.Resource:
 				var typed_container : Array = new_container
 				for idx in size:
@@ -502,35 +498,7 @@ func newStream( size : int, new_name : String, init_value, data_type : FlowData.
 	}
 	
 func newFloatStream( size : int, new_name : String, init_value ):
-	#return newStream( size, new_name, init_value, FlowData.DataType.Float )
-	var new_container = PackedFloat32Array()
-	new_container.resize( size )
-	if typeof(init_value) == TYPE_CALLABLE:
-		var fn : Callable = init_value
-		for idx in size:
-			new_container[idx] = fn.call(idx)
-	else:
-		new_container.fill( init_value )
-	return { 
-		"data_type" : FlowData.DataType.Float,
-		"container" : new_container,
-		"name" : new_name
-	}
-
-func newVector3Stream( size : int, new_name : String, init_value ):
-	var new_container = PackedVector3Array()
-	new_container.resize( size )
-	if typeof(init_value) == TYPE_CALLABLE:
-		var fn : Callable = init_value
-		for idx in size:
-			new_container[idx] = fn.call(idx)
-	else:
-		new_container.fill( init_value )
-	return { 
-		"data_type" : FlowData.DataType.Vector,
-		"container" : new_container,
-		"name" : new_name
-	}
+	return newStream( size, new_name, init_value, FlowData.DataType.Float )
 
 func getSceneRootNode3d( current : Node3D ) -> Node3D:
 	while current and current.get_parent_node_3d():

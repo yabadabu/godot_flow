@@ -30,7 +30,7 @@ static func _parse_vector2(value) -> Vector2:
 		return Vector2(parts[0], parts[1])
 	if value == null:
 		return Vector2(0,0)
-	print( "returning...", value)
+	#print( "returning...", value)
 	return value
 
 static  func _parse_vector3(value) -> Vector3:
