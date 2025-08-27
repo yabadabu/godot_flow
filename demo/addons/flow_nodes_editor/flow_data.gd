@@ -55,7 +55,7 @@ class Data:
 	var streams : Dictionary = {}
 	var last_added_stream_name : String
 
-	func newContainerOfType( data_type : DataType ):
+	static func newContainerOfType( data_type : DataType ):
 		match data_type:
 			DataType.Bool:
 				return PackedByteArray()
@@ -69,6 +69,8 @@ class Data:
 				return PackedStringArray()
 			DataType.Resource:
 				return Array([], TYPE_OBJECT, "Resource", null)
+			_:
+				push_error( "newContainerOfType(%d) type not supported" % [ data_type ])
 		return null
 	
 	func numFields() -> int:
@@ -175,7 +177,7 @@ class Data:
 	
 	func registerStream( name : String, container, data_type : DataType = FlowData.DataType.Invalid ):
 		if not name:
-			print( "Container size:", container.size() )
+			print( "registerStream empty name!. Container size:", container.size() )
 			push_error("registerStream name can't be empty of data_type %d" % [ data_type ] )
 			return null
 		if container == null:
@@ -345,7 +347,10 @@ class Data:
 			ssizes[idx] = init_value
 
 	func getVector3Container( stream_name : StringName ) -> PackedVector3Array:
-		return getContainerChecked( stream_name, DataType.Vector )
+		var container = getContainerChecked( stream_name, DataType.Vector )
+		if container == null:
+			container = PackedVector3Array()
+		return container
 
 	func getTransformsStream() -> TransformsStream:
 		var trs := TransformsStream.new()
@@ -357,5 +362,7 @@ class Data:
 			return null	
 		trs.sizes = getVector3Container( AttrSize )
 		if trs.sizes == null:
-			return null	
-		return trs
+			return null
+		if trs.sizes.size() == trs.positions.size() && trs.sizes.size() == trs.eulers.size():
+			return trs
+		return null
