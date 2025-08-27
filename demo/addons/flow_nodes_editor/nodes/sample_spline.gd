@@ -105,10 +105,6 @@ func rasterizeCurveInXZ( curve : Curve3D, uniform_interval : float, base : int )
 	return new_points
 
 func execute( ctx : FlowData.EvaluationContext ):
-	
-	var root = EditorInterface.get_edited_scene_root()
-	if not root:
-		return null
 		
 	var trace := settings.trace
 		
@@ -117,7 +113,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 	if path3d_nodes == null:
 		setError( "Input are not splines")
 		return null
-	print( "path3d_nodes", path3d_nodes)
+	#print( "path3d_nodes", path3d_nodes)
 
 	var output := FlowData.Data.new()
 	output.addCommonStreams( 0 )
@@ -158,6 +154,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 			var base = spos.size()
 			var curve_length := curve.get_baked_length()
 			var num_samples = curve.get_baked_points().size()
+			#print( "  curve: Base:%d Length:%f Samples:%d" % [ base, curve_length, num_samples ] )
 			
 			if getSettingValue( ctx, "sample_segments_centers" ):
 				if num_samples > 2:
@@ -177,7 +174,6 @@ func execute( ctx : FlowData.EvaluationContext ):
 						var b = Basis.looking_at( front )
 						srot[base + idx] = FlowData.basisToEuler( b )
 						ssize[base + idx] = Vector3( 1.0, 1.0, front.length() )
-			
 			else:
 				spos.resize( base + num_samples )
 				srot.resize( base + num_samples )
@@ -188,6 +184,9 @@ func execute( ctx : FlowData.EvaluationContext ):
 					
 					var b : Basis = path_3d.transform.basis * t.basis
 					srot[base + idx] = FlowData.basisToEuler( b )
+
+					#print( "%d : %s %s" % [ idx, spos[ base+idx], srot[ base+idx ] ])
+
 		uniform_interval = 1.0
 				
 	# All the samples have the same size
