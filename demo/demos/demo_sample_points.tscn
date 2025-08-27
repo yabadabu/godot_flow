@@ -63,12 +63,6 @@ data = {
 "to_node": &"id_0020_select",
 "to_port": 0
 }, {
-"from_node": &"id_0002_math_op",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0035_sample_points",
-"to_port": 0
-}, {
 "from_node": &"id_0035_sample_points",
 "from_port": 0,
 "keep_alive": false,
@@ -85,6 +79,12 @@ data = {
 "from_port": 0,
 "keep_alive": false,
 "to_node": &"id_0017_sample_spline",
+"to_port": 0
+}, {
+"from_node": &"id_0002_math_op",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0035_sample_points",
 "to_port": 0
 }],
 "min_pos": Vector2(-60, 260),
@@ -257,63 +257,6 @@ data = {
 "show_disconnected_inputs": false,
 "template": "distance"
 }, {
-"args_port": {},
-"name": &"id_0001_scan_nodes",
-"position": Vector2(180, 0),
-"settings": {
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_scale": 1.0,
-"disabled": false,
-"filter_by_class_name": "Path3D",
-"group_name": "",
-"import_metadata": false,
-"import_properties": Array[StringName]([]),
-"inspect_enabled": false,
-"random_seed": 2876997161,
-"size_to_bounds": true,
-"title": "Scan Nodes",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "scan_nodes"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0035_sample_points",
-"position": Vector2(620, 60),
-"settings": {
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": true,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_scale": -0.065,
-"disabled": false,
-"distribution": 3,
-"groups": Array[int]([2410]),
-"inspect_enabled": false,
-"max_x": 64,
-"max_y": 1,
-"max_z": 64,
-"new_size_factor": 1.0,
-"num_samples": 2651,
-"out_group_id": "",
-"phase": 0.205,
-"random_seed": 7279,
-"sampling_distance": 0.5,
-"size": 0.035,
-"title": "Sample Points",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "sample_points"
-}, {
 "args_port": {
 "Splines": {
 "connected": true,
@@ -352,7 +295,7 @@ data = {
 "debug_scale": 1.0,
 "disabled": false,
 "group_name": "",
-"inspect_enabled": true,
+"inspect_enabled": false,
 "random_seed": 42996258,
 "required_meta_bool": &"",
 "title": "Scan Splines",
@@ -360,12 +303,69 @@ data = {
 },
 "show_disconnected_inputs": false,
 "template": "scan_splines"
+}, {
+"args_port": {},
+"name": &"id_0001_scan_nodes",
+"position": Vector2(180, 0),
+"settings": {
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_scale": 1.0,
+"disabled": false,
+"filter_by_class_name": "Path3D",
+"group_name": "",
+"import_metadata": false,
+"import_properties": Array[StringName]([]),
+"inspect_enabled": false,
+"random_seed": 2876997161,
+"size_to_bounds": true,
+"title": "Scan Nodes",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "scan_nodes"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0035_sample_points",
+"position": Vector2(620, 60),
+"settings": {
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": true,
+"debug_mode": 1,
+"debug_modulate_by": "",
+"debug_scale": -0.065,
+"disabled": false,
+"distribution": 3,
+"groups": Array[int]([2410]),
+"inspect_enabled": false,
+"max_x": 64,
+"max_y": 1,
+"max_z": 64,
+"new_size_factor": 1.0,
+"num_samples": 2651,
+"out_group_id": "",
+"phase": 0.205,
+"random_seed": 7279,
+"sampling_distance": 0.5,
+"size": 0.035,
+"title": "Sample Points",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "sample_points"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
-view_zoom = 0.726782
-view_offset = Vector2(208.406, 2.88774)
+view_zoom = 0.660711
+view_offset = Vector2(42.6418, -60.9203)
 new_name_counter = 40
 in_params = Array[ExtResource("2_tllc8")]([SubResource("Resource_wusrb")])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"

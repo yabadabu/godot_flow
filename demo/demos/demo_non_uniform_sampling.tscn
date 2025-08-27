@@ -63,11 +63,11 @@ data = {
 "to_node": &"id_0003_sample_mesh",
 "to_port": 0
 }],
-"min_pos": Vector2(-89.2089, 240),
+"min_pos": Vector2(-60, 380),
 "nodes": [{
 "args_port": {},
 "name": &"id_0004_scan_nodes",
-"position": Vector2(169.209, 300),
+"position": Vector2(140, 160),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
@@ -99,7 +99,7 @@ data = {
 }
 },
 "name": &"id_0005_math_op",
-"position": Vector2(849.209, 280),
+"position": Vector2(820, 140),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
@@ -130,7 +130,7 @@ data = {
 }
 },
 "name": &"id_0008_math_op",
-"position": Vector2(1409.21, 280),
+"position": Vector2(1380, 140),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
@@ -161,7 +161,7 @@ data = {
 }
 },
 "name": &"id_0009_math_op",
-"position": Vector2(1229.21, 280),
+"position": Vector2(1200, 140),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
@@ -192,7 +192,7 @@ data = {
 }
 },
 "name": &"id_0018_math_op",
-"position": Vector2(1029.21, 280),
+"position": Vector2(1000, 140),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
@@ -227,7 +227,7 @@ data = {
 }
 },
 "name": &"id_0007_select",
-"position": Vector2(1589.21, 280),
+"position": Vector2(1560, 140),
 "settings": {
 "debug_color": Color(0.929412, 0, 0.109804, 1),
 "debug_enabled": true,
@@ -260,7 +260,7 @@ data = {
 }
 },
 "name": &"id_0014_distance",
-"position": Vector2(569.209, 280),
+"position": Vector2(540, 140),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": true,
@@ -281,65 +281,13 @@ data = {
 "template": "distance"
 }, {
 "args_port": {
-"Meshes": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0003_sample_mesh",
-"position": Vector2(169.209, 140),
-"settings": {
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_scale": 1.0,
-"density": 19.05,
-"disabled": false,
-"inspect_enabled": false,
-"mode": 0,
-"num_samples": 100,
-"point_size": 0.19,
-"random_seed": 310741729,
-"title": "Sample Mesh",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "sample_mesh"
-}, {
-"args_port": {},
-"name": &"id_0010_grid",
-"position": Vector2(169.209, 0),
-"settings": {
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"origin": Vector3(-4.605, -0.1, -4.505),
-"random_seed": 2702798924,
-"rotation": Vector3(0, 0, 0),
-"size": 0.23,
-"step": Vector3(0.25, 1, 0.25),
-"title": "Grid",
-"trace": false,
-"x": 40,
-"y": 1,
-"z": 40
-},
-"show_disconnected_inputs": false,
-"template": "grid"
-}, {
-"args_port": {
 "In": {
 "connected": true,
 "port": 0
 }
 },
 "name": &"id_0002_self_pruning",
-"position": Vector2(349.209, 140),
+"position": Vector2(320, 0),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
@@ -358,7 +306,7 @@ data = {
 }, {
 "args_port": {},
 "name": &"id_0012_scan_meshes",
-"position": Vector2(0, 149.286),
+"position": Vector2(0, 0),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
@@ -375,12 +323,39 @@ data = {
 },
 "show_disconnected_inputs": false,
 "template": "scan_meshes"
+}, {
+"args_port": {
+"Meshes": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0003_sample_mesh",
+"position": Vector2(140, 0),
+"settings": {
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_scale": 1.0,
+"density": 19.05,
+"disabled": false,
+"inspect_enabled": false,
+"mode": 0,
+"num_samples": 100,
+"point_size": 0.19,
+"random_seed": 310741729,
+"title": "Sample Mesh",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "sample_mesh"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
 view_zoom = 1.1
-view_offset = Vector2(-227.13, 79.2145)
+view_offset = Vector2(86.87, 109.215)
 new_name_counter = 12
 in_params = Array[ExtResource("2_1mcnb")]([])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
@@ -401,4 +376,4 @@ transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 0, 0)
 mesh = SubResource("PlaneMesh_aj3gx")
 
 [node name="RefPoint" type="Node3D" parent="." groups=["RefPoints"]]
-transform = Transform3D(4.09574, 0, 0, 0, 1, 0, 0, 0, 7.63447, 1.00747, -0.668377, 1.597)
+transform = Transform3D(4.09574, 0, 0, 0, 1, 0, 0, 0, 7.63447, 0.412525, -0.668378, 2.63185)

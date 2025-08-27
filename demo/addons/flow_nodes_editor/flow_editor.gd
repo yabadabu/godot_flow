@@ -110,7 +110,7 @@ func _process(delta: float) -> void:
 		evalGraph()
 
 	# Update active connections
-	if active_conns_intensity > 0.0:
+	if false && active_conns_intensity > 0.0:
 		active_conns_intensity -= 0.016 * 4
 		if active_conns_intensity < 0:
 			active_conns.clear()

@@ -1,0 +1,150 @@
+[gd_scene load_steps=5 format=3 uid="uid://btpo777vcetcv"]
+
+[ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_70s76"]
+[ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="2_ygdt0"]
+[ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="3_xtj63"]
+
+[sub_resource type="Resource" id="Resource_owq4s"]
+script = ExtResource("3_xtj63")
+data = {
+"frames": [],
+"links": [{
+"from_node": &"id_0004_expression",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0006_create_spline",
+"to_port": 0
+}, {
+"from_node": &"id_0001_grid",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0004_expression",
+"to_port": 0
+}, {
+"from_node": &"id_0006_create_spline",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0007_sample_spline",
+"to_port": 0
+}],
+"min_pos": Vector2(20, 120),
+"nodes": [{
+"args_port": {},
+"name": &"id_0001_grid",
+"position": Vector2(0, 0),
+"settings": {
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"origin": Vector3(0, 0, 0),
+"random_seed": 399167553,
+"rotation": Vector3(0, 0, 0),
+"size": 1.0,
+"step": Vector3(1, 1, 1),
+"title": "Grid",
+"trace": false,
+"x": 10,
+"y": 1,
+"z": 1
+},
+"show_disconnected_inputs": false,
+"template": "grid"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0006_create_spline",
+"position": Vector2(420, 0),
+"settings": {
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"random_seed": 1070075698,
+"title": "Create Spline",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "create_spline"
+}, {
+"args_port": {
+"Splines": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0007_sample_spline",
+"position": Vector2(600, 0),
+"settings": {
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": true,
+"debug_mode": 1,
+"debug_modulate_by": "",
+"debug_scale": 0.165,
+"disabled": false,
+"distance_attribute": "distance",
+"fill_curve": false,
+"inspect_enabled": true,
+"random_seed": 1652584944,
+"sample_segments_centers": false,
+"title": "Sample Spline",
+"trace": false,
+"uniform_interval": 0.5
+},
+"show_disconnected_inputs": false,
+"template": "sample_spline"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0004_expression",
+"position": Vector2(140, 0),
+"settings": {
+"args": {
+"freq": 0.535
+},
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_scale": 1.0,
+"disabled": false,
+"expose_arrays": false,
+"expression": "Vector3( Index, sin( Index * freq ), 0 )",
+"inspect_enabled": false,
+"out_name": "position",
+"random_seed": 1229476284,
+"title": "Expression",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "expression"
+}],
+"type": "flow_graph_nodes",
+"version": 1
+}
+view_zoom = 1.0
+view_offset = Vector2(213, -197)
+new_name_counter = 7
+in_params = Array[ExtResource("2_ygdt0")]([])
+
+[node name="DemoSplineCreate" type="Node3D"]
+
+[node name="FlowGraphNode3D" type="Node3D" parent="."]
+script = ExtResource("1_70s76")
+graph = SubResource("Resource_owq4s")
+refresh_inputs = Callable()
+metadata/_custom_type_script = "uid://d1krtmb1urldl"
