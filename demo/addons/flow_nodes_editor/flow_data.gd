@@ -313,7 +313,8 @@ class Data:
 		# This is not a deep clone, the packed*arrays are shared,
 		# use cloneStream to create an independent copy
 		var s := Data.new()
-		s.streams = streams.duplicate()
+		for name in streams:
+			s.streams[ name ] = streams[ name ].duplicate()
 		s.last_added_stream_name = last_added_stream_name
 		return s
 		
