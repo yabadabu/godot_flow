@@ -464,7 +464,7 @@ func _on_graph_edit_gui_input(event):
 			if no_modifiers:
 				deleteSelectedNodes()
 		elif key == KEY_A:
-			if no_modifiers:
+			if evt_key.shift_pressed:
 				openAddMenu()
 		elif key == KEY_C:
 			if no_modifiers:
