@@ -924,6 +924,10 @@ func _on_graph_edit_duplicate_nodes_request():
 	FlowNodeIO.duplicateSelecteddNodes( self )
 	
 func onEditorSceneChanged():
+	# When a node in the scene changes, just mark disty all nodes
+	# which can potentially become dirty
+	# This also triggers as dirty all scan_* nodes when we change
+	# anything in another of our nodes. Not very good
 	for child in gedit.get_children():
 		var node := child as FlowNodeBase
 		if node and node.getMeta().get( "scans_scene", false ):
