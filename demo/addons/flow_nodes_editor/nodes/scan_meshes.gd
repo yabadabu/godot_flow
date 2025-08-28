@@ -5,6 +5,7 @@ func _init():
 	meta_node = {
 		"title" : "Scan Meshes",
 		"settings" : ScanMeshesNodeSettings,
+		"scans_scene" : true,
 		"ins" : [],
 		"outs" : [{ "label" : "Out", "data_type" : FlowData.DataType.NodeMesh }],
 	}

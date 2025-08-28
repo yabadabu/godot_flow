@@ -29,31 +29,6 @@ data = {
 }],
 "min_pos": Vector2(20, 120),
 "nodes": [{
-"args_port": {},
-"name": &"id_0001_grid",
-"position": Vector2(0, 0),
-"settings": {
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"origin": Vector3(0, 0, 0),
-"random_seed": 399167553,
-"rotation": Vector3(0, 0, 0),
-"size": 1.0,
-"step": Vector3(1, 1, 1),
-"title": "Grid",
-"trace": false,
-"x": 10,
-"y": 1,
-"z": 1
-},
-"show_disconnected_inputs": false,
-"template": "grid"
-}, {
 "args_port": {
 "In": {
 "connected": true,
@@ -104,6 +79,31 @@ data = {
 "show_disconnected_inputs": false,
 "template": "sample_spline"
 }, {
+"args_port": {},
+"name": &"id_0001_grid",
+"position": Vector2(0, 0),
+"settings": {
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"origin": Vector3(0, 0, 0),
+"random_seed": 399167553,
+"rotation": Vector3(0, 0, 0),
+"size": 1.0,
+"step": Vector3(1, 1, 1),
+"title": "Grid",
+"trace": false,
+"x": 12,
+"y": 1,
+"z": 1
+},
+"show_disconnected_inputs": false,
+"template": "grid"
+}, {
 "args_port": {
 "In": {
 "connected": true,
@@ -114,16 +114,16 @@ data = {
 "position": Vector2(140, 0),
 "settings": {
 "args": {
-"freq": 0.535
+"freq": 1.025
 },
 "debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
+"debug_enabled": true,
+"debug_mode": 1,
 "debug_modulate_by": "",
-"debug_scale": 1.0,
+"debug_scale": 0.32,
 "disabled": false,
 "expose_arrays": false,
-"expression": "Vector3( Index, sin( Index * freq ), 0 )",
+"expression": "Vector3( Index, sin( Index * freq ), cos( Index * freq ) )",
 "inspect_enabled": false,
 "out_name": "position",
 "random_seed": 1229476284,
@@ -137,7 +137,7 @@ data = {
 "version": 1
 }
 view_zoom = 1.0
-view_offset = Vector2(213, -197)
+view_offset = Vector2(0, -197)
 new_name_counter = 7
 in_params = Array[ExtResource("2_ygdt0")]([])
 

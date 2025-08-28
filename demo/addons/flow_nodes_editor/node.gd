@@ -2,6 +2,8 @@
 class_name FlowNodeBase
 extends GraphNode
 
+# This represent the base class for all nodes forming the flow graph
+
 @export var settings: NodeSettings
 var rng : RandomNumberGenerator = RandomNumberGenerator.new()
 
@@ -26,6 +28,7 @@ var connectors_options_prefab = preload( "res://addons/flow_nodes_editor/connect
 
 # Filled during runtime
 var deps : Array[ Dictionary ]
+var dependants : Array[ Dictionary ]
 var eval_id : int = 0
 var err : String
 
@@ -129,6 +132,12 @@ func setError( new_err : String ):
 	err = new_err
 	redrawUI()
 		
+func setActivity( amount : float ):
+	if not err:
+		modulate = Color.WHITE + Color( amount, amount, amount, 0.0 )
+	else:
+		modulate = Color(1.0, 0.5, 0.5)
+		
 func _on_draw() -> void:
 	
 	if not settings:
@@ -136,10 +145,7 @@ func _on_draw() -> void:
 
 	if err:
 		var sz = 16 * ui_scale
-		self_modulate = Color(1.0, 0.5, 0.5)
 		draw_string( ThemeDB.fallback_font, Vector2(0,size.y + sz), err, HORIZONTAL_ALIGNMENT_LEFT, -1, sz )
-	else:
-		self_modulate = Color.WHITE
 		
 	if settings.inspect_enabled:
 		var clr : Color = Color.YELLOW / self_modulate

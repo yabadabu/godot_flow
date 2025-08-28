@@ -48,7 +48,7 @@ var input_sources := {} # key: Pair(to_node, to_port) -> value: Array[(from_node
 
 # Activate connections and nodes
 var active_conns_intensity = 0.0
-var active_conns = []
+var active_nodes = []
 
 var ui_scale = 1.0
 var node_types = { }
@@ -86,10 +86,11 @@ func setResourceToEdit( new_resource : FlowGraphResource, new_resource_owner : F
 	inspected_node = null
 	
 	FlowNodeIO.loadFromResource( self )
-
-	queueRegen()
+	
 	ctx.graph = current_resource
 	ctx.owner = resource_owner
+	markAllNodesAsDirty()
+	queueRegen()
 	populatePopupInputsMenu()
 
 func saveResource():
@@ -110,13 +111,17 @@ func _process(delta: float) -> void:
 		evalGraph()
 
 	# Update active connections
-	if active_conns_intensity > 0.0:
+	elif active_conns_intensity > 0.0:
 		active_conns_intensity -= 0.016 * 4
 		if active_conns_intensity < 0:
-			active_conns.clear()
-		for conn in active_conns:
-			gedit.set_connection_activity( conn[0], conn[1], conn[2], conn[3], active_conns_intensity )
-
+			active_conns_intensity = 0.0
+		for node in active_nodes:
+			node.setActivity( active_conns_intensity )
+			
+		if active_conns_intensity == 0:
+			active_nodes.clear()
+		gedit.queue_redraw()
+		
 func getNewName( suffix : String ):
 	new_name_counter += 1
 	return "id_%04d_%s" % [ new_name_counter, suffix ]
@@ -484,17 +489,21 @@ func _on_graph_edit_gui_input(event):
 				make_inspector_visible.call()
 		elif key == KEY_R:
 			if no_modifiers:
+				for node in getSelectedNodes():
+					node.dirty = true
 				evalGraph()
 
 func toggleDebug():
 	var nodes = getSelectedNodes()
 	for node in nodes:
+		node.dirty = true
 		node.settings.debug_enabled = !node.settings.debug_enabled
 		node.refreshFromSettings()
 
 func toggleDisabled():
 	var nodes = getSelectedNodes()
 	for node in nodes:
+		node.dirty = true
 		node.settings.disabled = !node.settings.disabled
 		node.refreshFromSettings()
 
@@ -507,6 +516,7 @@ func toggleInspection():
 		return
 	var node = nodes[0]
 	data_inspector.setNode( node )
+	node.dirty = true
 	node.refreshFromSettings()
 
 func addComment():
@@ -751,6 +761,50 @@ func removeGeneratedNodes():
 		resource_owner.remove_child( child )
 		child.queue_free()
 
+func getDirtyNodes() -> Array[ FlowNodeBase ]:
+	var nodes : Array[ FlowNodeBase ] = []
+	for child in gedit.get_children():
+		var node = child as FlowNodeBase
+		if not node:
+			continue
+		if node.dirty:
+			nodes.append( node )
+	return nodes
+
+func cacheConnections():
+	
+	# Clear all the arrays
+	for child in gedit.get_children():
+		var node = child as FlowNodeBase
+		if node:
+			node.deps.clear()
+			node.dependants.clear()
+			
+	# Add each connection to left and right sides
+	for conn in gedit.connections:
+		var src_node = gedit_nodes_by_name.get( conn.from_node )
+		var dst_node = gedit_nodes_by_name.get( conn.to_node )
+		if src_node and dst_node:
+			src_node.dependants.append( conn )
+			dst_node.deps.append( conn )
+
+	#for child in gedit.get_children():
+		#var node = child as FlowNodeBase
+		#if node:
+			#print( "Node: %s" % [ node.name ])
+			#print( "  deps: %s" % [ node.deps ])
+			#print( "  dependants: %s" % [ node.dependants ])
+
+func expandDirtyFlagToDependants( node : FlowNodeBase ):
+	#print( "%s is dirty" % [ node.name ] )
+	for out_conn in node.dependants:
+		#print( "  -> %s" % [ out_conn ])
+		var dst_node = gedit_nodes_by_name.get( out_conn.to_node )
+		if dst_node:
+			if not dst_node.dirty:
+				dst_node.dirty = true
+				expandDirtyFlagToDependants( dst_node )
+
 func evalGraph():
 	ctx.eval_id += 1
 	
@@ -759,27 +813,38 @@ func evalGraph():
 	# print( "evalGraph %d starts from %s" % [ ctx.eval_id, resource_owner.name if resource_owner else "null" ] )
 	removeGeneratedNodes()
 	
+	cacheConnections()
+	
 	active_conns_intensity = 1.0
-	active_conns.clear()
+	active_nodes.clear()
+	
+	var dirty_nodes := getDirtyNodes()
+	for node in dirty_nodes:
+		expandDirtyFlagToDependants( node )
+	dirty_nodes = getDirtyNodes()
+	#for node in dirty_nodes:
+		#print( "Dirty: %s" % node.name )
 	
 	var performance = []
 	#print( "getEvalOrder..." )
 	var nodes_to_eval = getEvalOrder( )
+		
 	for node in nodes_to_eval:
-		#print( "  Eval: %s (%d)" % [ node.name, node.eval_id ] )
+		#print( "  Eval: %s (%d) Dirty:%s" % [ node.name, node.eval_id, node.dirty ] )
 			
 		# The node has already been evaluated
-		if node.eval_id == ctx.eval_id:
+		if node.eval_id == ctx.eval_id or not node.dirty:
 			continue
 		
 		var time_node_start = Time.get_ticks_usec()
 		node.clearInputs()
 		for req in node.deps:
-			active_conns.append( [ req.from_node, req.from_port, req.to_node, req.to_port ] )
 			var req_node = gedit_nodes_by_name.get( req.from_node )
 			var data = req_node.get_output( req.from_port )
 			node.set_input( req.to_port, data )
+		active_nodes.append( node )
 	
+		#print( "Evaluating %s" % node.name )
 		if node.settings.disabled:
 			node.executedDisabled( ctx )
 		else:
@@ -789,6 +854,7 @@ func evalGraph():
 		if node.settings.inspect_enabled:
 			data_inspector.refresh()
 		node.setupDrawDebug()
+		node.dirty = false
 		var time_node_ends = Time.get_ticks_usec()
 		
 		if dump_performance:
@@ -813,6 +879,12 @@ func _on_button_save_pressed() -> void:
 		saveResource()
 		ResourceSaver.save(current_resource)
 
+func markAllNodesAsDirty():
+	for child in gedit.get_children():
+		var node = child as FlowNodeBase
+		if node:
+			node.dirty = true	
+
 func _on_button_regenerate_pressed() -> void:
 	#for key in input_sources.keys():
 		#print( key )	
@@ -821,6 +893,7 @@ func _on_button_regenerate_pressed() -> void:
 	#for conn in gedit.connections:
 		#print( conn )
 	dump_performance = true
+	markAllNodesAsDirty()
 	queueRegen()
 	#for n : FlowNodeBase in getSelectedNodes():
 		#print( "Node: %s  Ins:%d  Outs:%d" % [ n.name, n.num_in_ports, n.num_out_ports ])
@@ -850,3 +923,9 @@ func _on_graph_edit_paste_nodes_request():
 func _on_graph_edit_duplicate_nodes_request():
 	FlowNodeIO.duplicateSelecteddNodes( self )
 	
+func onEditorSceneChanged():
+	for child in gedit.get_children():
+		var node := child as FlowNodeBase
+		if node and node.getMeta().get( "scans_scene", false ):
+			node.dirty = true
+	regen_pending = true

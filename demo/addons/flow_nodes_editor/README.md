@@ -13,7 +13,6 @@
 	[ ] Substruct will read all input nodes..
 	[ ] partition
 [ ] Subgraphs / Loops?
-[ ] Do not update what it's not dirty
 [ ] Add noise to position <-- Improve noise
 [ ] Allow meta to define input requirements. Single vs Multiple/Accepted Types/Required
 [ ] Spline sampling interior in non grid pattern
@@ -23,6 +22,8 @@
 [ ] Test random colors for each node -> Graph Editor Settings
 [ ] add_attribute, if output is single stream with a type, set the color. Maybe make it generic
 [ ] Allow the popup menu to have sections. Custom SubGraphs/Resources/Folders maybe
+[X] Hightlight the node being evaluated rather than the connections
+[X] Do not update what it's not dirty
 [X] Introduce the mesh/spline data type
 	[X] NOdes of type Curve/Mesh
 	[X] Node to gather
