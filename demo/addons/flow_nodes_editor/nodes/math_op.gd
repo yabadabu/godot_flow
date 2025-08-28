@@ -5,7 +5,7 @@ func _init():
 	meta_node = {
 		"title" : "Math",
 		"settings" : MathOpNodeSettings,
-		"ins" : [{"label": "In A" }, {"label": "In B" }], 
+		"ins" : [{ "label": "In A", "multiple_connections" : false }, {"label": "In B", "multiple_connections" : false }], 
 		"outs" : [{ "label" : "Out" }],
 		"tooltip" : "Applies a math operation between two streams, storing the result in a new stream or overriding another.\nYou can read and write substreams like position.X",
 	}

@@ -647,11 +647,28 @@ func connect_nodes(from_node: StringName, from_port: int, to_node: StringName, t
 		input_sources.set( key, [])
 	input_sources[key].append([from_node, from_port])
 
+func findConnectionToNodeAndPort( node : FlowNodeBase, in_port : int ):
+	for conn in node.deps:
+		if conn.to_port == in_port:
+			return conn
+	return null
+
 func _on_graph_edit_connection_request(from_node: StringName, from_port: int, to_node: StringName, to_port: int) -> void:
 	var src_node = gedit_nodes_by_name.get( from_node )
 	var dst_node = gedit_nodes_by_name.get( to_node )
 	if not canConnect( src_node, from_port, dst_node, to_port ):
 		return
+	#print( "Conn request")
+	#print( "  from %s" % src_node )
+	#print( "    to %s" % dst_node )
+	
+	# Check if the input does not allow multiple connections
+	var to_port_meta = dst_node.getMeta().ins[ to_port ]
+	if not to_port_meta.get( "multiple_connections", true ):
+		var conn = findConnectionToNodeAndPort( dst_node, to_port )
+		if conn != null:
+			disconnect_nodes( conn.from_node, conn.from_port, conn.to_node, conn.to_port )
+	
 	connect_nodes( from_node, from_port, to_node, to_port )
 	queueSave()
 	queueRegen()
