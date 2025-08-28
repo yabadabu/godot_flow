@@ -932,4 +932,4 @@ func onEditorSceneChanged():
 		var node := child as FlowNodeBase
 		if node and node.getMeta().get( "scans_scene", false ):
 			node.dirty = true
-	regen_pending = true
+	queueRegen()
