@@ -145,8 +145,14 @@ class Data:
 		var big_container = stream.container
 		if sub_container.size() != big_container.size():
 			return "Container sizes do not match (%d vs %d)" % [sub_container.size(), big_container.size()]
+		#print( "big_container %s[%d] << %s" % [ big_container, subcomp_idx, sub_container ])
+		# Because we are mutating the container (part of it), we need to create
+		# a new copy of the original and insert it as the new current container
+		# Fixes bug expresion updating position.y and refreshing
+		big_container = big_container.duplicate()
 		for idx in range( big_container.size() ):
 			big_container[idx][ subcomp_idx ] = sub_container[idx]
+		stream.container = big_container
 		
 	func findStream( name : String ):
 		name = translateStreamName( name )

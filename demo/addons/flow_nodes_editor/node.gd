@@ -230,7 +230,7 @@ static func getFlowDataTypeFromObject( obj  ) -> FlowData.DataType:
 func exposedAsInputNode( prop ):
 	return true
 
-func get_exposed_params():
+func getExposedParams():
 	var meta := getMeta()
 	if meta.get( "hide_inputs", false ):
 		return []
@@ -282,7 +282,7 @@ func initFromScript():
 	var num_ins = ins.size()
 	var num_outs = outs.size()
 	
-	var exposed_params = get_exposed_params()
+	var exposed_params = getExposedParams()
 	var has_exposed_params = exposed_params.size() > 0
 	
 	# Access to my parent container editor
@@ -324,7 +324,6 @@ func initFromScript():
 	num_out_ports = num_outs
 	
 	# Delete current children
-	self.get_input_port_count()
 	clear_all_slots()
 	for child in get_children():
 		if child == draw_debug:
