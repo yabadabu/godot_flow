@@ -94,7 +94,9 @@ func execute( ctx : FlowData.EvaluationContext ):
 		for idx in range( _in_size ):
 			values[0] = idx
 			for k in range( containers.size() ):
-				values[ k0 + k ] = containers[k]
+				values[ k0 + k ] = containers[k][ idx ]
+			#if settings.trace:
+				#print( "  For %d : %s" % [ idx, values ])
 			if not evaluateAndSaveResult( idx, values ):
 				break
 		if settings.trace:
