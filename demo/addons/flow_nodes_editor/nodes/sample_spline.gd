@@ -125,6 +125,8 @@ func execute( ctx : FlowData.EvaluationContext ):
 	if uniform_interval < min_interval:
 		uniform_interval = min_interval
 		settings.uniform_interval = uniform_interval
+		
+	var adjust_to_borders : bool = getSettingValue( ctx, "adjust_to_borders" )
 	
 	if getSettingValue( ctx, "fill_curve" ):
 		for path_3d in path3d_nodes:
@@ -154,7 +156,12 @@ func execute( ctx : FlowData.EvaluationContext ):
 			var base = spos.size()
 			var curve_length := curve.get_baked_length()
 			var num_samples = curve.get_baked_points().size()
-			#print( "  curve: Base:%d Length:%f Samples:%d" % [ base, curve_length, num_samples ] )
+			var expected_length = num_samples * uniform_interval
+			var num_samples_float : float = num_samples - 1
+			#print( "  curve: Base:%d Length:%f vs %f Samples:%d" % [ base, curve_length, expected_length, num_samples ] )
+			if not adjust_to_borders:
+				num_samples_float = ( curve_length / uniform_interval )
+				num_samples = int( num_samples_float ) + 1
 			
 			if getSettingValue( ctx, "sample_segments_centers" ):
 				if num_samples > 2:
@@ -178,7 +185,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 				spos.resize( base + num_samples )
 				srot.resize( base + num_samples )
 				for idx in range( num_samples ):
-					var offset = idx * curve_length / float(num_samples - 1)
+					var offset = idx * curve_length / num_samples_float
 					var t : Transform3D = curve.sample_baked_with_rotation( offset )
 					spos[base + idx] = path_3d.transform * t.origin
 					
