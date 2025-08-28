@@ -7,11 +7,15 @@ func _init():
 		"settings" : CreateSplineNodeSettings,
 		"ins" : [{ "label": "In" }],
 		"outs" : [{ "label" : "Splines", "data_type": FlowData.DataType.NodePath }],
+		"tooltip" : 
+			"Generates a spline from all the input points." + 
+			""
 	}
 
 func spawnNode( root : Node, class_to_spawn ):
 	var new_node = class_to_spawn.new()
-	new_node.set_meta("flow_owner", name )	
+	#new_node.set_meta("flow_owner", name )	
+	new_node.owner = root
 	return new_node
 	
 func execute( ctx : FlowData.EvaluationContext ):
@@ -28,7 +32,6 @@ func execute( ctx : FlowData.EvaluationContext ):
 	root.add_child( path )
 	path.name = "Spline"
 	path.curve  = Curve3D.new()
-	path.owner = scene_root
 	var num_idxs : int = in_trs.size()
 	for idx in range( num_idxs ):
 		var pos : Vector3 = in_trs.positions[idx]
