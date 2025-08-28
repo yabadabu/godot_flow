@@ -203,6 +203,7 @@ func blueNoiseSampling( ctx : FlowData.EvaluationContext, in_trs : FlowData.Tran
 	var phase : float = getSettingValue( ctx, "phase" )
 	var point_size : Vector3 = Vector3.ONE * getSettingValue( ctx, "size")
 	var num_samples : int = getSettingValue( ctx, "num_samples" )
+	num_samples = maxi( 0, num_samples )
 
 	if blue_noise_samples.size() == 0:
 		precomputeBlueNoiseSamples()
@@ -224,13 +225,22 @@ func blueNoiseSampling( ctx : FlowData.EvaluationContext, in_trs : FlowData.Tran
 		var max_size : float = maxf( size.x, size.z )
 		var cell_size : Vector3 = Vector3( max_size, 1.0, max_size )
 		var base_j : int = settings.random_seed & 0xffff
+		var max_x = min( size.x, max_size ) * 0.5
+		var max_z = min( size.z, max_size ) * 0.5
 		for j in range( num_samples ):
 			var bn_idx : int = ( j + base_j ) & 0xffff
 			var bns : BNSample = blue_noise_samples[bn_idx]
-			spos[idx] = ( origin + Vector3(bns.u - 0.5, 0, bns.v - 0.5) * cell_size )
+			var p := Vector3(bns.u - 0.5, 0, bns.v - 0.5) * cell_size
+			if absf( p.x ) > max_x or absf( p.z ) > max_z:
+				continue
+			spos[idx] = transform * p
 			srot[idx] = ( rotation )
 			ssize[idx] = ( point_size )
 			idx += 1
+			
+		spos.resize( idx )
+		srot.resize( idx )
+		ssize.resize( idx )
 		
 func execute( ctx : FlowData.EvaluationContext ):
 	var in_data : FlowData.Data = get_input(0)
