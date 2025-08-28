@@ -47,7 +47,7 @@ var gedit_nodes_by_name = {}
 var input_sources := {} # key: Pair(to_node, to_port) -> value: Array[(from_node, from_port)]
 
 # Activate connections and nodes
-var active_conns_intensity = 0.0
+var active_intensity = 0.0
 var active_nodes = []
 
 var ui_scale = 1.0
@@ -111,14 +111,14 @@ func _process(delta: float) -> void:
 		evalGraph()
 
 	# Update active connections
-	elif active_conns_intensity > 0.0:
-		active_conns_intensity -= 0.016 * 4
-		if active_conns_intensity < 0:
-			active_conns_intensity = 0.0
+	elif active_intensity > 0.0:
+		active_intensity -= 0.016 * 4
+		if active_intensity < 0:
+			active_intensity = 0.0
 		for node in active_nodes:
-			node.setActivity( active_conns_intensity )
+			node.setActivity( active_intensity )
 			
-		if active_conns_intensity == 0:
+		if active_intensity == 0:
 			active_nodes.clear()
 		gedit.queue_redraw()
 		
@@ -804,7 +804,7 @@ func evalGraph():
 	
 	cacheConnections()
 	
-	active_conns_intensity = 1.0
+	active_intensity = 1.0
 	active_nodes.clear()
 	
 	var dirty_nodes := getDirtyNodes()
