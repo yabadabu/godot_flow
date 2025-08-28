@@ -345,15 +345,6 @@ func getRectOfNodes( nodes : Array[GraphNode] ):
 		r = r.expand( p1 )
 	return r
 
-# Get all connections aarriving to a specific node
-func getNodeInputConnections(node_name: StringName) -> Array[Dictionary]:
-	var conns : Array[Dictionary] = []	    # Connections coming INTO this node
-	var all_connections = gedit.get_connection_list()
-	for connection in all_connections:
-		if connection.to_node == node_name:
-			conns.append( connection )
-	return conns
-
 func localToGraphCoords( local_coords : Vector2 ):
 	#var view_zero_in_scroll_offset = gedit.scroll_offset / gedit.zoom
 	return ( gedit.scroll_offset + local_coords ) / gedit.zoom
@@ -712,12 +703,10 @@ func _on_graph_edit_connection_from_empty(to_node: StringName, to_port: int, rel
 	_on_graph_edit_popup_request( local_drop_position )
 
 func getDeps( node : FlowNodeBase ) -> Array[ FlowNodeBase ]:
-	node.deps = getNodeInputConnections( node.name )
 	var deps : Array[ FlowNodeBase ] = [ node ]
-	for dep in node.deps:
-		var dep_node = gedit_nodes_by_name.get( dep.from_node, null )
+	for conn in node.deps:
+		var dep_node = gedit_nodes_by_name.get( conn.from_node, null )
 		if not dep_node:
-			push_error( "Failed to find node %s in the graph" % dep.from_node )
 			continue
 		var req_deps = getDeps( dep_node )
 		deps.append_array( req_deps )

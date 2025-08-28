@@ -1,6 +1,6 @@
 === TODO
 [ ] Demos
-	[ ] Wall of rocks, picking a random point on the top
+	[X] Wall of rocks, picking a random point on the top
 	[ ] Path with random subscene, filter by attribute with rotations
 	[X] Sample surface of a mesh, create flowers or similar in the horizontal ground
 	[X] Mark an area with a spline, have a path remove all flowers

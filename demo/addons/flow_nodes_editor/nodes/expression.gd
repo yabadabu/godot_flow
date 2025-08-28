@@ -25,6 +25,7 @@ var _out_data : FlowData.Data
 func shorten(text: String) -> String:
 	return text.substr(0, 32) + "..." if text.length() > 32 else text
 	
+# Expose the local parameters of the expressions as parameters of the flow node 
 func getExposedParams():
 	var params = []
 	for arg_name in settings.args:
