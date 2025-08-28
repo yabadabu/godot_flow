@@ -429,11 +429,13 @@ func nodeOptionsChanged( expanded : bool ):
 	setupDrawDebug()
 	
 # This returns the current value of the input configuration taking into account potencial connections and overrides of the inputs
-func getSettingValue( ctx : FlowData.EvaluationContext, in_name : String ):
+func getSettingValue( ctx : FlowData.EvaluationContext, in_name : String, default_value = null):
 	var meta = getMeta()
 	var trace = meta.get( "trace", false )
 	
 	var value = settings.get( in_name )
+	if value == null:
+		value = default_value
 	if trace:
 		print( "Searching the current value of input %s in %d inputs at node %s. ByName:%s vs %s.   Meta:%s" % [ in_name, inputs.size(), name, args_ports_by_name, inputs, meta ] )
 	if args_ports_by_name.has( in_name ):

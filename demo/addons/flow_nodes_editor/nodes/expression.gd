@@ -7,7 +7,6 @@ func _init():
 		"settings" : ExpressionNodeSettings,
 		"ins" : [{ "label": "In" }], 
 		"outs" : [{ "label" : "Out" }],
-		"hide_inputs" : true,
 		"tooltip" : 
 			"Evaluates an expression and stores the result in the output stream\n" + 
 			" * When expose_arrays is set, the values of the point set are exposed as arrays\n" +
@@ -25,6 +24,22 @@ var _out_data : FlowData.Data
 	
 func shorten(text: String) -> String:
 	return text.substr(0, 32) + "..." if text.length() > 32 else text
+	
+func getExposedParams():
+	var params = []
+	for arg_name in settings.args:
+		var prop_gd_type = typeof( settings.args[ arg_name ] )
+		var data = {
+			"name" : arg_name,
+			"label" : editorDisplayName( arg_name ),
+			"type" : prop_gd_type,
+			"data_type" : getFlowDataTypeFromGdScriptType( prop_gd_type ),
+			"is_parameter" : true,
+			"port" : -1,
+		}	
+		params.append( data )	
+		#print( arg_name, settings.args[ arg_name ], data )
+	return params
 	
 func getTitle() -> String:
 	size = get_combined_minimum_size()
@@ -75,7 +90,14 @@ func execute( ctx : FlowData.EvaluationContext ):
 		setError("Failed parsing expression: %s" % _expression.get_error_text())
 		return
 	var values = [0, _in_size]
-	values.append_array( settings.args.values() )
+	for arg_name in settings.args:
+		var def_value = settings.args[ arg_name ]
+		var arg_value = getSettingValue( ctx, arg_name, def_value )
+		#print( "%s is %s vs %s" % [ arg_name, def_value, arg_value ] )
+		if arg_value != null:
+			values.append( arg_value )
+		else:
+			values.append( def_value )
 	
 	var container = null
 	if settings.expose_arrays:
