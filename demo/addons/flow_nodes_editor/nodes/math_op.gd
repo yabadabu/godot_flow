@@ -168,6 +168,9 @@ func execute( _ctx : FlowData.EvaluationContext ):
 				MathOpNodeSettings.eOperation.Modulo:
 					for i in num_elems:
 						outC[i] = fmod(inA[i], inB[i])
+				MathOpNodeSettings.eOperation.Frac:
+					for i in num_elems:
+						outC[i] = fmod(inA[i], inB[i])
 				MathOpNodeSettings.eOperation.Min:
 					for i in num_elems:
 						outC[i] = minf(inA[i], inB[i])
@@ -186,7 +189,7 @@ func execute( _ctx : FlowData.EvaluationContext ):
 					for i in num_elems:
 						outC[i] = pow( inA[i], inB[i] )
 				_:
-					setError( "Float vs Float operation not supported yet")
+					setError( "Float vs Float operation %s not supported yet" % MathOpNodeSettings.eOperation.keys()[ settings.operation ]  )
 			if settings.trace: print( "Math.Loop: %f (%d)" % [ Time.get_ticks_usec() - time_start, num_elems ] )
 			
 		elif sA.data_type == FlowData.DataType.Vector && sB.data_type == FlowData.DataType.Vector:
