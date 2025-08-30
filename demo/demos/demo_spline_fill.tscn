@@ -403,6 +403,7 @@ data = {
 "name": &"id_0047_sample_spline",
 "position": Vector2(185.02, 420),
 "settings": {
+"adjust_to_borders": true,
 "debug_color": Color(0.781464, 0.568812, 0.443646, 1),
 "debug_enabled": false,
 "debug_mode": 1,
@@ -432,6 +433,7 @@ data = {
 "debug_scale": 1.0,
 "disabled": false,
 "filter_by_class_name": "",
+"filter_by_name": "",
 "group_name": "",
 "import_metadata": false,
 "import_properties": Array[StringName]([]),

@@ -462,6 +462,7 @@ data = {
 "name": &"id_0086_sample_spline",
 "position": Vector2(260, 380),
 "settings": {
+"adjust_to_borders": true,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,

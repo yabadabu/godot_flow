@@ -894,6 +894,7 @@ data = {
 "name": &"id_0115_sample_spline",
 "position": Vector2(300, 810),
 "settings": {
+"adjust_to_borders": true,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
@@ -923,6 +924,7 @@ data = {
 "debug_scale": 1.0,
 "disabled": false,
 "filter_by_class_name": "",
+"filter_by_name": "",
 "group_name": "totem",
 "import_metadata": true,
 "import_properties": Array[StringName]([&"num_enemies"]),
@@ -988,6 +990,7 @@ data = {
 "name": &"id_0104_sample_spline",
 "position": Vector2(160, 330),
 "settings": {
+"adjust_to_borders": true,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,

@@ -225,4 +225,4 @@ refresh_inputs = Callable()
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
 
 [node name="RefPoint" type="Node3D" parent="." groups=["RefPoints"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.38174, 0.0712218, 2.26193)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.35342, 0.0712216, 1.59026)

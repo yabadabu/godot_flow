@@ -242,37 +242,6 @@ data = {
 "port": 0
 },
 "In B": {
-"connected": false,
-"port": 1
-}
-},
-"name": &"id_0011_math_op",
-"position": Vector2(800, 0),
-"settings": {
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 1,
-"debug_modulate_by": "",
-"debug_scale": 0.295,
-"disabled": false,
-"in_nameA": "row",
-"in_nameB": "",
-"inspect_enabled": false,
-"operation": 5,
-"out_name": "is_odd",
-"random_seed": 1733103425,
-"title": "Math",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "math_op"
-}, {
-"args_port": {
-"In A": {
-"connected": true,
-"port": 0
-},
-"In B": {
 "connected": true,
 "port": 1
 }
@@ -292,37 +261,6 @@ data = {
 "operation": 0,
 "out_name": "position.Z",
 "random_seed": 1076949034,
-"title": "Math",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "math_op"
-}, {
-"args_port": {
-"In A": {
-"connected": true,
-"port": 0
-},
-"In B": {
-"connected": false,
-"port": 1
-}
-},
-"name": &"id_0014_math_op",
-"position": Vector2(1020, 0),
-"settings": {
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_scale": 1.0,
-"disabled": false,
-"in_nameA": "is_odd",
-"in_nameB": "2",
-"inspect_enabled": false,
-"operation": 11,
-"out_name": "is_odd",
-"random_seed": 3801886254,
 "title": "Math",
 "trace": false
 },
@@ -537,9 +475,13 @@ data = {
 "connected": true,
 "port": 0
 },
+"adjust_to_borders": {
+"connected": false,
+"port": 3
+},
 "distance_attribute": {
 "connected": false,
-"port": 4
+"port": 5
 },
 "fill_curve": {
 "connected": false,
@@ -547,7 +489,7 @@ data = {
 },
 "sample_segments_centers": {
 "connected": false,
-"port": 3
+"port": 4
 },
 "uniform_interval": {
 "connected": true,
@@ -557,6 +499,7 @@ data = {
 "name": &"id_0023_sample_spline",
 "position": Vector2(300, 0),
 "settings": {
+"adjust_to_borders": true,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 1,
@@ -607,37 +550,6 @@ data = {
 "template": "add_attribute"
 }, {
 "args_port": {
-"In A": {
-"connected": true,
-"port": 0
-},
-"In B": {
-"connected": true,
-"port": 1
-}
-},
-"name": &"id_0013_math_op",
-"position": Vector2(1220, 0),
-"settings": {
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 1,
-"debug_modulate_by": "",
-"debug_scale": 0.295,
-"disabled": false,
-"in_nameA": "position.Z",
-"in_nameB": "new_attr",
-"inspect_enabled": false,
-"operation": 2,
-"out_name": "offset",
-"random_seed": 3775680099,
-"title": "Math",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "math_op"
-}, {
-"args_port": {
 "In": {
 "connected": false,
 "port": 0
@@ -667,12 +579,105 @@ data = {
 },
 "show_disconnected_inputs": false,
 "template": "add_attribute"
+}, {
+"args_port": {
+"In A": {
+"connected": true,
+"port": 0
+},
+"In B": {
+"connected": false,
+"port": 1
+}
+},
+"name": &"id_0011_math_op",
+"position": Vector2(800, 0),
+"settings": {
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 1,
+"debug_modulate_by": "",
+"debug_scale": 0.295,
+"disabled": false,
+"in_nameA": "row",
+"in_nameB": "",
+"inspect_enabled": false,
+"operation": 5,
+"out_name": "is_odd",
+"random_seed": 1733103425,
+"title": "Math",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "math_op"
+}, {
+"args_port": {
+"In A": {
+"connected": true,
+"port": 0
+},
+"In B": {
+"connected": false,
+"port": 1
+}
+},
+"name": &"id_0014_math_op",
+"position": Vector2(1020, 0),
+"settings": {
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_scale": 1.0,
+"disabled": false,
+"in_nameA": "is_odd",
+"in_nameB": "2",
+"inspect_enabled": true,
+"operation": 10,
+"out_name": "is_odd",
+"random_seed": 3801886254,
+"title": "Math",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "math_op"
+}, {
+"args_port": {
+"In A": {
+"connected": true,
+"port": 0
+},
+"In B": {
+"connected": true,
+"port": 1
+}
+},
+"name": &"id_0013_math_op",
+"position": Vector2(1220, 0),
+"settings": {
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 1,
+"debug_modulate_by": "",
+"debug_scale": 0.295,
+"disabled": false,
+"in_nameA": "position.Z",
+"in_nameB": "new_attr",
+"inspect_enabled": false,
+"operation": 2,
+"out_name": "offset",
+"random_seed": 3775680099,
+"title": "Math",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "math_op"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
-view_zoom = 0.564474
-view_offset = Vector2(189.028, -128.82)
+view_zoom = 1.0
+view_offset = Vector2(1013.44, -37.4551)
 new_name_counter = 51
 in_params = Array[ExtResource("2_frxqg")]([])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
@@ -700,7 +705,7 @@ graph = SubResource("Resource_dk6st")
 refresh_inputs = Callable()
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
 
-[node name="@MultiMeshInstance3D@34803" type="MultiMeshInstance3D" parent="FlowGraphNode3D"]
+[node name="@MultiMeshInstance3D@43552" type="MultiMeshInstance3D" parent="FlowGraphNode3D"]
 multimesh = SubResource("MultiMesh_kf2sw")
 metadata/flow_owner = &"id_0020_spawn_meshes"
 

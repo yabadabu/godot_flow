@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://bs1hqxveghk6s"]
 
-[ext_resource type="Script" uid="uid://bwkhpdoeua13e" path="res://demos/demo_table_view.gd" id="1_h6r0n"]
+[ext_resource type="Script" uid="uid://bwkhpdoeua13e" path="res://scenes/demo_table_view.gd" id="1_h6r0n"]
 [ext_resource type="PackedScene" uid="uid://b5a4uh306y0de" path="res://addons/flow_nodes_editor/visualization/table_view.tscn" id="2_tnki1"]
 
 [node name="DemoTableView" type="Control"]

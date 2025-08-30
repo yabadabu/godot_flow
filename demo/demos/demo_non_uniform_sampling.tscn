@@ -76,6 +76,7 @@ data = {
 "debug_scale": 1.0,
 "disabled": false,
 "filter_by_class_name": "",
+"filter_by_name": "",
 "group_name": "RefPoints",
 "import_metadata": true,
 "import_properties": Array[StringName]([]),
@@ -113,37 +114,6 @@ data = {
 "operation": 2,
 "out_name": "@last",
 "random_seed": 1671374794,
-"title": "Math",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "math_op"
-}, {
-"args_port": {
-"In A": {
-"connected": true,
-"port": 0
-},
-"In B": {
-"connected": false,
-"port": 1
-}
-},
-"name": &"id_0008_math_op",
-"position": Vector2(1380, 140),
-"settings": {
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "distance",
-"debug_scale": 1.0,
-"disabled": false,
-"in_nameA": "@last",
-"in_nameB": "4",
-"inspect_enabled": false,
-"operation": 16,
-"out_name": "@last",
-"random_seed": 2764706821,
 "title": "Math",
 "trace": false
 },
@@ -350,12 +320,43 @@ data = {
 },
 "show_disconnected_inputs": false,
 "template": "sample_mesh"
+}, {
+"args_port": {
+"In A": {
+"connected": true,
+"port": 0
+},
+"In B": {
+"connected": false,
+"port": 1
+}
+},
+"name": &"id_0008_math_op",
+"position": Vector2(1380, 140),
+"settings": {
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "distance",
+"debug_scale": 1.0,
+"disabled": false,
+"in_nameA": "@last",
+"in_nameB": "4",
+"inspect_enabled": false,
+"operation": 14,
+"out_name": "@last",
+"random_seed": 2764706821,
+"title": "Math",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "math_op"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
 view_zoom = 1.1
-view_offset = Vector2(86.87, 109.215)
+view_offset = Vector2(1016.87, 112.215)
 new_name_counter = 12
 in_params = Array[ExtResource("2_1mcnb")]([])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
@@ -376,4 +377,4 @@ transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 0, 0)
 mesh = SubResource("PlaneMesh_aj3gx")
 
 [node name="RefPoint" type="Node3D" parent="." groups=["RefPoints"]]
-transform = Transform3D(4.09574, 0, 0, 0, 1, 0, 0, 0, 7.63447, 0.412525, -0.668378, 2.63185)
+transform = Transform3D(10.6068, 0, 0, 0, 1, 0, 0, 0, 5.01689, 1.73201, -0.668378, -2.54627)
