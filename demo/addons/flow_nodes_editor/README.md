@@ -6,6 +6,7 @@
 	[X] Mark an area with a spline, have a path remove all flowers
 		[X] Change density based on the distance to the spline contour
 	[X] Bridge
+[ ] Match & Set is not taking into account the weight attr
 [ ] Support for multiple data in stream evaluation?
 	[ ] Debug
 	[ ] Generic Loop
@@ -15,7 +16,6 @@
 	[ ] partition
 [ ] Subgraphs / Loops?
 [ ] Add noise to position <-- Improve noise
-[ ] Allow meta to define input requirements. Single vs Multiple/Accepted Types/Required
 [ ] Spline sampling interior in non grid pattern
 [ ] Allow to filter rows in the inspector
 [ ] Support for Vector4/Color/PackedVector4Array -> Read SubAttributes / MathNode / SetAttribute / Use in Debug if exists
@@ -23,6 +23,7 @@
 [ ] Test random colors for each node -> Graph Editor Settings
 [ ] add_attribute, if output is single stream with a type, set the color. Maybe make it generic
 [ ] Allow the popup menu to have sections. Custom SubGraphs/Resources/Folders maybe
+[X] Allow meta to define input requirements. Single vs Multiple/Accepted Types/Required
 [X] Hightlight the node being evaluated rather than the connections
 [X] Do not update what it's not dirty
 [X] Introduce the mesh/spline data type
