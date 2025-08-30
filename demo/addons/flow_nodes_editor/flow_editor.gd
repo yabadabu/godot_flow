@@ -638,6 +638,10 @@ func disconnect_nodes(from_node: StringName, from_port: int, to_node: StringName
 	#print( "disconnect_nodes From:%s:%d To:%s:%d" % [ from_node, from_port, to_node, to_port ])
 	gedit.disconnect_node(from_node, from_port, to_node, to_port)
 	remove_input_source_target_connection( from_node, from_port, to_node, to_port )
+
+	var dst_node : FlowNodeBase = gedit_nodes_by_name.get( to_node )
+	if dst_node != null:
+		dst_node.dirty = true
 	
 func connect_nodes(from_node: StringName, from_port: int, to_node: StringName, to_port: int) -> void:
 	#print( "connect_nodes %s:%d -> %s:%d" % [ from_node, from_port, to_node, to_port ] )
@@ -646,6 +650,11 @@ func connect_nodes(from_node: StringName, from_port: int, to_node: StringName, t
 	if not input_sources.has(key):
 		input_sources.set( key, [])
 	input_sources[key].append([from_node, from_port])
+
+	var dst_node : FlowNodeBase = gedit_nodes_by_name.get( to_node )
+	if dst_node != null:
+		dst_node.dirty = true
+
 
 func findConnectionToNodeAndPort( node : FlowNodeBase, in_port : int ):
 	for conn in node.deps:
@@ -663,7 +672,7 @@ func _on_graph_edit_connection_request(from_node: StringName, from_port: int, to
 	#print( "    to %s" % dst_node )
 	
 	# Check if the input does not allow multiple connections
-	var to_port_meta = dst_node.getMeta().ins[ to_port ]
+	var to_port_meta = dst_node.getMeta().ins[ to_port ] if to_port < dst_node.getMeta().ins.size() else {}
 	if not to_port_meta.get( "multiple_connections", true ):
 		var conn = findConnectionToNodeAndPort( dst_node, to_port )
 		if conn != null:
