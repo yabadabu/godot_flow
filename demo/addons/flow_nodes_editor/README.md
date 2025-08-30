@@ -5,6 +5,7 @@
 	[X] Sample surface of a mesh, create flowers or similar in the horizontal ground
 	[X] Mark an area with a spline, have a path remove all flowers
 		[X] Change density based on the distance to the spline contour
+	[X] Bridge
 	
 [ ] Support for multiple data in stream evaluation?
 	[ ] Debug
