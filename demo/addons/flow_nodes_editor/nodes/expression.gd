@@ -7,7 +7,6 @@ func _init():
 		"settings" : ExpressionNodeSettings,
 		"ins" : [{ "label": "In" }], 
 		"outs" : [{ "label" : "Out" }],
-		"hide_inputs" : true,
 		"tooltip" : 
 			"Evaluates an expression and stores the result in the output stream\n" + 
 			" * When expose_arrays is set, the values of the point set are exposed as arrays\n" +
@@ -26,6 +25,23 @@ var _out_data : FlowData.Data
 func shorten(text: String) -> String:
 	return text.substr(0, 32) + "..." if text.length() > 32 else text
 	
+# Expose the local parameters of the expressions as parameters of the flow node 
+func getExposedParams():
+	var params = []
+	for arg_name in settings.args:
+		var prop_gd_type = typeof( settings.args[ arg_name ] )
+		var data = {
+			"name" : arg_name,
+			"label" : editorDisplayName( arg_name ),
+			"type" : prop_gd_type,
+			"data_type" : getFlowDataTypeFromGdScriptType( prop_gd_type ),
+			"is_parameter" : true,
+			"port" : -1,
+		}	
+		params.append( data )	
+		#print( arg_name, settings.args[ arg_name ], data )
+	return params
+	
 func getTitle() -> String:
 	size = get_combined_minimum_size()
 	if settings.title != "Expression":
@@ -41,18 +57,18 @@ func evaluateAndSaveResult( idx : int, values : Array ):
 		if _container == null:
 			var flow_data_type = getFlowDataTypeFromGdScriptType( typeof( result ))
 			if flow_data_type != FlowData.DataType.Invalid:
-				_container = _out_data.addStream( settings.out_name, flow_data_type )
-				_container.resize( _in_size )
+				var stream = newStream( _in_size, settings.out_name, result, flow_data_type )
 				if settings.trace:
-					print( "Created container of type %d" % [ flow_data_type ])
+					print( "Created container of type %d %s" % [ flow_data_type, stream ])
+				_container = stream.container
 			else:
 				setError( "Failed to identify type of expression result at index %d" % idx )
 				return false
-		#print( "Added[%d] = %s" % [ idx, result ])
+		if settings.trace:
+			print( "Added[%d] = %s" % [ idx, result ])
 		_container[idx] = result
 		return true
-	else:
-		setError( _expression.get_error_text() )	
+	setError( _expression.get_error_text() )	
 	return false
 
 func execute( ctx : FlowData.EvaluationContext ):
@@ -75,7 +91,14 @@ func execute( ctx : FlowData.EvaluationContext ):
 		setError("Failed parsing expression: %s" % _expression.get_error_text())
 		return
 	var values = [0, _in_size]
-	values.append_array( settings.args.values() )
+	for arg_name in settings.args:
+		var def_value = settings.args[ arg_name ]
+		var arg_value = getSettingValue( ctx, arg_name, def_value )
+		#print( "%s is %s vs %s" % [ arg_name, def_value, arg_value ] )
+		if arg_value != null:
+			values.append( arg_value )
+		else:
+			values.append( def_value )
 	
 	var container = null
 	if settings.expose_arrays:
@@ -94,8 +117,15 @@ func execute( ctx : FlowData.EvaluationContext ):
 		for idx in range( _in_size ):
 			values[0] = idx
 			for k in range( containers.size() ):
-				values[ k0 + k ] = containers[k]
+				values[ k0 + k ] = containers[k][ idx ]
+			#if settings.trace:
+				#print( "  For %d : %s" % [ idx, values ])
 			if not evaluateAndSaveResult( idx, values ):
 				break
+		if settings.trace:
+			print( "Registering stream %s with %s" % [ settings.out_name, _container ])
+		var err_msg = _out_data.registerStream( settings.out_name, _container )
+		if err_msg:
+			setError( err_msg )
 			
 	set_output( 0, _out_data )

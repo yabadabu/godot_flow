@@ -2,6 +2,8 @@
 class_name FlowNodeBase
 extends GraphNode
 
+# This represent the base class for all nodes forming the flow graph
+
 @export var settings: NodeSettings
 var rng : RandomNumberGenerator = RandomNumberGenerator.new()
 
@@ -26,6 +28,7 @@ var connectors_options_prefab = preload( "res://addons/flow_nodes_editor/connect
 
 # Filled during runtime
 var deps : Array[ Dictionary ]
+var dependants : Array[ Dictionary ]
 var eval_id : int = 0
 var err : String
 
@@ -129,6 +132,12 @@ func setError( new_err : String ):
 	err = new_err
 	redrawUI()
 		
+func setActivity( amount : float ):
+	if not err:
+		modulate = Color.WHITE + Color( amount, amount, amount, 0.0 )
+	else:
+		modulate = Color(1.0, 0.5, 0.5)
+		
 func _on_draw() -> void:
 	
 	if not settings:
@@ -136,10 +145,7 @@ func _on_draw() -> void:
 
 	if err:
 		var sz = 16 * ui_scale
-		self_modulate = Color(1.0, 0.5, 0.5)
 		draw_string( ThemeDB.fallback_font, Vector2(0,size.y + sz), err, HORIZONTAL_ALIGNMENT_LEFT, -1, sz )
-	else:
-		self_modulate = Color.WHITE
 		
 	if settings.inspect_enabled:
 		var clr : Color = Color.YELLOW / self_modulate
@@ -167,18 +173,22 @@ static func editorDisplayName(property_name: String) -> String:
 		parts[i] = parts[i].capitalize()
 	return " ".join(parts)
 
-static func getColorForGDScriptType( gd_type : int ) -> Color:
-	match( gd_type ):
-		TYPE_BOOL:
+static func getColorForFlowDataType( data_type : FlowData.DataType ) -> Color:
+	match( data_type ):
+		FlowData.DataType.Bool:
 			return Color.RED
-		TYPE_INT:
+		FlowData.DataType.Int:
 			return Color.CYAN
-		TYPE_FLOAT:
+		FlowData.DataType.Float:
 			return Color.WEB_GREEN
-		TYPE_VECTOR3:
+		FlowData.DataType.Vector:
 			return Color.BLUE_VIOLET
-		TYPE_STRING:
+		FlowData.DataType.String:
 			return Color.YELLOW
+		FlowData.DataType.NodePath:
+			return Color.SKY_BLUE
+		FlowData.DataType.NodeMesh:
+			return Color.MAGENTA
 	return Color.WHEAT
 
 static func getGdScriptTypeForFlowDataType( data_type : FlowData.DataType ) -> int:
@@ -220,7 +230,7 @@ static func getFlowDataTypeFromObject( obj  ) -> FlowData.DataType:
 func exposedAsInputNode( prop ):
 	return true
 
-func get_exposed_params():
+func getExposedParams():
 	var meta := getMeta()
 	if meta.get( "hide_inputs", false ):
 		return []
@@ -272,7 +282,7 @@ func initFromScript():
 	var num_ins = ins.size()
 	var num_outs = outs.size()
 	
-	var exposed_params = get_exposed_params()
+	var exposed_params = getExposedParams()
 	var has_exposed_params = exposed_params.size() > 0
 	
 	# Access to my parent container editor
@@ -314,7 +324,6 @@ func initFromScript():
 	num_out_ports = num_outs
 	
 	# Delete current children
-	self.get_input_port_count()
 	clear_all_slots()
 	for child in get_children():
 		if child == draw_debug:
@@ -343,11 +352,15 @@ func initFromScript():
 			var in_name = in_data.get( "name", in_data.label )
 			
 			set_slot_enabled_left( idx, true )
+			
 			# Change color
-			if in_data.has( "type"):
-				var color = getColorForGDScriptType( in_data.type )	
+			var data_type = in_data.get( "data_type", FlowData.DataType.Invalid )
+			if data_type == FlowData.DataType.Invalid and in_data.has( "type"):
+				data_type = getFlowDataTypeFromGdScriptType( in_data.type )
+			if data_type != FlowData.DataType.Invalid:
+				var color = getColorForFlowDataType( data_type )	
 				set_slot_color_left( idx, color )
-				set_slot_type_left( idx, in_data.type )
+				set_slot_type_left( idx, data_type )
 				
 			in_data.port = idx
 			ctrl.setData( in_data )
@@ -363,10 +376,16 @@ func initFromScript():
 			if out_data:
 				lbl_out.text = out_data.label
 				set_slot_enabled_right( idx, true )
-				if out_data.has( "type"):
-					var color = getColorForGDScriptType( out_data.type )
+					
+				# Change color
+				var data_type = out_data.get( "data_type", FlowData.DataType.Invalid )
+				if data_type == FlowData.DataType.Invalid and out_data.has( "type"):
+					data_type = getFlowDataTypeFromGdScriptType( out_data.type )
+				if data_type != FlowData.DataType.Invalid:
+					var color = getColorForFlowDataType( data_type )	
 					set_slot_color_right( idx, color )
-					set_slot_type_right( idx, out_data.type )
+					set_slot_type_right( idx, data_type )					
+					
 		else:
 			lbl_out.text = ""
 	
@@ -410,11 +429,13 @@ func nodeOptionsChanged( expanded : bool ):
 	setupDrawDebug()
 	
 # This returns the current value of the input configuration taking into account potencial connections and overrides of the inputs
-func getSettingValue( ctx : FlowData.EvaluationContext, in_name : String ):
+func getSettingValue( ctx : FlowData.EvaluationContext, in_name : String, default_value = null):
 	var meta = getMeta()
 	var trace = meta.get( "trace", false )
 	
 	var value = settings.get( in_name )
+	if value == null:
+		value = default_value
 	if trace:
 		print( "Searching the current value of input %s in %d inputs at node %s. ByName:%s vs %s.   Meta:%s" % [ in_name, inputs.size(), name, args_ports_by_name, inputs, meta ] )
 	if args_ports_by_name.has( in_name ):
@@ -442,32 +463,78 @@ func getSettingValue( ctx : FlowData.EvaluationContext, in_name : String ):
 						return new_value
 	return value
 
+func newStream( size : int, new_name : String, init_value, data_type : FlowData.DataType ):
+	var new_container = FlowData.Data.newContainerOfType( data_type )
+	new_container.resize( size )
+	if typeof(init_value) == TYPE_CALLABLE:
+		var fn : Callable = init_value
+		match data_type:
+			FlowData.DataType.Bool:
+				var typed_container : PackedByteArray = new_container
+				for idx in size:
+					typed_container[idx] = fn.call(idx)
+			FlowData.DataType.Int:
+				var typed_container : PackedInt32Array = new_container
+				for idx in size:
+					typed_container[idx] = fn.call(idx)
+			FlowData.DataType.Float:
+				var typed_container : PackedFloat32Array = new_container
+				for idx in size:
+					typed_container[idx] = fn.call(idx)
+			FlowData.DataType.Vector:
+				var typed_container : PackedVector3Array = new_container
+				for idx in size:
+					typed_container[idx] = fn.call(idx)
+			FlowData.DataType.String:
+				var typed_container : PackedStringArray = new_container
+				for idx in size:
+					typed_container[idx] = fn.call(idx)
+			FlowData.DataType.Resource:
+				var typed_container : Array = new_container
+				for idx in size:
+					typed_container[idx] = fn.call(idx)
+			_:
+				push_error( "newStream(%d) type not supported" % [ data_type ])
+				return null
+	else:
+		new_container.fill( init_value )
+	return { 
+		"data_type" : data_type,
+		"container" : new_container,
+		"name" : new_name
+	}
+	
 func newFloatStream( size : int, new_name : String, init_value ):
-	var new_container = PackedFloat32Array()
-	new_container.resize( size )
-	if typeof(init_value) == TYPE_CALLABLE:
-		var fn : Callable = init_value
-		for idx in size:
-			new_container[idx] = fn.call(idx)
-	else:
-		new_container.fill( init_value )
-	return { 
-		"data_type" : FlowData.DataType.Float,
-		"container" : new_container,
-		"name" : new_name
-	}
+	return newStream( size, new_name, init_value, FlowData.DataType.Float )
 
-func newVector3Stream( size : int, new_name : String, init_value ):
-	var new_container = PackedVector3Array()
-	new_container.resize( size )
-	if typeof(init_value) == TYPE_CALLABLE:
-		var fn : Callable = init_value
-		for idx in size:
-			new_container[idx] = fn.call(idx)
-	else:
-		new_container.fill( init_value )
-	return { 
-		"data_type" : FlowData.DataType.Vector,
-		"container" : new_container,
-		"name" : new_name
-	}
+func getSceneRootNode3d( current : Node3D ) -> Node3D:
+	while current and current.get_parent_node_3d():
+		current = current.get_parent_node_3d()
+	return current
+
+func findNodesMatchingFilters( ctx : FlowData.EvaluationContext, filter_by_class_name : String ) -> Array[ Node3D ]:
+
+	var group_name = getSettingValue( ctx, "group_name" )
+	
+	var all_nodes : Array[Node] = []
+	#var scene_root = ctx.owner.get_tree().root
+	if group_name:
+		all_nodes = ctx.owner.get_tree().get_nodes_in_group( group_name )
+	elif ctx.owner:
+		var root = getSceneRootNode3d( ctx.owner )
+		all_nodes = root.get_children()
+	
+	if settings.trace:
+		print( "all_nodes", all_nodes )
+	
+	# Filter to only include nodes in the current scene
+	var scene_nodes : Array[ Node3D ] = []
+	for node in all_nodes:
+		var node3d := node as Node3D
+		if node3d:
+			if filter_by_class_name and not node3d.is_class( filter_by_class_name ):
+				if settings.trace:
+					print( "%s.%s discarted by class_name %s" % [ node3d.name, node3d.get_class(), filter_by_class_name ])
+				continue
+			scene_nodes.append(node3d)
+	return scene_nodes

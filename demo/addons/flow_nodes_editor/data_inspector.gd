@@ -112,6 +112,9 @@ func onColumnBegins( cell : DataTableContainer.CellContents ):
 	elif stream.data_type == FlowData.DataType.Resource:
 		tv.setCellCallback( getCellContentsResource )
 		cell.alignment = HORIZONTAL_ALIGNMENT_LEFT
+	elif stream.data_type == FlowData.DataType.NodePath or stream.data_type == FlowData.DataType.NodeMesh:
+		tv.setCellCallback( getCellContentsNode )
+		cell.alignment = HORIZONTAL_ALIGNMENT_LEFT
 		
 func getCellContentsVectorX(cell : DataTableContainer.CellContents ):
 	cell.text = fmt( container[ cell.row ].x )
@@ -140,6 +143,10 @@ func getCellContentsString(cell : DataTableContainer.CellContents ):
 func getCellContentsResource(cell : DataTableContainer.CellContents ):
 	var res = container[ cell.row ] as Resource
 	cell.text = res.resource_path if res else ""
+			
+func getCellContentsNode(cell : DataTableContainer.CellContents ):
+	var node = container[ cell.row ] as Node3D
+	cell.text = ( "$" + node.name ) if node else ""
 		
 func refresh():
 	

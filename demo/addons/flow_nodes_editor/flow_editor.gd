@@ -47,13 +47,12 @@ var gedit_nodes_by_name = {}
 var input_sources := {} # key: Pair(to_node, to_port) -> value: Array[(from_node, from_port)]
 
 # Activate connections and nodes
-var active_conns_intensity = 0.0
-var active_conns = []
+var active_intensity = 0.0
+var active_nodes = []
 
 var ui_scale = 1.0
 var node_types = { }
 
-var popup_menu = null
 var popup_menu_inputs : PopupMenu
 var popup_on_over_input = null
 const IDM_PROMOTE_TO_PARAMETER : int = 100
@@ -87,10 +86,11 @@ func setResourceToEdit( new_resource : FlowGraphResource, new_resource_owner : F
 	inspected_node = null
 	
 	FlowNodeIO.loadFromResource( self )
-
-	queueRegen()
+	
 	ctx.graph = current_resource
 	ctx.owner = resource_owner
+	markAllNodesAsDirty()
+	queueRegen()
 	populatePopupInputsMenu()
 
 func saveResource():
@@ -111,13 +111,17 @@ func _process(delta: float) -> void:
 		evalGraph()
 
 	# Update active connections
-	if active_conns_intensity > 0.0:
-		active_conns_intensity -= 0.016 * 4
-		if active_conns_intensity < 0:
-			active_conns.clear()
-		for conn in active_conns:
-			gedit.set_connection_activity( conn[0], conn[1], conn[2], conn[3], active_conns_intensity )
-
+	elif active_intensity > 0.0:
+		active_intensity -= 0.016 * 4
+		if active_intensity < 0:
+			active_intensity = 0.0
+		for node in active_nodes:
+			node.setActivity( active_intensity )
+			
+		if active_intensity == 0:
+			active_nodes.clear()
+		gedit.queue_redraw()
+		
 func getNewName( suffix : String ):
 	new_name_counter += 1
 	return "id_%04d_%s" % [ new_name_counter, suffix ]
@@ -128,6 +132,7 @@ func registerNodeType( node_type_name, file ):
 	if not loaded_class:
 		push_error("Failed to load class %s" % full_res_path )
 		return
+	print( "Loading class %s" % full_res_path )
 	var instance = loaded_class.new() as FlowNodeBase
 	var meta = instance.getMeta()
 	meta.factory = loaded_class
@@ -160,7 +165,7 @@ func populatePopupInputsMenu():
 		popup_menu_inputs.add_item( "No inputs defined", -1 )
 		popup_menu_inputs.set_item_disabled(0, true)
 
-func populatePopupMenu():
+func populatePopupMenu() -> PopupMenu:
 	min_id = 1000
 	max_id = min_id
 	menu_ids = {}
@@ -174,18 +179,38 @@ func populatePopupMenu():
 	#pm.add_item( "Clear", 0, KEY_NONE )
 	#pm.add_separator( "", -1 )
 	
+	var required_input_type := FlowData.DataType.Invalid
+	var required_output_type := FlowData.DataType.Invalid
+	if auto_connect_from_node:
+		var from_node = gedit_nodes_by_name.get( auto_connect_from_node )
+		if from_node:
+			var meta = from_node.getMeta()
+			var oport = meta.outs[ auto_connect_from_port ]
+			required_input_type = oport.get( "data_type", FlowData.DataType.Invalid )
+		print( "auto_connect_from_node: %s:%d -> %d" % [ auto_connect_from_node, auto_connect_from_port, required_input_type])
+		
+	if auto_connect_to_node:
+		var to_node = gedit_nodes_by_name.get( auto_connect_to_node )
+		if to_node:
+			var meta = to_node.getMeta()
+			var iport = meta.ins[ auto_connect_to_port ]
+			required_output_type = iport.get( "data_type", FlowData.DataType.Invalid )
+		print( "auto_connect_to_node: %s:%d -> %d" % [auto_connect_to_node, auto_connect_to_port, required_output_type ])
+
 	# A submenu to invoke the inputs declared in the pcg
-	if popup_menu_inputs:
-		popup_menu_inputs.queue_free()
-	popup_menu_inputs = PopupMenu.new()
-	popup_menu_inputs.name = "inputs_menu"
-	popup_menu_inputs.id_pressed.connect( _on_inputs_menu_id_pressed )
-	pm.add_child(popup_menu_inputs)
-	pm.add_submenu_item("Inputs...", popup_menu_inputs.name)
-	pm.add_separator( "", -1 )
-	populatePopupInputsMenu()
-	
-	var idx = pm.get_child_count() + 1
+	var idx := 0
+	if required_input_type == FlowData.DataType.Invalid:
+		if popup_menu_inputs:
+			popup_menu_inputs.queue_free()
+		popup_menu_inputs = PopupMenu.new()
+		popup_menu_inputs.name = "inputs_menu"
+		popup_menu_inputs.id_pressed.connect( _on_inputs_menu_id_pressed )
+		pm.add_child(popup_menu_inputs)
+		pm.add_submenu_item("Inputs...", popup_menu_inputs.name)
+		pm.add_separator( "", -1 )
+		populatePopupInputsMenu()
+		idx = pm.get_child_count() + 1
+		
 	for key in node_types.keys():
 		var node_meta = node_types[ key ]
 		var label = node_meta.title
@@ -193,9 +218,23 @@ func populatePopupMenu():
 		if not node_meta.get( "auto_register", true):
 			print( "Adding menu %s skip (id:%d)" % [ label, max_id ])
 			continue
+			
+		if required_input_type !=FlowData.DataType.Invalid or required_output_type != FlowData.DataType.Invalid:
+			#print( "Candidate node meta: %s" % node_meta )
+			var has_compatible_port = false
+			var ports = node_meta.ins if required_input_type != FlowData.DataType.Invalid else node_meta.outs
+			var required_type = required_input_type if required_input_type != FlowData.DataType.Invalid else required_output_type
+			for port in ports:
+				var port_type = port.get( "data_type", 0 )
+				if port_type == required_type:
+					has_compatible_port = true
+					break
+			if not has_compatible_port:
+				continue
+				
 		#print( "Adding menu %s -> %d" % [ label, max_id ])
 		menu_ids[ max_id ] = key
-		pm.add_item(label, max_id, KEY_NONE )
+		pm.add_item(label, max_id, KEY_NONE)
 		if node_meta.has( "tooltip" ):
 			pm.set_item_tooltip( idx, node_meta.get( "tooltip" ) )
 		idx += 1
@@ -306,15 +345,6 @@ func getRectOfNodes( nodes : Array[GraphNode] ):
 		r = r.expand( p1 )
 	return r
 
-# Get all connections aarriving to a specific node
-func getNodeInputConnections(node_name: StringName) -> Array[Dictionary]:
-	var conns : Array[Dictionary] = []	    # Connections coming INTO this node
-	var all_connections = gedit.get_connection_list()
-	for connection in all_connections:
-		if connection.to_node == node_name:
-			conns.append( connection )
-	return conns
-
 func localToGraphCoords( local_coords : Vector2 ):
 	#var view_zero_in_scroll_offset = gedit.scroll_offset / gedit.zoom
 	return ( gedit.scroll_offset + local_coords ) / gedit.zoom
@@ -386,10 +416,11 @@ func canConnect( src : FlowNodeBase, src_port : int, dst : FlowNodeBase, dst_por
 		
 	var src_type = src.get_output_port_type( src_port )
 	var dst_type = dst.get_input_port_type( dst_port )
-	if src_type and dst_type:
+	if (src_type and dst_type) or (src_type == FlowData.DataType.NodePath) or (src_type == FlowData.DataType.NodeMesh):
 		if src_type != dst_type:
 			push_warning( "Node types do not match %d vs %d" % [ src_type, dst_type ])
 			return false
+		
 	#print( "canConnect OK %s:%d (%d)-> %s:%d (%d)" % [ src.name, src_port, src_type, dst.name, dst_port, dst_type ] )
 	return true
 	
@@ -429,7 +460,7 @@ func _on_graph_edit_gui_input(event):
 			if no_modifiers:
 				deleteSelectedNodes()
 		elif key == KEY_A:
-			if no_modifiers:
+			if evt_key.shift_pressed:
 				openAddMenu()
 		elif key == KEY_C:
 			if no_modifiers:
@@ -449,17 +480,21 @@ func _on_graph_edit_gui_input(event):
 				make_inspector_visible.call()
 		elif key == KEY_R:
 			if no_modifiers:
+				for node in getSelectedNodes():
+					node.dirty = true
 				evalGraph()
 
 func toggleDebug():
 	var nodes = getSelectedNodes()
 	for node in nodes:
+		node.dirty = true
 		node.settings.debug_enabled = !node.settings.debug_enabled
 		node.refreshFromSettings()
 
 func toggleDisabled():
 	var nodes = getSelectedNodes()
 	for node in nodes:
+		node.dirty = true
 		node.settings.disabled = !node.settings.disabled
 		node.refreshFromSettings()
 
@@ -472,6 +507,7 @@ func toggleInspection():
 		return
 	var node = nodes[0]
 	data_inspector.setNode( node )
+	node.dirty = true
 	node.refreshFromSettings()
 
 func addComment():
@@ -563,13 +599,15 @@ func _on_graph_edit_popup_request(at_position):
 		#print( "Show popup associated to %s.%s" % [ node.name, popup_on_over_input.getInLabel().text ] )
 		return
 	
-	popup_menu = null
-	if not popup_menu:
-		popup_menu = populatePopupMenu()
-	var p = popup_menu
+	var p := populatePopupMenu()
 	p.size = Vector2( 400,200 )
 	p.position = get_screen_position() + at_position
 	p.popup()
+	p.close_requested.connect( func():
+		auto_connect_from_node = ""
+		auto_connect_to_node = ""
+		)
+	
 	
 func openAddMenu():
 	var pos = get_local_mouse_position()
@@ -609,11 +647,28 @@ func connect_nodes(from_node: StringName, from_port: int, to_node: StringName, t
 		input_sources.set( key, [])
 	input_sources[key].append([from_node, from_port])
 
+func findConnectionToNodeAndPort( node : FlowNodeBase, in_port : int ):
+	for conn in node.deps:
+		if conn.to_port == in_port:
+			return conn
+	return null
+
 func _on_graph_edit_connection_request(from_node: StringName, from_port: int, to_node: StringName, to_port: int) -> void:
 	var src_node = gedit_nodes_by_name.get( from_node )
 	var dst_node = gedit_nodes_by_name.get( to_node )
 	if not canConnect( src_node, from_port, dst_node, to_port ):
 		return
+	#print( "Conn request")
+	#print( "  from %s" % src_node )
+	#print( "    to %s" % dst_node )
+	
+	# Check if the input does not allow multiple connections
+	var to_port_meta = dst_node.getMeta().ins[ to_port ]
+	if not to_port_meta.get( "multiple_connections", true ):
+		var conn = findConnectionToNodeAndPort( dst_node, to_port )
+		if conn != null:
+			disconnect_nodes( conn.from_node, conn.from_port, conn.to_node, conn.to_port )
+	
 	connect_nodes( from_node, from_port, to_node, to_port )
 	queueSave()
 	queueRegen()
@@ -653,22 +708,22 @@ func _on_graph_edit_disconnection_request(from_node: StringName, from_port: int,
 func _on_graph_edit_connection_to_empty(from_node: StringName, from_port: int, release_position: Vector2) -> void:
 	auto_connect_from_node = from_node
 	auto_connect_from_port = from_port
+	auto_connect_to_node = ""
 	local_drop_position = release_position
 	_on_graph_edit_popup_request( local_drop_position )
 
 func _on_graph_edit_connection_from_empty(to_node: StringName, to_port: int, release_position: Vector2) -> void:
 	auto_connect_to_node = to_node
 	auto_connect_to_port = to_port
+	auto_connect_from_node = ""
 	local_drop_position = release_position
 	_on_graph_edit_popup_request( local_drop_position )
 
 func getDeps( node : FlowNodeBase ) -> Array[ FlowNodeBase ]:
-	node.deps = getNodeInputConnections( node.name )
 	var deps : Array[ FlowNodeBase ] = [ node ]
-	for dep in node.deps:
-		var dep_node = gedit_nodes_by_name.get( dep.from_node, null )
+	for conn in node.deps:
+		var dep_node = gedit_nodes_by_name.get( conn.from_node, null )
 		if not dep_node:
-			push_error( "Failed to find node %s in the graph" % dep.from_node )
 			continue
 		var req_deps = getDeps( dep_node )
 		deps.append_array( req_deps )
@@ -712,6 +767,50 @@ func removeGeneratedNodes():
 		resource_owner.remove_child( child )
 		child.queue_free()
 
+func getDirtyNodes() -> Array[ FlowNodeBase ]:
+	var nodes : Array[ FlowNodeBase ] = []
+	for child in gedit.get_children():
+		var node = child as FlowNodeBase
+		if not node:
+			continue
+		if node.dirty:
+			nodes.append( node )
+	return nodes
+
+func cacheConnections():
+	
+	# Clear all the arrays
+	for child in gedit.get_children():
+		var node = child as FlowNodeBase
+		if node:
+			node.deps.clear()
+			node.dependants.clear()
+			
+	# Add each connection to left and right sides
+	for conn in gedit.connections:
+		var src_node = gedit_nodes_by_name.get( conn.from_node )
+		var dst_node = gedit_nodes_by_name.get( conn.to_node )
+		if src_node and dst_node:
+			src_node.dependants.append( conn )
+			dst_node.deps.append( conn )
+
+	#for child in gedit.get_children():
+		#var node = child as FlowNodeBase
+		#if node:
+			#print( "Node: %s" % [ node.name ])
+			#print( "  deps: %s" % [ node.deps ])
+			#print( "  dependants: %s" % [ node.dependants ])
+
+func expandDirtyFlagToDependants( node : FlowNodeBase ):
+	#print( "%s is dirty" % [ node.name ] )
+	for out_conn in node.dependants:
+		#print( "  -> %s" % [ out_conn ])
+		var dst_node = gedit_nodes_by_name.get( out_conn.to_node )
+		if dst_node:
+			if not dst_node.dirty:
+				dst_node.dirty = true
+				expandDirtyFlagToDependants( dst_node )
+
 func evalGraph():
 	ctx.eval_id += 1
 	
@@ -720,27 +819,38 @@ func evalGraph():
 	# print( "evalGraph %d starts from %s" % [ ctx.eval_id, resource_owner.name if resource_owner else "null" ] )
 	removeGeneratedNodes()
 	
-	active_conns_intensity = 1.0
-	active_conns.clear()
+	cacheConnections()
+	
+	active_intensity = 1.0
+	active_nodes.clear()
+	
+	var dirty_nodes := getDirtyNodes()
+	for node in dirty_nodes:
+		expandDirtyFlagToDependants( node )
+	dirty_nodes = getDirtyNodes()
+	#for node in dirty_nodes:
+		#print( "Dirty: %s" % node.name )
 	
 	var performance = []
 	#print( "getEvalOrder..." )
 	var nodes_to_eval = getEvalOrder( )
+		
 	for node in nodes_to_eval:
-		#print( "  Eval: %s (%d)" % [ node.name, node.eval_id ] )
+		#print( "  Eval: %s (%d) Dirty:%s" % [ node.name, node.eval_id, node.dirty ] )
 			
 		# The node has already been evaluated
-		if node.eval_id == ctx.eval_id:
+		if node.eval_id == ctx.eval_id or not node.dirty:
 			continue
 		
 		var time_node_start = Time.get_ticks_usec()
 		node.clearInputs()
 		for req in node.deps:
-			active_conns.append( [ req.from_node, req.from_port, req.to_node, req.to_port ] )
 			var req_node = gedit_nodes_by_name.get( req.from_node )
 			var data = req_node.get_output( req.from_port )
 			node.set_input( req.to_port, data )
+		active_nodes.append( node )
 	
+		#print( "Evaluating %s" % node.name )
 		if node.settings.disabled:
 			node.executedDisabled( ctx )
 		else:
@@ -750,6 +860,7 @@ func evalGraph():
 		if node.settings.inspect_enabled:
 			data_inspector.refresh()
 		node.setupDrawDebug()
+		node.dirty = false
 		var time_node_ends = Time.get_ticks_usec()
 		
 		if dump_performance:
@@ -768,12 +879,17 @@ func evalGraph():
 
 func _on_button_reload_pressed() -> void:
 	scanAvailableNodes()
-	popup_menu = null
 
 func _on_button_save_pressed() -> void:
 	if current_resource:
 		saveResource()
 		ResourceSaver.save(current_resource)
+
+func markAllNodesAsDirty():
+	for child in gedit.get_children():
+		var node = child as FlowNodeBase
+		if node:
+			node.dirty = true	
 
 func _on_button_regenerate_pressed() -> void:
 	#for key in input_sources.keys():
@@ -783,6 +899,7 @@ func _on_button_regenerate_pressed() -> void:
 	#for conn in gedit.connections:
 		#print( conn )
 	dump_performance = true
+	markAllNodesAsDirty()
 	queueRegen()
 	#for n : FlowNodeBase in getSelectedNodes():
 		#print( "Node: %s  Ins:%d  Outs:%d" % [ n.name, n.num_in_ports, n.num_out_ports ])
@@ -812,3 +929,13 @@ func _on_graph_edit_paste_nodes_request():
 func _on_graph_edit_duplicate_nodes_request():
 	FlowNodeIO.duplicateSelecteddNodes( self )
 	
+func onEditorSceneChanged():
+	# When a node in the scene changes, just mark disty all nodes
+	# which can potentially become dirty
+	# This also triggers as dirty all scan_* nodes when we change
+	# anything in another of our nodes. Not very good
+	for child in gedit.get_children():
+		var node := child as FlowNodeBase
+		if node and node.getMeta().get( "scans_scene", false ):
+			node.dirty = true
+	queueRegen()

@@ -100,7 +100,7 @@ func onSelectedGraphNodeChanged( node : FlowGraphNode3D, prop_name: String ):
 
 func _on_history_changed( ):
 	#print("Something changed in the editor (undo/redo history updated)")	
-	graph_dock.regen_pending = true
+	graph_dock.onEditorSceneChanged()
 
 func _process( elapsed : float ):
 	var scene_root = get_editor_interface().get_edited_scene_root()

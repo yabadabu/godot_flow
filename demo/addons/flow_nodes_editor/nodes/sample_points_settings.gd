@@ -8,6 +8,7 @@ enum eDistribution {
 	UniformGrid,
 	QuasiRandom2D,
 	QuasiRandom3D,
+	BlueNoise2D,
 }
 
 @export var distribution : eDistribution = eDistribution.QuasiRandom2D:
@@ -30,6 +31,8 @@ enum eDistribution {
 @export var out_group_id : String
 @export var groups : Array[int] = [ 32 ]
 
+@export var num_samples : int = 64
+
 func _init():
 	super._init()
 	resource_name = "Sample Points Settings"
@@ -40,9 +43,14 @@ func isUniformGridParam( name : String ) -> bool:
 func isQuasiRandomParam( name : String ) -> bool:
 	return name == "phase" or name == "size" or name == "out_group_id" or name == "groups"
 
+func isBlueNoiseParam( name : String ) -> bool:
+	return name == "num_samples" or name == "size"
+
 # This control if the param is visible in the property inspector
 func exposeParam( name : String ) -> bool:
 	# This must return true except for the specific parameters that depend on the enum
 	if distribution == eDistribution.UniformGrid:
 		return not isQuasiRandomParam( name )
+	if distribution == eDistribution.BlueNoise2D:
+		return isBlueNoiseParam( name ) or (not isQuasiRandomParam( name ) and not isUniformGridParam( name ))
 	return not isUniformGridParam( name )

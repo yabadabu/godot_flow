@@ -7,9 +7,8 @@ func _init():
 	meta_node = {
 		"title" : "Sample Spline",
 		"settings" : SampleSplineNodeSettings,
-		"ins" : [],
+		"ins" : [{ "label": "Splines", "data_type": FlowData.DataType.NodePath }],
 		"outs" : [{ "label" : "Out" }],
-		#"trace" : true
 	}
 	
 func get_polygon_bounds(polygon: PackedVector2Array) -> Rect2:
@@ -28,22 +27,6 @@ func get_polygon_bounds(polygon: PackedVector2Array) -> Rect2:
 		max_y = max(max_y, point.y)
 	
 	return Rect2(min_x, min_y, max_x - min_x, max_y - min_y)	
-
-func findNodesOfType(root: Node, type_name: String) -> Array[Node]:
-	var found_nodes: Array[Node] = []
-	
-	# Check if current node matches
-	if root.get_class() == type_name:
-		found_nodes.append(root)
-	
-	var required_meta_bool = settings.get( "required_meta_bool" )
-	
-	# Recursively check children
-	for child in root.get_children():
-		if !required_meta_bool or child.get_meta(required_meta_bool, false):
-			found_nodes.append_array(findNodesOfType(child, type_name))
-	
-	return found_nodes	
 
 func points3d_to_polygon2d(points3d : PackedVector3Array) -> PackedVector2Array:
 	var num_points := points3d.size()
@@ -122,14 +105,15 @@ func rasterizeCurveInXZ( curve : Curve3D, uniform_interval : float, base : int )
 	return new_points
 
 func execute( ctx : FlowData.EvaluationContext ):
-	
-	var root = EditorInterface.get_edited_scene_root()
-	if not root:
-		return null
 		
 	var trace := settings.trace
 		
-	var path3d_nodes = findNodesOfType(root, "Path3D")
+	var in_data = get_input(0)
+	var path3d_nodes = in_data.getContainerChecked( "node", FlowData.DataType.NodePath )
+	if path3d_nodes == null:
+		setError( "Input are not splines")
+		return null
+	#print( "path3d_nodes", path3d_nodes)
 
 	var output := FlowData.Data.new()
 	output.addCommonStreams( 0 )
@@ -141,6 +125,8 @@ func execute( ctx : FlowData.EvaluationContext ):
 	if uniform_interval < min_interval:
 		uniform_interval = min_interval
 		settings.uniform_interval = uniform_interval
+		
+	var adjust_to_borders : bool = getSettingValue( ctx, "adjust_to_borders" )
 	
 	if getSettingValue( ctx, "fill_curve" ):
 		for path_3d in path3d_nodes:
@@ -170,6 +156,12 @@ func execute( ctx : FlowData.EvaluationContext ):
 			var base = spos.size()
 			var curve_length := curve.get_baked_length()
 			var num_samples = curve.get_baked_points().size()
+			var expected_length = num_samples * uniform_interval
+			var num_samples_float : float = num_samples - 1
+			#print( "  curve: Base:%d Length:%f vs %f Samples:%d" % [ base, curve_length, expected_length, num_samples ] )
+			if not adjust_to_borders:
+				num_samples_float = ( curve_length / uniform_interval )
+				num_samples = int( num_samples_float ) + 1
 			
 			if getSettingValue( ctx, "sample_segments_centers" ):
 				if num_samples > 2:
@@ -189,17 +181,19 @@ func execute( ctx : FlowData.EvaluationContext ):
 						var b = Basis.looking_at( front )
 						srot[base + idx] = FlowData.basisToEuler( b )
 						ssize[base + idx] = Vector3( 1.0, 1.0, front.length() )
-			
 			else:
 				spos.resize( base + num_samples )
 				srot.resize( base + num_samples )
 				for idx in range( num_samples ):
-					var offset = idx * curve_length / float(num_samples - 1)
+					var offset = idx * curve_length / num_samples_float
 					var t : Transform3D = curve.sample_baked_with_rotation( offset )
 					spos[base + idx] = path_3d.transform * t.origin
 					
 					var b : Basis = path_3d.transform.basis * t.basis
 					srot[base + idx] = FlowData.basisToEuler( b )
+
+					#print( "%d : %s %s" % [ idx, spos[ base+idx], srot[ base+idx ] ])
+
 		uniform_interval = 1.0
 				
 	# All the samples have the same size

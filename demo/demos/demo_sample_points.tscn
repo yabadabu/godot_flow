@@ -25,21 +25,7 @@ cte_string = ""
 [sub_resource type="Resource" id="Resource_twxpo"]
 script = ExtResource("3_berhf")
 data = {
-"frames": [{
-"attached": Array[StringName]([&"id_0019_remap", &"id_0020_select", &"id_0018_distance", &"id_0017_sample_spline"]),
-"name": &"id_0021_comment",
-"position": Vector2(740, 159),
-"size": Vector2(823, 249),
-"tint_color": Color(0.282353, 0.239216, 0.545098, 1),
-"title": "Distance to the curve, select points near"
-}, {
-"attached": Array[StringName]([&"id_0033_sample_points"]),
-"name": &"id_0034_comment",
-"position": Vector2(560, -41),
-"size": Vector2(270, 169),
-"tint_color": Color(0.282353, 0.239216, 0.545098, 1),
-"title": "Change Distribution Type"
-}],
+"frames": [],
 "links": [{
 "from_node": &"id_0001_scan_nodes",
 "from_port": 0,
@@ -65,12 +51,6 @@ data = {
 "to_node": &"id_0003_make_vector",
 "to_port": 2
 }, {
-"from_node": &"id_0017_sample_spline",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0018_distance",
-"to_port": 1
-}, {
 "from_node": &"id_0018_distance",
 "from_port": 0,
 "keep_alive": false,
@@ -83,46 +63,35 @@ data = {
 "to_node": &"id_0020_select",
 "to_port": 0
 }, {
-"from_node": &"id_0033_sample_points",
+"from_node": &"id_0035_sample_points",
 "from_port": 0,
 "keep_alive": false,
 "to_node": &"id_0018_distance",
 "to_port": 0
 }, {
+"from_node": &"id_0017_sample_spline",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0018_distance",
+"to_port": 1
+}, {
+"from_node": &"id_0040_scan_splines",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0017_sample_spline",
+"to_port": 0
+}, {
 "from_node": &"id_0002_math_op",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0033_sample_points",
+"to_node": &"id_0035_sample_points",
 "to_port": 0
 }],
-"min_pos": Vector2(-60, 240),
+"min_pos": Vector2(-60, 260),
 "nodes": [{
 "args_port": {},
-"name": &"id_0017_sample_spline",
-"position": Vector2(780, 280),
-"settings": {
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_scale": 1.0,
-"disabled": false,
-"distance_attribute": "distance",
-"fill_curve": false,
-"inspect_enabled": false,
-"random_seed": 3607972186,
-"required_meta_bool": &"",
-"sample_segments_centers": false,
-"title": "Sample Spline",
-"trace": false,
-"uniform_interval": 0.2
-},
-"show_disconnected_inputs": false,
-"template": "sample_spline"
-}, {
-"args_port": {},
 "name": &"id_0014_input_Padding",
-"position": Vector2(0, 200),
+"position": Vector2(0, 180),
 "settings": {
 "data_type": 2,
 "debug_color": Color(1, 1, 1, 1),
@@ -141,13 +110,48 @@ data = {
 "template": "input_Padding"
 }, {
 "args_port": {
+"x": {
+"connected": true,
+"port": 0
+},
+"y": {
+"connected": false,
+"port": 1
+},
+"z": {
+"connected": true,
+"port": 2
+}
+},
+"name": &"id_0003_make_vector",
+"position": Vector2(180, 140),
+"settings": {
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"out_name": "Vector",
+"random_seed": 3123266162,
+"title": "Make Vector",
+"trace": false,
+"x": 2.0,
+"y": 10.49,
+"z": 2.0
+},
+"show_disconnected_inputs": true,
+"template": "make_vector"
+}, {
+"args_port": {
 "In": {
 "connected": true,
 "port": 0
 }
 },
 "name": &"id_0019_remap",
-"position": Vector2(1200, 200),
+"position": Vector2(1200, 180),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
@@ -167,35 +171,35 @@ data = {
 "template": "remap"
 }, {
 "args_port": {
-"In": {
+"In A": {
 "connected": true,
 "port": 0
 },
-"Target": {
+"In B": {
 "connected": true,
 "port": 1
 }
 },
-"name": &"id_0018_distance",
-"position": Vector2(1000, 200),
+"name": &"id_0002_math_op",
+"position": Vector2(360, 60),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
-"debug_modulate_by": "distance",
+"debug_modulate_by": "",
 "debug_scale": 1.0,
 "disabled": false,
-"in_nameA": "position",
-"in_nameB": "position",
+"in_nameA": "size",
+"in_nameB": "@last",
 "inspect_enabled": false,
-"max_distance": 0.0,
-"out_name": "distance",
-"random_seed": 2293053265,
-"title": "Distance",
+"operation": 0,
+"out_name": "size",
+"random_seed": 3078533786,
+"title": "Math",
 "trace": false
 },
 "show_disconnected_inputs": false,
-"template": "distance"
+"template": "math_op"
 }, {
 "args_port": {
 "In": {
@@ -204,7 +208,7 @@ data = {
 }
 },
 "name": &"id_0020_select",
-"position": Vector2(1400, 200),
+"position": Vector2(1400, 180),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": true,
@@ -226,51 +230,41 @@ data = {
 "In": {
 "connected": true,
 "port": 0
+},
+"Target": {
+"connected": true,
+"port": 1
 }
 },
-"name": &"id_0033_sample_points",
-"position": Vector2(600, 0),
+"name": &"id_0018_distance",
+"position": Vector2(1000, 180),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
-"debug_enabled": true,
+"debug_enabled": false,
 "debug_mode": 0,
-"debug_modulate_by": "",
+"debug_modulate_by": "distance",
 "debug_scale": 1.0,
 "disabled": false,
-"distribution": 1,
-"groups": Array[int]([2747]),
+"in_nameA": "position",
+"in_nameB": "position",
 "inspect_enabled": false,
-"max_x": 100,
-"max_y": 1,
-"max_z": 80,
-"new_size_factor": 0.165,
-"out_group_id": "",
-"phase": 0.195,
-"random_seed": 1145997859,
-"sampling_distance": 0.2,
-"size": 0.035,
-"title": "Sample Points",
+"max_distance": 0.0,
+"out_name": "distance",
+"random_seed": 2293053265,
+"title": "Distance",
 "trace": false
 },
 "show_disconnected_inputs": false,
-"template": "sample_points"
+"template": "distance"
 }, {
 "args_port": {
-"x": {
+"Splines": {
 "connected": true,
 "port": 0
-},
-"y": {
-"connected": false,
-"port": 1
-},
-"z": {
-"connected": true,
-"port": 2
 }
 },
-"name": &"id_0003_make_vector",
-"position": Vector2(180, 160),
+"name": &"id_0017_sample_spline",
+"position": Vector2(780, 260),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
@@ -278,21 +272,41 @@ data = {
 "debug_modulate_by": "",
 "debug_scale": 1.0,
 "disabled": false,
+"distance_attribute": "distance",
+"fill_curve": false,
 "inspect_enabled": false,
-"out_name": "Vector",
-"random_seed": 3123266162,
-"title": "Make Vector",
+"random_seed": 3607972186,
+"sample_segments_centers": false,
+"title": "Sample Spline",
 "trace": false,
-"x": 2.0,
-"y": 10.49,
-"z": 2.0
+"uniform_interval": 0.2
 },
-"show_disconnected_inputs": true,
-"template": "make_vector"
+"show_disconnected_inputs": false,
+"template": "sample_spline"
+}, {
+"args_port": {},
+"name": &"id_0040_scan_splines",
+"position": Vector2(620, 300),
+"settings": {
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_scale": 1.0,
+"disabled": false,
+"group_name": "",
+"inspect_enabled": false,
+"random_seed": 42996258,
+"required_meta_bool": &"",
+"title": "Scan Splines",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "scan_splines"
 }, {
 "args_port": {},
 "name": &"id_0001_scan_nodes",
-"position": Vector2(180, 20),
+"position": Vector2(180, 0),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
@@ -301,7 +315,6 @@ data = {
 "debug_scale": 1.0,
 "disabled": false,
 "filter_by_class_name": "Path3D",
-"filter_by_name": "",
 "group_name": "",
 "import_metadata": false,
 "import_properties": Array[StringName]([]),
@@ -315,42 +328,45 @@ data = {
 "template": "scan_nodes"
 }, {
 "args_port": {
-"In A": {
+"In": {
 "connected": true,
 "port": 0
-},
-"In B": {
-"connected": true,
-"port": 1
 }
 },
-"name": &"id_0002_math_op",
-"position": Vector2(360, 80),
+"name": &"id_0035_sample_points",
+"position": Vector2(620, 60),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
+"debug_enabled": true,
+"debug_mode": 1,
 "debug_modulate_by": "",
-"debug_scale": 1.0,
+"debug_scale": -0.065,
 "disabled": false,
-"in_nameA": "size",
-"in_nameB": "@last",
+"distribution": 3,
+"groups": Array[int]([2410]),
 "inspect_enabled": false,
-"operation": 0,
-"out_name": "size",
-"random_seed": 3078533786,
-"title": "Math",
+"max_x": 64,
+"max_y": 1,
+"max_z": 64,
+"new_size_factor": 1.0,
+"num_samples": 2651,
+"out_group_id": "",
+"phase": 0.205,
+"random_seed": 7279,
+"sampling_distance": 0.5,
+"size": 0.035,
+"title": "Sample Points",
 "trace": false
 },
 "show_disconnected_inputs": false,
-"template": "math_op"
+"template": "sample_points"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
-view_zoom = 0.909091
-view_offset = Vector2(340.63, -63.9976)
-new_name_counter = 34
+view_zoom = 0.660711
+view_offset = Vector2(42.6418, -60.9203)
+new_name_counter = 40
 in_params = Array[ExtResource("2_tllc8")]([SubResource("Resource_wusrb")])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 
@@ -496,7 +512,6 @@ data = {
 "debug_scale": 1.0,
 "disabled": false,
 "filter_by_class_name": "",
-"filter_by_name": "",
 "group_name": "BigPoint",
 "import_metadata": false,
 "import_properties": Array[StringName]([]),
@@ -565,6 +580,7 @@ data = {
 "max_y": 32,
 "max_z": 32,
 "new_size_factor": 0.67,
+"num_samples": 64,
 "out_group_id": "type",
 "phase": 0.355,
 "random_seed": 4003151073,
@@ -576,11 +592,15 @@ data = {
 "show_disconnected_inputs": true,
 "template": "sample_points"
 }, {
-"args_port": {},
-"name": &"id_0019_assets",
-"position": Vector2(340, 200),
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0021_spawn_meshes",
+"position": Vector2(980, 80),
 "settings": {
-"assets": Array[ExtResource("4_tllc8")]([SubResource("Resource_dwp87"), SubResource("Resource_v1s42"), SubResource("Resource_tejo6"), SubResource("Resource_2u10u")]),
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
@@ -588,12 +608,14 @@ data = {
 "debug_scale": 1.0,
 "disabled": false,
 "inspect_enabled": false,
-"random_seed": 604158908,
-"title": "Assets",
+"mesh": ExtResource("6_twxpo"),
+"mesh_attribute": "asset",
+"random_seed": 4174041606,
+"title": "Spawn Meshes",
 "trace": false
 },
 "show_disconnected_inputs": false,
-"template": "assets"
+"template": "spawn_meshes"
 }, {
 "args_port": {
 "Attributes": {
@@ -632,6 +654,25 @@ data = {
 "show_disconnected_inputs": true,
 "template": "match_and_set"
 }, {
+"args_port": {},
+"name": &"id_0019_assets",
+"position": Vector2(340, 200),
+"settings": {
+"assets": Array[ExtResource("4_tllc8")]([SubResource("Resource_dwp87"), SubResource("Resource_v1s42"), SubResource("Resource_tejo6"), SubResource("Resource_2u10u")]),
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"random_seed": 604158908,
+"title": "Assets",
+"trace": true
+},
+"show_disconnected_inputs": false,
+"template": "assets"
+}, {
 "args_port": {
 "In": {
 "connected": true,
@@ -661,37 +702,12 @@ data = {
 },
 "show_disconnected_inputs": false,
 "template": "transform"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0021_spawn_meshes",
-"position": Vector2(980, 80),
-"settings": {
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"mesh": ExtResource("6_twxpo"),
-"mesh_attribute": "asset",
-"random_seed": 4174041606,
-"title": "Spawn Meshes",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "spawn_meshes"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
-view_zoom = 0.826446
-view_offset = Vector2(406.659, -226.779)
+view_zoom = 0.564474
+view_offset = Vector2(-13.5095, -239.967)
 new_name_counter = 23
 in_params = Array[ExtResource("2_tllc8")]([SubResource("Resource_berhf"), SubResource("Resource_6f1cc"), SubResource("Resource_2t1fq"), SubResource("Resource_8r07d")])
 
@@ -741,19 +757,19 @@ graph = SubResource("Resource_tllc8")
 refresh_inputs = Callable()
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
 
-[node name="@MultiMeshInstance3D@41306" type="MultiMeshInstance3D" parent="FlowGraphNode3D2"]
+[node name="@MultiMeshInstance3D@27095" type="MultiMeshInstance3D" parent="FlowGraphNode3D2"]
 multimesh = SubResource("MultiMesh_twxpo")
 metadata/flow_owner = &"id_0021_spawn_meshes"
 
-[node name="@MultiMeshInstance3D@41307" type="MultiMeshInstance3D" parent="FlowGraphNode3D2"]
+[node name="@MultiMeshInstance3D@27096" type="MultiMeshInstance3D" parent="FlowGraphNode3D2"]
 multimesh = SubResource("MultiMesh_6f1cc")
 metadata/flow_owner = &"id_0021_spawn_meshes"
 
-[node name="@MultiMeshInstance3D@41308" type="MultiMeshInstance3D" parent="FlowGraphNode3D2"]
+[node name="@MultiMeshInstance3D@27097" type="MultiMeshInstance3D" parent="FlowGraphNode3D2"]
 multimesh = SubResource("MultiMesh_2t1fq")
 metadata/flow_owner = &"id_0021_spawn_meshes"
 
-[node name="@MultiMeshInstance3D@41309" type="MultiMeshInstance3D" parent="FlowGraphNode3D2"]
+[node name="@MultiMeshInstance3D@27098" type="MultiMeshInstance3D" parent="FlowGraphNode3D2"]
 multimesh = SubResource("MultiMesh_8r07d")
 metadata/flow_owner = &"id_0021_spawn_meshes"
 

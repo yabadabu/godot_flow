@@ -7,27 +7,11 @@ func _init():
 	meta_node = {
 		"title" : "Sample Mesh",
 		"settings" : SampleMeshNodeSettings,
-		"ins" : [],
+		"ins" : [{ "label": "Meshes", "data_type": FlowData.DataType.NodeMesh }],
 		"outs" : [{ "label" : "Out" }],
 		#"trace" : true
 	}
 	
-func findNodesOfType(root: Node, type_name: String) -> Array[Node]:
-	var found_nodes: Array[Node] = []
-	
-	# Check if current node matches
-	if root.get_class() == type_name:
-		found_nodes.append(root)
-	
-	var required_meta_bool = false # settings.get( "required_meta_bool" )
-	
-	# Recursively check children
-	for child in root.get_children():
-		if !required_meta_bool or child.get_meta(required_meta_bool, false):
-			found_nodes.append_array(findNodesOfType(child, type_name))
-	
-	return found_nodes
-
 ## Uniform surface sampling on a MeshInstance3D
 ## - If `n` > 0, returns exactly n points.
 ## - Else if `density` > 0, returns round(total_area * density) points.
@@ -168,8 +152,12 @@ func execute( ctx : FlowData.EvaluationContext ):
 	if not root:
 		return null
 		
-	var nodes = findNodesOfType(root, "MeshInstance3D")
-
+	var in_data = get_input(0)
+	var nodes = in_data.getContainerChecked( "node", FlowData.DataType.NodeMesh )
+	if nodes == null:
+		setError( "Input are not meshes")
+		return null		
+		
 	var output := FlowData.Data.new()
 	output.addCommonStreams( 0 )
 	var spos := output.getVector3Container( FlowData.AttrPosition )

@@ -5,56 +5,14 @@ func _init():
 	meta_node = {
 		"title" : "Scan Nodes",
 		"settings" : ScanNodesNodeSettings,
+		"scans_scene" : true,
 		"ins" : [],
 		"outs" : [{ "label" : "Out" }],
-		"tooltip" : "Generate points from existing non-graph nodes in the scene\nCan filter by class name, group.\nMetadata values can be optioanlly imported\nThe node can import properties of the nodes, even with a\nsubpath property like mesh:text if the nodes are a MeshInstance3D with meshes of type TextMesh.",
+		"tooltip" : "Generate points from existing non-flowgraph nodes in the scene\nCan filter by class name, group.\nMetadata values can optionally be imported\nYou can also import properties of the nodes, even with a\nsubpath property like mesh:text if the nodes are a MeshInstance3D with meshes of type TextMesh.",
 	}
 	
 # material[0]:albedo_color
 # name
-
-func get_scene_root_node3d( current : Node3D ) -> Node3D:
-	while current and current.get_parent_node_3d():
-		current = current.get_parent_node_3d()
-	return current
-
-func find_nodes_matching_filters( ctx : FlowData.EvaluationContext ) -> Array[ Node3D ]:
-	
-	var group_name = getSettingValue( ctx, "group_name" )
-	var filter_by_name = getSettingValue( ctx, "filter_by_name" )
-	var filter_by_class_name = getSettingValue( ctx, "filter_by_class_name" )
-		
-	var all_nodes : Array[Node] = []
-	#var scene_root = ctx.owner.get_tree().root
-	if group_name:
-		all_nodes = ctx.owner.get_tree().get_nodes_in_group( group_name )
-	elif ctx.owner:
-		var root = get_scene_root_node3d( ctx.owner )
-		all_nodes = root.get_children()
-	
-	if settings.trace:
-		print( "all_nodes", all_nodes )
-	
-	# Filter to only include nodes in the current scene
-	var scene_nodes : Array[ Node3D ] = []
-	for node in all_nodes:
-		var node3d := node as Node3D
-		if node3d:
-			if filter_by_class_name and not node3d.is_class( filter_by_class_name ):
-				if settings.trace:
-					print( "%s.%s discarted by class_name %s" % [ node3d.name, node3d.get_class(), filter_by_class_name ])
-				continue
-				
-			if filter_by_name:
-				print( "Checking if %s is in %s" % [ filter_by_name, node3d.name ])
-				if not filter_by_name in node3d.name:
-					if settings.trace:
-						print( "%s.%s discarted by name %s" % [ node3d.name, node3d.name, filter_by_name ])
-					continue
-				
-		#if scene_root.is_ancestor_of(node):
-			scene_nodes.append(node3d)
-	return scene_nodes
 
 func importMetaData( output, nodes ):
 	var nsamples = nodes.size()
@@ -180,7 +138,8 @@ func get_combined_aabb(root: Node3D) -> AABB:
 func execute( ctx : FlowData.EvaluationContext ):
 	var output := FlowData.Data.new()
 	
-	var nodes = find_nodes_matching_filters( ctx )
+	var filter_by_class_name = getSettingValue( ctx, "filter_by_class_name" )
+	var nodes = findNodesMatchingFilters( ctx, filter_by_class_name )
 	
 	var nsamples = nodes.size()
 	output.addCommonStreams( nsamples )

@@ -1,6 +1,15 @@
 @tool
 extends FlowNodeBase
 
+var blue_noise_image : Image = preload("res://addons/flow_nodes_editor/resources/bluenoise256.png" )
+
+class BNSample:
+	var key : int
+	var u : float
+	var v : float
+
+static var blue_noise_samples : Array[BNSample] = []
+
 func _init():
 	meta_node = {
 		"title" : "Sample Points",
@@ -117,18 +126,18 @@ func quasiRandomSampling( ctx : FlowData.EvaluationContext, in_trs : FlowData.Tr
 	if save_group_id:
 		out_group_container = output.addStream( settings.out_group_id, FlowData.DataType.Int )
 
-	var num_samples := 0
+	var qs_num_samples := 0
 	for val : int in settings.groups:
-		num_samples += val
+		qs_num_samples += val
 		
-	if num_samples < 0:
-		num_samples = 0
+	if qs_num_samples < 0:
+		qs_num_samples = 0
 	
 	for i : int in in_trs.size():
 		
 		# Alloc num_samples
 		var idx := spos.size()
-		var new_size := idx + num_samples
+		var new_size := idx + qs_num_samples
 		spos.resize( new_size )
 		srot.resize( new_size )
 		ssize.resize( new_size )
@@ -147,8 +156,8 @@ func quasiRandomSampling( ctx : FlowData.EvaluationContext, in_trs : FlowData.Tr
 		var color_idx := 0
 		var max_j : int = settings.groups[color_idx]
 	
-		#print( "num_samples is %d. Max_j starts at %d " % [ num_samples, max_j ] )
-		for j : int in num_samples:
+		#print( "num_samples is %d. Max_j starts at %d " % [ qs_num_samples, max_j ] )
+		for j : int in qs_num_samples:
 			var p : Vector3 = samplerFn.call( j, phase ) * size + offset
 			spos[idx] = transform * p
 			srot[idx] = rotation
@@ -161,6 +170,77 @@ func quasiRandomSampling( ctx : FlowData.EvaluationContext, in_trs : FlowData.Tr
 					max_j += settings.groups[ color_idx ]
 				out_group_container[idx] = color_idx
 			idx += 1
+
+func precomputeBlueNoiseSamples():
+	print( "Precomputing blue noise samples")
+	var w : int = blue_noise_image.get_width()
+	var h : int = blue_noise_image.get_height()
+	var data : PackedByteArray = blue_noise_image.get_data()
+	var grid_scale : float = 1.0 / float(w)
+	blue_noise_samples.resize( w * h )
+	var idx : int = 0
+	for z : int in range(h):
+		for x : int in range(w):
+			var offset = ( z * w + x ) * 4
+			var tex_value = data[ offset ]
+			var g : int = data[ offset + 1 ]
+			var b : int = data[ offset + 1 ]
+			var hash : int = g * 256 + b;
+			var bns : BNSample = BNSample.new()
+			bns.u = x * grid_scale
+			bns.v = z * grid_scale
+			bns.key = (tex_value << 16) + hash
+			blue_noise_samples[idx] = bns
+			idx += 1
+	blue_noise_samples.sort_custom( func( a: BNSample, b : BNSample) -> bool:
+		return a.key < b.key )	
+
+func blueNoiseSampling( ctx : FlowData.EvaluationContext, in_trs : FlowData.TransformsStream, output : FlowData.Data ):
+
+	var spos := output.getVector3Container( FlowData.AttrPosition )
+	var srot := output.getVector3Container( FlowData.AttrRotation )
+	var ssize := output.getVector3Container( FlowData.AttrSize )
+	var phase : float = getSettingValue( ctx, "phase" )
+	var point_size : Vector3 = Vector3.ONE * getSettingValue( ctx, "size")
+	var num_samples : int = getSettingValue( ctx, "num_samples" )
+	num_samples = maxi( 0, num_samples )
+
+	if blue_noise_samples.size() == 0:
+		precomputeBlueNoiseSamples()
+		
+	for i : int in in_trs.size():
+		
+		# Alloc output num_samples
+		var idx := spos.size()
+		var new_size := idx + num_samples
+		spos.resize( new_size )
+		srot.resize( new_size )
+		ssize.resize( new_size )
+		
+		var origin : Vector3 = in_trs.positions[ i ]
+		var rotation : Vector3 = in_trs.eulers[ i ] 
+		var size : Vector3 = in_trs.sizes[i]
+		var transform = Transform3D( FlowData.eulerToBasis(rotation), origin )
+		
+		var max_size : float = maxf( size.x, size.z )
+		var cell_size : Vector3 = Vector3( max_size, 1.0, max_size )
+		var base_j : int = settings.random_seed & 0xffff
+		var max_x = min( size.x, max_size ) * 0.5
+		var max_z = min( size.z, max_size ) * 0.5
+		for j in range( num_samples ):
+			var bn_idx : int = ( j + base_j ) & 0xffff
+			var bns : BNSample = blue_noise_samples[bn_idx]
+			var p := Vector3(bns.u - 0.5, 0, bns.v - 0.5) * cell_size
+			if absf( p.x ) > max_x or absf( p.z ) > max_z:
+				continue
+			spos[idx] = transform * p
+			srot[idx] = ( rotation )
+			ssize[idx] = ( point_size )
+			idx += 1
+			
+		spos.resize( idx )
+		srot.resize( idx )
+		ssize.resize( idx )
 		
 func execute( ctx : FlowData.EvaluationContext ):
 	var in_data : FlowData.Data = get_input(0)
@@ -172,9 +252,12 @@ func execute( ctx : FlowData.EvaluationContext ):
 	var out_data := FlowData.Data.new()
 	out_data.addCommonStreams( 0 )
 
-	if settings.distribution == SamplePointsNodeSettings.eDistribution.UniformGrid:
-		uniformSampling( ctx, in_trs, out_data )
+	if settings.distribution == SamplePointsNodeSettings.eDistribution.BlueNoise2D:
+		blueNoiseSampling( ctx, in_trs, out_data )
 	else:
-		quasiRandomSampling( ctx, in_trs, out_data )
+		if settings.distribution == SamplePointsNodeSettings.eDistribution.UniformGrid:
+			uniformSampling( ctx, in_trs, out_data )
+		else:
+			quasiRandomSampling( ctx, in_trs, out_data )
 		
 	set_output( 0, out_data )

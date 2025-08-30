@@ -5,7 +5,7 @@ func _init():
 	meta_node = {
 		"title" : "Math",
 		"settings" : MathOpNodeSettings,
-		"ins" : [{"label": "In A" }, {"label": "In B" }], 
+		"ins" : [{ "label": "In A", "multiple_connections" : false }, {"label": "In B", "multiple_connections" : false }], 
 		"outs" : [{ "label" : "Out" }],
 		"tooltip" : "Applies a math operation between two streams, storing the result in a new stream or overriding another.\nYou can read and write substreams like position.X",
 	}
@@ -57,7 +57,7 @@ func execute( _ctx : FlowData.EvaluationContext ):
 			if sB.data_type == FlowData.DataType.Float:
 				sB = newFloatStream( num_elemsA, sA.name + " as float", sB.container[0])
 			elif sB.data_type == FlowData.DataType.Vector:
-				sB = newVector3Stream( num_elemsA, sA.name + " as vector3", sB.container[0])
+				sB = newStream( num_elemsA, sA.name + " as vector3", sB.container[0], FlowData.DataType.Vector )
 			else:
 				setError( "Num elements from A nd B do not match (%d vs %d). But In B data type must be a float or Vector3" % [num_elemsA, num_elemsB])
 				

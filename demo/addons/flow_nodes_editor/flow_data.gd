@@ -8,6 +8,8 @@ enum DataType {
 	Vector,
 	String,
 	Resource,
+	NodeMesh,
+	NodePath,
 	Invalid = 999
 }
 
@@ -53,7 +55,7 @@ class Data:
 	var streams : Dictionary = {}
 	var last_added_stream_name : String
 
-	func newContainerOfType( data_type : DataType ):
+	static func newContainerOfType( data_type : DataType ):
 		match data_type:
 			DataType.Bool:
 				return PackedByteArray()
@@ -67,6 +69,8 @@ class Data:
 				return PackedStringArray()
 			DataType.Resource:
 				return Array([], TYPE_OBJECT, "Resource", null)
+			_:
+				push_error( "newContainerOfType(%d) type not supported" % [ data_type ])
 		return null
 	
 	func numFields() -> int:
@@ -141,8 +145,14 @@ class Data:
 		var big_container = stream.container
 		if sub_container.size() != big_container.size():
 			return "Container sizes do not match (%d vs %d)" % [sub_container.size(), big_container.size()]
+		#print( "big_container %s[%d] << %s" % [ big_container, subcomp_idx, sub_container ])
+		# Because we are mutating the container (part of it), we need to create
+		# a new copy of the original and insert it as the new current container
+		# Fixes bug expresion updating position.y and refreshing
+		big_container = big_container.duplicate()
 		for idx in range( big_container.size() ):
 			big_container[idx][ subcomp_idx ] = sub_container[idx]
+		stream.container = big_container
 		
 	func findStream( name : String ):
 		name = translateStreamName( name )
@@ -173,7 +183,7 @@ class Data:
 	
 	func registerStream( name : String, container, data_type : DataType = FlowData.DataType.Invalid ):
 		if not name:
-			print( "Container size:", container.size() )
+			print( "registerStream empty name!. Container size:", container.size() )
 			push_error("registerStream name can't be empty of data_type %d" % [ data_type ] )
 			return null
 		if container == null:
@@ -310,7 +320,7 @@ class Data:
 		# use cloneStream to create an independent copy
 		var s := Data.new()
 		for name in streams:
-			s.streams[ name ] = streams[name].duplicate()
+			s.streams[ name ] = streams[ name ].duplicate()
 		s.last_added_stream_name = last_added_stream_name
 		return s
 		
@@ -344,7 +354,10 @@ class Data:
 			ssizes[idx] = init_value
 
 	func getVector3Container( stream_name : StringName ) -> PackedVector3Array:
-		return getContainerChecked( stream_name, DataType.Vector )
+		var container = getContainerChecked( stream_name, DataType.Vector )
+		if container == null:
+			container = PackedVector3Array()
+		return container
 
 	func getTransformsStream() -> TransformsStream:
 		var trs := TransformsStream.new()
@@ -356,5 +369,7 @@ class Data:
 			return null	
 		trs.sizes = getVector3Container( AttrSize )
 		if trs.sizes == null:
-			return null	
-		return trs
+			return null
+		if trs.sizes.size() == trs.positions.size() && trs.sizes.size() == trs.eulers.size():
+			return trs
+		return null

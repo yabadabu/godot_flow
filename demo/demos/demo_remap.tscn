@@ -46,54 +46,62 @@ data = {
 }],
 "min_pos": Vector2(80, 200),
 "nodes": [{
-"args_port": {},
-"name": &"id_0003_scan_nodes",
-"position": Vector2(0, 120),
+"args_port": {
+"In A": {
+"connected": true,
+"port": 0
+},
+"In B": {
+"connected": false,
+"port": 1
+}
+},
+"name": &"id_0006_math_op",
+"position": Vector2(560, 140),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
-"debug_modulate_by": "",
+"debug_modulate_by": "distance",
 "debug_scale": 1.0,
 "disabled": false,
-"filter_by_class_name": "",
-"filter_by_name": "",
-"group_name": "RefPoints",
-"import_metadata": false,
-"import_properties": Array[StringName]([]),
+"in_nameA": "@last",
+"in_nameB": "@last",
 "inspect_enabled": false,
-"random_seed": 393844403,
-"size_to_bounds": false,
-"title": "Scan Nodes",
+"operation": 15,
+"out_name": "@last",
+"random_seed": 2509549124,
+"title": "Math",
 "trace": false
 },
 "show_disconnected_inputs": false,
-"template": "scan_nodes"
+"template": "math_op"
 }, {
-"args_port": {},
-"name": &"id_0001_grid",
-"position": Vector2(0, 0),
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0004_remap",
+"position": Vector2(400, 140),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
+"debug_enabled": true,
 "debug_mode": 0,
-"debug_modulate_by": "",
+"debug_modulate_by": "distance",
 "debug_scale": 1.0,
 "disabled": false,
+"in_name": "distance",
 "inspect_enabled": false,
-"origin": Vector3(0.05, 0, 0.05),
-"random_seed": 2710621526,
-"rotation": Vector3(0, 0, 0),
-"size": 0.07,
-"step": Vector3(0.1, 1, 0.1),
-"title": "Grid",
-"trace": false,
-"x": 40,
-"y": 1,
-"z": 40
+"out_name": "@in_name",
+"random_seed": 2803866490,
+"remap_curve": SubResource("Curve_8ag8x"),
+"title": "Remap",
+"trace": false
 },
 "show_disconnected_inputs": false,
-"template": "grid"
+"template": "remap"
 }, {
 "args_port": {
 "In": {
@@ -151,68 +159,59 @@ data = {
 "show_disconnected_inputs": false,
 "template": "distance"
 }, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0004_remap",
-"position": Vector2(400, 140),
-"settings": {
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": true,
-"debug_mode": 0,
-"debug_modulate_by": "distance",
-"debug_scale": 1.0,
-"disabled": false,
-"in_name": "distance",
-"inspect_enabled": false,
-"out_name": "@in_name",
-"random_seed": 2803866490,
-"remap_curve": SubResource("Curve_8ag8x"),
-"title": "Remap",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "remap"
-}, {
-"args_port": {
-"In A": {
-"connected": true,
-"port": 0
-},
-"In B": {
-"connected": false,
-"port": 1
-}
-},
-"name": &"id_0006_math_op",
-"position": Vector2(560, 140),
+"args_port": {},
+"name": &"id_0001_grid",
+"position": Vector2(0, 0),
 "settings": {
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
-"debug_modulate_by": "distance",
+"debug_modulate_by": "",
 "debug_scale": 1.0,
 "disabled": false,
-"in_nameA": "@last",
-"in_nameB": "@last",
 "inspect_enabled": false,
-"operation": 15,
-"out_name": "@last",
-"random_seed": 2509549124,
-"title": "Math",
+"origin": Vector3(0.05, 0, 0.05),
+"random_seed": 2710621526,
+"rotation": Vector3(0, 0, 0),
+"size": 0.07,
+"step": Vector3(0.1, 1, 0.1),
+"title": "Grid",
+"trace": false,
+"x": 40,
+"y": 1,
+"z": 40
+},
+"show_disconnected_inputs": false,
+"template": "grid"
+}, {
+"args_port": {},
+"name": &"id_0003_scan_nodes",
+"position": Vector2(0, 120),
+"settings": {
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_scale": 1.0,
+"disabled": false,
+"filter_by_class_name": "",
+"group_name": "RefPoints",
+"import_metadata": false,
+"import_properties": Array[StringName]([]),
+"inspect_enabled": false,
+"random_seed": 393844403,
+"size_to_bounds": false,
+"title": "Scan Nodes",
 "trace": false
 },
 "show_disconnected_inputs": false,
-"template": "math_op"
+"template": "scan_nodes"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
-view_zoom = 1.0
-view_offset = Vector2(352, -88)
+view_zoom = 0.826446
+view_offset = Vector2(0.173523, -113.322)
 new_name_counter = 7
 in_params = Array[ExtResource("2_cwlch")]([])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
@@ -226,4 +225,4 @@ refresh_inputs = Callable()
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
 
 [node name="RefPoint" type="Node3D" parent="." groups=["RefPoints"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.84716, 0.0712216, 2.32673)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.38174, 0.0712218, 2.26193)

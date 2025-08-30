@@ -8,6 +8,7 @@ func _init():
 		"settings" : AssetsNodeSettings,
 		"ins" : [],
 		"outs" : [{ "label" : "Out" }],
+		"hide_inputs" : true,
 		"tooltip" :"Generates a list of assets.\nUseful in combination with the Match And Set node, this node generates a list of meshes with some attribute/tag and weight assigned.",
 	}
 	

@@ -17,10 +17,7 @@ func getTitle() -> String:
 
 func refreshFromSettings():
 	super.refreshFromSettings()
-	#print( "settings.data_type", settings.data_type)
-	var gd_type := getGdScriptTypeForFlowDataType( settings.data_type )
-	#print( "gd_type", gd_type)
-	var color := getColorForGDScriptType( gd_type )
+	var color := getColorForFlowDataType( settings.data_type )
 	set_slot_color_right( 0, color )
 
 func execute( ctx : FlowData.EvaluationContext ):
