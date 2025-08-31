@@ -107,6 +107,8 @@ func setError( new_err : String ):
 	redrawUI()
 		
 func setActivity( amount : float ):
+	if settings.disabled:
+		return
 	if not err:
 		modulate = Color.WHITE + Color( amount, amount, amount, 0.0 )
 	else:

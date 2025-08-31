@@ -29,14 +29,48 @@ data = {
 }],
 "min_pos": Vector2(100, 220),
 "nodes": [{
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0002_transform",
+"position": Vector2(180, 0),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": true,
+"inspect_enabled": false,
+"offset_max": Vector3(1, 0, 0),
+"offset_min": Vector3(1, 0, 0),
+"random_seed": 1813447328,
+"rotation_max": Vector3(0, 0, 0),
+"rotation_min": Vector3(0, 0, 0),
+"scale_max": Vector3(1, 1, 1),
+"scale_min": Vector3(1, 1, 1),
+"title": "Transform",
+"trace": false,
+"uniform_scale": true
+},
+"show_disconnected_inputs": false,
+"template": "transform"
+}, {
 "args_port": {},
 "name": &"id_0001_grid",
 "position": Vector2(0, 0),
 "settings": {
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 1,
 "debug_modulate_by": "",
+"debug_output": 0,
 "debug_scale": 0.675,
 "disabled": false,
 "inspect_enabled": false,
@@ -54,35 +88,29 @@ data = {
 "show_disconnected_inputs": false,
 "template": "grid"
 }, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0002_transform",
-"position": Vector2(180, 0),
+"args_port": {},
+"name": &"id_0004_make_vector",
+"position": Vector2(200, 140),
 "settings": {
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "",
+"debug_output": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "inspect_enabled": false,
-"offset_max": Vector3(1, 0, 0),
-"offset_min": Vector3(1, 0, 0),
-"random_seed": 1813447328,
-"rotation_max": Vector3(0, 0, 0),
-"rotation_min": Vector3(0, 0, 0),
-"scale_max": Vector3(1, 1, 1),
-"scale_min": Vector3(1, 1, 1),
-"title": "Transform",
+"out_name": "Vector",
+"random_seed": 3658767773,
+"title": "Make Vector",
 "trace": false,
-"uniform_scale": true
+"x": 0.0,
+"y": 1.0,
+"z": 0.0
 },
 "show_disconnected_inputs": false,
-"template": "transform"
+"template": "make_vector"
 }, {
 "args_port": {
 "In A": {
@@ -97,15 +125,17 @@ data = {
 "name": &"id_0003_math_op",
 "position": Vector2(380, 40),
 "settings": {
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
-"debug_enabled": true,
+"debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "",
+"debug_output": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "in_nameA": "position",
 "in_nameB": "@last",
-"inspect_enabled": false,
+"inspect_enabled": true,
 "operation": 0,
 "out_name": "position",
 "random_seed": 4095248465,
@@ -114,28 +144,6 @@ data = {
 },
 "show_disconnected_inputs": false,
 "template": "math_op"
-}, {
-"args_port": {},
-"name": &"id_0004_make_vector",
-"position": Vector2(200, 140),
-"settings": {
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"out_name": "Vector",
-"random_seed": 3658767773,
-"title": "Make Vector",
-"trace": false,
-"x": 0.0,
-"y": 0.91,
-"z": 0.0
-},
-"show_disconnected_inputs": false,
-"template": "make_vector"
 }],
 "type": "flow_graph_nodes",
 "version": 1

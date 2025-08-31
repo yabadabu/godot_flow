@@ -74,6 +74,38 @@ data = {
 "show_disconnected_inputs": false,
 "template": "partition"
 }, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0008_transform",
+"position": Vector2(240, 180),
+"settings": {
+"debug_bulk": 1,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"offset_max": Vector3(5, 0, 0),
+"offset_min": Vector3(5, 0, 0),
+"random_seed": 2932366161,
+"rotation_max": Vector3(0, 0, 0),
+"rotation_min": Vector3(0, 0, 0),
+"scale_max": Vector3(1, 1, 1),
+"scale_min": Vector3(1, 1, 1),
+"title": "Transform",
+"trace": false,
+"uniform_scale": true
+},
+"show_disconnected_inputs": false,
+"template": "transform"
+}, {
 "args_port": {},
 "name": &"id_0001_grid",
 "position": Vector2(0, 0),
@@ -107,31 +139,24 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0008_transform",
-"position": Vector2(240, 180),
+"name": &"id_0014_merge",
+"position": Vector2(400, 0),
 "settings": {
-"debug_bulk": 1,
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "",
 "debug_output": 0,
 "debug_scale": 1.0,
-"disabled": true,
+"disabled": false,
 "inspect_enabled": false,
-"offset_max": Vector3(5, 0, 0),
-"offset_min": Vector3(5, 0, 0),
-"random_seed": 2932366161,
-"rotation_max": Vector3(0, 0, 0),
-"rotation_min": Vector3(0, 0, 0),
-"scale_max": Vector3(1, 1, 1),
-"scale_min": Vector3(1, 1, 1),
-"title": "Transform",
-"trace": false,
-"uniform_scale": true
+"random_seed": 2991590920,
+"title": "Merge",
+"trace": false
 },
 "show_disconnected_inputs": false,
-"template": "transform"
+"template": "merge"
 }, {
 "args_port": {},
 "name": &"id_0003_grid",
@@ -144,7 +169,7 @@ data = {
 "debug_modulate_by": "",
 "debug_output": 0,
 "debug_scale": 1.0,
-"disabled": true,
+"disabled": false,
 "inspect_enabled": false,
 "origin": Vector3(0, 1, 0),
 "random_seed": 947677449,
@@ -159,37 +184,12 @@ data = {
 },
 "show_disconnected_inputs": false,
 "template": "grid"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0014_merge",
-"position": Vector2(400, 0),
-"settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_scale": 1.0,
-"disabled": true,
-"inspect_enabled": false,
-"random_seed": 2991590920,
-"title": "Merge",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "merge"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
 view_zoom = 1.1
-view_offset = Vector2(54.616, -47.2)
+view_offset = Vector2(107.616, -79.2)
 new_name_counter = 17
 in_params = Array[ExtResource("2_r40ju")]([])
 

@@ -88,7 +88,10 @@ func setupDraw():
 	if !s.debug_enabled or s.disabled:
 		return
 		
-	s.debug_bulk = clampi( s.debug_bulk, 0, node.generated_bulks.size() - 1)
+	var num_bulks = node.generated_bulks.size()
+	s.debug_bulk = clampi( s.debug_bulk, 0, maxi( 0, num_bulks - 1) )
+	if s.debug_bulk >= num_bulks :
+		return
 	s.debug_output = clampi( s.debug_output, 0, node.generated_bulks[s.debug_bulk].size() - 1)
 		
 	var out_data : FlowData.Data = node.get_bulk_output(s.debug_bulk, s.debug_output)
