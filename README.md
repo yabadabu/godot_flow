@@ -19,11 +19,13 @@ In a scene 3D:
 
 # Features
 
-* +32 nodes including
+* +32 nodes including:
     - Sampling splines
     - Sampling meshes
     - CSG operations with points sets
     - Spawn meshes/full scenes with customized parameters
+    - Expressions evaluation
+    - Partition / Reduce / Merge / Sort
 * Grid Base Data Visualization and 3D Debug
 * Flow Graphs are godot resources with optional inputs
 
