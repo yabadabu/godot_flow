@@ -51,7 +51,7 @@ data = {
 "adjust_to_borders": true,
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
+"debug_enabled": true,
 "debug_mode": 1,
 "debug_modulate_by": "",
 "debug_output": 0,
