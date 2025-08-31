@@ -139,10 +139,12 @@ data = {
 "name": &"id_0002_scan_nodes",
 "position": Vector2(0, 0),
 "settings": {
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "",
+"debug_output": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "filter_by_class_name": "",
@@ -168,10 +170,12 @@ data = {
 "name": &"id_0003_transform",
 "position": Vector2(140, 0),
 "settings": {
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "",
+"debug_output": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "inspect_enabled": false,
@@ -198,10 +202,12 @@ data = {
 "name": &"id_0021_spawn_meshes",
 "position": Vector2(980, 60),
 "settings": {
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "",
+"debug_output": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "inspect_enabled": false,
@@ -235,13 +241,15 @@ data = {
 "name": &"id_0017_match_and_set",
 "position": Vector2(560, 60),
 "settings": {
+"debug_bulk": 0,
 "debug_color": Color(0.321569, 1, 1, 1),
 "debug_enabled": true,
 "debug_mode": 0,
 "debug_modulate_by": "color",
+"debug_output": 0,
 "debug_scale": 1.0,
 "disabled": false,
-"inspect_enabled": true,
+"inspect_enabled": false,
 "match_attr": "type",
 "random_seed": 3123198780,
 "title": "Match And Set",
@@ -256,10 +264,12 @@ data = {
 "position": Vector2(340, 200),
 "settings": {
 "assets": Array[ExtResource("3_puk1i")]([SubResource("Resource_2u10u"), SubResource("Resource_tejo6"), SubResource("Resource_dwp87"), SubResource("Resource_puk1i")]),
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "",
+"debug_output": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "inspect_enabled": false,
@@ -279,10 +289,12 @@ data = {
 "name": &"id_0023_transform",
 "position": Vector2(780, 60),
 "settings": {
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "",
+"debug_output": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "inspect_enabled": false,
@@ -309,10 +321,12 @@ data = {
 "name": &"id_0006_sample_points",
 "position": Vector2(320, 0),
 "settings": {
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "",
+"debug_output": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "distribution": 1,
@@ -350,15 +364,15 @@ buffer = PackedFloat32Array(1.55277, 0, -0.762766, -4.72772, 0, 1.73, 0, -1.9073
 
 [sub_resource type="MultiMesh" id="MultiMesh_puk1i"]
 transform_format = 1
-instance_count = 8
-mesh = SubResource("BoxMesh_m2kqf")
-buffer = PackedFloat32Array(-1.00221, 0, -1.41014, 0.564939, 0, 1.73, 0, -1.90735e-06, 1.41014, 0, -1.00221, -9.65215, 0.15721, 0, -1.72284, -4.3375, 0, 1.73, 0, -1.90735e-06, 1.72284, 0, 0.15721, 1.74466, 0.926905, 0, 1.46074, 5.8576, 0, 1.73, 0, -1.90735e-06, -1.46074, 0, 0.926905, 4.53827, 1.07987, 0, 1.35159, 6.24781, 0, 1.73, 0, -1.90735e-06, -1.35159, 0, 1.07987, -9.87451, 1.04102, 0, 1.38173, -3.55708, 0, 1.73, 0, -1.90735e-06, -1.38173, 0, 1.04102, -7.0809, 1.70641, 0, 0.284725, -8.06931, 0, 1.73, 0, -1.90735e-06, -0.284725, 0, 1.70641, -10.0969, -1.63585, 0, 0.562947, 7.02823, 0, 1.73, 0, -1.90735e-06, -0.562947, 0, -1.63585, 1.29994, -0.177932, 0, 1.72083, 7.41846, 0, 1.73, 0, -1.90735e-06, -1.72083, 0, -0.177932, 6.88716)
+instance_count = 10
+mesh = SubResource("PlaneMesh_twxpo")
+buffer = PackedFloat32Array(-1.00221, 0, -1.41014, 0.564939, 0, 1.73, 0, -1.90735e-06, 1.41014, 0, -1.00221, -9.65215, 0.15721, 0, -1.72284, -4.3375, 0, 1.73, 0, -1.90735e-06, 1.72284, 0, 0.15721, 1.74466, 0.930135, 0, 1.45868, 0.955149, 0, 1.73, 0, -1.90735e-06, -1.45868, 0, 0.930135, -4.06492, -1.68489, 0, -0.392507, -8.84974, 0, 1.73, 0, -1.90735e-06, 0.392507, 0, -1.68489, -1.27132, 1.07987, 0, 1.35159, 6.24781, 0, 1.73, 0, -1.90735e-06, -1.35159, 0, 1.07987, -9.87451, -1.14877, 0, 1.29353, 6.63803, 0, 1.73, 0, -1.90735e-06, -1.29353, 0, -1.14877, -4.28729, 1.70641, 0, 0.284725, -8.06931, 0, 1.73, 0, -1.90735e-06, -0.284725, 0, 1.70641, -10.0969, -1.63585, 0, 0.562947, 7.02823, 0, 1.73, 0, -1.90735e-06, -0.562947, 0, -1.63585, 1.29994, -0.909951, 0, 1.47136, -2.77665, 0, 1.73, 0, -1.90735e-06, -1.47136, 0, -0.909951, 4.09356, -0.927561, 0, -1.46032, -7.67908, 0, 1.73, 0, -1.90735e-06, 1.46032, 0, -0.927561, -4.50965)
 
 [sub_resource type="MultiMesh" id="MultiMesh_lnmet"]
 transform_format = 1
-instance_count = 12
-mesh = SubResource("PlaneMesh_twxpo")
-buffer = PackedFloat32Array(0.0447733, 0, 1.72942, -9.23995, 0, 1.73, 0, -1.90735e-06, -1.72942, 0, 0.0447733, -6.85854, 0.930135, 0, 1.45868, 0.955149, 0, 1.73, 0, -1.90735e-06, -1.45868, 0, 0.930135, -4.06492, 0.757856, 0, -1.55517, -3.94729, 0, 1.73, 0, -1.90735e-06, 1.55517, 0, 0.757856, 7.33188, -1.68489, 0, -0.392507, -8.84974, 0, 1.73, 0, -1.90735e-06, 0.392507, 0, -1.68489, -1.27132, 1.13541, 0, 1.30527, 1.34536, 0, 1.73, 0, -1.90735e-06, -1.30527, 0, 1.13541, 1.5223, 1.54469, 0, -0.778989, -8.45953, 0, 1.73, 0, -1.90735e-06, 0.778989, 0, 1.54469, 4.31591, -1.14877, 0, 1.29353, 6.63803, 0, 1.73, 0, -1.90735e-06, -1.29353, 0, -1.14877, -4.28729, 1.24047, 0, 1.20588, 1.73559, 0, 1.73, 0, -1.90735e-06, -1.20588, 0, 1.24047, 7.10952, -0.46759, 0, -1.66561, -3.16687, 0, 1.73, 0, -1.90735e-06, 1.66561, 0, -0.46759, -1.49368, -1.57028, 0, 0.726024, 2.12579, 0, 1.73, 0, -1.90735e-06, -0.726024, 0, -1.57028, -7.30325, -0.909951, 0, 1.47136, -2.77665, 0, 1.73, 0, -1.90735e-06, -1.47136, 0, -0.909951, 4.09356, -0.927561, 0, -1.46032, -7.67908, 0, 1.73, 0, -1.90735e-06, 1.46032, 0, -0.927561, -4.50965)
+instance_count = 10
+mesh = SubResource("BoxMesh_m2kqf")
+buffer = PackedFloat32Array(0.0447733, 0, 1.72942, -9.23995, 0, 1.73, 0, -1.90735e-06, -1.72942, 0, 0.0447733, -6.85854, 0.926905, 0, 1.46074, 5.8576, 0, 1.73, 0, -1.90735e-06, -1.46074, 0, 0.926905, 4.53827, 0.757856, 0, -1.55517, -3.94729, 0, 1.73, 0, -1.90735e-06, 1.55517, 0, 0.757856, 7.33188, 1.13541, 0, 1.30527, 1.34536, 0, 1.73, 0, -1.90735e-06, -1.30527, 0, 1.13541, 1.5223, 1.04102, 0, 1.38173, -3.55708, 0, 1.73, 0, -1.90735e-06, -1.38173, 0, 1.04102, -7.0809, 1.54469, 0, -0.778989, -8.45953, 0, 1.73, 0, -1.90735e-06, 0.778989, 0, 1.54469, 4.31591, 1.24047, 0, 1.20588, 1.73559, 0, 1.73, 0, -1.90735e-06, -1.20588, 0, 1.24047, 7.10952, -0.46759, 0, -1.66561, -3.16687, 0, 1.73, 0, -1.90735e-06, 1.66561, 0, -0.46759, -1.49368, -1.57028, 0, 0.726024, 2.12579, 0, 1.73, 0, -1.90735e-06, -0.726024, 0, -1.57028, -7.30325, -0.177932, 0, 1.72083, 7.41846, 0, 1.73, 0, -1.90735e-06, -1.72083, 0, -0.177932, 6.88716)
 
 [sub_resource type="MultiMesh" id="MultiMesh_qhx7h"]
 transform_format = 1
@@ -374,19 +388,19 @@ graph = SubResource("Resource_qhx7h")
 refresh_inputs = Callable()
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
 
-[node name="@MultiMeshInstance3D@35466" type="MultiMeshInstance3D" parent="FlowGraphNode3D2"]
+[node name="@MultiMeshInstance3D@34220" type="MultiMeshInstance3D" parent="FlowGraphNode3D2"]
 multimesh = SubResource("MultiMesh_m2kqf")
 metadata/flow_owner = &"id_0021_spawn_meshes"
 
-[node name="@MultiMeshInstance3D@35467" type="MultiMeshInstance3D" parent="FlowGraphNode3D2"]
+[node name="@MultiMeshInstance3D@34221" type="MultiMeshInstance3D" parent="FlowGraphNode3D2"]
 multimesh = SubResource("MultiMesh_puk1i")
 metadata/flow_owner = &"id_0021_spawn_meshes"
 
-[node name="@MultiMeshInstance3D@35468" type="MultiMeshInstance3D" parent="FlowGraphNode3D2"]
+[node name="@MultiMeshInstance3D@34222" type="MultiMeshInstance3D" parent="FlowGraphNode3D2"]
 multimesh = SubResource("MultiMesh_lnmet")
 metadata/flow_owner = &"id_0021_spawn_meshes"
 
-[node name="@MultiMeshInstance3D@35469" type="MultiMeshInstance3D" parent="FlowGraphNode3D2"]
+[node name="@MultiMeshInstance3D@34223" type="MultiMeshInstance3D" parent="FlowGraphNode3D2"]
 multimesh = SubResource("MultiMesh_qhx7h")
 metadata/flow_owner = &"id_0021_spawn_meshes"
 

@@ -16,7 +16,8 @@ In a scene 3D:
 * Select one node. For example ```Grid```
 * Press 'D' to visualize in the 3D scenes the points as white boxes
 * Tweak parameters of the selected node, like the number of elements in the grid node, or the Size
-* Press 'E' to visualize in the Data Inspector panel and see the actual values of each point
+* Press 'E' to toggle the visualization in the Data Inspector panel and see the actual values of each point
+    * Click on each row to highlight the point in the 3d scene as a magenta point
 
 # Features
 
@@ -30,20 +31,21 @@ In a scene 3D:
     - Ray cast the scene to query and place points
     - Match and Set to assign custom assets to the points
     - Change point distribution using godot Curve editors
+    - Scan nodes in your scene and gather metadata and attributes to feed the flow
 * Grid Base Data Visualization 
 * 3D Debug with colors
-* Flow Graphs are godot resources with optional inputs
+* Flow Graphs are godot resources with optional typed inputs
 * Copy/Paste nodes into the clipboard as json documents
 
 # Samples
 
-Inside the ```demo``` folder there is a Godot 4.4 project. Inside the folder ```demos``` you can inspect some sample graphs. 
+Inside the ```demo``` folder there is a Godot 4.4 project. Inside the folder ```demos``` you can inspect some sample graphs. Click on each FlowGraphNode3D to visualize the graph in the ```Data Flow``` panel
 
 # Platforms
     
 Precompiled versions of the plugin are provided for Windows and OSX platforms. But it should compile without problems in the Linux.
 
-The tool is an editor tool, so it should works where the editor works. Most of the code is currently gdscript, except for wrappers clases to implement KDTrees (from https://github.com/jlblancoc/nanoflann) and RTrees (from https://github.com/nushoin/RTree)
+The tool is an editor tool, so it should work where the editor works. Most of the code is currently gdscript, except for wrappers classes to implement KDTrees (from https://github.com/jlblancoc/nanoflann) and RTrees (from https://github.com/nushoin/RTree)
 
 # Roadmap
 

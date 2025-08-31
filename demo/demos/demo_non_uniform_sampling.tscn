@@ -65,30 +65,6 @@ data = {
 }],
 "min_pos": Vector2(-60, 380),
 "nodes": [{
-"args_port": {},
-"name": &"id_0004_scan_nodes",
-"position": Vector2(140, 160),
-"settings": {
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_scale": 1.0,
-"disabled": false,
-"filter_by_class_name": "",
-"filter_by_name": "",
-"group_name": "RefPoints",
-"import_metadata": true,
-"import_properties": Array[StringName]([]),
-"inspect_enabled": false,
-"random_seed": 1687206785,
-"size_to_bounds": false,
-"title": "Scan Nodes",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "scan_nodes"
-}, {
 "args_port": {
 "In A": {
 "connected": true,
@@ -102,10 +78,12 @@ data = {
 "name": &"id_0005_math_op",
 "position": Vector2(820, 140),
 "settings": {
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "distance",
+"debug_output": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "in_nameA": "@last",
@@ -133,10 +111,12 @@ data = {
 "name": &"id_0009_math_op",
 "position": Vector2(1200, 140),
 "settings": {
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "distance",
+"debug_output": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "in_nameA": "@last",
@@ -164,10 +144,12 @@ data = {
 "name": &"id_0018_math_op",
 "position": Vector2(1000, 140),
 "settings": {
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "distance",
+"debug_output": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "in_nameA": "@last",
@@ -199,10 +181,12 @@ data = {
 "name": &"id_0007_select",
 "position": Vector2(1560, 140),
 "settings": {
+"debug_bulk": 0,
 "debug_color": Color(0.929412, 0, 0.109804, 1),
 "debug_enabled": true,
 "debug_mode": 1,
 "debug_modulate_by": "",
+"debug_output": 0,
 "debug_scale": 0.21,
 "disabled": false,
 "inspect_enabled": false,
@@ -232,10 +216,12 @@ data = {
 "name": &"id_0014_distance",
 "position": Vector2(540, 140),
 "settings": {
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": true,
 "debug_mode": 0,
 "debug_modulate_by": "distance",
+"debug_output": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "in_nameA": "position",
@@ -259,10 +245,12 @@ data = {
 "name": &"id_0002_self_pruning",
 "position": Vector2(320, 0),
 "settings": {
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "",
+"debug_output": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "inspect_enabled": false,
@@ -278,10 +266,12 @@ data = {
 "name": &"id_0012_scan_meshes",
 "position": Vector2(0, 0),
 "settings": {
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "",
+"debug_output": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "group_name": "",
@@ -303,10 +293,12 @@ data = {
 "name": &"id_0003_sample_mesh",
 "position": Vector2(140, 0),
 "settings": {
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "",
+"debug_output": 0,
 "debug_scale": 1.0,
 "density": 19.05,
 "disabled": false,
@@ -334,10 +326,12 @@ data = {
 "name": &"id_0008_math_op",
 "position": Vector2(1380, 140),
 "settings": {
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "distance",
+"debug_output": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "in_nameA": "@last",
@@ -351,12 +345,38 @@ data = {
 },
 "show_disconnected_inputs": false,
 "template": "math_op"
+}, {
+"args_port": {},
+"name": &"id_0004_scan_nodes",
+"position": Vector2(260, 200),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"filter_by_class_name": "",
+"filter_by_name": "",
+"group_name": "RefPoints",
+"import_metadata": true,
+"import_properties": Array[StringName]([]),
+"inspect_enabled": false,
+"random_seed": 1687206785,
+"size_to_bounds": false,
+"title": "Scan Nodes",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "scan_nodes"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
 view_zoom = 1.1
-view_offset = Vector2(1016.87, 112.215)
+view_offset = Vector2(-22.13, 179.215)
 new_name_counter = 12
 in_params = Array[ExtResource("2_1mcnb")]([])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
@@ -377,4 +397,4 @@ transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 0, 0)
 mesh = SubResource("PlaneMesh_aj3gx")
 
 [node name="RefPoint" type="Node3D" parent="." groups=["RefPoints"]]
-transform = Transform3D(10.6068, 0, 0, 0, 1, 0, 0, 0, 5.01689, 1.73201, -0.668378, -2.54627)
+transform = Transform3D(10.6068, 0, 0, 0, 1, 0, 0, 0, 5.01689, 2.21347, -0.668378, -2.77652)

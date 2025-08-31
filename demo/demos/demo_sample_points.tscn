@@ -83,6 +83,12 @@ data = {
 "keep_alive": false,
 "to_node": &"id_0035_sample_points",
 "to_port": 0
+}, {
+"from_node": &"id_0020_select",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0041_transform",
+"to_port": 0
 }],
 "min_pos": Vector2(-60, 260),
 "nodes": [{
@@ -91,10 +97,12 @@ data = {
 "position": Vector2(0, 180),
 "settings": {
 "data_type": 2,
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "",
+"debug_output": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "inspect_enabled": false,
@@ -123,10 +131,12 @@ data = {
 "name": &"id_0003_make_vector",
 "position": Vector2(180, 140),
 "settings": {
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "",
+"debug_output": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "inspect_enabled": false,
@@ -150,10 +160,12 @@ data = {
 "name": &"id_0019_remap",
 "position": Vector2(1200, 180),
 "settings": {
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "",
+"debug_output": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "in_name": "distance",
@@ -180,10 +192,12 @@ data = {
 "name": &"id_0002_math_op",
 "position": Vector2(360, 60),
 "settings": {
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "",
+"debug_output": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "in_nameA": "size",
@@ -202,31 +216,6 @@ data = {
 "In": {
 "connected": true,
 "port": 0
-}
-},
-"name": &"id_0020_select",
-"position": Vector2(1400, 180),
-"settings": {
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": true,
-"debug_mode": 1,
-"debug_modulate_by": "",
-"debug_scale": 0.1,
-"disabled": false,
-"inspect_enabled": false,
-"random_seed": 4033823075,
-"ratio": 0.194,
-"title": "Select",
-"trace": false,
-"weight_name": "distance"
-},
-"show_disconnected_inputs": false,
-"template": "select"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
 },
 "Target": {
 "connected": true,
@@ -236,10 +225,12 @@ data = {
 "name": &"id_0018_distance",
 "position": Vector2(1000, 180),
 "settings": {
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "distance",
+"debug_output": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "in_nameA": "position",
@@ -264,10 +255,12 @@ data = {
 "position": Vector2(780, 260),
 "settings": {
 "adjust_to_borders": true,
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "",
+"debug_output": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "distance_attribute": "distance",
@@ -286,10 +279,12 @@ data = {
 "name": &"id_0040_scan_splines",
 "position": Vector2(620, 300),
 "settings": {
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "",
+"debug_output": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "group_name": "",
@@ -306,10 +301,12 @@ data = {
 "name": &"id_0001_scan_nodes",
 "position": Vector2(180, 0),
 "settings": {
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "",
+"debug_output": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "filter_by_class_name": "Path3D",
@@ -335,10 +332,12 @@ data = {
 "name": &"id_0035_sample_points",
 "position": Vector2(620, 60),
 "settings": {
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": true,
 "debug_mode": 1,
 "debug_modulate_by": "",
+"debug_output": 0,
 "debug_scale": -0.065,
 "disabled": false,
 "distribution": 3,
@@ -359,13 +358,72 @@ data = {
 },
 "show_disconnected_inputs": false,
 "template": "sample_points"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0020_select",
+"position": Vector2(1380, 180),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 1,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 0.185,
+"disabled": false,
+"inspect_enabled": false,
+"random_seed": 4033823075,
+"ratio": 0.194,
+"title": "Select",
+"trace": false,
+"weight_name": "distance"
+},
+"show_disconnected_inputs": false,
+"template": "select"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0041_transform",
+"position": Vector2(1560, 180),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": true,
+"debug_mode": 1,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 0.185,
+"disabled": false,
+"inspect_enabled": true,
+"offset_max": Vector3(0, 0, 0),
+"offset_min": Vector3(0, 0, 0),
+"random_seed": 288909398,
+"rotation_max": Vector3(0, 360, 0),
+"rotation_min": Vector3(0, 0, 0),
+"scale_max": Vector3(1, 1, 1),
+"scale_min": Vector3(1, 1, 1),
+"title": "Transform",
+"trace": false,
+"uniform_scale": true
+},
+"show_disconnected_inputs": false,
+"template": "transform"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
 view_zoom = 0.660711
-view_offset = Vector2(42.6418, -60.9203)
-new_name_counter = 40
+view_offset = Vector2(596.642, -257.92)
+new_name_counter = 41
 in_params = Array[ExtResource("2_tllc8")]([SubResource("Resource_wusrb")])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 

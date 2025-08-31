@@ -17,6 +17,28 @@ data = {
 }],
 "min_pos": Vector2(-257.28, 59.7299),
 "nodes": [{
+"args_port": {},
+"name": &"id_0037_scan_splines",
+"position": Vector2(0, 0),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"group_name": "",
+"inspect_enabled": false,
+"random_seed": 3146519054,
+"required_meta_bool": &"",
+"title": "Scan Splines",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "scan_splines"
+}, {
 "args_port": {
 "Splines": {
 "connected": true,
@@ -26,10 +48,13 @@ data = {
 "name": &"id_0009_sample_spline",
 "position": Vector2(197.28, 0.270084),
 "settings": {
+"adjust_to_borders": true,
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
-"debug_enabled": true,
+"debug_enabled": false,
 "debug_mode": 1,
 "debug_modulate_by": "",
+"debug_output": 0,
 "debug_scale": 0.375,
 "disabled": false,
 "distance_attribute": "",
@@ -43,33 +68,13 @@ data = {
 },
 "show_disconnected_inputs": false,
 "template": "sample_spline"
-}, {
-"args_port": {},
-"name": &"id_0037_scan_splines",
-"position": Vector2(0, 0),
-"settings": {
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_scale": 1.0,
-"disabled": false,
-"group_name": "",
-"inspect_enabled": false,
-"random_seed": 3146519054,
-"required_meta_bool": &"",
-"title": "Scan Splines",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "scan_splines"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
 view_zoom = 0.909092
 view_offset = Vector2(-270.891, -258.7)
-new_name_counter = 37
+new_name_counter = 38
 in_params = Array[ExtResource("2_1wmd1")]([])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 
