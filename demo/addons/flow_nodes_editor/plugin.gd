@@ -46,6 +46,9 @@ func _enter_tree():
 	
 	set_process(true)
 	
+func _save_external_data():
+	graph_dock.saveResource()
+	
 func _exit_tree():
 	if undo_redo:
 		undo_redo.history_changed.disconnect(_on_history_changed)

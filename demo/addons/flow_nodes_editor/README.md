@@ -7,14 +7,11 @@
 		[X] Change density based on the distance to the spline contour
 	[X] Bridge
 [ ] Match & Set is not taking into account the weight attr
-[ ] Support for multiple data in stream evaluation?
-	[ ] Debug
-	[ ] Generic Loop
-	[ ] Node to group
-	[ ] Node to split by condition/field
-	[ ] Substruct will read all input nodes..
-	[ ] partition
+[ ] Integrate with HTerrain plugin
 [ ] Subgraphs / Loops?
+[ ] Patterns
+[ ] Sample spline along N random positions
+[ ] Remove vertices too close to hard edges of a mesh
 [ ] Add noise to position <-- Improve noise
 [ ] Spline sampling interior in non grid pattern
 [ ] Allow to filter rows in the inspector
@@ -23,6 +20,12 @@
 [ ] Test random colors for each node -> Graph Editor Settings
 [ ] add_attribute, if output is single stream with a type, set the color. Maybe make it generic
 [ ] Allow the popup menu to have sections. Custom SubGraphs/Resources/Folders maybe
+[X] The inspected flag is saved, but it's now never restored
+[X] Support for multiple data in stream evaluation?
+	[X] Debug
+	[X] Generic Loop
+	[X] Node to group <-- Merge
+	[X] Node to split by condition/field <-- Partition
 [X] Allow meta to define input requirements. Single vs Multiple/Accepted Types/Required
 [X] Hightlight the node being evaluated rather than the connections
 [X] Do not update what it's not dirty

@@ -5,23 +5,26 @@ func _init():
 	meta_node = {
 		"title" : "Merge",
 		"settings" : MergeNodeSettings,
-		"ins" : [{ "label": "In A" }, { "label": "In B" }], 
+		"ins" : [{ "label": "In" }], 
 		"outs" : [{ "label" : "Out" }],		
 		"tooltip" : "Merges and combines all streams of all input connections in a single output\nIf input A provides streams s1 and s2, and input B streams s1 and s3\nthe output will have streams s1,s2 and s3 and the default values will be used where the input does not define a value.",
 	}
 
-func execute( ctx : FlowData.EvaluationContext ):
+func run( ctx : FlowData.EvaluationContext ):
 	
-	var in_dataA : FlowData.Data = get_input(0)
-	var in_dataB : FlowData.Data = get_input(1)
-	var in_datas = [ in_dataA, in_dataB ]
-
 	var merge_all = getSettingValue( ctx, "merge_all_attributes" )
-
 	var out_data := FlowData.Data.new()
 	var offset = 0
-	for in_data in in_datas:
-		# print( "Processing input data with size %d: (Offset:%d)" % [ in_data.size(), offset ] )
+	
+	# Each output connected to our input can bring several bulk datas
+	for bulk_index in range( num_connected_bulks ):
+		readAllInputsForBulk( ctx, bulk_index )
+		var in_data = get_input(0)
+		if in_data == null:
+			continue
+			
+		if settings.trace:
+			print( "Processing input data with size %d: (Offset:%d)" % [ in_data.size(), offset ] )
 
 		# For each stream
 		for stream_name in in_data.streams:

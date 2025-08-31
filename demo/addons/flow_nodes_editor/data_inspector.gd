@@ -8,6 +8,7 @@ extends Control
 
 @onready var tv : TableView = %TableView
 @onready var slot_selector : OptionButton = %SlotSelector
+@onready var bulk_selector : OptionButton = %BulkSelector
 
 var node : FlowNodeBase
 var num_rows : int = 0
@@ -18,7 +19,8 @@ var data : FlowData.Data
 
 # The slot corresponds to InA, InB, or Out streams for example
 # The setetings are not included
-var current_slot_index := 0
+var current_bulk_index := 0
+var current_port_index := 0
 var is_output : bool = true
 
 var container
@@ -34,6 +36,7 @@ func setNode( new_node : FlowNodeBase ):
 	if node != new_node and new_node:
 		%LabelTitle.text = new_node.get_title()
 		new_node.settings.inspect_enabled = true
+		current_bulk_index = new_node.settings.debug_bulk
 		node = new_node
 		node.setupDrawDebug()
 	else:
@@ -159,12 +162,23 @@ func refresh():
 	data = null
 	
 	if node:
+			
 		if is_output:
-			data = node.get_output( current_slot_index )
+			if current_bulk_index >= node.generated_bulks.size():
+				current_bulk_index = 0
+
+			if node.settings.debug_bulk != current_bulk_index:
+				print( "Updating node.settings.debug_bulk to %d" % [ current_bulk_index ])
+				node.settings.debug_bulk = current_bulk_index
+				node.setupDrawDebug()				
+				
+			data = node.get_bulk_output( current_bulk_index, current_port_index )
+			print( "Requesting out bulk %d:%d -> %s" % [ current_bulk_index, current_port_index, data ])
+			#data.dump( "Data refresh")
 		else:
-			data = node.get_input( current_slot_index )
+			data = node.get_bulk_input( current_bulk_index, current_port_index )
 		
-	if data:
+	if data != null:
 
 		updateNumRowsAndCols()
 		%LabelStats.text = "%d Rows, (%d cols in %d Streams)" % [ num_rows, num_cols, data.numFields()]
@@ -193,17 +207,29 @@ func _on_btn_refresh_pressed():
 	refresh()
 
 func _on_slot_selector_item_selected(index: int) -> void:
+	print( "_on_slot_selector_item_selected %d node: %s" % [ index, node ] )
 	if not node:
 		return
 		
 	var meta = node.getMeta()
 	if index < meta.outs.size():
 		is_output = true
-		current_slot_index = index
+		current_port_index = index
+		if current_bulk_index >= node.generated_bulks.size():
+			current_bulk_index = 0
+		print( "Selected output Bulk:%d Port:%d" % [ current_bulk_index, current_port_index ] )
 	else:
-		current_slot_index = index - meta.outs.size()
+		current_port_index = index - meta.outs.size()
 		is_output = false
-	#print( "Selected slot %d -> Output:%s %d" % [ index, is_output, current_slot_index ] )
+		print( "Selected input Bulk:%d Port:%d" % [ current_bulk_index, current_port_index ] )
+
+	current_bulk_index = 0
+	populateBulks()
+	refresh()
+
+func _on_bulk_selector_item_selected(index):
+	print( "bulk_selector changed to %d node: %s" % [ index, node ] )
+	current_bulk_index = index
 	refresh()
 
 func populateSlots():
@@ -222,3 +248,14 @@ func populateSlots():
 	for slot in meta.ins:
 		slot_selector.add_item( slot.label, idx )
 		idx +=1
+	populateBulks()
+	
+func populateBulks():
+	bulk_selector.clear()
+	if is_output:
+		for bulk_idx in range( node.generated_bulks.size() ):
+			bulk_selector.add_item( "Out Bulk %d" % bulk_idx, bulk_idx )
+	else:
+		for bulk_idx in range( node.input_bulks.size() ):
+			bulk_selector.add_item( "In Bulk %d" % bulk_idx, bulk_idx )
+	bulk_selector.select( current_bulk_index )

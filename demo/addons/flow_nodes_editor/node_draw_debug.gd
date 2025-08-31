@@ -82,13 +82,14 @@ func setupColors( out_data : FlowData.Data ):
 		RenderingServer.multimesh_instance_set_color( multimesh_rid, idx, color )
 
 func setupDraw():
-	if !node.settings.debug_enabled or node.settings.disabled:
+	var s = node.settings
+	if !s.debug_enabled or s.disabled:
 		return
 		
-	if not node.get_optional_output(0):
-		return
-
-	var out_data : FlowData.Data = node.get_output(0)
+	s.debug_bulk = clampi( s.debug_bulk, 0, node.generated_bulks.size() - 1)
+	s.debug_output = clampi( s.debug_output, 0, node.generated_bulks[s.debug_bulk].size() - 1)
+		
+	var out_data : FlowData.Data = node.get_bulk_output(s.debug_bulk, s.debug_output)
 	if not out_data || !out_data.hasStream( FlowData.AttrPosition ):
 		print( "setupDebugDraw failed - out_data" )
 		return

@@ -7,9 +7,12 @@ extends GraphNode
 @export var settings: NodeSettings
 var rng : RandomNumberGenerator = RandomNumberGenerator.new()
 
-# Common attributes
+# Common attributes ------------------------------
+var num_connected_bulks : int = 0
+var input_bulks : Array
+var num_generated_bulks : int = 0
+var generated_bulks : Array
 var inputs = []
-var outputs = []
 
 var args_ports_by_name = {}
 var num_in_ports : int = 0
@@ -27,8 +30,8 @@ var connectors_row_prefab = preload( "res://addons/flow_nodes_editor/connectors_
 var connectors_options_prefab = preload( "res://addons/flow_nodes_editor/connectors_options.tscn" )
 
 # Filled during runtime
-var deps : Array[ Dictionary ]
-var dependants : Array[ Dictionary ]
+var deps : Array[ Dictionary ]			# Array of graphEdit connections where I'm the target
+var dependants : Array[ Dictionary ]	# Array of graphEdit connections where I'm the source
 var eval_id : int = 0
 var err : String
 
@@ -57,52 +60,26 @@ func setupDrawDebug():
 	checkDrawDebug()
 	draw_debug.setupDraw()
 		
-func set_output( idx : int, data ):
-	if idx >= outputs.size():
-		outputs.resize( idx + 1 )
-	outputs[ idx ] = data
-
-func set_input( idx : int, data ):
-	if idx >= inputs.size():
-		inputs.resize( idx + 1 )
-	inputs[ idx ] = data
-	
-func clearInputs():
-	for idx in range( inputs.size() ):
-		inputs[ idx ] = null
-
-func get_input( idx : int ):
-	if idx >= inputs.size():
-		push_error( "Input.%d does not exists in node %s" % [ idx, name ])
-		return []
-	return inputs[ idx ]
-
-func get_optional_input( idx : int ):
-	if idx >= inputs.size():
-		return null
-	return inputs[ idx ]
-	
-func get_optional_output( idx : int ):
-	if idx >= outputs.size():
-		return null
-	return outputs[ idx ]
-
-func get_output( idx : int ):
-	if idx >= outputs.size():
-		push_error( "Output.%d does not exists in node %s" % [ idx, name ])
-		return []
-	return outputs[ idx ]
-
 func executedDisabled( ctx : FlowData.EvaluationContext ):
-	if outputs.size() > 0 && inputs.size() > 0:
-		var in_data = inputs[0]
-		outputs.set( 0, in_data )
+	#if outputs.size() > 0 && inputs.size() > 0:
+		#var in_data = inputs[0]
+		#outputs.set( 0, in_data )
+	pass
 
 func preExecute( ctx : FlowData.EvaluationContext ):
-	# clean outputs...
 	eval_id = ctx.eval_id
 	setError("")
 	rng.seed = settings.random_seed
+	num_generated_bulks = 0
+	num_connected_bulks = 0
+	input_bulks = []
+	generated_bulks = []
+	deps.map(func( conn : Dictionary ):
+		if conn.to_port == 0:
+			var node = ctx.gedit_nodes_by_name.get( conn.from_node )
+			if node:
+				num_connected_bulks += node.num_generated_bulks
+	)
 
 func redrawUI():
 	queue_redraw()
@@ -538,3 +515,78 @@ func findNodesMatchingFilters( ctx : FlowData.EvaluationContext, filter_by_class
 				continue
 			scene_nodes.append(node3d)
 	return scene_nodes
+
+# --------------------------------------------------------------------------
+func set_output( port_idx : int, data : FlowData.Data ):
+	if port_idx == 0:
+		num_generated_bulks += 1
+		generated_bulks.append( [] )
+	var bulk : Array = generated_bulks[ num_generated_bulks - 1]
+	if port_idx >= bulk.size():
+		bulk.resize( port_idx + 1 )
+	print( "Saving bulk %d, port %d with %s (%d entries)" % [ num_generated_bulks - 1, port_idx, data.streams.keys(), data.size() ] )
+	bulk[ port_idx ] = data
+	
+func get_input( idx : int ):
+	if idx >= inputs.size():
+		push_error( "Input.%d does not exists in node %s" % [ idx, name ])
+		return []
+	return inputs[ idx ]
+
+func get_optional_input( idx : int ):
+	if idx >= inputs.size():
+		return null
+	return inputs[ idx ]
+
+func get_bulk_input( bulk_idx : int, port_idx : int ):
+	if bulk_idx < input_bulks.size() && port_idx < getMeta().ins.size():
+		return input_bulks[ bulk_idx ][ port_idx ]
+	return null
+	
+func get_bulk_output( bulk_idx : int, port_idx : int ):
+	if bulk_idx >= generated_bulks.size():
+		push_error( "Node %s has not generated bulk %d" % [ name, bulk_idx ])
+		return FlowData.Data.new()
+	if port_idx >= generated_bulks[ bulk_idx ].size():
+		push_error( "Node %s bulk %d has not generated output %d" % [ name, bulk_idx, port_idx ])
+		return FlowData.Data.new()
+	return generated_bulks[ bulk_idx ][ port_idx ]
+
+func execute( ctx ):
+	pass
+
+func _getInputForBulkInContext( ctx : FlowData.EvaluationContext, bulk_idx : int, port_idx : int ):
+	var bulk_counter = 0
+	#print( "_getInputForBulkInContext( %d, %d )" % [ bulk_idx, port_idx ] )
+	for conn in deps:
+		var to_port = conn.to_port
+		if to_port != port_idx:
+			continue
+		var src_node = ctx.gedit_nodes_by_name.get( conn.from_node )
+		if not src_node:
+			continue
+		#print( "  Found.src_node is %s. Has generated %d bulks. So far we have explored %d bulks" % [ src_node, src_node.generated_bulks.size(), bulk_counter ] )
+		var from_port = conn.from_port
+		for input_bulk_idx in range( src_node.generated_bulks.size() ):
+			if bulk_counter == bulk_idx:
+				return src_node.get_bulk_output( input_bulk_idx, from_port )
+			bulk_counter += 1
+	return null
+
+func readAllInputsForBulk( ctx : FlowData.EvaluationContext, bulk_idx : int ):
+	inputs = []
+	for port_idx in range( getMeta().ins.size() ):
+		inputs.append( _getInputForBulkInContext( ctx, bulk_idx, port_idx ))
+	input_bulks.append( inputs )
+
+func run( ctx : FlowData.EvaluationContext ):
+	print( "Running node %s" % name )
+	if getMeta().ins.size() == 0:
+		#print( "Running node with no inputs %s" % name )
+		execute( ctx )
+	else:
+		# Each output connected to our input can bring several bulk datas
+		for bulk_index in range( num_connected_bulks ):
+			readAllInputsForBulk( ctx, bulk_index )
+			print( "Inputs for bulk %d are %s" % [ bulk_index, inputs ])
+			execute( ctx )

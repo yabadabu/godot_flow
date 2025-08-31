@@ -89,6 +89,7 @@ func setResourceToEdit( new_resource : FlowGraphResource, new_resource_owner : F
 	
 	ctx.graph = current_resource
 	ctx.owner = resource_owner
+	ctx.gedit_nodes_by_name = gedit_nodes_by_name
 	markAllNodesAsDirty()
 	queueRegen()
 	populatePopupInputsMenu()
@@ -738,15 +739,20 @@ func getDeps( node : FlowNodeBase ) -> Array[ FlowNodeBase ]:
 		deps.append_array( req_deps )
 	return deps
 	
-func getEvalOrder():
-	# Find targets, like spawn meshes
-	var finals : Array[ FlowNodeBase ]
+func getAllNodes() -> Array[ FlowNodeBase ]:
+	var nodes : Array[ FlowNodeBase ] = []
 	for child in gedit.get_children():
 		var node = child as FlowNodeBase
-		if not node or node.settings.disabled:
+		if not node:
 			continue
-		if node.settings.inspect_enabled or node.settings.debug_enabled or node.getMeta().get( "is_final", false ):
-			finals.append( node )
+		nodes.append( node )
+	return nodes
+	
+func getEvalOrder():
+	# Find targets, like spawn meshes
+	var finals := getAllNodes().filter( func ( node : FlowNodeBase ) -> bool:
+		return ( not node.settings.disabled ) and ( node.settings.inspect_enabled or node.settings.debug_enabled or node.getMeta().get( "is_final", false ) )
+	)
 	
 	# for each node, find requirements
 	# A -
@@ -777,23 +783,17 @@ func removeGeneratedNodes():
 		child.queue_free()
 
 func getDirtyNodes() -> Array[ FlowNodeBase ]:
-	var nodes : Array[ FlowNodeBase ] = []
-	for child in gedit.get_children():
-		var node = child as FlowNodeBase
-		if not node:
-			continue
-		if node.dirty:
-			nodes.append( node )
-	return nodes
+	return getAllNodes().filter( func( node : FlowNodeBase ) -> bool:
+		return node.dirty 
+	)
 
 func cacheConnections():
 	
 	# Clear all the arrays
-	for child in gedit.get_children():
-		var node = child as FlowNodeBase
-		if node:
-			node.deps.clear()
-			node.dependants.clear()
+	var nodes := getAllNodes()
+	for node in nodes:
+		node.deps.clear()
+		node.dependants.clear()
 			
 	# Add each connection to left and right sides
 	for conn in gedit.connections:
@@ -803,12 +803,10 @@ func cacheConnections():
 			src_node.dependants.append( conn )
 			dst_node.deps.append( conn )
 
-	#for child in gedit.get_children():
-		#var node = child as FlowNodeBase
-		#if node:
-			#print( "Node: %s" % [ node.name ])
-			#print( "  deps: %s" % [ node.deps ])
-			#print( "  dependants: %s" % [ node.dependants ])
+	#for node in getAllNodes():
+		#print( "Node: %s" % [ node.name ])
+		#print( "  deps: %s" % [ node.deps ])
+		#print( "  dependants: %s" % [ node.dependants ])
 
 func expandDirtyFlagToDependants( node : FlowNodeBase ):
 	#print( "%s is dirty" % [ node.name ] )
@@ -847,24 +845,20 @@ func evalGraph():
 	for node in nodes_to_eval:
 		#print( "  Eval: %s (%d) Dirty:%s" % [ node.name, node.eval_id, node.dirty ] )
 			
-		# The node has already been evaluated
+		# The node has already been evaluated or it's not dirty. No need to reevaluate it
 		if node.eval_id == ctx.eval_id or not node.dirty:
 			continue
 		
 		var time_node_start = Time.get_ticks_usec()
-		node.clearInputs()
-		for req in node.deps:
-			var req_node = gedit_nodes_by_name.get( req.from_node )
-			var data = req_node.get_output( req.from_port )
-			node.set_input( req.to_port, data )
 		active_nodes.append( node )
-	
+		
+		node.preExecute( ctx )
+		
 		#print( "Evaluating %s" % node.name )
 		if node.settings.disabled:
 			node.executedDisabled( ctx )
 		else:
-			node.preExecute( ctx )
-			node.execute( ctx )
+			node.run( ctx)
 		
 		if node.settings.inspect_enabled:
 			data_inspector.refresh()
@@ -895,10 +889,8 @@ func _on_button_save_pressed() -> void:
 		ResourceSaver.save(current_resource)
 
 func markAllNodesAsDirty():
-	for child in gedit.get_children():
-		var node = child as FlowNodeBase
-		if node:
-			node.dirty = true	
+	for node in getAllNodes():
+		node.dirty = true	
 
 func _on_button_regenerate_pressed() -> void:
 	#for key in input_sources.keys():
@@ -939,12 +931,11 @@ func _on_graph_edit_duplicate_nodes_request():
 	FlowNodeIO.duplicateSelecteddNodes( self )
 	
 func onEditorSceneChanged():
-	# When a node in the scene changes, just mark disty all nodes
+	# When a node in the scene changes, just mark dirty all nodes
 	# which can potentially become dirty
 	# This also triggers as dirty all scan_* nodes when we change
 	# anything in another of our nodes. Not very good
-	for child in gedit.get_children():
-		var node := child as FlowNodeBase
-		if node and node.getMeta().get( "scans_scene", false ):
+	for node in getAllNodes():
+		if node.getMeta().get( "scans_scene", false ):
 			node.dirty = true
 	queueRegen()

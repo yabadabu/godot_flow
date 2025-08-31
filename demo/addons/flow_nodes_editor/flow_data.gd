@@ -21,6 +21,7 @@ class EvaluationContext:
 	var owner : FlowGraphNode3D
 	var eval_id : int = 0
 	var graph : FlowGraphResource
+	var gedit_nodes_by_name : Dictionary
 
 # basis.get_euler() * 180.0 / PI		# <-- This is much faster
 static func basisToEuler( basis : Basis ) -> Vector3:
