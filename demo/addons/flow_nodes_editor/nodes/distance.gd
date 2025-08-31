@@ -5,7 +5,7 @@ func _init():
 	meta_node = {
 		"title" : "Distance",
 		"settings" : DistanceNodeSettings,
-		"ins" : [{"label": "In" }, {"label": "Target" }], 
+		"ins" : [{ "label": "In" }, { "label": "Target" }], 
 		"outs" : [{ "label" : "Out" }],
 		"tooltip" : "Creates a new attribute where the value is\nthe minimum distance from each point to any of the points in the second set.\nThe value can be normalized to an optional Max Distance",
 	}

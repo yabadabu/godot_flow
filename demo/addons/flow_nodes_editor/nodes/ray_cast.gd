@@ -5,7 +5,7 @@ func _init():
 	meta_node = {
 		"title" : "Ray Cast",
 		"settings" : RayCastNodeSettings,
-		"ins" : [{"label": "In" }], 
+		"ins" : [{ "label": "In" }], 
 		"outs" : [{ "label" : "Out" }],
 	}
 

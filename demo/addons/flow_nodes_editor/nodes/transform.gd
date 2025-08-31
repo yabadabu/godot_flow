@@ -5,7 +5,7 @@ func _init():
 	meta_node = {
 		"title" : "Transform",
 		"settings" : TransformNodeSettings,
-		"ins" : [{"label": "In" }], 
+		"ins" : [{ "label": "In" }], 
 		"outs" : [{ "label" : "Out" }],
 		"tooltip" : "Applies the random translation/rotation/scale to each point",
 	}
