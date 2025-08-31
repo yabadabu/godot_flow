@@ -73,6 +73,14 @@ func on_scene_changed(scene_root: Node) -> void:
 		var node = graph_dock.resource_owner
 		if scene_root and (node.get_owner() != scene_root and not scene_root.is_ancestor_of(node)):
 			graph_dock.setResourceToEdit( null, null )
+			
+	# Auto activate the first flow node graph found in the scene
+	for node in scene_root.get_children():
+		var flow_node = node as FlowGraphNode3D
+		if flow_node:
+			graph_dock.setResourceToEdit( flow_node.graph, flow_node )
+			break
+		
 
 func _selection_changed():
 	
@@ -86,7 +94,7 @@ func _selection_changed():
 	setWatchedNode( null )
 
 func setWatchedNode( new_node ):
-	print( "setWatchedNode %s" % new_node )
+	#print( "setWatchedNode %s" % new_node )
 	if current_watched_node:
 		current_watched_node.graph_node_changed.disconnect( onSelectedGraphNodeChanged )
 		current_watched_node = null
