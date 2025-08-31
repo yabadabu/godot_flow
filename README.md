@@ -45,7 +45,11 @@ Inside the ```demo``` folder there is a Godot 4.4 project. Inside the folder ```
 ![Sampling Top Faces of Mesh](demo/addons/flow_nodes_editor/doc/demo_sample_mesh.png)
 
 ### Procedural Basic Bridge
-![Procedural Basic Bridge](demo/addons/flow_nodes_editor/doc/demo_bridge.gif) 
+![Procedural Basic Bridge](demo/addons/flow_nodes_editor/doc/demo_bridge.gif)
+
+And the Associated graph
+
+![Demo Bridge Graph](demo/addons/flow_nodes_editor/doc/demo_bridge_graph.gif) 
 
 # Platforms
     
