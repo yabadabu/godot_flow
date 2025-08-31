@@ -80,7 +80,10 @@ The tool is an editor tool, so it should work where the editor works. Most of th
 
 See the [file](demo/addons/flow_nodes_editor/README.md) 
 
+The plugin is functional, but I have not yet used in any serious project inside Godot. If you try to use it and find problems/suggestions please open an issue.
+
 ## Build From Sources
 
     $ git submodule update --init
     $ scons
+
