@@ -1,0 +1,105 @@
+[gd_scene load_steps=8 format=3 uid="uid://c1b6ke05vpb8r"]
+
+[ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_ieaiv"]
+[ext_resource type="Resource" uid="uid://doldqxmlcvh80" path="res://graph01.tres" id="2_dmyae"]
+[ext_resource type="PackedScene" uid="uid://b6q4l56g02tqn" path="res://scenes/scene_3p.tscn" id="3_wlkwc"]
+[ext_resource type="Script" uid="uid://dbtbo3vh5nl2c" path="res://scenes/scene_3p.gd" id="4_3o3ua"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_ayuu8"]
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_ctgmk"]
+data = PackedVector3Array(1, 0, 1, -1, 0, 1, 1, 0, -1, -1, 0, 1, -1, 0, -1, 1, 0, -1)
+
+[sub_resource type="Curve3D" id="Curve3D_1hm1i"]
+bake_interval = 0.94
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 1.342, 0, 3.268, 1.112, 0, 0.213, -1.112, 0, -0.213, -0.708991, -0.0197018, 4.04708, 0, 0, 0, 0, 0, 0, -1.742, 0, -2.42815),
+"tilts": PackedFloat32Array(0, 0, 0)
+}
+point_count = 3
+
+[node name="DemoScene" type="Node3D"]
+
+[node name="PCG_2" type="Node3D" parent="."]
+script = ExtResource("1_ieaiv")
+graph = ExtResource("2_dmyae")
+refresh_inputs = Callable()
+metadata/_custom_type_script = "uid://d1krtmb1urldl"
+
+[node name="Scene_0000" type="Node3D" parent="PCG_2" instance=ExtResource("3_wlkwc")]
+transform = Transform3D(0.296449, 0.106511, 0.17428, 0, 0.307176, -0.18773, -0.20425, 0.15459, 0.25295, -0.289032, -4.43299, 4.00329)
+script = ExtResource("4_3o3ua")
+metadata/flow_owner = &"id_0039_spawn_scenes"
+
+[node name="Scene_0001" type="Node3D" parent="PCG_2" instance=ExtResource("3_wlkwc")]
+transform = Transform3D(0.296449, 0.106511, 0.17428, 0, 0.307176, -0.18773, -0.20425, 0.15459, 0.25295, -0.853392, -4.20429, 3.93769)
+script = ExtResource("4_3o3ua")
+metadata/flow_owner = &"id_0039_spawn_scenes"
+
+[node name="Scene_0002" type="Node3D" parent="PCG_2" instance=ExtResource("3_wlkwc")]
+transform = Transform3D(0.296449, 0.106511, 0.17428, 0, 0.307176, -0.18773, -0.20425, 0.15459, 0.25295, -1.20059, -3.84892, 3.47077)
+script = ExtResource("4_3o3ua")
+metadata/flow_owner = &"id_0039_spawn_scenes"
+
+[node name="Scene_0003" type="Node3D" parent="PCG_2" instance=ExtResource("3_wlkwc")]
+transform = Transform3D(0.296449, 0.106511, 0.17428, 0, 0.307176, -0.18773, -0.20425, 0.15459, 0.25295, -1.39626, -3.49669, 2.90569)
+script = ExtResource("4_3o3ua")
+metadata/flow_owner = &"id_0039_spawn_scenes"
+
+[node name="Scene_0004" type="Node3D" parent="PCG_2" instance=ExtResource("3_wlkwc")]
+transform = Transform3D(0.296449, 0.106511, 0.17428, 0, 0.307176, -0.18773, -0.20425, 0.15459, 0.25295, -1.5113, -3.16146, 2.31884)
+script = ExtResource("4_3o3ua")
+metadata/flow_owner = &"id_0039_spawn_scenes"
+
+[node name="Scene_0005" type="Node3D" parent="PCG_2" instance=ExtResource("3_wlkwc")]
+transform = Transform3D(0.296449, 0.106511, 0.17428, 0, 0.307176, -0.18773, -0.20425, 0.15459, 0.25295, -1.5957, -2.83422, 1.72676)
+script = ExtResource("4_3o3ua")
+metadata/flow_owner = &"id_0039_spawn_scenes"
+
+[node name="Scene_0006" type="Node3D" parent="PCG_2" instance=ExtResource("3_wlkwc")]
+transform = Transform3D(0.296449, 0.106511, 0.17428, 0, 0.307176, -0.18773, -0.20425, 0.15459, 0.25295, -1.65914, -2.51293, 1.13205)
+script = ExtResource("4_3o3ua")
+metadata/flow_owner = &"id_0039_spawn_scenes"
+
+[node name="Scene_0007" type="Node3D" parent="PCG_2" instance=ExtResource("3_wlkwc")]
+transform = Transform3D(0.296449, 0.106511, 0.17428, 0, 0.307176, -0.18773, -0.20425, 0.15459, 0.25295, -1.7071, -2.19626, 0.535862)
+script = ExtResource("4_3o3ua")
+metadata/flow_owner = &"id_0039_spawn_scenes"
+
+[node name="Scene_0008" type="Node3D" parent="PCG_2" instance=ExtResource("3_wlkwc")]
+transform = Transform3D(0.296449, 0.106511, 0.17428, 0, 0.307176, -0.18773, -0.20425, 0.15459, 0.25295, -1.74291, -1.88337, -0.0611843)
+script = ExtResource("4_3o3ua")
+metadata/flow_owner = &"id_0039_spawn_scenes"
+
+[node name="Scene_0009" type="Node3D" parent="PCG_2" instance=ExtResource("3_wlkwc")]
+transform = Transform3D(0.296449, 0.106511, 0.17428, 0, 0.307176, -0.18773, -0.20425, 0.15459, 0.25295, -1.76869, -1.5737, -0.658754)
+script = ExtResource("4_3o3ua")
+metadata/flow_owner = &"id_0039_spawn_scenes"
+
+[node name="Scene_0010" type="Node3D" parent="PCG_2" instance=ExtResource("3_wlkwc")]
+transform = Transform3D(0.296449, 0.106511, 0.17428, 0, 0.307176, -0.18773, -0.20425, 0.15459, 0.25295, -1.78584, -1.26686, -1.25664)
+script = ExtResource("4_3o3ua")
+metadata/flow_owner = &"id_0039_spawn_scenes"
+
+[node name="Scene_0011" type="Node3D" parent="PCG_2" instance=ExtResource("3_wlkwc")]
+transform = Transform3D(0.296449, 0.106511, 0.17428, 0, 0.307176, -0.18773, -0.20425, 0.15459, 0.25295, -1.79396, -0.963061, -1.8547)
+script = ExtResource("4_3o3ua")
+metadata/flow_owner = &"id_0039_spawn_scenes"
+
+[node name="Scene_0012" type="Node3D" parent="PCG_2" instance=ExtResource("3_wlkwc")]
+transform = Transform3D(0.296449, 0.106511, 0.17428, 0, 0.307176, -0.18773, -0.20425, 0.15459, 0.25295, -1.79563, -0.661472, -2.45283)
+script = ExtResource("4_3o3ua")
+metadata/flow_owner = &"id_0039_spawn_scenes"
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(3.11194, 0.466182, -0.891647, -1.07722, 1.34447, -2.5952, -0.00361333, 0.676621, 5.77109, -2.38702, -1.56438, -0.251251)
+mesh = SubResource("PlaneMesh_ayuu8")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="MeshInstance3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D/StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_ctgmk")
+
+[node name="Path3D" type="Path3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0536261, 9.53674e-07, -0.0246732)
+curve = SubResource("Curve3D_1hm1i")

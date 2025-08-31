@@ -192,7 +192,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 		for idx in range( num_points ):
 			spos[base + idx] = points[idx]
 			var n := normals[idx]
-			srot[base + idx] = FlowData.basisToEuler( basis_from_normal( n ) )
+			srot[base + idx] = FlowData.basisToEuler( FlowData.basisFromNormal( n ) )
 				
 	# All the samples have the same size
 	var ssize := output.getVector3Container( FlowData.AttrSize )

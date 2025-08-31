@@ -213,7 +213,7 @@ func populatePopupMenu() -> PopupMenu:
 		var label = node_meta.title
 		max_id += 1
 		if not node_meta.get( "auto_register", true):
-			print( "Adding menu %s skip (id:%d)" % [ label, max_id ])
+			#print( "Adding menu %s skip (id:%d)" % [ label, max_id ])
 			continue
 			
 		if required_input_type !=FlowData.DataType.Invalid or required_output_type != FlowData.DataType.Invalid:

@@ -30,6 +30,36 @@ class EvaluationContext:
 	var graph : FlowGraphResource
 	var gedit_nodes_by_name : Dictionary
 
+## Build a stable orthonormal Basis from a surface normal.
+## - `normal` is the axis you want to align (default aligns to +Z).
+## - `up` is your preferred up; a safe fallback is chosen if nearly parallel.
+## - `axis` can be "z" (default), "y", or "x" for which axis the normal should align to.
+static func basisFromNormal(normal: Vector3, up: Vector3 = Vector3.UP, axis: String = "z") -> Basis:
+	var n := normal.normalized()
+	if n.length() == 0.0 or not n.is_finite():
+		return Basis.IDENTITY
+
+	# Pick a safe up if nearly parallel to n
+	var safe_up := up
+	if abs(n.dot(safe_up)) > 0.999: # ~parallel
+		# pick the axis least aligned with n
+		safe_up = Vector3.UP if (abs(n.y) < 0.9) else Vector3.RIGHT
+
+	# Build tangent/bitangent
+	var t := safe_up.cross(n).normalized()    # tangent
+	var b := n.cross(t)                       # bitangent; already unit-length if t,n are
+
+	var basis: Basis
+	match axis:
+		"x":
+			basis = Basis(n, t, b)            # X=n, Y=t, Z=b
+		"y":
+			basis = Basis(t, n, b)            # X=t, Y=n, Z=b
+		_:
+			basis = Basis(t, b, n)            # X=t, Y=b, Z=n (default: Z=n)
+
+	return basis.orthonormalized()
+
 # basis.get_euler() * 180.0 / PI		# <-- This is much faster
 static func basisToEuler( basis : Basis ) -> Vector3:
 	var euler = basis.get_euler()
