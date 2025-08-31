@@ -41,6 +41,9 @@ In a scene 3D:
 
 Inside the ```demo``` folder there is a Godot 4.4 project. Inside the folder ```demos``` you can inspect some sample graphs. Click on each FlowGraphNode3D to visualize the graph in the ```Data Flow``` panel
 
+[sample mesh](demo/addons/flow_nodes_editor/doc/demo_sample_mesh.png) 
+[bridge](demo/addons/flow_nodes_editor/doc/demo_bridge.gif) 
+
 # Platforms
     
 Precompiled versions of the plugin are provided for Windows and OSX platforms. But it should compile without problems in the Linux.
