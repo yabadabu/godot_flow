@@ -315,7 +315,7 @@ class Data:
 				
 		return null
 
-	func duplicate():
+	func duplicate() -> Data:
 		# This is not a deep clone, the packed*arrays are shared,
 		# use cloneStream to create an independent copy
 		var s := Data.new()
@@ -324,7 +324,7 @@ class Data:
 		s.last_added_stream_name = last_added_stream_name
 		return s
 		
-	func filter( indices : PackedInt32Array ):
+	func filter( indices : PackedInt32Array ) -> Data:
 		var new_data := Data.new()
 		for old_stream in streams.values():
 			var new_container = filteredStream( old_stream, indices )

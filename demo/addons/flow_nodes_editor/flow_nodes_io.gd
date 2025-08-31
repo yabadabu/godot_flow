@@ -1,6 +1,9 @@
 extends Node
 class_name FlowNodeIO
 
+# Here are all functions related to read/write the resources, including 
+# serialization to/from json for the clipboard
+
 static func resource_to_dict(resource: Resource) -> Dictionary:
 	var dict := {}
 	for prop in resource.get_property_list():

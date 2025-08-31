@@ -12,10 +12,14 @@ func _init():
 	}
 
 func execute( ctx : FlowData.EvaluationContext ):
+	#print( "filter.input: ", inputs )
 	var in_dataA : FlowData.Data = get_input(0)
+	if in_dataA == null:
+		setError( "Input A %s not found" % [settings.in_nameA])
+		return
 	var sA = in_dataA.findStream( settings.in_nameA )
 	if sA == null:
-		setError( "Input A %s not found" % [settings.in_nameA])
+		setError( "Input A stream %s not found" % [settings.in_nameA])
 		return
 	var num_elemsA := in_dataA.size()
 
