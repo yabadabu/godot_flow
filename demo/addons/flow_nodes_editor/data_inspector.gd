@@ -1,6 +1,10 @@
 @tool
 extends Control
 
+# This controls the data_inspector panel to visualize the selected node inputs/outputs
+# Allow to specify the bulk and port index to visualize the data
+# The red yellow appearing over the node
+
 @export var data_ex : int = 0:
 	set(new_value):
 		data_ex = new_value

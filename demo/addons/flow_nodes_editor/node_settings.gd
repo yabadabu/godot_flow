@@ -2,6 +2,10 @@
 class_name NodeSettings
 extends Resource
 
+# Base class for the settings of all nodes
+# Each concrete node implmenets it's own NodeSettings derived class with the 
+# arguments that can be tweaked
+
 enum eDebugMode {
 	EXTENDS,
 	ABSOLUTE,

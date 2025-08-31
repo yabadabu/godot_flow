@@ -1,6 +1,13 @@
 extends Object
 class_name FlowData
 
+# Defines the DataTypes and Data class that is passed between nodes
+# A FlowData.Data is basically a dict of streams, where each stream is:
+#   Container: Continuous typed array of the actual data stored
+#   data_type
+#   name
+# The storage is column oriented, not row oriented
+
 enum DataType {
 	Bool,
 	Int,
@@ -37,6 +44,7 @@ static func eulerToBasis( euler : Vector3) -> Basis:
 	euler.z = deg_to_rad( euler.z )
 	return Basis.from_euler( euler )
 
+# A wrapper around the Position/Rotation/Scale streams
 class TransformsStream:
 	var positions : PackedVector3Array
 	var eulers : PackedVector3Array
@@ -52,6 +60,7 @@ class TransformsStream:
 	func size() -> int:
 		return positions.size()
 
+# The basic information that is passed between nodes
 class Data:
 	var streams : Dictionary = {}
 	var last_added_stream_name : String

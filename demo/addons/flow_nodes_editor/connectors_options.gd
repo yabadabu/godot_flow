@@ -2,6 +2,8 @@
 extends HBoxContainer
 class_name FlowConnectorOptions
 
+# The small widget added to the nodes with options to show/hide the optional inputs
+
 signal expand_toggled( is_on : bool )
 
 var show_disconnected_inputs : bool

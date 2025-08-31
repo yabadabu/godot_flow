@@ -2,7 +2,8 @@
 class_name FlowNodeBase
 extends GraphNode
 
-# This represent the base class for all nodes forming the flow graph
+# This represent the base class for all nodes in the flow graph
+# The actual nodes are implemented in the nodes subfolder
 
 @export var settings: NodeSettings
 var rng : RandomNumberGenerator = RandomNumberGenerator.new()
@@ -59,12 +60,6 @@ func checkDrawDebug():
 func setupDrawDebug():
 	checkDrawDebug()
 	draw_debug.setupDraw()
-		
-func executedDisabled( ctx : FlowData.EvaluationContext ):
-	#if outputs.size() > 0 && inputs.size() > 0:
-		#var in_data = inputs[0]
-		#outputs.set( 0, in_data )
-	pass
 
 func preExecute( ctx : FlowData.EvaluationContext ):
 	eval_id = ctx.eval_id
@@ -74,7 +69,9 @@ func preExecute( ctx : FlowData.EvaluationContext ):
 	num_connected_bulks = 0
 	input_bulks = []
 	generated_bulks = []
+	
 	deps.map(func( conn : Dictionary ):
+		# The number of bulkds in the pin 0 defines how many bulks we are going to generate
 		if conn.to_port == 0:
 			var node = ctx.gedit_nodes_by_name.get( conn.from_node )
 			if node:
@@ -578,6 +575,14 @@ func readAllInputsForBulk( ctx : FlowData.EvaluationContext, bulk_idx : int ):
 	for port_idx in range( getMeta().ins.size() ):
 		inputs.append( _getInputForBulkInContext( ctx, bulk_idx, port_idx ))
 	input_bulks.append( inputs )
+
+# Defines the behaviour of the node in it's disabled status
+# The default behaviour is to pass all inputs as outputs	
+func executedDisabled( ctx : FlowData.EvaluationContext ):
+	for bulk_index in range( num_connected_bulks ):
+		readAllInputsForBulk( ctx, bulk_index )
+		if inputs.size() > 0:
+			set_output( 0, inputs[0] )
 
 func run( ctx : FlowData.EvaluationContext ):
 	print( "Running node %s" % name )

@@ -1,11 +1,19 @@
 @tool
 extends Resource
 class_name FlowGraphResource
+
+# This the resource to store a full flow graph
+
 @export_category("Flow Graph Resource")
 
+# Where we store the graph_nodes + custom settings as a dict
 @export var data: Dictionary = {}
+
+# Visualization params
 @export var view_zoom : float = 1.0
 @export var view_offset : Vector2 = Vector2(0,0)
+
+# To always generate unique name ids for each node
 @export var new_name_counter : int = 0
 
 @export var in_params : Array[GraphInputParameter] = []:

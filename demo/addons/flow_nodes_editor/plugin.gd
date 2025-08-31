@@ -2,7 +2,7 @@
 extends EditorPlugin
 
 # This is the entry point for the plugin
-# Where we register all editors, inspectors and docks
+# Where we register all editors, inspectors and hocks
 
 var graph_dock: FlowGraphEditor
 var data_inspector_dock: Control

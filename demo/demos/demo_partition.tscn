@@ -45,34 +45,34 @@ data = {
 "to_node": &"id_0007_partition",
 "to_port": 0
 }],
-"min_pos": Vector2(100, 160),
+"min_pos": Vector2(100, 260),
 "nodes": [{
-"args_port": {},
-"name": &"id_0003_grid",
-"position": Vector2(0, 280),
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0007_partition",
+"position": Vector2(560, 0),
 "settings": {
+"attribute_name": "position.Z",
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
+"debug_enabled": true,
 "debug_mode": 0,
 "debug_modulate_by": "",
 "debug_output": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "inspect_enabled": false,
-"origin": Vector3(0, 1, 0),
-"random_seed": 947677449,
-"rotation": Vector3(0, 0, 0),
-"size": 1.0,
-"step": Vector3(1, 1, 1),
-"title": "Grid",
-"trace": false,
-"x": 1,
-"y": 1,
-"z": 3
+"out_partition_attribute": "partition_id",
+"random_seed": 3818728217,
+"title": "Partition",
+"trace": true
 },
 "show_disconnected_inputs": false,
-"template": "grid"
+"template": "partition"
 }, {
 "args_port": {},
 "name": &"id_0001_grid",
@@ -107,35 +107,8 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0007_partition",
-"position": Vector2(560, 100),
-"settings": {
-"attribute_name": "position.Z",
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": true,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"out_partition_attribute": "partition_id",
-"random_seed": 3818728217,
-"title": "Partition",
-"trace": true
-},
-"show_disconnected_inputs": false,
-"template": "partition"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
 "name": &"id_0008_transform",
-"position": Vector2(240, 280),
+"position": Vector2(240, 180),
 "settings": {
 "debug_bulk": 1,
 "debug_color": Color(1, 1, 1, 1),
@@ -144,7 +117,7 @@ data = {
 "debug_modulate_by": "",
 "debug_output": 0,
 "debug_scale": 1.0,
-"disabled": false,
+"disabled": true,
 "inspect_enabled": false,
 "offset_max": Vector3(5, 0, 0),
 "offset_min": Vector3(5, 0, 0),
@@ -160,14 +133,9 @@ data = {
 "show_disconnected_inputs": false,
 "template": "transform"
 }, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0014_merge",
-"position": Vector2(400, 100),
+"args_port": {},
+"name": &"id_0003_grid",
+"position": Vector2(0, 180),
 "settings": {
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
@@ -176,8 +144,40 @@ data = {
 "debug_modulate_by": "",
 "debug_output": 0,
 "debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": true,
+"disabled": true,
+"inspect_enabled": false,
+"origin": Vector3(0, 1, 0),
+"random_seed": 947677449,
+"rotation": Vector3(0, 0, 0),
+"size": 1.0,
+"step": Vector3(1, 1, 1),
+"title": "Grid",
+"trace": false,
+"x": 1,
+"y": 1,
+"z": 3
+},
+"show_disconnected_inputs": false,
+"template": "grid"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0014_merge",
+"position": Vector2(400, 0),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": true,
+"inspect_enabled": false,
 "random_seed": 2991590920,
 "title": "Merge",
 "trace": false

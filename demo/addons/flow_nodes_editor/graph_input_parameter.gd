@@ -2,6 +2,8 @@
 class_name GraphInputParameter
 extends Resource
 
+# An graph input with has a type and a constant value
+
 @export var name : String = "arg_name"
 @export var data_type : FlowData.DataType = FlowData.DataType.Float:
 	set(new_value):

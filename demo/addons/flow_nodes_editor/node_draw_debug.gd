@@ -1,6 +1,8 @@
 extends Node
 class_name NodeDrawDebug
 
+# This script is a separate helper script to store all the code associated with rendering the debug boxes in the 3D viewer
+
 var node : FlowNodeBase
 
 # Render

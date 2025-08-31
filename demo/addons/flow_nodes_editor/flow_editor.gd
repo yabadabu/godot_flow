@@ -2,6 +2,8 @@
 extends Control
 class_name FlowGraphEditor
 
+# This is the main container of the DataFlow Graph Editor
+
 var current_resource: FlowGraphResource
 var resource_owner : FlowGraphNode3D
 var ctx := FlowData.EvaluationContext.new()
@@ -9,10 +11,6 @@ var regen_pending := false
 var save_pending := false
 var auto_regen := true
 var dump_performance := false
-
-# Regen needs to take place once the graph nodes have been added/removed
-# from the actual scene, but there are more nodes child of the graph-edit
-var num_non_nodes_children = 0
 
 @onready var gedit : GraphEdit = %GraphEdit
 @onready var data_inspector : Control
@@ -79,7 +77,6 @@ func setResourceToEdit( new_resource : FlowGraphResource, new_resource_owner : F
 	gedit.clear_connections()
 	for child in children:
 		gedit.remove_child( child )
-	num_non_nodes_children = gedit.get_child_count()
 	
 	gedit_nodes_by_name.clear()
 	inspector.edit( null )
@@ -108,7 +105,6 @@ func _process(delta: float) -> void:
 	# This is also trigered to true by plugin.gd:_on_history_changed
 	if regen_pending:
 		#print( "_process.regen_pending: %s" % [ regen_pending ])
-		#if gedit.get_child_count() == num_non_nodes_children + current_resource.nodes.size():
 		evalGraph()
 
 	# Update active connections
@@ -858,7 +854,7 @@ func evalGraph():
 		if node.settings.disabled:
 			node.executedDisabled( ctx )
 		else:
-			node.run( ctx)
+			node.run( ctx )
 		
 		if node.settings.inspect_enabled:
 			data_inspector.refresh()
