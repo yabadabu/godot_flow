@@ -1,4 +1,5 @@
-=== TODO
+# TODO
+
 [ ] Demos
 	[X] Wall of rocks, picking a random point on the top
 	[ ] Path with random subscene, filter by attribute with rotations
@@ -30,7 +31,7 @@
 [X] Hightlight the node being evaluated rather than the connections
 [X] Do not update what it's not dirty
 [X] Introduce the mesh/spline data type
-	[X] NOdes of type Curve/Mesh
+	[X] Nodes of type Curve/Mesh
 	[X] Node to gather
 	[X] Node to create
 	[X] Node to sample (the current one)

@@ -46,4 +46,3 @@ See the [file](demo/addons/flow_nodes_editor/README.md)
 
     $ git submodule update --init
     $ scons
-
