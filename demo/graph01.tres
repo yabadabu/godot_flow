@@ -143,31 +143,6 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0007_debug",
-"position": Vector2(820, 120),
-"settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": true,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"random_seed": 1501725600,
-"title": "Debug",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "debug"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
 "name": &"id_0005_ray_cast",
 "position": Vector2(480, 0),
 "settings": {
@@ -232,34 +207,6 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0039_spawn_scenes",
-"position": Vector2(1180, 0),
-"settings": {
-"assign_attributes": {},
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": true,
-"random_seed": 4115871725,
-"scene": ExtResource("1_kx8in"),
-"scene_attribute": "",
-"title": "Spawn Scenes",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "spawn_scenes"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
 "name": &"id_0008_transform",
 "position": Vector2(1020, 0),
 "settings": {
@@ -285,12 +232,65 @@ data = {
 },
 "show_disconnected_inputs": false,
 "template": "transform"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0039_spawn_scenes",
+"position": Vector2(1180, 0),
+"settings": {
+"assign_attributes": {},
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"random_seed": 4115871725,
+"scene": ExtResource("1_kx8in"),
+"scene_attribute": "",
+"title": "Spawn Scenes",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "spawn_scenes"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0007_debug",
+"position": Vector2(820, 120),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 0.141176, 1, 1),
+"debug_enabled": true,
+"debug_mode": 1,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 0.395,
+"disabled": false,
+"inspect_enabled": false,
+"random_seed": 1501725600,
+"title": "Debug",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "debug"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
-view_zoom = 1.22091
-view_offset = Vector2(295.57, -417.395)
+view_zoom = 1.00902
+view_offset = Vector2(-167.173, -490.492)
 new_name_counter = 9
 in_params = Array[ExtResource("1_hovoc")]([])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
