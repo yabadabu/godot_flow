@@ -49,7 +49,7 @@ Inside the ```demo``` folder there is a Godot 4.4 project. Inside the folder ```
 
 And the Associated graph
 
-![Demo Bridge Graph](demo/addons/flow_nodes_editor/doc/demo_bridge_graph.gif) 
+![Demo Bridge Graph](demo/addons/flow_nodes_editor/doc/demo_bridge_graph.png) 
 
 # Platforms
     

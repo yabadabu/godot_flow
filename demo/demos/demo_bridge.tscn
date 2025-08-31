@@ -81,24 +81,6 @@ data = {
 "to_node": &"id_0005_sample_spline",
 "to_port": 0
 }, {
-"from_node": &"id_0005_sample_spline",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0006_transform",
-"to_port": 0
-}, {
-"from_node": &"id_0013_make_vector",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0006_transform",
-"to_port": 6
-}, {
-"from_node": &"id_0013_make_vector",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0006_transform",
-"to_port": 7
-}, {
 "from_node": &"id_0023_transform",
 "from_port": 0,
 "keep_alive": false,
@@ -116,6 +98,24 @@ data = {
 "keep_alive": false,
 "to_node": &"id_0008_transform",
 "to_port": 2
+}, {
+"from_node": &"id_0005_sample_spline",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0006_transform",
+"to_port": 0
+}, {
+"from_node": &"id_0013_make_vector",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0006_transform",
+"to_port": 6
+}, {
+"from_node": &"id_0013_make_vector",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0006_transform",
+"to_port": 7
 }],
 "min_pos": Vector2(1420, -340),
 "nodes": [{
@@ -516,6 +516,39 @@ data = {
 }, {
 "args_port": {
 "In": {
+"connected": false,
+"port": 0
+}
+},
+"name": &"id_0009_add_attribute",
+"position": Vector2(20, 380),
+"settings": {
+"cte_bool": false,
+"cte_float": 0.9,
+"cte_int": 0,
+"cte_resource": null,
+"cte_string": "",
+"cte_vector": Vector3(0, 0, 0),
+"data_type": 2,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"name": "Width",
+"random_seed": 2852739486,
+"title": "Add Attribute",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "add_attribute"
+}, {
+"args_port": {
+"In": {
 "connected": true,
 "port": 0
 },
@@ -578,45 +611,12 @@ data = {
 },
 "show_disconnected_inputs": true,
 "template": "transform"
-}, {
-"args_port": {
-"In": {
-"connected": false,
-"port": 0
-}
-},
-"name": &"id_0009_add_attribute",
-"position": Vector2(20, 380),
-"settings": {
-"cte_bool": false,
-"cte_float": 0.9,
-"cte_int": 0,
-"cte_resource": null,
-"cte_string": "",
-"cte_vector": Vector3(0, 0, 0),
-"data_type": 2,
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"name": "Width",
-"random_seed": 2852739486,
-"title": "Add Attribute",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "add_attribute"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
-view_zoom = 1.1
-view_offset = Vector2(2012.17, -440.281)
+view_zoom = 0.826446
+view_offset = Vector2(1103.16, -425.24)
 new_name_counter = 24
 in_params = Array[ExtResource("2_wdrda")]([])
 
