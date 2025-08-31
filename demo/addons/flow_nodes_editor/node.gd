@@ -77,6 +77,8 @@ func preExecute( ctx : FlowData.EvaluationContext ):
 			if node:
 				num_connected_bulks += node.num_generated_bulks
 	)
+	if num_connected_bulks == 0:
+		num_connected_bulks = 1
 
 func redrawUI():
 	queue_redraw()
@@ -600,13 +602,8 @@ func executedDisabled( ctx : FlowData.EvaluationContext ):
 			set_output( 0, inputs[0] )
 
 func run( ctx : FlowData.EvaluationContext ):
-	#print( "Running node %s" % name )
-	if deps.size() == 0:
-		#print( "Running node with no inputs %s" % name )
+	for bulk_index in range( num_connected_bulks ):
+		readAllInputsForBulk( ctx, bulk_index )
+		if settings.trace:
+			print( "%s Inputs for bulk %d/%d are %s" % [ name, bulk_index, num_connected_bulks, inputs ])
 		execute( ctx )
-	else:
-		# Each output connected to our input can bring several bulk datas
-		for bulk_index in range( num_connected_bulks ):
-			readAllInputsForBulk( ctx, bulk_index )
-			#print( "Inputs for bulk %d are %s" % [ bulk_index, inputs ])
-			execute( ctx )
