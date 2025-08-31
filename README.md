@@ -29,6 +29,16 @@ In a scene 3D:
 * Grid Base Data Visualization and 3D Debug
 * Flow Graphs are godot resources with optional inputs
 
+# Platforms
+    
+Precompiled versions of the plugin are provided for Windows and OSX platforms. But it should compile without problems in the Linux.
+
+The tool is an editor tool, so it should works where the editor works. Most of the code is currently gdscript, except for wrappers clases to implement KDTrees (from https://github.com/jlblancoc/nanoflann) and RTrees (from https://github.com/nushoin/RTree)
+
+# Roadmap
+
+See the file addons/flow_nodes_editor/README.md
+
 # Build From Sources
 
     $ git submodule update --init
