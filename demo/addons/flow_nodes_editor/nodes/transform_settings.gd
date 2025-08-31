@@ -8,6 +8,7 @@ extends NodeSettings
 @export var offset_max := Vector3(0,0,0)
 @export var rotation_min := Vector3(0,0,0)
 @export var rotation_max := Vector3(0,0,0)
+@export var rotation_local_space := false
 @export var scale_min := Vector3(1,1,1)
 @export var scale_max := Vector3(1,1,1)
 @export var uniform_scale := true

@@ -48,24 +48,6 @@ data = {
 "from_node": &"id_0023_transform",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0008_transform",
-"to_port": 0
-}, {
-"from_node": &"id_0010_make_vector",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0008_transform",
-"to_port": 1
-}, {
-"from_node": &"id_0010_make_vector",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0008_transform",
-"to_port": 2
-}, {
-"from_node": &"id_0023_transform",
-"from_port": 0,
-"keep_alive": false,
 "to_node": &"id_0019_transform",
 "to_port": 0
 }, {
@@ -109,13 +91,31 @@ data = {
 "from_port": 0,
 "keep_alive": false,
 "to_node": &"id_0006_transform",
-"to_port": 5
+"to_port": 6
 }, {
 "from_node": &"id_0013_make_vector",
 "from_port": 0,
 "keep_alive": false,
 "to_node": &"id_0006_transform",
-"to_port": 6
+"to_port": 7
+}, {
+"from_node": &"id_0023_transform",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0008_transform",
+"to_port": 0
+}, {
+"from_node": &"id_0010_make_vector",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0008_transform",
+"to_port": 1
+}, {
+"from_node": &"id_0010_make_vector",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0008_transform",
+"to_port": 2
 }],
 "min_pos": Vector2(1420, -340),
 "nodes": [{
@@ -251,6 +251,7 @@ data = {
 "offset_max": Vector3(1, 0, 0),
 "offset_min": Vector3(1, 0, 0),
 "random_seed": 1326272442,
+"rotation_local_space": false,
 "rotation_max": Vector3(0, 0, 0),
 "rotation_min": Vector3(0, 0, 0),
 "scale_max": Vector3(1, 1, 1),
@@ -283,6 +284,7 @@ data = {
 "offset_max": Vector3(0, 0.5, 0),
 "offset_min": Vector3(0, 0.5, 0),
 "random_seed": 1974044517,
+"rotation_local_space": false,
 "rotation_max": Vector3(0, 0, 0),
 "rotation_min": Vector3(0, 0, 0),
 "scale_max": Vector3(1, 1, 1),
@@ -353,6 +355,7 @@ data = {
 "offset_max": Vector3(1, 0, 0),
 "offset_min": Vector3(1, 0, 0),
 "random_seed": 1326272442,
+"rotation_local_space": false,
 "rotation_max": Vector3(0, 0, 0),
 "rotation_min": Vector3(0, 0, 0),
 "scale_max": Vector3(1, 1, 1),
@@ -524,6 +527,10 @@ data = {
 "connected": false,
 "port": 1
 },
+"rotation_local_space": {
+"connected": false,
+"port": 5
+},
 "rotation_max": {
 "connected": false,
 "port": 4
@@ -534,15 +541,15 @@ data = {
 },
 "scale_max": {
 "connected": true,
-"port": 6
+"port": 7
 },
 "scale_min": {
 "connected": true,
-"port": 5
+"port": 6
 },
 "uniform_scale": {
 "connected": false,
-"port": 7
+"port": 8
 }
 },
 "name": &"id_0006_transform",
@@ -560,6 +567,7 @@ data = {
 "offset_max": Vector3(0, 0, 0),
 "offset_min": Vector3(0, 0, 0),
 "random_seed": 1326272442,
+"rotation_local_space": false,
 "rotation_max": Vector3(0, -3.485, 0),
 "rotation_min": Vector3(0, 4.005, 0),
 "scale_max": Vector3(1, 0.1, 0.9),
@@ -607,8 +615,8 @@ data = {
 "type": "flow_graph_nodes",
 "version": 1
 }
-view_zoom = 0.683013
-view_offset = Vector2(933.372, -488.187)
+view_zoom = 1.1
+view_offset = Vector2(2012.17, -440.281)
 new_name_counter = 24
 in_params = Array[ExtResource("2_wdrda")]([])
 

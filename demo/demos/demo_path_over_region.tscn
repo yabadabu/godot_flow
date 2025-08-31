@@ -182,18 +182,6 @@ data = {
 "keep_alive": false,
 "to_node": &"id_0115_sample_spline",
 "to_port": 0
-}, {
-"from_node": &"id_0112_add_attribute",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0107_merge",
-"to_port": 0
-}, {
-"from_node": &"id_0113_add_attribute",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0107_merge",
-"to_port": 0
 }],
 "min_pos": Vector2(-260, -230),
 "nodes": [{
@@ -809,39 +797,6 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0112_add_attribute",
-"position": Vector2(1000.87, 729.72),
-"settings": {
-"cte_bool": false,
-"cte_float": 0.0,
-"cte_int": 200,
-"cte_resource": null,
-"cte_string": "",
-"cte_vector": Vector3(0, 0, 0),
-"data_type": 1,
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"name": "new_attr",
-"random_seed": 3417441686,
-"title": "Add Attribute",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "add_attribute"
-}, {
-"args_port": {
-"In": {
-"connected": false,
-"port": 0
-}
-},
 "name": &"id_0114_add_attribute",
 "position": Vector2(1000, 550),
 "settings": {
@@ -979,64 +934,6 @@ data = {
 }, {
 "args_port": {
 "In": {
-"connected": false,
-"port": 0
-}
-},
-"name": &"id_0113_add_attribute",
-"position": Vector2(1000, 830),
-"settings": {
-"cte_bool": false,
-"cte_float": 0.0,
-"cte_int": 50,
-"cte_resource": null,
-"cte_string": "",
-"cte_vector": Vector3(0, 0, 0),
-"data_type": 1,
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"name": "new_attr",
-"random_seed": 2605141521,
-"title": "Add Attribute",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "add_attribute"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0107_merge",
-"position": Vector2(1160, 770),
-"settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"random_seed": 985649740,
-"title": "Merge",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "merge"
-}, {
-"args_port": {
-"In": {
 "connected": true,
 "port": 0
 }
@@ -1065,7 +962,7 @@ data = {
 "version": 1
 }
 view_zoom = 0.970564
-view_offset = Vector2(823.736, -12.0712)
+view_offset = Vector2(551.736, -46.0712)
 new_name_counter = 107
 in_params = Array[ExtResource("2_dxf0c")]([])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"

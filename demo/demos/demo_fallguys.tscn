@@ -187,7 +187,7 @@ data = {
 }
 },
 "name": &"id_0022_copy",
-"position": Vector2(2320, 0),
+"position": Vector2(2260, 0),
 "settings": {
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
@@ -587,6 +587,7 @@ data = {
 "offset_max": Vector3(-0.2, 0, 0),
 "offset_min": Vector3(-0.2, 0, 0),
 "random_seed": 1268655514,
+"rotation_local_space": false,
 "rotation_max": Vector3(0, 0, 0),
 "rotation_min": Vector3(0, 0, 0),
 "scale_max": Vector3(1, 1, 1),
@@ -625,43 +626,12 @@ data = {
 }, {
 "args_port": {
 "In": {
-"connected": true,
-"port": 0
-},
-"mesh": {
-"connected": true,
-"port": 1
-}
-},
-"name": &"id_0020_spawn_meshes",
-"position": Vector2(2840, 0),
-"settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"mesh": ExtResource("9_c5783"),
-"mesh_attribute": "",
-"random_seed": 1935723741,
-"title": "Spawn Meshes",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "spawn_meshes"
-}, {
-"args_port": {
-"In": {
 "connected": false,
 "port": 0
 }
 },
 "name": &"id_0008_add_attribute",
-"position": Vector2(2600, 80),
+"position": Vector2(2400, 80),
 "settings": {
 "cte_bool": false,
 "cte_float": 0.0,
@@ -686,12 +656,43 @@ data = {
 },
 "show_disconnected_inputs": false,
 "template": "add_attribute"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+},
+"mesh": {
+"connected": true,
+"port": 1
+}
+},
+"name": &"id_0020_spawn_meshes",
+"position": Vector2(2580, 0),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"mesh": ExtResource("9_c5783"),
+"mesh_attribute": "",
+"random_seed": 1935723741,
+"title": "Spawn Meshes",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "spawn_meshes"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
-view_zoom = 1.331
-view_offset = Vector2(3026.78, 19.5794)
+view_zoom = 0.466507
+view_offset = Vector2(306.704, -383.525)
 new_name_counter = 52
 in_params = Array[ExtResource("2_frxqg")]([])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
@@ -719,7 +720,7 @@ graph = SubResource("Resource_dk6st")
 refresh_inputs = Callable()
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
 
-[node name="@MultiMeshInstance3D@72778" type="MultiMeshInstance3D" parent="FlowGraphNode3D"]
+[node name="@MultiMeshInstance3D@120442" type="MultiMeshInstance3D" parent="FlowGraphNode3D"]
 multimesh = SubResource("MultiMesh_kf2sw")
 metadata/flow_owner = &"id_0020_spawn_meshes"
 

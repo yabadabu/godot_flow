@@ -11,7 +11,7 @@ data = {
 "attached": Array[StringName]([&"id_0001_sample_spline", &"id_0004_make_vector", &"id_0006_transform"]),
 "name": &"id_0013_comment",
 "position": Vector2(239, -41),
-"size": Vector2(519, 379),
+"size": Vector2(562, 409),
 "tint_color": Color(0.282353, 0.239216, 0.545098, 1),
 "title": "Walls"
 }],
@@ -21,12 +21,6 @@ data = {
 "keep_alive": false,
 "to_node": &"id_0006_transform",
 "to_port": 0
-}, {
-"from_node": &"id_0004_make_vector",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0006_transform",
-"to_port": 5
 }, {
 "from_node": &"id_0004_make_vector",
 "from_port": 0,
@@ -81,6 +75,12 @@ data = {
 "keep_alive": false,
 "to_node": &"id_0025_add_attribute",
 "to_port": 1
+}, {
+"from_node": &"id_0004_make_vector",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0006_transform",
+"to_port": 7
 }],
 "min_pos": Vector2(-140, 260),
 "nodes": [{
@@ -100,10 +100,12 @@ data = {
 "cte_string": "",
 "cte_vector": Vector3(0, 0, 0),
 "data_type": 2,
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "",
+"debug_output": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "inspect_enabled": false,
@@ -131,13 +133,15 @@ data = {
 "cte_string": "",
 "cte_vector": Vector3(0, 0, 0),
 "data_type": 2,
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "",
+"debug_output": 0,
 "debug_scale": 1.0,
 "disabled": false,
-"inspect_enabled": true,
+"inspect_enabled": false,
 "name": "Internal",
 "random_seed": 3711800703,
 "title": "Add Attribute",
@@ -160,10 +164,12 @@ data = {
 "position": Vector2(279, 2),
 "settings": {
 "adjust_to_borders": true,
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "",
+"debug_output": 0,
 "debug_scale": 0.085,
 "disabled": false,
 "distance_attribute": "distance",
@@ -191,6 +197,10 @@ data = {
 "connected": false,
 "port": 1
 },
+"rotation_local_space": {
+"connected": false,
+"port": 5
+},
 "rotation_max": {
 "connected": false,
 "port": 4
@@ -201,30 +211,33 @@ data = {
 },
 "scale_max": {
 "connected": true,
-"port": 6
+"port": 7
 },
 "scale_min": {
 "connected": true,
-"port": 5
+"port": 6
 },
 "uniform_scale": {
 "connected": false,
-"port": 7
+"port": 8
 }
 },
 "name": &"id_0006_transform",
 "position": Vector2(540, 0),
 "settings": {
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": true,
 "debug_mode": 0,
 "debug_modulate_by": "",
+"debug_output": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "inspect_enabled": false,
 "offset_max": Vector3(0, 0, 0),
 "offset_min": Vector3(0, 0, 0),
 "random_seed": 2665810846,
+"rotation_local_space": false,
 "rotation_max": Vector3(0, 0, 0),
 "rotation_min": Vector3(0, 0, 0),
 "scale_max": Vector3(1, 1, 1),
@@ -240,10 +253,12 @@ data = {
 "name": &"id_0004_make_vector",
 "position": Vector2(340, 160),
 "settings": {
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "",
+"debug_output": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "inspect_enabled": false,
@@ -262,10 +277,12 @@ data = {
 "name": &"id_0024_scan_splines",
 "position": Vector2(11.3532, 98.5863),
 "settings": {
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "",
+"debug_output": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "group_name": "",
@@ -295,10 +312,12 @@ data = {
 "name": &"id_0010_make_vector",
 "position": Vector2(440, 600),
 "settings": {
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "",
+"debug_output": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "inspect_enabled": false,
@@ -327,10 +346,12 @@ data = {
 "position": Vector2(360, 460),
 "settings": {
 "adjust_to_borders": true,
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "",
+"debug_output": 0,
 "debug_scale": 0.085,
 "disabled": false,
 "distance_attribute": "distance",
@@ -365,10 +386,12 @@ data = {
 "cte_string": "",
 "cte_vector": Vector3(0, 0, 0),
 "data_type": 3,
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": true,
 "debug_mode": 0,
 "debug_modulate_by": "",
+"debug_output": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "inspect_enabled": false,
@@ -389,7 +412,7 @@ new_name_counter = 25
 in_params = Array[ExtResource("2_ef63f")]([])
 
 [sub_resource type="Curve3D" id="Curve3D_lggi4"]
-bake_interval = 1.03
+bake_interval = 0.965
 _data = {
 "points": PackedVector3Array(0, 0, 0, 0, 0, 0, -1.06563, 0, 2.12832, 0.283382, 0, 0.484111, -0.283382, 0, -0.484111, -1.97482, 0, 1.1719, -0.147595, 0, 0.490015, 0.147595, 0, -0.490015, -2.32314, 0, -0.563812, -0.230248, 0, 0.206633, 0.230248, 0, -0.206633, -1.81542, 0, -1.53794, -0.495919, 0, -0.0885569, 0.495919, 0, 0.0885569, -0.923944, 0, -1.85674, -0.0531342, 0, -0.289286, 0.0531342, 0, 0.289286, -0.528389, 0, -1.0066, -0.34242, 0, -0.265671, 0.34242, 0, 0.265671, -0.0147595, 0, 0.770445, 0, 0, 0, 0, 0, 0, 0.923944, 0, 1.0184, 0, 0, 0, 0, 0, 0, 1.91578, 0, -0.168258),
 "tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0)

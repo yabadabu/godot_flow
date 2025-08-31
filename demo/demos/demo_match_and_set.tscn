@@ -182,6 +182,7 @@ data = {
 "offset_max": Vector3(0, 0, 0),
 "offset_min": Vector3(0, 0, 0),
 "random_seed": 2232857195,
+"rotation_local_space": false,
 "rotation_max": Vector3(0, 0, 0),
 "rotation_min": Vector3(0, 0, 0),
 "scale_max": Vector3(20, 4, 20),
@@ -301,6 +302,7 @@ data = {
 "offset_max": Vector3(0, 0, 0),
 "offset_min": Vector3(0, 0, 0),
 "random_seed": 2292551584,
+"rotation_local_space": false,
 "rotation_max": Vector3(0, 360, 0),
 "rotation_min": Vector3(0, 0, 0),
 "scale_max": Vector3(2, 1, 1),
@@ -351,8 +353,8 @@ data = {
 "type": "flow_graph_nodes",
 "version": 1
 }
-view_zoom = 0.909091
-view_offset = Vector2(67.0762, -149.925)
+view_zoom = 0.683013
+view_offset = Vector2(-14.4611, -237.323)
 new_name_counter = 23
 in_params = Array[ExtResource("2_anws3")]([SubResource("Resource_berhf"), SubResource("Resource_6f1cc"), SubResource("Resource_2t1fq"), SubResource("Resource_8r07d")])
 
@@ -388,19 +390,19 @@ graph = SubResource("Resource_qhx7h")
 refresh_inputs = Callable()
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
 
-[node name="@MultiMeshInstance3D@34220" type="MultiMeshInstance3D" parent="FlowGraphNode3D2"]
+[node name="@MultiMeshInstance3D@119017" type="MultiMeshInstance3D" parent="FlowGraphNode3D2"]
 multimesh = SubResource("MultiMesh_m2kqf")
 metadata/flow_owner = &"id_0021_spawn_meshes"
 
-[node name="@MultiMeshInstance3D@34221" type="MultiMeshInstance3D" parent="FlowGraphNode3D2"]
+[node name="@MultiMeshInstance3D@119018" type="MultiMeshInstance3D" parent="FlowGraphNode3D2"]
 multimesh = SubResource("MultiMesh_puk1i")
 metadata/flow_owner = &"id_0021_spawn_meshes"
 
-[node name="@MultiMeshInstance3D@34222" type="MultiMeshInstance3D" parent="FlowGraphNode3D2"]
+[node name="@MultiMeshInstance3D@119019" type="MultiMeshInstance3D" parent="FlowGraphNode3D2"]
 multimesh = SubResource("MultiMesh_lnmet")
 metadata/flow_owner = &"id_0021_spawn_meshes"
 
-[node name="@MultiMeshInstance3D@34223" type="MultiMeshInstance3D" parent="FlowGraphNode3D2"]
+[node name="@MultiMeshInstance3D@119020" type="MultiMeshInstance3D" parent="FlowGraphNode3D2"]
 multimesh = SubResource("MultiMesh_qhx7h")
 metadata/flow_owner = &"id_0021_spawn_meshes"
 
