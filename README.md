@@ -1,6 +1,6 @@
 # Description
 
-This is a Godot 4.4 plugin editor to have a similar tool to the Procedural Content Generator (PCG) from Unreal 5.X into Godot. I call the tool Flow Graph
+This is a Godot 4.4 plugin editor to have a similar tool to the Procedural Content Generator (PCG) from Unreal 5.X into Godot. I call the tool Flow Graph.
 
 # Install
 
@@ -16,6 +16,7 @@ In a scene 3D:
 * Select one node. For example ```Grid```
 * Press 'D' to visualize in the 3D scenes the points as white boxes
 * Tweak parameters of the selected node, like the number of elements in the grid node, or the Size
+* Press 'E' to visualize in the Data Inspector panel and see the actual values of each point
 
 # Features
 
@@ -28,9 +29,15 @@ In a scene 3D:
     - Partition / Reduce / Merge / Sort
     - Ray cast the scene to query and place points
     - Match and Set to assign custom assets to the points
-    - Change point distribution
-* Grid Base Data Visualization and 3D Debug
+    - Change point distribution using godot Curve editors
+* Grid Base Data Visualization 
+* 3D Debug with colors
 * Flow Graphs are godot resources with optional inputs
+* Copy/Paste nodes into the clipboard as json documents
+
+# Samples
+
+Inside the ```demo``` folder there is a Godot 4.4 project. Inside the folder ```demos``` you can inspect some sample graphs. 
 
 # Platforms
     

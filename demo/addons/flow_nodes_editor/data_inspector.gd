@@ -177,7 +177,7 @@ func refresh():
 				node.setupDrawDebug()				
 				
 			data = node.get_bulk_output( current_bulk_index, current_port_index )
-			print( "Requesting out bulk %d:%d -> %s" % [ current_bulk_index, current_port_index, data ])
+			#print( "Requesting out bulk %d:%d -> %s" % [ current_bulk_index, current_port_index, data ])
 			#data.dump( "Data refresh")
 		else:
 			data = node.get_bulk_input( current_bulk_index, current_port_index )

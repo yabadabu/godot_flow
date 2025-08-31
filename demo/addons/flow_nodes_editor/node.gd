@@ -523,7 +523,7 @@ func set_output( port_idx : int, data : FlowData.Data ):
 	var bulk : Array = generated_bulks[ num_generated_bulks - 1]
 	if port_idx >= bulk.size():
 		bulk.resize( port_idx + 1 )
-	print( "Saving bulk %d, port %d with %s (%d entries)" % [ num_generated_bulks - 1, port_idx, data.streams.keys(), data.size() ] )
+	#print( "Saving bulk %d, port %d with %s (%d entries)" % [ num_generated_bulks - 1, port_idx, data.streams.keys(), data.size() ] )
 	bulk[ port_idx ] = data
 	
 func get_input( idx : int ):
@@ -574,8 +574,21 @@ func _getInputForBulkInContext( ctx : FlowData.EvaluationContext, bulk_idx : int
 
 func readAllInputsForBulk( ctx : FlowData.EvaluationContext, bulk_idx : int ):
 	inputs = []
-	for port_idx in range( getMeta().ins.size() ):
+	var num_inputs : int = getMeta().ins.size()
+	for port_idx in range( num_inputs ):
 		inputs.append( _getInputForBulkInContext( ctx, bulk_idx, port_idx ))
+	
+	# Read the options inputs, assuming they only generate a single bulk
+	var option_idx = num_inputs
+	for conn in deps:
+		if conn.to_port >= num_inputs:
+			#print( "Checking conn %s" % conn )
+			var config_input = _getInputForBulkInContext( ctx, 0, conn.to_port )
+			#print( "  -> %s" % config_input.streams  )
+			if conn.to_port >= inputs.size():
+				inputs.resize( conn.to_port + 1 )
+			inputs[ conn.to_port ] = config_input
+			option_idx += 1
 	input_bulks.append( inputs )
 
 # Defines the behaviour of the node in it's disabled status
@@ -587,13 +600,13 @@ func executedDisabled( ctx : FlowData.EvaluationContext ):
 			set_output( 0, inputs[0] )
 
 func run( ctx : FlowData.EvaluationContext ):
-	print( "Running node %s" % name )
-	if getMeta().ins.size() == 0:
+	#print( "Running node %s" % name )
+	if deps.size() == 0:
 		#print( "Running node with no inputs %s" % name )
 		execute( ctx )
 	else:
 		# Each output connected to our input can bring several bulk datas
 		for bulk_index in range( num_connected_bulks ):
 			readAllInputsForBulk( ctx, bulk_index )
-			print( "Inputs for bulk %d are %s" % [ bulk_index, inputs ])
+			#print( "Inputs for bulk %d are %s" % [ bulk_index, inputs ])
 			execute( ctx )
