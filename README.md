@@ -1,10 +1,10 @@
 # Description
 
-This is a Godot 4.4 plugin editor to have a similar tool to the Procedural Content Generator (PCG) from Unreal 5.X into Godot.
+This is a Godot 4.4 plugin editor to have a similar tool to the Procedural Content Generator (PCG) from Unreal 5.X into Godot. I call the tool Flow Graph
 
 # Install
 
-Copy the ```addons/flow_nodes_editor``` and ```bin``` folders into your project, then in the ```Project | Project Settings | Plugins``` enable the plugin "Flow Nodes Editor"
+Copy the ```demo/addons/flow_nodes_editor``` and ```demo/bin``` folders into your project, then in the ```Project | Project Settings | Plugins``` enable the plugin "Flow Nodes Editor"
 
 # Basic Usage
 
@@ -20,12 +20,15 @@ In a scene 3D:
 # Features
 
 * +32 nodes including:
-    - Sampling splines
+    - Sampling splines (contout and interior)
     - Sampling meshes
     - CSG operations with points sets
     - Spawn meshes/full scenes with customized parameters
     - Expressions evaluation
     - Partition / Reduce / Merge / Sort
+    - Ray cast the scene to query and place points
+    - Match and Set to assign custom assets to the points
+    - Change point distribution
 * Grid Base Data Visualization and 3D Debug
 * Flow Graphs are godot resources with optional inputs
 
@@ -37,7 +40,7 @@ The tool is an editor tool, so it should works where the editor works. Most of t
 
 # Roadmap
 
-See the file addons/flow_nodes_editor/README.md
+See the [file](demo/addons/flow_nodes_editor/README.md) 
 
 # Build From Sources
 
