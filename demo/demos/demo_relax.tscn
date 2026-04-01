@@ -33,16 +33,18 @@ data = {
 "to_node": &"id_0019_relax",
 "to_port": 0
 }],
-"min_pos": Vector2(80, 60),
+"min_pos": Vector2(80, 180),
 "nodes": [{
 "args_port": {},
 "name": &"id_0001_scan_splines",
-"position": Vector2(0, 120),
+"position": Vector2(0, 0),
 "settings": {
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "",
+"debug_output": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "group_name": "",
@@ -62,13 +64,15 @@ data = {
 }
 },
 "name": &"id_0003_sample_spline",
-"position": Vector2(140, 120),
+"position": Vector2(140, 0),
 "settings": {
 "adjust_to_borders": true,
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "",
+"debug_output": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "distance_attribute": "distance",
@@ -94,18 +98,20 @@ data = {
 }
 },
 "name": &"id_0018_math_op",
-"position": Vector2(500, 120),
+"position": Vector2(500, 0),
 "settings": {
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "",
+"debug_output": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "in_nameA": "position.Y",
 "in_nameB": "0.0",
-"inspect_enabled": false,
-"operation": 9,
+"inspect_enabled": true,
+"operation": 2,
 "out_name": "position.Y",
 "random_seed": 820617526,
 "title": "Math",
@@ -123,10 +129,12 @@ data = {
 "name": &"id_0007_sample_points",
 "position": Vector2(340, 0),
 "settings": {
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "",
+"debug_output": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "distribution": 3,
@@ -136,12 +144,12 @@ data = {
 "max_y": 1,
 "max_z": 32,
 "new_size_factor": 0.655,
-"num_samples": 1,
+"num_samples": 2,
 "out_group_id": "",
 "phase": 0.0,
 "random_seed": 1950616807,
 "sampling_distance": 0.2,
-"size": 0.695,
+"size": 0.43,
 "title": "Sample Points",
 "trace": false
 },
@@ -155,19 +163,21 @@ data = {
 }
 },
 "name": &"id_0019_relax",
-"position": Vector2(707.83044, 139.29904),
+"position": Vector2(680, 0),
 "settings": {
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
+"debug_enabled": true,
 "debug_mode": 0,
 "debug_modulate_by": "",
+"debug_output": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "inspect_enabled": false,
-"num_iterations": 1,
-"padding": 0.0,
+"num_iterations": 10,
+"padding": 0.39,
 "random_seed": 3682873854,
-"strength": 0.5,
+"strength": 0.165,
 "title": "Relax",
 "trace": false
 },
@@ -178,7 +188,7 @@ data = {
 "version": 1
 }
 view_zoom = 1.0640846
-view_offset = Vector2(639.3183, -94.928955)
+view_offset = Vector2(593.29944, -139.25586)
 new_name_counter = 19
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_lfecj"]
@@ -189,7 +199,7 @@ size = Vector3(2, 0.001, 2)
 [sub_resource type="Curve3D" id="Curve3D_ioxdu"]
 bake_interval = 0.445
 _data = {
-"points": PackedVector3Array(0, 0, 0, 0, 0, 0, -2.078, 0, 0.52, -0.13, 0, -0.179, 0.13, 0, 0.179, -1.675, 0, 1.76, -1.1228253, 0.05675387, -0.6881552, 1.1228253, -0.05675387, 0.6881552, -0.96684694, 0.0049230875, 3.8302326, -1.0533683, 0.08161844, 0.7586708, 1.0533683, -0.08161844, -0.7586708, 1.6090155, -0.0011439666, 4.147191, -0.153, 0, 0.535, 0.15311825, 0.012669286, -0.53535163, 2.9260461, -0.006180424, 1.038596),
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, -2.078, 0, 0.52, -0.13, 0, -0.179, 0.13, 0, 0.179, -1.675, 0, 1.76, -1.1228253, 0.05675387, -0.6881552, 1.1228253, -0.05675387, 0.6881552, -0.96684694, 0.0049230875, 3.8302326, -1.0533683, 0.08161844, 0.7586708, 1.0533683, -0.08161844, -0.7586708, 1.6090155, -0.0011439666, 4.147191, -0.153, 0, 0.535, 0.15311825, 0.012669286, -0.53535163, 5.0786915, -0.018180892, 1.0411487),
 "tilts": PackedFloat32Array(0, 0, 0, 0, 0)
 }
 point_count = 5

@@ -159,9 +159,6 @@ func execute( _ctx : FlowData.EvaluationContext ):
 				MathOpNodeSettings.eOperation.Add:
 					for i in num_elems:
 						outC[i] = inA[i] + inB[i]
-				MathOpNodeSettings.eOperation.Set:
-					for i in num_elems:
-						outC[i] = inB[i]
 				MathOpNodeSettings.eOperation.Substract:
 					for i in num_elems:
 						outC[i] = inA[i] - inB[i]

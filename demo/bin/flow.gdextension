@@ -3,6 +3,7 @@ entry_symbol = "library_init"
 compatibility_minimum = "4.4"
 
 [libraries]
+windows.x86_64.editor = "res://bin/libflow.windows.editor.x86_64.dll"
 windows.x86_64.debug = "res://bin/libflow.windows.template_debug.x86_64.dll"
 windows.x86_64.release = "res://bin/libflow.windows.template_release.x86_64.dll"
 macos.debug = "res://bin/libflow.macos.template_debug.framework"
