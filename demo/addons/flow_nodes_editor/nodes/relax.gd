@@ -17,6 +17,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 	var strength : float = getSettingValue( ctx, "strength" )
 	var delta : Vector3 = Vector3( 0,strength,0)
 	var num_iterations : int = getSettingValue( ctx, "num_iterations" )
+	var padding : float = getSettingValue( ctx, "padding" )
 	#print( "Iterating %d" % [num_iterations])
 
 	var tA := GDRTree.new()
@@ -39,7 +40,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 		
 		for i in spos.size():
 			candidate_pos[0] = spos[i]
-			candidate_size[0] = szA[i] * 8
+			candidate_size[0] = ( szA[i] + Vector3.ONE ) * padding * 2.0
 			var result = tA.overlaps( candidate_pos, candidate_size, true )
 			
 			for j in result.idxs_overlapped:
@@ -50,11 +51,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 				var dij = vij.length()
 				var dir = vij / dij if dij > 0.0001 else Vector3(randf(), randf(), randf()).normalized()
 
-				# Project each size onto the separation direction
-				#var ri = abs(szA[i].dot(dir))
-				#var rj = abs(szA[j].dot(dir))
-				#var radius = (ri + rj) * 0.5
-				var radius = (szA[i] + szA[j]).length() * 0.5
+				var radius = (szA[i] + szA[j]).length() * 0.5 + padding
 				if dij >= radius:
 					continue  # too far
 
