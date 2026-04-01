@@ -184,6 +184,8 @@ func execute( ctx : FlowData.EvaluationContext ):
 			else:
 				spos.resize( base + num_samples )
 				srot.resize( base + num_samples )
+				ssize.resize( base + num_samples )
+				var sample_size = Vector3.ONE * uniform_interval
 				for idx in range( num_samples ):
 					var offset = idx * curve_length / num_samples_float
 					var t : Transform3D = curve.sample_baked_with_rotation( offset )
@@ -191,6 +193,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 					
 					var b : Basis = path_3d.transform.basis * t.basis
 					srot[base + idx] = FlowData.basisToEuler( b )
+					ssize[base + idx] = sample_size
 
 					#print( "%d : %s %s" % [ idx, spos[ base+idx], srot[ base+idx ] ])
 
@@ -200,6 +203,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 	if ssize.size() != spos.size():
 		ssize.resize( spos.size() )
 		var sample_size = Vector3.ONE * uniform_interval
+		print( "Generating size sample", sample_size)
 		ssize.fill(sample_size)
 
 	set_output( 0, output )

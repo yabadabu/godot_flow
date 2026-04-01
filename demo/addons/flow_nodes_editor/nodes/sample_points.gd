@@ -224,7 +224,9 @@ func blueNoiseSampling( ctx : FlowData.EvaluationContext, in_trs : FlowData.Tran
 		
 		var max_size : float = maxf( size.x, size.z )
 		var cell_size : Vector3 = Vector3( max_size, 1.0, max_size )
-		var base_j : int = settings.random_seed & 0xffff
+		
+		# Add i + 256 so each point has a potentially different distribution
+		var base_j : int = (settings.random_seed + i * 256) & 0xffff
 		var max_x = min( size.x, max_size ) * 0.5
 		var max_z = min( size.z, max_size ) * 0.5
 		for j in range( num_samples ):
@@ -235,7 +237,7 @@ func blueNoiseSampling( ctx : FlowData.EvaluationContext, in_trs : FlowData.Tran
 				continue
 			spos[idx] = transform * p
 			srot[idx] = ( rotation )
-			ssize[idx] = ( point_size )
+			ssize[idx] = ( point_size ) * size
 			idx += 1
 			
 		spos.resize( idx )
