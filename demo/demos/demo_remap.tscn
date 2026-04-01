@@ -47,37 +47,6 @@ data = {
 "min_pos": Vector2(80, 200),
 "nodes": [{
 "args_port": {
-"In A": {
-"connected": true,
-"port": 0
-},
-"In B": {
-"connected": false,
-"port": 1
-}
-},
-"name": &"id_0006_math_op",
-"position": Vector2(560, 140),
-"settings": {
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "distance",
-"debug_scale": 1.0,
-"disabled": false,
-"in_nameA": "@last",
-"in_nameB": "@last",
-"inspect_enabled": false,
-"operation": 15,
-"out_name": "@last",
-"random_seed": 2509549124,
-"title": "Math",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "math_op"
-}, {
-"args_port": {
 "In": {
 "connected": true,
 "port": 0
@@ -195,6 +164,7 @@ data = {
 "debug_scale": 1.0,
 "disabled": false,
 "filter_by_class_name": "",
+"filter_by_name": "",
 "group_name": "RefPoints",
 "import_metadata": false,
 "import_properties": Array[StringName]([]),
@@ -206,12 +176,43 @@ data = {
 },
 "show_disconnected_inputs": false,
 "template": "scan_nodes"
+}, {
+"args_port": {
+"In A": {
+"connected": true,
+"port": 0
+},
+"In B": {
+"connected": false,
+"port": 1
+}
+},
+"name": &"id_0006_math_op",
+"position": Vector2(560, 140),
+"settings": {
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "distance",
+"debug_scale": 1.0,
+"disabled": false,
+"in_nameA": "@last",
+"in_nameB": "@last",
+"inspect_enabled": false,
+"operation": 14,
+"out_name": "@last",
+"random_seed": 2509549124,
+"title": "Math",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "math_op"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
-view_zoom = 0.826446
-view_offset = Vector2(0.173523, -113.322)
+view_zoom = 0.909091
+view_offset = Vector2(64.291, -70.6541)
 new_name_counter = 7
 in_params = Array[ExtResource("2_cwlch")]([])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
@@ -225,4 +226,4 @@ refresh_inputs = Callable()
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
 
 [node name="RefPoint" type="Node3D" parent="." groups=["RefPoints"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.38174, 0.0712218, 2.26193)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.35342, 0.0712216, 1.59026)

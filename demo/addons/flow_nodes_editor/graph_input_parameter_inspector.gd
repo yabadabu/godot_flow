@@ -1,6 +1,9 @@
 @tool
 extends EditorInspectorPlugin
 
+# Editor Inspector to show just the parameter associated to the Input Type
+# So, if the input is defined as float, show only the cte_float member in the inspector
+
 func _can_handle(obj: Object) -> bool:
 	return obj is GraphInputParameter
 

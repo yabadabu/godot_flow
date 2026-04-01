@@ -21,18 +21,6 @@ data = {
 "to_node": &"id_0005_expression",
 "to_port": 0
 }, {
-"from_node": &"id_0005_expression",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0007_create_spline",
-"to_port": 0
-}, {
-"from_node": &"id_0009_transform",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0010_expression",
-"to_port": 0
-}, {
 "from_node": &"id_0008_sample_spline",
 "from_port": 0,
 "keep_alive": false,
@@ -50,116 +38,42 @@ data = {
 "keep_alive": false,
 "to_node": &"id_0008_sample_spline",
 "to_port": 0
+}, {
+"from_node": &"id_0005_expression",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0011_expression",
+"to_port": 0
+}, {
+"from_node": &"id_0011_expression",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0007_create_spline",
+"to_port": 0
 }],
 "min_pos": Vector2(40, 160),
 "nodes": [{
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0007_create_spline",
-"position": Vector2(680, 0),
+"args_port": {},
+"name": &"id_0001_scan_splines",
+"position": Vector2(0, 0),
 "settings": {
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "",
+"debug_output": 0,
 "debug_scale": 1.0,
 "disabled": false,
+"group_name": "",
 "inspect_enabled": false,
-"random_seed": 1220668871,
-"title": "Create Spline",
+"random_seed": 277831965,
+"required_meta_bool": &"",
+"title": "Scan Splines",
 "trace": false
 },
 "show_disconnected_inputs": false,
-"template": "create_spline"
-}, {
-"args_port": {
-"Splines": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0008_sample_spline",
-"position": Vector2(860, 0),
-"settings": {
-"adjust_to_borders": true,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 1,
-"debug_modulate_by": "",
-"debug_scale": 0.125,
-"disabled": false,
-"distance_attribute": "distance",
-"fill_curve": false,
-"inspect_enabled": false,
-"random_seed": 1995640507,
-"sample_segments_centers": false,
-"title": "Sample Spline",
-"trace": false,
-"uniform_interval": 0.685
-},
-"show_disconnected_inputs": false,
-"template": "sample_spline"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0005_expression",
-"position": Vector2(480, 0),
-"settings": {
-"args": {},
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": true,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_scale": 1.0,
-"disabled": false,
-"expose_arrays": false,
-"expression": "position.y + size.y * 0.5",
-"inspect_enabled": false,
-"out_name": "position.Y",
-"random_seed": 258211304,
-"title": "Expression",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "expression"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0003_transform",
-"position": Vector2(320, 0),
-"settings": {
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"offset_max": Vector3(0, 0, 0),
-"offset_min": Vector3(0, 0, 0),
-"random_seed": 2943887412,
-"rotation_max": Vector3(30, 360, 10),
-"rotation_min": Vector3(0, 0, -10),
-"scale_max": Vector3(0.64, 0.895, 0.4),
-"scale_min": Vector3(0.12, 0.2, 0.4),
-"title": "Transform",
-"trace": false,
-"uniform_scale": false
-},
-"show_disconnected_inputs": false,
-"template": "transform"
+"template": "scan_splines"
 }, {
 "args_port": {
 "Splines": {
@@ -171,10 +85,12 @@ data = {
 "position": Vector2(140, 0),
 "settings": {
 "adjust_to_borders": true,
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 1,
 "debug_modulate_by": "",
+"debug_output": 0,
 "debug_scale": 0.285,
 "disabled": false,
 "distance_attribute": "distance",
@@ -189,25 +105,38 @@ data = {
 "show_disconnected_inputs": false,
 "template": "sample_spline"
 }, {
-"args_port": {},
-"name": &"id_0001_scan_splines",
-"position": Vector2(0, 0),
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0003_transform",
+"position": Vector2(320, 0),
 "settings": {
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "",
+"debug_output": 0,
 "debug_scale": 1.0,
 "disabled": false,
-"group_name": "",
 "inspect_enabled": false,
-"random_seed": 277831965,
-"required_meta_bool": &"",
-"title": "Scan Splines",
-"trace": false
+"offset_max": Vector3(0, 0, 0),
+"offset_min": Vector3(0, 0, 0),
+"random_seed": 2943887412,
+"rotation_local_space": false,
+"rotation_max": Vector3(30, 360, 10),
+"rotation_min": Vector3(0, 0, -10),
+"scale_max": Vector3(0.64, 0.895, 0.4),
+"scale_min": Vector3(0.12, 0.2, 0.4),
+"title": "Transform",
+"trace": false,
+"uniform_scale": false
 },
 "show_disconnected_inputs": false,
-"template": "scan_splines"
+"template": "transform"
 }, {
 "args_port": {
 "In": {
@@ -215,19 +144,21 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0010_expression",
-"position": Vector2(1220, 0),
+"name": &"id_0005_expression",
+"position": Vector2(480, 0),
 "settings": {
 "args": {},
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": true,
 "debug_mode": 0,
 "debug_modulate_by": "",
+"debug_output": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "expose_arrays": false,
 "expression": "position.y + size.y * 0.5",
-"inspect_enabled": true,
+"inspect_enabled": false,
 "out_name": "position.Y",
 "random_seed": 258211304,
 "title": "Expression",
@@ -242,23 +173,110 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0009_transform",
-"position": Vector2(1060, 0),
+"name": &"id_0007_create_spline",
+"position": Vector2(920, 0),
 "settings": {
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "",
+"debug_output": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "inspect_enabled": false,
-"offset_max": Vector3(0, 0.215, -0.215),
-"offset_min": Vector3(0, -0.23, 0),
+"random_seed": 1220668871,
+"title": "Create Spline",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "create_spline"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0011_expression",
+"position": Vector2(700, 0),
+"settings": {
+"args": {},
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"expose_arrays": false,
+"expression": "position.y + size.y * 0.5",
+"inspect_enabled": false,
+"out_name": "position.Y",
+"random_seed": 258211304,
+"title": "Expression",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "expression"
+}, {
+"args_port": {
+"Splines": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0008_sample_spline",
+"position": Vector2(1100, 0),
+"settings": {
+"adjust_to_borders": true,
+"debug_bulk": 0,
+"debug_color": Color(1, 0, 0, 1),
+"debug_enabled": false,
+"debug_mode": 1,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 0.125,
+"disabled": false,
+"distance_attribute": "distance",
+"fill_curve": false,
+"inspect_enabled": false,
+"random_seed": 1995640507,
+"sample_segments_centers": false,
+"title": "Sample Spline",
+"trace": false,
+"uniform_interval": 0.51
+},
+"show_disconnected_inputs": false,
+"template": "sample_spline"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0009_transform",
+"position": Vector2(1300, 0),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": true,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"offset_max": Vector3(0, 0.165, 0),
+"offset_min": Vector3(0, 0, 0),
 "random_seed": 902764379,
-"rotation_max": Vector3(135, 0.3, 0),
-"rotation_min": Vector3(45, 0.345, 0),
-"scale_max": Vector3(0.4, 0.975, 0.425),
-"scale_min": Vector3(0.2, 0.4, 0.2),
+"rotation_local_space": false,
+"rotation_max": Vector3(180, 180, 0),
+"rotation_min": Vector3(0, -180, 0),
+"scale_max": Vector3(0.4, 0.3, 0.2),
+"scale_min": Vector3(0.2, 0.2, 0.2),
 "title": "Transform",
 "trace": false,
 "uniform_scale": false
@@ -269,9 +287,9 @@ data = {
 "type": "flow_graph_nodes",
 "version": 1
 }
-view_zoom = 0.826446
-view_offset = Vector2(561.837, -144.039)
-new_name_counter = 10
+view_zoom = 0.751315
+view_offset = Vector2(490.505, -292.986)
+new_name_counter = 12
 in_params = Array[ExtResource("2_abtjl")]([])
 
 [sub_resource type="Curve3D" id="Curve3D_gpa26"]

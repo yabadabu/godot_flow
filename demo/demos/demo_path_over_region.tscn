@@ -165,18 +165,6 @@ data = {
 "to_node": &"id_0107_filter",
 "to_port": 0
 }, {
-"from_node": &"id_0112_add_attribute",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0111_merge",
-"to_port": 0
-}, {
-"from_node": &"id_0113_add_attribute",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0111_merge",
-"to_port": 1
-}, {
 "from_node": &"id_0106_substract",
 "from_port": 0,
 "keep_alive": false,
@@ -210,10 +198,12 @@ data = {
 "name": &"id_0091_math_op",
 "position": Vector2(630, 0),
 "settings": {
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "",
+"debug_output": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "in_nameA": "position.Z",
@@ -244,10 +234,12 @@ data = {
 "cte_string": "Super",
 "cte_vector": Vector3(0, 0, 0),
 "data_type": 4,
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "",
+"debug_output": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "inspect_enabled": false,
@@ -272,10 +264,12 @@ data = {
 "name": &"id_0093_math_op",
 "position": Vector2(920, 0),
 "settings": {
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "",
+"debug_output": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "in_nameA": "ipos",
@@ -306,10 +300,12 @@ data = {
 "cte_string": "",
 "cte_vector": Vector3(0, 0, 0),
 "data_type": 5,
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "",
+"debug_output": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "inspect_enabled": false,
@@ -330,10 +326,12 @@ data = {
 "name": &"id_0095_sort",
 "position": Vector2(1370, 0),
 "settings": {
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "",
+"debug_output": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "inspect_enabled": false,
@@ -359,10 +357,12 @@ data = {
 "name": &"id_0096_math_op",
 "position": Vector2(1230, 0),
 "settings": {
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "",
+"debug_output": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "in_nameA": "index",
@@ -390,10 +390,12 @@ data = {
 "name": &"id_0097_math_op",
 "position": Vector2(1500, 0),
 "settings": {
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "",
+"debug_output": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "in_nameA": "position",
@@ -424,10 +426,12 @@ data = {
 "cte_string": "",
 "cte_vector": Vector3(0, 0, 0),
 "data_type": 2,
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "",
+"debug_output": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "inspect_enabled": false,
@@ -452,10 +456,12 @@ data = {
 "name": &"id_0099_math_op",
 "position": Vector2(620, 130),
 "settings": {
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "",
+"debug_output": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "in_nameA": "size.X",
@@ -486,10 +492,12 @@ data = {
 "cte_string": "",
 "cte_vector": Vector3(0, 0, 0),
 "data_type": 1,
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "",
+"debug_output": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "inspect_enabled": false,
@@ -514,10 +522,12 @@ data = {
 "name": &"id_0101_math_op",
 "position": Vector2(620, 1050),
 "settings": {
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "",
+"debug_output": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "in_nameA": "index",
@@ -545,10 +555,12 @@ data = {
 "head_rotation": "dx",
 "visible": "is_big"
 },
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "",
+"debug_output": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "inspect_enabled": false,
@@ -574,10 +586,12 @@ data = {
 "name": &"id_0103_math_op",
 "position": Vector2(880, 1150),
 "settings": {
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "",
+"debug_output": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "in_nameA": "dx",
@@ -601,10 +615,12 @@ data = {
 "name": &"id_0105_select",
 "position": Vector2(660, 750),
 "settings": {
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "",
+"debug_output": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "inspect_enabled": false,
@@ -630,10 +646,12 @@ data = {
 "name": &"id_0106_substract",
 "position": Vector2(1500, 870),
 "settings": {
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "",
+"debug_output": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "inspect_enabled": false,
@@ -659,10 +677,12 @@ data = {
 "position": Vector2(1320, 570),
 "settings": {
 "condition": 2,
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "",
+"debug_output": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "in_nameA": "distance",
@@ -689,10 +709,12 @@ data = {
 "name": &"id_0108_math_op",
 "position": Vector2(1540, 430),
 "settings": {
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "",
+"debug_output": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "in_nameA": "noise",
@@ -720,10 +742,12 @@ data = {
 "name": &"id_0109_distance",
 "position": Vector2(880, 310),
 "settings": {
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "",
+"debug_output": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "in_nameA": "position",
@@ -747,10 +771,12 @@ data = {
 "name": &"id_0110_noise",
 "position": Vector2(1220, 250),
 "settings": {
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "",
+"debug_output": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "in_scale": 12415.1,
@@ -764,95 +790,6 @@ data = {
 },
 "show_disconnected_inputs": false,
 "template": "noise"
-}, {
-"args_port": {
-"In A": {
-"connected": true,
-"port": 0
-},
-"In B": {
-"connected": true,
-"port": 1
-}
-},
-"name": &"id_0111_merge",
-"position": Vector2(1160, 770),
-"settings": {
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"random_seed": 2827870609,
-"title": "Merge",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "merge"
-}, {
-"args_port": {
-"In": {
-"connected": false,
-"port": 0
-}
-},
-"name": &"id_0112_add_attribute",
-"position": Vector2(1000.87, 729.72),
-"settings": {
-"cte_bool": false,
-"cte_float": 0.0,
-"cte_int": 200,
-"cte_resource": null,
-"cte_string": "",
-"cte_vector": Vector3(0, 0, 0),
-"data_type": 1,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"name": "new_attr",
-"random_seed": 3417441686,
-"title": "Add Attribute",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "add_attribute"
-}, {
-"args_port": {
-"In": {
-"connected": false,
-"port": 0
-}
-},
-"name": &"id_0113_add_attribute",
-"position": Vector2(980, 830),
-"settings": {
-"cte_bool": false,
-"cte_float": 0.0,
-"cte_int": 50,
-"cte_resource": null,
-"cte_string": "",
-"cte_vector": Vector3(0, 0, 0),
-"data_type": 1,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"name": "new_attr",
-"random_seed": 2605141521,
-"title": "Add Attribute",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "add_attribute"
 }, {
 "args_port": {
 "In": {
@@ -870,10 +807,12 @@ data = {
 "cte_string": "John",
 "cte_vector": Vector3(0, 0.21, 0.36),
 "data_type": 2,
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "",
+"debug_output": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "inspect_enabled": false,
@@ -894,10 +833,13 @@ data = {
 "name": &"id_0115_sample_spline",
 "position": Vector2(300, 810),
 "settings": {
+"adjust_to_borders": true,
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "",
+"debug_output": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "distance_attribute": "distance",
@@ -916,13 +858,16 @@ data = {
 "name": &"id_0116_scan_nodes",
 "position": Vector2(320, 1050),
 "settings": {
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "",
+"debug_output": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "filter_by_class_name": "",
+"filter_by_name": "",
 "group_name": "totem",
 "import_metadata": true,
 "import_properties": Array[StringName]([&"num_enemies"]),
@@ -935,38 +880,16 @@ data = {
 "show_disconnected_inputs": false,
 "template": "scan_nodes"
 }, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0117_self_pruning",
-"position": Vector2(1660, 750),
-"settings": {
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": true,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"keep_self_intersections": false,
-"random_seed": 3556067674,
-"title": "Self Pruning",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "self_pruning"
-}, {
 "args_port": {},
 "name": &"id_0106_scan_splines",
 "position": Vector2(0, 330),
 "settings": {
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "",
+"debug_output": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "group_name": "",
@@ -988,10 +911,13 @@ data = {
 "name": &"id_0104_sample_spline",
 "position": Vector2(160, 330),
 "settings": {
+"adjust_to_borders": true,
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "",
+"debug_output": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "distance_attribute": "distance",
@@ -1005,13 +931,39 @@ data = {
 },
 "show_disconnected_inputs": false,
 "template": "sample_spline"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0117_self_pruning",
+"position": Vector2(1660, 750),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": true,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"keep_self_intersections": false,
+"random_seed": 3556067674,
+"title": "Self Pruning",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "self_pruning"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
-view_zoom = 0.662908
-view_offset = Vector2(-186.415, -140.196)
-new_name_counter = 106
+view_zoom = 0.970564
+view_offset = Vector2(551.736, -46.0712)
+new_name_counter = 107
 in_params = Array[ExtResource("2_dxf0c")]([])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 

@@ -6,6 +6,7 @@
 offset_right = 208.0
 offset_bottom = 158.0
 title = "Title"
+ignore_invalid_connection_type = true
 script = ExtResource("1_3mr3y")
 
 [connection signal="draw" from="." to="." method="_on_draw"]

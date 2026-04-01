@@ -12,10 +12,14 @@ func _init():
 	}
 
 func execute( ctx : FlowData.EvaluationContext ):
+	#print( "filter.input: ", inputs )
 	var in_dataA : FlowData.Data = get_input(0)
+	if in_dataA == null:
+		setError( "Input A %s not found" % [settings.in_nameA])
+		return
 	var sA = in_dataA.findStream( settings.in_nameA )
 	if sA == null:
-		setError( "Input A %s not found" % [settings.in_nameA])
+		setError( "Input A stream %s not found" % [settings.in_nameA])
 		return
 	var num_elemsA := in_dataA.size()
 
@@ -35,6 +39,8 @@ func execute( ctx : FlowData.EvaluationContext ):
 		if settings.in_nameB.is_valid_float():
 			var v = settings.in_nameB.to_float()
 			sB = newFloatStream( in_dataA.size(), "Constant %s" % settings.in_nameB, v )
+		elif settings.in_nameB.to_lower() == "true":
+			sB = newFloatStream( in_dataA.size(), "Constant %s" % settings.in_nameB, 1.0 )
 		else:
 			if requires_two_operands:
 				setError( "Input B %s not found, and can't be interpreted as a constant number (Op:%d)" % [settings.in_nameB, settings.condition])
@@ -53,6 +59,10 @@ func execute( ctx : FlowData.EvaluationContext ):
 	
 	# When comparing int vs floats, promote the ints to float to reduce the casuistics
 	if requires_two_operands and sA.data_type == FlowData.DataType.Int and sB.data_type == FlowData.DataType.Float:
+		sA = newFloatStream( num_elemsA, sA.name + " as float", func( idx : int ) -> float: return sA.container[idx] )
+		
+	# Also, when comparing bools vs floats, promote the bool to float to reduce the casuistics
+	if requires_two_operands and sA.data_type == FlowData.DataType.Bool and sB.data_type == FlowData.DataType.Float:
 		sA = newFloatStream( num_elemsA, sA.name + " as float", func( idx : int ) -> float: return sA.container[idx] )
 
 	# This will store the indices that pass the test
@@ -141,7 +151,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 						indices_true.append(i)
 					else:
 						indices_false.append(i)
-
+						
 	elif not requires_two_operands:
 		var inA = sA.container
 		match settings.condition:

@@ -18,9 +18,9 @@ enum eCondition {
 	IsNull
 }
 
+@export var in_nameA : String = "@last"
 @export var condition : eCondition = eCondition.Equal
-@export var in_nameA : String
-@export var in_nameB : String
+@export var in_nameB : String = "@last"
 @export var threshold : float = 0.1
 
 func _init():

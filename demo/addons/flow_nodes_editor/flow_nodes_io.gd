@@ -1,6 +1,9 @@
 extends Node
 class_name FlowNodeIO
 
+# Here are all functions related to read/write the resources, including 
+# serialization to/from json for the clipboard
+
 static func resource_to_dict(resource: Resource) -> Dictionary:
 	var dict := {}
 	for prop in resource.get_property_list():
@@ -151,6 +154,9 @@ static func create_nodes_from_dict( dict, editor : FlowGraphEditor, paste_offset
 		# Apply saved settings...
 		dict_to_resource( in_node.settings, node.settings )
 		
+		# Never inport the inspect_enabled
+		node.settings.inspect_enabled = false
+		
 		node.initFromScript();
 		
 		node.refreshFromSettings()
@@ -223,8 +229,6 @@ static func loadFromResource( editor : FlowGraphEditor ):
 	if current_resource == null:
 		return
 
-	var node_in_data_inspector = null
-	
 	# Register the input_* nodes before trying to load the nodes
 	for input in current_resource.in_params:
 		editor.registerInputNodeType( input )
@@ -236,4 +240,4 @@ static func loadFromResource( editor : FlowGraphEditor ):
 	editor.gedit.zoom = current_resource.view_zoom
 	editor.gedit.scroll_offset = current_resource.view_offset
 	editor.new_name_counter = current_resource.new_name_counter
-	editor.data_inspector.setNode( node_in_data_inspector )
+	editor.data_inspector.setNode( null )

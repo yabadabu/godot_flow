@@ -2,6 +2,8 @@
 extends HBoxContainer
 class_name FlowConnectorRow
 
+# The Basic row containing a left/right connectors
+
 var data : Dictionary = {}
 signal in_popup
 signal out_popup

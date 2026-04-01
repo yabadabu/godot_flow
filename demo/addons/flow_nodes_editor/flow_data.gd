@@ -1,6 +1,13 @@
 extends Object
 class_name FlowData
 
+# Defines the DataTypes and Data class that is passed between nodes
+# A FlowData.Data is basically a dict of streams, where each stream is:
+#   Container: Continuous typed array of the actual data stored
+#   data_type
+#   name
+# The storage is column oriented, not row oriented
+
 enum DataType {
 	Bool,
 	Int,
@@ -21,6 +28,37 @@ class EvaluationContext:
 	var owner : FlowGraphNode3D
 	var eval_id : int = 0
 	var graph : FlowGraphResource
+	var gedit_nodes_by_name : Dictionary
+
+## Build a stable orthonormal Basis from a surface normal.
+## - `normal` is the axis you want to align (default aligns to +Z).
+## - `up` is your preferred up; a safe fallback is chosen if nearly parallel.
+## - `axis` can be "z" (default), "y", or "x" for which axis the normal should align to.
+static func basisFromNormal(normal: Vector3, up: Vector3 = Vector3.UP, axis: String = "z") -> Basis:
+	var n := normal.normalized()
+	if n.length() == 0.0 or not n.is_finite():
+		return Basis.IDENTITY
+
+	# Pick a safe up if nearly parallel to n
+	var safe_up := up
+	if abs(n.dot(safe_up)) > 0.999: # ~parallel
+		# pick the axis least aligned with n
+		safe_up = Vector3.UP if (abs(n.y) < 0.9) else Vector3.RIGHT
+
+	# Build tangent/bitangent
+	var t := safe_up.cross(n).normalized()    # tangent
+	var b := n.cross(t)                       # bitangent; already unit-length if t,n are
+
+	var basis: Basis
+	match axis:
+		"x":
+			basis = Basis(n, t, b)            # X=n, Y=t, Z=b
+		"y":
+			basis = Basis(t, n, b)            # X=t, Y=n, Z=b
+		_:
+			basis = Basis(t, b, n)            # X=t, Y=b, Z=n (default: Z=n)
+
+	return basis.orthonormalized()
 
 # basis.get_euler() * 180.0 / PI		# <-- This is much faster
 static func basisToEuler( basis : Basis ) -> Vector3:
@@ -36,6 +74,7 @@ static func eulerToBasis( euler : Vector3) -> Basis:
 	euler.z = deg_to_rad( euler.z )
 	return Basis.from_euler( euler )
 
+# A wrapper around the Position/Rotation/Scale streams
 class TransformsStream:
 	var positions : PackedVector3Array
 	var eulers : PackedVector3Array
@@ -51,6 +90,7 @@ class TransformsStream:
 	func size() -> int:
 		return positions.size()
 
+# The basic information that is passed between nodes
 class Data:
 	var streams : Dictionary = {}
 	var last_added_stream_name : String
@@ -229,9 +269,9 @@ class Data:
 			return null
 		var sz := size()
 		var new_container = newContainerOfType(data_type)
-		registerStream( name, new_container, data_type )
 		if sz:
 			new_container.resize( sz )
+		registerStream( name, new_container, data_type )
 		return new_container
 	
 	func delStream( name : String):
@@ -315,7 +355,7 @@ class Data:
 				
 		return null
 
-	func duplicate():
+	func duplicate() -> Data:
 		# This is not a deep clone, the packed*arrays are shared,
 		# use cloneStream to create an independent copy
 		var s := Data.new()
@@ -324,7 +364,7 @@ class Data:
 		s.last_added_stream_name = last_added_stream_name
 		return s
 		
-	func filter( indices : PackedInt32Array ):
+	func filter( indices : PackedInt32Array ) -> Data:
 		var new_data := Data.new()
 		for old_stream in streams.values():
 			var new_container = filteredStream( old_stream, indices )

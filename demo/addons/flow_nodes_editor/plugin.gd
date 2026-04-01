@@ -2,14 +2,13 @@
 extends EditorPlugin
 
 # This is the entry point for the plugin
-# Where we register all editors, inspectors and docks
+# Where we register all editors, inspectors and hocks
 
 var graph_dock: FlowGraphEditor
 var data_inspector_dock: Control
 var inspector_plugin
 var watched_nodes : Array[Node] = []
 var undo_redo: EditorUndoRedoManager
-var add_attribute_inspector_plugin : EditorInspectorPlugin
 var graph_input_inspector_plugin : EditorInspectorPlugin
 var node_settings_inspector_plugin : EditorInspectorPlugin
 
@@ -36,8 +35,6 @@ func _enter_tree():
 	graph_dock.data_inspector = data_inspector_dock
 	graph_dock.make_inspector_visible = func(): make_bottom_panel_item_visible( data_inspector_dock )
 	
-	add_attribute_inspector_plugin = load("res://addons/flow_nodes_editor/attribute_inspector_plugin.gd").new()
-	add_inspector_plugin(add_attribute_inspector_plugin)
 	graph_input_inspector_plugin = load("res://addons/flow_nodes_editor/graph_input_parameter_inspector.gd").new()
 	add_inspector_plugin(graph_input_inspector_plugin)
 	node_settings_inspector_plugin = load("res://addons/flow_nodes_editor/node_settings_inspector_plugin.gd").new()
@@ -49,12 +46,14 @@ func _enter_tree():
 	
 	set_process(true)
 	
+func _save_external_data():
+	graph_dock.saveResource()
+	
 func _exit_tree():
 	if undo_redo:
 		undo_redo.history_changed.disconnect(_on_history_changed)
 	remove_inspector_plugin(node_settings_inspector_plugin)
 	remove_inspector_plugin(graph_input_inspector_plugin)
-	remove_inspector_plugin(add_attribute_inspector_plugin)
 	#remove_inspector_plugin(inspector_plugin)
 	remove_control_from_docks(graph_dock)
 	graph_dock.free()
@@ -74,6 +73,14 @@ func on_scene_changed(scene_root: Node) -> void:
 		var node = graph_dock.resource_owner
 		if scene_root and (node.get_owner() != scene_root and not scene_root.is_ancestor_of(node)):
 			graph_dock.setResourceToEdit( null, null )
+			
+	# Auto activate the first flow node graph found in the scene
+	for node in scene_root.get_children():
+		var flow_node = node as FlowGraphNode3D
+		if flow_node:
+			graph_dock.setResourceToEdit( flow_node.graph, flow_node )
+			break
+		
 
 func _selection_changed():
 	
@@ -87,7 +94,7 @@ func _selection_changed():
 	setWatchedNode( null )
 
 func setWatchedNode( new_node ):
-	print( "setWatchedNode %s" % new_node )
+	#print( "setWatchedNode %s" % new_node )
 	if current_watched_node:
 		current_watched_node.graph_node_changed.disconnect( onSelectedGraphNodeChanged )
 		current_watched_node = null

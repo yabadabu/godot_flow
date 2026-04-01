@@ -5,7 +5,7 @@ func _init():
 	meta_node = {
 		"title" : "Self Pruning",
 		"settings" : SelfPruningSettings,
-		"ins" : [{"label": "In" }], 
+		"ins" : [{ "label": "In" }], 
 		"outs" : [{ "label" : "Out" }],
 		"tooltip" : "Rejects any point overlaping previous points.",
 	}
