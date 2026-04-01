@@ -1,6 +1,6 @@
 # Flow Graph (Flow Nodes Editor)
 
-Procedural content graph for Godot 4.4 — an editor plugin inspired by Unreal Engine 5’s PCG. Build point sets, transform them, and spawn meshes/scenes through a visual flow graph.
+Procedural content graph for Godot 4.6 — an editor plugin inspired by Unreal Engine 5’s PCG. Build point sets, transform them, and spawn meshes/scenes through a visual flow graph.
 
 ## Description
 
