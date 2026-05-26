@@ -426,7 +426,7 @@ func populatePopupMenu() -> PopupMenu:
 		"Attributes": ["add_attribute", "attribute_rename", "remove_attribute", "attribute_filter_range", "point_filter_range", "mutate_seed", "add_tags", "delete_tags", "replace_tags", "load_data_table", "data_table_row_to_attribute_set", "load_pcg_data_asset"],
 		"Math": ["math_op", "remap", "expression", "reduce", "boolean"],
 		"Splines": ["create_spline", "sample_spline", "distance", "scan_splines", "clip_points_by_polygon", "clip_paths", "polygon_operation", "split_splines", "create_surface_from_spline", "create_surface_from_polygon"],
-		"Meshes": ["sample_mesh", "mesh_sampler", "scan_meshes", "point_from_mesh", "texture_sampler", "points_from_imported_scene", "load_alembic_file"],
+		"Meshes": ["sample_mesh", "scan_meshes", "point_from_mesh", "texture_sampler", "points_from_imported_scene", "load_alembic_file"],
 		"Spatial": ["substract", "difference", "intersection", "union", "point_neighborhood", "attribute_set_to_point", "point_to_attribute_set", "ray_cast", "physics_overlap_query", "physics_shape_sweep", "navigation_region_sampler"],
 		"Assets": ["assets", "spawn_meshes", "spawn_scenes", "spawn_nodes", "apply_on_actor", "points_from_imported_scene", "load_alembic_file", "load_pcg_data_asset"],
 		"Generators": ["grid", "noise", "relax", "self_pruning", "dungeon_generator", "volume_sampler"],
