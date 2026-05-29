@@ -37,3 +37,9 @@ func _init():
 
 func exposeParam( name : String ):
 	return true
+
+## Override in subclasses to declare which String properties are attribute selectors.
+## Each entry: { "prop": "property_name", "port": input_port_index }
+## The inspector will render these as dropdowns populated from the input data's stream names.
+func _get_attribute_selector_props() -> Array[Dictionary]:
+	return []

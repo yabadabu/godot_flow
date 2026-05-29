@@ -45,8 +45,8 @@ var show_disconnected_inputs : bool = false
 var dirty : bool = false
 
 # Helper to create the UI
-var connectors_row_prefab = preload( "res://addons/flow_nodes_editor/connectors_row.tscn" )
-var connectors_options_prefab = preload( "res://addons/flow_nodes_editor/connectors_options.tscn" )
+const connectors_row_prefab = preload( "res://addons/flow_nodes_editor/connectors_row.tscn" )
+const connectors_options_prefab = preload( "res://addons/flow_nodes_editor/connectors_options.tscn" )
 
 # Filled during runtime
 var deps : Array[ Dictionary ]			# Array of graphEdit connections where I'm the target
@@ -79,6 +79,65 @@ func checkDrawDebug():
 func setupDrawDebug():
 	checkDrawDebug()
 	draw_debug.setupDraw()
+	_cache_output_summaries()
+
+func _cache_output_summaries():
+	var output_summaries = []
+	var meta := getMeta()
+	var outs = meta.get("outs", [])
+	for bulk_idx in range(generated_bulks.size()):
+		var bulk = generated_bulks[bulk_idx]
+		for port_idx in range(outs.size()):
+			if port_idx >= bulk.size() or bulk[port_idx] == null:
+				continue
+			var out_data = bulk[port_idx] as FlowData.Data
+			if out_data == null:
+				continue
+			var info := []
+			for sname in out_data.streams.keys():
+				var stream = out_data.streams[sname]
+				var type_str = FlowData.DataType.keys()[stream.data_type] if stream.data_type < FlowData.DataType.size() else "?"
+				info.append({"name": str(sname), "type": type_str, "count": stream.container.size()})
+			while output_summaries.size() <= port_idx:
+				output_summaries.append(null)
+			output_summaries[port_idx] = {
+				"points": out_data.size(),
+				"streams": out_data.numFields(),
+				"stream_info": info,
+			}
+	set_meta("output_summaries", output_summaries)
+	# Update tooltip with stream summary
+	_update_data_tooltip()
+	redrawUI()
+
+func _update_data_tooltip():
+	var output_summaries = get_meta("output_summaries", [])
+	if output_summaries.is_empty():
+		return
+	var lines := []
+	var meta := getMeta()
+	var outs = meta.get("outs", [])
+	for port_idx in range(mini(output_summaries.size(), outs.size())):
+		var summary = output_summaries[port_idx]
+		if summary == null:
+			continue
+		var port_label = outs[port_idx].get("label", "Out %d" % port_idx)
+		lines.append("%s: %d pts, %d streams" % [port_label, summary.points, summary.streams])
+		for si in summary.stream_info:
+			lines.append("  · %s (%s)" % [si.name, si.type])
+	if lines.size() > 0:
+		tooltip_text = "\n".join(lines)
+
+## Returns a formatted string summary of this node's primary output, for status bar display.
+func get_data_summary() -> String:
+	var output_summaries = get_meta("output_summaries", [])
+	if output_summaries.is_empty() or output_summaries[0] == null:
+		return ""
+	var s = output_summaries[0]
+	var parts := PackedStringArray()
+	for si in s.stream_info:
+		parts.append("%s(%s)" % [si.name, si.type])
+	return "%d pts — %s" % [s.points, ", ".join(parts)]
 
 func preExecute( ctx : FlowData.EvaluationContext ):
 	eval_id = ctx.eval_id
@@ -117,41 +176,104 @@ func get_deterministic_color() -> Color:
 	# We want premium colors, so let's set saturation to around 0.5 and value/brightness to 0.75
 	return Color.from_hsv(hue, 0.5, 0.75)
 
+## Returns a hue value (0-1) based on the node's functional category.
+## Matches Unreal PCG's visual language: generators=green, filters=red, etc.
+func _get_category_hue() -> float:
+	var t := node_template
+	# Input/Output — warm orange
+	if t.begins_with("input") or t.begins_with("output"):
+		return 0.08
+	# Filters — red/coral
+	if t.begins_with("filter") or t == "attribute_filter_range" or t == "select" or t == "select_multi" or t == "select_points" or t == "self_pruning" or t == "partition" or t == "branch" or t == "switch":
+		return 0.0
+	# Generators/Sources — green
+	if t.begins_with("grid") or t.begins_with("sample") or t.begins_with("points_from") or t.begins_with("point_from") or t.begins_with("scan") or t.begins_with("noise") or t.begins_with("load") or t.begins_with("create") or t.begins_with("dungeon"):
+		return 0.33
+	# Transforms — blue
+	if t == "transform" or t == "transform_points" or t == "point_offsets" or t == "snap_to_grid" or t == "copy" or t == "copy_points" or t == "duplicate_point" or t.begins_with("spawn") or t == "apply_on_actor" or t == "relax" or t.begins_with("build_rotation"):
+		return 0.58
+	# Attributes — purple
+	if t.begins_with("attribute") or t.begins_with("add_attribute") or t == "remove_attribute" or t.begins_with("add_tag") or t.begins_with("delete_tag") or t.begins_with("replace_tag") or t.begins_with("tags_mutate") or t == "random_color" or t.begins_with("data_table"):
+		return 0.78
+	# Math/Logic — pink
+	if t == "math_op" or t == "expression" or t.begins_with("compose_vector") or t.begins_with("decompose_vector") or t.begins_with("make_vector") or t == "remap" or t.begins_with("density") or t.begins_with("distance") or t == "boolean" or t == "reduce" or t.begins_with("curve_remap"):
+		return 0.91
+	# Spatial/Physics — teal
+	if t.begins_with("physics") or t.begins_with("ray_cast") or t.begins_with("navigation") or t.begins_with("clip") or t.begins_with("bounds") or t.begins_with("difference") or t.begins_with("intersection") or t == "union" or t.begins_with("polygon"):
+		return 0.48
+	# Merge/Combine — cyan
+	if t == "merge" or t == "merge_points" or t == "combine_points" or t == "sequence_sample":
+		return 0.53
+	# Subgraph — bright cyan
+	if t == "subgraph":
+		return 0.53
+	# BL project-specific — indigo
+	if t.begins_with("bl_"):
+		return 0.72
+	# Debug/Utility — neutral
+	if t == "debug" or t == "print_string" or t == "sanity_check" or t == "get_points_count" or t == "get_data_count" or t == "get_entries_count" or t == "get_loop_index" or t == "loop" or t == "mutate_seed":
+		return 0.17
+	# Fallback: hash-based
+	return float(t.hash() % 360) / 360.0
+
 func update_node_style():
-	var hue = float(node_template.hash() % 360) / 360.0
+	if node_template == "reroute":
+		custom_minimum_size = Vector2(28, 28)
+		var empty_sb = StyleBoxEmpty.new()
+		empty_sb.content_margin_left = 0
+		empty_sb.content_margin_right = 0
+		empty_sb.content_margin_top = 0
+		empty_sb.content_margin_bottom = 0
+		add_theme_stylebox_override("panel", empty_sb)
+		add_theme_stylebox_override("panel_selected", empty_sb)
+		add_theme_stylebox_override("titlebar", empty_sb)
+		add_theme_stylebox_override("titlebar_selected", empty_sb)
+		return
+
+	# Category-based node colors (like Unreal PCG)
+	var cat_hue := _get_category_hue()
 	
 	var is_colored = false
 	var editor = getEditor()
 	if editor and "color_nodes" in editor and editor.color_nodes:
 		is_colored = true
 		
-	# Panel colors
-	var panel_bg: Color
-	var panel_selected_bg: Color
+	# Panel body always stays dark neutral — only titlebar gets category color
+	var panel_bg := Color("1b1e28")
+	var panel_selected_bg := Color("1b1e28")
 	var panel_border: Color
 	var panel_selected_border: Color
 	
 	if is_colored:
-		panel_bg = Color.from_hsv(hue, 0.25, 0.12, 0.9)
-		panel_selected_bg = Color.from_hsv(hue, 0.25, 0.12, 0.9)
-		panel_border = Color.from_hsv(hue, 0.25, 0.3, 0.9)
-		panel_selected_border = Color("22d3ee") # Cyan #22d3ee accent border
+		# Subtle colored left border accent
+		panel_border = Color.from_hsv(cat_hue, 0.4, 0.35, 0.7)
+		panel_selected_border = Color("22d3ee")
 	else:
-		panel_bg = Color("1b1e28") # #1b1e28 node cards
-		panel_selected_bg = Color("1b1e28")
-		panel_border = Color(1.0, 1.0, 1.0, 0.07) # Translucent white border (Figma 1px rgba(255,255,255,0.07))
-		panel_selected_border = Color("22d3ee") # Cyan #22d3ee accent border
+		panel_border = Color(1.0, 1.0, 1.0, 0.07)
+		panel_selected_border = Color("22d3ee")
+	
+	# Override border color for debug/inspect state indicators
+	if settings:
+		if settings.debug_enabled and settings.inspect_enabled:
+			panel_border = Color("22d3ee") # Cyan for both
+			panel_selected_border = Color("22d3ee")
+		elif settings.debug_enabled:
+			panel_border = Color(0.13, 0.72, 0.93, 0.6) # Subtle cyan
+			panel_selected_border = Color("22d3ee")
+		elif settings.inspect_enabled:
+			panel_border = Color(1.0, 0.85, 0.0, 0.6) # Subtle yellow
+			panel_selected_border = Color("fbbf24") # Yellow accent
 
-	# Titlebar colors
+	# Titlebar colors — this is where category color shows
 	var title_bg: Color
 	var title_selected_bg: Color
 	
 	if is_colored:
-		title_bg = Color.from_hsv(hue, 0.25, 0.18, 1.0)
-		title_selected_bg = Color.from_hsv(hue, 0.25, 0.22, 1.0)
+		title_bg = Color.from_hsv(cat_hue, 0.35, 0.22, 1.0)
+		title_selected_bg = Color.from_hsv(cat_hue, 0.4, 0.28, 1.0)
 	else:
-		title_bg = Color("252836") # #252836 node headers
-		title_selected_bg = Color("2e3244") # slightly lighter header when selected
+		title_bg = Color("252836")
+		title_selected_bg = Color("2e3244")
 		
 	# StyleBox Panel
 	var sb_panel = StyleBoxFlat.new()
@@ -239,11 +361,20 @@ func update_node_style():
 	self_modulate = Color.WHITE
 
 func _gui_input(event: InputEvent) -> void:
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.double_click:
-		if node_template == "subgraph" and settings and "graph" in settings and settings.graph:
-			var editor = getEditor()
-			if editor:
-				editor.setResourceToEdit(settings.graph, null)
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+		if event.pressed:
+			var gedit = get_parent() as GraphEdit
+			if gedit:
+				if not Input.is_key_pressed(KEY_SHIFT) and not Input.is_key_pressed(KEY_CTRL):
+					for child in gedit.get_children():
+						if child is GraphNode and child != self:
+							child.selected = false
+				selected = true
+			if event.double_click:
+				if node_template == "subgraph" and settings and "graph" in settings and settings.graph:
+					var editor = getEditor()
+					if editor:
+						editor.setResourceToEdit(settings.graph, null)
 
 func refreshFromSettings():
 	refreshDebugMark()
@@ -283,6 +414,13 @@ func setActivity( amount : float ):
 		modulate = Color.WHITE + Color( amount, amount, amount, 0.0 )
 	else:
 		modulate = Color(1.0, 0.5, 0.5)
+
+
+
+func setExecTime(usec: int):
+	set_meta("exec_time_usec", usec)
+	if is_inside_tree():
+		queue_redraw()
 		
 func _on_draw() -> void:
 	
@@ -300,6 +438,9 @@ func _on_draw() -> void:
 		var clr : Color = Color.CYAN / self_modulate
 		draw_circle( Vector2(size.x,0), marker_radius * ui_scale, clr )
 
+	# Draw point count badges on output ports
+	_draw_output_badges()
+
 	# Draw bottom decoration handle (Figma node style)
 	var handle_w = 22.0 * ui_scale
 	var handle_h = 3.0 * ui_scale
@@ -310,6 +451,71 @@ func _on_draw() -> void:
 	handle_sb.corner_radius_top_left = 2
 	handle_sb.corner_radius_top_right = 2
 	draw_style_box(handle_sb, Rect2(handle_x, handle_y, handle_w, handle_h))
+	
+	# Draw execution time badge (top-right, near titlebar)
+	var exec_time_usec = get_meta("exec_time_usec", 0)
+	if exec_time_usec > 100:
+		var time_font = ThemeDB.fallback_font
+		var time_font_size := int(9 * ui_scale)
+		var time_text: String
+		var time_color: Color
+		if exec_time_usec >= 10000:  # > 10ms — warning
+			time_text = "%.1f ms" % (exec_time_usec / 1000.0)
+			time_color = Color(1.0, 0.6, 0.2, 0.9)  # Warm orange
+		elif exec_time_usec >= 1000:  # 1-10ms
+			time_text = "%.1f ms" % (exec_time_usec / 1000.0)
+			time_color = Color(1, 1, 1, 0.4)
+		else:
+			time_text = "%d µs" % exec_time_usec
+			time_color = Color(1, 1, 1, 0.25)
+		var tw = time_font.get_string_size(time_text, HORIZONTAL_ALIGNMENT_LEFT, -1, time_font_size).x
+		var tx = size.x - tw - 8 * ui_scale
+		var ty = 12.0 * ui_scale
+		draw_string(time_font, Vector2(tx, ty), time_text, HORIZONTAL_ALIGNMENT_LEFT, -1, time_font_size, time_color)
+
+func _draw_output_badges():
+	var output_summaries = get_meta("output_summaries", [])
+	if output_summaries.is_empty():
+		return
+	var font = ThemeDB.fallback_font
+	var font_size := int(10 * ui_scale)
+	var badge_h := font_size + 4
+	
+	var port_controls = get_children().filter(func(c): return c is FlowConnectorRow)
+	
+	for port_idx in range(mini(output_summaries.size(), num_out_ports)):
+		var summary = output_summaries[port_idx]
+		if summary == null:
+			continue
+		var pts = summary.points
+		var badge_text: String
+		if pts >= 1000:
+			badge_text = "%.*fk" % [1, pts / 1000.0]
+		else:
+			badge_text = "%d pts" % pts
+		
+		# Get the Y position of this output port using custom control filter (safer than get_output_port_position)
+		var port_y := 0.0
+		if port_idx < port_controls.size():
+			var ctrl = port_controls[port_idx]
+			port_y = ctrl.position.y + ctrl.size.y * 0.5
+		else:
+			continue # if control isn't in tree yet
+			
+		var text_width = font.get_string_size(badge_text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x
+		var badge_w = text_width + 8
+		
+		# Draw badge background (pill shape)
+		var badge_x = size.x - badge_w - 18 * ui_scale
+		var badge_y = port_y - badge_h * 0.5
+		var badge_sb = StyleBoxFlat.new()
+		badge_sb.bg_color = Color(0.13, 0.72, 0.93, 0.2) # Subtle cyan
+		badge_sb.set_corner_radius_all(int(badge_h * 0.5))
+		draw_style_box(badge_sb, Rect2(badge_x, badge_y, badge_w, badge_h))
+		
+		# Draw badge text
+		var text_y = badge_y + badge_h - 3
+		draw_string(font, Vector2(badge_x + 4, text_y), badge_text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, Color(0.13, 0.72, 0.93, 0.85))
 
 func getMeta() -> Dictionary:
 	return meta_node

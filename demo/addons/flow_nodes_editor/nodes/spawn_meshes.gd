@@ -232,6 +232,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 		spawn_parent.add_child( mmi )
 		mmi.owner = owner_of_mmis
 	
-	EditorInterface.mark_scene_as_unsaved()
+	if Engine.is_editor_hint():
+		EditorInterface.mark_scene_as_unsaved()
 
 	set_output(0, in_data)

@@ -151,6 +151,18 @@ func execute(ctx : FlowData.EvaluationContext):
 	if write_avg_color:
 		out_avg_color.resize(num_points)
 
+	var use_tree = has_distance_limit and num_points > 8
+	var tA = GDRTree.new() if use_tree else null
+	var candidate_pos : PackedVector3Array
+	var candidate_size : PackedVector3Array
+	if use_tree:
+		candidate_pos.resize(1)
+		candidate_size.resize(1)
+		candidate_size[0] = Vector3.ONE * max_dist * 2.0
+		var zero_sizes = PackedVector3Array()
+		zero_sizes.resize(num_points)
+		tA.add(positions, zero_sizes)
+
 	for i in range(num_points):
 		var pi = positions[i]
 		var count = 0
@@ -158,7 +170,15 @@ func execute(ctx : FlowData.EvaluationContext):
 		var acc_density = 0.0
 		var acc_color = Vector3.ZERO
 
-		for j in range(num_points):
+		var neighbors
+		if use_tree:
+			candidate_pos[0] = pi
+			var result = tA.overlaps(candidate_pos, candidate_size, true)
+			neighbors = result.get("idxs_overlapped", [])
+		else:
+			neighbors = range(num_points)
+
+		for j in neighbors:
 			if not include_self and i == j:
 				continue
 			if has_distance_limit and pi.distance_squared_to(positions[j]) > max_dist_sq:

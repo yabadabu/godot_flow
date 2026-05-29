@@ -41,6 +41,10 @@ func execute(_ctx : FlowData.EvaluationContext):
 		setError("Anchors input is missing")
 		return
 
+	if in_data.size() == 0:
+		set_output(0, FlowData.Data.new())
+		return
+
 	var transforms := in_data.getTransformsStream()
 	if transforms == null:
 		if _ctx.owner == null and Engine.is_editor_hint():

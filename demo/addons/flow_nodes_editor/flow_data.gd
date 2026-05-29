@@ -30,6 +30,7 @@ class EvaluationContext:
 	var eval_id : int = 0
 	var graph : FlowGraphResource
 	var gedit_nodes_by_name : Dictionary
+	var runtime_params : Dictionary = {}
 
 ## Build a stable orthonormal Basis from a surface normal.
 ## - `normal` is the axis you want to align (default aligns to +Z).

@@ -75,7 +75,7 @@ func updateNumRowsAndCols():
 	#print( col_titles )
 	
 func fmt( v : float ) -> String:
-	return "%1.4f" % v
+	return "%1.3f" % v
 
 # When the draw of a column starts, we choose which fn will be used
 # to display the data of that column. As all the datas of that column
@@ -201,15 +201,22 @@ func refresh():
 			filter_text = %FilterEdit.text
 		update_visible_rows(filter_text)
 		
-		%LabelStats.text = "%d Rows, (%d cols in %d Streams)" % [ num_rows, num_cols, data.numFields()]
+		# Stats: row/col summary
+		%LabelStats.text = "%d rows · %d streams · %d cols" % [ num_rows, data.numFields(), num_cols]
 		
 		# Index column
-		tv.addColumn( "Index", 0 )
+		tv.addColumn( "#", 0 )
 		tv.num_rows = visible_rows.size()
 		var row_height := get_theme_default_font_size()
 		tv.setRowHeight( row_height )
+		
+		# Auto-size columns based on header text width
+		var base_font = ThemeDB.fallback_font
+		var header_font_size = 12
 		for title in col_titles:
-			tv.addColumn( title, 120 )
+			var text_w = base_font.get_string_size(title, HORIZONTAL_ALIGNMENT_LEFT, -1, header_font_size).x
+			var col_w = int(max(text_w + 16, 60)) # min 60px, pad 16px
+			tv.addColumn( title, col_w )
 			
 	tv.commitColumns()
 
@@ -285,6 +292,21 @@ func _on_filter_edit_text_changed(new_text : String):
 
 func _ready():
 	tv.cell_clicked.connect( onCellClicked )
+	
+	# Style the header elements for a compact, polished look
+	if has_node("%LabelTitle"):
+		%LabelTitle.add_theme_font_size_override("font_size", 12)
+		%LabelTitle.add_theme_color_override("font_color", Color("22d3ee"))
+	if has_node("%LabelStats"):
+		%LabelStats.add_theme_font_size_override("font_size", 10)
+		%LabelStats.add_theme_color_override("font_color", Color("8b95a5"))
+	if has_node("%SlotSelector"):
+		%SlotSelector.add_theme_font_size_override("font_size", 10)
+	if has_node("%BulkSelector"):
+		%BulkSelector.add_theme_font_size_override("font_size", 10)
+	if has_node("%FilterEdit"):
+		%FilterEdit.add_theme_font_size_override("font_size", 11)
+	
 	refresh()
 
 func _on_btn_refresh_pressed():

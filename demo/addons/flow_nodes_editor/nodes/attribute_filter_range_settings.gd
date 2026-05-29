@@ -32,6 +32,27 @@ extends NodeSettings
 		use_absolute_value = value
 		emit_changed()
 
+@export_group("String Match")
+@export var string_match_mode : bool = false:
+	set(value):
+		string_match_mode = value
+		emit_changed()
+
+@export var string_match_values : String = "":
+	set(value):
+		string_match_values = value
+		emit_changed()
+
+@export var case_sensitive : bool = false:
+	set(value):
+		case_sensitive = value
+		emit_changed()
+
 func _init():
 	super._init()
 	resource_name = "Attribute Filter Range Settings"
+
+func _get_attribute_selector_props() -> Array[Dictionary]:
+	return [
+		{ "prop": "attribute_name", "port": 0 },
+	]

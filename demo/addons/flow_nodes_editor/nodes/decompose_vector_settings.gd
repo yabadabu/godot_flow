@@ -11,3 +11,8 @@ extends NodeSettings
 func _init():
 	super._init()
 	resource_name = "Decompose Vector Settings"
+
+func _get_attribute_selector_props() -> Array[Dictionary]:
+	return [
+		{ "prop": "in_attribute", "port": 0 },
+	]

@@ -129,10 +129,19 @@ func execute( ctx : FlowData.EvaluationContext ):
 			var new_container = output.addStream( param.name, param.data_type )
 			if new_container == null:
 				continue
+			var fixture_data := _data_fixture_for_input(ctx, param.name, param.data_type)
+			if fixture_data != null:
+				set_output(i, fixture_data)
+				continue
 			var new_value = param.get_default_value()
 			if ctx.owner and ctx.owner.args.has( param.name ):
 				var ctx_value = ctx.owner.args[ param.name ]
-				if FlowNodeBase.getFlowDataTypeFromGdScriptType( typeof( ctx_value ) ) == param.data_type:
+				if ctx_value is FlowData.Data:
+					var arg_data := _normalize_input_data(ctx_value, param.name, param.data_type)
+					if arg_data != null:
+						set_output(i, arg_data)
+						continue
+				elif FlowNodeBase.getFlowDataTypeFromObject( ctx_value ) == param.data_type:
 					new_value = ctx.owner.args[ param.name ]
 			var container = output.streams[ param.name ].container
 			container.resize( 1 )
@@ -153,11 +162,21 @@ func execute( ctx : FlowData.EvaluationContext ):
 		if new_container == null:
 			setError( "Invalid name %s or data_type %d (bool)" % [settings.name, input.data_type ])
 			return
+
+		var fixture_data := _data_fixture_for_input(ctx, input.name, input.data_type)
+		if fixture_data != null:
+			set_output(0, fixture_data)
+			return
 			
 		var new_value = input.get_default_value()
 		if ctx.owner and ctx.owner.args.has( input.name ):
 			var ctx_value = ctx.owner.args[ input.name ]
-			if FlowNodeBase.getFlowDataTypeFromGdScriptType( typeof( ctx_value ) ) == input.data_type:
+			if ctx_value is FlowData.Data:
+				var arg_data := _normalize_input_data(ctx_value, input.name, input.data_type)
+				if arg_data != null:
+					set_output(0, arg_data)
+					return
+			elif FlowNodeBase.getFlowDataTypeFromObject( ctx_value ) == input.data_type:
 				new_value = ctx.owner.args[ input.name ]
 
 		var container =	output.streams[ settings.name ].container
@@ -166,3 +185,48 @@ func execute( ctx : FlowData.EvaluationContext ):
 			
 		set_output( 0, output )
 
+func _data_fixture_for_input(ctx: FlowData.EvaluationContext, input_name: String, input_type: FlowData.DataType) -> FlowData.Data:
+	if ctx.owner == null:
+		return null
+	if not ctx.owner.has_meta("flow_debug_graph") or not ctx.owner.has_meta("flow_debug_input_data_map"):
+		return null
+	if ctx.owner.get_meta("flow_debug_graph") != ctx.graph:
+		return null
+	var data_map: Dictionary = ctx.owner.get_meta("flow_debug_input_data_map")
+	var data_value = data_map.get(input_name, null)
+	if not (data_value is FlowData.Data):
+		return null
+	return _normalize_input_data(data_value, input_name, input_type)
+
+func _normalize_input_data(data: FlowData.Data, input_name: String, input_type: FlowData.DataType) -> FlowData.Data:
+	var target := FlowData.Data.new()
+	for stream_name in data.streams:
+		var stream = data.streams[stream_name]
+		target.registerStream(stream_name, stream.container, stream.data_type)
+	if target.hasStreamOfType(input_name, input_type):
+		return target
+	if not target.hasStream(input_name):
+		var preferred_stream = _first_stream_of_type(data, input_type)
+		if preferred_stream != null:
+			target.registerStream(input_name, preferred_stream.container, preferred_stream.data_type)
+	if target.hasStreamOfType(input_name, input_type):
+		return target
+	if _has_any_stream_of_type(target, input_type):
+		return target
+	return null
+
+func _first_stream_of_type(data: FlowData.Data, input_type: FlowData.DataType):
+	if data.last_added_stream_name != "":
+		var last_stream = data.findStream(data.last_added_stream_name)
+		if last_stream != null and last_stream.data_type == input_type:
+			return last_stream
+	for stream in data.streams.values():
+		if stream.data_type == input_type:
+			return stream
+	return null
+
+func _has_any_stream_of_type(data: FlowData.Data, input_type: FlowData.DataType) -> bool:
+	for stream in data.streams.values():
+		if stream.data_type == input_type:
+			return true
+	return false

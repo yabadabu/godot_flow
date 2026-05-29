@@ -241,7 +241,7 @@ static func basis_from_normal(normal: Vector3, up: Vector3 = Vector3.UP, axis: S
 
 func execute( ctx : FlowData.EvaluationContext ):
 	
-	var root = EditorInterface.get_edited_scene_root()
+	var root = ctx.owner if (ctx and ctx.owner) else (EditorInterface.get_edited_scene_root() if Engine.is_editor_hint() else null)
 	if not root:
 		return null
 		

@@ -43,7 +43,7 @@ func _create_query_shape(point_size : Vector3) -> Shape3D:
 	return sphere
 
 func execute(_ctx : FlowData.EvaluationContext):
-	var root = EditorInterface.get_edited_scene_root()
+	var root = _ctx.owner if (_ctx and _ctx.owner) else (EditorInterface.get_edited_scene_root() if Engine.is_editor_hint() else null)
 	if root == null:
 		set_output(0, FlowData.Data.new())
 		return

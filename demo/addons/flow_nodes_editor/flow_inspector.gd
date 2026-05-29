@@ -132,6 +132,12 @@ func _populate_node_properties(node: GraphNode, settings: Object):
 	# Header
 	_add_header(node.title, node.name)
 	
+	# Build attribute selector lookup: prop_name -> port
+	var attr_selector_map := {}
+	if settings.has_method("_get_attribute_selector_props"):
+		for entry in settings._get_attribute_selector_props():
+			attr_selector_map[entry["prop"]] = entry.get("port", 0)
+	
 	# Type-specific properties container
 	var type_box = VBoxContainer.new()
 	type_box.add_theme_constant_override("separation", 10)
@@ -151,7 +157,11 @@ func _populate_node_properties(node: GraphNode, settings: Object):
 		if settings.has_method("exposeParam") and not settings.exposeParam(prop.name):
 			continue
 			
-		var ctrl = _create_control_for_property(settings, prop)
+		var ctrl: Control
+		if attr_selector_map.has(prop.name):
+			ctrl = _create_attribute_selector(node, settings, prop.name, attr_selector_map[prop.name])
+		else:
+			ctrl = _create_control_for_property(settings, prop)
 		if ctrl:
 			type_box.add_child(_create_row(_format_label(prop.name), ctrl))
 			has_custom_props = true
@@ -203,6 +213,203 @@ func _populate_node_properties(node: GraphNode, settings: Object):
 		var ctrl = _create_control_for_property(settings, prop)
 		if ctrl:
 			common_container.add_child(_create_row(_format_label(prop.name), ctrl))
+
+	# Override Pins for subgraph nodes
+	if node.node_template == "subgraph" and settings is SubgraphNodeSettings and settings.graph:
+		_populate_subgraph_overrides(node, settings)
+
+func _populate_subgraph_overrides(node: GraphNode, settings: SubgraphNodeSettings):
+	var sep = HSeparator.new()
+	sep.add_theme_stylebox_override("separator", _create_separator_stylebox())
+	content_vbox.add_child(sep)
+	
+	var header = Button.new()
+	header.text = "▼ Override Pins"
+	header.flat = true
+	header.alignment = HorizontalAlignment.HORIZONTAL_ALIGNMENT_LEFT
+	header.add_theme_color_override("font_color", Color("fbbf24"))  # Yellow for overrides
+	header.add_theme_color_override("font_hover_color", Color.WHITE)
+	content_vbox.add_child(header)
+	
+	var override_container = VBoxContainer.new()
+	override_container.add_theme_constant_override("separation", 8)
+	content_vbox.add_child(override_container)
+	
+	header.pressed.connect(func():
+		override_container.visible = not override_container.visible
+		header.text = "▼ Override Pins" if override_container.visible else "▶ Override Pins"
+	)
+	
+	for param in settings.graph.in_params:
+		if not param:
+			continue
+		# Create a row with: [Override checkbox] [Param name] [Value control]
+		var row = HBoxContainer.new()
+		row.add_theme_constant_override("separation", 6)
+		
+		# Override toggle checkbox
+		var checkbox = CheckBox.new()
+		checkbox.button_pressed = settings.has_param_override(param.name)
+		checkbox.add_theme_font_size_override("font_size", 11)
+		
+		# Value control based on param type
+		var value_ctrl = _create_override_value_control(settings, param)
+		if value_ctrl:
+			value_ctrl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			# Dim the control when override is not active
+			if not settings.has_param_override(param.name):
+				value_ctrl.modulate = Color(1, 1, 1, 0.4)
+			
+			var captured_param = param
+			var captured_ctrl = value_ctrl
+			checkbox.toggled.connect(func(pressed: bool):
+				if pressed:
+					settings.set_param_override(captured_param.name, captured_param.get_default_value())
+					captured_ctrl.modulate = Color.WHITE
+				else:
+					settings.clear_param_override(captured_param.name)
+					captured_ctrl.modulate = Color(1, 1, 1, 0.4)
+				property_edited.emit("param_overrides")
+			)
+		
+		row.add_child(checkbox)
+		
+		var label = Label.new()
+		label.text = param.name
+		label.add_theme_font_size_override("font_size", 11)
+		label.custom_minimum_size.x = 80
+		row.add_child(label)
+		
+		if value_ctrl:
+			row.add_child(value_ctrl)
+		
+		override_container.add_child(row)
+
+func _create_override_value_control(settings: SubgraphNodeSettings, param: GraphInputParameter) -> Control:
+	var current_val = settings.get_param_value(param)
+	
+	match param.data_type:
+		FlowData.DataType.Bool:
+			var cb = CheckBox.new()
+			cb.button_pressed = current_val if current_val is bool else false
+			var captured_param = param
+			cb.toggled.connect(func(pressed):
+				settings.set_param_override(captured_param.name, pressed)
+				property_edited.emit("param_overrides")
+			)
+			return cb
+		FlowData.DataType.Int:
+			var sb = SpinBox.new()
+			sb.min_value = -999999
+			sb.max_value = 999999
+			sb.step = 1
+			sb.value = int(current_val) if current_val != null else 0
+			var captured_param = param
+			sb.value_changed.connect(func(new_val):
+				settings.set_param_override(captured_param.name, int(new_val))
+				property_edited.emit("param_overrides")
+			)
+			return sb
+		FlowData.DataType.Float:
+			var sb = SpinBox.new()
+			sb.min_value = -999999.0
+			sb.max_value = 999999.0
+			sb.step = 0.01
+			sb.value = float(current_val) if current_val != null else 0.0
+			var captured_param = param
+			sb.value_changed.connect(func(new_val):
+				settings.set_param_override(captured_param.name, new_val)
+				property_edited.emit("param_overrides")
+			)
+			return sb
+		FlowData.DataType.String:
+			var le = LineEdit.new()
+			le.text = str(current_val) if current_val != null else ""
+			le.add_theme_font_size_override("font_size", 11)
+			var sb_style := StyleBoxFlat.new()
+			sb_style.bg_color = Color("111318")
+			sb_style.set_corner_radius_all(3)
+			sb_style.content_margin_left = 6
+			sb_style.content_margin_right = 6
+			le.add_theme_stylebox_override("normal", sb_style)
+			var captured_param = param
+			le.text_submitted.connect(func(new_text):
+				settings.set_param_override(captured_param.name, new_text)
+				property_edited.emit("param_overrides")
+			)
+			le.focus_exited.connect(func():
+				var cur = settings.get_param_value(captured_param)
+				if str(cur) != le.text:
+					settings.set_param_override(captured_param.name, le.text)
+					property_edited.emit("param_overrides")
+			)
+			return le
+		FlowData.DataType.Vector:
+			var vec_val: Vector3 = current_val if current_val is Vector3 else Vector3.ZERO
+			var hbc = HBoxContainer.new()
+			hbc.add_theme_constant_override("separation", 4)
+			var captured_param = param
+			for axis in ["x", "y", "z"]:
+				var this_axis = axis
+				var sb_axis = SpinBox.new()
+				sb_axis.min_value = -999999.0
+				sb_axis.max_value = 999999.0
+				sb_axis.step = 0.01
+				sb_axis.custom_minimum_size.x = 48
+				sb_axis.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+				if axis == "x":
+					sb_axis.value = vec_val.x
+				elif axis == "y":
+					sb_axis.value = vec_val.y
+				else:
+					sb_axis.value = vec_val.z
+				sb_axis.value_changed.connect(func(new_val):
+					var cur_val = settings.get_param_value(captured_param)
+					var next_vec: Vector3 = cur_val if cur_val is Vector3 else Vector3.ZERO
+					if this_axis == "x":
+						next_vec.x = new_val
+					elif this_axis == "y":
+						next_vec.y = new_val
+					else:
+						next_vec.z = new_val
+					settings.set_param_override(captured_param.name, next_vec)
+					property_edited.emit("param_overrides")
+				)
+				hbc.add_child(sb_axis)
+			return hbc
+		FlowData.DataType.Resource:
+			var res_hbox = HBoxContainer.new()
+			var res_lbl = Label.new()
+			res_lbl.text = "None" if current_val == null else current_val.resource_path.get_file()
+			res_lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			res_lbl.clip_text = true
+			res_lbl.add_theme_font_size_override("font_size", 11)
+			res_hbox.add_child(res_lbl)
+			var res_btn = Button.new()
+			res_btn.text = "..."
+			var captured_param = param
+			res_btn.pressed.connect(func():
+				var fd = FileDialog.new()
+				fd.file_mode = FileDialog.FILE_MODE_OPEN_FILE
+				fd.access = FileDialog.ACCESS_RESOURCES
+				fd.add_filter("*.tres,*.res", "Resource Files")
+				fd.file_selected.connect(func(path):
+					var res = load(path)
+					if res:
+						settings.set_param_override(captured_param.name, res)
+						res_lbl.text = path.get_file()
+						property_edited.emit("param_overrides")
+					fd.queue_free()
+				)
+				fd.canceled.connect(func():
+					fd.queue_free()
+				)
+				add_child(fd)
+				fd.popup_centered_ratio(0.4)
+			)
+			res_hbox.add_child(res_btn)
+			return res_hbox
+	return null
 
 func _add_header(title_text: String, id_text: String):
 	# Title bar panel matching #252836
@@ -351,6 +558,98 @@ func _create_string_input(obj: Object, prop_name: String) -> LineEdit:
 			_on_value_changed(obj, prop_name, le.text)
 	)
 	return le
+
+## Creates an attribute selector: OptionButton dropdown populated from upstream
+## stream names, with a "(custom...)" option that reveals a text field.
+func _create_attribute_selector(node: GraphNode, settings: Object, prop_name: String, port: int) -> Control:
+	var current_val := str(settings.get(prop_name))
+	var stream_names := _get_input_stream_names(node, port)
+	
+	var wrapper = VBoxContainer.new()
+	wrapper.add_theme_constant_override("separation", 4)
+	
+	var opt = OptionButton.new()
+	opt.add_theme_font_size_override("font_size", 11)
+	opt.custom_minimum_size.x = 100
+	
+	# Fallback text input for custom attribute names
+	var le = LineEdit.new()
+	le.text = current_val
+	le.placeholder_text = "attribute name..."
+	le.add_theme_font_size_override("font_size", 11)
+	var sb := StyleBoxFlat.new()
+	sb.bg_color = Color("111318")
+	sb.set_corner_radius_all(3)
+	sb.content_margin_left = 6
+	sb.content_margin_right = 6
+	le.add_theme_stylebox_override("normal", sb)
+	le.visible = false
+	
+	# Populate dropdown
+	var selected_idx := -1
+	var idx := 0
+	for sname in stream_names:
+		opt.add_item(sname, idx)
+		if sname == current_val:
+			selected_idx = idx
+		idx += 1
+	
+	# Add separator and custom option
+	var custom_idx := idx
+	opt.add_separator()
+	opt.add_item("(custom...)", custom_idx + 1)
+	
+	if stream_names.is_empty():
+		# No upstream data — show text field directly
+		opt.visible = false
+		le.visible = true
+	elif selected_idx >= 0:
+		opt.selected = selected_idx
+	else:
+		# Current value not in dropdown — show as custom
+		opt.visible = false
+		le.visible = true
+	
+	opt.item_selected.connect(func(index):
+		var item_id = opt.get_item_id(index)
+		if item_id == custom_idx + 1:
+			# Switch to custom text input
+			le.visible = true
+			le.grab_focus()
+		else:
+			var chosen = opt.get_item_text(index)
+			le.visible = false
+			_on_value_changed(settings, prop_name, chosen)
+	)
+	
+	le.text_submitted.connect(func(new_text):
+		_on_value_changed(settings, prop_name, new_text)
+	)
+	le.focus_exited.connect(func():
+		if str(settings.get(prop_name)) != le.text:
+			_on_value_changed(settings, prop_name, le.text)
+	)
+	
+	wrapper.add_child(opt)
+	wrapper.add_child(le)
+	return wrapper
+
+## Gets the stream names available on a node's input at the given port.
+## Returns the names from the last-evaluated data (requires Regenerate first).
+func _get_input_stream_names(node: GraphNode, port: int) -> PackedStringArray:
+	var names := PackedStringArray()
+	if not node or not "inputs" in node:
+		return names
+	if port < 0 or port >= node.inputs.size():
+		return names
+	var input_data = node.inputs[port]
+	if input_data == null or not input_data is FlowData.Data:
+		return names
+	for sname in input_data.streams.keys():
+		names.append(str(sname))
+	names.sort()
+	return names
+
 
 func _create_bool_input(obj: Object, prop_name: String) -> CheckBox:
 	var cb = CheckBox.new()

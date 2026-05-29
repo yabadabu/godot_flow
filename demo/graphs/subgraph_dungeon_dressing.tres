@@ -39,16 +39,16 @@
 [ext_resource type="PackedScene" uid="uid://b0637cdw60mbc" path="res://addons/kaykit_dungeon_remastered/Assets/gltf/coin_stack_small.gltf.glb" id="35_xaku3"]
 [ext_resource type="PackedScene" uid="uid://bhciy7kjxcbrs" path="res://addons/kaykit_dungeon_remastered/Assets/gltf/key.gltf.glb" id="36_7klc6"]
 [ext_resource type="PackedScene" uid="uid://b6xnmkpkisb63" path="res://addons/kaykit_dungeon_remastered/Assets/gltf/shelf_small.gltf.glb" id="37_pvwxj"]
-[ext_resource type="PackedScene" path="res://addons/kaykit_dungeon_remastered/Assets/gltf/column.gltf.glb" id="38_colmn"]
-[ext_resource type="PackedScene" path="res://addons/kaykit_dungeon_remastered/Assets/gltf/trunk_large_A.gltf.glb" id="39_trnka"]
-[ext_resource type="PackedScene" path="res://addons/kaykit_dungeon_remastered/Assets/gltf/trunk_large_B.gltf.glb" id="40_trnkb"]
-[ext_resource type="PackedScene" path="res://addons/kaykit_dungeon_remastered/Assets/gltf/rubble_large.gltf.glb" id="41_rubbl"]
-[ext_resource type="PackedScene" path="res://addons/kaykit_dungeon_remastered/Assets/gltf/shelves.gltf.glb" id="42_shlvs"]
-[ext_resource type="PackedScene" path="res://addons/kaykit_dungeon_remastered/Assets/gltf/keg.gltf.glb" id="43_keg01"]
-[ext_resource type="PackedScene" path="res://addons/kaykit_dungeon_remastered/Assets/gltf/barrel_large_decorated.gltf.glb" id="44_brldec"]
-[ext_resource type="PackedScene" path="res://addons/kaykit_dungeon_remastered/Assets/gltf/rubble_half.gltf.glb" id="45_rubhf"]
-[ext_resource type="PackedScene" path="res://addons/kaykit_dungeon_remastered/Assets/gltf/torch.gltf.glb" id="46_torch"]
-[ext_resource type="PackedScene" path="res://addons/kaykit_dungeon_remastered/Assets/gltf/coin.gltf.glb" id="47_coin1"]
+[ext_resource type="PackedScene" uid="uid://mhtfw2q070le" path="res://addons/kaykit_dungeon_remastered/Assets/gltf/column.gltf.glb" id="38_colmn"]
+[ext_resource type="PackedScene" uid="uid://b6428rmeiugvx" path="res://addons/kaykit_dungeon_remastered/Assets/gltf/trunk_large_A.gltf.glb" id="39_trnka"]
+[ext_resource type="PackedScene" uid="uid://bjq114ncimpvu" path="res://addons/kaykit_dungeon_remastered/Assets/gltf/trunk_large_B.gltf.glb" id="40_trnkb"]
+[ext_resource type="PackedScene" uid="uid://4btl7yb8dul7" path="res://addons/kaykit_dungeon_remastered/Assets/gltf/rubble_large.gltf.glb" id="41_rubbl"]
+[ext_resource type="PackedScene" uid="uid://cbxka8pkwoeei" path="res://addons/kaykit_dungeon_remastered/Assets/gltf/shelves.gltf.glb" id="42_shlvs"]
+[ext_resource type="PackedScene" uid="uid://bsviw3cg08w5v" path="res://addons/kaykit_dungeon_remastered/Assets/gltf/keg.gltf.glb" id="43_keg01"]
+[ext_resource type="PackedScene" uid="uid://dscy5w0njm8sq" path="res://addons/kaykit_dungeon_remastered/Assets/gltf/barrel_large_decorated.gltf.glb" id="44_brldec"]
+[ext_resource type="PackedScene" uid="uid://bc5cap7cyusqp" path="res://addons/kaykit_dungeon_remastered/Assets/gltf/rubble_half.gltf.glb" id="45_rubhf"]
+[ext_resource type="PackedScene" uid="uid://dvidw8kuhcuyq" path="res://addons/kaykit_dungeon_remastered/Assets/gltf/torch.gltf.glb" id="46_torch"]
+[ext_resource type="PackedScene" uid="uid://3dy1gf3vbxy4" path="res://addons/kaykit_dungeon_remastered/Assets/gltf/coin.gltf.glb" id="47_coin1"]
 
 [sub_resource type="Resource" id="Resource_jfvob"]
 script = ExtResource("30_s3gcd")
@@ -443,7 +443,7 @@ data = {
 "position": Vector2(300, 80),
 "settings": {
 "random_seed": 1101,
-"ratio": 0.40
+"ratio": 0.4
 },
 "show_disconnected_inputs": false,
 "template": "select_points"
@@ -809,7 +809,7 @@ data = {
 "offsets": [Vector3(0.42, 0, 0.42), Vector3(-0.42, 0, 0.42), Vector3(0.42, 0, -0.42), Vector3(-0.42, 0, -0.42)],
 "rotations": [Vector3(0, 45, 0), Vector3(0, 135, 0), Vector3(0, -45, 0), Vector3(0, -135, 0)],
 "scale_offsets_by_anchor_size": true,
-"sizes": [Vector3(0.7, 1.0, 0.7), Vector3(0.7, 1.0, 0.7), Vector3(0.7, 1.0, 0.7), Vector3(0.7, 1.0, 0.7)]
+"sizes": [Vector3(0.7, 1, 0.7), Vector3(0.7, 1, 0.7), Vector3(0.7, 1, 0.7), Vector3(0.7, 1, 0.7)]
 },
 "show_disconnected_inputs": false,
 "template": "point_offsets"
@@ -819,7 +819,7 @@ data = {
 "position": Vector2(400, 1380),
 "settings": {
 "random_seed": 2651,
-"ratio": 0.50
+"ratio": 0.5
 },
 "show_disconnected_inputs": false,
 "template": "select_points"
@@ -865,7 +865,7 @@ data = {
 "offsets": [Vector3(0.45, 0, 0), Vector3(-0.45, 0, 0), Vector3(0, 0, 0.45), Vector3(0, 0, -0.45)],
 "rotations": [Vector3(0, 90, 0), Vector3(0, -90, 0), Vector3(0, 0, 0), Vector3(0, 180, 0)],
 "scale_offsets_by_anchor_size": true,
-"sizes": [Vector3(0.8, 1.0, 0.5), Vector3(0.8, 1.0, 0.5), Vector3(0.8, 1.0, 0.5), Vector3(0.8, 1.0, 0.5)]
+"sizes": [Vector3(0.8, 1, 0.5), Vector3(0.8, 1, 0.5), Vector3(0.8, 1, 0.5), Vector3(0.8, 1, 0.5)]
 },
 "show_disconnected_inputs": false,
 "template": "point_offsets"
@@ -875,7 +875,7 @@ data = {
 "position": Vector2(400, 1580),
 "settings": {
 "random_seed": 2611,
-"ratio": 0.40
+"ratio": 0.4
 },
 "show_disconnected_inputs": false,
 "template": "select_points"
@@ -936,10 +936,10 @@ data = {
 "position": Vector2(700, 1800),
 "settings": {
 "labels": ["clutter", "clutter", "clutter", "clutter", "clutter", "clutter"],
-"offsets": [Vector3(-0.40, 0, -0.40), Vector3(0.40, 0, -0.40), Vector3(-0.40, 0, 0.40), Vector3(0.40, 0, 0.40), Vector3(-0.25, 0, 0), Vector3(0.25, 0, 0)],
+"offsets": [Vector3(-0.4, 0, -0.4), Vector3(0.4, 0, -0.4), Vector3(-0.4, 0, 0.4), Vector3(0.4, 0, 0.4), Vector3(-0.25, 0, 0), Vector3(0.25, 0, 0)],
 "rotations": [Vector3(0, 45, 0), Vector3(0, -45, 0), Vector3(0, 135, 0), Vector3(0, -135, 0), Vector3(0, 90, 0), Vector3(0, -90, 0)],
 "scale_offsets_by_anchor_size": true,
-"sizes": [Vector3(0.85, 1.0, 0.85), Vector3(0.85, 1.0, 0.85), Vector3(0.85, 1.0, 0.85), Vector3(0.85, 1.0, 0.85), Vector3(0.85, 1.0, 0.85), Vector3(0.85, 1.0, 0.85)]
+"sizes": [Vector3(0.85, 1, 0.85), Vector3(0.85, 1, 0.85), Vector3(0.85, 1, 0.85), Vector3(0.85, 1, 0.85), Vector3(0.85, 1, 0.85), Vector3(0.85, 1, 0.85)]
 },
 "show_disconnected_inputs": false,
 "template": "point_offsets"
@@ -949,7 +949,7 @@ data = {
 "position": Vector2(900, 1800),
 "settings": {
 "random_seed": 2451,
-"ratio": 0.50
+"ratio": 0.5
 },
 "show_disconnected_inputs": false,
 "template": "select_points"

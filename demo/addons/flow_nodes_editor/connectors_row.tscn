@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://uxgag1b66gtj" path="res://addons/flow_nodes_editor/connectors_row.gd" id="1_0cbnu"]
 
 [node name="ConnectorRows" type="HBoxContainer"]
+mouse_filter = 1
 script = ExtResource("1_0cbnu")
 
 [node name="LabelIn" type="Label" parent="."]
@@ -14,9 +15,11 @@ text = "IN"
 custom_minimum_size = Vector2(32, 0)
 layout_mode = 2
 size_flags_horizontal = 3
+mouse_filter = 2
 
 [node name="LabelOut" type="Label" parent="."]
 layout_mode = 2
+mouse_filter = 1
 text = "OUT"
 horizontal_alignment = 2
 

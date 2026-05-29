@@ -168,5 +168,6 @@ func execute( ctx : FlowData.EvaluationContext ):
 			var read_idx = idx if s.container.size() > 1 else 0
 			assign_target.set( s.node_property, s.container[ read_idx ])
 	
-	EditorInterface.mark_scene_as_unsaved()
+	if Engine.is_editor_hint():
+		EditorInterface.mark_scene_as_unsaved()
 	set_output(0, in_data)

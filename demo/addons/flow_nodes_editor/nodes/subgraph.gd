@@ -2,6 +2,7 @@
 extends FlowNodeBase
 
 var _connected_graph: FlowGraphResource = null
+var _last_input_data_map: Dictionary = {}
 
 func _init():
 	meta_node = {
@@ -87,22 +88,37 @@ func onPropChanged( prop_name : String ):
 
 func execute( ctx : FlowData.EvaluationContext ):
 	if not settings.graph:
-		setError("No graph assigned to Subgraph")
+		setError("No graph assigned to Subgraph node '%s'" % getTitle())
 		return
 		
 	var input_data_map = {}
+	_last_input_data_map = {}
 	if settings.graph:
 		for i in range(settings.graph.in_params.size()):
 			var param = settings.graph.in_params[i]
 			if param:
 				var in_data = get_optional_input(i)
 				if in_data:
+					# Priority 1: Connected wire
 					input_data_map[param.name] = in_data
-					
+					_last_input_data_map[param.name] = in_data
+				elif settings.has_param_override(param.name):
+					# Priority 2: Per-instance override
+					var override_val = settings.get_param_value(param)
+					var override_data = FlowData.Data.new()
+					var container = override_data.addStream(param.name, param.data_type)
+					if container != null:
+						container.resize(1)
+						container[0] = override_val
+					input_data_map[param.name] = override_data
+					_last_input_data_map[param.name] = override_data
+				# Priority 3: Graph default (handled by the evaluator's input node)
+	
 	var FlowNodeIOClass = load("res://addons/flow_nodes_editor/flow_nodes_io.gd")
 	var outputs = FlowNodeIOClass.evaluate_graph(settings.graph, input_data_map, ctx)
 	
 	var meta = getMeta()
+	var missing_outputs := PackedStringArray()
 	for i in range(meta.outs.size()):
 		var out_info = meta.outs[i]
 		var out_name = out_info.label
@@ -111,10 +127,35 @@ func execute( ctx : FlowData.EvaluationContext ):
 			set_output(i, out_data)
 		else:
 			set_output(i, FlowData.Data.new())
+			missing_outputs.append(out_name)
+	if missing_outputs.size() > 0:
+		setError("Missing outputs: %s" % ", ".join(missing_outputs))
 
 func _gui_input(event: InputEvent):
 	if event is InputEventMouseButton and event.double_click and event.button_index == MOUSE_BUTTON_LEFT:
 		var editor = getEditor()
 		if editor and settings and settings.graph:
-			editor.setResourceToEdit(settings.graph, null)
+			var owner = editor.resource_owner
+			if owner:
+				var debug_inputs := _debug_input_data_map()
+				owner.set_meta("flow_debug_graph", settings.graph)
+				owner.set_meta("flow_debug_input_data_map", debug_inputs)
+			editor.setResourceToEdit(settings.graph, owner)
 			accept_event()
+
+func _debug_input_data_map() -> Dictionary:
+	var data_map: Dictionary = {}
+	if not settings or not settings.graph:
+		return data_map
+	for i in range(settings.graph.in_params.size()):
+		var param = settings.graph.in_params[i]
+		if param == null:
+			continue
+		var data = null
+		if inputs.size() > i and inputs[i] != null:
+			data = inputs[i]
+		elif _last_input_data_map.has(param.name):
+			data = _last_input_data_map[param.name]
+		if data is FlowData.Data:
+			data_map[param.name] = data
+	return data_map

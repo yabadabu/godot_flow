@@ -269,7 +269,7 @@ static func loadFromResource( editor : Control ):
 	editor.new_name_counter = current_resource.new_name_counter
 	editor.data_inspector.setNode( null )
 
-static func evaluate_graph(graph: FlowGraphResource, input_data_map: Dictionary, parent_ctx: FlowData.EvaluationContext) -> Dictionary:
+static func evaluate_graph(graph: FlowGraphResource, input_data_map: Dictionary, parent_ctx: FlowData.EvaluationContext, runtime_params: Dictionary = {}) -> Dictionary:
 	var instances = {}
 	var node_list = []
 	for n_data in graph.data.get("nodes", []):
@@ -341,6 +341,9 @@ static func evaluate_graph(graph: FlowGraphResource, input_data_map: Dictionary,
 	ctx.owner = parent_ctx.owner
 	ctx.eval_id = parent_ctx.eval_id
 	ctx.gedit_nodes_by_name = instances
+	ctx.runtime_params = parent_ctx.runtime_params.duplicate(true) if parent_ctx.runtime_params else {}
+	for key in runtime_params.keys():
+		ctx.runtime_params[key] = runtime_params[key]
 	
 	# Feed subgraph inputs from input_data_map
 	for node in ordered_nodes:

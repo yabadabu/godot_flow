@@ -20,7 +20,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 	var padding : float = getSettingValue( ctx, "padding" )
 	#print( "Iterating %d" % [num_iterations])
 
-	var tA := GDRTree.new()
+	var tA = GDRTree.new()
 	var num_points = spos.size()
 	var szA = in_data.getVector3Container( FlowData.AttrSize )
 

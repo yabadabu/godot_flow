@@ -204,8 +204,8 @@ func execute(ctx : FlowData.EvaluationContext):
 	var szA : PackedVector3Array = size_result_a.sizes
 	var szB : PackedVector3Array = size_result_b.sizes
 
-	var tA := GDRTree.new()
-	var tB := GDRTree.new()
+	var tA = GDRTree.new()
+	var tB = GDRTree.new()
 	tA.add(posA, szA)
 	tB.add(posB, szB)
 

@@ -9,7 +9,7 @@ func _init():
 		"settings" : AttributeFilterRangeNodeSettings,
 		"ins" : [{ "label": "In" }],
 		"outs" : [{ "label" : "Inside" }, { "label" : "Outside" }],
-		"tooltip" : "Splits points by whether an attribute value falls inside a numeric range.",
+		"tooltip" : "Splits points by whether an attribute value falls inside a numeric range.\nEnable 'String Match Mode' to filter by comma-separated string values instead.",
 	}
 
 func _stream_value_as_float(stream, index : int) -> Array:
@@ -73,6 +73,36 @@ func execute(_ctx : FlowData.EvaluationContext):
 		setError("Attribute '%s' has %d values but input has %d points (expected %d or 1)" % [attr_name, stream_size, num_points, num_points])
 		return
 
+	# --- String match mode ---
+	if settings.string_match_mode:
+		var raw_values: String = settings.string_match_values
+		var is_case_sensitive: bool = settings.case_sensitive
+		var allowed: Dictionary = {}
+		for token: String in raw_values.split(","):
+			var clean: String = token.strip_edges()
+			if clean != "":
+				allowed[clean if is_case_sensitive else clean.to_lower()] = true
+
+		if allowed.is_empty():
+			setError("String match mode is on but no match values specified")
+			return
+
+		var inside := PackedInt32Array()
+		var outside := PackedInt32Array()
+		for i in range(num_points):
+			var read_idx: int = i if stream_size > 1 else 0
+			var val: String = str(stream.container[read_idx])
+			var test_val: String = val if is_case_sensitive else val.to_lower()
+			if allowed.has(test_val):
+				inside.append(i)
+			else:
+				outside.append(i)
+
+		set_output(0, in_data.filter(inside))
+		set_output(1, in_data.filter(outside))
+		return
+
+	# --- Numeric range mode (original behaviour) ---
 	var range_min = minf(settings.min_value, settings.max_value)
 	var range_max = maxf(settings.min_value, settings.max_value)
 

@@ -67,6 +67,7 @@ var active_tab_index: int = -1
 var open_file_dialog: FileDialog
 var analyze_panel: PanelContainer
 var current_analyzed_node: FlowNodeBase
+var breadcrumb_bar: HBoxContainer
 
 func setResourceToEdit( new_resource : FlowGraphResource, new_resource_owner : FlowGraphNode3D ):
 	if new_resource == null:
@@ -137,6 +138,7 @@ func _switch_to_tab(index: int, new_owner = null):
 	
 	_clear_ui_nodes()
 	
+	scanAvailableNodes()
 	FlowNodeIO.loadFromResource( self )
 	
 	ctx.graph = current_resource
@@ -214,6 +216,68 @@ func _update_tab_titles():
 		elif open_tabs[i].owner:
 			tab_title = open_tabs[i].owner.name
 		tab_bar.set_tab_title(i, tab_title)
+	_update_breadcrumbs()
+
+func _update_breadcrumbs():
+	if not breadcrumb_bar:
+		return
+	var panel = breadcrumb_bar.get_parent()
+	
+	# Clear old breadcrumbs
+	for child in breadcrumb_bar.get_children():
+		child.queue_free()
+		breadcrumb_bar.remove_child(child)
+	
+	# Only show when we have more than 1 tab (inside a subgraph)
+	if open_tabs.size() <= 1:
+		if panel:
+			panel.visible = false
+		return
+	if panel:
+		panel.visible = true
+	
+	# Build breadcrumb path from tab 0 to current active tab
+	var end_idx = mini(active_tab_index, open_tabs.size() - 1)
+	for i in range(end_idx + 1):
+		if i > 0:
+			# Separator
+			var sep_lbl = Label.new()
+			sep_lbl.text = " › "
+			sep_lbl.add_theme_font_size_override("font_size", 11)
+			sep_lbl.add_theme_color_override("font_color", Color(1, 1, 1, 0.25))
+			breadcrumb_bar.add_child(sep_lbl)
+		
+		var tab_res = open_tabs[i].resource
+		var crumb_text = "Graph"
+		if is_instance_valid(tab_res) and tab_res.resource_path != "":
+			crumb_text = tab_res.resource_path.get_file().get_basename()
+		elif open_tabs[i].owner:
+			crumb_text = open_tabs[i].owner.name
+		
+		var is_current = (i == active_tab_index)
+		
+		if is_current:
+			# Active crumb — just a label
+			var lbl = Label.new()
+			lbl.text = crumb_text
+			lbl.add_theme_font_size_override("font_size", 11)
+			lbl.add_theme_color_override("font_color", Color("22d3ee"))
+			breadcrumb_bar.add_child(lbl)
+		else:
+			# Clickable crumb — a flat button
+			var btn = Button.new()
+			btn.text = crumb_text
+			btn.flat = true
+			btn.add_theme_font_size_override("font_size", 11)
+			btn.add_theme_color_override("font_color", Color(1, 1, 1, 0.5))
+			btn.add_theme_color_override("font_hover_color", Color("22d3ee"))
+			var target_idx = i
+			btn.pressed.connect(func():
+				if current_resource:
+					saveResource()
+				_switch_to_tab(target_idx)
+			)
+			breadcrumb_bar.add_child(btn)
 
 func _on_button_open_pressed():
 	if not open_file_dialog:
@@ -253,7 +317,8 @@ func _on_filesystem_changed():
 	
 	# Reload the active tab's resource from disk
 	var refreshed = _reload_resource_from_disk(current_resource)
-	if refreshed != current_resource:
+	var resource_stale = (refreshed != current_resource)
+	if resource_stale:
 		# Resource was stale, swap it in
 		current_resource = refreshed
 		if active_tab_index >= 0 and active_tab_index < open_tabs.size():
@@ -262,9 +327,36 @@ func _on_filesystem_changed():
 		# Reconnect signals
 		if refreshed and not refreshed.in_params_changed.is_connected(_on_in_params_changed):
 			refreshed.in_params_changed.connect(_on_in_params_changed)
-		
+
+	# Check for modified scripts
+	var scripts_changed := false
+	for type_name in node_types:
+		var meta = node_types[type_name]
+		if meta.has("full_res_path"):
+			var current_mtime = FileAccess.get_modified_time(meta.full_res_path)
+			var last_mtime = meta.get("last_modified_time", 0)
+			if current_mtime != last_mtime:
+				print("[DataFlow] Node script changed on disk: %s. Reloading..." % meta.full_res_path)
+				var loaded_class : Script = ResourceLoader.load(meta.full_res_path, "Script", ResourceLoader.CACHE_MODE_REPLACE) as Script
+				if loaded_class:
+					loaded_class.reload(true)
+					var instance = loaded_class.new()
+					var flow_node = instance as FlowNodeBase
+					if flow_node:
+						var new_meta = flow_node.getMeta()
+						new_meta.factory = loaded_class
+						new_meta.full_res_path = meta.full_res_path
+						new_meta.last_modified_time = current_mtime
+						node_types[type_name] = new_meta
+						flow_node.free()
+						scripts_changed = true
+					else:
+						instance.free()
+
+	if resource_stale:
 		# Rebuild the UI from the fresh resource
 		_clear_ui_nodes()
+		scanAvailableNodes()
 		FlowNodeIO.loadFromResource(self)
 		ctx.graph = current_resource
 		ctx.owner = resource_owner
@@ -274,6 +366,21 @@ func _on_filesystem_changed():
 		populatePopupInputsMenu()
 		update_status_bar()
 		print("[DataFlow] Auto-reloaded graph from disk: %s" % current_resource.resource_path)
+	elif scripts_changed:
+		# Surgical hot-swap: update metadata on existing nodes and trigger regen
+		for child in gedit.get_children():
+			var node = child as FlowNodeBase
+			if node and node_types.has(node.node_template):
+				# Re-bind the factory script and copy new metadata
+				node.set_script(node_types[node.node_template].factory)
+				node.meta_node = node_types[node.node_template].duplicate()
+				node.meta_node.erase("factory")
+				node.initFromScript()
+				node.refreshFromSettings()
+		markAllNodesAsDirty()
+		queueRegen()
+		update_status_bar()
+		print("[DataFlow] Successfully hot-swapped updated scripts.")
 
 
 func saveResource():
@@ -343,6 +450,8 @@ func registerNodeType(node_type_name: String, file_name: String):
 	if not loaded_class:
 		push_error("Failed to load class %s" % full_res_path )
 		return
+	# Force compilation on load to compile disk changes
+	loaded_class.reload(true)
 	if not loaded_class.can_instantiate():
 		var reload_err := loaded_class.reload(false)
 		if reload_err != OK or not loaded_class.can_instantiate():
@@ -362,6 +471,8 @@ func registerNodeType(node_type_name: String, file_name: String):
 		push_warning("Skipping node with empty metadata %s" % full_res_path)
 		return
 	meta.factory = loaded_class
+	meta.full_res_path = full_res_path
+	meta.last_modified_time = FileAccess.get_modified_time(full_res_path)
 	#print( "Registering node type %s" % node_type_name )
 	node_types[ node_type_name ] = meta
 
@@ -488,6 +599,7 @@ func populatePopupMenu() -> PopupMenu:
 
 	# Categorized node submenus
 	var cat_map = {
+		"Black Lantern": ["bl_style_lab_source", "bl_building_mass", "bl_zone_carver", "bl_room_splitter", "bl_decorator_master", "bl_tactical_decorator", "bl_floor_data_to_points", "bl_floor_data_contract_points", "bl_validate_floor_data", "bl_room_style_template", "bl_style_context_source", "bl_style_context_points", "bl_style_anchor_points", "bl_sync_grid_cell", "bl_points_to_style_spec", "bl_style_spec_to_points", "bl_style_spec_merge", "bl_style_metadata_spec", "bl_smart_prop_scatter", "bl_points_to_floor_data_props"],
 		"Attributes": ["add_attribute", "attribute_rename", "remove_attribute", "attribute_filter_range", "point_filter_range", "mutate_seed", "add_tags", "delete_tags", "replace_tags", "point_to_attribute_set", "attribute_set_to_point", "load_data_table", "data_table_row_to_attribute_set", "load_pcg_data_asset"],
 		"Math": ["math_op", "remap", "expression", "reduce", "boolean"],
 		"Splines": ["create_spline", "sample_spline", "distance", "scan_splines", "clip_points_by_polygon", "clip_paths", "polygon_operation", "split_splines", "create_surface_from_spline", "create_surface_from_polygon"],
@@ -589,6 +701,26 @@ func _ready():
 	tab_panel.add_child(tab_bar)
 	$VBoxContainer.add_child(tab_panel)
 	$VBoxContainer.move_child(tab_panel, 1)
+	
+	# Breadcrumb bar for subgraph navigation
+	var breadcrumb_panel = PanelContainer.new()
+	breadcrumb_panel.name = "BreadcrumbPanel"
+	var bc_sb = StyleBoxFlat.new()
+	bc_sb.bg_color = Color("0e1016")
+	bc_sb.content_margin_left = 8
+	bc_sb.content_margin_right = 8
+	bc_sb.content_margin_top = 2
+	bc_sb.content_margin_bottom = 2
+	bc_sb.border_color = Color(1, 1, 1, 0.04)
+	bc_sb.border_width_top = 1
+	breadcrumb_panel.add_theme_stylebox_override("panel", bc_sb)
+	
+	breadcrumb_bar = HBoxContainer.new()
+	breadcrumb_bar.add_theme_constant_override("separation", 2)
+	breadcrumb_panel.add_child(breadcrumb_bar)
+	breadcrumb_panel.visible = false
+	$VBoxContainer.add_child(breadcrumb_panel)
+	$VBoxContainer.move_child(breadcrumb_panel, 2)
 	
 	# Initialize Open Graph Button
 	var btn_open := Button.new()
@@ -731,8 +863,203 @@ func _ready():
 		gedit.begin_node_move.connect(_on_graph_edit_begin_node_move)
 	if not gedit.end_node_move.is_connected(_on_graph_edit_end_node_move):
 		gedit.end_node_move.connect(_on_graph_edit_end_node_move)
-		
+	
 	update_status_bar()
+
+## Handles debug hotkeys: D (toggle debug), A (toggle inspect), Alt+D (clear all), T (toggle trace).
+## Uses _input so it fires before GraphEdit consumes the key events.
+## Only active when this editor is visible and no text field is focused.
+func _input(event: InputEvent):
+	if not visible or not is_visible_in_tree():
+		return
+	if not event is InputEventKey:
+		return
+	var key_event := event as InputEventKey
+	if not key_event.pressed or key_event.echo:
+		return
+	
+	# Don't intercept when a text field has focus (LineEdit, TextEdit, SpinBox)
+	var focused = get_viewport().gui_get_focus_owner()
+	if focused is LineEdit or focused is TextEdit:
+		return
+	if focused and focused.get_parent() is SpinBox:
+		return
+	# Only intercept when focus is within this editor's subtree
+	if focused and not is_ancestor_of(focused):
+		return
+	
+	match key_event.keycode:
+		KEY_D:
+			if key_event.alt_pressed:
+				_hotkey_clear_all_debug()
+			else:
+				_hotkey_toggle_debug()
+			get_viewport().set_input_as_handled()
+		KEY_A:
+			if not key_event.ctrl_pressed:
+				_hotkey_toggle_inspect()
+				get_viewport().set_input_as_handled()
+		KEY_T:
+			_hotkey_toggle_trace()
+			get_viewport().set_input_as_handled()
+		KEY_E:
+			_hotkey_toggle_disabled()
+			get_viewport().set_input_as_handled()
+
+## Returns the FlowNodeBase under the mouse cursor, or null if none.
+func _get_node_under_cursor() -> FlowNodeBase:
+	var mouse_pos = gedit.get_local_mouse_position()
+	# Hit test all graph nodes (reverse order = front-to-back)
+	var children = gedit.get_children()
+	for i in range(children.size() - 1, -1, -1):
+		var child = children[i]
+		if child is FlowNodeBase:
+			var node_rect = Rect2(child.position_offset, child.size)
+			# Account for graph zoom and scroll
+			var graph_pos = (mouse_pos + gedit.scroll_offset) / gedit.zoom
+			if node_rect.has_point(graph_pos):
+				return child
+	return null
+
+## Returns target nodes for hotkey: hovered node first, then selected nodes.
+func _get_hotkey_target_nodes() -> Array:
+	var hovered = _get_node_under_cursor()
+	if hovered:
+		return [hovered]
+	return getSelectedNodes()
+
+func _hotkey_toggle_debug():
+	var nodes = _get_hotkey_target_nodes()
+	if nodes.is_empty():
+		return
+	# Toggle based on first node's current state
+	var new_state = not nodes[0].settings.debug_enabled if nodes[0].settings else true
+	var names := PackedStringArray()
+	for node in nodes:
+		if node is FlowNodeBase and node.settings:
+			node.settings.debug_enabled = new_state
+			node.dirty = true
+			node.refreshFromSettings()
+			names.append(node.settings.title)
+	var state_str = "ON" if new_state else "OFF"
+	update_status_bar("Debug %s: %s" % [state_str, ", ".join(names)])
+	queueRegen()
+
+func _hotkey_clear_all_debug():
+	var count := 0
+	for child in gedit.get_children():
+		var node = child as FlowNodeBase
+		if node and node.settings and node.settings.debug_enabled:
+			node.settings.debug_enabled = false
+			node.dirty = true
+			node.refreshFromSettings()
+			count += 1
+	update_status_bar("Debug cleared on %d nodes" % count)
+	queueRegen()
+
+func _hotkey_toggle_inspect():
+	# Try hovered node first, then fall back to selection
+	var hovered = _get_node_under_cursor()
+	if hovered:
+		analyzeNode(hovered)
+	else:
+		analyzeSelection()
+
+func _hotkey_toggle_trace():
+	var nodes = _get_hotkey_target_nodes()
+	if nodes.is_empty():
+		return
+	var new_state = not nodes[0].settings.trace if nodes[0].settings else true
+	var names := PackedStringArray()
+	for node in nodes:
+		if node is FlowNodeBase and node.settings:
+			node.settings.trace = new_state
+			node.dirty = true
+			node.refreshFromSettings()
+			names.append(node.settings.title)
+	var state_str = "ON" if new_state else "OFF"
+	update_status_bar("Trace %s: %s" % [state_str, ", ".join(names)])
+	queueRegen()
+
+func _hotkey_toggle_disabled():
+	var nodes = _get_hotkey_target_nodes()
+	if nodes.is_empty():
+		return
+	var new_state = not nodes[0].settings.disabled if nodes[0].settings else true
+	var names := PackedStringArray()
+	for node in nodes:
+		if node is FlowNodeBase and node.settings:
+			node.settings.disabled = new_state
+			node.dirty = true
+			node.refreshFromSettings()
+			names.append(node.settings.title)
+	var state_str = "DISABLED" if new_state else "ENABLED"
+	update_status_bar("%s: %s" % [state_str, ", ".join(names)])
+	queueRegen()
+
+## Finds the nearest connection to a screen position in the GraphEdit.
+## Returns the connection dict or null if nothing is within threshold.
+func _find_nearest_connection(screen_pos: Vector2):
+	var threshold := 20.0 * gedit.zoom
+	var best_conn = null
+	var best_dist := threshold
+	
+	for conn in gedit.connections:
+		var from_node = gedit_nodes_by_name.get(conn.from_node)
+		var to_node = gedit_nodes_by_name.get(conn.to_node)
+		if not from_node or not to_node:
+			continue
+		
+		# Get port positions in GraphEdit local coords
+		var from_pos = from_node.position_offset + from_node.get_output_port_position(conn.from_port)
+		var to_pos = to_node.position_offset + to_node.get_input_port_position(conn.to_port)
+		
+		# Convert screen pos to graph coords
+		var graph_pos = (screen_pos + gedit.scroll_offset) / gedit.zoom
+		
+		# Sample points along the bezier curve and find min distance
+		var steps := 12
+		for i in range(steps + 1):
+			var t = float(i) / float(steps)
+			# Approximate GraphEdit's cubic bezier wire
+			var ctrl_offset = abs(to_pos.x - from_pos.x) * 0.5
+			ctrl_offset = maxf(ctrl_offset, 50.0)
+			var cp1 = from_pos + Vector2(ctrl_offset, 0)
+			var cp2 = to_pos - Vector2(ctrl_offset, 0)
+			var point = from_pos.bezier_interpolate(cp1, cp2, to_pos, t)
+			var dist = graph_pos.distance_to(point)
+			if dist < best_dist:
+				best_dist = dist
+				best_conn = conn
+	
+	return best_conn
+
+## Analyze a specific node (used by hover-based hotkeys).
+func analyzeNode(node: FlowNodeBase):
+	if not data_inspector:
+		return
+	var prev_auto_regen := auto_regen
+	auto_regen = false
+	# Toggle off: if analyzer is open on the same node
+	if analyze_panel and analyze_panel.visible:
+		if current_analyzed_node and node == current_analyzed_node:
+			data_inspector.setNode(null)
+			_set_analyze_panel_visible(false)
+			auto_regen = prev_auto_regen
+			regen_pending = false
+			return
+	data_inspector.setNode(null)
+	data_inspector.setNode(node)
+	markAllNodesAsDirty()
+	node.refreshFromSettings()
+	_set_analyze_panel_visible(true)
+	current_analyzed_node = node
+	auto_regen = prev_auto_regen
+	regen_pending = false
+	evalGraph()
+	data_inspector.refresh()
+	if make_inspector_visible and make_inspector_visible.is_valid():
+		make_inspector_visible.call()
 
 func _style_toolbar_button(btn: Button):
 	var sb_normal := StyleBoxFlat.new()
@@ -772,6 +1099,8 @@ func _setup_inline_analyze_panel():
 	panel.offset_bottom = -8.0
 	panel.mouse_filter = Control.MOUSE_FILTER_STOP
 	panel.z_index = 100
+	# Minimum size so it doesn't collapse to nothing
+	panel.custom_minimum_size = Vector2(200, 120)
 
 	var panel_sb := StyleBoxFlat.new()
 	panel_sb.bg_color = Color("10141f")
@@ -780,7 +1109,7 @@ func _setup_inline_analyze_panel():
 	panel_sb.set_corner_radius_all(4)
 	panel_sb.content_margin_left = 8
 	panel_sb.content_margin_right = 8
-	panel_sb.content_margin_top = 8
+	panel_sb.content_margin_top = 12 # Extra room for resize handle
 	panel_sb.content_margin_bottom = 8
 	panel.add_theme_stylebox_override("panel", panel_sb)
 
@@ -793,6 +1122,8 @@ func _setup_inline_analyze_panel():
 		push_error("Failed to instantiate inline data inspector")
 		return
 	inline_inspector.name = "InlineDataInspector"
+	inline_inspector.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	inline_inspector.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	inline_inspector.anchor_left = 0.0
 	inline_inspector.anchor_top = 0.0
 	inline_inspector.anchor_right = 1.0
@@ -806,6 +1137,57 @@ func _setup_inline_analyze_panel():
 	gedit.add_child(panel)
 	analyze_panel = panel
 	data_inspector = inline_inspector
+	
+	# Add resize handle to the top edge
+	_setup_analyze_resize_handle(panel)
+
+var _analyze_drag_active := false
+var _analyze_drag_start_y := 0.0
+var _analyze_drag_start_offset := 0.0
+const ANALYZE_MIN_HEIGHT := 120.0
+const ANALYZE_MAX_HEIGHT_RATIO := 0.85
+
+func _setup_analyze_resize_handle(panel: PanelContainer):
+	var handle := Control.new()
+	handle.name = "ResizeHandle"
+	handle.mouse_filter = Control.MOUSE_FILTER_STOP
+	handle.mouse_default_cursor_shape = Control.CURSOR_VSIZE
+	handle.anchor_left = 0.0
+	handle.anchor_right = 1.0
+	handle.anchor_top = 0.0
+	handle.anchor_bottom = 0.0
+	handle.offset_top = -2.0
+	handle.offset_bottom = 8.0 # 10px grab zone at top
+	handle.offset_left = 0.0
+	handle.offset_right = 0.0
+	# Draw a visible drag handle indicator
+	handle.draw.connect(func():
+		var w = handle.size.x
+		var cy = handle.size.y * 0.5
+		var bar_w = 32.0
+		var bar_x = (w - bar_w) * 0.5
+		handle.draw_line(Vector2(bar_x, cy - 1), Vector2(bar_x + bar_w, cy - 1), Color(1, 1, 1, 0.15), 1.0)
+		handle.draw_line(Vector2(bar_x, cy + 1), Vector2(bar_x + bar_w, cy + 1), Color(1, 1, 1, 0.15), 1.0)
+	)
+	panel.add_child(handle)
+	
+	handle.gui_input.connect(func(event: InputEvent):
+		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+			if event.pressed:
+				_analyze_drag_active = true
+				_analyze_drag_start_y = event.global_position.y
+				_analyze_drag_start_offset = analyze_panel.offset_top
+			else:
+				_analyze_drag_active = false
+		elif event is InputEventMouseMotion and _analyze_drag_active:
+			var delta = event.global_position.y - _analyze_drag_start_y
+			var new_offset = _analyze_drag_start_offset + delta
+			# Clamp: min height and max height (ratio of parent)
+			var parent_h = gedit.size.y
+			var max_offset = -ANALYZE_MIN_HEIGHT
+			var min_offset = -(parent_h * ANALYZE_MAX_HEIGHT_RATIO)
+			analyze_panel.offset_top = clampf(new_offset, min_offset, max_offset)
+	)
 
 func _set_analyze_panel_visible(visible: bool):
 	if not analyze_panel:
@@ -829,6 +1211,10 @@ func update_status_bar(eval_msg: String = ""):
 	text_parts.append("%d connections" % wires_count)
 	if eval_msg != "":
 		text_parts.append(eval_msg)
+	elif inspected_node and inspected_node is FlowNodeBase and inspected_node.has_method("get_data_summary"):
+		var summary = inspected_node.get_data_summary()
+		if summary != "":
+			text_parts.append(summary)
 	elif current_resource:
 		text_parts.append("Ready")
 		
@@ -1083,6 +1469,16 @@ func addNode( node_template, settings = null ):
 
 # ------------------------------------------------
 func _on_graph_edit_gui_input(event):
+	# Ctrl+Click on wire to disconnect
+	var evt_mouse = event as InputEventMouseButton
+	if evt_mouse and evt_mouse.pressed and evt_mouse.button_index == MOUSE_BUTTON_LEFT and evt_mouse.ctrl_pressed:
+		var conn = _find_nearest_connection(evt_mouse.position)
+		if conn:
+			_on_graph_edit_disconnection_request(conn.from_node, conn.from_port, conn.to_node, conn.to_port)
+			update_status_bar("Disconnected %s → %s" % [conn.from_node, conn.to_node])
+			gedit.accept_event()
+			return
+	
 	var evt_key = event as InputEventKey
 	if evt_key and evt_key.pressed:
 		var no_modifiers = not evt_key.ctrl_pressed and not evt_key.alt_pressed and not evt_key.shift_pressed
@@ -1090,29 +1486,36 @@ func _on_graph_edit_gui_input(event):
 		if key == KEY_X or key == KEY_DELETE:
 			if no_modifiers:
 				deleteSelectedNodes()
+				gedit.accept_event()
 		elif key == KEY_A:
 			if evt_key.shift_pressed:
 				openAddMenu()
+				gedit.accept_event()
 			elif no_modifiers:
-				analyzeSelection()
+				_hotkey_toggle_inspect()
+				gedit.accept_event()
 		elif key == KEY_C:
 			if no_modifiers:
 				addComment()
-		elif key == KEY_G:
-			if no_modifiers:
-				toggleDisabled()
-				evalGraph()
-		elif key == KEY_D:
-			if no_modifiers:
-				toggleDebug()
+				gedit.accept_event()
 		elif key == KEY_E:
 			if no_modifiers:
-				analyzeSelection()
+				_hotkey_toggle_disabled()
+				gedit.accept_event()
+		elif key == KEY_D:
+			if no_modifiers:
+				_hotkey_toggle_debug()
+				gedit.accept_event()
+		elif key == KEY_T:
+			if no_modifiers:
+				_hotkey_toggle_trace()
+				gedit.accept_event()
 		elif key == KEY_R:
 			if no_modifiers:
 				for node in getSelectedNodes():
 					node.dirty = true
 				evalGraph()
+				gedit.accept_event()
 		elif evt_key.ctrl_pressed and not evt_key.alt_pressed:
 			if key == KEY_Z:
 				if evt_key.shift_pressed:
@@ -1152,10 +1555,12 @@ func toggleDebug():
 	auto_regen = false
 	for node in nodes:
 		node.settings.debug_enabled = !node.settings.debug_enabled
+		node.dirty = true
 		node.refreshFromSettings()
-		node.setupDrawDebug()
 	auto_regen = prev_auto_regen
 	regen_pending = false
+	markAllNodesAsDirty()
+	evalGraph()
 
 func toggleDisabled():
 	var nodes = getSelectedNodes()
@@ -1178,12 +1583,13 @@ func toggleInspection():
 		return
 	var node = nodes[0]
 	data_inspector.setNode( node )
-	node.dirty = true
+	markAllNodesAsDirty()
 	node.refreshFromSettings()
 	_set_analyze_panel_visible(true)
 	current_analyzed_node = node
 	auto_regen = prev_auto_regen
 	regen_pending = false
+	evalGraph()
 	data_inspector.refresh()
 
 func analyzeSelection():
@@ -1210,12 +1616,13 @@ func analyzeSelection():
 	# Force rebind so repeated Analyze on the same node stays active.
 	data_inspector.setNode(null)
 	data_inspector.setNode(node)
-	node.dirty = true
+	markAllNodesAsDirty()
 	node.refreshFromSettings()
 	_set_analyze_panel_visible(true)
 	current_analyzed_node = node
 	auto_regen = prev_auto_regen
 	regen_pending = false
+	evalGraph()
 	data_inspector.refresh()
 	if make_inspector_visible and make_inspector_visible.is_valid():
 		make_inspector_visible.call()
@@ -1620,10 +2027,23 @@ func collapse_selected_to_subgraph():
 		
 	subgraph_data["nodes"] = nodes_clean
 	
+	# Build output params from the output boundary (mirrors how in_params are built)
+	var subgraph_out_params : Array[GraphInputParameter] = []
+	for item in output_boundary_list:
+		var param = GraphInputParameter.new()
+		param.name = item["out_name"]
+		var source_node = gedit_nodes_by_name.get(item.from_node)
+		if source_node:
+			var source_meta = source_node.getMeta()
+			if item.from_port < source_meta.outs.size():
+				param.data_type = source_meta.outs[item.from_port].get("data_type", FlowData.DataType.Float)
+		subgraph_out_params.append(param)
+	
 	# Save subgraph resource
 	var subgraph_res = FlowGraphResource.new()
 	subgraph_res.data = subgraph_data
 	subgraph_res.in_params = subgraph_in_params
+	subgraph_res.out_params = subgraph_out_params
 	var save_err = ResourceSaver.save(subgraph_res, path)
 	if save_err != OK:
 		push_error("Failed to save collapsed subgraph to %s" % path)
@@ -1983,9 +2403,13 @@ func evalGraph():
 		node.setupDrawDebug()
 		node.dirty = false
 		var time_node_ends = Time.get_ticks_usec()
+		var exec_usec = time_node_ends - time_node_start
+		
+		# Always show execution time on the node
+		node.setExecTime(exec_usec)
 		
 		if dump_performance:
-			performance.append( { "name": node.name, "time": time_node_ends - time_node_start })
+			performance.append( { "name": node.name, "time": exec_usec })
 
 	regen_pending = false
 	#print( "regen_pending is now false")
@@ -2000,6 +2424,17 @@ func evalGraph():
 
 func _on_button_reload_pressed() -> void:
 	scanAvailableNodes()
+	if current_resource:
+		_clear_ui_nodes()
+		FlowNodeIO.loadFromResource(self)
+		ctx.graph = current_resource
+		ctx.owner = resource_owner
+		ctx.gedit_nodes_by_name = gedit_nodes_by_name
+		markAllNodesAsDirty()
+		queueRegen()
+		populatePopupInputsMenu()
+		populatePopupOutputsMenu()
+		update_status_bar()
 
 func _on_button_analyze_pressed() -> void:
 	analyzeSelection()

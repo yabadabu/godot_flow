@@ -10,8 +10,8 @@ var num_rows : int = 0
 var selected_row : int = -1
 var font_size : int = 16
 
-var selection_bg_color := Color.CORNFLOWER_BLUE
-var vertical_lines_color := Color.WHITE
+var selection_bg_color := Color(0.13, 0.55, 0.73, 0.35)
+var vertical_lines_color := Color(1.0, 1.0, 1.0, 0.08)
 
 class CellContents:
 	var row : int
@@ -52,7 +52,8 @@ func horizontallLine( y0 : int, color : Color ):
 	draw_line( p0, p1, color )
 
 func drawCell( cell_pos : Vector2, width: float, cell : CellContents ):
-	draw_string( font, cell_pos, cell.text, cell.alignment, width, cell.font_size, cell.color  )
+	# Pad cell text from grid lines
+	draw_string( font, cell_pos + Vector2(4, 0), cell.text, cell.alignment, width - 8, cell.font_size, cell.color  )
 		
 func drawVerticalLines():
 	for idx in range( col_starts.size() ):
@@ -96,8 +97,7 @@ func drawCol( col_idx : int, y0 : float, top_row_idx : int ):
 		
 
 func drawBackgrounds( y0 : float, row_idx : int ):
-	var g = 0.3
-	var bg_color_odd : Color = Color( g, g, g )
+	var bg_color_odd : Color = Color( 0.14, 0.14, 0.16 )
 	var w = size.x
 	var y1 := min( size.y, num_rows * line_height )
 	var pos := Vector2( 0, y0 )

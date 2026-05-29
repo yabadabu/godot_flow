@@ -21,7 +21,7 @@ func execute( _ctx : FlowData.EvaluationContext ):
 		_grid_cell_prune(in_dataA)
 		return
 		
-	var tA := GDRTree.new()
+	var tA = GDRTree.new()
 	var posA = in_dataA.getVector3Container( FlowData.AttrPosition )
 	var szA = in_dataA.getVector3Container( FlowData.AttrSize )
 	var result = tA.self_prune( posA, szA, settings.keep_self_intersections )

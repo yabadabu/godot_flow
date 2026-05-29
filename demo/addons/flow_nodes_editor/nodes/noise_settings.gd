@@ -64,3 +64,8 @@ func exposeParam(name : String) -> bool:
 	if name == "fractal_octaves" or name == "fractal_lacunarity" or name == "fractal_gain" or name == "fractal_ping_pong_strength":
 		return fractal_type != eFractalType.None
 	return true
+
+func _get_attribute_selector_props() -> Array[Dictionary]:
+	return [
+		{ "prop": "sample_attribute", "port": 0 },
+	]

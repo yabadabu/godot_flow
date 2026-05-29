@@ -35,6 +35,8 @@ var list_vbox: VBoxContainer
 var all_items: Array[Dictionary] = [] # Array of { "type": "node"|"action"|"input", "key": Variant, "label": String, "category": String, "button_node": Button }
 var visible_items: Array[Dictionary] = []
 var highlighted_index: int = -1
+var recently_used: Array[String] = [] # Ordered list of recently used template names (most recent first)
+const MAX_RECENT = 8
 
 # Sub-panel popup
 var submenu_popup: PopupPanel
@@ -243,6 +245,7 @@ func setup(p_node_types: Dictionary, p_inputs: Array, p_outputs: Array, p_has_se
 		
 	# 3. Node items
 	var cat_map = {
+		"Black Lantern": ["bl_style_lab_source", "bl_building_mass", "bl_zone_carver", "bl_room_splitter", "bl_decorator_master", "bl_tactical_decorator", "bl_floor_data_to_points", "bl_floor_data_contract_points", "bl_validate_floor_data", "bl_room_style_template", "bl_style_context_source", "bl_style_context_points", "bl_style_anchor_points", "bl_sync_grid_cell", "bl_points_to_style_spec", "bl_style_spec_to_points", "bl_style_spec_merge", "bl_style_metadata_spec", "bl_smart_prop_scatter", "bl_points_to_floor_data_props"],
 		"Control Flow": ["input", "output", "subgraph", "loop", "branch", "select", "select_multi", "switch", "get_loop_index"],
 		"Debug": ["debug", "print_string", "sanity_check"],
 		"Density": ["curve_remap_density", "density_remap", "distance_to_density"],
@@ -299,14 +302,47 @@ func setup(p_node_types: Dictionary, p_inputs: Array, p_outputs: Array, p_has_se
 		})
 
 func _item_matches_query(item: Dictionary, query: String) -> bool:
-	if item.label.to_lower().contains(query) or item.category.to_lower().contains(query):
-		return true
+	return _item_match_score(item, query) > 0
+
+## Scores how well an item matches the query. Higher = better. 0 = no match.
+## Supports fuzzy token-based matching: "pt neigh" matches "Point Neighborhood".
+func _item_match_score(item: Dictionary, query: String) -> int:
+	var label_lower = item.label.to_lower()
+	var cat_lower = item.category.to_lower()
+	var full_path = cat_lower + " " + label_lower
+	
+	# Exact match in label = highest score
+	if label_lower == query:
+		return 100
+	# Starts with = high score
+	if label_lower.begins_with(query):
+		return 80
+	# Contains full query = good score
+	if label_lower.contains(query):
+		return 60
+	if full_path.contains(query):
+		return 50
+	# Check tooltip
 	if item.get("tooltip", "").to_lower().contains(query):
-		return true
+		return 40
+	# Check aliases
 	for alias in item.get("aliases", []):
 		if str(alias).to_lower().contains(query):
-			return true
-	return false
+			return 40
+	# Fuzzy token matching: split query into tokens, ALL must match somewhere
+	var tokens = query.split(" ", false)
+	if tokens.size() > 1:
+		var searchable = full_path + " " + item.get("tooltip", "").to_lower()
+		for alias in item.get("aliases", []):
+			searchable += " " + str(alias).to_lower()
+		var all_match = true
+		for token in tokens:
+			if not searchable.contains(token):
+				all_match = false
+				break
+		if all_match:
+			return 30
+	return 0
 
 func _create_scroll_arrow_button(label: String) -> Button:
 	var btn = Button.new()
@@ -402,13 +438,17 @@ func rebuild_list():
 	
 	var query = search_query.strip_edges().to_lower()
 	if query != "":
-		# Filter items flat across all categories
-		var filtered = all_items.filter(func(item):
-			return _item_matches_query(item, query)
-		)
+		# Filter and score items, then sort by score descending
+		var scored = []
+		for item in all_items:
+			var score = _item_match_score(item, query)
+			if score > 0:
+				scored.append({"item": item, "score": score})
+		scored.sort_custom(func(a, b): return a.score > b.score)
 		
 		var item_index = 0
-		for item in filtered:
+		for entry in scored:
+			var item = entry.item
 			var btn = Button.new()
 			# Show path: e.g. "ASSETS > SPAWN MESHES"
 			if item.type == "node":
@@ -507,6 +547,55 @@ func rebuild_list():
 					item.button_node = btn
 					visible_items.append(item)
 					item_index += 1
+			
+			# Render "Recently Used" section
+			if recently_used.size() > 0:
+				var recent_header = Label.new()
+				recent_header.text = "RECENTLY USED"
+				recent_header.add_theme_font_size_override("font_size", 9)
+				recent_header.add_theme_color_override("font_color", Color("6b7280"))
+				var header_margin = MarginContainer.new()
+				header_margin.add_theme_constant_override("margin_left", 12)
+				header_margin.add_theme_constant_override("margin_top", 6)
+				header_margin.add_theme_constant_override("margin_bottom", 2)
+				header_margin.add_child(recent_header)
+				list_vbox.add_child(header_margin)
+				
+				for template_name in recently_used:
+					var recent_item = null
+					for item in all_items:
+						if item.type == "node" and item.key == template_name:
+							recent_item = item
+							break
+					if recent_item == null:
+						continue
+					var btn = Button.new()
+					btn.text = recent_item.label.to_upper()
+					btn.tooltip_text = recent_item.get("tooltip", "")
+					_style_menu_button(btn)
+					btn.add_theme_color_override("font_color", ACCENT_COLOR)
+					
+					current_item_index = item_index
+					btn.mouse_entered.connect(func():
+						_set_highlight(current_item_index)
+					)
+					var captured_item = recent_item
+					btn.pressed.connect(func():
+						_select_item(captured_item)
+					)
+					
+					list_vbox.add_child(btn)
+					recent_item.button_node = btn
+					visible_items.append(recent_item)
+					item_index += 1
+				
+				# Small separator after recent
+				var sep = HSeparator.new()
+				var sep_style = StyleBoxLine.new()
+				sep_style.color = Color(1.0, 1.0, 1.0, 0.05)
+				sep_style.thickness = 1
+				sep.add_theme_stylebox_override("separator", sep_style)
+				list_vbox.add_child(sep)
 			
 			# Render categories collapsed
 			var categories = []
@@ -673,6 +762,7 @@ func _ensure_visible(ctrl: Control):
 
 func _select_item(item: Dictionary):
 	if item.type == "node":
+		_track_recently_used(item.key)
 		node_selected.emit(item.key)
 		hide()
 	elif item.type == "action":
@@ -690,6 +780,17 @@ func _select_item(item: Dictionary):
 	elif item.type == "back":
 		current_category = ""
 		rebuild_list()
+
+func _track_recently_used(template_name: String):
+	# Remove if already present
+	var idx = recently_used.find(template_name)
+	if idx >= 0:
+		recently_used.remove_at(idx)
+	# Insert at front
+	recently_used.insert(0, template_name)
+	# Trim to max
+	if recently_used.size() > MAX_RECENT:
+		recently_used.resize(MAX_RECENT)
 
 func _on_search_text_changed(new_text: String):
 	search_query = new_text

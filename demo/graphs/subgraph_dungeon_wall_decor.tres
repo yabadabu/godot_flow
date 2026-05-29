@@ -10,11 +10,11 @@
 [ext_resource type="PackedScene" uid="uid://djbannpf354a8" path="res://addons/kaykit_dungeon_remastered/Assets/gltf/shelf_small_candles.gltf.glb" id="8_7gsuc"]
 [ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="9_aovpp"]
 [ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="10_i4mcx"]
-[ext_resource type="PackedScene" path="res://addons/kaykit_dungeon_remastered/Assets/gltf/shelf_small.gltf.glb" id="11_shfsm"]
-[ext_resource type="PackedScene" path="res://addons/kaykit_dungeon_remastered/Assets/gltf/keyring_hanging.gltf.glb" id="12_krhng"]
-[ext_resource type="PackedScene" path="res://addons/kaykit_dungeon_remastered/Assets/gltf/sword_shield_broken.gltf.glb" id="13_swbkn"]
-[ext_resource type="PackedScene" path="res://addons/kaykit_dungeon_remastered/Assets/gltf/banner_patternB_red.gltf.glb" id="14_bnpbr"]
-[ext_resource type="PackedScene" path="res://addons/kaykit_dungeon_remastered/Assets/gltf/banner_triple_red.gltf.glb" id="15_bntrd"]
+[ext_resource type="PackedScene" uid="uid://b6xnmkpkisb63" path="res://addons/kaykit_dungeon_remastered/Assets/gltf/shelf_small.gltf.glb" id="11_shfsm"]
+[ext_resource type="PackedScene" uid="uid://dyrb55kbecfa0" path="res://addons/kaykit_dungeon_remastered/Assets/gltf/keyring_hanging.gltf.glb" id="12_krhng"]
+[ext_resource type="PackedScene" uid="uid://bpycjerk2elye" path="res://addons/kaykit_dungeon_remastered/Assets/gltf/sword_shield_broken.gltf.glb" id="13_swbkn"]
+[ext_resource type="PackedScene" uid="uid://ufw6ohvey2fa" path="res://addons/kaykit_dungeon_remastered/Assets/gltf/banner_patternB_red.gltf.glb" id="14_bnpbr"]
+[ext_resource type="PackedScene" uid="uid://ct6doscl2t3wu" path="res://addons/kaykit_dungeon_remastered/Assets/gltf/banner_triple_red.gltf.glb" id="15_bntrd"]
 
 [sub_resource type="Resource" id="Resource_dr3un"]
 script = ExtResource("9_aovpp")
@@ -287,7 +287,7 @@ data = {
 "labels": Array[String](["banner"]),
 "local_space": true,
 "offset_index_attribute": "offset_index",
-"offsets": Array[Vector3]([Vector3(0, 0.55, -0.50)]),
+"offsets": Array[Vector3]([Vector3(0, 0.55, -0.5)]),
 "parent_index_attribute": "parent_index",
 "random_seed": 3627988437,
 "rotations": Array[Vector3]([Vector3(0, 0, 0)]),

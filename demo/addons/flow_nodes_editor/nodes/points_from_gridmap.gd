@@ -35,7 +35,7 @@ func _collect_gridmaps(root : Node) -> Array:
 	return root.find_children("*", "GridMap", true, false)
 
 func execute(_ctx : FlowData.EvaluationContext):
-	var root = EditorInterface.get_edited_scene_root()
+	var root = _ctx.owner if (_ctx and _ctx.owner) else (EditorInterface.get_edited_scene_root() if Engine.is_editor_hint() else null)
 	if root == null:
 		set_output(0, FlowData.Data.new())
 		return

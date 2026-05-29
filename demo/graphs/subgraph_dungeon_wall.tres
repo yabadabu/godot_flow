@@ -7,8 +7,8 @@
 [ext_resource type="PackedScene" uid="uid://cu3gga7dm0tau" path="res://addons/kaykit_dungeon_remastered/Assets/gltf/wall_arched.gltf.glb" id="3_w0xid"]
 [ext_resource type="PackedScene" uid="uid://b712yatb3ml2l" path="res://addons/kaykit_dungeon_remastered/Assets/gltf/wall_window_closed.gltf.glb" id="4_8t357"]
 [ext_resource type="PackedScene" uid="uid://cxiuc7yapm02e" path="res://addons/kaykit_dungeon_remastered/Assets/gltf/wall_broken.gltf.glb" id="5_vu2vv"]
-[ext_resource type="PackedScene" path="res://addons/kaykit_dungeon_remastered/Assets/gltf/wall_shelves.gltf.glb" id="6_shvlw"]
-[ext_resource type="PackedScene" path="res://addons/kaykit_dungeon_remastered/Assets/gltf/wall_gated.gltf.glb" id="7_gatdw"]
+[ext_resource type="PackedScene" uid="uid://bb41g3g318u4h" path="res://addons/kaykit_dungeon_remastered/Assets/gltf/wall_shelves.gltf.glb" id="6_shvlw"]
+[ext_resource type="PackedScene" uid="uid://cwma0t6ajh0w8" path="res://addons/kaykit_dungeon_remastered/Assets/gltf/wall_gated.gltf.glb" id="7_gatdw"]
 
 [sub_resource type="Resource" id="Resource_hy2wg"]
 script = ExtResource("2_6i6xu")

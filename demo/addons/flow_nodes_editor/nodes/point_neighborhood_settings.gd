@@ -70,3 +70,9 @@ extends NodeSettings
 func _init():
 	super._init()
 	resource_name = "Point Neighborhood Settings"
+
+func _get_attribute_selector_props() -> Array[Dictionary]:
+	return [
+		{ "prop": "density_attribute", "port": 0 },
+		{ "prop": "color_attribute", "port": 0 },
+	]
