@@ -39,7 +39,10 @@ func setNode( new_node : FlowNodeBase ):
 			node.refreshFromSettings()
 		
 	if node != new_node and new_node:
-		%LabelTitle.text = new_node.get_title()
+		if new_node.has_method("getLocalizedTitle"):
+			%LabelTitle.text = new_node.getLocalizedTitle()
+		else:
+			%LabelTitle.text = new_node.get_title()
 		new_node.settings.inspect_enabled = true
 		current_bulk_index = new_node.settings.debug_bulk
 		node = new_node
@@ -142,7 +145,7 @@ func getCellContentsFloat(cell : DataTableContainer.CellContents ):
 	
 func getCellContentsBool(cell : DataTableContainer.CellContents ):
 	var real_row = visible_rows[cell.row] if cell.row < visible_rows.size() else 0
-	cell.text = "True" if container[ real_row ] else "False"
+	cell.text = FlowI18n.t("True") if container[ real_row ] else FlowI18n.t("False")
 	
 func getCellContentsInt(cell : DataTableContainer.CellContents ):
 	var real_row = visible_rows[cell.row] if cell.row < visible_rows.size() else 0
@@ -202,7 +205,7 @@ func refresh():
 		update_visible_rows(filter_text)
 		
 		# Stats: row/col summary
-		%LabelStats.text = "%d rows · %d streams · %d cols" % [ num_rows, data.numFields(), num_cols]
+		%LabelStats.text = FlowI18n.t("%d rows · %d streams · %d cols") % [ num_rows, data.numFields(), num_cols]
 		
 		# Index column
 		tv.addColumn( "#", 0 )
@@ -292,6 +295,7 @@ func _on_filter_edit_text_changed(new_text : String):
 
 func _ready():
 	tv.cell_clicked.connect( onCellClicked )
+	refresh_localized_text()
 	
 	# Style the header elements for a compact, polished look
 	if has_node("%LabelTitle"):
@@ -307,6 +311,21 @@ func _ready():
 	if has_node("%FilterEdit"):
 		%FilterEdit.add_theme_font_size_override("font_size", 11)
 	
+	refresh()
+
+func refresh_localized_text() -> void:
+	if has_node("VBoxContainer/HBoxContainer/BtnRefresh"):
+		$VBoxContainer/HBoxContainer/BtnRefresh.tooltip_text = FlowI18n.t("Refresh data")
+	if has_node("VBoxContainer/HBoxFilter/LabelFilter"):
+		$VBoxContainer/HBoxFilter/LabelFilter.text = FlowI18n.t("Filter:")
+	if has_node("%FilterEdit"):
+		%FilterEdit.placeholder_text = FlowI18n.t("Filter rows...")
+	if node and has_node("%LabelTitle"):
+		if node.has_method("getLocalizedTitle"):
+			%LabelTitle.text = node.getLocalizedTitle()
+		else:
+			%LabelTitle.text = node.get_title()
+	populateSlots()
 	refresh()
 
 func _on_btn_refresh_pressed():
@@ -348,11 +367,11 @@ func populateSlots():
 	
 	var idx = 0
 	for slot in meta.outs:
-		slot_selector.add_item( slot.label, idx )
+		slot_selector.add_item( FlowI18n.tn(slot.label), idx )
 		idx +=1
 
 	for slot in meta.ins:
-		slot_selector.add_item( slot.label, idx )
+		slot_selector.add_item( FlowI18n.tn(slot.label), idx )
 		idx +=1
 	populateBulks()
 	
@@ -360,10 +379,10 @@ func populateBulks():
 	bulk_selector.clear()
 	if is_output:
 		for bulk_idx in range( node.generated_bulks.size() ):
-			bulk_selector.add_item( "Out Bulk %d" % bulk_idx, bulk_idx )
+			bulk_selector.add_item( FlowI18n.t("Out Bulk %d") % [bulk_idx], bulk_idx )
 	else:
 		for bulk_idx in range( node.input_bulks.size() ):
-			bulk_selector.add_item( "In Bulk %d" % bulk_idx, bulk_idx )
+			bulk_selector.add_item( FlowI18n.t("In Bulk %d") % [bulk_idx], bulk_idx )
 	if bulk_selector.get_item_count() > 0:
 		current_bulk_index = clampi(current_bulk_index, 0, bulk_selector.get_item_count() - 1)
 		bulk_selector.select( current_bulk_index )

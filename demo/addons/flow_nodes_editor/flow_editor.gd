@@ -77,10 +77,19 @@ var tab_bar: TabBar
 var open_tabs: Array[Dictionary] = []
 var active_tab_index: int = -1
 var open_file_dialog: EditorFileDialog
-var analyze_panel: PanelContainer
+var analyze_panel: Control
 var current_analyzed_node: FlowNodeBase
 var breadcrumb_bar: HBoxContainer
 var last_graph_open_dir := "res://graphs"
+var graph_loading_overlay: PanelContainer
+var graph_loading_label: Label
+var graph_loading_bar: ProgressBar
+var graph_loading_sweep_container: Control
+var graph_loading_sweep: ColorRect
+var graph_loading_message := ""
+var graph_loading_target_value := 0.0
+var graph_loading_display_value := 0.0
+var graph_loading_sweep_offset := 0.0
 
 func setResourceToEdit( new_resource : FlowGraphResource, new_resource_owner : FlowGraphNode3D ):
 	if new_resource == null:
@@ -305,12 +314,236 @@ func _on_button_open_pressed():
 	open_file_dialog.popup_centered_ratio(0.4)
 
 func _on_graph_file_selected(path: String):
+	await _open_graph_file_with_loading(path)
+
+func _open_graph_file_with_loading(path: String) -> void:
+	await _set_graph_loading_progress("Opening Graph...", 5.0)
+	await _set_graph_loading_progress("Loading Resource...", 18.0)
 	var res = ResourceLoader.load(path, "Resource", ResourceLoader.CACHE_MODE_REPLACE)
 	if res is FlowGraphResource:
 		last_graph_open_dir = path.get_base_dir()
-		setResourceToEdit(res, null)
+		await _set_resource_to_edit_with_loading(res, null)
+		await _set_graph_loading_progress("Graph Loaded", 100.0)
+		_hide_graph_loading()
 	else:
+		_hide_graph_loading()
+		update_status_bar(FlowI18n.t("Selected resource is not a FlowGraphResource"))
 		push_error("Selected resource is not a FlowGraphResource!")
+
+func _set_resource_to_edit_with_loading(new_resource: FlowGraphResource, new_resource_owner: FlowGraphNode3D) -> void:
+	if new_resource == null:
+		if current_resource:
+			await _set_graph_loading_progress("Saving Current Graph...", 24.0)
+			saveResource()
+		return
+
+	var found_idx := -1
+	for i in range(open_tabs.size()):
+		if open_tabs[i].resource == new_resource:
+			found_idx = i
+			break
+
+	if found_idx != -1:
+		if active_tab_index == found_idx:
+			if new_resource_owner != null:
+				resource_owner = new_resource_owner
+				open_tabs[found_idx].owner = new_resource_owner
+				ctx.owner = new_resource_owner
+			return
+		await _switch_to_tab_with_loading(found_idx, new_resource_owner)
+		return
+
+	if current_resource:
+		await _set_graph_loading_progress("Saving Current Graph...", 24.0)
+		saveResource()
+
+	var tab_title := "New Graph"
+	if new_resource.resource_path != "":
+		tab_title = new_resource.resource_path.get_file()
+	elif new_resource_owner:
+		tab_title = new_resource_owner.name
+
+	open_tabs.append({
+		"resource": new_resource,
+		"owner": new_resource_owner
+	})
+	tab_bar.add_tab(tab_title)
+	await _switch_to_tab_with_loading(open_tabs.size() - 1, new_resource_owner)
+
+func _switch_to_tab_with_loading(index: int, new_owner = null) -> void:
+	if index < 0 or index >= open_tabs.size():
+		return
+
+	if current_resource and current_resource.in_params_changed.is_connected(_on_in_params_changed):
+		current_resource.in_params_changed.disconnect(_on_in_params_changed)
+
+	active_tab_index = index
+
+	await _set_graph_loading_progress("Refreshing Resource...", 28.0)
+	var tab_resource = open_tabs[index].resource
+	var refreshed = _reload_resource_from_disk(tab_resource)
+	if refreshed != tab_resource:
+		open_tabs[index].resource = refreshed
+	current_resource = open_tabs[index].resource
+
+	if current_resource and not current_resource.in_params_changed.is_connected(_on_in_params_changed):
+		current_resource.in_params_changed.connect(_on_in_params_changed)
+
+	if new_owner != null:
+		open_tabs[index].owner = new_owner
+	resource_owner = open_tabs[index].owner
+
+	await _set_graph_loading_progress("Clearing Graph...", 34.0)
+	_clear_ui_nodes()
+
+	await _set_graph_loading_progress("Scanning Nodes...", 42.0)
+	scanAvailableNodes()
+
+	await FlowNodeIO.loadFromResourceWithProgress(self, Callable(self, "_set_graph_loading_progress"))
+
+	await _set_graph_loading_progress("Finalizing Graph...", 96.0)
+	ctx.graph = current_resource
+	ctx.owner = resource_owner
+	ctx.gedit_nodes_by_name = gedit_nodes_by_name
+	markAllNodesAsDirty()
+	queueRegen()
+	populatePopupInputsMenu()
+
+	tab_bar.current_tab = index
+	_update_tab_titles()
+
+	if inspector:
+		inspector.edit(null)
+
+	update_status_bar()
+
+func _setup_graph_loading_overlay() -> void:
+	graph_loading_overlay = PanelContainer.new()
+	graph_loading_overlay.name = "GraphLoadingOverlay"
+	graph_loading_overlay.visible = false
+	graph_loading_overlay.mouse_filter = Control.MOUSE_FILTER_STOP
+	graph_loading_overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	graph_loading_overlay.z_index = 100
+
+	var overlay_style := StyleBoxFlat.new()
+	overlay_style.bg_color = Color(0.04, 0.05, 0.08, 0.72)
+	graph_loading_overlay.add_theme_stylebox_override("panel", overlay_style)
+
+	var center := CenterContainer.new()
+	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	graph_loading_overlay.add_child(center)
+
+	var card := PanelContainer.new()
+	card.custom_minimum_size = Vector2(360, 88)
+	var card_style := StyleBoxFlat.new()
+	card_style.bg_color = Color("171a24")
+	card_style.border_color = Color("22d3ee")
+	card_style.border_width_left = 1
+	card_style.border_width_top = 1
+	card_style.border_width_right = 1
+	card_style.border_width_bottom = 1
+	card_style.set_corner_radius_all(4)
+	card_style.content_margin_left = 18
+	card_style.content_margin_right = 18
+	card_style.content_margin_top = 14
+	card_style.content_margin_bottom = 14
+	card.add_theme_stylebox_override("panel", card_style)
+	center.add_child(card)
+
+	var box := VBoxContainer.new()
+	box.add_theme_constant_override("separation", 10)
+	card.add_child(box)
+
+	graph_loading_label = Label.new()
+	graph_loading_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	graph_loading_label.add_theme_font_size_override("font_size", 12)
+	graph_loading_label.add_theme_color_override("font_color", Color("e5e7eb"))
+	box.add_child(graph_loading_label)
+
+	graph_loading_bar = ProgressBar.new()
+	graph_loading_bar.min_value = 0.0
+	graph_loading_bar.max_value = 100.0
+	graph_loading_bar.value = 0.0
+	graph_loading_bar.show_percentage = false
+	graph_loading_bar.custom_minimum_size = Vector2(320, 12)
+	var bar_background := StyleBoxFlat.new()
+	bar_background.bg_color = Color("0b1020")
+	bar_background.set_corner_radius_all(3)
+	graph_loading_bar.add_theme_stylebox_override("background", bar_background)
+	var bar_fill := StyleBoxFlat.new()
+	bar_fill.bg_color = Color("22d3ee")
+	bar_fill.set_corner_radius_all(3)
+	graph_loading_bar.add_theme_stylebox_override("fill", bar_fill)
+
+	graph_loading_sweep_container = Control.new()
+	graph_loading_sweep_container.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	graph_loading_sweep_container.clip_contents = true
+	graph_loading_sweep_container.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	graph_loading_bar.add_child(graph_loading_sweep_container)
+
+	graph_loading_sweep = ColorRect.new()
+	graph_loading_sweep.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	graph_loading_sweep.color = Color(1.0, 1.0, 1.0, 0.34)
+	graph_loading_sweep_container.add_child(graph_loading_sweep)
+	box.add_child(graph_loading_bar)
+
+	add_child(graph_loading_overlay)
+
+func _set_graph_loading_progress(message: String, value: float) -> void:
+	if graph_loading_overlay == null:
+		return
+	graph_loading_message = message
+	graph_loading_target_value = clampf(value, 0.0, 100.0)
+	if not graph_loading_overlay.visible:
+		graph_loading_display_value = 0.0
+		graph_loading_sweep_offset = 0.0
+		graph_loading_bar.value = 0.0
+	graph_loading_overlay.visible = true
+	graph_loading_overlay.move_to_front()
+	_update_graph_loading_animation(0.0)
+	await get_tree().process_frame
+
+func _hide_graph_loading() -> void:
+	if graph_loading_overlay:
+		graph_loading_overlay.visible = false
+	graph_loading_message = ""
+	graph_loading_target_value = 0.0
+	graph_loading_display_value = 0.0
+	graph_loading_sweep_offset = 0.0
+
+func _update_graph_loading_animation(delta: float) -> void:
+	if graph_loading_overlay == null or not graph_loading_overlay.visible:
+		return
+
+	var target := graph_loading_target_value
+	if target < 100.0 and graph_loading_display_value >= target - 0.1:
+		target = minf(target + 12.0, 96.0)
+
+	var speed := 18.0
+	if graph_loading_display_value < graph_loading_target_value:
+		speed = maxf(18.0, absf(graph_loading_target_value - graph_loading_display_value) * 6.0)
+	graph_loading_display_value = move_toward(graph_loading_display_value, target, speed * delta)
+	graph_loading_bar.value = graph_loading_display_value
+	graph_loading_label.text = "%s  %d%%" % [FlowI18n.t(graph_loading_message), int(round(graph_loading_display_value))]
+	_update_graph_loading_sweep(delta)
+
+func _update_graph_loading_sweep(delta: float) -> void:
+	if graph_loading_sweep_container == null or graph_loading_sweep == null:
+		return
+
+	var bar_size := graph_loading_bar.size
+	var fill_width := bar_size.x * graph_loading_display_value / 100.0
+	graph_loading_sweep_container.position = Vector2.ZERO
+	graph_loading_sweep_container.size = Vector2(fill_width, bar_size.y)
+	if fill_width <= 2.0:
+		graph_loading_sweep.visible = false
+		return
+
+	graph_loading_sweep.visible = true
+	var sweep_width := clampf(bar_size.x * 0.22, 42.0, 92.0)
+	graph_loading_sweep.size = Vector2(sweep_width, bar_size.y)
+	graph_loading_sweep_offset = fposmod(graph_loading_sweep_offset + maxf(bar_size.x * 0.85, 180.0) * delta, fill_width + sweep_width)
+	graph_loading_sweep.position = Vector2(graph_loading_sweep_offset - sweep_width, 0.0)
 
 ## Reloads a FlowGraphResource from disk if it has a valid path, bypassing cache.
 ## Returns the refreshed resource, or the original if it has no path (unsaved).
@@ -405,6 +638,7 @@ func saveResource():
 func _process(delta: float) -> void:
 	if node_registry_version != FlowNodeRegistry.get_version():
 		_on_node_registry_changed()
+	_update_graph_loading_animation(delta)
 	if not current_resource:
 		return
 		
@@ -889,6 +1123,7 @@ func _ready():
 	
 	$VBoxContainer.add_child(status_panel)
 	info = status_label
+	_setup_graph_loading_overlay()
 	
 	%AutoRegen.button_pressed = auto_regen
 	if has_node("%CheckColorNodes"):
@@ -1064,6 +1299,9 @@ func _notification(what: int):
 		_apply_toolbar_translations()
 		if search_add_node_popup:
 			search_add_node_popup.update_localized_text()
+		_refresh_node_translations()
+		if data_inspector and data_inspector.has_method("refresh_localized_text"):
+			data_inspector.refresh_localized_text()
 		if gedit and info:
 			update_status_bar()
 
@@ -1102,6 +1340,16 @@ func _on_node_translation_toggled(toggled_on: bool):
 	FlowI18n.set_node_translation_enabled(toggled_on)
 	if search_add_node_popup:
 		search_add_node_popup.update_localized_text()
+	_refresh_node_translations()
+
+func _refresh_node_translations() -> void:
+	if gedit:
+		for child in gedit.get_children():
+			var node := child as FlowNodeBase
+			if node:
+				node.refreshLocalizedText()
+	if inspector:
+		inspector.refresh_localized_text()
 
 ## Handles debug hotkeys: D (toggle debug), A (toggle inspect), Alt+D (clear all), T (toggle trace).
 ## Uses _input so it fires before GraphEdit consumes the key events.
@@ -1323,7 +1571,7 @@ func _style_toolbar_button(btn: Button):
 	btn.add_theme_color_override("font_pressed_color", Color("a1a1aa"))
 
 func _setup_inline_analyze_panel():
-	var panel := PanelContainer.new()
+	var panel := Control.new()
 	panel.name = "InlineAnalyzePanel"
 	panel.visible = false
 	panel.anchor_left = 0.0
@@ -1339,6 +1587,11 @@ func _setup_inline_analyze_panel():
 	# Minimum size so it doesn't collapse to nothing
 	panel.custom_minimum_size = Vector2(200, 120)
 
+	var panel_background := PanelContainer.new()
+	panel_background.name = "AnalyzePanelBackground"
+	panel_background.mouse_filter = Control.MOUSE_FILTER_STOP
+	panel_background.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+
 	var panel_sb := StyleBoxFlat.new()
 	panel_sb.bg_color = Color("10141f")
 	panel_sb.set_border_width_all(1)
@@ -1348,7 +1601,8 @@ func _setup_inline_analyze_panel():
 	panel_sb.content_margin_right = 8
 	panel_sb.content_margin_top = 12 # Extra room for resize handle
 	panel_sb.content_margin_bottom = 8
-	panel.add_theme_stylebox_override("panel", panel_sb)
+	panel_background.add_theme_stylebox_override("panel", panel_sb)
+	panel.add_child(panel_background)
 
 	var packed := load("res://addons/flow_nodes_editor/data_inspector.tscn") as PackedScene
 	if not packed:
@@ -1370,7 +1624,7 @@ func _setup_inline_analyze_panel():
 	inline_inspector.offset_right = 0.0
 	inline_inspector.offset_bottom = 0.0
 
-	panel.add_child(inline_inspector)
+	panel_background.add_child(inline_inspector)
 	gedit.add_child(panel)
 	analyze_panel = panel
 	data_inspector = inline_inspector
@@ -1384,7 +1638,7 @@ var _analyze_drag_start_offset := 0.0
 const ANALYZE_MIN_HEIGHT := 120.0
 const ANALYZE_MAX_HEIGHT_RATIO := 0.85
 
-func _setup_analyze_resize_handle(panel: PanelContainer):
+func _setup_analyze_resize_handle(panel: Control):
 	var handle := Control.new()
 	handle.name = "ResizeHandle"
 	handle.mouse_filter = Control.MOUSE_FILTER_STOP
@@ -1582,7 +1836,7 @@ func refreshSignalsInputArgs( node ):
 		if row.out_popup.get_connections().is_empty():
 			row.out_popup.connect( setOnOverInParam.bind( null ) )	
 
-func addNodeFromTemplate( node_template, node_name : String, settings = null ):
+func addNodeFromTemplate( node_template, node_name : String, settings = null, initialize := true ):
 	print( "addNode %s (%s : %s)" % [ node_template, node_name, str(settings) ])
 	var node = packed_node.instantiate() as GraphNode
 	var meta = node_types.get( node_template, null )
@@ -1622,12 +1876,13 @@ func addNodeFromTemplate( node_template, node_name : String, settings = null ):
 			#print( "Assigning default settings" )
 			node.settings = NodeSettings.new()
 	node.settings.title = meta.title
-	node.initFromScript()
 	node.title = node.getTitle()
 	node.size = Vector2(32,32)
 	node.tooltip_text = meta.get( "tooltip", "" )
-	node.refreshFromSettings()
-	refreshSignalsInputArgs( node )
+	if initialize:
+		node.initFromScript()
+		node.refreshFromSettings()
+		refreshSignalsInputArgs( node )
 	
 	gedit.add_child(node)
 	gedit_nodes_by_name[ node.name ] = node
@@ -2711,18 +2966,30 @@ func evalGraph():
 		dump_performance = false
 
 func _on_button_reload_pressed() -> void:
+	await _reload_current_graph_with_loading()
+
+func _reload_current_graph_with_loading() -> void:
+	if not current_resource:
+		scanAvailableNodes()
+		return
+
+	await _set_graph_loading_progress("Reloading Graph...", 8.0)
+	await _set_graph_loading_progress("Scanning Nodes...", 24.0)
 	scanAvailableNodes()
-	if current_resource:
-		_clear_ui_nodes()
-		FlowNodeIO.loadFromResource(self)
-		ctx.graph = current_resource
-		ctx.owner = resource_owner
-		ctx.gedit_nodes_by_name = gedit_nodes_by_name
-		markAllNodesAsDirty()
-		queueRegen()
-		populatePopupInputsMenu()
-		populatePopupOutputsMenu()
-		update_status_bar()
+	await _set_graph_loading_progress("Clearing Graph...", 34.0)
+	_clear_ui_nodes()
+	await FlowNodeIO.loadFromResourceWithProgress(self, Callable(self, "_set_graph_loading_progress"))
+	await _set_graph_loading_progress("Finalizing Graph...", 96.0)
+	ctx.graph = current_resource
+	ctx.owner = resource_owner
+	ctx.gedit_nodes_by_name = gedit_nodes_by_name
+	markAllNodesAsDirty()
+	queueRegen()
+	populatePopupInputsMenu()
+	populatePopupOutputsMenu()
+	update_status_bar()
+	await _set_graph_loading_progress("Graph Loaded", 100.0)
+	_hide_graph_loading()
 
 func _on_node_registry_changed() -> void:
 	if current_resource and save_pending:

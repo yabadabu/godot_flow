@@ -4,6 +4,8 @@ class_name FlowNodeIO
 # Here are all functions related to read/write the resources, including 
 # serialization to/from json for the clipboard
 
+const LOAD_PROGRESS_CHUNK_SIZE := 2
+
 static func resource_to_dict(resource: Resource) -> Dictionary:
 	var dict := {}
 	for prop in resource.get_property_list():
@@ -215,6 +217,84 @@ static func create_nodes_from_dict( dict, editor : Control, paste_offset = null)
 
 	return new_nodes
 
+static func create_nodes_from_dict_with_progress(dict, editor: Control, paste_offset = null, progress_callback: Callable = Callable(), start_progress := 45.0, end_progress := 92.0) -> Array:
+	if dict.get("type", null) != "flow_graph_nodes":
+		push_error("Invalid dict to paste nodes from")
+		return []
+
+	var source_nodes: Array = dict.get("nodes", [])
+	var source_links: Array = dict.get("links", [])
+	var source_frames: Array = dict.get("frames", [])
+	var total_steps = maxi(source_nodes.size() * 4 + source_links.size() + source_frames.size(), 1)
+	var completed_steps := 0
+	var new_nodes := []
+	var old_to_new_names := {}
+
+	for in_node in source_nodes:
+		completed_steps += 1
+		await _report_load_progress(progress_callback, "Building Graph...", completed_steps, total_steps, start_progress, end_progress)
+
+		var in_name = in_node.name
+		var new_name = in_name
+		if editor.gedit_nodes_by_name.has(in_name):
+			new_name = editor.getNewName(in_node.template)
+		var node = editor.addNodeFromTemplate(in_node.template, new_name, null, false)
+		if not node:
+			return []
+		var in_pos = _parse_vector2(in_node.position)
+		node.position_offset = (in_pos + paste_offset) * editor.ui_scale
+		node.show_disconnected_inputs = in_node.get("show_disconnected_inputs", false)
+		node.args_ports_by_name = in_node.get("args_port", {})
+
+		completed_steps += 1
+		await _report_load_progress(progress_callback, "Building Graph...", completed_steps, total_steps, start_progress, end_progress)
+
+		dict_to_resource(in_node.settings, node.settings)
+		node.settings.inspect_enabled = false
+
+		completed_steps += 1
+		await _report_load_progress(progress_callback, "Building Graph...", completed_steps, total_steps, start_progress, end_progress)
+
+		node.initFromScript()
+		node.refreshFromSettings()
+		editor.refreshSignalsInputArgs(node)
+
+		old_to_new_names[in_name] = new_name
+		new_nodes.append(node)
+		completed_steps += 1
+		await _report_load_progress(progress_callback, "Building Graph...", completed_steps, total_steps, start_progress, end_progress)
+
+	for link in source_links:
+		var new_from = old_to_new_names.get(link.from_node, null)
+		var new_to = old_to_new_names.get(link.to_node, null)
+		if new_from == null or new_to == null:
+			push_error("Failed to identify params links", link)
+		else:
+			editor.connect_nodes(new_from, link.from_port, new_to, link.to_port)
+		completed_steps += 1
+		if _should_report_load_progress(completed_steps, total_steps):
+			await _report_load_progress(progress_callback, "Connecting Nodes...", completed_steps, total_steps, start_progress, end_progress)
+
+	for frame_data in source_frames:
+		var frame := GraphFrame.new()
+		frame.name = frame_data.name
+		frame.title = frame_data.title
+		var in_pos = _parse_vector2(frame_data.position)
+		frame.position_offset = (in_pos + paste_offset) * editor.ui_scale
+		frame.size = _parse_vector2(frame_data.size)
+		frame.tint_color = _parse_color(frame_data.tint_color)
+		frame.tint_color_enabled = true
+		editor.gedit.add_child(frame)
+		for old_name in frame_data.attached:
+			var new_name = old_to_new_names.get(old_name, null)
+			if new_name:
+				editor.gedit.attach_graph_element_to_frame(new_name, frame.name)
+		completed_steps += 1
+		if _should_report_load_progress(completed_steps, total_steps):
+			await _report_load_progress(progress_callback, "Restoring Frames...", completed_steps, total_steps, start_progress, end_progress)
+
+	return new_nodes
+
 static func copySelectionToClipboard( editor : Control ):
 	var nodes = editor.getSelectedNodes()
 	var frames = editor.getSelectedFrames()
@@ -268,6 +348,39 @@ static func loadFromResource( editor : Control ):
 	editor.gedit.scroll_offset = current_resource.view_offset
 	editor.new_name_counter = current_resource.new_name_counter
 	editor.data_inspector.setNode( null )
+
+static func loadFromResourceWithProgress(editor: Control, progress_callback: Callable = Callable()) -> void:
+	var current_resource = editor.current_resource
+	if current_resource == null:
+		return
+
+	await _call_load_progress(progress_callback, "Registering Parameters...", 45.0)
+	for input in current_resource.in_params:
+		editor.registerInputNodeType(input)
+	if "out_params" in current_resource:
+		for output in current_resource.out_params:
+			editor.registerOutputNodeType(output)
+
+	if current_resource.data and not current_resource.data.is_empty():
+		var paste_offset = _parse_vector2(current_resource.data.min_pos)
+		await create_nodes_from_dict_with_progress(current_resource.data, editor, paste_offset, progress_callback, 48.0, 90.0)
+
+	await _call_load_progress(progress_callback, "Restoring View...", 92.0)
+	editor.gedit.zoom = current_resource.view_zoom
+	editor.gedit.scroll_offset = current_resource.view_offset
+	editor.new_name_counter = current_resource.new_name_counter
+	editor.data_inspector.setNode(null)
+
+static func _should_report_load_progress(completed_steps: int, total_steps: int) -> bool:
+	return completed_steps == total_steps or completed_steps % LOAD_PROGRESS_CHUNK_SIZE == 0
+
+static func _report_load_progress(progress_callback: Callable, message: String, completed_steps: int, total_steps: int, start_progress: float, end_progress: float) -> void:
+	var ratio := float(completed_steps) / float(maxi(total_steps, 1))
+	await _call_load_progress(progress_callback, message, lerpf(start_progress, end_progress, ratio))
+
+static func _call_load_progress(progress_callback: Callable, message: String, value: float) -> void:
+	if progress_callback.is_valid():
+		await progress_callback.call(message, value)
 
 static func evaluate_graph(graph: FlowGraphResource, input_data_map: Dictionary, parent_ctx: FlowData.EvaluationContext, runtime_params: Dictionary = {}) -> Dictionary:
 	var instances = {}

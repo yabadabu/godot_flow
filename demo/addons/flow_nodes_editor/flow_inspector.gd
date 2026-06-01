@@ -12,6 +12,7 @@ const BASE_SETTINGS_PROPS = [
 
 var current_node: Node = null
 var current_settings: Object = null
+var current_target: Object = null
 var editor: Control = null
 
 var scroll_container: ScrollContainer
@@ -54,7 +55,7 @@ func _ready():
 	
 	# Create Placeholder Label
 	placeholder_label = Label.new()
-	placeholder_label.text = "Select a node to inspect its settings."
+	placeholder_label.text = FlowI18n.t("Select a node to inspect its settings.")
 	placeholder_label.autowrap_mode = TextServer.AUTOWRAP_WORD
 	placeholder_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	placeholder_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -66,6 +67,7 @@ func _ready():
 	edit(null)
 
 func edit(target_node: Object):
+	current_target = target_node
 	current_node = null if not target_node is Node else target_node
 	current_settings = null
 	
@@ -110,6 +112,7 @@ func edit(target_node: Object):
 		_populate_generic_resource_properties(target_node)
 
 func edit_editor_settings(flow_editor):
+	current_target = flow_editor
 	current_node = null
 	current_settings = flow_editor
 
@@ -120,6 +123,28 @@ func edit_editor_settings(flow_editor):
 	scroll_container.visible = true
 	placeholder_label.visible = false
 	_populate_flow_editor_settings(flow_editor)
+
+func refresh_localized_text() -> void:
+	placeholder_label.text = FlowI18n.t("Select a node to inspect its settings.")
+	if current_target != null and is_instance_valid(current_target):
+		if current_target.has_method("_on_auto_regen_toggled"):
+			edit_editor_settings(current_target)
+		else:
+			edit(current_target)
+		return
+	edit(null)
+
+func _node_title(node: GraphNode) -> String:
+	if node != null and node.has_method("getLocalizedTitle"):
+		return str(node.call("getLocalizedTitle"))
+	return FlowI18n.tn(node.title)
+
+func _localized_property_label(property_name: String) -> String:
+	return FlowI18n.tn(_format_label(property_name))
+
+func _section_label(expanded: bool, label: String) -> String:
+	var prefix := "▼ " if expanded else "▶ "
+	return prefix + FlowI18n.t(label)
 
 func _populate_flow_editor_settings(flow_editor):
 	_add_header(FlowI18n.t("Settings"), FlowI18n.t("Flow Editor"))
@@ -149,7 +174,7 @@ func _create_editor_setting_checkbox(is_pressed: bool, changed: Callable) -> Che
 
 func _populate_frame_properties(frame: GraphFrame):
 	# Header
-	_add_header(frame.title, frame.name)
+	_add_header(FlowI18n.tn(frame.title), frame.name)
 	
 	# Frame Properties Container
 	var prop_box = VBoxContainer.new()
@@ -157,18 +182,18 @@ func _populate_frame_properties(frame: GraphFrame):
 	content_vbox.add_child(prop_box)
 	
 	# Title
-	prop_box.add_child(_create_row("Title", _create_string_input(frame, "title")))
+	prop_box.add_child(_create_row(FlowI18n.t("Title"), _create_string_input(frame, "title")))
 	# Tint Color
-	prop_box.add_child(_create_row("Tint Color", _create_color_input(frame, "tint_color")))
+	prop_box.add_child(_create_row(FlowI18n.t("Tint Color"), _create_color_input(frame, "tint_color")))
 	# Tint Enabled
-	prop_box.add_child(_create_row("Tint Enabled", _create_bool_input(frame, "tint_color_enabled")))
+	prop_box.add_child(_create_row(FlowI18n.t("Tint Enabled"), _create_bool_input(frame, "tint_color_enabled")))
 
 func _populate_generic_node_properties(node: GraphNode):
-	_add_header(node.title, node.name)
+	_add_header(_node_title(node), node.name)
 
 func _populate_node_properties(node: GraphNode, settings: Object):
 	# Header
-	_add_header(node.title, node.name)
+	_add_header(_node_title(node), node.name)
 	
 	# Build attribute selector lookup: prop_name -> port
 	var attr_selector_map := {}
@@ -181,7 +206,7 @@ func _populate_node_properties(node: GraphNode, settings: Object):
 	type_box.add_theme_constant_override("separation", 10)
 	content_vbox.add_child(type_box)
 
-	type_box.add_child(_create_row("Title", _create_string_input(settings, "title")))
+	type_box.add_child(_create_row(FlowI18n.t("Title"), _create_string_input(settings, "title")))
 
 	# Gather subclass-specific properties
 	var props = settings.get_property_list()
@@ -201,12 +226,12 @@ func _populate_node_properties(node: GraphNode, settings: Object):
 		else:
 			ctrl = _create_control_for_property(settings, prop)
 		if ctrl:
-			type_box.add_child(_create_row(_format_label(prop.name), ctrl))
+			type_box.add_child(_create_row(_localized_property_label(prop.name), ctrl))
 			has_custom_props = true
 			
 	if not has_custom_props:
 		var lbl_empty = Label.new()
-		lbl_empty.text = "No custom settings"
+		lbl_empty.text = FlowI18n.t("No custom settings")
 		lbl_empty.add_theme_color_override("font_color", Color("a1a1aa"))
 		lbl_empty.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		type_box.add_child(lbl_empty)
@@ -218,7 +243,7 @@ func _populate_node_properties(node: GraphNode, settings: Object):
 	
 	# Collapsible Common Settings
 	var common_header = Button.new()
-	common_header.text = "▼ Common Settings"
+	common_header.text = _section_label(true, "Common Settings")
 	common_header.flat = true
 	common_header.alignment = HorizontalAlignment.HORIZONTAL_ALIGNMENT_LEFT
 	common_header.add_theme_color_override("font_color", Color("22d3ee")) # Cyan #22d3ee accent
@@ -232,9 +257,9 @@ func _populate_node_properties(node: GraphNode, settings: Object):
 	common_header.pressed.connect(func():
 		common_container.visible = not common_container.visible
 		if common_container.visible:
-			common_header.text = "▼ Common Settings"
+			common_header.text = _section_label(true, "Common Settings")
 		else:
-			common_header.text = "▶ Common Settings"
+			common_header.text = _section_label(false, "Common Settings")
 	)
 	
 	# Populate Common Settings
@@ -250,7 +275,7 @@ func _populate_node_properties(node: GraphNode, settings: Object):
 			
 		var ctrl = _create_control_for_property(settings, prop)
 		if ctrl:
-			common_container.add_child(_create_row(_format_label(prop.name), ctrl))
+			common_container.add_child(_create_row(_localized_property_label(prop.name), ctrl))
 
 	# Override Pins for subgraph nodes
 	if node.node_template == "subgraph" and settings is SubgraphNodeSettings and settings.graph:
@@ -262,7 +287,7 @@ func _populate_subgraph_overrides(node: GraphNode, settings: SubgraphNodeSetting
 	content_vbox.add_child(sep)
 	
 	var header = Button.new()
-	header.text = "▼ Override Pins"
+	header.text = _section_label(true, "Override Pins")
 	header.flat = true
 	header.alignment = HorizontalAlignment.HORIZONTAL_ALIGNMENT_LEFT
 	header.add_theme_color_override("font_color", Color("fbbf24"))  # Yellow for overrides
@@ -275,7 +300,7 @@ func _populate_subgraph_overrides(node: GraphNode, settings: SubgraphNodeSetting
 	
 	header.pressed.connect(func():
 		override_container.visible = not override_container.visible
-		header.text = "▼ Override Pins" if override_container.visible else "▶ Override Pins"
+		header.text = _section_label(override_container.visible, "Override Pins")
 	)
 	
 	for param in settings.graph.in_params:
@@ -418,7 +443,7 @@ func _create_override_value_control(settings: SubgraphNodeSettings, param: Graph
 		FlowData.DataType.Resource:
 			var res_hbox = HBoxContainer.new()
 			var res_lbl = Label.new()
-			res_lbl.text = "None" if current_val == null else current_val.resource_path.get_file()
+			res_lbl.text = FlowI18n.t("None") if current_val == null else current_val.resource_path.get_file()
 			res_lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 			res_lbl.clip_text = true
 			res_lbl.add_theme_font_size_override("font_size", 11)
@@ -510,7 +535,7 @@ func _create_control_for_property(obj: Object, prop: Dictionary) -> Control:
 		var opt = OptionButton.new()
 		var options = prop.hint_string.split(",")
 		for idx in range(options.size()):
-			opt.add_item(options[idx], idx)
+			opt.add_item(FlowI18n.tn(options[idx]), idx)
 		opt.selected = val
 		opt.item_selected.connect(func(index):
 			_on_value_changed(obj, prop_name, index)
@@ -559,7 +584,7 @@ func _create_control_for_property(obj: Object, prop: Dictionary) -> Control:
 		TYPE_OBJECT:
 			var hbc = HBoxContainer.new()
 			var lbl = Label.new()
-			lbl.text = "None" if val == null else val.resource_path.get_file()
+			lbl.text = FlowI18n.t("None") if val == null else val.resource_path.get_file()
 			lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 			lbl.clip_text = true
 			lbl.add_theme_font_size_override("font_size", 11)
@@ -613,7 +638,7 @@ func _create_attribute_selector(node: GraphNode, settings: Object, prop_name: St
 	# Fallback text input for custom attribute names
 	var le = LineEdit.new()
 	le.text = current_val
-	le.placeholder_text = "attribute name..."
+	le.placeholder_text = FlowI18n.t("attribute name...")
 	le.add_theme_font_size_override("font_size", 11)
 	var sb := StyleBoxFlat.new()
 	sb.bg_color = Color("111318")
@@ -635,24 +660,24 @@ func _create_attribute_selector(node: GraphNode, settings: Object, prop_name: St
 	# Add separator and custom option
 	var custom_idx := idx
 	opt.add_separator()
-	opt.add_item("(custom...)", custom_idx + 1)
+	opt.add_item(FlowI18n.t("(custom...)"), custom_idx + 1)
 	
 	if stream_names.is_empty():
 		opt.selected = opt.item_count - 1
-		opt.set_item_text(opt.item_count - 1, "(no attributes found)")
+		opt.set_item_text(opt.item_count - 1, FlowI18n.t("(no attributes found)"))
 		opt.disabled = true
 		opt.visible = true
 		le.visible = true
 	elif selected_idx >= 0:
 		opt.selected = selected_idx
 		opt.disabled = false
-		opt.set_item_text(opt.item_count - 1, "(custom...)")
+		opt.set_item_text(opt.item_count - 1, FlowI18n.t("(custom...)"))
 		opt.visible = true
 		le.visible = false
 	else:
 		opt.selected = opt.item_count - 1
 		opt.disabled = false
-		opt.set_item_text(opt.item_count - 1, "(custom...)")
+		opt.set_item_text(opt.item_count - 1, FlowI18n.t("(custom...)"))
 		opt.visible = true
 		le.visible = true
 	
@@ -839,7 +864,7 @@ func _create_array_input(obj: Object, prop_name: String, arr_val: Array, prop: D
 			"packedscene":
 				var lbl = Label.new()
 				var res = arr_val[this_idx]
-				lbl.text = "None" if res == null else res.resource_path.get_file()
+				lbl.text = FlowI18n.t("None") if res == null else res.resource_path.get_file()
 				lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 				lbl.clip_text = true
 				lbl.add_theme_font_size_override("font_size", 11)
@@ -877,7 +902,7 @@ func _create_array_input(obj: Object, prop_name: String, arr_val: Array, prop: D
 
 		var btn_remove = Button.new()
 		btn_remove.text = "-"
-		btn_remove.tooltip_text = "Remove item"
+		btn_remove.tooltip_text = FlowI18n.t("Remove item")
 		btn_remove.pressed.connect(func():
 			var current_arr = obj.get(prop_name)
 			var next: Array = current_arr.duplicate(true) if current_arr is Array else []
@@ -892,7 +917,7 @@ func _create_array_input(obj: Object, prop_name: String, arr_val: Array, prop: D
 	var add_row = HBoxContainer.new()
 	add_row.add_theme_constant_override("separation", 4)
 	var add_btn = Button.new()
-	add_btn.text = "+ Add"
+	add_btn.text = "+ " + FlowI18n.t("Add")
 	add_btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	add_btn.pressed.connect(func():
 		var current_arr = obj.get(prop_name)
@@ -935,7 +960,7 @@ func _create_dictionary_input(obj: Object, prop_name: String, dict_val: Dictiona
 
 		var btn_remove = Button.new()
 		btn_remove.text = "-"
-		btn_remove.tooltip_text = "Remove entry"
+		btn_remove.tooltip_text = FlowI18n.t("Remove entry")
 		var original_key = key
 		btn_remove.pressed.connect(func():
 			var current_dict = obj.get(prop_name)
@@ -977,11 +1002,11 @@ func _create_dictionary_input(obj: Object, prop_name: String, dict_val: Dictiona
 	var add_row = HBoxContainer.new()
 	add_row.add_theme_constant_override("separation", 4)
 	var add_key = LineEdit.new()
-	add_key.placeholder_text = "key"
+	add_key.placeholder_text = FlowI18n.t("key")
 	add_key.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	add_row.add_child(add_key)
 	var add_value = LineEdit.new()
-	add_value.placeholder_text = "value"
+	add_value.placeholder_text = FlowI18n.t("value")
 	add_value.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	add_row.add_child(add_value)
 	var add_btn = Button.new()
@@ -1154,7 +1179,7 @@ func _create_graph_parameter_type_button(res: FlowGraphResource, param: GraphInp
 	for t_idx in range(types_to_show.size()):
 		var t_val = types_to_show[t_idx]
 		var t_name = FlowData.DataType.keys()[t_val]
-		opt_type.add_item(t_name, t_val)
+		opt_type.add_item(FlowI18n.t(t_name), t_val)
 		if param.data_type == t_val:
 			opt_type.selected = t_idx
 
@@ -1267,7 +1292,7 @@ func _create_graph_parameter_value_control(res: FlowGraphResource, param: GraphI
 		FlowData.DataType.Resource:
 			var res_hbox = HBoxContainer.new()
 			var res_lbl = Label.new()
-			res_lbl.text = "None" if param.cte_resource == null else param.cte_resource.resource_path.get_file()
+			res_lbl.text = FlowI18n.t("None") if param.cte_resource == null else param.cte_resource.resource_path.get_file()
 			res_lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 			res_lbl.clip_text = true
 			res_lbl.add_theme_font_size_override("font_size", 11)
@@ -1288,7 +1313,7 @@ func _emit_graph_parameter_changed(res: FlowGraphResource, param: GraphInputPara
 	property_edited.emit(prop_name)
 
 func _populate_graph_resource_properties(res: FlowGraphResource):
-	_add_header("Graph Inputs", res.resource_path.get_file() if res.resource_path != "" else "Unsaved Resource")
+	_add_header(FlowI18n.t("Graph Inputs"), res.resource_path.get_file() if res.resource_path != "" else FlowI18n.t("Unsaved Resource"))
 	
 	# Inputs list
 	var list_box = VBoxContainer.new()
@@ -1304,7 +1329,7 @@ func _populate_graph_resource_properties(res: FlowGraphResource):
 		
 	# Add Parameter Button
 	var btn_add = Button.new()
-	btn_add.text = "+ Add Parameter"
+	btn_add.text = "+ " + FlowI18n.t("Add Parameter")
 	btn_add.add_theme_color_override("font_color", Color("22d3ee")) # Cyan
 	btn_add.pressed.connect(func():
 		var new_param = GraphInputParameter.new()
@@ -1338,7 +1363,7 @@ func _show_file_dialog_for_param_resource(param: GraphInputParameter, label: Lab
 	fd.popup_centered_ratio(0.4)
 
 func _populate_graph_resource_outputs(res: FlowGraphResource):
-	_add_header("Graph Outputs", res.resource_path.get_file() if res.resource_path != "" else "Unsaved Resource")
+	_add_header(FlowI18n.t("Graph Outputs"), res.resource_path.get_file() if res.resource_path != "" else FlowI18n.t("Unsaved Resource"))
 	
 	# Outputs list
 	var list_box = VBoxContainer.new()
@@ -1354,7 +1379,7 @@ func _populate_graph_resource_outputs(res: FlowGraphResource):
 		
 	# Add Parameter Button
 	var btn_add = Button.new()
-	btn_add.text = "+ Add Parameter"
+	btn_add.text = "+ " + FlowI18n.t("Add Parameter")
 	btn_add.add_theme_color_override("font_color", Color("22d3ee")) # Cyan
 	btn_add.pressed.connect(func():
 		var new_param = GraphInputParameter.new()
@@ -1383,4 +1408,4 @@ func _populate_generic_resource_properties(res: Resource):
 			
 		var ctrl = _create_control_for_property(res, prop)
 		if ctrl:
-			prop_box.add_child(_create_row(_format_label(prop.name), ctrl))
+			prop_box.add_child(_create_row(_localized_property_label(prop.name), ctrl))

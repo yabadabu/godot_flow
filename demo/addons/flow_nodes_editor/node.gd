@@ -121,7 +121,7 @@ func _update_data_tooltip():
 		var summary = output_summaries[port_idx]
 		if summary == null:
 			continue
-		var port_label = outs[port_idx].get("label", "Out %d" % port_idx)
+		var port_label = _localized_node_text(str(outs[port_idx].get("label", "Out %d" % port_idx)))
 		lines.append("%s: %d pts, %d streams" % [port_label, summary.points, summary.streams])
 		for si in summary.stream_info:
 			lines.append("  · %s (%s)" % [si.name, si.type])
@@ -379,7 +379,7 @@ func _gui_input(event: InputEvent) -> void:
 func refreshFromSettings():
 	refreshDebugMark()
 	refreshInspectMark()
-	title = getTitle()
+	refreshLocalizedText()
 	modulate = Color( 0.7, 0.7, 0.7, 0.5 ) if settings.disabled else Color.WHITE
 	
 	update_node_style()
@@ -521,7 +521,46 @@ func getMeta() -> Dictionary:
 	return meta_node
 	
 func getTitle() -> String:
-	return settings.title
+	if settings:
+		return settings.title
+	return str(getMeta().get("title", ""))
+
+func getLocalizedTitle() -> String:
+	return _localized_node_text(getTitle())
+
+func getTooltip() -> String:
+	return _localized_node_text(str(getMeta().get("tooltip", "")))
+
+func refreshLocalizedText() -> void:
+	title = getLocalizedTitle()
+	if get_meta("output_summaries", []).is_empty():
+		tooltip_text = getTooltip()
+	else:
+		_update_data_tooltip()
+	_refresh_connector_labels()
+
+func _refresh_connector_labels() -> void:
+	var meta := getMeta()
+	var outs = meta.get("outs", [])
+	var row_index := 0
+	for child in get_children():
+		var row := child as FlowConnectorRow
+		if row == null:
+			continue
+		if row_index < num_in_ports and not row.data.is_empty():
+			row.getInLabel().text = _localized_node_text(str(row.data.get("label", "")))
+		elif row_index >= num_in_ports:
+			row.getInLabel().text = ""
+		if row_index < outs.size() and outs[row_index]:
+			row.getOutLabel().text = _localized_node_text(str(outs[row_index].get("label", "")))
+		else:
+			row.getOutLabel().text = ""
+		row_index += 1
+
+func _localized_node_text(text: String) -> String:
+	if text.is_empty():
+		return text
+	return FlowI18n.tn(text)
 
 func shuffleArray(arr: Array) -> void:
 	for i in range(arr.size() - 1, 0, -1):
@@ -742,7 +781,7 @@ func initFromScript():
 				in_data = ins[idx]
 			else:
 				in_data = exposed_params[ idx - num_ins ]
-			lbl_in.text = in_data.label
+			lbl_in.text = _localized_node_text(str(in_data.get("label", "")))
 			
 			var in_name = in_data.get( "name", in_data.label )
 			
@@ -769,7 +808,7 @@ func initFromScript():
 		if idx < num_outs:
 			var out_data = outs[idx]
 			if out_data:
-				lbl_out.text = out_data.label
+				lbl_out.text = _localized_node_text(str(out_data.get("label", "")))
 				set_slot_enabled_right( idx, true )
 					
 				# Change color
