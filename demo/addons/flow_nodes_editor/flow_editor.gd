@@ -61,6 +61,12 @@ var popup_menu_outputs : PopupMenu
 var popup_on_over_input = null
 const IDM_PROMOTE_TO_PARAMETER : int = 100
 const IDM_COLLAPSE_TO_SUBGRAPH : int = 200
+const RIGHT_DRAG_PAN_THRESHOLD := 4.0
+var right_drag_pan_active := false
+var right_drag_pan_moved := false
+var right_drag_pan_start_position := Vector2.ZERO
+var right_drag_pan_start_scroll := Vector2.ZERO
+var suppress_next_popup_request := false
 
 var tab_bar: TabBar
 var open_tabs: Array[Dictionary] = []
@@ -534,7 +540,7 @@ func populatePopupInputsMenu():
 			popup_menu_inputs.add_item( FlowNodeBase.editorDisplayName( label ), idx)
 
 	if popup_menu_inputs.get_item_count() == 0:
-		popup_menu_inputs.add_item( "No inputs defined", -1 )
+		popup_menu_inputs.add_item( FlowI18n.t("No inputs defined"), -1 )
 		popup_menu_inputs.set_item_disabled(0, true)
 
 func populatePopupOutputsMenu():
@@ -548,7 +554,7 @@ func populatePopupOutputsMenu():
 			popup_menu_outputs.add_item( FlowNodeBase.editorDisplayName( label ), idx)
 
 	if popup_menu_outputs.get_item_count() == 0:
-		popup_menu_outputs.add_item( "No outputs defined", -1 )
+		popup_menu_outputs.add_item( FlowI18n.t("No outputs defined"), -1 )
 		popup_menu_outputs.set_item_disabled(0, true)
 
 func populatePopupMenu() -> PopupMenu:
@@ -583,7 +589,7 @@ func populatePopupMenu() -> PopupMenu:
 	# A submenu to invoke the inputs declared in the pcg
 	if required_input_type == FlowData.DataType.Invalid:
 		if getSelectedNodes().size() > 0:
-			pm.add_item("Collapse Selected to Subgraph", IDM_COLLAPSE_TO_SUBGRAPH)
+			pm.add_item( FlowI18n.t("Collapse Selected to Subgraph"), IDM_COLLAPSE_TO_SUBGRAPH )
 			pm.add_separator("", -1)
 			
 		if popup_menu_inputs:
@@ -592,7 +598,7 @@ func populatePopupMenu() -> PopupMenu:
 		popup_menu_inputs.name = "inputs_menu"
 		popup_menu_inputs.id_pressed.connect( _on_inputs_menu_id_pressed )
 		pm.add_child(popup_menu_inputs)
-		pm.add_submenu_item("Inputs...", popup_menu_inputs.name)
+		pm.add_submenu_item( FlowI18n.t("Inputs..."), popup_menu_inputs.name )
 		pm.add_separator( "", -1 )
 		populatePopupInputsMenu()
 
@@ -602,7 +608,7 @@ func populatePopupMenu() -> PopupMenu:
 		popup_menu_outputs.name = "outputs_menu"
 		popup_menu_outputs.id_pressed.connect( _on_outputs_menu_id_pressed )
 		pm.add_child(popup_menu_outputs)
-		pm.add_submenu_item("Outputs...", popup_menu_outputs.name)
+		pm.add_submenu_item( FlowI18n.t("Outputs..."), popup_menu_outputs.name )
 		pm.add_separator( "", -1 )
 		populatePopupOutputsMenu()
 
@@ -665,7 +671,7 @@ func populatePopupMenu() -> PopupMenu:
 		category_idx += 1
 		sub_pm.id_pressed.connect(_on_popup_menu_id_pressed)
 		pm.add_child(sub_pm)
-		pm.add_submenu_item(cat, sub_pm.name)
+		pm.add_submenu_item( FlowI18n.t(cat), sub_pm.name )
 		
 		# Sort node templates in this category alphabetically by title
 		var templates = categorized_keys[cat]
@@ -738,8 +744,9 @@ func _ready():
 	
 	# Initialize Open Graph Button
 	var btn_open := Button.new()
-	btn_open.text = "Open Graph"
-	btn_open.tooltip_text = "Open a FlowGraph resource"
+	btn_open.name = "ButtonOpenGraph"
+	btn_open.text = FlowI18n.t("Open Graph")
+	btn_open.tooltip_text = FlowI18n.t("Open a FlowGraph resource")
 	btn_open.pressed.connect(_on_button_open_pressed)
 	var toolbar = $VBoxContainer/ScrollContainer/HBoxContainer
 	toolbar.add_child(btn_open)
@@ -747,11 +754,13 @@ func _ready():
 
 	# Analyze: inspect selected node raw output
 	var btn_analyze := Button.new()
-	btn_analyze.text = "Analyze"
-	btn_analyze.tooltip_text = "Inspect selected node raw data (A)"
+	btn_analyze.name = "ButtonAnalyze"
+	btn_analyze.text = FlowI18n.t("Analyze")
+	btn_analyze.tooltip_text = FlowI18n.t("Inspect selected node raw data (A)")
 	btn_analyze.pressed.connect(_on_button_analyze_pressed)
 	toolbar.add_child(btn_analyze)
 	toolbar.move_child(btn_analyze, 1)
+	_apply_toolbar_translations()
 	
 	# Style the toolbar background #171a24
 	var toolbar_container = $VBoxContainer/ScrollContainer
@@ -879,6 +888,46 @@ func _ready():
 		gedit.end_node_move.connect(_on_graph_edit_end_node_move)
 	
 	update_status_bar()
+
+func _notification(what: int):
+	if what == NOTIFICATION_TRANSLATION_CHANGED and is_inside_tree():
+		_apply_toolbar_translations()
+		if search_add_node_popup:
+			search_add_node_popup.update_localized_text()
+		if gedit and info:
+			update_status_bar()
+
+func _apply_toolbar_translations():
+	var toolbar = get_node_or_null("VBoxContainer/ScrollContainer/HBoxContainer")
+	if not toolbar:
+		return
+
+	var text_by_name = {
+		"ButtonOpenGraph": "Open Graph",
+		"ButtonAnalyze": "Analyze",
+		"ButtonReload": "Reload",
+		"ButtonInputs": "Inputs",
+		"ButtonSave": "Save Resource",
+		"AutoRegen": "Auto Regen",
+		"CheckColorNodes": "Color Nodes",
+		"ButtonRegenerate": "Regenerate",
+		"LabelInfo": "Info",
+	}
+	for node_name in text_by_name:
+		var control = toolbar.get_node_or_null(node_name) as Control
+		if control is Button:
+			(control as Button).text = FlowI18n.t(String(text_by_name[node_name]))
+		elif control is Label:
+			(control as Label).text = FlowI18n.t(String(text_by_name[node_name]))
+
+	var tooltip_by_name = {
+		"ButtonOpenGraph": "Open a FlowGraph resource",
+		"ButtonAnalyze": "Inspect selected node raw data (A)",
+	}
+	for node_name in tooltip_by_name:
+		var control = toolbar.get_node_or_null(node_name) as Control
+		if control:
+			control.tooltip_text = FlowI18n.t(String(tooltip_by_name[node_name]))
 
 ## Handles debug hotkeys: D (toggle debug), A (toggle inspect), Alt+D (clear all), T (toggle trace).
 ## Uses _input so it fires before GraphEdit consumes the key events.
@@ -1221,8 +1270,8 @@ func update_status_bar(eval_msg: String = ""):
 	var wires_count = connections.size()
 	
 	var text_parts = []
-	text_parts.append("%d nodes" % nodes_count)
-	text_parts.append("%d connections" % wires_count)
+	text_parts.append(FlowI18n.count(nodes_count, "nodes"))
+	text_parts.append(FlowI18n.count(wires_count, "connections"))
 	if eval_msg != "":
 		text_parts.append(eval_msg)
 	elif inspected_node and inspected_node is FlowNodeBase and inspected_node.has_method("get_data_summary"):
@@ -1230,7 +1279,7 @@ func update_status_bar(eval_msg: String = ""):
 		if summary != "":
 			text_parts.append(summary)
 	elif current_resource:
-		text_parts.append("Ready")
+		text_parts.append(FlowI18n.t("Ready"))
 		
 	info.text = " · ".join(text_parts)
 
@@ -1481,8 +1530,53 @@ func addNode( node_template, settings = null ):
 		syncGraphOutputs()
 	return node
 
+func _handle_right_mouse_pan(event: InputEvent) -> bool:
+	var evt_mouse := event as InputEventMouseButton
+	if evt_mouse and evt_mouse.button_index == MOUSE_BUTTON_RIGHT:
+		if evt_mouse.pressed:
+			if _find_nearest_connection(evt_mouse.position):
+				return false
+			right_drag_pan_active = true
+			right_drag_pan_moved = false
+			right_drag_pan_start_position = evt_mouse.position
+			right_drag_pan_start_scroll = gedit.scroll_offset
+			gedit.accept_event()
+			return true
+
+		if right_drag_pan_active:
+			var was_drag := right_drag_pan_moved or evt_mouse.position.distance_to(right_drag_pan_start_position) >= RIGHT_DRAG_PAN_THRESHOLD
+			right_drag_pan_active = false
+			right_drag_pan_moved = false
+			gedit.accept_event()
+			if not was_drag:
+				suppress_next_popup_request = true
+				call_deferred("_clear_suppressed_popup_request")
+				_open_graph_context_menu(evt_mouse.position)
+			return true
+		return false
+
+	var evt_motion := event as InputEventMouseMotion
+	if evt_motion and right_drag_pan_active:
+		var delta := evt_motion.position - right_drag_pan_start_position
+		if right_drag_pan_moved or delta.length() >= RIGHT_DRAG_PAN_THRESHOLD:
+			right_drag_pan_moved = true
+			var zoom := gedit.zoom
+			if is_zero_approx(zoom):
+				zoom = 1.0
+			gedit.scroll_offset = right_drag_pan_start_scroll - delta / zoom
+		gedit.accept_event()
+		return true
+
+	return false
+
+func _clear_suppressed_popup_request():
+	suppress_next_popup_request = false
+
 # ------------------------------------------------
 func _on_graph_edit_gui_input(event):
+	if _handle_right_mouse_pan(event):
+		return
+
 	# Ctrl+Click on wire to disconnect
 	var evt_mouse = event as InputEventMouseButton
 	if evt_mouse and evt_mouse.pressed and evt_mouse.button_index == MOUSE_BUTTON_LEFT and evt_mouse.ctrl_pressed:
@@ -1790,6 +1884,12 @@ func _on_graph_edit_delete_nodes_request(node_names : Array):
 	record_undo_action("Delete Nodes", before_state)
 
 func _on_graph_edit_popup_request(at_position):
+	if suppress_next_popup_request:
+		suppress_next_popup_request = false
+		return
+	_open_graph_context_menu(at_position)
+
+func _open_graph_context_menu(at_position: Vector2):
 	local_drop_position = at_position
 	
 	if popup_on_over_input:
@@ -1797,7 +1897,7 @@ func _on_graph_edit_popup_request(at_position):
 		var pm := PopupMenu.new()
 		add_child( pm )
 		pm.name = "InPopupMenu"
-		pm.add_item( "Promote To Parameter", IDM_PROMOTE_TO_PARAMETER, KEY_NONE )
+		pm.add_item( FlowI18n.t("Promote To Parameter"), IDM_PROMOTE_TO_PARAMETER, KEY_NONE )
 		pm.id_pressed.connect( _on_in_popup_menu_pressed.bind( popup_on_over_input ) )
 		pm.position = get_screen_position() + at_position + Vector2( 20, 20 )
 		pm.popup()
@@ -1834,7 +1934,7 @@ func _on_graph_edit_popup_request(at_position):
 	
 func openAddMenu():
 	var pos = get_local_mouse_position()
-	_on_graph_edit_popup_request( pos )
+	_open_graph_context_menu( pos )
 
 func _on_inputs_menu_id_pressed(id: int):
 	var input = current_resource.in_params[id]

@@ -820,7 +820,9 @@ func refreshConnectionFlags( ):
 			args_ports_by_name[ arg_name ].connected = editor.is_node_port_connected( name, args_ports_by_name[ arg_name ].port )
 		
 func nodeOptionsChanged( expanded : bool ):
-	show_disconnected_inputs = not show_disconnected_inputs
+	if show_disconnected_inputs == expanded:
+		return
+	show_disconnected_inputs = expanded
 	refreshConnectionFlags( )
 	initFromScript()
 	setupDrawDebug()

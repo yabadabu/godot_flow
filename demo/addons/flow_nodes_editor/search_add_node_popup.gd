@@ -86,7 +86,7 @@ func _ready():
 	main_vbox.add_child(header_margin)
 	
 	line_edit = LineEdit.new()
-	line_edit.placeholder_text = "Search nodes..."
+	line_edit.placeholder_text = FlowI18n.t("Search nodes...")
 	line_edit.flat = true
 	line_edit.add_theme_font_size_override("font_size", 13)
 	line_edit.add_theme_color_override("font_color", Color("c8c8d4"))
@@ -231,7 +231,7 @@ func setup(p_node_types: Dictionary, p_inputs: Array, p_outputs: Array, p_has_se
 			all_items.append({
 				"type": "input",
 				"key": idx,
-				"label": "Input: " + input_name,
+				"label": FlowI18n.trf("Input: %s", [input_name]),
 				"category": "Inputs"
 			})
 		for idx in range(outputs_list.size()):
@@ -239,7 +239,7 @@ func setup(p_node_types: Dictionary, p_inputs: Array, p_outputs: Array, p_has_se
 			all_items.append({
 				"type": "output",
 				"key": idx,
-				"label": "Output: " + output_name,
+				"label": FlowI18n.trf("Output: %s", [output_name]),
 				"category": "Outputs"
 			})
 		
@@ -305,24 +305,36 @@ func setup(p_node_types: Dictionary, p_inputs: Array, p_outputs: Array, p_has_se
 			"tooltip": meta.get("tooltip", "")
 		})
 
+func _notification(what: int):
+	if what == NOTIFICATION_TRANSLATION_CHANGED and is_inside_tree():
+		update_localized_text()
+
+func update_localized_text():
+	if line_edit:
+		line_edit.placeholder_text = FlowI18n.t("Search nodes...")
+	if list_vbox:
+		rebuild_list()
+
 func _item_matches_query(item: Dictionary, query: String) -> bool:
 	return _item_match_score(item, query) > 0
 
 ## Scores how well an item matches the query. Higher = better. 0 = no match.
 ## Supports fuzzy token-based matching: "pt neigh" matches "Point Neighborhood".
 func _item_match_score(item: Dictionary, query: String) -> int:
-	var label_lower = item.label.to_lower()
-	var cat_lower = item.category.to_lower()
-	var full_path = cat_lower + " " + label_lower
+	var label_lower = String(item.label).to_lower()
+	var localized_label_lower = _localized_label(item).to_lower()
+	var cat_lower = String(item.category).to_lower()
+	var localized_cat_lower = _localized_category(item).to_lower()
+	var full_path = cat_lower + " " + localized_cat_lower + " " + label_lower + " " + localized_label_lower
 	
 	# Exact match in label = highest score
-	if label_lower == query:
+	if label_lower == query or localized_label_lower == query:
 		return 100
 	# Starts with = high score
-	if label_lower.begins_with(query):
+	if label_lower.begins_with(query) or localized_label_lower.begins_with(query):
 		return 80
 	# Contains full query = good score
-	if label_lower.contains(query):
+	if label_lower.contains(query) or localized_label_lower.contains(query):
 		return 60
 	if full_path.contains(query):
 		return 50
@@ -347,6 +359,15 @@ func _item_match_score(item: Dictionary, query: String) -> int:
 		if all_match:
 			return 30
 	return 0
+
+func _localized_label(item: Dictionary) -> String:
+	return FlowI18n.t(String(item.label))
+
+func _localized_category(item: Dictionary) -> String:
+	return FlowI18n.t(String(item.category))
+
+func _node_path_label(item: Dictionary) -> String:
+	return "%s > %s" % [_localized_category(item), _localized_label(item)]
 
 func _create_scroll_arrow_button(label: String) -> Button:
 	var btn = Button.new()
@@ -454,12 +475,12 @@ func rebuild_list():
 		for entry in scored:
 			var item = entry.item
 			var btn = Button.new()
-			# Show path: e.g. "ASSETS > SPAWN MESHES"
+			# Show path: e.g. "Assets > Spawn Meshes"
 			if item.type == "node":
-				btn.text = item.category.to_upper() + " > " + item.label.to_upper()
+				btn.text = _node_path_label(item)
 				btn.tooltip_text = item.get("tooltip", "")
 			else:
-				btn.text = item.label.to_upper()
+				btn.text = _localized_label(item)
 				
 			_style_menu_button(btn)
 			
@@ -483,7 +504,7 @@ func rebuild_list():
 			# We are inside a category!
 			# Render Back button
 			var back_btn = Button.new()
-			back_btn.text = "< " + current_category.to_upper()
+			back_btn.text = "< " + FlowI18n.t(current_category)
 			_style_menu_button(back_btn)
 			back_btn.add_theme_color_override("font_color", Color("22d3ee")) # Cyan back color
 			back_btn.add_theme_color_override("font_hover_color", Color("22d3ee"))
@@ -513,7 +534,7 @@ func rebuild_list():
 			for item in all_items:
 				if item.type == "node" and item.category == current_category:
 					var btn = Button.new()
-					btn.text = item.label.to_upper()
+					btn.text = _localized_label(item)
 					btn.tooltip_text = item.get("tooltip", "")
 					_style_menu_button(btn)
 					
@@ -536,7 +557,7 @@ func rebuild_list():
 			for item in all_items:
 				if item.type in ["action", "input", "output"]:
 					var btn = Button.new()
-					btn.text = item.label.to_upper()
+					btn.text = _localized_label(item)
 					_style_menu_button(btn)
 					
 					current_item_index = item_index
@@ -555,7 +576,7 @@ func rebuild_list():
 			# Render "Recently Used" section
 			if recently_used.size() > 0:
 				var recent_header = Label.new()
-				recent_header.text = "RECENTLY USED"
+				recent_header.text = FlowI18n.t("Recently Used")
 				recent_header.add_theme_font_size_override("font_size", 9)
 				recent_header.add_theme_color_override("font_color", Color("6b7280"))
 				var header_margin = MarginContainer.new()
@@ -574,7 +595,7 @@ func rebuild_list():
 					if recent_item == null:
 						continue
 					var btn = Button.new()
-					btn.text = recent_item.label.to_upper()
+					btn.text = _localized_label(recent_item)
 					btn.tooltip_text = recent_item.get("tooltip", "")
 					_style_menu_button(btn)
 					btn.add_theme_color_override("font_color", ACCENT_COLOR)
@@ -612,7 +633,7 @@ func rebuild_list():
 			
 			for cat in categories:
 				var btn = Button.new()
-				btn.text = cat.to_upper() + "  >"
+				btn.text = FlowI18n.t(cat) + "  >"
 				_style_menu_button(btn)
 				btn.add_theme_color_override("font_color", Color("cbd5e1")) # slightly brighter for categories
 				
@@ -855,7 +876,7 @@ func _show_sub_panel(category_name: String, category_button: Button):
 	
 	for item in sub_items:
 		var btn = Button.new()
-		btn.text = item.label.to_upper()
+		btn.text = _localized_label(item)
 		btn.tooltip_text = item.get("tooltip", "")
 		_style_menu_button(btn)
 		

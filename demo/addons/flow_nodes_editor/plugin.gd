@@ -30,7 +30,7 @@ func spawnDock( res_template : String, title : String, bottom : bool ) -> Contro
 
 func _enter_tree():
 	print("Data Flow plugin enabled")
-	graph_dock = spawnDock("res://addons/flow_nodes_editor/flow_editor.tscn", "Data Flow", false ) as Control
+	graph_dock = spawnDock("res://addons/flow_nodes_editor/flow_editor.tscn", FlowI18n.t("Data Flow"), false ) as Control
 	
 	graph_input_inspector_plugin = load("res://addons/flow_nodes_editor/graph_input_parameter_inspector.gd").new()
 	add_inspector_plugin(graph_input_inspector_plugin)
