@@ -51,6 +51,7 @@ const ZH_CN := {
 	"Save Resource": "保存资源",
 	"Search nodes...": "搜索节点...",
 	"Select a node to expand": "选择节点以展开",
+	"Selected node has no expandable inputs": "所选节点没有可展开输入",
 	"Settings": "设置",
 	"Spatial": "空间",
 	"Splines": "样条",

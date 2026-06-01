@@ -73,10 +73,11 @@ var suppress_next_popup_request := false
 var tab_bar: TabBar
 var open_tabs: Array[Dictionary] = []
 var active_tab_index: int = -1
-var open_file_dialog: FileDialog
+var open_file_dialog: EditorFileDialog
 var analyze_panel: PanelContainer
 var current_analyzed_node: FlowNodeBase
 var breadcrumb_bar: HBoxContainer
+var last_graph_open_dir := "res://graphs"
 
 func setResourceToEdit( new_resource : FlowGraphResource, new_resource_owner : FlowGraphNode3D ):
 	if new_resource == null:
@@ -290,18 +291,20 @@ func _update_breadcrumbs():
 
 func _on_button_open_pressed():
 	if not open_file_dialog:
-		open_file_dialog = FileDialog.new()
-		open_file_dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
-		open_file_dialog.access = FileDialog.ACCESS_RESOURCES
+		open_file_dialog = EditorFileDialog.new()
+		open_file_dialog.file_mode = EditorFileDialog.FILE_MODE_OPEN_FILE
+		open_file_dialog.access = EditorFileDialog.ACCESS_RESOURCES
 		open_file_dialog.add_filter("*.tres", "Flow Graph Resource")
 		open_file_dialog.add_filter("*.res", "Flow Graph Resource")
 		open_file_dialog.file_selected.connect(_on_graph_file_selected)
 		add_child(open_file_dialog)
+	open_file_dialog.current_dir = last_graph_open_dir
 	open_file_dialog.popup_centered_ratio(0.4)
 
 func _on_graph_file_selected(path: String):
 	var res = ResourceLoader.load(path, "Resource", ResourceLoader.CACHE_MODE_REPLACE)
 	if res is FlowGraphResource:
+		last_graph_open_dir = path.get_base_dir()
 		setResourceToEdit(res, null)
 	else:
 		push_error("Selected resource is not a FlowGraphResource!")
@@ -947,9 +950,13 @@ func _show_editor_settings_panel():
 	inspected_node = null
 
 func _toggle_selected_nodes_expanded():
-	var flow_nodes := _get_selected_flow_nodes()
+	var flow_nodes := _get_expandable_target_nodes()
 	if flow_nodes.is_empty():
-		update_status_bar(FlowI18n.t("Select a node to expand"))
+		var selected_flow_nodes := _get_selected_flow_nodes()
+		if selected_flow_nodes.is_empty():
+			update_status_bar(FlowI18n.t("Select a node to expand"))
+		else:
+			update_status_bar(FlowI18n.t("Selected node has no expandable inputs"))
 		return
 
 	var expand_nodes := _should_expand_selected_nodes(flow_nodes)
@@ -960,10 +967,20 @@ func _toggle_selected_nodes_expanded():
 
 func _get_selected_flow_nodes() -> Array[FlowNodeBase]:
 	var flow_nodes: Array[FlowNodeBase] = []
+	var inspected_flow_node := inspected_node as FlowNodeBase
+	if inspected_flow_node:
+		flow_nodes.append(inspected_flow_node)
 	for node in getSelectedNodes():
 		var flow_node := node as FlowNodeBase
-		if flow_node:
+		if flow_node and not flow_node in flow_nodes:
 			flow_nodes.append(flow_node)
+	return flow_nodes
+
+func _get_expandable_target_nodes() -> Array[FlowNodeBase]:
+	var flow_nodes: Array[FlowNodeBase] = []
+	for node in _get_selected_flow_nodes():
+		if not node.getExposedParams().is_empty():
+			flow_nodes.append(node)
 	return flow_nodes
 
 func _should_expand_selected_nodes(flow_nodes: Array[FlowNodeBase]) -> bool:
@@ -975,7 +992,7 @@ func _should_expand_selected_nodes(flow_nodes: Array[FlowNodeBase]) -> bool:
 func _update_expand_button_state():
 	if not expand_graph_button:
 		return
-	var flow_nodes := _get_selected_flow_nodes()
+	var flow_nodes := _get_expandable_target_nodes()
 	if flow_nodes.is_empty():
 		expand_graph_button.text = FlowI18n.t("Expand")
 		return
