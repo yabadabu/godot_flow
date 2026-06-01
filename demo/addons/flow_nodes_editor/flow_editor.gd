@@ -20,6 +20,7 @@ var inspector: FlowInspector
 var inspected_node : Node
 var make_inspector_visible : Callable
 var search_add_node_popup: SearchAddNodePopup
+var node_translation_checkbox: CheckBox
 var settings_button: Button
 var settings_popup: PopupPanel
 
@@ -673,7 +674,7 @@ func populatePopupMenu() -> PopupMenu:
 		category_idx += 1
 		sub_pm.id_pressed.connect(_on_popup_menu_id_pressed)
 		pm.add_child(sub_pm)
-		pm.add_submenu_item( FlowI18n.t(cat), sub_pm.name )
+		pm.add_submenu_item( FlowI18n.tn(cat), sub_pm.name )
 		
 		# Sort node templates in this category alphabetically by title
 		var templates = categorized_keys[cat]
@@ -686,9 +687,9 @@ func populatePopupMenu() -> PopupMenu:
 			var node_meta = node_types[key]
 			max_id += 1
 			menu_ids[max_id] = key
-			sub_pm.add_item(node_meta.title, max_id, KEY_NONE)
+			sub_pm.add_item( FlowI18n.tn(String(node_meta.title)), max_id, KEY_NONE )
 			if node_meta.has("tooltip"):
-				sub_pm.set_item_tooltip(idx, node_meta.get("tooltip"))
+				sub_pm.set_item_tooltip(idx, FlowI18n.tn(String(node_meta.get("tooltip"))))
 			idx += 1
 			
 	return pm
@@ -933,6 +934,13 @@ func _setup_toolbar_settings_panel(toolbar: HBoxContainer):
 	spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	toolbar.add_child(spacer)
 
+	node_translation_checkbox = CheckBox.new()
+	node_translation_checkbox.name = "CheckTranslateNodes"
+	node_translation_checkbox.button_pressed = FlowI18n.is_node_translation_enabled()
+	node_translation_checkbox.tooltip_text = FlowI18n.t("Translate Nodes")
+	node_translation_checkbox.toggled.connect(_on_node_translation_toggled)
+	toolbar.add_child(node_translation_checkbox)
+
 	settings_button = Button.new()
 	settings_button.name = "ButtonSettings"
 	settings_button.text = FlowI18n.t("Settings")
@@ -947,6 +955,7 @@ func _arrange_toolbar_buttons(toolbar: HBoxContainer):
 		"ButtonAnalyze",
 		"ButtonRegenerate",
 		"ToolbarSpacer",
+		"CheckTranslateNodes",
 		"ButtonSettings",
 	]
 	var index := 0
@@ -1008,11 +1017,17 @@ func _apply_toolbar_translations():
 	var tooltip_by_name = {
 		"ButtonOpenGraph": "Open a FlowGraph resource",
 		"ButtonAnalyze": "Inspect selected node raw data (A)",
+		"CheckTranslateNodes": "Translate Nodes",
 	}
 	for node_name in tooltip_by_name:
 		var control = _get_toolbar_control(node_name)
 		if control:
 			control.tooltip_text = FlowI18n.t(String(tooltip_by_name[node_name]))
+
+func _on_node_translation_toggled(toggled_on: bool):
+	FlowI18n.set_node_translation_enabled(toggled_on)
+	if search_add_node_popup:
+		search_add_node_popup.update_localized_text()
 
 ## Handles debug hotkeys: D (toggle debug), A (toggle inspect), Alt+D (clear all), T (toggle trace).
 ## Uses _input so it fires before GraphEdit consumes the key events.

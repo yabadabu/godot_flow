@@ -2,6 +2,8 @@
 extends RefCounted
 class_name FlowI18n
 
+static var node_translation_enabled := true
+
 const ZH_CN := {
 	"Actions": "操作",
 	"Analyze": "分析",
@@ -46,12 +48,18 @@ const ZH_CN := {
 	"Settings": "设置",
 	"Spatial": "空间",
 	"Splines": "样条",
+	"Translate Nodes": "翻译节点",
 	"Utility": "工具",
 }
 
 static func t(message: String) -> String:
 	if _uses_simplified_chinese():
 		return ZH_CN.get(message, message)
+	return message
+
+static func tn(message: String) -> String:
+	if node_translation_enabled:
+		return t(message)
 	return message
 
 static func trf(message: String, values: Array) -> String:
@@ -61,6 +69,12 @@ static func count(value: int, label: String) -> String:
 	if _uses_simplified_chinese():
 		return "%d 个%s" % [value, t(label)]
 	return "%d %s" % [value, t(label)]
+
+static func set_node_translation_enabled(enabled: bool):
+	node_translation_enabled = enabled
+
+static func is_node_translation_enabled() -> bool:
+	return node_translation_enabled
 
 static func _uses_simplified_chinese() -> bool:
 	var locale := TranslationServer.get_locale()

@@ -361,10 +361,23 @@ func _item_match_score(item: Dictionary, query: String) -> int:
 	return 0
 
 func _localized_label(item: Dictionary) -> String:
+	if item.type == "node":
+		return FlowI18n.tn(String(item.label))
 	return FlowI18n.t(String(item.label))
 
 func _localized_category(item: Dictionary) -> String:
+	if item.type == "node":
+		return FlowI18n.tn(String(item.category))
 	return FlowI18n.t(String(item.category))
+
+func _localized_node_category(category_name: String) -> String:
+	return FlowI18n.tn(category_name)
+
+func _localized_tooltip(item: Dictionary) -> String:
+	var tooltip := String(item.get("tooltip", ""))
+	if item.type == "node":
+		return FlowI18n.tn(tooltip)
+	return FlowI18n.t(tooltip)
 
 func _node_path_label(item: Dictionary) -> String:
 	return "%s > %s" % [_localized_category(item), _localized_label(item)]
@@ -478,7 +491,7 @@ func rebuild_list():
 			# Show path: e.g. "Assets > Spawn Meshes"
 			if item.type == "node":
 				btn.text = _node_path_label(item)
-				btn.tooltip_text = item.get("tooltip", "")
+				btn.tooltip_text = _localized_tooltip(item)
 			else:
 				btn.text = _localized_label(item)
 				
@@ -504,7 +517,7 @@ func rebuild_list():
 			# We are inside a category!
 			# Render Back button
 			var back_btn = Button.new()
-			back_btn.text = "< " + FlowI18n.t(current_category)
+			back_btn.text = "< " + _localized_node_category(current_category)
 			_style_menu_button(back_btn)
 			back_btn.add_theme_color_override("font_color", Color("22d3ee")) # Cyan back color
 			back_btn.add_theme_color_override("font_hover_color", Color("22d3ee"))
@@ -535,7 +548,7 @@ func rebuild_list():
 				if item.type == "node" and item.category == current_category:
 					var btn = Button.new()
 					btn.text = _localized_label(item)
-					btn.tooltip_text = item.get("tooltip", "")
+					btn.tooltip_text = _localized_tooltip(item)
 					_style_menu_button(btn)
 					
 					current_item_index = item_index
@@ -596,7 +609,7 @@ func rebuild_list():
 						continue
 					var btn = Button.new()
 					btn.text = _localized_label(recent_item)
-					btn.tooltip_text = recent_item.get("tooltip", "")
+					btn.tooltip_text = _localized_tooltip(recent_item)
 					_style_menu_button(btn)
 					btn.add_theme_color_override("font_color", ACCENT_COLOR)
 					
@@ -633,7 +646,7 @@ func rebuild_list():
 			
 			for cat in categories:
 				var btn = Button.new()
-				btn.text = FlowI18n.t(cat) + "  >"
+				btn.text = _localized_node_category(cat) + "  >"
 				_style_menu_button(btn)
 				btn.add_theme_color_override("font_color", Color("cbd5e1")) # slightly brighter for categories
 				
@@ -877,7 +890,7 @@ func _show_sub_panel(category_name: String, category_button: Button):
 	for item in sub_items:
 		var btn = Button.new()
 		btn.text = _localized_label(item)
-		btn.tooltip_text = item.get("tooltip", "")
+		btn.tooltip_text = _localized_tooltip(item)
 		_style_menu_button(btn)
 		
 		btn.mouse_entered.connect(func():
