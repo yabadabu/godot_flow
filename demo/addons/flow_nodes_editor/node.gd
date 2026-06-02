@@ -302,11 +302,15 @@ func _gui_input(event: InputEvent) -> void:
 		if event.pressed:
 			var gedit = get_parent() as GraphEdit
 			if gedit:
-				if not Input.is_key_pressed(KEY_SHIFT) and not Input.is_key_pressed(KEY_CTRL):
+				var additive := Input.is_key_pressed(KEY_SHIFT) or Input.is_key_pressed(KEY_CTRL)
+				if additive:
+					selected = true
+				elif not selected:
 					for child in gedit.get_children():
 						if child is GraphNode and child != self:
 							child.selected = false
-				selected = true
+					selected = true
+				# Already selected without modifier: keep multi-selection for group drag.
 			if event.double_click:
 				if node_template == "subgraph" and settings and "graph" in settings and settings.graph:
 					var editor = getEditor()

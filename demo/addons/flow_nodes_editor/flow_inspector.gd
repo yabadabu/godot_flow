@@ -177,6 +177,9 @@ func _populate_flow_editor_settings(flow_editor):
 	settings_box.add_child(_create_row(FlowI18n.t("Hide Title"), _create_editor_setting_checkbox(flow_editor.hide_inspector_title, func(pressed):
 		flow_editor._on_hide_inspector_title_toggled(pressed)
 	)))
+	settings_box.add_child(_create_row(FlowI18n.t("Track External Edits"), _create_editor_setting_checkbox(flow_editor.track_external_edits, func(pressed):
+		flow_editor._on_track_external_edits_toggled(pressed)
+	)))
 
 func _create_editor_setting_checkbox(is_pressed: bool, changed: Callable) -> CheckBox:
 	var checkbox = CheckBox.new()
@@ -199,6 +202,42 @@ func _populate_frame_properties(frame: GraphFrame):
 	prop_box.add_child(_create_row(FlowI18n.t("Tint Color"), _create_color_input(frame, "tint_color")))
 	# Tint Enabled
 	prop_box.add_child(_create_row(FlowI18n.t("Tint Enabled"), _create_bool_input(frame, "tint_color_enabled")))
+
+	var flow_editor: FlowEditor = _find_flow_editor(frame)
+	if flow_editor:
+		var actions_box := VBoxContainer.new()
+		actions_box.add_theme_constant_override("separation", 6)
+		content_vbox.add_child(actions_box)
+		var add_btn := Button.new()
+		add_btn.text = FlowI18n.t("Add Selected Nodes")
+		add_btn.pressed.connect(func():
+			var added: int = flow_editor.add_selected_nodes_to_comment_frame(frame)
+			if flow_editor.has_method("update_status_bar"):
+				if added > 0:
+					flow_editor.update_status_bar(FlowI18n.t("Added %d nodes to comment") % added)
+				else:
+					flow_editor.update_status_bar(FlowI18n.t("No nodes added to comment"))
+		)
+		actions_box.add_child(add_btn)
+		var remove_btn := Button.new()
+		remove_btn.text = FlowI18n.t("Remove Selected Nodes")
+		remove_btn.pressed.connect(func():
+			var removed: int = flow_editor.remove_selected_nodes_from_comment_frame(frame)
+			if flow_editor.has_method("update_status_bar"):
+				if removed > 0:
+					flow_editor.update_status_bar(FlowI18n.t("Removed %d nodes from comment") % removed)
+				else:
+					flow_editor.update_status_bar(FlowI18n.t("No nodes removed from comment"))
+		)
+		actions_box.add_child(remove_btn)
+
+func _find_flow_editor(from_node: Node) -> FlowEditor:
+	var current := from_node
+	while current:
+		if current is FlowEditor:
+			return current as FlowEditor
+		current = current.get_parent()
+	return null
 
 func _populate_generic_node_properties(node: GraphNode):
 	var hide_title := _hide_inspector_title_enabled()

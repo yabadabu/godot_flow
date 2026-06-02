@@ -1,5 +1,6 @@
 @tool
 extends Control
+class_name FlowEditor
 
 # This is the main container of the DataFlow Graph Editor
 
@@ -40,6 +41,7 @@ const FAST_GRAPH_LOAD_NODE_THRESHOLD := 24
 const EDITOR_SETTING_AUTO_REGEN := "addons/flow_nodes_editor/auto_generate"
 const EDITOR_SETTING_NATIVE_GRAPH_GRID := "addons/flow_nodes_editor/use_native_graph_grid"
 const EDITOR_SETTING_HIDE_INSPECTOR_TITLE := "addons/flow_nodes_editor/hide_inspector_title"
+const EDITOR_SETTING_TRACK_EXTERNAL_EDITS := "addons/flow_nodes_editor/track_external_edits"
 
 # New nodes generation using the editor
 var local_drop_position : Vector2 = Vector2(0,0)
@@ -69,6 +71,7 @@ var drag_start_snapshot : Dictionary = {}
 var suppress_next_editor_scene_changed := false
 var color_nodes : bool = true
 var hide_inspector_title : bool = false
+var track_external_edits : bool = true
 
 var ui_scale = 1.0
 var node_types = { }
@@ -79,6 +82,8 @@ var popup_menu_outputs : PopupMenu
 var popup_on_over_input = null
 const IDM_PROMOTE_TO_PARAMETER : int = 100
 const IDM_COLLAPSE_TO_SUBGRAPH : int = 200
+const IDM_FRAME_ADD_SELECTED_NODES : int = 300
+const IDM_FRAME_REMOVE_SELECTED_NODES : int = 301
 const RIGHT_DRAG_PAN_THRESHOLD := 4.0
 const SAVE_DEBOUNCE_SECONDS := 0.35
 const AUTO_REGEN_FRAME_BUDGET_USEC := 5000
@@ -279,7 +284,9 @@ func _clear_ui_nodes():
 		gedit.remove_child( child )
 	
 	gedit_nodes_by_name.clear()
-	inspector.edit( null )
+	_ensure_inspector()
+	if inspector:
+		inspector.edit(null)
 	inspected_node = null
 	if data_inspector:
 		data_inspector.setNode(null)
@@ -610,24 +617,31 @@ func _reload_resource_from_disk(res: FlowGraphResource) -> FlowGraphResource:
 		return fresh
 	return res
 
+func _sync_open_tabs_from_disk() -> bool:
+	var active_tab_changed := false
+	for i in range(open_tabs.size()):
+		var tab_res: FlowGraphResource = open_tabs[i].resource
+		if tab_res == null or tab_res.resource_path == "":
+			continue
+		var refreshed := _reload_resource_from_disk(tab_res)
+		if refreshed == tab_res:
+			continue
+		open_tabs[i].resource = refreshed
+		if i == active_tab_index:
+			current_resource = refreshed
+			active_tab_changed = true
+	return active_tab_changed
+
 ## Called by plugin.gd when EditorFileSystem detects files changed on disk.
-## Reloads the active graph (and all open tabs) without needing a tab switch.
+## Reloads open graph tabs when [member track_external_edits] is enabled.
 func _on_filesystem_changed():
-	if not current_resource or current_resource.resource_path == "":
+	if not track_external_edits:
 		return
-	
-	# Reload the active tab's resource from disk
-	var refreshed = _reload_resource_from_disk(current_resource)
-	var resource_stale = (refreshed != current_resource)
-	if resource_stale:
-		# Resource was stale, swap it in
-		current_resource = refreshed
-		if active_tab_index >= 0 and active_tab_index < open_tabs.size():
-			open_tabs[active_tab_index].resource = refreshed
-		
-		# Reconnect signals
-		if refreshed and not refreshed.in_params_changed.is_connected(_on_in_params_changed):
-			refreshed.in_params_changed.connect(_on_in_params_changed)
+
+	var resource_stale := _sync_open_tabs_from_disk()
+	if resource_stale and current_resource:
+		if not current_resource.in_params_changed.is_connected(_on_in_params_changed):
+			current_resource.in_params_changed.connect(_on_in_params_changed)
 
 	# Check for modified scripts
 	var scripts_changed := false
@@ -1113,6 +1127,7 @@ func _exit_tree() -> void:
 func _finish_editor_ready() -> void:
 	if not is_inside_tree():
 		return
+	_ensure_inspector()
 	FlowEditorChrome.apply_translations(_chrome_refs)
 	_sync_tab_bar_from_open_tabs()
 	ensureCurrentResource()
@@ -1135,12 +1150,10 @@ func _create_dynamic_editor_ui() -> void:
 	_setup_graph_loading_overlay()
 
 func _refresh_dynamic_editor_ui() -> void:
+	inspector = null
 	_ensure_custom_graph_grid()
 	_apply_graph_grid_mode()
-	if inspector == null or not is_instance_valid(inspector):
-		_ensure_inspector()
-	elif not inspector.property_edited.is_connected(onNodePropertyChanged):
-		inspector.property_edited.connect(onNodePropertyChanged)
+	_ensure_inspector()
 	if search_add_node_popup == null or not is_instance_valid(search_add_node_popup):
 		_ensure_search_add_node_popup()
 
@@ -1179,7 +1192,11 @@ func _ensure_custom_graph_grid() -> void:
 		custom_graph_grid.gedit = gedit
 
 func _ensure_inspector() -> void:
+	if inspector != null and not is_instance_valid(inspector):
+		inspector = null
 	var splitter := $VBoxContainer/VSplitContainer
+	if splitter == null:
+		return
 	for child in splitter.get_children():
 		if child is FlowInspector:
 			inspector = child as FlowInspector
@@ -1189,6 +1206,8 @@ func _ensure_inspector() -> void:
 		inspector.custom_minimum_size = Vector2(268, 200)
 		splitter.add_child(inspector)
 		splitter.split_offset = 600
+	if inspector == null:
+		return
 	gedit.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	gedit.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	gedit.add_theme_color_override("activity", Color(1, 0.2, 0.2, 1))
@@ -1231,7 +1250,9 @@ func _ensure_search_add_node_popup() -> void:
 	)
 
 func _show_editor_settings_panel():
-	inspector.edit_editor_settings(self)
+	_ensure_inspector()
+	if inspector:
+		inspector.edit_editor_settings(self)
 	inspected_node = null
 
 func _load_editor_settings():
@@ -1256,9 +1277,16 @@ func _load_editor_settings():
 		"name": EDITOR_SETTING_HIDE_INSPECTOR_TITLE,
 		"type": TYPE_BOOL,
 	})
+	if not editor_settings.has_setting(EDITOR_SETTING_TRACK_EXTERNAL_EDITS):
+		editor_settings.set_setting(EDITOR_SETTING_TRACK_EXTERNAL_EDITS, track_external_edits)
+	editor_settings.add_property_info({
+		"name": EDITOR_SETTING_TRACK_EXTERNAL_EDITS,
+		"type": TYPE_BOOL,
+	})
 	auto_regen = bool(editor_settings.get_setting(EDITOR_SETTING_AUTO_REGEN))
 	use_native_graph_grid = bool(editor_settings.get_setting(EDITOR_SETTING_NATIVE_GRAPH_GRID))
 	hide_inspector_title = bool(editor_settings.get_setting(EDITOR_SETTING_HIDE_INSPECTOR_TITLE))
+	track_external_edits = bool(editor_settings.get_setting(EDITOR_SETTING_TRACK_EXTERNAL_EDITS))
 
 func _save_editor_settings():
 	var editor_settings := EditorInterface.get_editor_settings()
@@ -1267,6 +1295,7 @@ func _save_editor_settings():
 	editor_settings.set_setting(EDITOR_SETTING_AUTO_REGEN, auto_regen)
 	editor_settings.set_setting(EDITOR_SETTING_NATIVE_GRAPH_GRID, use_native_graph_grid)
 	editor_settings.set_setting(EDITOR_SETTING_HIDE_INSPECTOR_TITLE, hide_inspector_title)
+	editor_settings.set_setting(EDITOR_SETTING_TRACK_EXTERNAL_EDITS, track_external_edits)
 
 func _apply_graph_grid_mode():
 	if not gedit:
@@ -1882,7 +1911,9 @@ func deleteGraphElementsAndRefresh( nodes : Array[GraphNode], frames : Array[Gra
 	deleteNodes( nodes )
 	queueSave()
 	inspected_node = null
-	inspector.edit(null)
+	_ensure_inspector()
+	if inspector:
+		inspector.edit(null)
 	queueRegen()
 	
 func deleteSelectedNodes():
@@ -2502,7 +2533,94 @@ func addComment():
 	
 	for node in nodes:
 		gedit.attach_graph_element_to_frame( node.name, frame.name )
-	
+	_fit_comment_frame_to_attached_nodes(frame)
+
+func get_comment_frame_at_graph_position(graph_position: Vector2) -> GraphFrame:
+	for child in gedit.get_children():
+		var frame := child as GraphFrame
+		if frame == null:
+			continue
+		var frame_rect := Rect2(frame.position_offset, frame.size)
+		if frame_rect.has_point(graph_position):
+			return frame
+	return null
+
+func _get_target_comment_frame(at_local_position: Vector2) -> GraphFrame:
+	var selected_frames := getSelectedFrames()
+	if selected_frames.size() == 1:
+		return selected_frames[0]
+	if selected_frames.is_empty():
+		return get_comment_frame_at_graph_position(localToGraphCoords(at_local_position))
+	return get_comment_frame_at_graph_position(localToGraphCoords(at_local_position))
+
+func add_selected_nodes_to_comment_frame(frame: GraphFrame) -> int:
+	if frame == null:
+		return 0
+	var added := 0
+	for node in getSelectedNodes():
+		if node == null or not is_instance_valid(node):
+			continue
+		var current_frame := gedit.get_element_frame(node.name)
+		if current_frame == frame:
+			continue
+		gedit.attach_graph_element_to_frame(node.name, frame.name)
+		added += 1
+	if added > 0:
+		_fit_comment_frame_to_attached_nodes(frame)
+		queueSave()
+		_mark_status_counts_dirty()
+	return added
+
+func remove_selected_nodes_from_comment_frame(frame: GraphFrame) -> int:
+	if frame == null:
+		return 0
+	var removed := 0
+	for node in getSelectedNodes():
+		if node == null or not is_instance_valid(node):
+			continue
+		if gedit.get_element_frame(node.name) != frame:
+			continue
+		gedit.detach_graph_element_from_frame(node.name)
+		removed += 1
+	if removed > 0:
+		_fit_comment_frame_to_attached_nodes(frame)
+		queueSave()
+		_mark_status_counts_dirty()
+	return removed
+
+func _fit_comment_frame_to_attached_nodes(frame: GraphFrame) -> void:
+	if frame == null:
+		return
+	var attached_nodes: Array[GraphNode] = []
+	for node_name in gedit.get_attached_nodes_of_frame(frame.name):
+		var child := gedit.get_node_or_null(NodePath(node_name))
+		if child is GraphNode:
+			attached_nodes.append(child as GraphNode)
+	if attached_nodes.is_empty():
+		return
+	var rect: Rect2 = getRectOfNodes(attached_nodes)
+	rect.position -= comment_padding
+	rect.size += comment_padding * 2
+	frame.position_offset = rect.position
+	frame.size = rect.size
+
+func _on_frame_context_menu_pressed(menu_id: int, frame: GraphFrame) -> void:
+	if frame == null:
+		return
+	match menu_id:
+		IDM_FRAME_ADD_SELECTED_NODES:
+			var added := add_selected_nodes_to_comment_frame(frame)
+			if added > 0:
+				update_status_bar(FlowI18n.t("Added %d nodes to comment") % added)
+			else:
+				update_status_bar(FlowI18n.t("No nodes added to comment"))
+		IDM_FRAME_REMOVE_SELECTED_NODES:
+			var removed := remove_selected_nodes_from_comment_frame(frame)
+			if removed > 0:
+				update_status_bar(FlowI18n.t("Removed %d nodes from comment") % removed)
+			else:
+				update_status_bar(FlowI18n.t("No nodes removed from comment"))
+
 func _on_graph_edit_node_selected(node):
 	if not inspector:
 		push_error("inspector is null")
@@ -2663,6 +2781,18 @@ func _open_graph_context_menu(at_position: Vector2):
 		pm.position = get_screen_position() + at_position + Vector2( 20, 20 )
 		pm.popup()
 		#print( "Show popup associated to %s.%s" % [ node.name, popup_on_over_input.getInLabel().text ] )
+		return
+
+	var target_frame := _get_target_comment_frame(at_position)
+	if target_frame:
+		var frame_menu := PopupMenu.new()
+		add_child(frame_menu)
+		frame_menu.name = "FramePopupMenu"
+		frame_menu.add_item(FlowI18n.t("Add Selected Nodes"), IDM_FRAME_ADD_SELECTED_NODES)
+		frame_menu.add_item(FlowI18n.t("Remove Selected Nodes"), IDM_FRAME_REMOVE_SELECTED_NODES)
+		frame_menu.id_pressed.connect(_on_frame_context_menu_pressed.bind(target_frame))
+		frame_menu.position = get_screen_position() + at_position + Vector2(20, 20)
+		frame_menu.popup()
 		return
 	
 	var required_input_type := FlowData.DataType.Invalid
@@ -3616,7 +3746,9 @@ func _show_graph_inputs_panel():
 	inspected_node = null
 	_clear_graph_selection()
 	if current_resource:
-		inspector.edit( current_resource )
+		_ensure_inspector()
+		if inspector:
+			inspector.edit(current_resource)
 
 # Cut/Copy/Paste/Dupe
 func _on_graph_edit_copy_nodes_request():
@@ -3864,6 +3996,10 @@ func _on_hide_inspector_title_toggled(toggled_on: bool) -> void:
 	_save_editor_settings()
 	if inspector and inspected_node:
 		inspector.edit(inspected_node)
+
+func _on_track_external_edits_toggled(toggled_on: bool) -> void:
+	track_external_edits = toggled_on
+	_save_editor_settings()
 
 func apply_connections_change(conns_to_remove: Array, conns_to_add: Array):
 	for c in conns_to_remove:
