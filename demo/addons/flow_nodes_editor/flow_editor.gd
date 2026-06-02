@@ -1952,6 +1952,14 @@ func onNodePropertyChanged( prop_name : String):
 			if prop_name == "name" or prop_name == "data_type":
 				normalizeDynamicNodeTemplate(inspected_node)
 				syncGraphOutputs()
+		elif inspected_node is FlowNodeBase and (inspected_node.node_template == "set_variable" or inspected_node.node_template == "get_variable"):
+			if inspected_node.node_template == "set_variable" and prop_name == "variable_name":
+				var variable_name := String(inspected_node.settings.variable_name).strip_edges()
+				var unique_variable_name := ensureSetVariableNameUnique(inspected_node)
+				if unique_variable_name != variable_name and inspector:
+					inspector.edit(inspected_node)
+			if prop_name == "variable_name" or prop_name == "node_color":
+				refreshVariableNodes()
 		queueSave()
 		queueRegen()
 		
@@ -2004,12 +2012,15 @@ func _restore_graph_selection(selected_names: Array):
 func deleteNodes( nodes : Array[GraphNode] ):
 	var has_input_nodes := false
 	var has_output_nodes := false
+	var has_variable_nodes := false
 	for node in nodes:
 		active_nodes.erase(node)
 		if node is FlowNodeBase and (node.node_template == "input" or node.node_template.begins_with("input_")):
 			has_input_nodes = true
 		elif node is FlowNodeBase and (node.node_template == "output" or node.node_template.begins_with("output_")):
 			has_output_nodes = true
+		elif node is FlowNodeBase and (node.node_template == "set_variable" or node.node_template == "get_variable"):
+			has_variable_nodes = true
 		for n in range( node.num_ports ):
 			remove_all_inputs_to_target_connection( node.name, n )
 		for n in range( node.getMeta().outs.size() ):
@@ -2023,6 +2034,8 @@ func deleteNodes( nodes : Array[GraphNode] ):
 		syncGraphParameters()
 	if has_output_nodes:
 		syncGraphOutputs()
+	if has_variable_nodes:
+		refreshVariableNodes()
 
 func deleteGraphElementsAndRefresh( nodes : Array[GraphNode], frames : Array[GraphFrame] ):
 	deleteFrames( frames )
@@ -2151,6 +2164,8 @@ func addNodeFromTemplate( node_template, node_name : String, settings = null, in
 		else:
 			#print( "Assigning default settings" )
 			node.settings = NodeSettings.new()
+	if node_template == "set_variable":
+		ensureSetVariableNameUnique(node, false)
 	node.settings.title = meta.title
 	node.title = node.getTitle()
 	node.size = Vector2(32,32)
@@ -2381,7 +2396,36 @@ func addNode( node_template, settings = null ):
 		name_counter_after
 	)
 	_sync_graph_parameters_for_node_template(node_template)
+	if node_template == "set_variable" or node_template == "get_variable":
+		refreshVariableNodes()
 	return node
+
+func insertRerouteOnConnection(conn: Dictionary, local_position: Vector2) -> FlowNodeBase:
+	if conn.is_empty():
+		return null
+	ensureCurrentResource()
+	var before_state = get_graph_snapshot()
+	local_drop_position = local_position
+	var reroute_name = getNewName("reroute")
+	var reroute = addNodeFromTemplate("reroute", reroute_name) as FlowNodeBase
+	if not reroute:
+		return null
+	var reroute_size : Vector2 = reroute.custom_minimum_size
+	if reroute_size == Vector2.ZERO:
+		reroute_size = reroute.size
+	reroute.position_offset = localToGraphCoords(local_position) - reroute_size * 0.5
+	disconnect_nodes(conn.from_node, conn.from_port, conn.to_node, conn.to_port)
+	connect_nodes(conn.from_node, conn.from_port, reroute.name, 0)
+	connect_nodes(reroute.name, 0, conn.to_node, conn.to_port)
+	for prev_node in getSelectedNodes():
+		prev_node.selected = false
+	reroute.selected = true
+	reroute.visible = true
+	queueSave()
+	markAllNodesAsDirty()
+	queueRegen()
+	record_undo_action("Insert Reroute", before_state)
+	return reroute
 
 func _handle_right_mouse_pan(event: InputEvent) -> bool:
 	var evt_mouse := event as InputEventMouseButton
@@ -2430,8 +2474,16 @@ func _on_graph_edit_gui_input(event):
 	if _handle_right_mouse_pan(event):
 		return
 
-	# Ctrl+Click on wire to disconnect
 	var evt_mouse = event as InputEventMouseButton
+	if evt_mouse and evt_mouse.pressed and evt_mouse.button_index == MOUSE_BUTTON_LEFT and evt_mouse.double_click:
+		var conn_to_reroute = _find_nearest_connection(evt_mouse.position)
+		if conn_to_reroute:
+			insertRerouteOnConnection(conn_to_reroute.duplicate(), evt_mouse.position)
+			update_status_bar("Inserted reroute")
+			gedit.accept_event()
+			return
+
+	# Ctrl+Click on wire to disconnect
 	if evt_mouse and evt_mouse.pressed and evt_mouse.button_index == MOUSE_BUTTON_LEFT and evt_mouse.ctrl_pressed:
 		var conn = _find_nearest_connection(evt_mouse.position)
 		if conn:
@@ -3288,6 +3340,109 @@ func getAllNodes() -> Array[ FlowNodeBase ]:
 			continue
 		nodes.append( node )
 	return nodes
+
+func getSetVariableNodes(variable_name: String = "", exclude_node: FlowNodeBase = null) -> Array[FlowNodeBase]:
+	var nodes : Array[FlowNodeBase] = []
+	var requested_name := variable_name.strip_edges()
+	for node in getAllNodes():
+		if node == exclude_node:
+			continue
+		if node.node_template != "set_variable" or not node.settings or not ("variable_name" in node.settings):
+			continue
+		var set_name := String(node.settings.variable_name).strip_edges()
+		if set_name.is_empty():
+			continue
+		if not requested_name.is_empty() and set_name != requested_name:
+			continue
+		nodes.append(node)
+	return nodes
+
+func _set_variable_name_exists(variable_name: String, exclude_node: FlowNodeBase = null) -> bool:
+	return not getSetVariableNodes(variable_name, exclude_node).is_empty()
+
+func getUniqueSetVariableName(base_name: String, exclude_node: FlowNodeBase = null) -> String:
+	var root_name := base_name.strip_edges()
+	if root_name.is_empty():
+		root_name = "variable"
+	if not _set_variable_name_exists(root_name, exclude_node):
+		return root_name
+
+	var index := 2
+	while true:
+		var candidate := "%s_%d" % [root_name, index]
+		if not _set_variable_name_exists(candidate, exclude_node):
+			return candidate
+		index += 1
+	return root_name
+
+func ensureSetVariableNameUnique(node: FlowNodeBase, refresh_node := true) -> String:
+	if node == null or node.node_template != "set_variable" or not node.settings or not ("variable_name" in node.settings):
+		return ""
+	var variable_name := String(node.settings.variable_name).strip_edges()
+	var unique_variable_name := getUniqueSetVariableName(variable_name, node)
+	if unique_variable_name == variable_name:
+		return unique_variable_name
+	node.settings.variable_name = unique_variable_name
+	if refresh_node:
+		if node.settings is Resource:
+			node.settings.emit_changed()
+		elif node.is_inside_tree():
+			node.refreshFromSettings()
+	return unique_variable_name
+
+func findSetVariableNode(variable_name: String) -> FlowNodeBase:
+	for node in getSetVariableNodes(variable_name):
+		return node
+	return null
+
+func focusSetVariableNode(variable_name: String) -> bool:
+	var node := findSetVariableNode(variable_name)
+	if node == null:
+		update_status_bar("Set variable not found: %s" % variable_name)
+		return false
+
+	for selected_node in getSelectedNodes():
+		selected_node.selected = false
+	node.selected = true
+	node.visible = true
+	inspected_node = node
+	if inspector:
+		inspector.edit(node)
+
+	var target_center := node.position_offset + node.size * 0.5
+	gedit.scroll_offset = target_center * gedit.zoom - gedit.size * 0.5
+	update_status_bar("Located set variable: %s" % variable_name)
+	return true
+
+func getSetVariableDefinitions() -> Array[Dictionary]:
+	var definitions_by_name := {}
+	for node in getSetVariableNodes():
+		var variable_name := String(node.settings.variable_name).strip_edges()
+		definitions_by_name[variable_name] = node.settings.node_color
+	var names = definitions_by_name.keys()
+	names.sort()
+	var definitions : Array[Dictionary] = []
+	for variable_name in names:
+		definitions.append({
+			"name": variable_name,
+			"color": definitions_by_name[variable_name],
+		})
+	return definitions
+
+func getSetVariableColor(variable_name: String) -> Color:
+	var requested_name := variable_name.strip_edges()
+	for node in getSetVariableNodes(requested_name):
+		return node.settings.node_color
+	return Color("22d3ee")
+
+func refreshVariableNodes() -> void:
+	for node in getAllNodes():
+		if node.node_template != "set_variable" and node.node_template != "get_variable":
+			continue
+		if node.has_method("refreshVariableChoices"):
+			node.refreshVariableChoices()
+		node.dirty = true
+		node.refreshFromSettings()
 	
 func getEvalOrder():
 	# Find targets, like spawn meshes
@@ -3344,11 +3499,43 @@ func cacheConnections():
 		if src_node and dst_node:
 			src_node.dependants.append( conn )
 			dst_node.deps.append( conn )
+	_cache_variable_dependencies(nodes)
 
 	#for node in getAllNodes():
 		#print( "Node: %s" % [ node.name ])
 		#print( "  deps: %s" % [ node.deps ])
 		#print( "  dependants: %s" % [ node.dependants ])
+
+func _cache_variable_dependencies(nodes: Array[FlowNodeBase]) -> void:
+	var set_nodes_by_name := {}
+	for node in nodes:
+		if node.node_template != "set_variable" or not node.settings or not ("variable_name" in node.settings):
+			continue
+		var variable_name := String(node.settings.variable_name).strip_edges()
+		if variable_name.is_empty():
+			continue
+		if not set_nodes_by_name.has(variable_name):
+			set_nodes_by_name[variable_name] = []
+		set_nodes_by_name[variable_name].append(node)
+
+	for node in nodes:
+		if node.node_template != "get_variable" or not node.settings or not ("variable_name" in node.settings):
+			continue
+		var variable_name := String(node.settings.variable_name).strip_edges()
+		if variable_name.is_empty() or not set_nodes_by_name.has(variable_name):
+			continue
+		var set_nodes : Array = set_nodes_by_name[variable_name].duplicate()
+		set_nodes.reverse()
+		for set_node in set_nodes:
+			var conn = {
+				"from_node": set_node.name,
+				"from_port": 0,
+				"to_node": node.name,
+				"to_port": -1,
+				"virtual_variable": true,
+			}
+			set_node.dependants.append(conn)
+			node.deps.append(conn)
 
 func expandDirtyFlagToDependants( node : FlowNodeBase ):
 	#print( "%s is dirty" % [ node.name ] )
@@ -3362,6 +3549,7 @@ func expandDirtyFlagToDependants( node : FlowNodeBase ):
 
 func _begin_eval_graph() -> Dictionary:
 	ctx.eval_id += 1
+	ctx.variables.clear()
 	
 	var time_start = Time.get_ticks_usec()
 	

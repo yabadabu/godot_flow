@@ -200,6 +200,11 @@ func _populate_node_properties(node: GraphNode, settings: Object):
 	if settings.has_method("_get_attribute_selector_props"):
 		for entry in settings._get_attribute_selector_props():
 			attr_selector_map[entry["prop"]] = entry.get("port", 0)
+
+	var variable_selector_props := {}
+	if settings.has_method("_get_variable_selector_props"):
+		for entry in settings._get_variable_selector_props():
+			variable_selector_props[entry["prop"]] = true
 	
 	# Type-specific properties container
 	var type_box = VBoxContainer.new()
@@ -223,11 +228,17 @@ func _populate_node_properties(node: GraphNode, settings: Object):
 		var ctrl: Control
 		if attr_selector_map.has(prop.name):
 			ctrl = _create_attribute_selector(node, settings, prop.name, attr_selector_map[prop.name])
+		elif variable_selector_props.has(prop.name):
+			ctrl = _create_variable_selector(node, settings, prop.name)
 		else:
 			ctrl = _create_control_for_property(settings, prop)
 		if ctrl:
 			type_box.add_child(_create_row(_localized_property_label(prop.name), ctrl))
 			has_custom_props = true
+
+	if node is FlowNodeBase and node.node_template == "get_variable":
+		type_box.add_child(_create_row(FlowI18n.t("Source"), _create_get_variable_source_button(node, settings)))
+		has_custom_props = true
 			
 	if not has_custom_props:
 		var lbl_empty = Label.new()
@@ -705,6 +716,60 @@ func _create_attribute_selector(node: GraphNode, settings: Object, prop_name: St
 	wrapper.add_child(opt)
 	wrapper.add_child(le)
 	return wrapper
+
+func _create_variable_selector(node: GraphNode, settings: Object, prop_name: String) -> Control:
+	var current_val := str(settings.get(prop_name))
+	var opt = OptionButton.new()
+	opt.add_theme_font_size_override("font_size", 11)
+	opt.custom_minimum_size.x = 100
+
+	var selected_idx := -1
+	var item_idx := 0
+	var editor_instance = node.getEditor() if node and node.has_method("getEditor") else null
+	var definitions := []
+	if editor_instance and editor_instance.has_method("getSetVariableDefinitions"):
+		definitions = editor_instance.getSetVariableDefinitions()
+
+	for definition in definitions:
+		var variable_name := String(definition.get("name", ""))
+		if variable_name.is_empty():
+			continue
+		opt.add_item(variable_name, item_idx)
+		if variable_name == current_val:
+			selected_idx = item_idx
+		item_idx += 1
+
+	if item_idx == 0:
+		opt.add_item(FlowI18n.t("No variables set"), 0)
+		opt.selected = 0
+		opt.disabled = true
+	else:
+		opt.disabled = false
+		opt.select(selected_idx)
+
+	opt.item_selected.connect(func(index):
+		if opt.disabled:
+			return
+		_on_value_changed(settings, prop_name, opt.get_item_text(index))
+		if node and node.has_method("refreshVariableChoices"):
+			node.refreshVariableChoices()
+	)
+	return opt
+
+func _create_get_variable_source_button(node: GraphNode, settings: Object) -> Button:
+	var btn = Button.new()
+	btn.text = FlowI18n.t("Locate Set Variable")
+	btn.add_theme_font_size_override("font_size", 11)
+
+	var editor_instance = node.getEditor() if node and node.has_method("getEditor") else null
+	btn.disabled = editor_instance == null or not editor_instance.has_method("focusSetVariableNode")
+	btn.pressed.connect(func():
+		var variable_name := str(settings.get("variable_name")).strip_edges()
+		if variable_name.is_empty():
+			return
+		editor_instance.focusSetVariableNode(variable_name)
+	)
+	return btn
 
 ## Gets the stream names available on a node's input at the given port.
 ## Returns the names from the last-evaluated data (requires Regenerate first).

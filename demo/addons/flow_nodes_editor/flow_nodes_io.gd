@@ -201,12 +201,35 @@ static func _paste_nodes_from_dict( dict, editor : Control, at_graph_coords = nu
 	for node in new_nodes:
 		node.selected = true
 
+static func _ensure_unique_set_variable_name(node, editor: Control, variable_name_remaps: Dictionary) -> void:
+	if node == null or node.node_template != "set_variable" or node.settings == null or not ("variable_name" in node.settings):
+		return
+	var original_name := String(node.settings.variable_name).strip_edges()
+	if not editor.has_method("ensureSetVariableNameUnique"):
+		return
+	var unique_name := String(editor.ensureSetVariableNameUnique(node, false))
+	if not original_name.is_empty() and unique_name != original_name:
+		variable_name_remaps[original_name] = unique_name
+
+static func _remap_get_variable_names(nodes: Array, variable_name_remaps: Dictionary) -> void:
+	if variable_name_remaps.is_empty():
+		return
+	for node in nodes:
+		if node == null or node.node_template != "get_variable" or node.settings == null or not ("variable_name" in node.settings):
+			continue
+		var variable_name := String(node.settings.variable_name).strip_edges()
+		if not variable_name_remaps.has(variable_name):
+			continue
+		node.settings.variable_name = variable_name_remaps[variable_name]
+		node.refreshFromSettings()
+
 static func create_nodes_from_dict( dict, editor : Control, paste_offset = null):		
 	if dict.get( "type", null) != "flow_graph_nodes":
 		push_error( "Invalid dict to paste nodes from" )
 		return []
 	var new_nodes = []
 	var old_to_new_names = {}
+	var variable_name_remaps := {}
 	for in_node in dict.nodes:
 		var in_name = in_node.name
 		var node_template = _template_for_load(in_node, editor)
@@ -224,6 +247,7 @@ static func create_nodes_from_dict( dict, editor : Control, paste_offset = null)
 		# Apply saved settings...
 		dict_to_resource( in_node.settings, node.settings )
 		_normalize_loaded_node_template(node, editor)
+		_ensure_unique_set_variable_name(node, editor, variable_name_remaps)
 		
 		# Never inport the inspect_enabled
 		node.settings.inspect_enabled = false
@@ -236,6 +260,8 @@ static func create_nodes_from_dict( dict, editor : Control, paste_offset = null)
 		old_to_new_names[ in_name ] = new_name
 		new_nodes.append( node )
 		
+	_remap_get_variable_names(new_nodes, variable_name_remaps)
+
 	# Recreate the links
 	for link in dict.links:
 		var new_from = old_to_new_names.get( link.from_node, null )
@@ -260,6 +286,8 @@ static func create_nodes_from_dict( dict, editor : Control, paste_offset = null)
 			if new_name:
 				editor.gedit.attach_graph_element_to_frame( new_name, frame.name )
 
+	if editor.has_method("refreshVariableNodes"):
+		editor.refreshVariableNodes()
 	return new_nodes
 
 static func create_nodes_from_dict_with_progress(dict, editor: Control, paste_offset = null, progress_callback: Callable = Callable(), start_progress := 45.0, end_progress := 92.0) -> Array:
@@ -274,6 +302,7 @@ static func create_nodes_from_dict_with_progress(dict, editor: Control, paste_of
 	var completed_steps := 0
 	var new_nodes := []
 	var old_to_new_names := {}
+	var variable_name_remaps := {}
 
 	for in_node in source_nodes:
 		completed_steps += 1
@@ -297,6 +326,7 @@ static func create_nodes_from_dict_with_progress(dict, editor: Control, paste_of
 
 		dict_to_resource(in_node.settings, node.settings)
 		_normalize_loaded_node_template(node, editor)
+		_ensure_unique_set_variable_name(node, editor, variable_name_remaps)
 		node.settings.inspect_enabled = false
 
 		completed_steps += 1
@@ -310,6 +340,8 @@ static func create_nodes_from_dict_with_progress(dict, editor: Control, paste_of
 		new_nodes.append(node)
 		completed_steps += 1
 		await _report_load_progress(progress_callback, "Building Graph...", completed_steps, total_steps, start_progress, end_progress)
+
+	_remap_get_variable_names(new_nodes, variable_name_remaps)
 
 	for link in source_links:
 		var new_from = old_to_new_names.get(link.from_node, null)
@@ -340,6 +372,8 @@ static func create_nodes_from_dict_with_progress(dict, editor: Control, paste_of
 		if _should_report_load_progress(completed_steps, total_steps):
 			await _report_load_progress(progress_callback, "Restoring Frames...", completed_steps, total_steps, start_progress, end_progress)
 
+	if editor.has_method("refreshVariableNodes"):
+		editor.refreshVariableNodes()
 	return new_nodes
 
 static func copySelectionToClipboard( editor : Control ):
@@ -429,6 +463,42 @@ static func _call_load_progress(progress_callback: Callable, message: String, va
 	if progress_callback.is_valid():
 		await progress_callback.call(message, value)
 
+static func _node_variable_name(node) -> String:
+	if node == null or node.settings == null or not ("variable_name" in node.settings):
+		return ""
+	return String(node.settings.variable_name).strip_edges()
+
+static func _add_virtual_variable_dependencies(node_list: Array) -> void:
+	var set_nodes_by_name := {}
+	for node in node_list:
+		if node.node_template != "set_variable":
+			continue
+		var variable_name := _node_variable_name(node)
+		if variable_name.is_empty():
+			continue
+		if not set_nodes_by_name.has(variable_name):
+			set_nodes_by_name[variable_name] = []
+		set_nodes_by_name[variable_name].append(node)
+
+	for node in node_list:
+		if node.node_template != "get_variable":
+			continue
+		var variable_name := _node_variable_name(node)
+		if variable_name.is_empty() or not set_nodes_by_name.has(variable_name):
+			continue
+		var set_nodes : Array = set_nodes_by_name[variable_name].duplicate()
+		set_nodes.reverse()
+		for set_node in set_nodes:
+			var conn = {
+				"from_node": set_node.name,
+				"from_port": 0,
+				"to_node": node.name,
+				"to_port": -1,
+				"virtual_variable": true,
+			}
+			set_node.dependants.append(conn)
+			node.deps.append(conn)
+
 static func evaluate_graph(graph: FlowGraphResource, input_data_map: Dictionary, parent_ctx: FlowData.EvaluationContext, runtime_params: Dictionary = {}) -> Dictionary:
 	var instances = {}
 	var node_list = []
@@ -468,6 +538,7 @@ static func evaluate_graph(graph: FlowGraphResource, input_data_map: Dictionary,
 		if src_node and dst_node:
 			src_node.dependants.append(conn)
 			dst_node.deps.append(conn)
+	_add_virtual_variable_dependencies(node_list)
 
 	# Topological sort
 	var get_deps_recursive = func(node, this_func) -> Array:
@@ -504,6 +575,7 @@ static func evaluate_graph(graph: FlowGraphResource, input_data_map: Dictionary,
 	ctx.runtime_params = parent_ctx.runtime_params.duplicate(true) if parent_ctx.runtime_params else {}
 	for key in runtime_params.keys():
 		ctx.runtime_params[key] = runtime_params[key]
+	ctx.variables.clear()
 	
 	# Feed subgraph inputs from input_data_map
 	for node in ordered_nodes:
@@ -576,6 +648,8 @@ static func evaluate_graph(graph: FlowGraphResource, input_data_map: Dictionary,
 				num_ins = max(num_ins, 1)
 		node.inputs.resize(num_ins)
 		for conn in node.deps:
+			if conn.get("virtual_variable", false):
+				continue
 			var src = instances.get(conn.from_node)
 			if src and src.generated_bulks.size() > 0:
 				var src_bulk = src.generated_bulks[src.generated_bulks.size() - 1]

@@ -148,13 +148,14 @@ func preExecute( ctx : FlowData.EvaluationContext ):
 	input_bulks = []
 	generated_bulks = []
 	
-	deps.map(func( conn : Dictionary ):
+	for conn in deps:
+		if conn.get("virtual_variable", false):
+			continue
 		# The number of bulkds in the pin 0 defines how many bulks we are going to generate
 		if conn.to_port == 0:
 			var node = ctx.gedit_nodes_by_name.get( conn.from_node )
 			if node:
 				num_connected_bulks += node.num_generated_bulks
-	)
 	if num_connected_bulks == 0:
 		num_connected_bulks = 1
 
@@ -234,7 +235,8 @@ func _make_tinted_graph_node_stylebox(style_name: String, bg_color: Color):
 
 func update_node_style():
 	if node_template == "reroute":
-		custom_minimum_size = Vector2(28, 28)
+		custom_minimum_size = Vector2(64, 64)
+		size = custom_minimum_size
 		var empty_sb = StyleBoxEmpty.new()
 		empty_sb.content_margin_left = 0
 		empty_sb.content_margin_right = 0
@@ -255,7 +257,20 @@ func update_node_style():
 	if editor and "color_nodes" in editor and editor.color_nodes:
 		is_colored = true
 
-	if is_colored:
+	var custom_node_color = null
+	if has_method("_get_custom_node_color"):
+		custom_node_color = call("_get_custom_node_color")
+
+	if custom_node_color is Color:
+		var color : Color = custom_node_color
+		var sb_title = _make_tinted_graph_node_stylebox("titlebar", color.darkened(0.62))
+		if sb_title:
+			add_theme_stylebox_override("titlebar", sb_title)
+
+		var sb_title_selected = _make_tinted_graph_node_stylebox("titlebar_selected", color.darkened(0.48))
+		if sb_title_selected:
+			add_theme_stylebox_override("titlebar_selected", sb_title_selected)
+	elif is_colored:
 		var sb_title = _make_tinted_graph_node_stylebox("titlebar", Color.from_hsv(cat_hue, 0.35, 0.24, 1.0))
 		if sb_title:
 			add_theme_stylebox_override("titlebar", sb_title)
