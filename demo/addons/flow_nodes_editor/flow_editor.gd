@@ -115,6 +115,7 @@ var graph_loading_message := ""
 var graph_loading_target_value := 0.0
 var graph_loading_display_value := 0.0
 var graph_loading_sweep_offset := 0.0
+var graph_reload_in_progress := false
 
 func _active_tab_is_valid() -> bool:
 	return active_tab_index >= 0 and active_tab_index < open_tabs.size()
@@ -268,29 +269,22 @@ func _on_tab_close_pressed(index: int):
 				if active_tab_index > index:
 					active_tab_index -= 1
 
-func _clear_ui_nodes():
-	_cancel_regen_run()
-	_clear_active_nodes()
-	_mark_status_counts_dirty()
-	var children = []
-	for child in gedit.get_children():
-		if child is GraphNode or child is GraphFrame:
-			child.queue_free()
-			children.append( child )
-	
-	input_sources.clear()
-	gedit.clear_connections()
-	for child in children:
-		gedit.remove_child( child )
-	
-	gedit_nodes_by_name.clear()
+func _clear_ui_nodes() -> void:
+	clear_graph()
 	_ensure_inspector()
 	if inspector:
 		inspector.edit(null)
-	inspected_node = null
-	if data_inspector:
-		data_inspector.setNode(null)
-	_set_analyze_panel_visible(false)
+
+func _refresh_active_tab_resource_from_disk() -> void:
+	if not _active_tab_is_valid() or current_resource == null:
+		return
+	var refreshed := _reload_resource_from_disk(current_resource)
+	if refreshed == current_resource:
+		return
+	open_tabs[active_tab_index].resource = refreshed
+	current_resource = refreshed
+	if not current_resource.in_params_changed.is_connected(_on_in_params_changed):
+		current_resource.in_params_changed.connect(_on_in_params_changed)
 
 func _update_tab_titles():
 	if tab_bar == null:
@@ -2318,12 +2312,7 @@ func _handle_right_mouse_pan(event: InputEvent) -> bool:
 			if not was_drag:
 				suppress_next_popup_request = true
 				call_deferred("_clear_suppressed_popup_request")
-				var conn = _find_nearest_connection(evt_mouse.position)
-				if conn:
-					_on_graph_edit_disconnection_request(conn.from_node, conn.from_port, conn.to_node, conn.to_port)
-					update_status_bar("Disconnected %s → %s" % [conn.from_node, conn.to_node])
-				else:
-					_open_graph_context_menu(evt_mouse.position)
+				_open_graph_context_menu(evt_mouse.position)
 			return true
 		return false
 
@@ -3677,15 +3666,22 @@ func evalGraphAsync() -> void:
 	_complete_regen_run(run_id)
 
 func _on_button_reload_pressed() -> void:
+	if graph_reload_in_progress:
+		return
 	await _reload_current_graph_with_loading()
 
 func _reload_current_graph_with_loading() -> void:
+	if graph_reload_in_progress:
+		return
 	if not current_resource:
 		scanAvailableNodesIfNeeded()
 		return
 
+	graph_reload_in_progress = true
 	_set_graph_loading_progress("Reloading Graph...", 8.0)
 	await get_tree().process_frame
+	_set_graph_loading_progress("Refreshing Resource...", 18.0)
+	_refresh_active_tab_resource_from_disk()
 	_set_graph_loading_progress("Scanning Nodes...", 24.0)
 	scanAvailableNodesIfNeeded()
 	_set_graph_loading_progress("Clearing Graph...", 34.0)
@@ -3706,6 +3702,7 @@ func _reload_current_graph_with_loading() -> void:
 	_set_graph_loading_progress("Graph Loaded", 100.0)
 	await get_tree().process_frame
 	_hide_graph_loading()
+	graph_reload_in_progress = false
 
 func _on_node_registry_changed() -> void:
 	if current_resource and save_pending:
