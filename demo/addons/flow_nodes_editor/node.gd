@@ -235,7 +235,7 @@ func _make_tinted_graph_node_stylebox(style_name: String, bg_color: Color):
 
 func update_node_style():
 	if node_template == "reroute":
-		custom_minimum_size = Vector2(64, 64)
+		custom_minimum_size = Vector2(42, 24)
 		size = custom_minimum_size
 		var empty_sb = StyleBoxEmpty.new()
 		empty_sb.content_margin_left = 0

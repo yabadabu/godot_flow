@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://bl8p4bid734wo"]
+[gd_scene load_steps=3 format=3 uid="uid://bl8p4bid734wo"]
 
 [ext_resource type="Script" uid="uid://rhc2whb7j6tt" path="res://addons/flow_nodes_editor/flow_editor.gd" id="1_0ji4f"]
+[ext_resource type="Script" path="res://addons/flow_nodes_editor/flow_graph_edit.gd" id="2_l4kri"]
 
 [node name="FlowEditor" type="Control"]
 layout_mode = 3
@@ -82,6 +83,7 @@ right_disconnects = true
 connection_lines_thickness = 2.0
 show_zoom_buttons = false
 show_grid_buttons = false
+script = ExtResource("2_l4kri")
 
 [connection signal="pressed" from="VBoxContainer/ScrollContainer/HBoxContainer/ButtonReload" to="." method="_on_button_reload_pressed"]
 [connection signal="pressed" from="VBoxContainer/ScrollContainer/HBoxContainer/ButtonInputs" to="." method="_on_button_inputs_pressed"]

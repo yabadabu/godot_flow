@@ -1662,8 +1662,8 @@ func _hotkey_toggle_disabled():
 ## Returns the connection dict or null if nothing is within threshold.
 func _find_nearest_connection(screen_pos: Vector2):
 	var zoom := maxf(gedit.zoom, 0.001)
-	var threshold := 20.0 / zoom
-	var graph_pos = (screen_pos + gedit.scroll_offset) / zoom
+	var threshold := 20.0
+	var connection_pos := screen_pos + gedit.scroll_offset
 	var best_conn = null
 	var best_dist := threshold
 	
@@ -1673,21 +1673,16 @@ func _find_nearest_connection(screen_pos: Vector2):
 		if not from_node or not to_node:
 			continue
 		
-		# Get port positions in GraphEdit local coords
-		var from_pos = from_node.position_offset + from_node.get_output_port_position(conn.from_port)
-		var to_pos = to_node.position_offset + to_node.get_input_port_position(conn.to_port)
+		# Match GraphEdit's connection layer coordinates.
+		var from_pos = (from_node.position_offset + from_node.get_output_port_position(conn.from_port)) * zoom
+		var to_pos = (to_node.position_offset + to_node.get_input_port_position(conn.to_port)) * zoom
 		
-		# Sample points along the bezier curve and find min distance
-		var steps := 12
-		for i in range(steps + 1):
-			var t = float(i) / float(steps)
-			# Approximate GraphEdit's cubic bezier wire
-			var ctrl_offset = abs(to_pos.x - from_pos.x) * 0.5
-			ctrl_offset = maxf(ctrl_offset, 50.0)
-			var cp1 = from_pos + Vector2(ctrl_offset, 0)
-			var cp2 = to_pos - Vector2(ctrl_offset, 0)
-			var point = from_pos.bezier_interpolate(cp1, cp2, to_pos, t)
-			var dist = graph_pos.distance_to(point)
+		var line_points := gedit.get_connection_line(from_pos, to_pos)
+		if line_points.size() < 2:
+			continue
+		for idx in range(line_points.size() - 1):
+			var point := Geometry2D.get_closest_point_to_segment(connection_pos, line_points[idx], line_points[idx + 1])
+			var dist = connection_pos.distance_to(point)
 			if dist < best_dist:
 				best_dist = dist
 				best_conn = conn
