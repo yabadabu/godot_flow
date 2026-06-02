@@ -31,9 +31,21 @@ func spawnDock( res_template : String, title : String, bottom : bool ) -> Contro
 func _has_valid_graph_dock() -> bool:
 	return graph_dock != null and is_instance_valid(graph_dock)
 
+func _ensure_graph_dock() -> void:
+	if _has_valid_graph_dock() and not FlowEditorChrome.is_valid_layout(graph_dock):
+		remove_control_from_docks(graph_dock)
+		graph_dock.queue_free()
+		graph_dock = null
+	if not _has_valid_graph_dock():
+		graph_dock = spawnDock(
+			"res://addons/flow_nodes_editor/flow_editor.tscn",
+			FlowI18n.t("Data Flow"),
+			false
+		) as Control
+
 func _enter_tree():
 	print("Data Flow plugin enabled")
-	graph_dock = spawnDock("res://addons/flow_nodes_editor/flow_editor.tscn", FlowI18n.t("Data Flow"), false ) as Control
+	_ensure_graph_dock()
 	
 	graph_input_inspector_plugin = load("res://addons/flow_nodes_editor/graph_input_parameter_inspector.gd").new()
 	add_inspector_plugin(graph_input_inspector_plugin)

@@ -24,6 +24,8 @@ var use_native_graph_grid := false
 @onready var expand_graph_button: Button = $VBoxContainer/TabBarPanel/TabBarRow/ButtonExpandGraph
 @onready var toolbar_hbox: HBoxContainer = $VBoxContainer/ScrollContainer/HBoxContainer
 
+var _chrome_refs: FlowEditorChrome.Refs
+
 # The inspector shows the settings property of the current node
 var inspector: FlowInspector
 var inspected_node : Node
@@ -1081,10 +1083,13 @@ func _ready():
 		ui_scale *= 2.0
 				
 	scanAvailableNodes()
-	_enforce_vbox_chrome_order()
-	_connect_editor_chrome_signals()
-	_apply_editor_chrome_styles()
-	_apply_toolbar_translations()
+	_chrome_refs = FlowEditorChrome.Refs.new()
+	_chrome_refs.host = self
+	_chrome_refs.tab_bar = tab_bar
+	_chrome_refs.toolbar_hbox = toolbar_hbox
+	_chrome_refs.open_graph_button = open_graph_button
+	_chrome_refs.expand_graph_button = expand_graph_button
+	FlowEditorChrome.setup(_chrome_refs)
 	if not has_meta(EDITOR_DYNAMIC_UI_META):
 		_create_dynamic_editor_ui()
 		set_meta(EDITOR_DYNAMIC_UI_META, true)
@@ -1099,135 +1104,27 @@ func _ready():
 		gedit.end_node_move.connect(_on_graph_edit_end_node_move)
 	call_deferred("_finish_editor_ready")
 
-func _enforce_vbox_chrome_order() -> void:
-	var vbox := $VBoxContainer
-	var legacy_breadcrumb := vbox.get_node_or_null("BreadcrumbPanel")
-	if legacy_breadcrumb:
-		legacy_breadcrumb.free()
-	if toolbar_hbox:
-		var legacy_open := toolbar_hbox.get_node_or_null("ButtonOpenGraph")
-		if legacy_open:
-			legacy_open.free()
-	var order := [
-		"TabBarPanel",
-		"ScrollContainer",
-		"VSplitContainer",
-		"StatusPanel",
-	]
-	for i in order.size():
-		var node := vbox.get_node_or_null(order[i])
-		if node:
-			vbox.move_child(node, i)
+func _exit_tree() -> void:
+	if Engine.is_editor_hint():
+		FlowEditorChrome.clear_initialized(self)
+		if has_meta(EDITOR_DYNAMIC_UI_META):
+			remove_meta(EDITOR_DYNAMIC_UI_META)
 
 func _finish_editor_ready() -> void:
 	if not is_inside_tree():
 		return
-	_enforce_vbox_chrome_order()
+	FlowEditorChrome.apply_translations(_chrome_refs)
 	_sync_tab_bar_from_open_tabs()
 	ensureCurrentResource()
 	_sync_tab_bar_from_open_tabs()
-	_apply_toolbar_translations()
+	FlowEditorChrome.apply_translations(_chrome_refs)
 	update_status_bar()
-
-func _connect_editor_chrome_signals() -> void:
-	if tab_bar:
-		if not tab_bar.tab_changed.is_connected(_on_tab_changed):
-			tab_bar.tab_changed.connect(_on_tab_changed)
-		if not tab_bar.tab_close_pressed.is_connected(_on_tab_close_pressed):
-			tab_bar.tab_close_pressed.connect(_on_tab_close_pressed)
-	if toolbar_hbox == null:
-		return
-	if open_graph_button and not open_graph_button.pressed.is_connected(_on_button_open_pressed):
-		open_graph_button.pressed.connect(_on_button_open_pressed)
-	_connect_toolbar_pressed("ButtonSave", _on_button_save_pressed)
-	_connect_toolbar_pressed("ButtonReload", _on_button_reload_pressed)
-	_connect_toolbar_pressed("ButtonAnalyze", _on_button_analyze_pressed)
-	_connect_toolbar_pressed("ButtonRegenerate", _on_button_regenerate_pressed)
-	_connect_toolbar_pressed("ButtonInputs", _on_button_inputs_pressed)
-	_connect_toolbar_pressed("ButtonSettings", _on_button_settings_pressed)
-	_connect_toolbar_toggled("AutoRegen", _on_auto_regen_toggled)
-	_connect_toolbar_toggled("CheckColorNodes", _on_color_nodes_toggled)
-	var inputs_button := toolbar_hbox.get_node_or_null("ButtonInputs") as Button
-	if inputs_button:
-		inputs_button.alignment = HORIZONTAL_ALIGNMENT_LEFT
-	if expand_graph_button and not expand_graph_button.pressed.is_connected(_on_button_expand_graph_pressed):
-		expand_graph_button.pressed.connect(_on_button_expand_graph_pressed)
-
-func _connect_toolbar_pressed(node_name: String, callback: Callable) -> void:
-	var button := toolbar_hbox.get_node_or_null(node_name) as Button
-	if button and not button.pressed.is_connected(callback):
-		button.pressed.connect(callback)
-
-func _connect_toolbar_toggled(node_name: String, callback: Callable) -> void:
-	var checkbox := toolbar_hbox.get_node_or_null(node_name) as CheckBox
-	if checkbox and not checkbox.toggled.is_connected(callback):
-		checkbox.toggled.connect(callback)
 
 func _on_button_expand_graph_pressed() -> void:
 	_float_graph_panel()
 
 func _on_button_settings_pressed() -> void:
 	_show_editor_settings_panel()
-
-func _apply_editor_chrome_styles() -> void:
-	var tab_panel := $VBoxContainer.get_node_or_null("TabBarPanel") as PanelContainer
-	if tab_panel:
-		var tab_sb := StyleBoxFlat.new()
-		tab_sb.bg_color = Color("0e1016")
-		tab_sb.content_margin_left = 4
-		tab_sb.content_margin_right = 4
-		tab_sb.content_margin_top = 2
-		tab_sb.content_margin_bottom = 0
-		tab_panel.add_theme_stylebox_override("panel", tab_sb)
-	var toolbar_container := $VBoxContainer.get_node_or_null("ScrollContainer") as ScrollContainer
-	if toolbar_container:
-		var sb_tb := StyleBoxFlat.new()
-		sb_tb.bg_color = Color("171a24")
-		sb_tb.content_margin_left = 8
-		sb_tb.content_margin_right = 8
-		sb_tb.content_margin_top = 6
-		sb_tb.content_margin_bottom = 6
-		toolbar_container.add_theme_stylebox_override("panel", sb_tb)
-	var status_panel := $VBoxContainer.get_node_or_null("StatusPanel") as PanelContainer
-	if status_panel:
-		var status_sb := StyleBoxFlat.new()
-		status_sb.bg_color = Color("0a0c12")
-		status_sb.border_width_top = 1
-		status_sb.border_color = Color(1.0, 1.0, 1.0, 0.04)
-		status_sb.content_margin_left = 12
-		status_sb.content_margin_right = 12
-		status_sb.content_margin_top = 4
-		status_sb.content_margin_bottom = 4
-		status_panel.add_theme_stylebox_override("panel", status_sb)
-	if toolbar_hbox:
-		for child in toolbar_hbox.get_children():
-			if child is Button:
-				if child.name == "ButtonRegenerate":
-					var sb_normal := StyleBoxFlat.new()
-					sb_normal.bg_color = Color("1b1e28")
-					sb_normal.set_border_width_all(1)
-					sb_normal.border_color = Color("22d3ee")
-					sb_normal.set_corner_radius_all(3)
-					sb_normal.content_margin_left = 10
-					sb_normal.content_margin_right = 10
-					sb_normal.content_margin_top = 4
-					sb_normal.content_margin_bottom = 4
-					child.add_theme_stylebox_override("normal", sb_normal)
-					var sb_hover := sb_normal.duplicate()
-					sb_hover.bg_color = Color("252836")
-					child.add_theme_stylebox_override("hover", sb_hover)
-					var sb_pressed := sb_normal.duplicate()
-					sb_pressed.bg_color = Color("111318")
-					child.add_theme_stylebox_override("pressed", sb_pressed)
-					child.add_theme_color_override("font_color", Color("22d3ee"))
-					child.add_theme_color_override("font_hover_color", Color("22d3ee"))
-					child.add_theme_color_override("font_pressed_color", Color("22d3ee"))
-				else:
-					_style_toolbar_button(child)
-	if open_graph_button:
-		_style_toolbar_button(open_graph_button)
-	if expand_graph_button:
-		_style_toolbar_button(expand_graph_button)
 
 func _create_dynamic_editor_ui() -> void:
 	_ensure_custom_graph_grid()
@@ -1451,20 +1348,9 @@ func _maximize_graph_panel_window():
 	current_window.grab_focus()
 	update_status_bar(FlowI18n.t("Graph panel floated"))
 
-func _get_toolbar_control(node_name: String) -> Control:
-	if toolbar_hbox:
-		var control := toolbar_hbox.get_node_or_null(node_name) as Control
-		if control:
-			return control
-	if node_name == "ButtonOpenGraph" and open_graph_button:
-		return open_graph_button
-	if node_name == "ButtonExpandGraph" and expand_graph_button:
-		return expand_graph_button
-	return null
-
 func _notification(what: int):
-	if what == NOTIFICATION_TRANSLATION_CHANGED and is_inside_tree():
-		_apply_toolbar_translations()
+	if what == NOTIFICATION_TRANSLATION_CHANGED and is_inside_tree() and _chrome_refs != null:
+		FlowEditorChrome.apply_translations(_chrome_refs)
 		if search_add_node_popup:
 			search_add_node_popup.update_localized_text()
 		_refresh_node_translations()
@@ -1473,39 +1359,10 @@ func _notification(what: int):
 		if gedit and info:
 			update_status_bar()
 
-func _apply_toolbar_translations():
-	var text_by_name = {
-		"ButtonAnalyze": "Analyze",
-		"ButtonReload": "Reload",
-		"ButtonInputs": "Inputs",
-		"ButtonSave": "Save Resource",
-		"AutoRegen": "Auto Generate",
-		"CheckColorNodes": "Color Nodes",
-		"ButtonRegenerate": "Regenerate",
-		"ButtonExpandGraph": "Expand",
-		"ButtonSettings": "Settings",
-	}
-	for node_name in text_by_name:
-		var control = _get_toolbar_control(node_name)
-		if control is Button:
-			(control as Button).text = FlowI18n.t(String(text_by_name[node_name]))
-		elif control is Label:
-			(control as Label).text = FlowI18n.t(String(text_by_name[node_name]))
-
-	var tooltip_by_name = {
-		"ButtonAnalyze": "Inspect selected node raw data (A)",
-		"ButtonExpandGraph": "Float and Maximize Graph Panel",
-	}
-	for node_name in tooltip_by_name:
-		var control = _get_toolbar_control(node_name)
-		if control:
-			control.tooltip_text = FlowI18n.t(String(tooltip_by_name[node_name]))
-	if open_graph_button:
-		open_graph_button.text = "+"
-		open_graph_button.tooltip_text = FlowI18n.t("Open a FlowGraph resource")
-
 func _on_node_translation_toggled(toggled_on: bool):
 	FlowI18n.set_node_translation_enabled(toggled_on)
+	if _chrome_refs != null:
+		FlowEditorChrome.apply_translations(_chrome_refs)
 	if search_add_node_popup:
 		search_add_node_popup.update_localized_text()
 	_refresh_node_translations()
@@ -1730,30 +1587,6 @@ func analyzeNode(node: FlowNodeBase):
 	_refresh_inspector_if_showing_nodes([previous_node, node])
 	if make_inspector_visible and make_inspector_visible.is_valid():
 		make_inspector_visible.call()
-
-func _style_toolbar_button(btn: Button):
-	var sb_normal := StyleBoxFlat.new()
-	sb_normal.bg_color = Color(1.0, 1.0, 1.0, 0.05)
-	sb_normal.set_border_width_all(1)
-	sb_normal.border_color = Color(1.0, 1.0, 1.0, 0.1)
-	sb_normal.set_corner_radius_all(3)
-	sb_normal.content_margin_left = 10
-	sb_normal.content_margin_right = 10
-	sb_normal.content_margin_top = 4
-	sb_normal.content_margin_bottom = 4
-	btn.add_theme_stylebox_override("normal", sb_normal)
-	
-	var sb_hover := sb_normal.duplicate()
-	sb_hover.bg_color = Color(1.0, 1.0, 1.0, 0.09)
-	btn.add_theme_stylebox_override("hover", sb_hover)
-	
-	var sb_pressed := sb_normal.duplicate()
-	sb_pressed.bg_color = Color(1.0, 1.0, 1.0, 0.02)
-	btn.add_theme_stylebox_override("pressed", sb_pressed)
-	
-	btn.add_theme_color_override("font_color", Color("cdd0dc"))
-	btn.add_theme_color_override("font_hover_color", Color.WHITE)
-	btn.add_theme_color_override("font_pressed_color", Color("a1a1aa"))
 
 func _setup_inline_analyze_panel():
 	var panel := Control.new()
