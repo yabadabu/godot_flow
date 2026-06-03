@@ -142,7 +142,8 @@ func get_data_summary() -> String:
 func preExecute( ctx : FlowData.EvaluationContext ):
 	eval_id = ctx.eval_id
 	setError("")
-	rng.seed = settings.random_seed
+	if settings != null and "random_seed" in settings:
+		rng.seed = settings.random_seed
 	num_generated_bulks = 0
 	num_connected_bulks = 0
 	input_bulks = []
