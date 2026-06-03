@@ -84,7 +84,6 @@ Generate dynamic gameplay platforms such as the multi-colored hexagon grid inspi
 
 1. Copy the following folders from this repository into your Godot project's root:
    * `demo/addons/flow_nodes_editor`
-   * `demo/bin`
 2. Open your project in Godot: **Project** → **Project Settings** → **Plugins**.
 3. Locate **Flow Nodes Editor** and toggle the status to **Enabled**.
 
@@ -110,7 +109,8 @@ If you want to compile the C++ wrappers (KdTree, RTree) yourself:
 git submodule update --init
 scons
 ```
-Precompiled binaries for Windows and macOS are included under `demo/bin/` by default.
+The plugin's native C++ source lives under `demo/addons/flow_nodes_editor/native/src/`.
+Bundled native binaries live under `demo/addons/flow_nodes_editor/bin/`. This repository currently includes the Windows editor binary and a macOS debug framework; build additional GDExtension targets before using the native extension in exports.
 
 ---
 

@@ -14,14 +14,14 @@ export_credentials.cfg
 .mono/
 data_*/
 mono_crash.*.json
-plugin/*.obj
-plugin/*.os
+demo/addons/flow_nodes_editor/native/src/*.obj
+demo/addons/flow_nodes_editor/native/src/*.os
 
 *.DS_Store
 
 # Local editor/tooling state
 .sconsign.dblite
-demo/bin/~*.TMP
+demo/addons/flow_nodes_editor/bin/~*.TMP
 demo/editor_screenshot.png
 demo/editor_screenshot.png.import
 demo/orchestrator_preview/

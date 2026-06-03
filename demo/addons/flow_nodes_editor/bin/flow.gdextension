@@ -1,0 +1,7 @@
+[configuration]
+entry_symbol = "library_init"
+compatibility_minimum = "4.4"
+
+[libraries]
+windows.x86_64.editor = "res://addons/flow_nodes_editor/bin/libflow.windows.editor.x86_64.dll"
+macos.debug = "res://addons/flow_nodes_editor/bin/libflow.macos.template_debug.framework"
