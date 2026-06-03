@@ -1539,12 +1539,32 @@ func _finish_editor_ready() -> void:
 	if not is_inside_tree():
 		return
 	_ensure_inspector()
+	_apply_bottom_dock_layout()
 	FlowEditorChrome.apply_translations(_chrome_refs)
 	_sync_tab_bar_from_open_tabs()
 	ensureCurrentResource()
 	_sync_tab_bar_from_open_tabs()
 	FlowEditorChrome.apply_translations(_chrome_refs)
 	update_status_bar()
+
+func _apply_bottom_dock_layout() -> void:
+	if not Engine.is_editor_hint():
+		return
+	var editor_scale := EditorInterface.get_editor_scale()
+	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	layout_mode = 1
+	size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	size_flags_vertical = Control.SIZE_EXPAND_FILL
+	var vbox := $VBoxContainer
+	vbox.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	vbox.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	var main_split := $VBoxContainer/VSplitContainer as HSplitContainer
+	if main_split:
+		main_split.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		main_split.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		main_split.split_offset = int(200 * editor_scale)
+
 
 func _on_button_expand_graph_pressed() -> void:
 	_float_graph_panel()
@@ -1614,17 +1634,20 @@ func _ensure_inspector() -> void:
 			break
 	if inspector == null:
 		inspector = FlowInspector.new()
-		inspector.custom_minimum_size = Vector2(268, 200)
 		splitter.add_child(inspector)
-		splitter.split_offset = 600
 	if inspector == null:
 		return
+	var editor_scale := EditorInterface.get_editor_scale()
+	inspector.custom_minimum_size = Vector2(200, 120) * editor_scale
 	inspector.ui_scale = ui_scale
+	splitter.move_child(inspector, 0)
+	splitter.move_child(gedit, 1)
 	gedit.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	gedit.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	gedit.add_theme_color_override("activity", Color(1, 0.2, 0.2, 1))
-	inspector.size_flags_horizontal = Control.SIZE_FILL
+	inspector.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 	inspector.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	splitter.split_offset = int(200 * editor_scale)
+	gedit.add_theme_color_override("activity", Color(1, 0.2, 0.2, 1))
 	if not inspector.property_edited.is_connected(onNodePropertyChanged):
 		inspector.property_edited.connect(onNodePropertyChanged)
 	if not gedit.node_deselected.is_connected(_on_graph_edit_node_deselected):
@@ -1807,7 +1830,7 @@ func _maximize_graph_panel_window():
 	current_window.grab_focus()
 	update_status_bar(FlowI18n.t("Graph panel floated"))
 
-func _notification(what: int):
+func _notification(what: int) -> void:
 	if what == NOTIFICATION_TRANSLATION_CHANGED and is_inside_tree() and _chrome_refs != null:
 		FlowEditorChrome.apply_translations(_chrome_refs)
 		if search_add_node_popup:
@@ -1817,6 +1840,8 @@ func _notification(what: int):
 			data_inspector.refresh_localized_text()
 		if gedit and info:
 			update_status_bar()
+	elif what == NOTIFICATION_RESIZED and Engine.is_editor_hint():
+		_apply_bottom_dock_layout()
 
 func _on_node_translation_toggled(toggled_on: bool):
 	FlowI18n.set_node_translation_enabled(toggled_on)
