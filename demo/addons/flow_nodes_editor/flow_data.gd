@@ -298,8 +298,11 @@ class Data:
 			if data_type == FlowData.DataType.Invalid:
 				print( "Invalid data type ", name, " Container:", container)
 				return "Invalid container type"
-				
-			streams[ name ] = { 
+
+			if streams.has(name) and streams[name].data_type != data_type:
+				push_warning("Stream name conflict: '%s' already exists with data_type %d, overwriting with data_type %d" % [name, streams[name].data_type, data_type])
+
+			streams[ name ] = {
 				"container" : container,
 				"name" : name,
 				"data_type" : data_type
@@ -425,11 +428,10 @@ class Data:
 		return null
 
 	func duplicate() -> Data:
-		# This is not a deep clone, the packed*arrays are shared,
-		# use cloneStream to create an independent copy
 		var s := Data.new()
 		for name in streams:
-			s.streams[ name ] = streams[ name ].duplicate()
+			s.streams[name] = streams[name].duplicate()
+			s.streams[name]["container"] = streams[name]["container"].duplicate()
 		s.last_added_stream_name = last_added_stream_name
 		s.tags = tags.duplicate()
 		return s

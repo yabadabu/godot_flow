@@ -559,16 +559,18 @@ func populatePopupMenu() -> PopupMenu:
 		var from_node = gedit_nodes_by_name.get( auto_connect_from_node )
 		if from_node:
 			var meta = from_node.getMeta()
-			var oport = meta.outs[ auto_connect_from_port ]
-			required_input_type = oport.get( "data_type", FlowData.DataType.Invalid )
+			if auto_connect_from_port < meta.outs.size():
+				var oport = meta.outs[ auto_connect_from_port ]
+				required_input_type = oport.get( "data_type", FlowData.DataType.Invalid )
 		print( "auto_connect_from_node: %s:%d -> %d" % [ auto_connect_from_node, auto_connect_from_port, required_input_type])
-		
+
 	if auto_connect_to_node:
 		var to_node = gedit_nodes_by_name.get( auto_connect_to_node )
 		if to_node:
 			var meta = to_node.getMeta()
-			var iport = meta.ins[ auto_connect_to_port ]
-			required_output_type = iport.get( "data_type", FlowData.DataType.Invalid )
+			if auto_connect_to_port < meta.ins.size():
+				var iport = meta.ins[ auto_connect_to_port ]
+				required_output_type = iport.get( "data_type", FlowData.DataType.Invalid )
 		print( "auto_connect_to_node: %s:%d -> %d" % [auto_connect_to_node, auto_connect_to_port, required_output_type ])
 
 	# A submenu to invoke the inputs declared in the pcg
@@ -997,6 +999,22 @@ func _hotkey_toggle_disabled():
 	var state_str = "DISABLED" if new_state else "ENABLED"
 	update_status_bar("%s: %s" % [state_str, ", ".join(names)])
 	queueRegen()
+
+## Zooms and scrolls the GraphEdit so all nodes are visible (hotkey: F).
+func _zoom_to_fit():
+	var min_pos := Vector2(INF, INF)
+	var max_pos := Vector2(-INF, -INF)
+	for child in gedit.get_children():
+		if child is GraphNode:
+			min_pos = min_pos.min(child.position_offset)
+			max_pos = max_pos.max(child.position_offset + child.size)
+	if max_pos.x <= min_pos.x:
+		return
+	var center := (min_pos + max_pos) * 0.5
+	var zoom_x := gedit.size.x / (max_pos.x - min_pos.x + 200.0)
+	var zoom_y := gedit.size.y / (max_pos.y - min_pos.y + 200.0)
+	gedit.zoom = clampf(minf(zoom_x, zoom_y), 0.1, 2.0)
+	gedit.scroll_offset = center * gedit.zoom - gedit.size * 0.5
 
 ## Finds the nearest connection to a screen position in the GraphEdit.
 ## Returns the connection dict or null if nothing is within threshold.
@@ -1429,7 +1447,9 @@ func canConnect( src : FlowNodeBase, src_port : int, dst : FlowNodeBase, dst_por
 		
 	var src_type = src.get_output_port_type( src_port )
 	var dst_type = dst.get_input_port_type( dst_port )
-	if (src_type and dst_type) or (src_type == FlowData.DataType.NodePath) or (src_type == FlowData.DataType.NodeMesh):
+	# When both ports have an explicit non-zero type they must match exactly.
+	# A zero (default/untyped) port is treated as a wildcard and connects to anything.
+	if src_type != 0 and dst_type != 0:
 		if src_type != dst_type:
 			push_warning( "Node types do not match %d vs %d" % [ src_type, dst_type ])
 			return false
@@ -1516,6 +1536,10 @@ func _on_graph_edit_gui_input(event):
 				for node in getSelectedNodes():
 					node.dirty = true
 				evalGraph()
+				gedit.accept_event()
+		elif key == KEY_F:
+			if no_modifiers:
+				_zoom_to_fit()
 				gedit.accept_event()
 		elif evt_key.ctrl_pressed and not evt_key.alt_pressed:
 			if key == KEY_Z:
@@ -1797,15 +1821,17 @@ func _on_graph_edit_popup_request(at_position):
 		var from_node = gedit_nodes_by_name.get( auto_connect_from_node )
 		if from_node:
 			var meta = from_node.getMeta()
-			var oport = meta.outs[ auto_connect_from_port ]
-			required_input_type = oport.get( "data_type", FlowData.DataType.Invalid )
-		
+			if auto_connect_from_port < meta.outs.size():
+				var oport = meta.outs[ auto_connect_from_port ]
+				required_input_type = oport.get( "data_type", FlowData.DataType.Invalid )
+
 	if auto_connect_to_node:
 		var to_node = gedit_nodes_by_name.get( auto_connect_to_node )
 		if to_node:
 			var meta = to_node.getMeta()
-			var iport = meta.ins[ auto_connect_to_port ]
-			required_output_type = iport.get( "data_type", FlowData.DataType.Invalid )
+			if auto_connect_to_port < meta.ins.size():
+				var iport = meta.ins[ auto_connect_to_port ]
+				required_output_type = iport.get( "data_type", FlowData.DataType.Invalid )
 
 	var in_params = []
 	var out_params = []
