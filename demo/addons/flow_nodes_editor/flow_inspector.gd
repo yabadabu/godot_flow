@@ -14,14 +14,20 @@ var current_node: Node = null
 var current_settings: Object = null
 var current_target: Object = null
 var editor: Control = null
+var ui_scale: float = 1.0
 
 var scroll_container: ScrollContainer
 var content_vbox: VBoxContainer
 var placeholder_label: Label
 
+func _scaled_font_size(base_size: int) -> int:
+	return maxi(1, int(round(base_size * ui_scale)))
+
 func _ready():
 	custom_minimum_size.x = 268
-	
+	if Engine.is_editor_hint():
+		ui_scale = EditorInterface.get_editor_scale()
+
 	# Apply original dark theme panel colors
 	var sb := StyleBoxFlat.new()
 	sb.bg_color = Color("1b1e28") # #1b1e28 node cards background
@@ -29,13 +35,13 @@ func _ready():
 	sb.border_width_left = 1
 	sb.border_color = Color("252836") # #252836 border/separator
 	add_theme_stylebox_override("panel", sb)
-	
+
 	# Create ScrollContainer
 	scroll_container = ScrollContainer.new()
 	scroll_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	scroll_container.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	add_child(scroll_container)
-	
+
 	# MarginContainer for spacing inside ScrollContainer
 	var margin_container = MarginContainer.new()
 	margin_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -45,14 +51,14 @@ func _ready():
 	margin_container.add_theme_constant_override("margin_top", 12)
 	margin_container.add_theme_constant_override("margin_bottom", 12)
 	scroll_container.add_child(margin_container)
-	
+
 	# Create ContentVBox
 	content_vbox = VBoxContainer.new()
 	content_vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	content_vbox.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	content_vbox.add_theme_constant_override("separation", 12)
 	margin_container.add_child(content_vbox)
-	
+
 	# Create Placeholder Label
 	placeholder_label = Label.new()
 	placeholder_label.text = FlowI18n.t("Select a node to inspect its settings.")
@@ -63,27 +69,27 @@ func _ready():
 	placeholder_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	placeholder_label.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	add_child(placeholder_label)
-	
+
 	edit(null)
 
 func edit(target_node: Object):
 	current_target = target_node
 	current_node = null if not target_node is Node else target_node
 	current_settings = null
-	
+
 	# Clear existing children in ContentVBox
 	for child in content_vbox.get_children():
 		child.queue_free()
 		content_vbox.remove_child(child)
-		
+
 	if target_node == null:
 		scroll_container.visible = false
 		placeholder_label.visible = true
 		return
-		
+
 	scroll_container.visible = true
 	placeholder_label.visible = false
-	
+
 	if target_node is GraphFrame:
 		_populate_frame_properties(target_node)
 	elif target_node is GraphNode:
@@ -188,14 +194,13 @@ func _create_editor_setting_checkbox(is_pressed: bool, changed: Callable) -> Che
 	return checkbox
 
 func _populate_frame_properties(frame: GraphFrame):
-	# Header
 	_add_header(FlowI18n.tn(frame.title), frame.name)
-	
+
 	# Frame Properties Container
 	var prop_box = VBoxContainer.new()
 	prop_box.add_theme_constant_override("separation", 8)
 	content_vbox.add_child(prop_box)
-	
+
 	# Title
 	prop_box.add_child(_create_row(FlowI18n.t("Title"), _create_string_input(frame, "title")))
 	# Tint Color
@@ -246,7 +251,7 @@ func _populate_generic_node_properties(node: GraphNode):
 func _populate_node_properties(node: GraphNode, settings: Object):
 	var hide_title := _hide_inspector_title_enabled()
 	_add_header(_node_title(node), node.name, not hide_title)
-	
+
 	# Build attribute selector lookup: prop_name -> port
 	var attr_selector_map := {}
 	if settings.has_method("_get_attribute_selector_props"):
@@ -257,7 +262,7 @@ func _populate_node_properties(node: GraphNode, settings: Object):
 	if settings.has_method("_get_variable_selector_props"):
 		for entry in settings._get_variable_selector_props():
 			variable_selector_props[entry["prop"]] = true
-	
+
 	# Type-specific properties container
 	var type_box = VBoxContainer.new()
 	type_box.add_theme_constant_override("separation", 10)
@@ -269,7 +274,7 @@ func _populate_node_properties(node: GraphNode, settings: Object):
 	# Gather subclass-specific properties
 	var props = settings.get_property_list()
 	var has_custom_props = false
-	
+
 	for prop in props:
 		if prop.name in BASE_SETTINGS_PROPS:
 			continue
@@ -277,7 +282,7 @@ func _populate_node_properties(node: GraphNode, settings: Object):
 			continue
 		if settings.has_method("exposeParam") and not settings.exposeParam(prop.name):
 			continue
-			
+
 		var ctrl: Control
 		if attr_selector_map.has(prop.name):
 			ctrl = _create_attribute_selector(node, settings, prop.name, attr_selector_map[prop.name])
@@ -295,19 +300,19 @@ func _populate_node_properties(node: GraphNode, settings: Object):
 	if node is FlowNodeBase and node.node_template == "set_variable":
 		_populate_set_variable_get_references(node as FlowNodeBase, settings, type_box)
 		has_custom_props = true
-			
+
 	if not has_custom_props:
 		var lbl_empty = Label.new()
 		lbl_empty.text = FlowI18n.t("No custom settings")
 		lbl_empty.add_theme_color_override("font_color", Color("a1a1aa"))
 		lbl_empty.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		type_box.add_child(lbl_empty)
-		
+
 	# Separator before Common Settings
 	var sep = HSeparator.new()
 	sep.add_theme_stylebox_override("separator", _create_separator_stylebox())
 	content_vbox.add_child(sep)
-	
+
 	# Collapsible Common Settings
 	var common_header = Button.new()
 	common_header.text = _section_label(true, "Common Settings")
@@ -316,11 +321,11 @@ func _populate_node_properties(node: GraphNode, settings: Object):
 	common_header.add_theme_color_override("font_color", Color("22d3ee")) # Cyan #22d3ee accent
 	common_header.add_theme_color_override("font_hover_color", Color.WHITE)
 	content_vbox.add_child(common_header)
-	
+
 	var common_container = VBoxContainer.new()
 	common_container.add_theme_constant_override("separation", 8)
 	content_vbox.add_child(common_container)
-	
+
 	common_header.pressed.connect(func():
 		common_container.visible = not common_container.visible
 		if common_container.visible:
@@ -328,7 +333,7 @@ func _populate_node_properties(node: GraphNode, settings: Object):
 		else:
 			common_header.text = _section_label(false, "Common Settings")
 	)
-	
+
 	# Populate Common Settings
 	for prop in props:
 		if not prop.name in BASE_SETTINGS_PROPS:
@@ -339,7 +344,7 @@ func _populate_node_properties(node: GraphNode, settings: Object):
 			continue
 		if settings.has_method("exposeParam") and not settings.exposeParam(prop.name):
 			continue
-			
+
 		var ctrl = _create_control_for_property(settings, prop)
 		if ctrl:
 			common_container.add_child(_create_row(_localized_property_label(prop.name), ctrl))
@@ -352,7 +357,7 @@ func _populate_subgraph_overrides(node: GraphNode, settings: SubgraphNodeSetting
 	var sep = HSeparator.new()
 	sep.add_theme_stylebox_override("separator", _create_separator_stylebox())
 	content_vbox.add_child(sep)
-	
+
 	var header = Button.new()
 	header.text = _section_label(true, "Override Pins")
 	header.flat = true
@@ -360,28 +365,28 @@ func _populate_subgraph_overrides(node: GraphNode, settings: SubgraphNodeSetting
 	header.add_theme_color_override("font_color", Color("fbbf24"))  # Yellow for overrides
 	header.add_theme_color_override("font_hover_color", Color.WHITE)
 	content_vbox.add_child(header)
-	
+
 	var override_container = VBoxContainer.new()
 	override_container.add_theme_constant_override("separation", 8)
 	content_vbox.add_child(override_container)
-	
+
 	header.pressed.connect(func():
 		override_container.visible = not override_container.visible
 		header.text = _section_label(override_container.visible, "Override Pins")
 	)
-	
+
 	for param in settings.graph.in_params:
 		if not param:
 			continue
 		# Create a row with: [Override checkbox] [Param name] [Value control]
 		var row = HBoxContainer.new()
 		row.add_theme_constant_override("separation", 6)
-		
+
 		# Override toggle checkbox
 		var checkbox = CheckBox.new()
 		checkbox.button_pressed = settings.has_param_override(param.name)
-		checkbox.add_theme_font_size_override("font_size", 11)
-		
+		checkbox.add_theme_font_size_override("font_size", _scaled_font_size(11))
+
 		# Value control based on param type
 		var value_ctrl = _create_override_value_control(settings, param)
 		if value_ctrl:
@@ -389,7 +394,7 @@ func _populate_subgraph_overrides(node: GraphNode, settings: SubgraphNodeSetting
 			# Dim the control when override is not active
 			if not settings.has_param_override(param.name):
 				value_ctrl.modulate = Color(1, 1, 1, 0.4)
-			
+
 			var captured_param = param
 			var captured_ctrl = value_ctrl
 			checkbox.toggled.connect(func(pressed: bool):
@@ -401,23 +406,23 @@ func _populate_subgraph_overrides(node: GraphNode, settings: SubgraphNodeSetting
 					captured_ctrl.modulate = Color(1, 1, 1, 0.4)
 				property_edited.emit("param_overrides")
 			)
-		
+
 		row.add_child(checkbox)
-		
+
 		var label = Label.new()
 		label.text = param.name
-		label.add_theme_font_size_override("font_size", 11)
+		label.add_theme_font_size_override("font_size", _scaled_font_size(11))
 		label.custom_minimum_size.x = 80
 		row.add_child(label)
-		
+
 		if value_ctrl:
 			row.add_child(value_ctrl)
-		
+
 		override_container.add_child(row)
 
 func _create_override_value_control(settings: SubgraphNodeSettings, param: GraphInputParameter) -> Control:
 	var current_val = settings.get_param_value(param)
-	
+
 	match param.data_type:
 		FlowData.DataType.Bool:
 			var cb = CheckBox.new()
@@ -455,7 +460,7 @@ func _create_override_value_control(settings: SubgraphNodeSettings, param: Graph
 		FlowData.DataType.String:
 			var le = LineEdit.new()
 			le.text = str(current_val) if current_val != null else ""
-			le.add_theme_font_size_override("font_size", 11)
+			le.add_theme_font_size_override("font_size", _scaled_font_size(11))
 			var sb_style := StyleBoxFlat.new()
 			sb_style.bg_color = Color("111318")
 			sb_style.set_corner_radius_all(3)
@@ -513,7 +518,7 @@ func _create_override_value_control(settings: SubgraphNodeSettings, param: Graph
 			res_lbl.text = FlowI18n.t("None") if current_val == null else current_val.resource_path.get_file()
 			res_lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 			res_lbl.clip_text = true
-			res_lbl.add_theme_font_size_override("font_size", 11)
+			res_lbl.add_theme_font_size_override("font_size", _scaled_font_size(11))
 			res_hbox.add_child(res_lbl)
 			var res_btn = Button.new()
 			res_btn.text = "..."
@@ -552,26 +557,26 @@ func _add_header(title_text: String, id_text: String, show_title: bool = true):
 	hb_style.content_margin_top = 8
 	hb_style.content_margin_bottom = 8
 	header_panel.add_theme_stylebox_override("panel", hb_style)
-	
+
 	var header_vbox = VBoxContainer.new()
 	header_vbox.add_theme_constant_override("separation", 2)
 	header_panel.add_child(header_vbox)
-	
+
 	if show_title and not title_text.is_empty():
 		var lbl_title = Label.new()
 		lbl_title.text = title_text
-		lbl_title.add_theme_font_size_override("font_size", 14)
+		lbl_title.add_theme_font_size_override("font_size", _scaled_font_size(14))
 		lbl_title.add_theme_color_override("font_color", Color.WHITE)
 		header_vbox.add_child(lbl_title)
-	
+
 	var lbl_id = Label.new()
 	lbl_id.text = id_text
-	lbl_id.add_theme_font_size_override("font_size", 10 if show_title and not title_text.is_empty() else 14)
+	lbl_id.add_theme_font_size_override("font_size", _scaled_font_size(10 if show_title and not title_text.is_empty() else 14))
 	lbl_id.add_theme_color_override("font_color", Color("a1a1aa") if show_title and not title_text.is_empty() else Color.WHITE)
 	header_vbox.add_child(lbl_id)
-	
+
 	content_vbox.add_child(header_panel)
-	
+
 	# Small space
 	var spacer = Control.new()
 	spacer.custom_minimum_size.y = 4
@@ -581,15 +586,15 @@ func _create_row(label_text: String, control: Control) -> HBoxContainer:
 	var row = HBoxContainer.new()
 	row.alignment = BoxContainer.ALIGNMENT_BEGIN
 	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	
+
 	var lbl = Label.new()
 	lbl.text = label_text
-	lbl.add_theme_font_size_override("font_size", 11)
+	lbl.add_theme_font_size_override("font_size", _scaled_font_size(11))
 	lbl.add_theme_color_override("font_color", Color("cbd5e1")) # light gray
-	lbl.custom_minimum_size.x = 90
+	lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	lbl.clip_text = true
 	row.add_child(lbl)
-	
+
 	control.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	row.add_child(control)
 	return row
@@ -598,7 +603,7 @@ func _create_control_for_property(obj: Object, prop: Dictionary) -> Control:
 	var prop_name = prop.name
 	var prop_type = prop.type
 	var val = obj.get(prop_name)
-	
+
 	if prop_type == TYPE_INT and prop.hint == PROPERTY_HINT_ENUM:
 		var opt = OptionButton.new()
 		var options = prop.hint_string.split(",")
@@ -608,9 +613,9 @@ func _create_control_for_property(obj: Object, prop: Dictionary) -> Control:
 		opt.item_selected.connect(func(index):
 			_on_value_changed(obj, prop_name, index)
 		)
-		opt.add_theme_font_size_override("font_size", 11)
+		opt.add_theme_font_size_override("font_size", _scaled_font_size(11))
 		return opt
-		
+
 	match prop_type:
 		TYPE_BOOL:
 			var cb = CheckBox.new()
@@ -655,9 +660,9 @@ func _create_control_for_property(obj: Object, prop: Dictionary) -> Control:
 			lbl.text = FlowI18n.t("None") if val == null else val.resource_path.get_file()
 			lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 			lbl.clip_text = true
-			lbl.add_theme_font_size_override("font_size", 11)
+			lbl.add_theme_font_size_override("font_size", _scaled_font_size(11))
 			hbc.add_child(lbl)
-			
+
 			var btn = Button.new()
 			btn.text = "..."
 			btn.pressed.connect(func():
@@ -665,14 +670,14 @@ func _create_control_for_property(obj: Object, prop: Dictionary) -> Control:
 			)
 			hbc.add_child(btn)
 			return hbc
-			
+
 	return null
 
 func _create_string_input(obj: Object, prop_name: String) -> LineEdit:
 	var le = LineEdit.new()
 	le.text = str(obj.get(prop_name))
-	le.add_theme_font_size_override("font_size", 11)
-	
+	le.add_theme_font_size_override("font_size", _scaled_font_size(11))
+
 	# Apply dark background stylebox #111318
 	var sb := StyleBoxFlat.new()
 	sb.bg_color = Color("111318")
@@ -680,7 +685,7 @@ func _create_string_input(obj: Object, prop_name: String) -> LineEdit:
 	sb.content_margin_left = 6
 	sb.content_margin_right = 6
 	le.add_theme_stylebox_override("normal", sb)
-	
+
 	le.text_submitted.connect(func(new_text):
 		_on_value_changed(obj, prop_name, new_text)
 	)
@@ -695,19 +700,19 @@ func _create_string_input(obj: Object, prop_name: String) -> LineEdit:
 func _create_attribute_selector(node: GraphNode, settings: Object, prop_name: String, port: int) -> Control:
 	var current_val := str(settings.get(prop_name))
 	var stream_names := _get_input_stream_names(node, port)
-	
+
 	var wrapper = VBoxContainer.new()
 	wrapper.add_theme_constant_override("separation", 4)
-	
+
 	var opt = OptionButton.new()
-	opt.add_theme_font_size_override("font_size", 11)
+	opt.add_theme_font_size_override("font_size", _scaled_font_size(11))
 	opt.custom_minimum_size.x = 100
-	
+
 	# Fallback text input for custom attribute names
 	var le = LineEdit.new()
 	le.text = current_val
 	le.placeholder_text = FlowI18n.t("attribute name...")
-	le.add_theme_font_size_override("font_size", 11)
+	le.add_theme_font_size_override("font_size", _scaled_font_size(11))
 	var sb := StyleBoxFlat.new()
 	sb.bg_color = Color("111318")
 	sb.set_corner_radius_all(3)
@@ -715,7 +720,7 @@ func _create_attribute_selector(node: GraphNode, settings: Object, prop_name: St
 	sb.content_margin_right = 6
 	le.add_theme_stylebox_override("normal", sb)
 	le.visible = false
-	
+
 	# Populate dropdown
 	var selected_idx := -1
 	var idx := 0
@@ -724,12 +729,12 @@ func _create_attribute_selector(node: GraphNode, settings: Object, prop_name: St
 		if sname == current_val:
 			selected_idx = idx
 		idx += 1
-	
+
 	# Add separator and custom option
 	var custom_idx := idx
 	opt.add_separator()
 	opt.add_item(FlowI18n.t("(custom...)"), custom_idx + 1)
-	
+
 	if stream_names.is_empty():
 		opt.selected = opt.item_count - 1
 		opt.set_item_text(opt.item_count - 1, FlowI18n.t("(no attributes found)"))
@@ -748,7 +753,7 @@ func _create_attribute_selector(node: GraphNode, settings: Object, prop_name: St
 		opt.set_item_text(opt.item_count - 1, FlowI18n.t("(custom...)"))
 		opt.visible = true
 		le.visible = true
-	
+
 	opt.item_selected.connect(func(index):
 		var item_id = opt.get_item_id(index)
 		if item_id == custom_idx + 1:
@@ -761,7 +766,7 @@ func _create_attribute_selector(node: GraphNode, settings: Object, prop_name: St
 			le.text = chosen
 			_on_value_changed(settings, prop_name, chosen)
 	)
-	
+
 	le.text_submitted.connect(func(new_text):
 		_on_value_changed(settings, prop_name, new_text)
 	)
@@ -769,7 +774,7 @@ func _create_attribute_selector(node: GraphNode, settings: Object, prop_name: St
 		if str(settings.get(prop_name)) != le.text:
 			_on_value_changed(settings, prop_name, le.text)
 	)
-	
+
 	wrapper.add_child(opt)
 	wrapper.add_child(le)
 	return wrapper
@@ -1040,7 +1045,7 @@ func _create_array_input(obj: Object, prop_name: String, arr_val: Array, prop: D
 				lbl.text = FlowI18n.t("None") if res == null else res.resource_path.get_file()
 				lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 				lbl.clip_text = true
-				lbl.add_theme_font_size_override("font_size", 11)
+				lbl.add_theme_font_size_override("font_size", _scaled_font_size(11))
 				row.add_child(lbl)
 				var btn_pick = Button.new()
 				btn_pick.text = "..."
@@ -1487,19 +1492,19 @@ func _emit_graph_parameter_changed(res: FlowGraphResource, param: GraphInputPara
 
 func _populate_graph_resource_properties(res: FlowGraphResource):
 	_add_header(FlowI18n.t("Graph Inputs"), res.resource_path.get_file() if res.resource_path != "" else FlowI18n.t("Unsaved Resource"))
-	
+
 	# Inputs list
 	var list_box = VBoxContainer.new()
 	list_box.add_theme_constant_override("separation", 12)
 	content_vbox.add_child(list_box)
-	
+
 	for idx in range(res.in_params.size()):
 		var param = res.in_params[idx]
 		if not param:
 			continue
 
 		list_box.add_child(_create_graph_parameter_panel(res, res.in_params, param, idx, "in_params", true))
-		
+
 	# Add Parameter Button
 	var btn_add = Button.new()
 	btn_add.text = "+ " + FlowI18n.t("Add Parameter")
@@ -1537,19 +1542,19 @@ func _show_file_dialog_for_param_resource(param: GraphInputParameter, label: Lab
 
 func _populate_graph_resource_outputs(res: FlowGraphResource):
 	_add_header(FlowI18n.t("Graph Outputs"), res.resource_path.get_file() if res.resource_path != "" else FlowI18n.t("Unsaved Resource"))
-	
+
 	# Outputs list
 	var list_box = VBoxContainer.new()
 	list_box.add_theme_constant_override("separation", 12)
 	content_vbox.add_child(list_box)
-	
+
 	for idx in range(res.out_params.size()):
 		var param = res.out_params[idx]
 		if not param:
 			continue
 
 		list_box.add_child(_create_graph_parameter_panel(res, res.out_params, param, idx, "out_params", false))
-		
+
 	# Add Parameter Button
 	var btn_add = Button.new()
 	btn_add.text = "+ " + FlowI18n.t("Add Parameter")
@@ -1567,18 +1572,18 @@ func _populate_graph_resource_outputs(res: FlowGraphResource):
 
 func _populate_generic_resource_properties(res: Resource):
 	_add_header(res.resource_path.get_file() if res.resource_path != "" else res.get_class(), res.get_class())
-	
+
 	var prop_box = VBoxContainer.new()
 	prop_box.add_theme_constant_override("separation", 10)
 	content_vbox.add_child(prop_box)
-	
+
 	var props = res.get_property_list()
 	for prop in props:
 		if prop.name in ["resource_local_to_scene", "resource_path", "resource_name", "script"]:
 			continue
 		if prop.usage & PROPERTY_USAGE_STORAGE == 0:
 			continue
-			
+
 		var ctrl = _create_control_for_property(res, prop)
 		if ctrl:
 			prop_box.add_child(_create_row(_localized_property_label(prop.name), ctrl))

@@ -153,7 +153,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 		for param in settings.graph.in_params:
 			if param and param.name != settings.item_input_name:
 				if param.name == settings.feedback_param_name:
-					input_data_map[param.name] = feedback_data
+					input_data_map[param.name] = feedback_data.duplicate() if feedback_data != null else FlowData.Data.new()
 				else:
 					var extra_in = get_optional_input(input_idx)
 					if extra_in:
@@ -161,9 +161,12 @@ func execute( ctx : FlowData.EvaluationContext ):
 				input_idx += 1
 				
 		var FlowNodeIOClass = load("res://addons/flow_nodes_editor/flow_nodes_io.gd")
-		var outputs = FlowNodeIOClass.evaluate_graph(settings.graph, input_data_map, ctx)
+		var child_depth := int(ctx.runtime_params.get("__eval_depth", 0)) + 1
+		var outputs = FlowNodeIOClass.evaluate_graph(settings.graph, input_data_map, ctx, {}, child_depth)
 		
 		var result_data = outputs.get(settings.output_attribute_name, null)
+		if result_data == null:
+			push_warning("Loop iteration produced no output for stream: " + settings.output_attribute_name)
 		results.append(result_data)
 		
 		if settings.feedback_param_name != "":

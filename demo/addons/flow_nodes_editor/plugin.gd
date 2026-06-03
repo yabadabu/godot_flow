@@ -46,23 +46,25 @@ func _ensure_graph_dock() -> void:
 func _enter_tree():
 	print("Data Flow plugin enabled")
 	_ensure_graph_dock()
-	
+
 	graph_input_inspector_plugin = load("res://addons/flow_nodes_editor/graph_input_parameter_inspector.gd").new()
 	add_inspector_plugin(graph_input_inspector_plugin)
 	node_settings_inspector_plugin = load("res://addons/flow_nodes_editor/node_settings_inspector_plugin.gd").new()
 	add_inspector_plugin(node_settings_inspector_plugin)
-	
+
 	# Will refresh everytime the undo/redo subsystem saves a point
 	undo_redo = get_undo_redo()
 	undo_redo.history_changed.connect(_on_history_changed)
 	graph_dock.undo_redo = undo_redo
-	
+
 	# Auto-detect file changes on disk (from git, agents, external editors)
 	var efs = EditorInterface.get_resource_filesystem()
 	if efs:
 		efs.filesystem_changed.connect(_on_filesystem_changed)
 		efs.resources_reimported.connect(_on_resources_reimported)
-	
+
+	selection.selection_changed.connect(_selection_changed)
+
 	set_process(true)
 	
 func _save_external_data():
@@ -70,6 +72,7 @@ func _save_external_data():
 		graph_dock.saveResource()
 	
 func _exit_tree():
+	setWatchedNode(null)
 	if undo_redo and undo_redo.history_changed.is_connected(_on_history_changed):
 		undo_redo.history_changed.disconnect(_on_history_changed)
 	var efs = EditorInterface.get_resource_filesystem()
@@ -95,8 +98,6 @@ func _exit_tree():
 		selection.selection_changed.disconnect(_selection_changed)
 
 func _ready():
-	if selection and not selection.selection_changed.is_connected(_selection_changed):
-		selection.selection_changed.connect(_selection_changed)
 	_selection_changed()
 
 # This is called after the a new scene is loaded, but the 'selection' event of the new

@@ -513,7 +513,10 @@ static func _add_virtual_variable_dependencies(node_list: Array) -> void:
 			set_node.dependants.append(conn)
 			node.deps.append(conn)
 
-static func evaluate_graph(graph: FlowGraphResource, input_data_map: Dictionary, parent_ctx: FlowData.EvaluationContext, runtime_params: Dictionary = {}) -> Dictionary:
+static func evaluate_graph(graph: FlowGraphResource, input_data_map: Dictionary, parent_ctx: FlowData.EvaluationContext, runtime_params: Dictionary = {}, depth: int = 0) -> Dictionary:
+	if depth > 20:
+		push_error("PCG graph evaluation exceeded maximum recursion depth (20). Check for circular subgraph references.")
+		return {}
 	var instances = {}
 	var node_list = []
 	for n_data in graph.data.get("nodes", []):
@@ -555,22 +558,26 @@ static func evaluate_graph(graph: FlowGraphResource, input_data_map: Dictionary,
 	_add_virtual_variable_dependencies(node_list)
 
 	# Topological sort
-	var get_deps_recursive = func(node, this_func) -> Array:
+	var get_deps_recursive = func(node, visited: Dictionary, this_func) -> Array:
+		if visited.has(node.name):
+			push_warning("Circular dependency detected involving node: " + node.name)
+			return []
+		visited[node.name] = true
 		var deps = [node]
 		for conn in node.deps:
 			var dep_node = instances.get(conn.from_node)
 			if dep_node:
-				deps.append_array(this_func.call(dep_node, this_func))
+				deps.append_array(this_func.call(dep_node, visited, this_func))
 		return deps
-		
+
 	var finals = node_list.filter(func(node):
 		var is_output = node.node_template == "output" or node.node_template.begins_with("output_")
 		return is_output or node.getMeta().get("is_final", false) or node.settings.debug_enabled or node.settings.inspect_enabled
 	)
-	
+
 	var all_deps = []
 	for node in finals:
-		all_deps.append_array(get_deps_recursive.call(node, get_deps_recursive))
+		all_deps.append_array(get_deps_recursive.call(node, {}, get_deps_recursive))
 	all_deps.reverse()
 	
 	var ordered_nodes = []
@@ -589,6 +596,7 @@ static func evaluate_graph(graph: FlowGraphResource, input_data_map: Dictionary,
 	ctx.runtime_params = parent_ctx.runtime_params.duplicate(true) if parent_ctx.runtime_params else {}
 	for key in runtime_params.keys():
 		ctx.runtime_params[key] = runtime_params[key]
+	ctx.runtime_params["__eval_depth"] = depth
 	ctx.variables.clear()
 	
 	# Feed subgraph inputs from input_data_map
