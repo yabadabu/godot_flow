@@ -3740,12 +3740,12 @@ func collapse_selected_to_subgraph():
 		}
 	}
 	after_nodes.append(subgraph_node_dict)
-	
+
 	var after_links = []
 	for link in before_state.links:
 		if not selected_node_names.has(link.from_node) and not selected_node_names.has(link.to_node):
 			after_links.append(link)
-			
+
 	# Connect external inputs to the subgraph node
 	for item in input_boundary_list:
 		after_links.append({
@@ -3754,7 +3754,7 @@ func collapse_selected_to_subgraph():
 			"to_node": subgraph_node_name,
 			"to_port": item.param_idx
 		})
-		
+
 	# Connect subgraph node to external outputs
 	for item in output_boundary_list:
 		for target in item.targets:
@@ -3764,7 +3764,7 @@ func collapse_selected_to_subgraph():
 				"to_node": target.to_node,
 				"to_port": target.to_port
 			})
-			
+
 	var after_frames = []
 	for frame in before_state.frames:
 		if not frame.name in before_state.selected_names:
@@ -3774,7 +3774,7 @@ func collapse_selected_to_subgraph():
 					attached.append(node_name)
 			frame.attached = attached
 			after_frames.append(frame)
-			
+
 	var after_absolute_positions = {}
 	for node in after_nodes:
 		if node.name == subgraph_node_name:
@@ -3782,11 +3782,11 @@ func collapse_selected_to_subgraph():
 		else:
 			if before_state.absolute_positions.has(node.name):
 				after_absolute_positions[node.name] = before_state.absolute_positions[node.name]
-				
+
 	for frame in after_frames:
 		if before_state.absolute_positions.has(frame.name):
 			after_absolute_positions[frame.name] = before_state.absolute_positions[frame.name]
-			
+
 	var after_state = {
 		"type": "flow_graph_nodes",
 		"version": 1,
@@ -3801,7 +3801,7 @@ func collapse_selected_to_subgraph():
 		"links": after_links,
 		"frames": after_frames
 	}
-	
+
 	load_graph_state(after_state)
 	record_undo_action("Collapse to Subgraph", before_state)
 
