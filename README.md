@@ -19,8 +19,7 @@ The goal is to build on what `Godot Flow` started and bring a more powerful, edi
 
 ### 🎬 Demo Video
 
-[![Watch PCGODOT in action](demo/addons/flow_nodes_editor/doc/demo_flashy_colonnade_ui.png)](https://x.com/digisculp/status/2061301248381309366)
-
+https://github.com/user-attachments/assets/fe29dea7-82c0-481c-a022-46050b05642d
 ---
 
 ## 🚀 Key Features & Additions
