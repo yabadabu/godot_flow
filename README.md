@@ -17,6 +17,10 @@ For developers unfamiliar with modern PCG workflows, this kind of tech lets you 
 
 The goal is to build on what `Godot Flow` started and bring a more powerful, editor-driven visual PCG workflow to Godot 4. Something that feels approachable for indie developers, but flexible enough to support the kinds of procedural tools usually associated with larger engine pipelines.
 
+### 🎬 Demo Video
+
+[![Watch PCGODOT in action](demo/addons/flow_nodes_editor/doc/demo_flashy_colonnade_ui.png)](https://x.com/digisculp/status/2061301248381309366)
+
 ---
 
 ## 🚀 Key Features & Additions
