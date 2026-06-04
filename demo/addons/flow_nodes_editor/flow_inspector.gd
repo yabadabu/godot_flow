@@ -109,22 +109,18 @@ func edit(target_node: Object):
 		current_settings = target_node
 		_populate_graph_resource_properties(target_node)
 		_populate_graph_resource_outputs(target_node)
+	elif FlowInspectorPropertyPolicy.is_flow_editor_settings_proxy(target_node):
+		current_settings = target_node
+		_populate_flow_editor_settings(target_node)
 	elif target_node is Resource:
 		current_settings = target_node
 		_populate_generic_resource_properties(target_node)
 	_sync_panel_visibility()
 
 func edit_editor_settings(flow_editor):
-	current_target = flow_editor
-	current_node = null
-	current_settings = flow_editor
-
-	for child in content_vbox.get_children():
-		child.queue_free()
-		content_vbox.remove_child(child)
-
-	_populate_flow_editor_settings(flow_editor)
-	_sync_panel_visibility()
+	var settings_proxy := FlowEditorSettingsProxy.new()
+	settings_proxy.sync_from_editor(flow_editor)
+	edit(settings_proxy)
 
 func refresh_localized_text() -> void:
 	if current_target != null and is_instance_valid(current_target):
@@ -150,46 +146,15 @@ func _hide_inspector_title_enabled() -> bool:
 	return false
 
 func _localized_property_label(property_name: String) -> String:
-	return FlowI18n.tn(_format_label(property_name))
+	return FlowInspectorPropertyPolicy.localized_property_label(current_settings, property_name)
 
 func _section_label(expanded: bool, label: String) -> String:
 	var prefix := "▼ " if expanded else "▶ "
 	return prefix + FlowI18n.t(label)
 
-func _populate_flow_editor_settings(flow_editor):
+func _populate_flow_editor_settings(settings_proxy: Object):
 	_add_header(FlowI18n.t("Settings"), FlowI18n.t("Flow Editor"))
-
-	var settings_box = VBoxContainer.new()
-	settings_box.add_theme_constant_override("separation", 10)
-	content_vbox.add_child(settings_box)
-
-	settings_box.add_child(_create_row(FlowI18n.t("Auto Generate"), _create_editor_setting_checkbox(flow_editor.auto_regen, func(pressed):
-		flow_editor._on_auto_regen_toggled(pressed)
-	)))
-	settings_box.add_child(_create_row(FlowI18n.t("Color Nodes"), _create_editor_setting_checkbox(flow_editor.color_nodes, func(pressed):
-		flow_editor._on_color_nodes_toggled(pressed)
-	)))
-	settings_box.add_child(_create_row(FlowI18n.t("Native GraphEdit Grid"), _create_editor_setting_checkbox(flow_editor.use_native_graph_grid, func(pressed):
-		flow_editor._on_native_graph_grid_toggled(pressed)
-	)))
-	settings_box.add_child(_create_row(FlowI18n.t("Node Language"), _create_editor_setting_checkbox(FlowI18n.is_node_translation_enabled(), func(pressed):
-		flow_editor._on_node_translation_toggled(pressed)
-	)))
-	settings_box.add_child(_create_row(FlowI18n.t("Hide Title"), _create_editor_setting_checkbox(flow_editor.hide_inspector_title, func(pressed):
-		flow_editor._on_hide_inspector_title_toggled(pressed)
-	)))
-	settings_box.add_child(_create_row(FlowI18n.t("Hide Resource Built-in Rows"), _create_editor_setting_checkbox(flow_editor.hide_resource_builtin_rows, func(pressed):
-		flow_editor._on_hide_resource_builtin_rows_toggled(pressed)
-	)))
-	settings_box.add_child(_create_row(FlowI18n.t("Track External Edits"), _create_editor_setting_checkbox(flow_editor.track_external_edits, func(pressed):
-		flow_editor._on_track_external_edits_toggled(pressed)
-	)))
-
-func _create_editor_setting_checkbox(is_pressed: bool, changed: Callable) -> CheckBox:
-	var checkbox = CheckBox.new()
-	checkbox.button_pressed = is_pressed
-	checkbox.toggled.connect(changed)
-	return checkbox
+	_add_native_property_rows(settings_proxy)
 
 func _populate_frame_properties(frame: GraphFrame):
 	_add_header(FlowI18n.tn(frame.title), frame.name)
@@ -199,12 +164,9 @@ func _populate_frame_properties(frame: GraphFrame):
 	prop_box.add_theme_constant_override("separation", 8)
 	content_vbox.add_child(prop_box)
 
-	# Title
-	prop_box.add_child(_create_row(FlowI18n.t("Title"), _create_string_input(frame, "title")))
-	# Tint Color
-	prop_box.add_child(_create_row(FlowI18n.t("Tint Color"), _create_color_input(frame, "tint_color")))
-	# Tint Enabled
-	prop_box.add_child(_create_row(FlowI18n.t("Tint Enabled"), _create_bool_input(frame, "tint_color_enabled")))
+	_add_native_property_by_name(prop_box, frame, "title")
+	_add_native_property_by_name(prop_box, frame, "tint_color")
+	_add_native_property_by_name(prop_box, frame, "tint_color_enabled")
 
 	var flow_editor: FlowEditor = _find_flow_editor(frame)
 	if flow_editor:
@@ -267,7 +229,7 @@ func _populate_node_properties(node: GraphNode, settings: Object):
 	content_vbox.add_child(type_box)
 
 	if not hide_title:
-		type_box.add_child(_create_row(FlowI18n.t("Title"), _create_string_input(settings, "title")))
+		_add_native_property_by_name(type_box, settings, "title")
 
 	# Gather subclass-specific properties
 	var props = settings.get_property_list()
@@ -276,7 +238,7 @@ func _populate_node_properties(node: GraphNode, settings: Object):
 	for prop in props:
 		if prop.name in BASE_SETTINGS_PROPS:
 			continue
-		if prop.usage & PROPERTY_USAGE_STORAGE == 0:
+		if (int(prop.usage) & PROPERTY_USAGE_STORAGE) == 0:
 			continue
 		if settings.has_method("exposeParam") and not settings.exposeParam(prop.name):
 			continue
@@ -287,7 +249,9 @@ func _populate_node_properties(node: GraphNode, settings: Object):
 		elif variable_selector_props.has(prop.name):
 			ctrl = _create_variable_selector(node, settings, prop.name)
 		else:
-			ctrl = _create_control_for_property(settings, prop)
+			if _add_native_property_editor(type_box, settings, prop):
+				has_custom_props = true
+			continue
 		if ctrl:
 			type_box.add_child(_create_row(_localized_property_label(prop.name), ctrl))
 			has_custom_props = true
@@ -338,14 +302,12 @@ func _populate_node_properties(node: GraphNode, settings: Object):
 			continue
 		if prop.name in ["resource_local_to_scene", "resource_path", "resource_name", "script", "title", "disabled", "trace"]:
 			continue
-		if prop.usage & PROPERTY_USAGE_STORAGE == 0:
+		if (int(prop.usage) & PROPERTY_USAGE_STORAGE) == 0:
 			continue
 		if settings.has_method("exposeParam") and not settings.exposeParam(prop.name):
 			continue
 
-		var ctrl = _create_control_for_property(settings, prop)
-		if ctrl:
-			common_container.add_child(_create_row(_localized_property_label(prop.name), ctrl))
+		_add_native_property_editor(common_container, settings, prop)
 
 	# Override Pins for subgraph nodes
 	if node.node_template == "subgraph" and settings is SubgraphNodeSettings and settings.graph:
@@ -597,101 +559,63 @@ func _create_row(label_text: String, control: Control) -> HBoxContainer:
 	row.add_child(control)
 	return row
 
-func _create_control_for_property(obj: Object, prop: Dictionary) -> Control:
-	var prop_name = prop.name
-	var prop_type = prop.type
-	var val = obj.get(prop_name)
-
-	if prop_type == TYPE_INT and prop.hint == PROPERTY_HINT_ENUM:
-		var opt = OptionButton.new()
-		var options = prop.hint_string.split(",")
-		for idx in range(options.size()):
-			opt.add_item(FlowI18n.tn(options[idx]), idx)
-		opt.selected = val
-		opt.item_selected.connect(func(index):
-			_on_value_changed(obj, prop_name, index)
-		)
-		opt.add_theme_font_size_override("font_size", _scaled_font_size(11))
-		return opt
-
-	match prop_type:
-		TYPE_BOOL:
-			var cb = CheckBox.new()
-			cb.button_pressed = val
-			cb.toggled.connect(func(pressed):
-				_on_value_changed(obj, prop_name, pressed)
-			)
-			return cb
-		TYPE_INT:
-			var sb = SpinBox.new()
-			sb.min_value = -999999
-			sb.max_value = 999999
-			sb.step = 1
-			sb.value = val
-			sb.value_changed.connect(func(new_val):
-				_on_value_changed(obj, prop_name, int(new_val))
-			)
-			return sb
-		TYPE_FLOAT:
-			var sb = SpinBox.new()
-			sb.min_value = -999999.0
-			sb.max_value = 999999.0
-			sb.step = 0.01
-			sb.value = val
-			sb.value_changed.connect(func(new_val):
-				_on_value_changed(obj, prop_name, new_val)
-			)
-			return sb
-		TYPE_STRING:
-			return _create_string_input(obj, prop_name)
-		TYPE_COLOR:
-			return _create_color_input(obj, prop_name)
-		TYPE_VECTOR3:
-			return _create_vector3_input(obj, prop_name)
-		TYPE_ARRAY:
-			return _create_array_input(obj, prop_name, val if val is Array else [], prop)
-		TYPE_DICTIONARY:
-			return _create_dictionary_input(obj, prop_name, val if val is Dictionary else {})
-		TYPE_OBJECT:
-			var hbc = HBoxContainer.new()
-			var lbl = Label.new()
-			lbl.text = FlowI18n.t("None") if val == null else val.resource_path.get_file()
-			lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-			lbl.clip_text = true
-			lbl.add_theme_font_size_override("font_size", _scaled_font_size(11))
-			hbc.add_child(lbl)
-
-			var btn = Button.new()
-			btn.text = "..."
-			btn.pressed.connect(func():
-				_show_file_dialog_for_property(obj, prop_name, lbl, prop)
-			)
-			hbc.add_child(btn)
-			return hbc
-
-	return null
-
-func _create_string_input(obj: Object, prop_name: String) -> LineEdit:
-	var le = LineEdit.new()
-	le.text = str(obj.get(prop_name))
-	le.add_theme_font_size_override("font_size", _scaled_font_size(11))
-
-	# Apply dark background stylebox #111318
-	var sb := StyleBoxFlat.new()
-	sb.bg_color = Color("111318")
-	sb.set_corner_radius_all(3)
-	sb.content_margin_left = 6
-	sb.content_margin_right = 6
-	le.add_theme_stylebox_override("normal", sb)
-
-	le.text_submitted.connect(func(new_text):
-		_on_value_changed(obj, prop_name, new_text)
+func _add_native_property_rows(
+	object: Object,
+	included: Array = [],
+	excluded: Dictionary = {},
+) -> FlowNativePropertyRows:
+	var rows := FlowNativePropertyRows.new()
+	rows.setup(object, included, excluded)
+	rows.property_edited.connect(func(prop_name: String):
+		property_edited.emit(prop_name)
 	)
-	le.focus_exited.connect(func():
-		if str(obj.get(prop_name)) != le.text:
-			_on_value_changed(obj, prop_name, le.text)
+	if not rows.is_empty():
+		content_vbox.add_child(rows)
+	return rows
+
+func _add_native_property_editor(parent: VBoxContainer, object: Object, prop: Dictionary) -> bool:
+	var property_name := str(prop.name)
+	var editor_property := FlowInspectorPropertyPolicy.create_native_property_editor(
+		object,
+		prop.type,
+		property_name,
+		prop.hint,
+		prop.hint_string,
+		prop.usage,
+		false,
+		FlowInspectorPropertyPolicy.localized_property_label(object, property_name)
 	)
-	return le
+	if editor_property == null:
+		return false
+	editor_property.property_changed.connect(func(
+		edited_property: StringName,
+		value,
+		_field: StringName,
+		_changing: bool,
+	):
+		var edited_property_name := String(edited_property)
+		object.set(edited_property_name, value)
+		if object is Resource:
+			object.emit_changed()
+		property_edited.emit(edited_property_name)
+	)
+	editor_property.multiple_properties_changed.connect(func(properties: PackedStringArray, values: Array):
+		var count := mini(properties.size(), values.size())
+		for index in range(count):
+			var edited_property_name := String(properties[index])
+			object.set(edited_property_name, values[index])
+			property_edited.emit(edited_property_name)
+		if object is Resource:
+			object.emit_changed()
+	)
+	parent.add_child(editor_property)
+	return true
+
+func _add_native_property_by_name(parent: VBoxContainer, object: Object, property_name: String) -> bool:
+	for prop in object.get_property_list():
+		if str(prop.name) == property_name:
+			return _add_native_property_editor(parent, object, prop)
+	return false
 
 ## Creates an attribute selector: OptionButton dropdown populated from upstream
 ## stream names, with a "(custom...)" option that reveals a text field.
@@ -899,369 +823,11 @@ func _get_input_stream_names(node: GraphNode, port: int) -> PackedStringArray:
 	return names
 
 
-func _create_bool_input(obj: Object, prop_name: String) -> CheckBox:
-	var cb = CheckBox.new()
-	cb.button_pressed = obj.get(prop_name)
-	cb.toggled.connect(func(pressed):
-		_on_value_changed(obj, prop_name, pressed)
-	)
-	return cb
-
-func _create_color_input(obj: Object, prop_name: String) -> ColorPickerButton:
-	var cpb = ColorPickerButton.new()
-	cpb.color = obj.get(prop_name)
-	cpb.color_changed.connect(func(new_color):
-		_on_value_changed(obj, prop_name, new_color)
-	)
-	return cpb
-
-func _create_vector3_input(obj: Object, prop_name: String) -> Control:
-	var current_val = obj.get(prop_name)
-	var value: Vector3 = current_val if current_val is Vector3 else Vector3.ZERO
-	var hbc = HBoxContainer.new()
-	hbc.add_theme_constant_override("separation", 4)
-	for axis in ["x", "y", "z"]:
-		var this_axis = axis
-		var sb = SpinBox.new()
-		sb.min_value = -999999.0
-		sb.max_value = 999999.0
-		sb.step = 0.01
-		sb.custom_minimum_size.x = 52
-		sb.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		if axis == "x":
-			sb.value = value.x
-		elif axis == "y":
-			sb.value = value.y
-		else:
-			sb.value = value.z
-		sb.value_changed.connect(func(new_val):
-			var current = obj.get(prop_name)
-			var next: Vector3 = current if current is Vector3 else Vector3.ZERO
-			if this_axis == "x":
-				next.x = new_val
-			elif this_axis == "y":
-				next.y = new_val
-			else:
-				next.z = new_val
-			_on_value_changed(obj, prop_name, next)
-		)
-		hbc.add_child(sb)
-	return hbc
-
-func _infer_array_mode(prop_name: String, prop: Dictionary, arr_val: Array) -> String:
-	var hint = str(prop.get("hint_string", "")).to_lower()
-	var hint_prefix = hint
-	if hint.find(":") != -1:
-		hint_prefix = hint.split(":")[0]
-	if hint.find("packedscene") != -1 or prop_name == "scene_variants":
-		return "packedscene"
-	if hint.find("vector3") != -1 or prop_name in ["offsets", "rotations", "sizes"]:
-		return "vector3"
-	if hint.find("float") != -1 or prop_name == "scene_variant_weights":
-		return "float"
-	if hint.find("string") != -1 or prop_name == "labels":
-		return "string"
-	if hint_prefix == "9":
-		return "vector3"
-	if hint_prefix == "4":
-		return "string"
-	if hint_prefix == "3":
-		return "float"
-	if arr_val.size() > 0:
-		var first = arr_val[0]
-		if first is PackedScene:
-			return "packedscene"
-		match typeof(first):
-			TYPE_VECTOR3:
-				return "vector3"
-			TYPE_FLOAT:
-				return "float"
-			TYPE_STRING:
-				return "string"
-	return "string"
-
-func _create_array_input(obj: Object, prop_name: String, arr_val: Array, prop: Dictionary) -> Control:
-	var wrapper = VBoxContainer.new()
-	wrapper.add_theme_constant_override("separation", 4)
-	var mode = _infer_array_mode(prop_name, prop, arr_val)
-
-	for idx in range(arr_val.size()):
-		var row = HBoxContainer.new()
-		row.add_theme_constant_override("separation", 4)
-		var this_idx = idx
-
-		match mode:
-			"vector3":
-				var vec_val = arr_val[this_idx]
-				var vec: Vector3 = vec_val if vec_val is Vector3 else Vector3.ZERO
-				for axis in ["x", "y", "z"]:
-					var this_axis = axis
-					var sb_axis = SpinBox.new()
-					sb_axis.min_value = -999999.0
-					sb_axis.max_value = 999999.0
-					sb_axis.step = 0.01
-					sb_axis.custom_minimum_size.x = 48
-					sb_axis.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-					if axis == "x":
-						sb_axis.value = vec.x
-					elif axis == "y":
-						sb_axis.value = vec.y
-					else:
-						sb_axis.value = vec.z
-					sb_axis.value_changed.connect(func(new_val):
-						var current_arr = obj.get(prop_name)
-						var next: Array = current_arr.duplicate(true) if current_arr is Array else []
-						var cur = next[this_idx]
-						var next_vec: Vector3 = cur if cur is Vector3 else Vector3.ZERO
-						if this_axis == "x":
-							next_vec.x = new_val
-						elif this_axis == "y":
-							next_vec.y = new_val
-						else:
-							next_vec.z = new_val
-						next[this_idx] = next_vec
-						_on_value_changed(obj, prop_name, next)
-					)
-					row.add_child(sb_axis)
-			"float":
-				var sb = SpinBox.new()
-				sb.min_value = -999999.0
-				sb.max_value = 999999.0
-				sb.step = 0.01
-				sb.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-				sb.value = float(arr_val[this_idx])
-				sb.value_changed.connect(func(new_val):
-					var current_arr = obj.get(prop_name)
-					var next: Array = current_arr.duplicate(true) if current_arr is Array else []
-					next[this_idx] = new_val
-					_on_value_changed(obj, prop_name, next)
-				)
-				row.add_child(sb)
-			"packedscene":
-				var lbl = Label.new()
-				var res = arr_val[this_idx]
-				lbl.text = FlowI18n.t("None") if res == null else res.resource_path.get_file()
-				lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-				lbl.clip_text = true
-				lbl.add_theme_font_size_override("font_size", _scaled_font_size(11))
-				row.add_child(lbl)
-				var btn_pick = Button.new()
-				btn_pick.text = "..."
-				btn_pick.pressed.connect(func():
-					_show_file_dialog_for_array_resource(obj, prop_name, this_idx, lbl, "packedscene")
-				)
-				row.add_child(btn_pick)
-			_:
-				var le = LineEdit.new()
-				le.text = str(arr_val[this_idx])
-				le.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-				var sb_style := StyleBoxFlat.new()
-				sb_style.bg_color = Color("111318")
-				sb_style.set_corner_radius_all(3)
-				sb_style.content_margin_left = 6
-				sb_style.content_margin_right = 6
-				le.add_theme_stylebox_override("normal", sb_style)
-				le.text_submitted.connect(func(new_text):
-					var current_arr = obj.get(prop_name)
-					var next: Array = current_arr.duplicate(true) if current_arr is Array else []
-					next[this_idx] = new_text
-					_on_value_changed(obj, prop_name, next)
-				)
-				le.focus_exited.connect(func():
-					var current_arr = obj.get(prop_name)
-					var next: Array = current_arr.duplicate(true) if current_arr is Array else []
-					if str(next[this_idx]) != le.text:
-						next[this_idx] = le.text
-						_on_value_changed(obj, prop_name, next)
-				)
-				row.add_child(le)
-
-		var btn_remove = Button.new()
-		btn_remove.text = "-"
-		btn_remove.tooltip_text = FlowI18n.t("Remove item")
-		btn_remove.pressed.connect(func():
-			var current_arr = obj.get(prop_name)
-			var next: Array = current_arr.duplicate(true) if current_arr is Array else []
-			if this_idx >= 0 and this_idx < next.size():
-				next.remove_at(this_idx)
-				_on_value_changed(obj, prop_name, next)
-			edit(current_node)
-		)
-		row.add_child(btn_remove)
-		wrapper.add_child(row)
-
-	var add_row = HBoxContainer.new()
-	add_row.add_theme_constant_override("separation", 4)
-	var add_btn = Button.new()
-	add_btn.text = "+ " + FlowI18n.t("Add")
-	add_btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	add_btn.pressed.connect(func():
-		var current_arr = obj.get(prop_name)
-		var next: Array = current_arr.duplicate(true) if current_arr is Array else []
-		match mode:
-			"vector3":
-				next.append(Vector3.ZERO)
-			"float":
-				next.append(1.0)
-			"packedscene":
-				next.append(null)
-			_:
-				next.append("")
-		_on_value_changed(obj, prop_name, next)
-		edit(current_node)
-	)
-	add_row.add_child(add_btn)
-	wrapper.add_child(add_row)
-
-	return wrapper
-
-func _create_dictionary_input(obj: Object, prop_name: String, dict_val: Dictionary) -> Control:
-	var wrapper = VBoxContainer.new()
-	wrapper.add_theme_constant_override("separation", 4)
-
-	for key in dict_val.keys():
-		var row = HBoxContainer.new()
-		row.add_theme_constant_override("separation", 4)
-
-		var key_le = LineEdit.new()
-		key_le.text = str(key)
-		key_le.custom_minimum_size.x = 80
-		key_le.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		row.add_child(key_le)
-
-		var value_le = LineEdit.new()
-		value_le.text = str(dict_val[key])
-		value_le.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		row.add_child(value_le)
-
-		var btn_remove = Button.new()
-		btn_remove.text = "-"
-		btn_remove.tooltip_text = FlowI18n.t("Remove entry")
-		var original_key = key
-		btn_remove.pressed.connect(func():
-			var current_dict = obj.get(prop_name)
-			var next: Dictionary = current_dict.duplicate(true) if current_dict is Dictionary else {}
-			if next.has(original_key):
-				next.erase(original_key)
-				_on_value_changed(obj, prop_name, next)
-			edit(current_node)
-		)
-		row.add_child(btn_remove)
-
-		key_le.focus_exited.connect(func():
-			var current_dict = obj.get(prop_name)
-			var next: Dictionary = current_dict.duplicate(true) if current_dict is Dictionary else {}
-			var new_key = key_le.text.strip_edges()
-			if new_key == "":
-				key_le.text = str(original_key)
-				return
-			var current_val = next[original_key] if next.has(original_key) else value_le.text
-			if new_key != str(original_key):
-				next.erase(original_key)
-				next[new_key] = current_val
-				_on_value_changed(obj, prop_name, next)
-				edit(current_node)
-		)
-
-		value_le.focus_exited.connect(func():
-			var current_dict = obj.get(prop_name)
-			var next: Dictionary = current_dict.duplicate(true) if current_dict is Dictionary else {}
-			var target_key = key_le.text.strip_edges()
-			if target_key == "":
-				target_key = str(original_key)
-			next[target_key] = value_le.text
-			_on_value_changed(obj, prop_name, next)
-		)
-
-		wrapper.add_child(row)
-
-	var add_row = HBoxContainer.new()
-	add_row.add_theme_constant_override("separation", 4)
-	var add_key = LineEdit.new()
-	add_key.placeholder_text = FlowI18n.t("key")
-	add_key.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	add_row.add_child(add_key)
-	var add_value = LineEdit.new()
-	add_value.placeholder_text = FlowI18n.t("value")
-	add_value.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	add_row.add_child(add_value)
-	var add_btn = Button.new()
-	add_btn.text = "+"
-	add_btn.pressed.connect(func():
-		var key = add_key.text.strip_edges()
-		if key == "":
-			return
-		var current_dict = obj.get(prop_name)
-		var next: Dictionary = current_dict.duplicate(true) if current_dict is Dictionary else {}
-		next[key] = add_value.text
-		_on_value_changed(obj, prop_name, next)
-		edit(current_node)
-	)
-	add_row.add_child(add_btn)
-	wrapper.add_child(add_row)
-
-	return wrapper
-
 func _on_value_changed(obj: Object, prop_name: String, new_val):
 	obj.set(prop_name, new_val)
 	if obj is Resource:
 		obj.emit_changed()
 	property_edited.emit(prop_name)
-
-func _show_file_dialog_for_property(obj: Object, prop_name: String, label: Label, prop: Dictionary = {}):
-	var fd = FileDialog.new()
-	fd.file_mode = FileDialog.FILE_MODE_OPEN_FILE
-	fd.access = FileDialog.ACCESS_RESOURCES
-	var hint = str(prop.get("hint_string", "")).to_lower()
-	if hint.find("packedscene") != -1 or prop_name.find("scene") != -1:
-		fd.add_filter("*.tscn,*.scn", "Scene Files")
-		fd.add_filter("*.tres,*.res", "Resource Files")
-	else:
-		fd.add_filter("*.tres,*.res", "Resource Files")
-		fd.add_filter("*.tscn,*.scn", "Scene Files")
-	fd.file_selected.connect(func(path):
-		var res = load(path)
-		if res:
-			_on_value_changed(obj, prop_name, res)
-			label.text = path.get_file()
-		fd.queue_free()
-	)
-	fd.canceled.connect(func():
-		fd.queue_free()
-	)
-	add_child(fd)
-	fd.popup_centered_ratio(0.4)
-
-func _show_file_dialog_for_array_resource(obj: Object, prop_name: String, index: int, label: Label, mode: String):
-	var fd = FileDialog.new()
-	fd.file_mode = FileDialog.FILE_MODE_OPEN_FILE
-	fd.access = FileDialog.ACCESS_RESOURCES
-	if mode == "packedscene":
-		fd.add_filter("*.tscn,*.scn", "Scene Files")
-	else:
-		fd.add_filter("*.tres,*.res", "Resource Files")
-	fd.file_selected.connect(func(path):
-		var res = load(path)
-		if res:
-			var current_arr = obj.get(prop_name)
-			var next: Array = current_arr.duplicate(true) if current_arr is Array else []
-			if index >= 0 and index < next.size():
-				next[index] = res
-				_on_value_changed(obj, prop_name, next)
-				label.text = path.get_file()
-		fd.queue_free()
-	)
-	fd.canceled.connect(func():
-		fd.queue_free()
-	)
-	add_child(fd)
-	fd.popup_centered_ratio(0.4)
-
-func _format_label(name: String) -> String:
-	var words = name.replace("_", " ").split(" ")
-	for i in range(words.size()):
-		words[i] = words[i].capitalize()
-	return " ".join(words)
 
 func _create_separator_stylebox() -> StyleBoxLine:
 	var sbl = StyleBoxLine.new()
@@ -1269,319 +835,25 @@ func _create_separator_stylebox() -> StyleBoxLine:
 	sbl.thickness = 1
 	return sbl
 
-func _create_graph_parameter_panel(res: FlowGraphResource, params: Array, param: GraphInputParameter, idx: int, prop_name: String, include_value: bool) -> PanelContainer:
-	var param_panel = PanelContainer.new()
-	var p_style = StyleBoxFlat.new()
-	p_style.bg_color = Color("252836")
-	p_style.set_corner_radius_all(6)
-	p_style.content_margin_left = 8
-	p_style.content_margin_right = 8
-	p_style.content_margin_top = 6
-	p_style.content_margin_bottom = 6
-	param_panel.add_theme_stylebox_override("panel", p_style)
+func _populate_graph_resource_properties(res: FlowGraphResource) -> void:
+	_add_graph_parameters_control(res, "in_params", FlowI18n.t("Graph Inputs"), true)
 
-	var row = HBoxContainer.new()
-	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	row.add_theme_constant_override("separation", 6)
-	param_panel.add_child(row)
+func _populate_graph_resource_outputs(res: FlowGraphResource) -> void:
+	_add_graph_parameters_control(res, "out_params", FlowI18n.t("Graph Outputs"), false)
 
-	var le_name = LineEdit.new()
-	le_name.text = param.name
-	le_name.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	le_name.add_theme_font_size_override("font_size", 11)
-	_style_parameter_line_edit(le_name)
-	le_name.text_submitted.connect(func(new_text):
-		_update_graph_parameter_name(res, param, prop_name, le_name, new_text)
+func _add_graph_parameters_control(
+	res: FlowGraphResource,
+	prop_name: String,
+	title: String,
+	include_value: bool,
+) -> void:
+	var editor := FlowGraphParametersEditor.new()
+	editor.setup(res, prop_name, title, include_value)
+	editor.property_edited.connect(func(edited_prop_name: String):
+		property_edited.emit(edited_prop_name)
 	)
-	le_name.focus_exited.connect(func():
-		_update_graph_parameter_name(res, param, prop_name, le_name, le_name.text)
-	)
-	row.add_child(le_name)
-
-	row.add_child(_create_graph_parameter_type_button(res, param, prop_name))
-
-	if include_value:
-		var val_ctrl = _create_graph_parameter_value_control(res, param, prop_name)
-		if val_ctrl:
-			val_ctrl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-			row.add_child(val_ctrl)
-
-	var btn_del = Button.new()
-	btn_del.text = "X"
-	btn_del.flat = true
-	btn_del.custom_minimum_size.x = 24
-	btn_del.add_theme_color_override("font_color", Color("ef4444"))
-	btn_del.pressed.connect(func():
-		params.remove_at(idx)
-		res.emit_changed()
-		property_edited.emit(prop_name)
-		edit(res)
-	)
-	row.add_child(btn_del)
-
-	return param_panel
-
-func _style_parameter_line_edit(line_edit: LineEdit):
-	var sb := StyleBoxFlat.new()
-	sb.bg_color = Color("111318")
-	sb.set_corner_radius_all(3)
-	sb.content_margin_left = 6
-	sb.content_margin_right = 6
-	line_edit.add_theme_stylebox_override("normal", sb)
-
-func _update_graph_parameter_name(res: FlowGraphResource, param: GraphInputParameter, prop_name: String, line_edit: LineEdit, new_text: String):
-	if param.name == new_text:
-		return
-	param.name = new_text
-	param.emit_changed()
-	res.emit_changed()
-	property_edited.emit(prop_name)
-	line_edit.text = new_text
-
-func _create_graph_parameter_type_button(res: FlowGraphResource, param: GraphInputParameter, prop_name: String) -> OptionButton:
-	var opt_type = OptionButton.new()
-	opt_type.custom_minimum_size.x = 82
-	opt_type.size_flags_horizontal = Control.SIZE_FILL
-	opt_type.add_theme_font_size_override("font_size", 10)
-
-	var types_to_show = [
-		FlowData.DataType.Bool,
-		FlowData.DataType.Int,
-		FlowData.DataType.Float,
-		FlowData.DataType.Vector,
-		FlowData.DataType.String,
-		FlowData.DataType.Resource
-	]
-	for t_idx in range(types_to_show.size()):
-		var t_val = types_to_show[t_idx]
-		var t_name = FlowData.DataType.keys()[t_val]
-		opt_type.add_item(FlowI18n.t(t_name), t_val)
-		if param.data_type == t_val:
-			opt_type.selected = t_idx
-
-	opt_type.get_popup().min_size = Vector2i(180, 0)
-	_style_parameter_type_button(opt_type, param.data_type)
-	opt_type.item_selected.connect(func(id_index):
-		var new_type = opt_type.get_item_id(id_index)
-		param.data_type = new_type
-		param.emit_changed()
-		res.emit_changed()
-		property_edited.emit(prop_name)
-		edit(res)
-	)
-	return opt_type
-
-func _style_parameter_type_button(opt_type: OptionButton, data_type: FlowData.DataType):
-	var type_color := FlowNodeBase.getColorForFlowDataType(data_type)
-	var normal := StyleBoxFlat.new()
-	normal.bg_color = type_color.darkened(0.45)
-	normal.set_border_width_all(1)
-	normal.border_color = type_color.darkened(0.05)
-	normal.set_corner_radius_all(3)
-	normal.content_margin_left = 6
-	normal.content_margin_right = 6
-	opt_type.add_theme_stylebox_override("normal", normal)
-
-	var hover := normal.duplicate()
-	hover.bg_color = type_color.darkened(0.32)
-	opt_type.add_theme_stylebox_override("hover", hover)
-	opt_type.add_theme_stylebox_override("pressed", hover)
-	opt_type.add_theme_color_override("font_color", Color.WHITE)
-	opt_type.add_theme_color_override("font_hover_color", Color.WHITE)
-	opt_type.add_theme_color_override("font_pressed_color", Color.WHITE)
-
-func _create_graph_parameter_value_control(res: FlowGraphResource, param: GraphInputParameter, prop_name: String) -> Control:
-	match param.data_type:
-		FlowData.DataType.Bool:
-			var checkbox = CheckBox.new()
-			checkbox.button_pressed = param.cte_bool
-			checkbox.toggled.connect(func(pressed):
-				param.cte_bool = pressed
-				_emit_graph_parameter_changed(res, param, prop_name)
-			)
-			return checkbox
-		FlowData.DataType.Int:
-			var spin_int = SpinBox.new()
-			spin_int.min_value = -999999
-			spin_int.max_value = 999999
-			spin_int.step = 1
-			spin_int.value = param.cte_int
-			spin_int.value_changed.connect(func(new_val):
-				param.cte_int = int(new_val)
-				_emit_graph_parameter_changed(res, param, prop_name)
-			)
-			return spin_int
-		FlowData.DataType.Float:
-			var spin_float = SpinBox.new()
-			spin_float.min_value = -999999.0
-			spin_float.max_value = 999999.0
-			spin_float.step = 0.01
-			spin_float.value = param.cte_float
-			spin_float.value_changed.connect(func(new_val):
-				param.cte_float = new_val
-				_emit_graph_parameter_changed(res, param, prop_name)
-			)
-			return spin_float
-		FlowData.DataType.Vector:
-			var vec_hbox = HBoxContainer.new()
-			vec_hbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-			for axis in ["x", "y", "z"]:
-				var sb_axis = SpinBox.new()
-				sb_axis.min_value = -999999.0
-				sb_axis.max_value = 999999.0
-				sb_axis.step = 0.01
-				sb_axis.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-				if axis == "x":
-					sb_axis.value = param.cte_vector.x
-					sb_axis.value_changed.connect(func(nv):
-						param.cte_vector.x = nv
-						_emit_graph_parameter_changed(res, param, prop_name)
-					)
-				elif axis == "y":
-					sb_axis.value = param.cte_vector.y
-					sb_axis.value_changed.connect(func(nv):
-						param.cte_vector.y = nv
-						_emit_graph_parameter_changed(res, param, prop_name)
-					)
-				else:
-					sb_axis.value = param.cte_vector.z
-					sb_axis.value_changed.connect(func(nv):
-						param.cte_vector.z = nv
-						_emit_graph_parameter_changed(res, param, prop_name)
-					)
-				vec_hbox.add_child(sb_axis)
-			return vec_hbox
-		FlowData.DataType.String:
-			var line_edit = LineEdit.new()
-			line_edit.text = param.cte_string
-			_style_parameter_line_edit(line_edit)
-			line_edit.text_submitted.connect(func(new_text):
-				param.cte_string = new_text
-				_emit_graph_parameter_changed(res, param, prop_name)
-			)
-			line_edit.focus_exited.connect(func():
-				if param.cte_string != line_edit.text:
-					param.cte_string = line_edit.text
-					_emit_graph_parameter_changed(res, param, prop_name)
-			)
-			return line_edit
-		FlowData.DataType.Resource:
-			var res_hbox = HBoxContainer.new()
-			var res_lbl = Label.new()
-			res_lbl.text = FlowI18n.t("None") if param.cte_resource == null else param.cte_resource.resource_path.get_file()
-			res_lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-			res_lbl.clip_text = true
-			res_lbl.add_theme_font_size_override("font_size", 11)
-			res_hbox.add_child(res_lbl)
-
-			var res_btn = Button.new()
-			res_btn.text = "..."
-			res_btn.pressed.connect(func():
-				_show_file_dialog_for_param_resource(param, res_lbl, res, prop_name)
-			)
-			res_hbox.add_child(res_btn)
-			return res_hbox
-	return null
-
-func _emit_graph_parameter_changed(res: FlowGraphResource, param: GraphInputParameter, prop_name: String):
-	param.emit_changed()
-	res.emit_changed()
-	property_edited.emit(GRAPH_PARAMETER_VALUE_EDITED)
-
-func _populate_graph_resource_properties(res: FlowGraphResource):
-	_add_header(FlowI18n.t("Graph Inputs"), res.resource_path.get_file() if res.resource_path != "" else FlowI18n.t("Unsaved Resource"))
-
-	# Inputs list
-	var list_box = VBoxContainer.new()
-	list_box.add_theme_constant_override("separation", 12)
-	content_vbox.add_child(list_box)
-
-	for idx in range(res.in_params.size()):
-		var param = res.in_params[idx]
-		if not param:
-			continue
-
-		list_box.add_child(_create_graph_parameter_panel(res, res.in_params, param, idx, "in_params", true))
-
-	# Add Parameter Button
-	var btn_add = Button.new()
-	btn_add.text = "+ " + FlowI18n.t("Add Parameter")
-	btn_add.add_theme_color_override("font_color", Color("22d3ee")) # Cyan
-	btn_add.pressed.connect(func():
-		var new_param = GraphInputParameter.new()
-		new_param.name = "new_param_%d" % (res.in_params.size() + 1)
-		new_param.data_type = FlowData.DataType.Float
-		res.in_params.append(new_param)
-		res.emit_changed()
-		property_edited.emit("in_params")
-		edit(res) # refresh
-	)
-	content_vbox.add_child(btn_add)
-
-func _show_file_dialog_for_param_resource(param: GraphInputParameter, label: Label, parent_res: FlowGraphResource, prop_name: String):
-	var fd = FileDialog.new()
-	fd.file_mode = FileDialog.FILE_MODE_OPEN_FILE
-	fd.access = FileDialog.ACCESS_RESOURCES
-	fd.file_selected.connect(func(path):
-		var loaded_res = load(path)
-		if loaded_res:
-			param.cte_resource = loaded_res
-			param.emit_changed()
-			parent_res.emit_changed()
-			property_edited.emit(GRAPH_PARAMETER_VALUE_EDITED)
-			label.text = path.get_file()
-		fd.queue_free()
-	)
-	fd.canceled.connect(func():
-		fd.queue_free()
-	)
-	add_child(fd)
-	fd.popup_centered_ratio(0.4)
-
-func _populate_graph_resource_outputs(res: FlowGraphResource):
-	_add_header(FlowI18n.t("Graph Outputs"), res.resource_path.get_file() if res.resource_path != "" else FlowI18n.t("Unsaved Resource"))
-
-	# Outputs list
-	var list_box = VBoxContainer.new()
-	list_box.add_theme_constant_override("separation", 12)
-	content_vbox.add_child(list_box)
-
-	for idx in range(res.out_params.size()):
-		var param = res.out_params[idx]
-		if not param:
-			continue
-
-		list_box.add_child(_create_graph_parameter_panel(res, res.out_params, param, idx, "out_params", false))
-
-	# Add Parameter Button
-	var btn_add = Button.new()
-	btn_add.text = "+ " + FlowI18n.t("Add Parameter")
-	btn_add.add_theme_color_override("font_color", Color("22d3ee")) # Cyan
-	btn_add.pressed.connect(func():
-		var new_param = GraphInputParameter.new()
-		new_param.name = "new_out_%d" % (res.out_params.size() + 1)
-		new_param.data_type = FlowData.DataType.Float
-		res.out_params.append(new_param)
-		res.emit_changed()
-		property_edited.emit("out_params")
-		edit(res) # refresh
-	)
-	content_vbox.add_child(btn_add)
+	content_vbox.add_child(editor)
 
 func _populate_generic_resource_properties(res: Resource):
 	_add_header(res.resource_path.get_file() if res.resource_path != "" else res.get_class(), res.get_class())
-
-	var prop_box = VBoxContainer.new()
-	prop_box.add_theme_constant_override("separation", 10)
-	content_vbox.add_child(prop_box)
-
-	var props = res.get_property_list()
-	for prop in props:
-		if prop.name in ["resource_local_to_scene", "resource_path", "resource_name", "script"]:
-			continue
-		if prop.usage & PROPERTY_USAGE_STORAGE == 0:
-			continue
-
-		var ctrl = _create_control_for_property(res, prop)
-		if ctrl:
-			prop_box.add_child(_create_row(_localized_property_label(prop.name), ctrl))
+	_add_native_property_rows(res)

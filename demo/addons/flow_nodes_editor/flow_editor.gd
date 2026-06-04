@@ -1798,6 +1798,10 @@ func _on_native_inspector_property_edited(prop_name: String) -> void:
 		return
 	if current_resource != null:
 		if edited_object == current_resource:
+			if prop_name == FlowInspector.GRAPH_PARAMETER_VALUE_EDITED:
+				queueSave()
+				queueRegen()
+				return
 			_refresh_graph_resource_parameter_edit(prop_name)
 			return
 		if _graph_resource_contains_parameter(edited_object, current_resource.in_params):
@@ -1850,7 +1854,7 @@ func _show_editor_settings_panel():
 	inspected_node = null
 	_ensure_inspector()
 	if inspector != null:
-		inspector.edit_editor_settings(self)
+		inspector.edit(editor_settings_proxy)
 		_apply_internal_inspector_mode(true)
 	_inspect_in_native(editor_settings_proxy)
 
