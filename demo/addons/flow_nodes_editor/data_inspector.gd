@@ -196,6 +196,7 @@ func refresh():
 	if data != null:
 
 		updateNumRowsAndCols()
+		filterRows( %EditFilter.text )
 		
 		# Index column
 		tv.addColumn( "Index", 0 )
@@ -211,13 +212,14 @@ func refresh():
 			tv.addColumn( title, col_w )
 			
 	tv.addColumn( "", 0 )
-	updateNumVisibleRowsAndStats()
+	updateNumVisibleRows()
 
 func onCellClicked( row : int, col : int ):
 	tv.setSelectedRow( row )
 	if node:
-		node.debug_row = visible_rows[row]
-		node.setupDrawDebug()
+		if row < visible_rows.size():
+			node.debug_row = visible_rows[row]
+			node.setupDrawDebug()
 
 func _ready():
 	tv.cell_clicked.connect( onCellClicked )
@@ -285,17 +287,23 @@ func populateBulks():
 	
 	bulk_selector.select( current_bulk_index )
 
-func updateNumVisibleRowsAndStats():
-	# Stats: row/col summary
-	if tv and data:
+func updateStats():
+	if data:
 		%LabelStats.text = "%d/%d Rows, (%d cols in %d Streams)" % [ visible_rows.size(), num_rows, num_cols, data.numFields()]
+	else:
+		%LabelStats.text = "No data"
+		
+func updateNumVisibleRows():
+	# Stats: row/col summary
+	if tv:
 		tv.num_rows = visible_rows.size()
 		tv.refreshUIDeferred()
+		updateStats()
 
 func _on_edit_filter_text_changed(new_text):
 	if data and tv:
-		updateVisibleRows( new_text )
-		updateNumVisibleRowsAndStats()
+		filterRows( new_text )
+		updateNumVisibleRows()
 
 func rowMathesQuery( filter_lower : String, row_idx : int) -> bool:
 	if filter_lower in str(row_idx):
@@ -330,7 +338,7 @@ func rowMathesQuery( filter_lower : String, row_idx : int) -> bool:
 					return true
 	return false
 
-func updateVisibleRows( filter_text : String ):
+func filterRows( filter_text : String ):
 	visible_rows = PackedInt32Array()
 	if filter_text.is_empty():
 		# Make a 1:1 mapping
