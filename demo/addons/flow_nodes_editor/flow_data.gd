@@ -204,6 +204,28 @@ class Data:
 		
 	func findStream( name : String ):
 		name = translateStreamName( name )
+		var name_lower := name.to_lower()
+		if name_lower == "front" or name_lower == "up" or name_lower == "right":
+			var rot_stream = streams.get(AttrRotation, null)
+			if rot_stream != null:
+				var eulers = rot_stream.container
+				var new_container := PackedVector3Array()
+				new_container.resize(eulers.size())
+				for idx in range(eulers.size()):
+					var basis := FlowData.eulerToBasis(eulers[idx])
+					match name_lower:
+						"front":
+							new_container[idx] = basis.z
+						"up":
+							new_container[idx] = basis.y
+						"right":
+							new_container[idx] = -basis.x
+				return {
+					"data_type": DataType.Vector,
+					"container": new_container,
+					"name": name
+				}
+			return null
 		
 		if name == "index":
 			var new_container = PackedInt32Array()
@@ -219,7 +241,7 @@ class Data:
 		var parts = name.split( "." )
 		if parts.size() == 2:
 			#print( "findStream(%s) => %s (Streams:%s)" % [ name, parts, streams])
-			var s0 = streams.get( parts[0], null )
+			var s0 = findStream( parts[0] )
 			if s0 == null:
 				push_error( "Failed to find stream root %s" % parts[0] )
 				return null
