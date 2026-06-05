@@ -110,6 +110,10 @@ class Data:
 				return PackedStringArray()
 			DataType.Resource:
 				return Array([], TYPE_OBJECT, "Resource", null)
+			DataType.NodeMesh:
+				return Array([], TYPE_OBJECT, "Node", null)
+			DataType.NodePath:
+				return Array([], TYPE_OBJECT, "Node", null)
 			DataType.Color:
 				return PackedColorArray()
 			_:
@@ -152,12 +156,15 @@ class Data:
 		return name
 		
 	func getSubStreamIndex(  sub_comp : String ):
-		if sub_comp == "X":
+		var sc_up = sub_comp.to_upper()
+		if sc_up == "X" or sc_up == "R":
 			return 0
-		elif sub_comp== "Y":
+		elif sc_up == "Y" or sc_up == "G":
 			return 1
-		elif sub_comp == "Z":
+		elif sc_up == "Z" or sc_up == "B":
 			return 2
+		elif sc_up == "W" or sc_up == "A":
+			return 3
 		return -1
 	
 	func getSubStream( stream : Dictionary, sub_comp : String ):
@@ -390,6 +397,20 @@ class Data:
 			DataType.Resource:
 				var old_container : Array[ Resource ] = old_stream.container
 				var new_container : Array[ Resource ] = []
+				new_container.resize( new_size )
+				for idx in range( new_size ):
+					new_container[idx] = old_container[ indices[idx] ]
+				return new_container
+			DataType.NodeMesh:
+				var old_container : Array = old_stream.container
+				var new_container : Array = []
+				new_container.resize( new_size )
+				for idx in range( new_size ):
+					new_container[idx] = old_container[ indices[idx] ]
+				return new_container
+			DataType.NodePath:
+				var old_container : Array = old_stream.container
+				var new_container : Array = []
 				new_container.resize( new_size )
 				for idx in range( new_size ):
 					new_container[idx] = old_container[ indices[idx] ]
