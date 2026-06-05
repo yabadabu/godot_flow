@@ -1,0 +1,183 @@
+[gd_scene format=3 uid="uid://ch8l7w8sldyut"]
+
+[ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_3rj1w"]
+[ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="2_qq08u"]
+[ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="3_x770j"]
+
+[sub_resource type="Resource" id="Resource_huh3s"]
+script = ExtResource("3_x770j")
+data = {
+"frames": [],
+"links": [{
+"from_node": &"id_0001_scan_splines",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0003_sample_spline",
+"to_port": 0
+}, {
+"from_node": &"id_0003_sample_spline",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0018_math_op",
+"to_port": 0
+}, {
+"from_node": &"id_0018_math_op",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0025_sample_around",
+"to_port": 0
+}],
+"min_pos": Vector2(80, 180),
+"nodes": [{
+"args_port": {},
+"name": &"id_0001_scan_splines",
+"position": Vector2(0, 0),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"group_name": "",
+"inspect_enabled": false,
+"random_seed": 2053119505,
+"required_meta_bool": &"",
+"title": "Scan Splines",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "scan_splines"
+}, {
+"args_port": {
+"Splines": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0003_sample_spline",
+"position": Vector2(140, 0),
+"settings": {
+"adjust_to_borders": false,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"distance_attribute": "distance",
+"fill_curve": false,
+"inspect_enabled": false,
+"random_seed": 2020946630,
+"sample_segments_centers": true,
+"title": "Sample Spline",
+"trace": false,
+"uniform_interval": 1.0
+},
+"show_disconnected_inputs": false,
+"template": "sample_spline"
+}, {
+"args_port": {
+"In A": {
+"connected": true,
+"port": 0
+},
+"In B": {
+"connected": false,
+"port": 1
+}
+},
+"name": &"id_0018_math_op",
+"position": Vector2(340, 0),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"in_nameA": "position.Y",
+"in_nameB": "0.0",
+"inspect_enabled": false,
+"operation": 2,
+"out_name": "position.Y",
+"random_seed": 820617526,
+"title": "Math",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "math_op"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0025_sample_around",
+"position": Vector2(520, 0),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": true,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"max_points": 133,
+"radius": 0.3,
+"random_seed": 2789012003,
+"title": "Sample Around",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "sample_around"
+}],
+"type": "flow_graph_nodes",
+"version": 1
+}
+view_zoom = 0.96734935
+view_offset = Vector2(405.38678, -184.32373)
+new_name_counter = 25
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_lfecj"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wobnc"]
+size = Vector3(2, 0.001, 2)
+
+[sub_resource type="Curve3D" id="Curve3D_ioxdu"]
+bake_interval = 1.0
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, -2.078, 0, 0.52, -0.13, 0, -0.179, 0.13, 0, 0.179, -1.675, 0, 1.76, -1.1228253, 0.05675387, -0.6881552, 1.1228253, -0.05675387, 0.6881552, -0.96684694, 0.0049230875, 3.8302326, -1.0533683, 0.08161844, 0.7586708, 1.0533683, -0.08161844, -0.7586708, 1.6090155, -0.0011439666, 4.147191, -0.153, 0, 0.535, 0.15311825, 0.012669286, -0.53535163, 5.0786915, -0.018180892, 1.0411487),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0)
+}
+point_count = 5
+
+[node name="DemoSampleAround" type="Node3D" unique_id=182733429]
+
+[node name="FlowGraphNode3D" type="Node3D" parent="." unique_id=768904491]
+script = ExtResource("1_3rj1w")
+graph = SubResource("Resource_huh3s")
+refresh_inputs = Callable()
+metadata/_custom_type_script = "uid://d1krtmb1urldl"
+
+[node name="Ground" type="MeshInstance3D" parent="FlowGraphNode3D" unique_id=1146039181]
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0)
+visible = false
+mesh = SubResource("PlaneMesh_lfecj")
+skeleton = NodePath("../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="FlowGraphNode3D/Ground" unique_id=801069733]
+shape = SubResource("BoxShape3D_wobnc")
+
+[node name="Path3D" type="Path3D" parent="." unique_id=1196535396]
+transform = Transform3D(0.9999837, -0.0055746622, 0.0011857857, 0.005575491, 0.9999842, -0.0006958283, -0.0011818821, 0.0007024381, 0.99999905, 0, 0, 0)
+curve = SubResource("Curve3D_ioxdu")
