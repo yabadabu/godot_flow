@@ -14,7 +14,7 @@
 - [ ] Discard points too close to hard edges of a mesh
 - [ ] Add noise to position <-- Improve noise
 - [ ] Spline sampling interior in non grid pattern
-- [ ] Allow to filter rows in the inspector
+- [X] Allow to filter rows in the inspector
 - [ ] Support for virtual streams like front, up, right from rotation.
 - [ ] Support for Vector4/Color/PackedVector4Array -> Read SubAttributes / MathNode / SetAttribute / Use in Debug if exists
 - [ ] undo/redo
