@@ -26,7 +26,7 @@ layout_mode = 2
 
 [node name="BtnRefresh" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=987216885]
 layout_mode = 2
-text = "Refresh"
+text = "↻"
 
 [node name="LabelTitle" type="Label" parent="VBoxContainer/HBoxContainer" unique_id=347353033]
 unique_name_in_owner = true
@@ -68,7 +68,7 @@ placeholder_text = "Filter Text"
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-text = "N Datas"
+text = "No data"
 horizontal_alignment = 2
 
 [node name="TableView" parent="VBoxContainer" unique_id=300917046 instance=ExtResource("2_ehj1v")]

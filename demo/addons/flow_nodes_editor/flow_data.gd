@@ -95,6 +95,7 @@ class TransformsStream:
 class Data:
 	var streams : Dictionary = {}
 	var last_added_stream_name : String
+	var tags : PackedStringArray = PackedStringArray()
 
 	static func newContainerOfType( data_type : DataType ):
 		match data_type:
@@ -425,6 +426,7 @@ class Data:
 		for name in streams:
 			s.streams[ name ] = streams[ name ].duplicate()
 		s.last_added_stream_name = last_added_stream_name
+		s.tags = tags.duplicate()
 		return s
 		
 	func filter( indices : PackedInt32Array ) -> Data:
@@ -432,6 +434,7 @@ class Data:
 		for old_stream in streams.values():
 			var new_container = filteredStream( old_stream, indices )
 			new_data.registerStream( old_stream.name, new_container, old_stream.data_type )
+		new_data.tags = tags.duplicate()
 		return new_data
 
 	func dump( title : String ):
