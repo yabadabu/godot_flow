@@ -27,8 +27,8 @@ var show_disconnected_inputs : bool = false
 var dirty : bool = false
 
 # Helper to create the UI
-var connectors_row_prefab = preload( "res://addons/flow_nodes_editor/connectors_row.tscn" )
-var connectors_options_prefab = preload( "res://addons/flow_nodes_editor/connectors_options.tscn" )
+const connectors_row_prefab = preload( "res://addons/flow_nodes_editor/connectors_row.tscn" )
+const connectors_options_prefab = preload( "res://addons/flow_nodes_editor/connectors_options.tscn" )
 
 # Filled during runtime
 var deps : Array[ Dictionary ]			# Array of graphEdit connections where I'm the target
@@ -115,6 +115,11 @@ func setActivity( amount : float ):
 		modulate = Color.WHITE + Color( amount, amount, amount, 0.0 )
 	else:
 		modulate = Color(1.0, 0.5, 0.5)
+
+func setExecTime(usec: int):
+	set_meta("exec_time_usec", usec)
+	if is_inside_tree():
+		queue_redraw()
 		
 func _on_draw() -> void:
 	
@@ -131,6 +136,27 @@ func _on_draw() -> void:
 	if settings.debug_enabled:
 		var clr : Color = Color.CYAN / self_modulate
 		draw_circle( Vector2(size.x,0), marker_radius * ui_scale, clr )
+	
+	# Draw execution time badge (top-right, near titlebar)
+	var exec_time_usec = get_meta("exec_time_usec", 0)
+	if exec_time_usec > 100:
+		var time_font = ThemeDB.fallback_font
+		var time_font_size := int(9 * ui_scale)
+		var time_text: String
+		var time_color: Color
+		if exec_time_usec >= 10000:  # > 10ms — warning
+			time_text = "%.1f ms" % (exec_time_usec / 1000.0)
+			time_color = Color(1.0, 0.6, 0.2, 0.9)  # Warm orange
+		elif exec_time_usec >= 1000:  # 1-10ms
+			time_text = "%.1f ms" % (exec_time_usec / 1000.0)
+			time_color = Color(1, 1, 1, 0.4)
+		else:
+			time_text = "%d µs" % exec_time_usec
+			time_color = Color(1, 1, 1, 0.25)
+		var tw = time_font.get_string_size(time_text, HORIZONTAL_ALIGNMENT_LEFT, -1, time_font_size).x
+		var tx = size.x - tw - 8 * ui_scale
+		var ty = 12.0 * ui_scale
+		draw_string(time_font, Vector2(tx, ty), time_text, HORIZONTAL_ALIGNMENT_LEFT, -1, time_font_size, time_color)
 
 func getMeta() -> Dictionary:
 	return meta_node
