@@ -52,11 +52,11 @@ func addColumn( text : String, initial_width : int ):
 	
 func dataScrolled( _offset : int ):
 	$TitlesContainer.scroll_horizontal = $ScrollContainer.scroll_horizontal
-	call_deferred( "refreshUI" )
+	refreshUIDeferred()
 	
 func titlesScrolled( _offset : int ):
 	$ScrollContainer.scroll_horizontal = $TitlesContainer.scroll_horizontal
-	call_deferred( "refreshUI" )
+	refreshUIDeferred()
 	
 func splitDragged( _offset : int ):
 	if not is_visible_in_tree():
@@ -71,7 +71,7 @@ func splitDragged( _offset : int ):
 		
 		# Confirm we have the layout correctly evaluated...
 		if idx == 1 && col.position.x == 0:
-			call_deferred( "refreshUI" )
+			refreshUIDeferred()
 			return
 		var lbl_size = col.size
 		#print( "cols %s size is %d. Pos %1.1f vs %1.1f vs %1.1f (%s)" % [ col.name, col.size.x, pos.x, my_origin.x, col.position.x, visible ])
@@ -99,10 +99,13 @@ func updateInfo():
 func refreshUI():
 	splitDragged(0)
 
+func refreshUIDeferred():
+	call_deferred( "refreshUI" )
+
 func commitColumns():
 	addColumn( "", 0 )
 	#print("Comminging columns %d" % col_starts.size())
-	call_deferred( "refreshUI" )
+	refreshUIDeferred()
 
 func setCellCallback( new_cell_callback : Callable ):
 	$ScrollContainer.cell_contents = new_cell_callback
@@ -117,7 +120,7 @@ func _ready():
 
 func setSelectedRow( new_row : int ):
 	$ScrollContainer.selected_row = new_row
-	call_deferred( "refreshUI" )
+	refreshUIDeferred()
 
 func setRowHeight( new_height : float ):
 	$ScrollContainer.font_size = new_height
@@ -165,4 +168,4 @@ func _input(event):
 
 func _on_visibility_changed() -> void:
 	if visible:
-		call_deferred( "refreshUI" )
+		refreshUIDeferred()
