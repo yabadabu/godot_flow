@@ -161,6 +161,8 @@ static func getColorForFlowDataType( data_type : FlowData.DataType ) -> Color:
 			return Color.WEB_GREEN
 		FlowData.DataType.Vector:
 			return Color.BLUE_VIOLET
+		FlowData.DataType.Color:
+			return Color("eab308")
 		FlowData.DataType.String:
 			return Color.YELLOW
 		FlowData.DataType.NodePath:
@@ -181,6 +183,8 @@ static func getGdScriptTypeForFlowDataType( data_type : FlowData.DataType ) -> i
 			return TYPE_STRING
 		FlowData.DataType.Vector:
 			return TYPE_VECTOR3
+		FlowData.DataType.Color:
+			return TYPE_COLOR
 	return TYPE_NIL
 	
 static func getFlowDataTypeFromGdScriptType( gd_type : int  ) -> FlowData.DataType:
@@ -195,6 +199,8 @@ static func getFlowDataTypeFromGdScriptType( gd_type : int  ) -> FlowData.DataTy
 			return FlowData.DataType.String 
 		TYPE_VECTOR3:
 			return FlowData.DataType.Vector
+		TYPE_COLOR:
+			return FlowData.DataType.Color
 	return FlowData.DataType.Invalid
 
 static func getFlowDataTypeFromObject( obj  ) -> FlowData.DataType:
@@ -461,6 +467,10 @@ func newStream( size : int, new_name : String, init_value, data_type : FlowData.
 					typed_container[idx] = fn.call(idx)
 			FlowData.DataType.Vector:
 				var typed_container : PackedVector3Array = new_container
+				for idx in size:
+					typed_container[idx] = fn.call(idx)
+			FlowData.DataType.Color:
+				var typed_container : PackedColorArray = new_container
 				for idx in size:
 					typed_container[idx] = fn.call(idx)
 			FlowData.DataType.String:

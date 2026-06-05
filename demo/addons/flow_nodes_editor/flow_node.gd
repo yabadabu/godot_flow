@@ -19,7 +19,7 @@ var _graph : FlowGraphResource = FlowGraphResource.new()
 signal graph_node_changed( graph_node : FlowGraphNode3D, prop_name : String )
 
 # custom inputs values for this instantiation
-@export var args : Dictionary
+@export var args : Dictionary = {}
 
 # You can also use get_property_list() for more control
 func _get_property_list():
@@ -40,6 +40,8 @@ func _get(property: StringName):
 
 func refreshInputs():
 	print( "RefreshInputs %s" % graph )
+	if args == null:
+		args = {}
 	var changed := false
 	if graph:
 		print( "Checking in_params:", graph.in_params )

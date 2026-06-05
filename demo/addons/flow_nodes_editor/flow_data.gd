@@ -17,6 +17,7 @@ enum DataType {
 	Resource,
 	NodeMesh,
 	NodePath,
+	Color,
 	Invalid = 999
 }
 
@@ -109,6 +110,8 @@ class Data:
 				return PackedStringArray()
 			DataType.Resource:
 				return Array([], TYPE_OBJECT, "Resource", null)
+			DataType.Color:
+				return PackedColorArray()
 			_:
 				push_error( "newContainerOfType(%d) type not supported" % [ data_type ])
 		return null
@@ -162,8 +165,11 @@ class Data:
 		if subcomp_idx == -1:
 			push_error( "Invalid sub_stream name %s" % sub_comp )
 			return null
-		if stream.data_type != DataType.Vector:
-			return "getSubStream.Parent stream must be of type Vector"
+		if stream.data_type != DataType.Vector and stream.data_type != DataType.Color:
+			push_error( "getSubStream.Parent stream must be of type Vector or Color" )
+			return null
+		if stream.data_type == DataType.Vector and subcomp_idx == 3:
+			push_error( "Vector parent does not support W/A component" )
 			return null
 		var big_container = stream.container
 		var new_container = PackedFloat32Array()
@@ -180,8 +186,10 @@ class Data:
 		var subcomp_idx = getSubStreamIndex( sub_comp )
 		if subcomp_idx == -1:
 			return "Invalid sub stream name %s" % sub_comp
-		if stream.data_type != DataType.Vector:
-			return "setSubStream.Parent stream must be of type Vector"
+		if stream.data_type != DataType.Vector and stream.data_type != DataType.Color:
+			return "setSubStream.Parent stream must be of type Vector or Color"
+		if stream.data_type == DataType.Vector and subcomp_idx == 3:
+			return "Vector parent does not support W/A component"
 		var big_container = stream.container
 		if sub_container.size() != big_container.size():
 			return "Container sizes do not match (%d vs %d)" % [sub_container.size(), big_container.size()]
@@ -245,6 +253,8 @@ class Data:
 				data_type = FlowData.DataType.Int
 			elif container is PackedVector3Array:
 				data_type = FlowData.DataType.Vector
+			elif container is PackedColorArray:
+				data_type = FlowData.DataType.Color
 			elif container is PackedStringArray:
 				data_type = FlowData.DataType.String
 			elif container is PackedByteArray:
@@ -294,6 +304,8 @@ class Data:
 			DataType.Vector:
 				new_container = PackedVector3Array( prev_stream.container )
 				#print( "Duped container vec3 %s %s" % [ name, new_container ])
+			DataType.Color:
+				new_container = PackedColorArray( prev_stream.container )
 			DataType.String:
 				new_container = PackedStringArray( prev_stream.container )
 			_:  # Resource
@@ -332,6 +344,14 @@ class Data:
 			DataType.Vector:
 				var old_container : PackedVector3Array = old_stream.container
 				var new_container := PackedVector3Array(  )		
+				new_container.resize( new_size )
+				for idx in range( new_size ):
+					new_container[idx] = old_container[ indices[idx] ]
+				return new_container
+				
+			DataType.Color:
+				var old_container : PackedColorArray = old_stream.container
+				var new_container := PackedColorArray( )
 				new_container.resize( new_size )
 				for idx in range( new_size ):
 					new_container[idx] = old_container[ indices[idx] ]
@@ -400,16 +420,12 @@ class Data:
 		return container
 
 	func getTransformsStream() -> TransformsStream:
+		if not (streams.has(AttrPosition) and streams.has(AttrRotation) and streams.has(AttrSize)):
+			return null
 		var trs := TransformsStream.new()
 		trs.positions = getVector3Container( AttrPosition )
-		if trs.positions == null:
-			return null
 		trs.eulers = getVector3Container( AttrRotation )
-		if trs.eulers == null:
-			return null	
 		trs.sizes = getVector3Container( AttrSize )
-		if trs.sizes == null:
-			return null
-		if trs.sizes.size() == trs.positions.size() && trs.sizes.size() == trs.eulers.size():
+		if trs.sizes.size() == trs.positions.size() && trs.sizes.size() == trs.eulers.size() and trs.sizes.size() > 0:
 			return trs
 		return null

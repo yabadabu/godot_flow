@@ -148,8 +148,8 @@ static func create_nodes_from_dict( dict, editor : FlowGraphEditor, paste_offset
 			return null
 		var in_pos = _parse_vector2( in_node.position )
 		node.position_offset = ( in_pos + paste_offset ) * editor.ui_scale
-		node.show_disconnected_inputs = in_node.show_disconnected_inputs
-		node.args_ports_by_name = in_node.args_port
+		node.show_disconnected_inputs = in_node.get("show_disconnected_inputs", false)
+		node.args_ports_by_name = in_node.get("args_port", {})
 		
 		# Apply saved settings...
 		dict_to_resource( in_node.settings, node.settings )
@@ -229,9 +229,12 @@ static func loadFromResource( editor : FlowGraphEditor ):
 	if current_resource == null:
 		return
 
-	# Register the input_* nodes before trying to load the nodes
+	# Register the input_* and output_* nodes before trying to load the nodes
 	for input in current_resource.in_params:
 		editor.registerInputNodeType( input )
+	if "out_params" in current_resource:
+		for output in current_resource.out_params:
+			editor.registerOutputNodeType( output )
 		
 	if current_resource.data and not current_resource.data.is_empty():
 		var paste_offset = _parse_vector2( current_resource.data.min_pos )

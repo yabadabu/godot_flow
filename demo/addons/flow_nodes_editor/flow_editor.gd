@@ -167,14 +167,11 @@ func populatePopupMenu() -> PopupMenu:
 	max_id = min_id
 	menu_ids = {}
 	
-	#gedit.theme.ac = Color( 1, 0.5, 0.5 );
 	var pm := PopupMenu.new()
 	add_child( pm )
 	pm.name = "MainMenu"
-	pm.clear();
+	pm.clear()
 	pm.id_pressed.connect( _on_popup_menu_id_pressed )
-	#pm.add_item( "Clear", 0, KEY_NONE )
-	#pm.add_separator( "", -1 )
 	
 	var required_input_type := FlowData.DataType.Invalid
 	var required_output_type := FlowData.DataType.Invalid
@@ -861,9 +858,13 @@ func evalGraph():
 		node.setupDrawDebug()
 		node.dirty = false
 		var time_node_ends = Time.get_ticks_usec()
+		var exec_usec = time_node_ends - time_node_start
+		
+		# Always show execution time on the node
+		node.setExecTime(exec_usec)
 		
 		if dump_performance:
-			performance.append( { "name": node.name, "time": time_node_ends - time_node_start })
+			performance.append( { "name": node.name, "time": exec_usec })
 
 	regen_pending = false
 	#print( "regen_pending is now false")
