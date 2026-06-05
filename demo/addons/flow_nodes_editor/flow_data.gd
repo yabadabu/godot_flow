@@ -448,6 +448,6 @@ class Data:
 		trs.positions = getVector3Container( AttrPosition )
 		trs.eulers = getVector3Container( AttrRotation )
 		trs.sizes = getVector3Container( AttrSize )
-		if trs.sizes.size() == trs.positions.size() && trs.sizes.size() == trs.eulers.size() and trs.sizes.size() > 0:
+		if trs.sizes.size() == trs.positions.size() and trs.sizes.size() == trs.eulers.size() and trs.sizes.size() > 0:
 			return trs
 		return null
