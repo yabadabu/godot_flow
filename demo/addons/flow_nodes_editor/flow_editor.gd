@@ -456,22 +456,22 @@ func _on_graph_edit_gui_input(event):
 		elif key == KEY_A:
 			if evt_key.shift_pressed:
 				openAddMenu()
+			else:
+				if no_modifiers:
+					toggleInspection()
+					evalGraph()
+					make_inspector_visible.call()
 		elif key == KEY_C:
 			if no_modifiers:
 				addComment()
-		elif key == KEY_G:
-			if no_modifiers:
-				toggleDisabled()
-				evalGraph()
 		elif key == KEY_D:
 			if no_modifiers:
 				toggleDebug()
 				evalGraph()
 		elif key == KEY_E:
 			if no_modifiers:
-				toggleInspection()
+				toggleDisabled()
 				evalGraph()
-				make_inspector_visible.call()
 		elif key == KEY_R:
 			if no_modifiers:
 				for node in getSelectedNodes():
