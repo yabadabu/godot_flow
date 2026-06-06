@@ -5,6 +5,7 @@ func _init():
 	meta_node = {
 		"title" : "Sort",
 		"settings" : SortNodeSettings,
+		"category" : "Point Ops",
 		"ins" : [{"label": "In" }], 
 		"outs" : [{ "label" : "Out" }],
 		"hide_inputs" : true,

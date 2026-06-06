@@ -5,6 +5,7 @@ func _init():
 	meta_node = {
 		"title" : "Grid",
 		"settings" : GridNodeSettings,
+		"category" : "Generators",
 		"ins" : [],
 		"outs" : [{ "label" : "Out" }],
 		"tooltip" : "Generates a set of points in a grid spatial distribution,\nwhere the separation is step",

@@ -5,6 +5,7 @@ func _init():
 	meta_node = {
 		"title" : "Copy",
 		"settings" : CopyNodeSettings,
+		"category" : "Generators",
 		"ins" : [{ "label": "In" }], 
 		"outs" : [{ "label" : "Out" }],
 		"tooltip" :"Creates N copies of the current points applying\na repeated translation + rotation offset",

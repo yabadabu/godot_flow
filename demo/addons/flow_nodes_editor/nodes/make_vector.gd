@@ -5,6 +5,7 @@ func _init():
 	meta_node = {
 		"title" : "Make Vector",
 		"settings" : MakeVectorNodeSettings,
+		"category" : "Math",
 		"ins" : [], 
 		"outs" : [{ "label" : "Out", "data_type" : FlowData.DataType.Vector }],
 		"tooltip" : "Creates a single Vector value from 3 inmediate float values",

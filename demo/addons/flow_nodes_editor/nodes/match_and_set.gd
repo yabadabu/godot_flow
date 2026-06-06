@@ -5,6 +5,7 @@ func _init():
 	meta_node = {
 		"title" : "Match And Set",
 		"settings" : MatchAndSetNodeSettings,
+		"category" : "Attributes",
 		"ins" : [{ "label" : "In" }, { "label" : "Attributes" }],
 		"outs" : [{ "label" : "Out" }],
 		"tooltip" : "Copies attributes into input data set based on a match_attr." + 

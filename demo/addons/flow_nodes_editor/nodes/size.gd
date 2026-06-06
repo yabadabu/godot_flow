@@ -5,6 +5,7 @@ func _init():
 	meta_node = {
 		"title" : "Size",
 		"settings" : SizeNodeSettings,
+		"category" : "Attributes",
 		"ins" : [{ "label" : "In"}],
 		"outs" : [{ "label" : "Size", "data_type" : FlowData.DataType.Int }],
 		"tooltip" : "Returns the current size of the input sequence",

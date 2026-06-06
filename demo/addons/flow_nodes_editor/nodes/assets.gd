@@ -6,6 +6,7 @@ func _init():
 	meta_node = {
 		"title" : "Assets",
 		"settings" : AssetsNodeSettings,
+		"category" : "Attributes",
 		"ins" : [],
 		"outs" : [{ "label" : "Out" }],
 		"hide_inputs" : true,

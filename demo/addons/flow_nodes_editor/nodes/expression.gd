@@ -5,6 +5,7 @@ func _init():
 	meta_node = {
 		"title" : "Expression",
 		"settings" : ExpressionNodeSettings,
+		"category" : "Math",
 		"ins" : [{ "label": "In" }], 
 		"outs" : [{ "label" : "Out" }],
 		"tooltip" : 

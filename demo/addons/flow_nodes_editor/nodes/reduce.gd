@@ -5,6 +5,7 @@ func _init():
 	meta_node = {
 		"title" : "Reduce",
 		"settings" : ReduceNodeSettings,
+		"category" : "Point Ops",
 		"ins" : [{ "label": "In" }], 
 		"outs" : [{ "label" : "Out" }],
 		"tooltip" : "Computes the min/max/avg values of the specified stream\nLimited to streams of type float, vector3 or ints.",

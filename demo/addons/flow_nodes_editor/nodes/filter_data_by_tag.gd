@@ -5,6 +5,7 @@ func _init():
 	meta_node = {
 		"title" : "Filter Data By Tag",
 		"settings" : FilterDataByTagNodeSettings,
+		"category" : "Filter",
 		"ins" : [{ "label": "In" }], 
 		"outs" : [{ "label" : "Inside" }, { "label" : "Outside" }],
 		"tooltip" : "Separates data according to their tags. You can specify a comma-separated list of Tags to filter by.",

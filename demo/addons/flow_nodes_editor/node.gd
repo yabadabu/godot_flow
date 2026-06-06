@@ -93,16 +93,20 @@ func refreshInspectMark():
 func onPropChanged( prop_name : String ):
 	dirty = true
 	
+func getCategory() -> String:
+	var meta := getMeta()
+	return meta.get( "category", "Others...")
+	
 func updateStyle():
 	var sb = get_theme_stylebox("titlebar", "GraphNode").duplicate(true)
-	var main_title_color = FlowNodeStyle.getCategoryColor( name )
+	var main_title_color = FlowNodeStyle.getCategoryColor( getCategory() )
 	sb.bg_color = main_title_color
 	sb.set_content_margin_all(0)
 	sb.content_margin_left = 8
 	sb.content_margin_right = 8
 	add_theme_stylebox_override("titlebar", sb)
 	sb = get_theme_stylebox("titlebar_selected", "GraphNode").duplicate(true)
-	sb.bg_color = main_title_color * 1.3
+	sb.bg_color = main_title_color
 	sb.set_content_margin_all(0)
 	sb.content_margin_left = 8
 	sb.content_margin_right = 8

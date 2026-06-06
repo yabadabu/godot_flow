@@ -1,0 +1,64 @@
+[gd_scene format=3 uid="uid://cp16df0jy2u3t"]
+
+[ext_resource type="Script" uid="uid://bshtd3ebledhi" path="res://addons/flow_nodes_editor/search_add_node_popup.gd" id="1_ihoms"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ihoms"]
+
+[node name="SearchAddNodePopup" type="PanelContainer" unique_id=856911600]
+visible = false
+offset_right = 360.0
+offset_bottom = 240.0
+theme_override_styles/panel = SubResource("StyleBoxEmpty_ihoms")
+script = ExtResource("1_ihoms")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=919723642]
+layout_mode = 2
+
+[node name="SearchText" type="LineEdit" parent="VBoxContainer" unique_id=1314709936]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "Search Nodes..."
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=1245906414]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="CategoriesScroll" type="ScrollContainer" parent="VBoxContainer/HBoxContainer" unique_id=935199073]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+mouse_filter = 0
+horizontal_scroll_mode = 0
+
+[node name="Categories" type="VBoxContainer" parent="VBoxContainer/HBoxContainer/CategoriesScroll" unique_id=523307903]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 0
+
+[node name="MenuButton" type="MenuButton" parent="VBoxContainer/HBoxContainer/CategoriesScroll/Categories" unique_id=775099302]
+layout_mode = 2
+text = "Action1"
+
+[node name="MenuButton2" type="MenuButton" parent="VBoxContainer/HBoxContainer/CategoriesScroll/Categories" unique_id=772248929]
+layout_mode = 2
+text = "Action2"
+
+[node name="SearchResultsScroll" type="ScrollContainer" parent="VBoxContainer/HBoxContainer" unique_id=525872570]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 0
+horizontal_scroll_mode = 0
+
+[node name="SearchResults" type="VBoxContainer" parent="VBoxContainer/HBoxContainer/SearchResultsScroll" unique_id=1757406439]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 0
+
+[node name="MenuButton" type="MenuButton" parent="VBoxContainer/HBoxContainer/SearchResultsScroll/SearchResults" unique_id=1571969688]
+layout_mode = 2
+text = "Action1"
+
+[node name="MenuButton2" type="MenuButton" parent="VBoxContainer/HBoxContainer/SearchResultsScroll/SearchResults" unique_id=2019585578]
+layout_mode = 2
+text = "Action2"

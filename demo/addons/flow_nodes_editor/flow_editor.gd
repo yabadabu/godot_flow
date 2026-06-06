@@ -20,9 +20,11 @@ var dump_performance := false
 var inspector: EditorInspector
 var inspected_node : Node
 var make_inspector_visible : Callable
+var search_add_node_popup: SearchAddNodePopup
 
 # This is the default graph-node instantiated, the script contains the logic
 var packed_node = preload("res://addons/flow_nodes_editor/node.tscn")
+var packed_search_add_node_popup = preload("res://addons/flow_nodes_editor/search_add_node_popup.tscn")
 const directory_path := "res://addons/flow_nodes_editor/nodes"
 
 # New nodes generation using the editor
@@ -262,6 +264,14 @@ func _ready():
 	inspector.custom_minimum_size.y = 150
 	inspector.property_edited.connect( onNodePropertyChanged )
 	
+	# Instantiate custom SearchAddNodePopup
+	search_add_node_popup = packed_search_add_node_popup.instantiate() as SearchAddNodePopup
+	add_child(search_add_node_popup)
+	search_add_node_popup.node_selected.connect(_on_search_add_node_popup_node_selected)
+	search_add_node_popup.on_closed.connect( func():
+		auto_connect_from_node = ""
+		auto_connect_to_node = ""
+		)
 	%AutoRegen.button_pressed = auto_regen
 	
 func onNodePropertyChanged( prop_name : String):
@@ -428,13 +438,11 @@ func addNode( node_template, settings = null ):
 		var source_node = gedit_nodes_by_name.get( auto_connect_from_node )
 		if canConnect( source_node, auto_connect_from_port, node, 0 ):
 			connect_nodes(auto_connect_from_node, auto_connect_from_port, node.name, 0)
-		auto_connect_from_node = ""
 		
 	if auto_connect_to_node:
 		var target_node = gedit_nodes_by_name.get( auto_connect_to_node )
 		if canConnect( node, 0, target_node, auto_connect_to_port ):
 			connect_nodes(node.name, 0, auto_connect_to_node, auto_connect_to_port )
-		auto_connect_to_node = ""
 	
 	for prev_node in getSelectedNodes():
 		prev_node.selected = false
@@ -592,20 +600,39 @@ func _on_graph_edit_popup_request(at_position):
 		pm.popup()
 		#print( "Show popup associated to %s.%s" % [ node.name, popup_on_over_input.getInLabel().text ] )
 		return
-	
-	var p := populatePopupMenu()
-	p.size = Vector2( 400,200 )
-	p.position = get_screen_position() + at_position
-	p.popup()
-	p.close_requested.connect( func():
-		auto_connect_from_node = ""
-		auto_connect_to_node = ""
-		)
+		
+	var required_input_type := FlowData.DataType.Invalid
+	var required_output_type := FlowData.DataType.Invalid
+	if auto_connect_from_node:
+		var from_node = gedit_nodes_by_name.get( auto_connect_from_node )
+		if from_node:
+			var meta = from_node.getMeta()
+			var oport = meta.outs[ auto_connect_from_port ]
+			required_input_type = oport.get( "data_type", FlowData.DataType.Invalid )
+		print( "auto_connect_from_node: %s:%d -> %d" % [ auto_connect_from_node, auto_connect_from_port, required_input_type])
+		
+	if auto_connect_to_node:
+		var to_node = gedit_nodes_by_name.get( auto_connect_to_node )
+		if to_node:
+			var meta = to_node.getMeta()
+			var iport = meta.ins[ auto_connect_to_port ]
+			required_output_type = iport.get( "data_type", FlowData.DataType.Invalid )
+		print( "auto_connect_to_node: %s:%d -> %d" % [auto_connect_to_node, auto_connect_to_port, required_output_type ])		
+	var in_params = []
+	var out_params = []
+	if current_resource:
+		in_params = current_resource.in_params
+		
+	search_add_node_popup.setup( node_types, in_params, out_params, required_input_type, required_output_type )
+	search_add_node_popup.appearAt(get_screen_position() + at_position)
 	
 	
 func openAddMenu():
 	var pos = get_local_mouse_position()
 	_on_graph_edit_popup_request( pos )
+
+func _on_search_add_node_popup_node_selected(template_name : String):
+	addNode(template_name)
 
 func _on_inputs_menu_id_pressed(id: int):
 	var input = current_resource.in_params[id]

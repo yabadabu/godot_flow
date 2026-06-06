@@ -5,6 +5,7 @@ func _init():
 	meta_node = {
 		"title" : "Scan Nodes",
 		"settings" : ScanNodesNodeSettings,
+		"category" : "Generators",
 		"scans_scene" : true,
 		"ins" : [],
 		"outs" : [{ "label" : "Out" }],

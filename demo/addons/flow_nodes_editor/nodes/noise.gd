@@ -5,6 +5,7 @@ func _init():
 	meta_node = {
 		"title" : "Noise",
 		"settings" : NoiseNodeSettings,
+		"category" : "Attributes",
 		"ins" : [{ "label" : "In" }],
 		"outs" : [{ "label" : "Out" }],
 		"tooltip" : "Outputs an attribute with Noise values",

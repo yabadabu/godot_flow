@@ -5,6 +5,7 @@ func _init():
 	meta_node = {
 		"title" : "Remove Attributes",
 		"settings" : RemoveAttributeNodeSettings,
+		"category" : "Attributes",
 		"ins" : [{"label": "In" }], 
 		"outs" : [{ "label" : "Out" }],
 		"tooltip" : "Remove streams from the input connection.",

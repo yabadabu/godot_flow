@@ -5,6 +5,7 @@ func _init():
 	meta_node = {
 		"title" : "Relax",
 		"settings" : RelaxNodeSettings,
+		"category" : "Point Ops",
 		"ins" : [{"label": "In" }], 
 		"outs" : [{ "label" : "Out" }],
 		"tooltip" : "Relax distance between points",
