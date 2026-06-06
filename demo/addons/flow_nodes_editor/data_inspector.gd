@@ -23,8 +23,13 @@ var data : FlowData.Data
 var visible_rows := PackedInt32Array()
 
 # The slot corresponds to InA, InB, or Out streams for example
-# The setetings are not included
+# The settings are not included
 var current_bulk_index := 0
+
+# The current_port_combined_index is used in the combo selector. First outputs, then inputs
+var current_port_combined_index := 0
+
+# These two are derived from the current_port_combined_index
 var current_port_index := 0
 var is_output : bool = true
 
@@ -35,19 +40,29 @@ func setNode( new_node : FlowNodeBase ):
 	if node:
 		%LabelTitle.text = "..."
 		if node.settings:
+			node.settings.debug_bulk = current_bulk_index
+			node.settings.debug_port_combined_index = current_port_combined_index
 			node.settings.inspect_enabled = false
+			print( "Saving %s.settings Bulk:%d Index:%d" % [node.name, current_bulk_index, current_port_combined_index ])
 			node.refreshFromSettings()
 		
 	if node != new_node and new_node:
-		%LabelTitle.text = new_node.get_title()
-		new_node.settings.inspect_enabled = true
-		current_bulk_index = new_node.settings.debug_bulk
 		node = new_node
+		%LabelTitle.text = node.get_title()
+		node.settings.inspect_enabled = true
+		current_port_combined_index = node.settings.debug_port_combined_index
+		print( "Reading %s.settings Bulk:%d Index:%d" % [node.name, current_bulk_index, current_port_combined_index ])
+		_on_slot_selector_item_selected( current_port_combined_index )
+		current_bulk_index = node.settings.debug_bulk
 		node.setupDrawDebug()
 	else:
 		node = null
 		refresh()
 	populateSlots()
+	if current_port_combined_index < slot_selector.item_count:
+		slot_selector.select(current_port_combined_index)
+	if current_bulk_index < bulk_selector.item_count:
+		bulk_selector.select(current_bulk_index)
 	
 func setLabelNumber( label : Label, value : float ):
 	var new_text = fmt( value )
@@ -233,6 +248,8 @@ func _on_slot_selector_item_selected(index: int) -> void:
 	if not node:
 		return
 		
+	current_port_combined_index = index
+		
 	var meta = node.getMeta()
 	if index < meta.outs.size():
 		is_output = true
@@ -272,14 +289,26 @@ func populateSlots():
 		idx +=1
 	populateBulks()
 	
+func tagsAsStr( data : FlowData.Data ) -> String:
+	if not data or data.tags.is_empty():
+		return ""
+	return "(" + ", ".join(data.tags) + ")"
+	
 func populateBulks():
 	bulk_selector.clear()
 	if is_output:
 		for bulk_idx in range( node.generated_bulks.size() ):
-			bulk_selector.add_item( "Out Bulk %d" % bulk_idx, bulk_idx )
+			var bulk_data = node.get_bulk_output( bulk_idx, current_port_index )
+			var tags_str : String = tagsAsStr( bulk_data )
+			var title = "Out Bulk %d %s" % [ bulk_idx, tags_str ]
+			bulk_selector.add_item( title, bulk_idx )
+				
 	else:
 		for bulk_idx in range( node.input_bulks.size() ):
-			bulk_selector.add_item( "In Bulk %d" % bulk_idx, bulk_idx )
+			var bulk_data = node.get_bulk_input( bulk_idx, current_port_index )
+			var tags_str : String = tagsAsStr( bulk_data )
+			var title = "In Bulk %d %s" % [ bulk_idx, tags_str ]
+			bulk_selector.add_item( title, bulk_idx )
 	
 	# Ensure the bulk_index is still valid
 	if bulk_selector.get_item_count() > 0:

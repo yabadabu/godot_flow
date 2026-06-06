@@ -19,8 +19,9 @@ enum eDebugMode {
 @export var debug_enabled: bool = false
 @export var debug_mode : eDebugMode = eDebugMode.EXTENDS
 @export var debug_scale : float = 1.0
-@export var debug_bulk: int = 0
 @export var debug_output: int = 0
+@export var debug_bulk: int = 0
+@export var debug_port_combined_index: int = 0
 
 @export var debug_color : Color = Color.WHITE
 @export var debug_modulate_by : String
