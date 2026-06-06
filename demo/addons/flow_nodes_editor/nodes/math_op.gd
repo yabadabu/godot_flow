@@ -9,6 +9,7 @@ func _init():
 		"ins" : [{ "label": "In A", "multiple_connections" : false }, { "label": "In B", "multiple_connections" : false }], 
 		"outs" : [{ "label" : "Out" }],
 		"tooltip" : "Applies a math operation between two streams, storing the result in a new stream or overriding another.\nYou can read and write substreams like position.X",
+		"keywords" : [ "multiply", "add" ],
 	}
 	
 func getTitle() -> String:
