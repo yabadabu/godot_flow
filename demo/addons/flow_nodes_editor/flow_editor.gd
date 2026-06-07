@@ -33,7 +33,6 @@ var auto_connect_from_node : String
 var auto_connect_from_port : int
 var auto_connect_to_node : String
 var auto_connect_to_port : int
-var new_name_counter : int = 0
 
 # Ranges for the menu
 var min_id = 1000
@@ -120,10 +119,6 @@ func _process(delta: float) -> void:
 			active_nodes.clear()
 		gedit.queue_redraw()
 		
-func getNewName( suffix : String ):
-	new_name_counter += 1
-	return "id_%04d_%s" % [ new_name_counter, suffix ]
-
 func registerInputNodeType( input ):
 	var node_type_name := "input_%s" % input.name
 	nodes_factory.registerNodeType( node_type_name, "input.gd")
@@ -295,7 +290,7 @@ func canConnect( src : FlowNodeBase, src_port : int, dst : FlowNodeBase, dst_por
 	return true
 	
 func addNode( node_template, settings = null ):
-	var node_name = getNewName(node_template)
+	var node_name = nodes_factory.getNewName(node_template)
 	var node = addNodeFromTemplate( node_template, node_name, settings )
 	if not node:
 		return null
@@ -385,7 +380,7 @@ func addComment():
 	rect.size += comment_padding * 2
 	
 	var frame := GraphFrame.new()
-	frame.name = getNewName("comment")
+	frame.name = nodes_factory.getNewName("comment")
 	frame.title = "My Comments..."
 	frame.position_offset = rect.position
 	frame.size = rect.size

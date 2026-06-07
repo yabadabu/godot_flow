@@ -2,9 +2,14 @@ extends Node
 class_name FlowNodesFactory
 
 var node_types = { }
+var new_name_counter : int = 0
 
 const directory_path := "res://addons/flow_nodes_editor/nodes"
 
+func getNewName( suffix : String ):
+	new_name_counter += 1
+	return "id_%04d_%s" % [ new_name_counter, suffix ]
+	
 func registerNodeType( node_type_name, file ):
 	var full_res_path = directory_path + "/" + file
 	var loaded_class : Script = load( full_res_path ) as Script
