@@ -71,6 +71,8 @@ func execute( ctx : FlowData.EvaluationContext ):
 	else:
 		if ctx.inputs.has( input.name ):
 			var runtime_input = ctx.inputs[ input.name ]
+			print( "Reading input %s from ctx -> %s" % [input.name, runtime_input])
 			set_output( 0, runtime_input )
 		else:
+			print( "Reading input %s from ctx FAILED. Inputs;%s" % [input.name, ctx.inputs])
 			set_output( 0, FlowData.Data.new() )

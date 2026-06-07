@@ -256,6 +256,8 @@ func refreshSignalsInputArgs( node ):
 			row.out_popup.connect( setOnOverInParam.bind( null ) )	
 
 func addNodeFromTemplate( node_template, node_name : String, settings = null ):
+	if gedit_nodes_by_name.has( node_name ):
+		node_name = nodes_factory.getNewName(node_template.template)
 	var node = nodes_factory.createNewNode( packed_node, node_template, node_name, settings )
 	if node:
 		node.ui_scale = ui_scale
@@ -527,6 +529,21 @@ func _on_popup_menu_id_pressed(id: int) -> void:
 			var node = nodes[0]
 			var target = nodes[1]
 			gedit.set_connection_activity( node.name, 0, target.name, 0, 1.0)
+	
+func addFrame( frame_data : Dictionary, old_to_new_names : Dictionary, paste_offset  ):
+	var frame := GraphFrame.new()
+	frame.name = frame_data.name
+	frame.title = frame_data.title
+	var in_pos = FlowNodeIO._parse_vector2( frame_data.position )
+	frame.position_offset = (in_pos + paste_offset ) * ui_scale
+	frame.size = FlowNodeIO._parse_vector2( frame_data.size )
+	frame.tint_color = FlowNodeIO._parse_color( frame_data.tint_color )
+	frame.tint_color_enabled = true
+	gedit.add_child(frame)
+	for old_name in frame_data.attached:
+		var new_name = old_to_new_names.get( old_name, null )
+		if new_name:
+			gedit.attach_graph_element_to_frame( new_name, frame.name )
 
 func disconnect_nodes(from_node: StringName, from_port: int, to_node: StringName, to_port: int) -> void:
 	#print( "disconnect_nodes From:%s:%d To:%s:%d" % [ from_node, from_port, to_node, to_port ])
@@ -622,16 +639,6 @@ func _on_graph_edit_connection_from_empty(to_node: StringName, to_port: int, rel
 	local_drop_position = release_position
 	_on_graph_edit_popup_request( local_drop_position )
 
-func getDeps( node : FlowNodeBase ) -> Array[ FlowNodeBase ]:
-	var deps : Array[ FlowNodeBase ] = [ node ]
-	for conn in node.deps:
-		var dep_node = gedit_nodes_by_name.get( conn.from_node, null )
-		if not dep_node:
-			continue
-		var req_deps = getDeps( dep_node )
-		deps.append_array( req_deps )
-	return deps
-	
 func getAllNodes() -> Array[ FlowNodeBase ]:
 	var nodes : Array[ FlowNodeBase ] = []
 	for child in gedit.get_children():
@@ -640,27 +647,6 @@ func getAllNodes() -> Array[ FlowNodeBase ]:
 			continue
 		nodes.append( node )
 	return nodes
-	
-func getEvalOrder():
-	# Find targets, like spawn meshes
-	var finals := getAllNodes().filter( func ( node : FlowNodeBase ) -> bool:
-		return ( not node.settings.disabled ) and ( node.settings.inspect_enabled or node.settings.debug_enabled or node.getMeta().get( "is_final", false ) )
-	)
-	
-	# for each node, find requirements
-	# A -
-	#    -- C - D
-	# B -
-	# D -> C -> A -> B
-	var all_deps : Array[ FlowNodeBase ]
-	for node in finals:
-		var node_deps = getDeps( node )
-		all_deps.append_array( node_deps )
-	
-	# Evaluate in inverse order
-	# B, A, C, D
-	all_deps.reverse()	
-	return all_deps
 
 func removeGeneratedNodes():
 	if not resource_owner:
@@ -712,7 +698,6 @@ func expandDirtyFlagToDependants( node : FlowNodeBase ):
 				expandDirtyFlagToDependants( dst_node )
 
 func evalGraph():
-	ctx.eval_id += 1
 	
 	var time_start = Time.get_ticks_usec()
 	
@@ -733,7 +718,7 @@ func evalGraph():
 	
 	var performance = []
 	#print( "getEvalOrder..." )
-	ctx.nodes_to_eval = getEvalOrder( )
+	ctx.nodes_to_eval = ctx.getEvalOrder( getAllNodes() )
 	ctx.run()
 	active_nodes = ctx.active_nodes
 	

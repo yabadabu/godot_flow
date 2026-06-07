@@ -32,18 +32,55 @@ class EvaluationContext:
 	var gedit_nodes_by_name : Dictionary
 	# Used by loops/subgraphs/non_ctes_input_params : string : FlowData
 	var inputs : Dictionary = {}
+	var trace : bool = false
 	
 	# Filled by the user of the context
 	var nodes_to_eval : Array[ FlowNodeBase ]
 	var active_nodes = []
 	
+	func getDeps( node : FlowNodeBase ) -> Array[ FlowNodeBase ]:
+		var deps : Array[ FlowNodeBase ] = [ node ]
+		for conn in node.deps:
+			var dep_node = gedit_nodes_by_name.get( conn.from_node, null )
+			if not dep_node:
+				print( "dep_node %s NOT FOUND" %[ conn.from_node ])
+				continue
+			var req_deps = getDeps( dep_node )
+			deps.append_array( req_deps )
+		return deps
+		
+	func getEvalOrder( all_nodes : Array[ FlowNodeBase ] ):
+		# Find targets, like spawn meshes
+		var finals := all_nodes.filter( func ( node : FlowNodeBase ) -> bool:
+			return ( not node.settings.disabled ) and ( node.settings.inspect_enabled or node.settings.debug_enabled or node.getMeta().get( "is_final", false ) )
+		)
+		print( "Finals are", finals)
+		
+		# for each node, find requirements
+		# A -
+		#    -- C - D
+		# B -
+		# D -> C -> A -> B
+		var all_deps : Array[ FlowNodeBase ]
+		for node in finals:
+			var node_deps = getDeps( node )
+			all_deps.append_array( node_deps )
+		
+		# Evaluate in inverse order
+		# B, A, C, D
+		all_deps.reverse()	
+		return all_deps
+	
 	func run():
+		eval_id += 1
 		active_nodes.clear()
 		for node in nodes_to_eval:
-			#print( "  Eval: %s (%d) Dirty:%s" % [ node.name, node.eval_id, node.dirty ] )
+			if trace:
+				print( "  Eval: %s (%d) Dirty:%s" % [ node.name, node.eval_id, node.dirty ] )
 				
 			# The node has already been evaluated or it's not dirty. No need to reevaluate it
 			if node.eval_id == eval_id or not node.dirty:
+				print( "  Already eval or not diry")
 				continue
 			
 			var time_node_start = Time.get_ticks_usec()

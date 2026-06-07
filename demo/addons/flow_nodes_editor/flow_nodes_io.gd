@@ -132,7 +132,7 @@ static func _paste_nodes_from_dict( dict, editor : FlowGraphEditor, at_graph_coo
 	for node in new_nodes:
 		node.selected = true
 
-static func create_nodes_from_dict( dict, editor : FlowGraphEditor, paste_offset = null):		
+static func create_nodes_from_dict( dict, container, paste_offset = null):		
 	if dict.get( "type", null) != "flow_graph_nodes":
 		push_error( "Invalid dict to paste nodes from" )
 		return []
@@ -140,14 +140,11 @@ static func create_nodes_from_dict( dict, editor : FlowGraphEditor, paste_offset
 	var old_to_new_names = {}
 	for in_node in dict.nodes:
 		var in_name = in_node.name
-		var new_name = in_name
-		if editor.gedit_nodes_by_name.has( in_name ):
-			new_name = editor.getNewName(in_node.template)
-		var node = editor.addNodeFromTemplate( in_node.template, new_name )
+		var node = container.addNodeFromTemplate( in_node.template, in_name )
 		if not node:
 			return null
 		var in_pos = _parse_vector2( in_node.position )
-		node.position_offset = ( in_pos + paste_offset ) * editor.ui_scale
+		node.position_offset = ( in_pos + paste_offset ) * container.ui_scale
 		node.show_disconnected_inputs = in_node.get("show_disconnected_inputs", false)
 		node.args_ports_by_name = in_node.get("args_port", {})
 		
@@ -162,7 +159,7 @@ static func create_nodes_from_dict( dict, editor : FlowGraphEditor, paste_offset
 		node.refreshFromSettings()
 		
 		# Update relation old -> new for the links
-		old_to_new_names[ in_name ] = new_name
+		old_to_new_names[ in_name ] = node.name
 		new_nodes.append( node )
 		
 	# Recreate the links
@@ -172,22 +169,10 @@ static func create_nodes_from_dict( dict, editor : FlowGraphEditor, paste_offset
 		if new_from == null or new_to == null:
 			push_error( "Failed to identify params links", link)
 			continue
-		editor.connect_nodes(new_from, link.from_port, new_to, link.to_port )
+		container.connect_nodes(new_from, link.from_port, new_to, link.to_port )
 
 	for frame_data in dict.get( "frames", [] ):
-		var frame := GraphFrame.new()
-		frame.name = frame_data.name
-		frame.title = frame_data.title
-		var in_pos = _parse_vector2( frame_data.position )
-		frame.position_offset = (in_pos + paste_offset ) * editor.ui_scale
-		frame.size = _parse_vector2( frame_data.size )
-		frame.tint_color = _parse_color( frame_data.tint_color )
-		frame.tint_color_enabled = true
-		editor.gedit.add_child(frame)
-		for old_name in frame_data.attached:
-			var new_name = old_to_new_names.get( old_name, null )
-			if new_name:
-				editor.gedit.attach_graph_element_to_frame( new_name, frame.name )
+		container.addFrame(frame_data, old_to_new_names, paste_offset)
 
 	return new_nodes
 
@@ -222,7 +207,7 @@ static func saveToResource( editor : FlowGraphEditor ):
 	current_resource.data = nodes_as_dict( all_nodes, all_frames, editor )
 	current_resource.view_zoom = gedit.zoom
 	current_resource.view_offset = gedit.scroll_offset
-	current_resource.new_name_counter = editor.new_name_counter
+	current_resource.new_name_counter = editor.nodes_factory.new_name_counter
 
 static func loadFromResource( editor : FlowGraphEditor ):
 	var current_resource = editor.current_resource
@@ -242,5 +227,5 @@ static func loadFromResource( editor : FlowGraphEditor ):
 		
 	editor.gedit.zoom = current_resource.view_zoom
 	editor.gedit.scroll_offset = current_resource.view_offset
-	editor.new_name_counter = current_resource.new_name_counter
+	editor.nodes_factory.new_name_counter = current_resource.new_name_counter
 	editor.data_inspector.setNode( null )
