@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_i773s"]
 [ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="2_b1aic"]
 [ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="3_qwth0"]
+[ext_resource type="Resource" uid="uid://eel6j7ywlgwm" path="res://graphs/subgraph_dungeon_select_rooms.tres" id="4_b1aic"]
 
 [sub_resource type="Resource" id="Resource_i773s"]
 script = ExtResource("3_qwth0")
@@ -91,6 +92,36 @@ data = {
 "from_port": 0,
 "keep_alive": false,
 "to_node": &"sort_candidates",
+"to_port": 0
+}, {
+"from_node": &"id_0013_partition",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0011_subgraph",
+"to_port": 0
+}, {
+"from_node": &"id_0011_subgraph",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0014_merge",
+"to_port": 0
+}, {
+"from_node": &"id_0011_subgraph",
+"from_port": 1,
+"keep_alive": false,
+"to_node": &"id_0015_merge",
+"to_port": 0
+}, {
+"from_node": &"sort_candidates",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0013_partition",
+"to_port": 0
+}, {
+"from_node": &"id_0015_merge",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"room_style",
 "to_port": 0
 }],
 "min_pos": Vector2(-40, 20),
@@ -355,127 +386,6 @@ data = {
 "port": 0
 }
 },
-"name": &"compose_room_size",
-"position": Vector2(2440, 280),
-"settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"default_value": Vector3(1, 1, 1),
-"disabled": false,
-"inspect_enabled": false,
-"out_attribute": "size",
-"random_seed": 1736692376,
-"title": "Compose Vector",
-"trace": false,
-"x_attribute": "RoomWidthWorld",
-"y_attribute": "",
-"z_attribute": "RoomHeightWorld"
-},
-"show_disconnected_inputs": false,
-"template": "compose_vector"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"sort_candidates",
-"position": Vector2(2600, 280),
-"settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"random_seed": 1000054401,
-"sort_by": "RoomPriority",
-"sort_descending": true,
-"title": "Sort",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "sort"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"rand_id",
-"position": Vector2(2280, 280),
-"settings": {
-"attribute_name": "RoomID",
-"data_type": 1,
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"max_value": 1.0,
-"min_value": 0.0,
-"random_seed": 732307886,
-"title": "Attribute Random",
-"trace": false,
-"use_index_as_value": true
-},
-"show_disconnected_inputs": false,
-"template": "attribute_random"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"rand_prio",
-"position": Vector2(2120, 280),
-"settings": {
-"attribute_name": "RoomPriority",
-"data_type": 0,
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"max_value": 1.0,
-"min_value": 0.0,
-"random_seed": 51721,
-"title": "Attribute Random",
-"trace": false,
-"use_index_as_value": false
-},
-"show_disconnected_inputs": false,
-"template": "attribute_random"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
 "name": &"id_0003_surface_sampler",
 "position": Vector2(200, 140),
 "settings": {
@@ -562,13 +472,285 @@ data = {
 },
 "show_disconnected_inputs": false,
 "template": "math_op"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"compose_room_size",
+"position": Vector2(2440, 280),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"default_value": Vector3(1, 1, 1),
+"disabled": false,
+"inspect_enabled": false,
+"out_attribute": "size",
+"random_seed": 1736692376,
+"title": "Compose Vector",
+"trace": false,
+"x_attribute": "RoomWidthWorld",
+"y_attribute": "",
+"z_attribute": "RoomHeightWorld"
+},
+"show_disconnected_inputs": false,
+"template": "compose_vector"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"rand_id",
+"position": Vector2(2280, 280),
+"settings": {
+"attribute_name": "RoomID",
+"data_type": 1,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"max_value": 1.0,
+"min_value": 0.0,
+"random_seed": 732308125,
+"title": "Attribute Random",
+"trace": false,
+"use_index_as_value": true
+},
+"show_disconnected_inputs": false,
+"template": "attribute_random"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+},
+"attribute_name": {
+"connected": false,
+"port": 1
+},
+"out_partition_attribute": {
+"connected": false,
+"port": 2
+}
+},
+"name": &"id_0013_partition",
+"position": Vector2(3160, 280),
+"settings": {
+"attribute_name": "Index",
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"out_partition_attribute": "",
+"random_seed": 1881242478,
+"title": "Partition",
+"trace": false
+},
+"show_disconnected_inputs": true,
+"template": "partition"
+}, {
+"args_port": {
+"CandidateRoom": {
+"connected": true,
+"port": 0
+},
+"SelectedRooms": {
+"connected": false,
+"port": 1
+}
+},
+"name": &"id_0011_subgraph",
+"position": Vector2(3460, 280),
+"settings": {
+"debug_bulk": 1,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 1,
+"debug_scale": 1.0,
+"disabled": false,
+"graph": ExtResource("4_b1aic"),
+"inspect_enabled": false,
+"param_overrides": {},
+"random_seed": 3219186451,
+"title": "Subgraph",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "subgraph"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"sort_candidates",
+"position": Vector2(2600, 280),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"random_seed": 1000054401,
+"sort_by": "RoomPriority",
+"sort_descending": true,
+"title": "Sort",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "sort"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"rand_prio",
+"position": Vector2(2120, 280),
+"settings": {
+"attribute_name": "RoomPriority",
+"data_type": 0,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"max_value": 1.0,
+"min_value": 0.0,
+"random_seed": 51680,
+"title": "Attribute Random",
+"trace": false,
+"use_index_as_value": false
+},
+"show_disconnected_inputs": false,
+"template": "attribute_random"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0014_merge",
+"position": Vector2(3840, 260),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"random_seed": 1707486170,
+"title": "Merge",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "merge"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0015_merge",
+"position": Vector2(3840, 360),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"random_seed": 1837664973,
+"title": "Merge",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "merge"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"room_style",
+"position": Vector2(4120, 360),
+"settings": {
+"attribute_name": "room_style",
+"data_type": 1,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"max_value": 3.0,
+"min_value": 0.0,
+"random_seed": 3301,
+"title": "Attribute Random",
+"trace": false,
+"use_index_as_value": false
+},
+"show_disconnected_inputs": false,
+"template": "attribute_random"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
-view_zoom = 0.82644594
-view_offset = Vector2(141.46259, -191.9135)
-new_name_counter = 10
+view_zoom = 1.0640843
+view_offset = Vector2(3828.8489, -156.71942)
+new_name_counter = 25
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 
 [node name="DemoDungeon" type="Node3D" unique_id=729494838]
@@ -576,5 +758,11 @@ metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 [node name="FlowGraphNode3D" type="Node3D" parent="." unique_id=34485852]
 script = ExtResource("1_i773s")
 graph = SubResource("Resource_i773s")
+refresh_inputs = Callable()
+metadata/_custom_type_script = "uid://d1krtmb1urldl"
+
+[node name="FlowGraphNode3D2" type="Node3D" parent="." unique_id=1216533672]
+script = ExtResource("1_i773s")
+graph = ExtResource("4_b1aic")
 refresh_inputs = Callable()
 metadata/_custom_type_script = "uid://d1krtmb1urldl"

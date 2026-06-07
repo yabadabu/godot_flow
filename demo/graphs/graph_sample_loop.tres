@@ -75,13 +75,52 @@ data = {
 "template": "input_InData"
 }, {
 "args_port": {
+"In": {
+"connected": true,
+"port": 0
+},
+"cte_int": {
+"connected": true,
+"port": 1
+}
+},
+"name": &"id_0006_add_attribute",
+"position": Vector2(220, 0),
+"settings": {
+"cte_bool": false,
+"cte_color": Color(1, 1, 1, 1),
+"cte_float": 0.0,
+"cte_int": -1,
+"cte_resource": null,
+"cte_string": "",
+"cte_vector": Vector3(0, 0, 0),
+"data_type": 1,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"name": "Iteration",
+"random_seed": 1044615548,
+"title": "Add Attribute",
+"trace": false
+},
+"show_disconnected_inputs": true,
+"template": "add_attribute"
+}, {
+"args_port": {
 "Out": {
 "connected": true,
 "port": 0
 }
 },
 "name": &"id_0007_output",
-"position": Vector2(620, 0),
+"position": Vector2(500, 0),
 "settings": {
 "data_type": 999,
 "debug_bulk": 0,
@@ -96,34 +135,6 @@ data = {
 "inspect_enabled": false,
 "name": "Out Data",
 "random_seed": 1048777736,
-"title": "Output",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "output"
-}, {
-"args_port": {
-"Out": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0004_output",
-"position": Vector2(620, 140),
-"settings": {
-"data_type": 999,
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"name": "Counter",
-"random_seed": 4231413624,
 "title": "Output",
 "trace": false
 },
@@ -165,26 +176,15 @@ data = {
 "template": "math_op"
 }, {
 "args_port": {
-"In": {
+"Out": {
 "connected": true,
 "port": 0
-},
-"cte_int": {
-"connected": true,
-"port": 1
 }
 },
-"name": &"id_0006_add_attribute",
-"position": Vector2(220, 0),
+"name": &"id_0004_output",
+"position": Vector2(500, 140),
 "settings": {
-"cte_bool": false,
-"cte_color": Color(1, 1, 1, 1),
-"cte_float": 0.0,
-"cte_int": -1,
-"cte_resource": null,
-"cte_string": "",
-"cte_vector": Vector3(0, 0, 0),
-"data_type": 1,
+"data_type": 999,
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
@@ -195,13 +195,13 @@ data = {
 "debug_scale": 1.0,
 "disabled": false,
 "inspect_enabled": false,
-"name": "Iteration",
-"random_seed": 1044615548,
-"title": "Add Attribute",
+"name": "Counter",
+"random_seed": 4231413624,
+"title": "Output",
 "trace": false
 },
-"show_disconnected_inputs": true,
-"template": "add_attribute"
+"show_disconnected_inputs": false,
+"template": "output"
 }, {
 "args_port": {},
 "name": &"id_0003_input_Counter",
