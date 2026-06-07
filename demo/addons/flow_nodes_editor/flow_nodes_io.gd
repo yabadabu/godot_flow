@@ -550,6 +550,13 @@ static func _is_topo_final_root(node: FlowNodeBase) -> bool:
 		return true
 	if not node.getMeta().get("is_final", false):
 		return false
+	# Subgraph nodes with downstream consumers are reached through those consumers.
+	# A terminal subgraph is itself the execution root for graphs that intentionally
+	# end at subgraph side effects instead of output nodes.
+	if node.node_template == "subgraph":
+		for conn in node.deps:
+			if not conn.get("virtual_variable", false):
+				return node.dependants.is_empty()
 	return true
 
 
