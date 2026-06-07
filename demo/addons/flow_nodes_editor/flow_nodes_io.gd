@@ -129,8 +129,10 @@ static func _paste_nodes_from_dict( dict, editor : FlowGraphEditor, at_graph_coo
 	# Update selection
 	for node in editor.getSelectedNodes():
 		node.selected = false
-	for node in new_nodes:
-		node.selected = true
+		
+	if new_nodes:
+		for node in new_nodes:
+			node.selected = true
 
 static func create_nodes_from_dict( dict, container, paste_offset = null):		
 	if dict.get( "type", null) != "flow_graph_nodes":

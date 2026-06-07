@@ -257,7 +257,7 @@ func refreshSignalsInputArgs( node ):
 
 func addNodeFromTemplate( node_template, node_name : String, settings = null ):
 	if gedit_nodes_by_name.has( node_name ):
-		node_name = nodes_factory.getNewName(node_template.template)
+		node_name = nodes_factory.getNewName(node_template)
 	var node = nodes_factory.createNewNode( packed_node, node_template, node_name, settings )
 	if node:
 		node.ui_scale = ui_scale
@@ -433,8 +433,8 @@ func _on_in_popup_menu_pressed( id: int, row : FlowConnectorRow ) -> void:
 			# Connect the input to the node
 			_on_graph_edit_connection_request( new_input_node.name, 0, node.name, row.data.port )
 		
-func _on_graph_edit_delete_nodes_request(node_names : Array[ String ]):
-	print( "_on_graph_edit_delete_nodes_request", node_names )
+func _on_graph_edit_delete_nodes_request(node_names : Array):
+	print( "_on_graph_edit_delete_nodes_request: ", node_names )
 	var frames : Array[ GraphFrame ]
 	var nodes : Array[ GraphNode ]
 	for node_name in node_names:
