@@ -5,6 +5,13 @@ extends Resource
 # An graph input with has a type and a constant value
 
 @export var name : String = "arg_name"
+
+@export var is_constant : bool = true:
+	set(new_value):
+		is_constant = new_value
+		emit_changed()
+		notify_property_list_changed()
+		
 @export var data_type : FlowData.DataType = FlowData.DataType.Float:
 	set(new_value):
 		data_type = new_value

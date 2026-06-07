@@ -2,7 +2,7 @@
 
 - [ ] attribute_random, the use_index_as_value is not clamped between min/max -> Can use Indexnnnn
 - [ ] Assign categories to all nodes
-
+- [ ] Drag to the left of an exposed parameter does not work. In only scans the input
 
 - [ ] Demos
 	- [X] Wall of rocks, picking a random point on the top
@@ -19,7 +19,7 @@
 - [ ] Add noise to position <-- Improve noise
 - [ ] Spline sampling interior in non grid pattern
 - [X] Allow to filter rows in the inspector
-- [ ] Support for virtual streams like front, up, right from rotation.
+- [X] Support for virtual streams like front, up, right from rotation.
 - [ ] Support for Vector4/Color/PackedVector4Array -> Read SubAttributes / MathNode / SetAttribute / Use in Debug if exists
 - [ ] undo/redo
 - [ ] Test random colors for each node -> Graph Editor Settings

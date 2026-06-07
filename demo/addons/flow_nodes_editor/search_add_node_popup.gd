@@ -17,12 +17,16 @@ const MAX_RECENT : int = 8
 @onready var categories_column: Control = categories.get_parent()
 
 var current_node_types: Dictionary = {}
+var current_inputs: Array = []
 var nodes_by_category: Dictionary = {}
 var category_buttons: Dictionary = {}
 var compatible_template_names: Array = []
 var current_category := ""
+var show_inputs_category := false
 
 const RECENTS_CATEGORY := "Recents"
+const INPUTS_CATEGORY := "Inputs"
+const ACTION_ADD_NEW_INPUT := 1
 const MIN_POPUP_SIZE := Vector2i(360, 240)
 const CATEGORY_ROW_HEIGHT := 30
 const POPUP_VERTICAL_PADDING := 58
@@ -40,9 +44,10 @@ func appearAt( new_screen_position : Vector2 ):
 	show()
 	move_to_front()
 	
-func setup( node_types : Dictionary, _p_inputs: Array, _p_outputs: Array, required_input_type : FlowData.DataType, required_output_type : FlowData.DataType ):
+func setup( node_types : Dictionary, p_inputs: Array, _p_outputs: Array, required_input_type : FlowData.DataType, required_output_type : FlowData.DataType ):
 	print( "invoking menu popup setup... %d %d" % [ required_input_type, required_output_type ])
 	current_node_types = node_types
+	current_inputs = p_inputs
 	if not search_text.text_changed.is_connected(_on_search_text_changed):
 		search_text.text_changed.connect(_on_search_text_changed)
 	search_text.text = ""
@@ -81,6 +86,7 @@ func _clear_options():
 	category_buttons.clear()
 	compatible_template_names.clear()
 	current_category = ""
+	show_inputs_category = false
 	for child in categories.get_children():
 		categories.remove_child(child)
 		child.queue_free()
@@ -101,18 +107,26 @@ func _populate_categories(node_types : Dictionary, required_input_type : FlowDat
 			nodes_by_category[category] = []
 		nodes_by_category[category].append(template_name)
 
-	var category_names := nodes_by_category.keys()
-	category_names.sort()
-	var recent_template_names := _get_recent_template_names()
-	if not recent_template_names.is_empty():
-		nodes_by_category[RECENTS_CATEGORY] = recent_template_names
-		category_names.push_front(RECENTS_CATEGORY)
+	show_inputs_category = required_input_type == FlowData.DataType.Invalid
+	var category_names := _get_visible_category_names()
 	for category_name in category_names:
 		_add_category_button(str(category_name))
 
 	_fit_height_to_categories(category_names.size())
 	if not category_names.is_empty():
 		_show_category(str(category_names[0]))
+
+func _get_visible_category_names() -> Array:
+	var category_names := nodes_by_category.keys()
+	category_names.erase(RECENTS_CATEGORY)
+	category_names.sort()
+	var recent_template_names := _get_recent_template_names()
+	if not recent_template_names.is_empty():
+		nodes_by_category[RECENTS_CATEGORY] = recent_template_names
+		category_names.push_front(RECENTS_CATEGORY)
+	if show_inputs_category:
+		category_names.push_front(INPUTS_CATEGORY)
+	return category_names
 
 func _get_recent_template_names() -> Array[String]:
 	var valid_recent_template_names: Array[String] = []
@@ -128,8 +142,7 @@ func _on_search_text_changed(new_text : String):
 	var query := new_text.strip_edges()
 	if query == "":
 		categories_column.visible = true
-		var category_names := nodes_by_category.keys()
-		category_names.sort()
+		var category_names := _get_visible_category_names()
 		if not category_names.is_empty():
 			_show_category(str(category_names[0]))
 		else:
@@ -158,6 +171,9 @@ func _show_category(category_name : String):
 		category_button.button_pressed = key == current_category
 
 	_clear_results()
+	if category_name == INPUTS_CATEGORY:
+		_show_inputs()
+		return
 
 	var template_names : Array = nodes_by_category.get(category_name, [])
 	if category_name != RECENTS_CATEGORY:
@@ -176,6 +192,25 @@ func _show_category(category_name : String):
 		if node_meta.has("tooltip"):
 			node_button.tooltip_text = node_meta.tooltip
 		search_results.add_child(node_button)
+
+func _show_inputs():
+	for input_idx in range(current_inputs.size()):
+		var input = current_inputs[input_idx]
+		var input_button := Button.new()
+		input_button.text = FlowNodeBase.editorDisplayName(input.name)
+		input_button.alignment = HORIZONTAL_ALIGNMENT_LEFT
+		input_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		_apply_category_button_style(input_button, INPUTS_CATEGORY)
+		input_button.pressed.connect(_select_input.bind(input_idx))
+		search_results.add_child(input_button)
+
+	var add_button := Button.new()
+	add_button.text = "Add New Input..."
+	add_button.alignment = HORIZONTAL_ALIGNMENT_LEFT
+	add_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_apply_category_button_style(add_button, INPUTS_CATEGORY)
+	add_button.pressed.connect(_select_action.bind(ACTION_ADD_NEW_INPUT))
+	search_results.add_child(add_button)
 
 func _show_search_results(query : String):
 	_clear_results()
@@ -206,6 +241,20 @@ func _show_search_results(query : String):
 			node_button.tooltip_text = node_meta.tooltip
 		search_results.add_child(node_button)
 
+	for input_idx in range(current_inputs.size()):
+		var input = current_inputs[input_idx]
+		var label : String = FlowNodeBase.editorDisplayName(input.name)
+		var haystack := "%s %s" % [input.name, label]
+		if not haystack.to_lower().contains(query.to_lower()):
+			continue
+		var input_button := Button.new()
+		input_button.text = "%s / %s" % [INPUTS_CATEGORY, label]
+		input_button.alignment = HORIZONTAL_ALIGNMENT_LEFT
+		input_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		_apply_category_button_style(input_button, INPUTS_CATEGORY)
+		input_button.pressed.connect(_select_input.bind(input_idx))
+		search_results.add_child(input_button)
+
 func _apply_category_button_style(button : Button, category_name : String):
 	var base_color := _get_display_category_color(category_name)
 	var normal_color := Color(base_color.r, base_color.g, base_color.b, 1.0)
@@ -234,6 +283,8 @@ func _make_button_style(color : Color, border_color : Color = Color.TRANSPARENT,
 func _get_display_category_color(category_name : String) -> Color:
 	if category_name == RECENTS_CATEGORY:
 		return Color(0.55, 0.55, 0.55)
+	if category_name == INPUTS_CATEGORY:
+		return Color(0.32, 0.52, 0.85)
 	return FlowNodeStyle.getCategoryColor(category_name)
 
 func _get_text_color_for_bg(bg_color : Color) -> Color:
@@ -287,5 +338,15 @@ func _select_node(template_name : String):
 	if recently_used.size() > MAX_RECENT:
 		recently_used.resize(MAX_RECENT)
 	node_selected.emit(template_name)
+	hide()
+	on_closed.emit()
+
+func _select_input(input_idx : int):
+	input_selected.emit(input_idx)
+	hide()
+	on_closed.emit()
+
+func _select_action(action_id : int):
+	action_selected.emit(action_id)
 	hide()
 	on_closed.emit()

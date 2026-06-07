@@ -91,7 +91,6 @@ func setResourceToEdit( new_resource : FlowGraphResource, new_resource_owner : F
 	ctx.gedit_nodes_by_name = gedit_nodes_by_name
 	markAllNodesAsDirty()
 	queueRegen()
-	populatePopupInputsMenu()
 
 func saveResource():
 	FlowNodeIO.saveToResource( self )
@@ -151,20 +150,6 @@ func scanAvailableNodes():
 		registerNodeType( stem, file )
 	print( "Registered %d node types" % node_types.size() )
 
-func populatePopupInputsMenu():
-	if not popup_menu_inputs:
-		return
-	popup_menu_inputs.clear()
-
-	if current_resource:
-		for idx in range(current_resource.in_params.size()):
-			var label : String = current_resource.in_params[idx].name
-			popup_menu_inputs.add_item( FlowNodeBase.editorDisplayName( label ), idx)
-
-	if popup_menu_inputs.get_item_count() == 0:
-		popup_menu_inputs.add_item( "No inputs defined", -1 )
-		popup_menu_inputs.set_item_disabled(0, true)
-
 func _ready():
 	
 	if not Engine.is_editor_hint():
@@ -197,6 +182,8 @@ func _ready():
 	search_add_node_popup = packed_search_add_node_popup.instantiate() as SearchAddNodePopup
 	add_child(search_add_node_popup)
 	search_add_node_popup.node_selected.connect(_on_search_add_node_popup_node_selected)
+	search_add_node_popup.input_selected.connect(_on_search_add_node_popup_input_selected)
+	search_add_node_popup.action_selected.connect(_on_search_add_node_popup_action_selected)
 	search_add_node_popup.on_closed.connect( func():
 		auto_connect_from_node = ""
 		auto_connect_to_node = ""
@@ -491,14 +478,13 @@ func _on_in_popup_menu_pressed( id: int, row : FlowConnectorRow ) -> void:
 		var in_name = node.getMeta().title + " - " + row.data.label
 		registerAsParameter( in_name, row.data.data_type )
 		# Instantiate the input
-		var new_input_node = _on_inputs_menu_id_pressed( current_resource.in_params.size() - 1 )
+		var new_input_node = _on_search_add_node_popup_input_selected( current_resource.in_params.size() - 1 )
 		if new_input_node:
 			# Adjust the positions, the size is correct, our left is the parent left - size
 			new_input_node.position_offset.x = node.position_offset.x - new_input_node.size.x - 40
 			new_input_node.position_offset.y -= new_input_node.size.y - 15
 			# Connect the input to the node
 			_on_graph_edit_connection_request( new_input_node.name, 0, node.name, row.data.port )
-		populatePopupInputsMenu()
 		
 func _on_graph_edit_delete_nodes_request(node_names : Array[ String ]):
 	print( "_on_graph_edit_delete_nodes_request", node_names )
@@ -544,8 +530,17 @@ func _on_graph_edit_popup_request(at_position):
 		var to_node = gedit_nodes_by_name.get( auto_connect_to_node )
 		if to_node:
 			var meta = to_node.getMeta()
-			var iport = meta.ins[ auto_connect_to_port ]
-			required_output_type = iport.get( "data_type", FlowData.DataType.Invalid )
+			print( "Autoconnecting to %s : %d gives %s" %[ auto_connect_to_node, auto_connect_to_port, meta ])
+			if auto_connect_to_port < meta.ins.size():
+				var iport = meta.ins[ auto_connect_to_port ]
+				required_output_type = iport.get( "data_type", FlowData.DataType.Invalid )
+			else:
+				print( "  Autoconnect is connecting to a cte of the node")
+				var exposed_params = to_node.getExposedParams()
+				print( "  exposed_params", exposed_params)
+				var exposed_index = auto_connect_to_port - meta.ins.size()
+				var iport = exposed_params[ exposed_index ]
+				required_output_type = iport.get( "data_type", FlowData.DataType.Invalid )
 		print( "auto_connect_to_node: %s:%d -> %d" % [auto_connect_to_node, auto_connect_to_port, required_output_type ])		
 	var in_params = []
 	var out_params = []
@@ -563,7 +558,7 @@ func openAddMenu():
 func _on_search_add_node_popup_node_selected(template_name : String):
 	addNode(template_name)
 
-func _on_inputs_menu_id_pressed(id: int):
+func _on_search_add_node_popup_input_selected(id : int):
 	var input = current_resource.in_params[id]
 	var node_type = "input_%s" % input.name
 	print( "Creating a input node: %s (%d) -> %s" % [ input.name, input.data_type, node_type] )
@@ -571,6 +566,10 @@ func _on_inputs_menu_id_pressed(id: int):
 	settings.name = input.name
 	settings.data_type = input.data_type
 	return addNode( node_type, settings )
+
+func _on_search_add_node_popup_action_selected(action_id : int):
+	if action_id == SearchAddNodePopup.ACTION_ADD_NEW_INPUT:
+		print("Add New Input... selected")
 
 func _on_popup_menu_id_pressed(id: int) -> void:
 	if menu_ids.has( id ):
