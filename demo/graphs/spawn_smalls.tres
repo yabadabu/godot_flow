@@ -27,7 +27,7 @@ data = {
 "to_node": &"id_0021_math_op",
 "to_port": 1
 }, {
-"from_node": &"id_0023_spawn_meshes",
+"from_node": &"id_0018_input_In",
 "from_port": 0,
 "keep_alive": false,
 "to_node": &"id_0024_output",
@@ -39,11 +39,20 @@ data = {
 "to_node": &"id_0024_output",
 "to_port": 0
 }],
-"min_pos": Vector2(-460, -60),
+"min_pos": Vector2(-460, -140),
 "nodes": [{
-"args_port": {},
-"name": &"id_0022_make_vector",
-"position": Vector2(0, 80),
+"args_port": {
+"In A": {
+"connected": true,
+"port": 0
+},
+"In B": {
+"connected": true,
+"port": 1
+}
+},
+"name": &"id_0021_math_op",
+"position": Vector2(160, 80),
 "settings": {
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
@@ -54,17 +63,17 @@ data = {
 "debug_port_combined_index": 0,
 "debug_scale": 1.0,
 "disabled": false,
+"in_nameA": "position",
+"in_nameB": "@last",
 "inspect_enabled": false,
-"out_name": "Vector",
-"random_seed": 2880357212,
-"title": "Make Vector",
-"trace": false,
-"x": 0.0,
-"y": 1.0,
-"z": 0.0
+"operation": 0,
+"out_name": "position",
+"random_seed": 1644668358,
+"title": "Math",
+"trace": false
 },
 "show_disconnected_inputs": false,
-"template": "make_vector"
+"template": "math_op"
 }, {
 "args_port": {},
 "name": &"id_0018_input_In",
@@ -96,7 +105,7 @@ data = {
 }
 },
 "name": &"id_0024_output",
-"position": Vector2(500, 0),
+"position": Vector2(540, 40),
 "settings": {
 "data_type": 999,
 "debug_bulk": 0,
@@ -117,18 +126,9 @@ data = {
 "show_disconnected_inputs": false,
 "template": "output"
 }, {
-"args_port": {
-"In A": {
-"connected": true,
-"port": 0
-},
-"In B": {
-"connected": true,
-"port": 1
-}
-},
-"name": &"id_0021_math_op",
-"position": Vector2(160, 0),
+"args_port": {},
+"name": &"id_0022_make_vector",
+"position": Vector2(0, 160),
 "settings": {
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
@@ -139,17 +139,17 @@ data = {
 "debug_port_combined_index": 0,
 "debug_scale": 1.0,
 "disabled": false,
-"in_nameA": "position",
-"in_nameB": "@last",
 "inspect_enabled": false,
-"operation": 0,
-"out_name": "position",
-"random_seed": 1644668358,
-"title": "Math",
-"trace": false
+"out_name": "Vector",
+"random_seed": 2880357212,
+"title": "Make Vector",
+"trace": false,
+"x": 0.0,
+"y": 1.0,
+"z": 0.0
 },
 "show_disconnected_inputs": false,
-"template": "math_op"
+"template": "make_vector"
 }, {
 "args_port": {
 "In": {
@@ -158,7 +158,7 @@ data = {
 }
 },
 "name": &"id_0023_spawn_meshes",
-"position": Vector2(340, 80),
+"position": Vector2(280, 240),
 "settings": {
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
@@ -168,7 +168,7 @@ data = {
 "debug_output": 0,
 "debug_port_combined_index": 0,
 "debug_scale": 1.0,
-"disabled": true,
+"disabled": false,
 "inspect_enabled": false,
 "mesh": ExtResource("1_j4j53"),
 "mesh_attribute": "",

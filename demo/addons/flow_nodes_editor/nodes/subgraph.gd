@@ -76,7 +76,7 @@ func connect_nodes( from_node: StringName, from_port: int, to_node: StringName, 
 		var conn = { "from_node" : src_node.name, "from_port" : from_port, "to_node" : dst_node.name, "to_port" : to_port }
 		src_node.dependants.append(conn)
 		dst_node.deps.append(conn)
-		print( "subgraph.conn.ok From:%s:%d To:%s:%d (%s)" % [ from_node, from_port, to_node, to_port, conn ])
+		#print( "subgraph.conn.ok From:%s:%d To:%s:%d (%s)" % [ from_node, from_port, to_node, to_port, conn ])
 	else:
 		print( "subgraph.conn FAILED From:%s:%d To:%s:%d" % [ from_node, from_port, to_node, to_port ])
 		print( "subctx.gedit_nodes_by_name: %s" % [ subctx.gedit_nodes_by_name ])
@@ -112,7 +112,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 	subctx.graph = settings.graph
 	#print( "subctx.gedit_nodes_by_name", subctx.gedit_nodes_by_name )
 	var nodes = subctx.getEvalOrder( all_nodes )
-	print( "Nodes to eval in order", nodes )
+	print( "Subgraph.Nodes to eval in order", nodes )
 	var input_idx : int = 0
 	for input in ins:
 		subctx.inputs[ input.label ] = get_input(input_idx)
@@ -123,12 +123,13 @@ func execute( ctx : FlowData.EvaluationContext ):
 	var meta = getMeta()
 	var output_idx : int = 0
 	for output in meta.outs:
-		print( "Subgrpah.Output[%d] was %s" % [output_idx, output])
+		print( "Subgraph.Output[%d] was %s" % [output_idx, output])
 		var node_output = subctx.gedit_nodes_by_name.get( output.provider_node )
 		if node_output:
-			var result = node_output.get_input(0)
-			print( " found the provided node", result )
-			set_output(output_idx, result)
+			print( " found the provider node %s NumBulks:%d " % [node_output.name, node_output.num_connected_bulks] )
+			for bulk_idx in node_output.num_connected_bulks:
+				var result = node_output.get_bulk_input(bulk_idx, 0)
+				set_output(output_idx, result)
 		else:
 			set_output(output_idx, FlowData.Data.new())
 		output_idx += 1
