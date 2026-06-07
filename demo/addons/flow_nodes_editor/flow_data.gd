@@ -30,6 +30,43 @@ class EvaluationContext:
 	var eval_id : int = 0
 	var graph : FlowGraphResource
 	var gedit_nodes_by_name : Dictionary
+	# Used by loops/subgraphs/non_ctes_input_params : string : FlowData
+	var inputs : Dictionary = {}
+	
+	# Filled by the user of the context
+	var nodes_to_eval : Array[ FlowNodeBase ]
+	var active_nodes = []
+	
+	func run():
+		active_nodes.clear()
+		for node in nodes_to_eval:
+			#print( "  Eval: %s (%d) Dirty:%s" % [ node.name, node.eval_id, node.dirty ] )
+				
+			# The node has already been evaluated or it's not dirty. No need to reevaluate it
+			if node.eval_id == eval_id or not node.dirty:
+				continue
+			
+			var time_node_start = Time.get_ticks_usec()
+			active_nodes.append( node )
+			
+			node.preExecute( self )
+			
+			#print( "Evaluating %s" % node.name )
+			if node.settings.disabled:
+				node.executedDisabled( self )
+			else:
+				node.run( self )
+			
+			#if node.settings.inspect_enabled:
+				#data_inspector.refresh()
+			#node.setupDrawDebug()
+			node.dirty = false
+			var time_node_ends = Time.get_ticks_usec()
+			var exec_usec = time_node_ends - time_node_start
+			
+			# Always show execution time on the node
+			node.setExecTime(exec_usec)
+			
 
 ## Build a stable orthonormal Basis from a surface normal.
 ## - `normal` is the axis you want to align (default aligns to +Z).

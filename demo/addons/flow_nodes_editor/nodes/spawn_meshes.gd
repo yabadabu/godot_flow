@@ -32,7 +32,6 @@ func spawnNode( root : Node, class_to_spawn ):
 func execute( ctx : FlowData.EvaluationContext ):
 	var in_data : FlowData.Data = get_input(0)
 	if !in_data:
-		setError( "Input is invalid")
 		return
 
 	var meshes = null

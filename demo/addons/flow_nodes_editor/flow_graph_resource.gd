@@ -41,7 +41,7 @@ func _on_input_changed():
 	print("One of the in_params was modified.")
 	emit_signal("in_params_changed")
 
-func findInParamByName( requested_name : String ):
+func findInParamByName( requested_name : String ) -> GraphInputParameter:
 	for candidate in in_params:
 		if candidate and candidate.name == requested_name:
 			return candidate

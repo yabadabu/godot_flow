@@ -1,0 +1,88 @@
+[gd_scene format=3 uid="uid://c2jfpkeuv78ro"]
+
+[ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_dx0d7"]
+[ext_resource type="Resource" uid="uid://camnuosmr8ij5" path="res://graphs/spawn_smalls.tres" id="2_5ifn7"]
+[ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="2_mmqr1"]
+[ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="3_5ifn7"]
+
+[sub_resource type="Resource" id="Resource_nyqj1"]
+script = ExtResource("3_5ifn7")
+data = {
+"frames": [],
+"links": [{
+"from_node": &"id_0002_grid",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0001_subgraph",
+"to_port": 0
+}],
+"min_pos": Vector2(180, 300),
+"nodes": [{
+"args_port": {},
+"name": &"id_0002_grid",
+"position": Vector2(0, 0),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"origin": Vector3(0, 0, 0),
+"random_seed": 1332378436,
+"rotation": Vector3(0, 0, 0),
+"size": 0.245,
+"step": Vector3(1, 1, 1),
+"title": "Grid",
+"trace": false,
+"x": 3,
+"y": 1,
+"z": 3
+},
+"show_disconnected_inputs": false,
+"template": "grid"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0001_subgraph",
+"position": Vector2(160, 0),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"graph": ExtResource("2_5ifn7"),
+"inspect_enabled": false,
+"param_overrides": {},
+"random_seed": 2544599225,
+"title": "Subgraph",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "subgraph"
+}],
+"type": "flow_graph_nodes",
+"version": 1
+}
+new_name_counter = 2
+
+[node name="DemoSubgraph" type="Node2D" unique_id=1877697427]
+
+[node name="FlowGraphNode3D" type="Node3D" parent="." unique_id=85644735]
+script = ExtResource("1_dx0d7")
+graph = SubResource("Resource_nyqj1")
+refresh_inputs = Callable()
+metadata/_custom_type_script = "uid://d1krtmb1urldl"

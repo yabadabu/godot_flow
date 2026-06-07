@@ -26,6 +26,11 @@ extends Resource
 @export var cte_resource : Resource
 @export var cte_string : String = ""
 
+func getDataType() -> FlowData.DataType:
+	if is_constant:
+		return data_type
+	return FlowData.DataType.Invalid
+
 func get_default_value():
 	match data_type:
 		FlowData.DataType.Bool:

@@ -788,38 +788,16 @@ func evalGraph():
 	
 	var performance = []
 	#print( "getEvalOrder..." )
-	var nodes_to_eval = getEvalOrder( )
-		
-	for node in nodes_to_eval:
-		#print( "  Eval: %s (%d) Dirty:%s" % [ node.name, node.eval_id, node.dirty ] )
-			
-		# The node has already been evaluated or it's not dirty. No need to reevaluate it
-		if node.eval_id == ctx.eval_id or not node.dirty:
-			continue
-		
-		var time_node_start = Time.get_ticks_usec()
-		active_nodes.append( node )
-		
-		node.preExecute( ctx )
-		
-		#print( "Evaluating %s" % node.name )
-		if node.settings.disabled:
-			node.executedDisabled( ctx )
-		else:
-			node.run( ctx )
-		
+	ctx.nodes_to_eval = getEvalOrder( )
+	ctx.run()
+	active_nodes = ctx.active_nodes
+	
+	for node in active_nodes:
 		if node.settings.inspect_enabled:
 			data_inspector.refresh()
 		node.setupDrawDebug()
-		node.dirty = false
-		var time_node_ends = Time.get_ticks_usec()
-		var exec_usec = time_node_ends - time_node_start
-		
-		# Always show execution time on the node
-		node.setExecTime(exec_usec)
-		
 		if dump_performance:
-			performance.append( { "name": node.name, "time": exec_usec })
+			performance.append( { "name": node.name, "time": node.get_meta("exec_time_usec", 0) })
 
 	regen_pending = false
 	#print( "regen_pending is now false")
