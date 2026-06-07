@@ -51,7 +51,7 @@ var active_intensity = 0.0
 var active_nodes = []
 
 var ui_scale = 1.0
-var node_types = { }
+var nodes_factory = FlowNodesFactory.new()
 
 var popup_menu_inputs : PopupMenu
 var popup_on_over_input = null
@@ -124,31 +124,9 @@ func getNewName( suffix : String ):
 	new_name_counter += 1
 	return "id_%04d_%s" % [ new_name_counter, suffix ]
 
-func registerNodeType( node_type_name, file ):
-	var full_res_path = directory_path + "/" + file
-	var loaded_class : Script = load( full_res_path ) as Script
-	if not loaded_class:
-		push_error("Failed to load class %s" % full_res_path )
-		return
-	#print( "Loading class %s" % full_res_path )
-	var instance = loaded_class.new() as FlowNodeBase
-	var meta = instance.getMeta()
-	meta.factory = loaded_class
-	#print( "Registering node type %s" % node_type_name )
-	node_types[ node_type_name ] = meta
-
 func registerInputNodeType( input ):
 	var node_type_name := "input_%s" % input.name
-	registerNodeType( node_type_name, "input.gd")
-
-func scanAvailableNodes():
-	var files := ResourceLoader.list_directory(directory_path) 
-	for file in files:
-		var stem = file.get_basename()
-		if stem.ends_with("_settings"):
-			continue
-		registerNodeType( stem, file )
-	print( "Registered %d node types" % node_types.size() )
+	nodes_factory.registerNodeType( node_type_name, "input.gd")
 
 func _ready():
 	
@@ -160,7 +138,7 @@ func _ready():
 	if dpi > 150:
 		ui_scale *= 2.0
 				
-	scanAvailableNodes()
+	nodes_factory.scanAvailableNodes()
 	
 	inspector = EditorInspector.new()
 	inspector.custom_minimum_size = Vector2( 200, 600 )
@@ -283,41 +261,13 @@ func refreshSignalsInputArgs( node ):
 			row.out_popup.connect( setOnOverInParam.bind( null ) )	
 
 func addNodeFromTemplate( node_template, node_name : String, settings = null ):
-	print( "addNode %s (%s : %s)" % [ node_template, node_name, str(settings) ])
-	var node = packed_node.instantiate() as GraphNode
-	var meta = node_types.get( node_template, null )
-	if not meta:
-		push_error("node_type %s is not registered" % node_template)
-		print( node_types.keys() )
-		return null	
-	#print( "Meta:", str(meta) )
-		
-	node.set_script(meta.factory)
-
-	node.node_template = node_template
-	node.name = node_name
-	node.ui_scale = ui_scale
-	node.position_offset = localToGraphCoords(local_drop_position)
-	if settings:
-		node.settings = settings
-	else:
-		if meta.has( "settings" ):
-			#print( "Assigning settings of type %s" % meta.settings )
-			#print( "node is %s" % node )
-			node.settings = meta.settings.new()
-		else:
-			#print( "Assigning default settings" )
-			node.settings = NodeSettings.new()
-	node.settings.title = meta.title
-	node.initFromScript()
-	node.title = node.getTitle()
-	node.size = Vector2(32,32)
-	node.tooltip_text = meta.get( "tooltip", "" )
-	node.refreshFromSettings()
-	refreshSignalsInputArgs( node )
-	
-	gedit.add_child(node)
-	gedit_nodes_by_name[ node.name ] = node
+	var node = nodes_factory.createNewNode( packed_node, node_template, node_name, settings )
+	if node:
+		node.ui_scale = ui_scale
+		node.position_offset = localToGraphCoords(local_drop_position)
+		refreshSignalsInputArgs( node )
+		gedit.add_child(node)
+		gedit_nodes_by_name[ node.name ] = node
 	return node
 	
 func canConnect( src : FlowNodeBase, src_port : int, dst : FlowNodeBase, dst_port : int ):
@@ -547,7 +497,7 @@ func _on_graph_edit_popup_request(at_position):
 	if current_resource:
 		in_params = current_resource.in_params
 		
-	search_add_node_popup.setup( node_types, in_params, out_params, required_input_type, required_output_type )
+	search_add_node_popup.setup( nodes_factory.node_types, in_params, out_params, required_input_type, required_output_type )
 	search_add_node_popup.appearAt(get_screen_position() + at_position)
 	
 	
@@ -811,7 +761,7 @@ func evalGraph():
 		dump_performance = false
 
 func _on_button_reload_pressed() -> void:
-	scanAvailableNodes()
+	nodes_factory.scanAvailableNodes()
 
 func _on_button_save_pressed() -> void:
 	if current_resource:

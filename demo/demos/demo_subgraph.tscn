@@ -57,7 +57,7 @@ data = {
 "settings": {
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
+"debug_enabled": true,
 "debug_mode": 0,
 "debug_modulate_by": "",
 "debug_output": 0,
@@ -79,7 +79,7 @@ data = {
 }
 new_name_counter = 2
 
-[node name="DemoSubgraph" type="Node2D" unique_id=1877697427]
+[node name="DemoSubgraph" type="Node3D" unique_id=1826795326]
 
 [node name="FlowGraphNode3D" type="Node3D" parent="." unique_id=85644735]
 script = ExtResource("1_dx0d7")

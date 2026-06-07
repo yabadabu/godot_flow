@@ -21,25 +21,25 @@ func getMeta() -> Dictionary:
 			if param:
 				ins.append({
 					"label": param.name,
-					"data_type": param.data_type
+					"data_type": param.getDataType()
 				})
-		if "out_params" in settings.graph and settings.graph.out_params.size() > 0:
-			for param in settings.graph.out_params:
-				if param:
-					outs.append({
-						"label": param.name,
-						"data_type": param.data_type
-					})
-		elif settings.graph.data and settings.graph.data.has("nodes"):
-			for n_data in settings.graph.data["nodes"]:
-				if n_data.get("template") == "output":
-					var node_settings = n_data.get("settings", {})
-					var out_name = node_settings.get("name", "out_val")
-					var out_type = node_settings.get("data_type", FlowData.DataType.Float)
-					outs.append({
-						"label": out_name,
-						"data_type": out_type
-					})
+		#if "out_params" in settings.graph and settings.graph.out_params.size() > 0:
+			#for param in settings.graph.out_params:
+				#if param:
+					#outs.append({
+						#"label": param.name,
+						#"data_type": param.data_type
+					#})
+		#elif settings.graph.data and settings.graph.data.has("nodes"):
+			#for n_data in settings.graph.data["nodes"]:
+				#if n_data.get("template") == "output":
+					#var node_settings = n_data.get("settings", {})
+					#var out_name = node_settings.get("name", "out_val")
+					#var out_type = node_settings.get("data_type", FlowData.DataType.Float)
+					#outs.append({
+						#"label": out_name,
+						#"data_type": out_type
+					#})
 	meta_node.ins = ins
 	meta_node.outs = outs
 	return meta_node
@@ -53,6 +53,10 @@ func execute( ctx : FlowData.EvaluationContext ):
 	print( "Subgraph, required ins are ", ins)
 	
 	var subctx := FlowData.EvaluationContext.new()
+	
+	print( settings.graph.data )
+	FlowNodeIO.create_nodes_from_dict( settings.graph.data, null, Vector2(0,0) )
+	
 	#subctx.owner = ctx.owner
 	subctx.graph = settings.graph
 	var nodes = subctx.getAllNodes()

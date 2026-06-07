@@ -1,8 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://bl8p4bid734wo"]
+[gd_scene format=3 uid="uid://bl8p4bid734wo"]
 
 [ext_resource type="Script" uid="uid://rhc2whb7j6tt" path="res://addons/flow_nodes_editor/flow_editor.gd" id="1_0ji4f"]
 
-[node name="FlowEditor" type="Control"]
+[node name="FlowEditor" type="Control" unique_id=546384510]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -13,7 +13,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("1_0ji4f")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1735223359]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -23,49 +23,50 @@ grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer" unique_id=862874869]
 layout_mode = 2
 vertical_scroll_mode = 0
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/ScrollContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/ScrollContainer" unique_id=957060859]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="ButtonReload" type="Button" parent="VBoxContainer/ScrollContainer/HBoxContainer"]
+[node name="ButtonReload" type="Button" parent="VBoxContainer/ScrollContainer/HBoxContainer" unique_id=1410979393]
 layout_mode = 2
 text = "Reload"
 
-[node name="ButtonInputs" type="Button" parent="VBoxContainer/ScrollContainer/HBoxContainer"]
+[node name="ButtonInputs" type="Button" parent="VBoxContainer/ScrollContainer/HBoxContainer" unique_id=1012244081]
 layout_mode = 2
 text = "Inputs"
 
-[node name="ButtonSave" type="Button" parent="VBoxContainer/ScrollContainer/HBoxContainer"]
+[node name="ButtonSave" type="Button" parent="VBoxContainer/ScrollContainer/HBoxContainer" unique_id=816937869]
 layout_mode = 2
 text = "Save Resource"
 
-[node name="AutoRegen" type="CheckBox" parent="VBoxContainer/ScrollContainer/HBoxContainer"]
+[node name="AutoRegen" type="CheckBox" parent="VBoxContainer/ScrollContainer/HBoxContainer" unique_id=483718617]
 unique_name_in_owner = true
 layout_mode = 2
 button_pressed = true
 text = "Auto Regen"
 
-[node name="ButtonRegenerate" type="Button" parent="VBoxContainer/ScrollContainer/HBoxContainer"]
+[node name="ButtonRegenerate" type="Button" parent="VBoxContainer/ScrollContainer/HBoxContainer" unique_id=173258778]
 layout_mode = 2
 text = "Regenerate"
 
-[node name="LabelInfo" type="Label" parent="VBoxContainer/ScrollContainer/HBoxContainer"]
+[node name="LabelInfo" type="Label" parent="VBoxContainer/ScrollContainer/HBoxContainer" unique_id=136781516]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Info"
 
-[node name="VSplitContainer" type="VSplitContainer" parent="VBoxContainer"]
+[node name="VSplitContainer" type="VSplitContainer" parent="VBoxContainer" unique_id=633334263]
 custom_minimum_size = Vector2(0, 200)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+split_offsets = PackedInt32Array(400)
 split_offset = 400
 
-[node name="GraphEdit" type="GraphEdit" parent="VBoxContainer/VSplitContainer"]
+[node name="GraphEdit" type="GraphEdit" parent="VBoxContainer/VSplitContainer" unique_id=1731932737]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 200)
 layout_mode = 2

@@ -16,5 +16,5 @@ func setShowDisconnectedInputs( how : bool ):
 	$ToggleButton.set_pressed_no_signal(  show_disconnected_inputs )
 	
 func _on_toggle_button_toggled(toggled_on):
-	print( "toggled2: %s" % toggled_on)
+	#print( "toggled2: %s" % toggled_on)
 	expand_toggled.emit( toggled_on )
