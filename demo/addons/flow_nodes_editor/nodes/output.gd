@@ -10,7 +10,7 @@ func _init():
 		"outs" : [],
 		"tooltip" : "Defines the output of the graph as when used as subgraphs or loop",
 		"auto_register" : true,
-		"hide_inputs" : false,
+		"hide_inputs" : true,
 		"is_final" : true,
 	}
 	
