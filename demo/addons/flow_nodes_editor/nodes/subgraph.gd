@@ -64,11 +64,13 @@ func addNodeFromTemplate( node_template, node_name : String, node_settings = nul
 		var node = editor.nodes_factory.createNewNode( null, node_template, node_name, node_settings )
 		if settings.trace:
 			print( "  Registering ", node.name, " -> ", node)
-		subctx.gedit_nodes_by_name[ node.name ] = node
-		all_nodes.append( node )
-		node.dirty = true
-		#add_child(node)
-		return node
+		if node:
+			subctx.gedit_nodes_by_name[ node.name ] = node
+			all_nodes.append( node )
+			node.dirty = true
+			node.runtime_only = true
+			#add_child(node)
+			return node
 	return null
 	
 func connect_nodes( from_node: StringName, from_port: int, to_node: StringName, to_port: int) -> void:

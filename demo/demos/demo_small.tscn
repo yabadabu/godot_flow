@@ -23,6 +23,12 @@ data = {
 "to_node": &"id_0001_subgraph",
 "to_port": 0
 }, {
+"from_node": &"id_0001_subgraph",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0006_merge",
+"to_port": 0
+}, {
 "from_node": &"id_0004_add_attribute",
 "from_port": 0,
 "keep_alive": false,
@@ -143,7 +149,7 @@ data = {
 "name": &"id_0001_subgraph",
 "position": Vector2(380, 0),
 "settings": {
-"debug_bulk": 0,
+"debug_bulk": 2,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
@@ -161,13 +167,39 @@ data = {
 },
 "show_disconnected_inputs": true,
 "template": "subgraph"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0006_merge",
+"position": Vector2(640, 0),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": true,
+"random_seed": 2309560294,
+"title": "Merge",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "merge"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
 view_zoom = 1.2875425
-view_offset = Vector2(-26.737122, -118.51898)
-new_name_counter = 5
+view_offset = Vector2(17.262878, -185.51898)
+new_name_counter = 6
 
 [node name="DemoSubgraph" type="Node3D" unique_id=1826795326]
 

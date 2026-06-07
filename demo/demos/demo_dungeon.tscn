@@ -651,38 +651,6 @@ data = {
 "template": "partition"
 }, {
 "args_port": {
-"CandidateRoom": {
-"connected": true,
-"port": 0
-},
-"SelectedRooms": {
-"connected": false,
-"port": 1
-}
-},
-"name": &"id_0011_subgraph",
-"position": Vector2(3480, 300),
-"settings": {
-"debug_bulk": 1,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 1,
-"debug_scale": 1.0,
-"disabled": false,
-"graph": ExtResource("4_b1aic"),
-"inspect_enabled": false,
-"param_overrides": {},
-"random_seed": 3219186451,
-"title": "Subgraph",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "subgraph"
-}, {
-"args_port": {
 "In": {
 "connected": true,
 "port": 0
@@ -742,37 +710,6 @@ data = {
 "template": "attribute_random"
 }, {
 "args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0028_grid_connect_points",
-"position": Vector2(4340, 360),
-"settings": {
-"axis_order": 0,
-"cell_size": Vector3(4, 1, 4),
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 1,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"deduplicate_cells": true,
-"disabled": false,
-"include_input_points": true,
-"inspect_enabled": false,
-"path_index_attribute": "CorridorPath",
-"random_seed": 3339043550,
-"title": "Grid Connect Points",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "grid_connect_points"
-}, {
-"args_port": {
 "Bounds": {
 "connected": true,
 "port": 0
@@ -805,41 +742,6 @@ data = {
 },
 "show_disconnected_inputs": false,
 "template": "grid_fill_bounds"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0031_add_attribute",
-"position": Vector2(4360, 440),
-"settings": {
-"cte_bool": false,
-"cte_color": Color(1, 1, 1, 1),
-"cte_float": 0.0,
-"cte_int": 0,
-"cte_resource": null,
-"cte_string": "",
-"cte_vector": Vector3(1, 1, 1),
-"data_type": 3,
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"name": "size",
-"random_seed": 492631459,
-"title": "Add Attribute",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "add_attribute"
 }, {
 "args_port": {
 "In A": {
@@ -942,63 +844,6 @@ data = {
 "port": 0
 }
 },
-"name": &"room_style",
-"position": Vector2(4120, 360),
-"settings": {
-"attribute_name": "room_style",
-"data_type": 1,
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"max_value": 3.0,
-"min_value": 0.0,
-"random_seed": 3301,
-"title": "Attribute Random",
-"trace": false,
-"use_index_as_value": false
-},
-"show_disconnected_inputs": false,
-"template": "attribute_random"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0032_merge",
-"position": Vector2(4760, 700),
-"settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": true,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"random_seed": 4055464860,
-"title": "Merge",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "merge"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
 "name": &"corridor_floor_style",
 "position": Vector2(4520, 440),
 "settings": {
@@ -1027,37 +872,6 @@ data = {
 },
 "show_disconnected_inputs": false,
 "template": "add_attribute"
-}, {
-"args_port": {
-"In A": {
-"connected": true,
-"port": 0
-},
-"In B": {
-"connected": true,
-"port": 1
-}
-},
-"name": &"id_0034_substract",
-"position": Vector2(5402.151, 549.9416),
-"settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": true,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"operation": 0,
-"random_seed": 3944916852,
-"title": "Substract",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "substract"
 }, {
 "args_port": {
 "In": {
@@ -1110,13 +924,199 @@ data = {
 },
 "show_disconnected_inputs": false,
 "template": "merge"
+}, {
+"args_port": {
+"CandidateRoom": {
+"connected": true,
+"port": 0
+},
+"SelectedRooms": {
+"connected": false,
+"port": 1
+}
+},
+"name": &"id_0011_subgraph",
+"position": Vector2(3480, 300),
+"settings": {
+"debug_bulk": 1,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 1,
+"debug_scale": 1.0,
+"disabled": false,
+"graph": ExtResource("4_b1aic"),
+"inspect_enabled": false,
+"param_overrides": {},
+"random_seed": 3219186451,
+"title": "Subgraph",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "subgraph"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0032_merge",
+"position": Vector2(4760, 700),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"random_seed": 4055464860,
+"title": "Merge",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "merge"
+}, {
+"args_port": {
+"In A": {
+"connected": true,
+"port": 0
+},
+"In B": {
+"connected": true,
+"port": 1
+}
+},
+"name": &"id_0034_substract",
+"position": Vector2(5402.151, 549.9416),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"operation": 0,
+"random_seed": 3944916852,
+"title": "Substract",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "substract"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"room_style",
+"position": Vector2(4120, 360),
+"settings": {
+"attribute_name": "room_style",
+"data_type": 1,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"max_value": 3.0,
+"min_value": 0.0,
+"random_seed": 3301,
+"title": "Attribute Random",
+"trace": false,
+"use_index_as_value": false
+},
+"show_disconnected_inputs": false,
+"template": "attribute_random"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0028_grid_connect_points",
+"position": Vector2(4340, 360),
+"settings": {
+"axis_order": 0,
+"cell_size": Vector3(4, 1, 4),
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 1,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"deduplicate_cells": true,
+"disabled": false,
+"include_input_points": true,
+"inspect_enabled": false,
+"path_index_attribute": "CorridorPath",
+"random_seed": 3339043550,
+"title": "Grid Connect Points",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "grid_connect_points"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0031_add_attribute",
+"position": Vector2(4360, 440),
+"settings": {
+"cte_bool": false,
+"cte_color": Color(1, 1, 1, 1),
+"cte_float": 0.0,
+"cte_int": 0,
+"cte_resource": null,
+"cte_string": "",
+"cte_vector": Vector3(1, 1, 1),
+"data_type": 3,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"name": "size",
+"random_seed": 492631459,
+"title": "Add Attribute",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "add_attribute"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
-view_zoom = 0.5460432
-view_offset = Vector2(1887.4177, -177.07288)
-new_name_counter = 46
+view_zoom = 1.4223652
+view_offset = Vector2(5193.524, 334.2077)
+new_name_counter = 50
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 
 [node name="DemoDungeon" type="Node3D" unique_id=729494838]

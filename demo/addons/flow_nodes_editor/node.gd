@@ -23,6 +23,7 @@ var meta_node: Dictionary = {}
 
 var node_template : String
 var show_disconnected_inputs : bool = false
+var runtime_only : bool = false
 
 var dirty : bool = false
 
@@ -343,8 +344,9 @@ func initFromScript():
 			)
 	else:
 		# When we just instantiate the node
-		# Do NOT clear the array
-		# exposed_params = []
+		if not runtime_only:
+			# This clears the initial list of exposed parameters
+			exposed_params = []
 		pass
 		
 	if trace:
