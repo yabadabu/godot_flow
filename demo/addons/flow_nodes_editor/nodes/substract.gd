@@ -24,8 +24,7 @@ func execute( _ctx : FlowData.EvaluationContext ):
 		return
 		
 	if in_dataB == null:
-		setError( "Input B not found")
-		return
+		in_dataB = FlowData.Data.new()
 
 	var tA := GDRTree.new()
 	var posA = in_dataA.getVector3Container( FlowData.AttrPosition )
