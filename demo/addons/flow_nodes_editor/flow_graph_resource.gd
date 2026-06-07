@@ -19,6 +19,11 @@ class_name FlowGraphResource
 @export var in_params : Array[GraphInputParameter] = []:
 	set(value):
 		in_params = value
+		for idx in range(in_params.size()):
+			if in_params[idx] == null:
+				var param := GraphInputParameter.new()
+				param.name = "input_%d" % idx
+				in_params[idx] = param
 		_watch_input_changes()
 		emit_signal("in_params_changed")
 	get:

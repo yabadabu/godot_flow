@@ -1,0 +1,236 @@
+[gd_resource type="Resource" script_class="FlowGraphResource" format=3 uid="uid://d005n8y5vf68q"]
+
+[ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="1_kqlyv"]
+[ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="2_3c0op"]
+
+[sub_resource type="Resource" id="Resource_kqlyv"]
+script = ExtResource("1_kqlyv")
+name = "InData"
+is_constant = false
+
+[sub_resource type="Resource" id="Resource_3c0op"]
+script = ExtResource("1_kqlyv")
+name = "Counter"
+is_constant = false
+data_type = 999
+
+[resource]
+script = ExtResource("2_3c0op")
+data = {
+"frames": [],
+"links": [{
+"from_node": &"id_0003_input_Counter",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0010_math_op",
+"to_port": 0
+}, {
+"from_node": &"id_0010_math_op",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0004_output",
+"to_port": 0
+}, {
+"from_node": &"id_0002_input_InData",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0006_add_attribute",
+"to_port": 0
+}, {
+"from_node": &"id_0006_add_attribute",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0007_output",
+"to_port": 0
+}, {
+"from_node": &"id_0003_input_Counter",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0006_add_attribute",
+"to_port": 1
+}],
+"min_pos": Vector2(160, 180),
+"nodes": [{
+"args_port": {},
+"name": &"id_0002_input_InData",
+"position": Vector2(0, 0),
+"settings": {
+"data_type": 999,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"name": "InData",
+"random_seed": 736583181,
+"title": "Input",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "input_InData"
+}, {
+"args_port": {
+"Out": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0007_output",
+"position": Vector2(620, 0),
+"settings": {
+"data_type": 999,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"name": "Out Data",
+"random_seed": 1048777736,
+"title": "Output",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "output"
+}, {
+"args_port": {
+"Out": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0004_output",
+"position": Vector2(620, 140),
+"settings": {
+"data_type": 999,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"name": "Counter",
+"random_seed": 4231413624,
+"title": "Output",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "output"
+}, {
+"args_port": {
+"In A": {
+"connected": true,
+"port": 0
+},
+"In B": {
+"connected": false,
+"port": 1
+}
+},
+"name": &"id_0010_math_op",
+"position": Vector2(220, 140),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"in_nameA": "@last",
+"in_nameB": "1",
+"inspect_enabled": false,
+"operation": 0,
+"out_name": "@last",
+"random_seed": 957759204,
+"title": "Math",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "math_op"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+},
+"cte_int": {
+"connected": true,
+"port": 1
+}
+},
+"name": &"id_0006_add_attribute",
+"position": Vector2(220, 0),
+"settings": {
+"cte_bool": false,
+"cte_color": Color(1, 1, 1, 1),
+"cte_float": 0.0,
+"cte_int": -1,
+"cte_resource": null,
+"cte_string": "",
+"cte_vector": Vector3(0, 0, 0),
+"data_type": 1,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"name": "Iteration",
+"random_seed": 1044615548,
+"title": "Add Attribute",
+"trace": false
+},
+"show_disconnected_inputs": true,
+"template": "add_attribute"
+}, {
+"args_port": {},
+"name": &"id_0003_input_Counter",
+"position": Vector2(0, 140),
+"settings": {
+"data_type": 999,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"name": "Counter",
+"random_seed": 2837717976,
+"title": "Input",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "input_Counter"
+}],
+"type": "flow_graph_nodes",
+"version": 1
+}
+view_zoom = 1.2875423
+view_offset = Vector2(169.0676, -69.82425)
+new_name_counter = 11
+in_params = Array[ExtResource("1_kqlyv")]([SubResource("Resource_kqlyv"), SubResource("Resource_3c0op")])
+metadata/_custom_type_script = "uid://j6vjeb5cjjoy"

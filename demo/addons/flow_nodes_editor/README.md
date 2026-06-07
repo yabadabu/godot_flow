@@ -2,7 +2,6 @@
 
 - [ ] attribute_random, the use_index_as_value is not clamped between min/max -> Can use Indexnnnn
 - [ ] Assign categories to all nodes
-- [ ] Drag to the left of an exposed parameter does not work. In only scans the input
 
 - [ ] Demos
 	- [X] Wall of rocks, picking a random point on the top
@@ -24,7 +23,7 @@
 - [ ] undo/redo
 - [ ] Test random colors for each node -> Graph Editor Settings
 - [ ] add_attribute, if output is single stream with a type, set the color. Maybe make it generic
-- [ ] Allow the popup menu to have sections. Custom SubGraphs/Resources/Folders maybe
+- [X] Allow the popup menu to have sections. Custom SubGraphs/Resources/Folders maybe
 - [X] Transform. Allow rotation to be in local space
 - [X] The inspected flag is saved, but it's now never restored
 - [X] Support for multiple data in stream evaluation?

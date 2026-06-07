@@ -161,7 +161,7 @@ func _on_draw() -> void:
 	var exec_time_usec = get_meta("exec_time_usec", 0)
 	if exec_time_usec > 100:
 		var time_font = ThemeDB.fallback_font
-		var time_font_size := int(9 * ui_scale)
+		var time_font_size := int(11 * ui_scale)
 		var time_text: String
 		var time_color: Color
 		if exec_time_usec >= 10000:  # > 10ms — warning
@@ -175,7 +175,7 @@ func _on_draw() -> void:
 			time_color = Color(1, 1, 1, 0.25)
 		var tw = time_font.get_string_size(time_text, HORIZONTAL_ALIGNMENT_LEFT, -1, time_font_size).x
 		var tx = size.x - tw - 8 * ui_scale
-		var ty = 12.0 * ui_scale
+		var ty = size.y - 9.0 * ui_scale
 		draw_string(time_font, Vector2(tx, ty), time_text, HORIZONTAL_ALIGNMENT_LEFT, -1, time_font_size, time_color)
 
 func getMeta() -> Dictionary:
@@ -307,12 +307,17 @@ func initFromScript():
 	var meta := getMeta()
 	var trace = meta.get( "trace", false )
 	
+	if trace:
+		print( "initFromScript: %s" % getTitle())
+	
 	var ins = meta.get( "ins", [] )
 	var outs = meta.get( "outs", [] )
 	var num_ins = ins.size()
 	var num_outs = outs.size()
 	
 	var exposed_params = getExposedParams()
+	if trace:
+		print( "initFromScript.exposed_params: %s" % exposed_params)
 	var has_exposed_params = exposed_params.size() > 0
 	
 	# Access to my parent container editor
@@ -338,15 +343,18 @@ func initFromScript():
 			)
 	else:
 		# When we just instantiate the node
-		exposed_params = []
+		# Do NOT clear the array
+		# exposed_params = []
+		pass
 		
 	if trace:
-		print( "flow_editor: %s" % flow_editor)
-		print( "show_disconnected_inputs: %s" % show_disconnected_inputs)
-		print( "all_exposed_params: %s" % exposed_params.size())
-		print( "exposed_params: %s" % exposed_params.size())
-		print( "args_ports_by_name: %s" % args_ports_by_name)
-		print( "num_ins: %d num_outs: %d" % [num_ins, num_outs])
+		print( "initFromScript: %s" % getTitle())
+		print( "  flow_editor: %s" % flow_editor)
+		print( "  show_disconnected_inputs: %s" % show_disconnected_inputs)
+		print( "  all_exposed_params: %s" % exposed_params.size())
+		print( "  exposed_params: %s" % exposed_params.size())
+		print( "  args_ports_by_name: %s" % args_ports_by_name)
+		print( "  num_ins: %d num_outs: %d" % [num_ins, num_outs])
 		
 	# Total inputs are flow in streams + exposed parameters of the node
 	var num_inputs = num_ins + exposed_params.size()
@@ -471,6 +479,8 @@ func getSettingValue( ctx : FlowData.EvaluationContext, in_name : String, defaul
 		print( "Searching the current value of input %s in %d inputs at node %s. ByName:%s vs %s.   Meta:%s" % [ in_name, inputs.size(), name, args_ports_by_name, inputs, meta ] )
 	if args_ports_by_name.has( in_name ):
 		var port = args_ports_by_name[ in_name ].port
+		if trace:
+			print( "Found at port %d.. Inputs has size %d" % [ port, inputs.size() ] )
 		if port >= 0 and port < inputs.size():
 			var input = inputs[ port ] as FlowData.Data
 			if input:
@@ -492,6 +502,9 @@ func getSettingValue( ctx : FlowData.EvaluationContext, in_name : String, defaul
 							push_warning( "  Type of %s (%d) does not match the expected type (%d)" % [ in_name, typeof(new_value), typeof(value) ])
 							
 						return new_value
+	
+	if trace:
+		print( "Input %s using from settings %s" % [ in_name, str(value) ])
 	return value
 
 func newStream( size : int, new_name : String, init_value, data_type : FlowData.DataType ):
@@ -587,7 +600,7 @@ func set_output( port_idx : int, data : FlowData.Data ):
 	
 func get_input( idx : int ):
 	if idx >= inputs.size():
-		push_error( "Input.%d does not exists in node %s" % [ idx, name ])
+		push_error( "Input.%d does not exists in node %s. There are only %d" % [ idx, name, inputs.size() ])
 		return []
 	return inputs[ idx ]
 

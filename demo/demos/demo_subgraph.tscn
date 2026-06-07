@@ -55,7 +55,7 @@ data = {
 "name": &"id_0001_subgraph",
 "position": Vector2(160, 0),
 "settings": {
-"debug_bulk": 1,
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": true,
 "debug_mode": 0,
@@ -65,7 +65,7 @@ data = {
 "debug_scale": 1.0,
 "disabled": false,
 "graph": ExtResource("2_5ifn7"),
-"inspect_enabled": true,
+"inspect_enabled": false,
 "param_overrides": {},
 "random_seed": 2544599225,
 "title": "Subgraph",

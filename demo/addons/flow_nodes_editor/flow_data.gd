@@ -54,7 +54,7 @@ class EvaluationContext:
 		var finals := all_nodes.filter( func ( node : FlowNodeBase ) -> bool:
 			return ( not node.settings.disabled ) and ( node.settings.inspect_enabled or node.settings.debug_enabled or node.getMeta().get( "is_final", false ) )
 		)
-		print( "Finals are", finals)
+		#print( "Finals nodes are ", finals)
 		
 		# for each node, find requirements
 		# A -
@@ -80,7 +80,8 @@ class EvaluationContext:
 				
 			# The node has already been evaluated or it's not dirty. No need to reevaluate it
 			if node.eval_id == eval_id or not node.dirty:
-				print( "  Already eval or not diry")
+				if trace:
+					print( "  %s Already eval or not diry" % [ node.name ])
 				continue
 			
 			var time_node_start = Time.get_ticks_usec()

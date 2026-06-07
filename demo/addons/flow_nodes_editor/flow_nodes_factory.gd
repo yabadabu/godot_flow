@@ -32,7 +32,6 @@ func scanAvailableNodes():
 		registerNodeType( stem, file )
 	print( "Registered %d node types" % node_types.size() )
 
-
 func createNewNode( packed_node, node_template : String, node_name : String, settings = null ):
 	var meta = node_types.get( node_template, null )
 	if not meta:
@@ -53,8 +52,6 @@ func createNewNode( packed_node, node_template : String, node_name : String, set
 		node.settings = settings
 	else:
 		if meta.has( "settings" ):
-			#print( "Assigning settings of type %s" % meta.settings )
-			#print( "node is %s" % node )
 			node.settings = meta.settings.new()
 		else:
 			#print( "Assigning default settings" )
