@@ -543,6 +543,26 @@ static func _publish_flow_variables(child_ctx: FlowData.EvaluationContext, paren
 	FlowVariableEval._mirror_variables_to_runtime(parent_ctx)
 
 
+static func _publish_runtime_params(child_ctx: FlowData.EvaluationContext, parent_ctx: FlowData.EvaluationContext, local_params: Dictionary) -> void:
+	if parent_ctx == null:
+		return
+	for key in child_ctx.runtime_params.keys():
+		var runtime_key := str(key)
+		if _is_local_runtime_param(runtime_key) or local_params.has(runtime_key):
+			continue
+		parent_ctx.runtime_params[runtime_key] = child_ctx.runtime_params[key]
+
+
+static func _is_local_runtime_param(runtime_key: String) -> bool:
+	return runtime_key in [
+		"__eval_depth",
+		"debug_enabled",
+		"flow_analyze_node",
+		"flow_suppress_preview_side_effects",
+		"flow_suppress_seed_advance",
+	]
+
+
 static func _is_topo_final_root(node: FlowNodeBase) -> bool:
 	if node.node_template == "output" or node.node_template.begins_with("output_"):
 		return true
@@ -933,6 +953,7 @@ static func evaluate_graph(graph: FlowGraphResource, input_data_map: Dictionary,
 				elif node.inputs.size() > 0 and node.inputs[0] != null:
 					outputs[out_name] = node.inputs[0]
 	_publish_flow_variables(ctx, parent_ctx)
+	_publish_runtime_params(ctx, parent_ctx, runtime_params)
 
 	# Outputs are collected (FlowData.Data is RefCounted, so the references in
 	# `outputs` keep the data alive) — free the instanced node Controls now.
