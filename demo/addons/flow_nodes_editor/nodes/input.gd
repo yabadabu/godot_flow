@@ -7,11 +7,13 @@ func _init():
 		"settings" : InputNodeSettings,
 		"category" : "Control Flow",
 		"ins" : [],
-		"outs" : [{ "label" : "Out" }],
+		"outs" : [{ "label" : "Data" }],
 		"tooltip" : "Exposes an input of the Flow Graph Node into the Graph",
 		"auto_register" : true,
 		"hide_inputs" : true
 	}
+	
+var output : FlowData.Data
 	
 func getTitle() -> String:
 	return settings.name
@@ -34,9 +36,11 @@ func refreshFromSettings():
 func onPropChanged( prop_name : String ):
 	super.onPropChanged( prop_name )
 	refreshFromSettings()
-		
-func execute( ctx : FlowData.EvaluationContext ):
-	
+
+func preExecute( ctx : FlowData.EvaluationContext ):
+	super.preExecute( ctx )
+	#print( "input.preExecute")
+
 	if not ctx.graph or ctx.graph.in_params.size() == 0:
 		setError( "Graph does not define any input")
 		return
@@ -47,11 +51,12 @@ func execute( ctx : FlowData.EvaluationContext ):
 		return
 		
 	if input.is_constant:
+		#print( "input.is constant")
 		
-		var output := FlowData.Data.new()
+		output = FlowData.Data.new()
 		var new_container = output.addStream( settings.name, input.data_type )
 		if new_container == null:
-			setError( "Invalid name %s or data_type %d (bool)" % [settings.name, input.data_type ])
+			setError( "input.Invalid name %s or data_type %d (bool)" % [settings.name, input.data_type ])
 			return
 			
 		# Decide if we use the default value or the user has provided one in the instanced FlowGraphNode
@@ -65,14 +70,17 @@ func execute( ctx : FlowData.EvaluationContext ):
 		var container =	output.streams[ settings.name ].container
 		container.resize( 1 )
 		container[0] = new_value
-			
-		set_output( 0, output )
 
 	else:
 		if ctx.inputs.has( input.name ):
-			var runtime_input = ctx.inputs[ input.name ]
-			print( "Reading input %s from ctx -> %s" % [input.name, runtime_input])
-			set_output( 0, runtime_input )
+			output = ctx.inputs[ input.name ]
+			#print( "input.Reading %s from ctx -> %s" % [input.name, output])
 		else:
-			print( "Reading input %s from ctx FAILED. Inputs;%s" % [input.name, ctx.inputs])
-			set_output( 0, FlowData.Data.new() )
+			#print( "input.Reading %s from ctx FAILED. Inputs;%s" % [input.name, ctx.inputs])
+			output = FlowData.Data.new()
+	#output.dump( "input.preexe" )
+
+func execute( ctx : FlowData.EvaluationContext ):
+	#print( "input. using cached data %s from ctx -> %s" % [name, output])
+	set_output( 0, output )
+	
