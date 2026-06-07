@@ -131,7 +131,7 @@ func registerNodeType( node_type_name, file ):
 	if not loaded_class:
 		push_error("Failed to load class %s" % full_res_path )
 		return
-	print( "Loading class %s" % full_res_path )
+	#print( "Loading class %s" % full_res_path )
 	var instance = loaded_class.new() as FlowNodeBase
 	var meta = instance.getMeta()
 	meta.factory = loaded_class
@@ -149,6 +149,7 @@ func scanAvailableNodes():
 		if stem.ends_with("_settings"):
 			continue
 		registerNodeType( stem, file )
+	print( "Registered %d node types" % node_types.size() )
 
 func populatePopupInputsMenu():
 	if not popup_menu_inputs:
@@ -163,78 +164,6 @@ func populatePopupInputsMenu():
 	if popup_menu_inputs.get_item_count() == 0:
 		popup_menu_inputs.add_item( "No inputs defined", -1 )
 		popup_menu_inputs.set_item_disabled(0, true)
-
-func populatePopupMenu() -> PopupMenu:
-	min_id = 1000
-	max_id = min_id
-	menu_ids = {}
-	
-	var pm := PopupMenu.new()
-	add_child( pm )
-	pm.name = "MainMenu"
-	pm.clear()
-	pm.id_pressed.connect( _on_popup_menu_id_pressed )
-	
-	var required_input_type := FlowData.DataType.Invalid
-	var required_output_type := FlowData.DataType.Invalid
-	if auto_connect_from_node:
-		var from_node = gedit_nodes_by_name.get( auto_connect_from_node )
-		if from_node:
-			var meta = from_node.getMeta()
-			var oport = meta.outs[ auto_connect_from_port ]
-			required_input_type = oport.get( "data_type", FlowData.DataType.Invalid )
-		print( "auto_connect_from_node: %s:%d -> %d" % [ auto_connect_from_node, auto_connect_from_port, required_input_type])
-		
-	if auto_connect_to_node:
-		var to_node = gedit_nodes_by_name.get( auto_connect_to_node )
-		if to_node:
-			var meta = to_node.getMeta()
-			var iport = meta.ins[ auto_connect_to_port ]
-			required_output_type = iport.get( "data_type", FlowData.DataType.Invalid )
-		print( "auto_connect_to_node: %s:%d -> %d" % [auto_connect_to_node, auto_connect_to_port, required_output_type ])
-
-	# A submenu to invoke the inputs declared in the pcg
-	var idx := 0
-	if required_input_type == FlowData.DataType.Invalid:
-		if popup_menu_inputs:
-			popup_menu_inputs.queue_free()
-		popup_menu_inputs = PopupMenu.new()
-		popup_menu_inputs.name = "inputs_menu"
-		popup_menu_inputs.id_pressed.connect( _on_inputs_menu_id_pressed )
-		pm.add_child(popup_menu_inputs)
-		pm.add_submenu_item("Inputs...", popup_menu_inputs.name)
-		pm.add_separator( "", -1 )
-		populatePopupInputsMenu()
-		idx = pm.get_child_count() + 1
-		
-	for key in node_types.keys():
-		var node_meta = node_types[ key ]
-		var label = node_meta.title
-		max_id += 1
-		if not node_meta.get( "auto_register", true):
-			#print( "Adding menu %s skip (id:%d)" % [ label, max_id ])
-			continue
-			
-		if required_input_type !=FlowData.DataType.Invalid or required_output_type != FlowData.DataType.Invalid:
-			#print( "Candidate node meta: %s" % node_meta )
-			var has_compatible_port = false
-			var ports = node_meta.ins if required_input_type != FlowData.DataType.Invalid else node_meta.outs
-			var required_type = required_input_type if required_input_type != FlowData.DataType.Invalid else required_output_type
-			for port in ports:
-				var port_type = port.get( "data_type", 0 )
-				if port_type == required_type:
-					has_compatible_port = true
-					break
-			if not has_compatible_port:
-				continue
-				
-		#print( "Adding menu %s -> %d" % [ label, max_id ])
-		menu_ids[ max_id ] = key
-		pm.add_item(label, max_id, KEY_NONE)
-		if node_meta.has( "tooltip" ):
-			pm.set_item_tooltip( idx, node_meta.get( "tooltip" ) )
-		idx += 1
-	return pm
 
 func _ready():
 	

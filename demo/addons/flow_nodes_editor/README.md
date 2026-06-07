@@ -1,5 +1,9 @@
 # TODO
 
+- [ ] attribute_random, the use_index_as_value is not clamped between min/max -> Can use Indexnnnn
+- [ ] Assign categories to all nodes
+
+
 - [ ] Demos
 	- [X] Wall of rocks, picking a random point on the top
 	- [ ] Path with random subscene, filter by attribute with rotations

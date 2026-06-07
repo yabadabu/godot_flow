@@ -346,6 +346,7 @@ func initFromScript():
 		print( "all_exposed_params: %s" % exposed_params.size())
 		print( "exposed_params: %s" % exposed_params.size())
 		print( "args_ports_by_name: %s" % args_ports_by_name)
+		print( "num_ins: %d num_outs: %d" % [num_ins, num_outs])
 		
 	# Total inputs are flow in streams + exposed parameters of the node
 	var num_inputs = num_ins + exposed_params.size()
