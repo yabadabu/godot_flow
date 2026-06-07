@@ -118,7 +118,7 @@ func refreshFromSettings():
 	title = getTitle()
 	modulate = Color( 0.7, 0.7, 0.7, 0.5 ) if settings.disabled else Color.WHITE
 	
-	if ( not settings.debug_enabled and draw_debug ) or settings.disabled:
+	if draw_debug and ( not settings.debug_enabled or settings.disabled ):
 		draw_debug.cleanup_multimesh_direct()
 	
 func setError( new_err : String ):
