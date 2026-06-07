@@ -27,10 +27,16 @@ data = {
 "to_node": &"id_0021_math_op",
 "to_port": 1
 }, {
+"from_node": &"id_0023_spawn_meshes",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0024_output",
+"to_port": 0
+}, {
 "from_node": &"id_0021_math_op",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0023_spawn_meshes",
+"to_node": &"id_0024_output",
 "to_port": 0
 }],
 "min_pos": Vector2(-460, -60),
@@ -60,15 +66,11 @@ data = {
 "show_disconnected_inputs": false,
 "template": "make_vector"
 }, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0023_spawn_meshes",
-"position": Vector2(340, 0),
+"args_port": {},
+"name": &"id_0018_input_In",
+"position": Vector2(0, 0),
 "settings": {
+"data_type": 999,
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
@@ -79,14 +81,41 @@ data = {
 "debug_scale": 1.0,
 "disabled": false,
 "inspect_enabled": false,
-"mesh": ExtResource("1_j4j53"),
-"mesh_attribute": "",
-"random_seed": 3327296606,
-"title": "Spawn Meshes",
+"name": "In",
+"random_seed": 1305654154,
+"title": "Input",
 "trace": false
 },
 "show_disconnected_inputs": false,
-"template": "spawn_meshes"
+"template": "input_In"
+}, {
+"args_port": {
+"Out": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0024_output",
+"position": Vector2(500, 0),
+"settings": {
+"data_type": 999,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"name": "Elevated",
+"random_seed": 947836005,
+"title": "Output",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "output"
 }, {
 "args_port": {
 "In A": {
@@ -122,11 +151,15 @@ data = {
 "show_disconnected_inputs": false,
 "template": "math_op"
 }, {
-"args_port": {},
-"name": &"id_0018_input_In",
-"position": Vector2(0, 0),
+"args_port": {
+"In": {
+"connected": false,
+"port": 0
+}
+},
+"name": &"id_0023_spawn_meshes",
+"position": Vector2(340, 80),
 "settings": {
-"data_type": 999,
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
@@ -135,20 +168,22 @@ data = {
 "debug_output": 0,
 "debug_port_combined_index": 0,
 "debug_scale": 1.0,
-"disabled": false,
+"disabled": true,
 "inspect_enabled": false,
-"name": "In",
-"random_seed": 1305654154,
-"title": "Input",
+"mesh": ExtResource("1_j4j53"),
+"mesh_attribute": "",
+"random_seed": 3327296606,
+"title": "Spawn Meshes",
 "trace": false
 },
 "show_disconnected_inputs": false,
-"template": "input_In"
+"template": "spawn_meshes"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
-view_offset = Vector2(-612.0266, -343.56665)
-new_name_counter = 23
+view_zoom = 1.6105101
+view_offset = Vector2(-856.29175, -375.43814)
+new_name_counter = 24
 in_params = Array[ExtResource("1_7eoxu")]([SubResource("Resource_7eoxu")])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"

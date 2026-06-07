@@ -4,6 +4,7 @@ extends FlowNodeBase
 #var _connected_graph: FlowGraphResource = null
 var subctx := FlowData.EvaluationContext.new()
 var all_nodes : Array[ FlowNodeBase ]
+var out_nodes : Dictionary
 
 func _init():
 	meta_node = {
@@ -40,16 +41,17 @@ func getMeta() -> Dictionary:
 						#"label": param.name,
 						#"data_type": param.data_type
 					#})
-		#elif settings.graph.data and settings.graph.data.has("nodes"):
-			#for n_data in settings.graph.data["nodes"]:
-				#if n_data.get("template") == "output":
-					#var node_settings = n_data.get("settings", {})
-					#var out_name = node_settings.get("name", "out_val")
-					#var out_type = node_settings.get("data_type", FlowData.DataType.Float)
-					#outs.append({
-						#"label": out_name,
-						#"data_type": out_type
-					#})
+		if settings.graph.data and settings.graph.data.has("nodes"):
+			for n_data in settings.graph.data["nodes"]:
+				if n_data.get("template") == "output":
+					var node_settings = n_data.get("settings", {})
+					var out_name = node_settings.get("name", "out_val")
+					var out_type = node_settings.get("data_type", FlowData.DataType.Float)
+					outs.append({
+						"label": out_name,
+						"data_type": out_type, 
+						"provider_node" : n_data.name
+					})
 	meta_node.ins = ins
 	meta_node.outs = outs
 	return meta_node
@@ -94,6 +96,8 @@ func execute( ctx : FlowData.EvaluationContext ):
 	var ins = meta_node.ins
 	print( "Subgraph, required ins are ", ins)
 	
+	# I will need my own factory so the my inputs do not bother the inputs from other graphs 
+	
 	var editor = getEditor()
 	for input in settings.graph.in_params:
 		editor.registerInputNodeType( input )
@@ -115,3 +119,18 @@ func execute( ctx : FlowData.EvaluationContext ):
 		input_idx += 1
 	subctx.nodes_to_eval = nodes
 	subctx.run()
+	
+	var meta = getMeta()
+	var output_idx : int = 0
+	for output in meta.outs:
+		print( "Subgrpah.Output[%d] was %s" % [output_idx, output])
+		var node_output = subctx.gedit_nodes_by_name.get( output.provider_node )
+		if node_output:
+			var result = node_output.get_input(0)
+			print( " found the provided node", result )
+			set_output(output_idx, result)
+		else:
+			set_output(output_idx, FlowData.Data.new())
+		output_idx += 1
+			
+			

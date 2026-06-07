@@ -4,7 +4,6 @@
 [ext_resource type="Resource" uid="uid://camnuosmr8ij5" path="res://graphs/spawn_smalls.tres" id="2_5ifn7"]
 [ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="2_mmqr1"]
 [ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="3_5ifn7"]
-[ext_resource type="BoxMesh" uid="uid://7flu82pqtc5d" path="res://addons/flow_nodes_editor/resources/unit_cube.tres" id="5_5ifn7"]
 
 [sub_resource type="Resource" id="Resource_nyqj1"]
 script = ExtResource("3_5ifn7")
@@ -58,7 +57,7 @@ data = {
 "settings": {
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
+"debug_enabled": true,
 "debug_mode": 0,
 "debug_modulate_by": "",
 "debug_output": 0,
@@ -78,14 +77,9 @@ data = {
 "type": "flow_graph_nodes",
 "version": 1
 }
-view_zoom = 1.0640846
-view_offset = Vector2(-82.58942, -11.006134)
-
-[sub_resource type="MultiMesh" id="MultiMesh_5ifn7"]
-transform_format = 1
-instance_count = 9
-mesh = ExtResource("5_5ifn7")
-buffer = PackedFloat32Array(0.245, 0, 0, 0, 0, 0.245, 0, 1, 0, 0, 0.245, 0, 0.245, 0, 0, 1, 0, 0.245, 0, 1, 0, 0, 0.245, 0, 0.245, 0, 0, 2, 0, 0.245, 0, 1, 0, 0, 0.245, 0, 0.245, 0, 0, 0, 0, 0.245, 0, 1, 0, 0, 0.245, 1, 0.245, 0, 0, 1, 0, 0.245, 0, 1, 0, 0, 0.245, 1, 0.245, 0, 0, 2, 0, 0.245, 0, 1, 0, 0, 0.245, 1, 0.245, 0, 0, 0, 0, 0.245, 0, 1, 0, 0, 0.245, 2, 0.245, 0, 0, 1, 0, 0.245, 0, 1, 0, 0, 0.245, 2, 0.245, 0, 0, 2, 0, 0.245, 0, 1, 0, 0, 0.245, 2)
+view_zoom = 1.5579263
+view_offset = Vector2(95.941956, -31.938599)
+new_name_counter = 1
 
 [node name="DemoSubgraph" type="Node3D" unique_id=1826795326]
 
@@ -94,7 +88,3 @@ script = ExtResource("1_dx0d7")
 graph = SubResource("Resource_nyqj1")
 refresh_inputs = Callable()
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
-
-[node name="@MultiMeshInstance3D@30816" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=1657385199]
-multimesh = SubResource("MultiMesh_5ifn7")
-metadata/flow_owner = &"id_0023_spawn_meshes"
