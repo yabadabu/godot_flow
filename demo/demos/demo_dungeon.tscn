@@ -8,7 +8,14 @@
 [sub_resource type="Resource" id="Resource_i773s"]
 script = ExtResource("3_qwth0")
 data = {
-"frames": [],
+"frames": [{
+"attached": Array[StringName]([&"id_0013_partition", &"id_0011_subgraph", &"id_0015_merge"]),
+"name": &"id_0035_comment",
+"position": Vector2(3140, 259),
+"size": Vector2(899, 216),
+"tint_color": Color(0.28235295, 0.23921569, 0.54509807, 1),
+"title": "Remove Overlapped Rooms"
+}],
 "links": [{
 "from_node": &"id_0002_make_bounds",
 "from_port": 0,
@@ -101,12 +108,6 @@ data = {
 "to_port": 0
 }, {
 "from_node": &"id_0011_subgraph",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0014_merge",
-"to_port": 0
-}, {
-"from_node": &"id_0011_subgraph",
 "from_port": 1,
 "keep_alive": false,
 "to_node": &"id_0015_merge",
@@ -122,6 +123,84 @@ data = {
 "from_port": 0,
 "keep_alive": false,
 "to_node": &"room_style",
+"to_port": 0
+}, {
+"from_node": &"id_0026_grid_fill_bounds",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0027_grid_boundary",
+"to_port": 0
+}, {
+"from_node": &"room_style",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0028_grid_connect_points",
+"to_port": 0
+}, {
+"from_node": &"room_style",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0026_grid_fill_bounds",
+"to_port": 0
+}, {
+"from_node": &"id_0026_grid_fill_bounds",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0029_substract",
+"to_port": 1
+}, {
+"from_node": &"id_0028_grid_connect_points",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0031_add_attribute",
+"to_port": 0
+}, {
+"from_node": &"id_0031_add_attribute",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"corridor_floor_style",
+"to_port": 0
+}, {
+"from_node": &"corridor_floor_style",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0029_substract",
+"to_port": 0
+}, {
+"from_node": &"corridor_floor_style",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0032_merge",
+"to_port": 0
+}, {
+"from_node": &"id_0026_grid_fill_bounds",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0032_merge",
+"to_port": 0
+}, {
+"from_node": &"id_0029_substract",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0033_grid_boundary",
+"to_port": 0
+}, {
+"from_node": &"id_0027_grid_boundary",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0034_substract",
+"to_port": 0
+}, {
+"from_node": &"id_0033_grid_boundary",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0034_substract",
+"to_port": 1
+}, {
+"from_node": &"id_0011_subgraph",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0044_merge",
 "to_port": 0
 }],
 "min_pos": Vector2(-40, 20),
@@ -550,7 +629,7 @@ data = {
 }
 },
 "name": &"id_0013_partition",
-"position": Vector2(3160, 280),
+"position": Vector2(3180, 300),
 "settings": {
 "attribute_name": "Index",
 "debug_bulk": 0,
@@ -582,7 +661,7 @@ data = {
 }
 },
 "name": &"id_0011_subgraph",
-"position": Vector2(3460, 280),
+"position": Vector2(3480, 300),
 "settings": {
 "debug_bulk": 1,
 "debug_color": Color(1, 1, 1, 1),
@@ -668,25 +747,64 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0014_merge",
-"position": Vector2(3840, 260),
+"name": &"id_0028_grid_connect_points",
+"position": Vector2(4340, 360),
 "settings": {
+"axis_order": 0,
+"cell_size": Vector3(4, 1, 4),
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
-"debug_mode": 0,
+"debug_mode": 1,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"deduplicate_cells": true,
+"disabled": false,
+"include_input_points": true,
+"inspect_enabled": false,
+"path_index_attribute": "CorridorPath",
+"random_seed": 3339043550,
+"title": "Grid Connect Points",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "grid_connect_points"
+}, {
+"args_port": {
+"Bounds": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0026_grid_fill_bounds",
+"position": Vector2(4340, 640),
+"settings": {
+"bounds_center": Vector3(0, 0, 0),
+"bounds_size": Vector3(10, 1, 10),
+"cell_size": Vector3(1, 1, 1),
+"copy_input_attributes": true,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 1,
 "debug_modulate_by": "",
 "debug_output": 0,
 "debug_port_combined_index": 0,
 "debug_scale": 1.0,
 "disabled": false,
+"fill_y_axis": false,
 "inspect_enabled": false,
-"random_seed": 1707486170,
-"title": "Merge",
-"trace": false
+"max_points": 100000,
+"random_seed": 3323197853,
+"source_index_attribute": "",
+"title": "Grid Fill Bounds",
+"trace": false,
+"use_input_bounds": true
 },
 "show_disconnected_inputs": false,
-"template": "merge"
+"template": "grid_fill_bounds"
 }, {
 "args_port": {
 "In": {
@@ -694,8 +812,47 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0015_merge",
-"position": Vector2(3840, 360),
+"name": &"id_0031_add_attribute",
+"position": Vector2(4360, 440),
+"settings": {
+"cte_bool": false,
+"cte_color": Color(1, 1, 1, 1),
+"cte_float": 0.0,
+"cte_int": 0,
+"cte_resource": null,
+"cte_string": "",
+"cte_vector": Vector3(1, 1, 1),
+"data_type": 3,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"name": "size",
+"random_seed": 492631459,
+"title": "Add Attribute",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "add_attribute"
+}, {
+"args_port": {
+"In A": {
+"connected": true,
+"port": 0
+},
+"In B": {
+"connected": true,
+"port": 1
+}
+},
+"name": &"id_0029_substract",
+"position": Vector2(4760, 400),
 "settings": {
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
@@ -707,12 +864,77 @@ data = {
 "debug_scale": 1.0,
 "disabled": false,
 "inspect_enabled": false,
-"random_seed": 1837664973,
-"title": "Merge",
+"operation": 0,
+"random_seed": 198575042,
+"title": "Corridor Only Cells",
 "trace": false
 },
 "show_disconnected_inputs": false,
-"template": "merge"
+"template": "substract"
+}, {
+"args_port": {
+"Filled Cells": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0027_grid_boundary",
+"position": Vector2(4760, 820),
+"settings": {
+"cell_size": Vector3(4, 1, 4),
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"include_corners": false,
+"inspect_enabled": false,
+"normal_attribute": "boundary_normal",
+"random_seed": 285105322,
+"title": "Room Boundary",
+"trace": false,
+"type_attribute": "boundary_type",
+"wall_height": 1.0,
+"wall_thickness": 1.0
+},
+"show_disconnected_inputs": false,
+"template": "grid_boundary"
+}, {
+"args_port": {
+"Filled Cells": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0033_grid_boundary",
+"position": Vector2(4960, 400),
+"settings": {
+"cell_size": Vector3(1, 1, 1),
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"include_corners": true,
+"inspect_enabled": false,
+"normal_attribute": "boundary_normal",
+"random_seed": 4220618259,
+"title": "Corridor  Boundary",
+"trace": false,
+"type_attribute": "boundary_type",
+"wall_height": 1.0,
+"wall_thickness": 0.2
+},
+"show_disconnected_inputs": false,
+"template": "grid_boundary"
 }, {
 "args_port": {
 "In": {
@@ -744,13 +966,157 @@ data = {
 },
 "show_disconnected_inputs": false,
 "template": "attribute_random"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0032_merge",
+"position": Vector2(4760, 700),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": true,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"random_seed": 4055464860,
+"title": "Merge",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "merge"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"corridor_floor_style",
+"position": Vector2(4520, 440),
+"settings": {
+"cte_bool": false,
+"cte_color": Color(1, 1, 1, 1),
+"cte_float": 0.0,
+"cte_int": 0,
+"cte_resource": null,
+"cte_string": "",
+"cte_vector": Vector3(0, 0, 0),
+"data_type": 2,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"name": "room_style",
+"random_seed": 258639929,
+"title": "Corridor Floor Style",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "add_attribute"
+}, {
+"args_port": {
+"In A": {
+"connected": true,
+"port": 0
+},
+"In B": {
+"connected": true,
+"port": 1
+}
+},
+"name": &"id_0034_substract",
+"position": Vector2(5402.151, 549.9416),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": true,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"operation": 0,
+"random_seed": 3944916852,
+"title": "Substract",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "substract"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0015_merge",
+"position": Vector2(3860, 380),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"random_seed": 1837664973,
+"title": "Merge",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "merge"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0044_merge",
+"position": Vector2(3860, 280),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"random_seed": 1837664973,
+"title": "Merge",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "merge"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
-view_zoom = 1.0640843
-view_offset = Vector2(3828.8489, -156.71942)
-new_name_counter = 25
+view_zoom = 0.5460432
+view_offset = Vector2(1887.4177, -177.07288)
+new_name_counter = 46
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 
 [node name="DemoDungeon" type="Node3D" unique_id=729494838]
