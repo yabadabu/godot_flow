@@ -181,6 +181,8 @@ func _show_category(category_name : String):
 			return current_node_types[a].get("title", str(a)) < current_node_types[b].get("title", str(b))
 		)
 	for template_name in template_names:
+		if template_name.begins_with("input_"):
+			continue
 		var node_meta = current_node_types[template_name]
 		var node_category := _get_category(node_meta)
 		var node_button := Button.new()

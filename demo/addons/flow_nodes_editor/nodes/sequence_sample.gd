@@ -5,6 +5,7 @@ func _init():
 	meta_node = {
 		"title" : "Sequence Sample",
 		"settings" : SequenceSampleNodeSettings,
+		"category" : "Filter",
 		"ins" : [{ "label": "In" }], 
 		"outs" : [{ "label" : "Out" }],
 		"tooltip" : "Samples 'count' input values from the input, starting at Start and using a 'Step' as gap.\nIf count = 0 means all points.\nNegative values mean backwards",

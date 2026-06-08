@@ -7,6 +7,7 @@ func _init():
 	meta_node = {
 		"title" : "Compose Vector",
 		"settings" : ComposeVectorNodeSettings,
+		"category" : "Metadata",
 		"ins" : [{ "label": "In" }], 
 		"outs" : [{ "label" : "Out" }],
 		"tooltip" : "Composes a Vector3 attribute from float attributes or default values.",

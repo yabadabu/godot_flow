@@ -5,7 +5,7 @@ func _init():
 	meta_node = {
 		"title" : "Ray Cast",
 		"settings" : RayCastNodeSettings,
-		"category" : "Math",
+		"category" : "Spatial",
 		"ins" : [{ "label": "In" }], 
 		"outs" : [{ "label" : "Out" }],
 		"tooltip" : "Traces a ray in the current scene from the point position (the attribute can be redefined).\n" + 

@@ -7,6 +7,7 @@ func _init():
 	meta_node = {
 		"title" : "Sample Spline",
 		"settings" : SampleSplineNodeSettings,
+		"category" : "Sampler",
 		"ins" : [{ "label": "Splines", "data_type": FlowData.DataType.NodePath }],
 		"outs" : [{ "label" : "Out" }],
 	}

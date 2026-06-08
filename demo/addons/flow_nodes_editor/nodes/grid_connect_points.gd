@@ -7,6 +7,7 @@ func _init():
 	meta_node = {
 		"title" : "Grid Connect Points",
 		"settings" : GridConnectPointsNodeSettings,
+		"category" : "Spatial",
 		"ins" : [{ "label": "In" }],
 		"outs" : [{ "label" : "Cells" }],
 		"tooltip" : "Connects ordered points with orthogonal grid-cell paths on the XZ plane.",

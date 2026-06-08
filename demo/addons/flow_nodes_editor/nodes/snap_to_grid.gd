@@ -7,6 +7,7 @@ func _init():
 	meta_node = {
 		"title" : "Snap to Grid",
 		"settings" : SnapToGridNodeSettings,
+		"category" : "Spatial",
 		"ins" : [{ "label": "In" }], 
 		"outs" : [{ "label" : "Out" }],
 		"tooltip" : "Snaps point positions, rotations, or scale sizes to grid values.",

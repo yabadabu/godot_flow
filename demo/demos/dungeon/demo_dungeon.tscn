@@ -1,12 +1,13 @@
 [gd_scene format=3 uid="uid://dpsolkm7q3exw"]
 
-[ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_i773s"]
-[ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="2_b1aic"]
-[ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="3_qwth0"]
-[ext_resource type="Resource" uid="uid://eel6j7ywlgwm" path="res://graphs/subgraph_dungeon_select_rooms.tres" id="4_b1aic"]
+[ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_dstpa"]
+[ext_resource type="Resource" uid="uid://eel6j7ywlgwm" path="res://demos/dungeon/subgraph_dungeon_select_rooms.tres" id="2_6bhyk"]
+[ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="3_byy4n"]
+[ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="4_j7xqx"]
+[ext_resource type="Resource" uid="uid://duluofvop566o" path="res://demos/dungeon/subgraph_dungeon_upper_level.tres" id="5_6bhyk"]
 
 [sub_resource type="Resource" id="Resource_i773s"]
-script = ExtResource("3_qwth0")
+script = ExtResource("4_j7xqx")
 data = {
 "frames": [{
 "attached": Array[StringName]([&"id_0013_partition", &"id_0011_subgraph", &"id_0015_merge"]),
@@ -201,6 +202,12 @@ data = {
 "from_port": 0,
 "keep_alive": false,
 "to_node": &"id_0044_merge",
+"to_port": 0
+}, {
+"from_node": &"room_style",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0051_subgraph",
 "to_port": 0
 }],
 "min_pos": Vector2(-40, 20),
@@ -716,7 +723,7 @@ data = {
 }
 },
 "name": &"id_0026_grid_fill_bounds",
-"position": Vector2(4340, 640),
+"position": Vector2(4440, 840),
 "settings": {
 "bounds_center": Vector3(0, 0, 0),
 "bounds_size": Vector3(10, 1, 10),
@@ -744,44 +751,13 @@ data = {
 "template": "grid_fill_bounds"
 }, {
 "args_port": {
-"In A": {
-"connected": true,
-"port": 0
-},
-"In B": {
-"connected": true,
-"port": 1
-}
-},
-"name": &"id_0029_substract",
-"position": Vector2(4760, 400),
-"settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"operation": 0,
-"random_seed": 198575042,
-"title": "Corridor Only Cells",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "substract"
-}, {
-"args_port": {
 "Filled Cells": {
 "connected": true,
 "port": 0
 }
 },
 "name": &"id_0027_grid_boundary",
-"position": Vector2(4760, 820),
+"position": Vector2(4860, 1020),
 "settings": {
 "cell_size": Vector3(4, 1, 4),
 "debug_bulk": 0,
@@ -813,7 +789,7 @@ data = {
 }
 },
 "name": &"id_0033_grid_boundary",
-"position": Vector2(4960, 400),
+"position": Vector2(5060, 600),
 "settings": {
 "cell_size": Vector3(1, 1, 1),
 "debug_bulk": 0,
@@ -845,7 +821,7 @@ data = {
 }
 },
 "name": &"corridor_floor_style",
-"position": Vector2(4520, 440),
+"position": Vector2(4620, 640),
 "settings": {
 "cte_bool": false,
 "cte_color": Color(1, 1, 1, 1),
@@ -872,32 +848,6 @@ data = {
 },
 "show_disconnected_inputs": false,
 "template": "add_attribute"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0015_merge",
-"position": Vector2(3860, 380),
-"settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"random_seed": 1837664973,
-"title": "Merge",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "merge"
 }, {
 "args_port": {
 "In": {
@@ -947,7 +897,7 @@ data = {
 "debug_port_combined_index": 1,
 "debug_scale": 1.0,
 "disabled": false,
-"graph": ExtResource("4_b1aic"),
+"graph": ExtResource("2_6bhyk"),
 "inspect_enabled": false,
 "param_overrides": {},
 "random_seed": 3219186451,
@@ -964,7 +914,7 @@ data = {
 }
 },
 "name": &"id_0032_merge",
-"position": Vector2(4760, 700),
+"position": Vector2(4860, 900),
 "settings": {
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
@@ -994,7 +944,7 @@ data = {
 }
 },
 "name": &"id_0034_substract",
-"position": Vector2(5402.151, 549.9416),
+"position": Vector2(5500, 760),
 "settings": {
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
@@ -1013,6 +963,67 @@ data = {
 },
 "show_disconnected_inputs": false,
 "template": "substract"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0031_add_attribute",
+"position": Vector2(4460, 640),
+"settings": {
+"cte_bool": false,
+"cte_color": Color(1, 1, 1, 1),
+"cte_float": 0.0,
+"cte_int": 0,
+"cte_resource": null,
+"cte_string": "",
+"cte_vector": Vector3(1, 1, 1),
+"data_type": 3,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"name": "size",
+"random_seed": 492631459,
+"title": "Add Attribute",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "add_attribute"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0015_merge",
+"position": Vector2(3860, 380),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"random_seed": 1837664973,
+"title": "Merge",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "merge"
 }, {
 "args_port": {
 "In": {
@@ -1046,19 +1057,50 @@ data = {
 "template": "attribute_random"
 }, {
 "args_port": {
+"In A": {
+"connected": true,
+"port": 0
+},
+"In B": {
+"connected": true,
+"port": 1
+}
+},
+"name": &"id_0029_substract",
+"position": Vector2(4860, 600),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"operation": 0,
+"random_seed": 198575042,
+"title": "Corridor Only Cells",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "substract"
+}, {
+"args_port": {
 "In": {
 "connected": true,
 "port": 0
 }
 },
 "name": &"id_0028_grid_connect_points",
-"position": Vector2(4340, 360),
+"position": Vector2(4460, 560),
 "settings": {
 "axis_order": 0,
 "cell_size": Vector3(4, 1, 4),
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
+"debug_enabled": true,
 "debug_mode": 1,
 "debug_modulate_by": "",
 "debug_output": 0,
@@ -1077,22 +1119,14 @@ data = {
 "template": "grid_connect_points"
 }, {
 "args_port": {
-"In": {
+"My rooms": {
 "connected": true,
 "port": 0
 }
 },
-"name": &"id_0031_add_attribute",
-"position": Vector2(4360, 440),
+"name": &"id_0051_subgraph",
+"position": Vector2(4460, 320),
 "settings": {
-"cte_bool": false,
-"cte_color": Color(1, 1, 1, 1),
-"cte_float": 0.0,
-"cte_int": 0,
-"cte_resource": null,
-"cte_string": "",
-"cte_vector": Vector3(1, 1, 1),
-"data_type": 3,
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
@@ -1102,33 +1136,34 @@ data = {
 "debug_port_combined_index": 0,
 "debug_scale": 1.0,
 "disabled": false,
+"graph": ExtResource("5_6bhyk"),
 "inspect_enabled": false,
-"name": "size",
-"random_seed": 492631459,
-"title": "Add Attribute",
+"param_overrides": {},
+"random_seed": 1962547679,
+"title": "Subgraph",
 "trace": false
 },
 "show_disconnected_inputs": false,
-"template": "add_attribute"
+"template": "subgraph"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
-view_zoom = 1.4223652
-view_offset = Vector2(5193.524, 334.2077)
-new_name_counter = 50
+view_zoom = 0.97149366
+view_offset = Vector2(4216.3022, 215.70627)
+new_name_counter = 52
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 
 [node name="DemoDungeon" type="Node3D" unique_id=729494838]
 
 [node name="FlowGraphNode3D" type="Node3D" parent="." unique_id=34485852]
-script = ExtResource("1_i773s")
+script = ExtResource("1_dstpa")
 graph = SubResource("Resource_i773s")
 refresh_inputs = Callable()
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
 
 [node name="FlowGraphNode3D2" type="Node3D" parent="." unique_id=1216533672]
-script = ExtResource("1_i773s")
-graph = ExtResource("4_b1aic")
+script = ExtResource("1_dstpa")
+graph = ExtResource("5_6bhyk")
 refresh_inputs = Callable()
 metadata/_custom_type_script = "uid://d1krtmb1urldl"

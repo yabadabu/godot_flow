@@ -7,6 +7,7 @@ func _init():
 	meta_node = {
 		"title" : "Attribute Random",
 		"settings" : AttributeRandomNodeSettings,
+		"category" : "Metadata",
 		"ins" : [{ "label": "In" }], 
 		"outs" : [{ "label" : "Out" }],
 		"tooltip" : "Sets an attribute on points to random values or sequential indices.",

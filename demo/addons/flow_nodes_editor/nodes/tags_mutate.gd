@@ -7,7 +7,7 @@ func _init():
 	meta_node = {
 		"title" : "Tags",
 		"settings" : TagsMutateSettings,
-		"category" : "Attributes",
+		"category" : "Metadata",
 		"ins" : [{ "label": "In" }],
 		"outs" : [{ "label" : "Out" }],
 		"tooltip" : "Adds, removes, or replaces FlowData tags.",

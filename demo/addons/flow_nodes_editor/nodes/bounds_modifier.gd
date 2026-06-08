@@ -5,6 +5,7 @@ func _init():
 	meta_node = {
 		"title" : "Bounds Modifier",
 		"settings" : BoundsModifierNodeSettings,
+		"category" : "Point Ops",
 		"ins" : [{ "label": "In" }], 
 		"outs" : [{ "label" : "Out" }],
 		"tooltip" : "Modifies the size/bounds property on points in the provided point data.",

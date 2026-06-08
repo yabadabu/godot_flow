@@ -14,6 +14,7 @@ func _init():
 	meta_node = {
 		"title" : "Sample Points",
 		"settings" : SamplePointsNodeSettings,
+		"category" : "Sampler",
 		"ins" : [{ "label" : "In" }],
 		"outs" : [{ "label" : "Out" }],
 		"tooltip" : "Subdivides each int point into a subgrid of regular points with the specified sampling distance",

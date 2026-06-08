@@ -6,6 +6,7 @@ func _init():
 	meta_node = {
 		"title" : "Point Offsets",
 		"settings" : settings_script,
+		"category" : "Spatial",
 		"ins" : [{ "label": "Anchors" }],
 		"outs" : [{ "label" : "Points" }],
 		"tooltip" : "Creates child points around each input point using local or world offsets. Useful for sockets, tabletop dressing, seating layouts, and repeated prop clusters.",
@@ -17,11 +18,12 @@ func _copy_streams(in_data : FlowData.Data, out_count : int, offsets_count : int
 	for stream_name in in_data.streams:
 		var stream = in_data.streams[stream_name]
 		var out_container = FlowData.Data.newContainerOfType(stream.data_type)
-		out_container.resize(out_count)
-		for src_idx : int in range(in_data.size()):
-			for offset_idx : int in range(offsets_count):
-				out_container[src_idx * offsets_count + offset_idx] = stream.container[src_idx]
-		out_data.registerStream(stream.name, out_container, stream.data_type)
+		if out_container:
+			out_container.resize(out_count)
+			for src_idx : int in range(in_data.size()):
+				for offset_idx : int in range(offsets_count):
+					out_container[src_idx * offsets_count + offset_idx] = stream.container[src_idx]
+			out_data.registerStream(stream.name, out_container, stream.data_type)
 	out_data.tags = in_data.tags.duplicate()
 	return out_data
 

@@ -5,7 +5,7 @@ func _init():
 	meta_node = {
 		"title" : "Remap",
 		"settings" : RemapNodeSettings,
-		"category" : "Attributes",
+		"category" : "Metadata",
 		"ins" : [{ "label" : "In" }],
 		"outs" : [{ "label" : "Out" }],
 		"tooltip" : "Remaps the input values using a curve",

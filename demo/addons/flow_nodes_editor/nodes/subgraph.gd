@@ -10,6 +10,7 @@ func _init():
 	meta_node = {
 		"title" : "Subgraph",
 		"settings" : SubgraphNodeSettings,
+		"category" : "Control Flow",
 		"ins" : [],
 		"outs" : [],
 		"is_final" : true,
@@ -101,12 +102,7 @@ func preExecute( ctx : FlowData.EvaluationContext ):
 	subctx.gedit_nodes_by_name.clear()
 	print( "Subgraph.Reading resource")
 	FlowNodeIO.create_nodes_from_dict( settings.graph.data, self, Vector2(0,0) )
-	
-	# I will need my own factory so the my inputs do not bother the inputs from other graphs 
-	var editor = getEditor()
-	for input in settings.graph.in_params:
-		editor.registerInputNodeType( input )
-		
+			
 	subctx.owner = ctx.owner
 	subctx.graph = settings.graph
 	subctx.trace = settings.trace
@@ -114,8 +110,7 @@ func preExecute( ctx : FlowData.EvaluationContext ):
 	#print( "subctx.gedit_nodes_by_name", subctx.gedit_nodes_by_name )
 	var nodes = subctx.getEvalOrder( all_nodes )
 	subctx.nodes_to_eval = nodes
-	
-	
+
 func execute( ctx : FlowData.EvaluationContext ):
 	if not settings.graph:
 		setError("No graph assigned to Subgraph node '%s'" % getTitle())

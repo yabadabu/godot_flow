@@ -7,6 +7,7 @@ func _init():
 	meta_node = {
 		"title" : "Make Bounds",
 		"settings" : MakeBoundsNodeSettings,
+		"category" : "Point Ops",
 		"ins" : [], 
 		"outs" : [{ "label" : "Out" }],
 		"tooltip" : "Generates a single bounding point at center with size.",

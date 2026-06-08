@@ -5,7 +5,7 @@ func _init():
 	meta_node = {
 		"title" : "Partition",
 		"settings" : PartitionNodeSettings,
-		"category" : "Point Ops",
+		"category" : "Metadata",
 		"ins" : [{ "label": "In" }], 
 		"outs" : [{ "label" : "Out" }],
 		"tooltip" : "Partition data based on the different values an attribute."

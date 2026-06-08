@@ -7,6 +7,7 @@ func _init():
 	meta_node = {
 		"title" : "Grid Boundary",
 		"settings" : GridBoundaryNodeSettings,
+		"category" : "Spatial",
 		"ins" : [{ "label": "Filled Cells" }],
 		"outs" : [{ "label" : "Edges" }, { "label" : "Corners" }, { "label" : "All" }],
 		"tooltip" : "Extracts exposed edge and corner points from filled grid cells.",

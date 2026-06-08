@@ -5,6 +5,7 @@ func _init():
 	meta_node = {
 		"title" : "Sample Around",
 		"settings" : SampleAroundNodeSettings,
+		"category" : "Spatial",
 		"ins" : [{ "label": "In" }],
 		"outs" : [{ "label" : "Out" }],
 	}

@@ -5,7 +5,7 @@ func _init():
 	meta_node = {
 		"title" : "Substract",
 		"settings" : SubstractSettings,
-		"category" : "Boolean Ops",
+		"category" : "Spatial",
 		"ins" : [{ "label": "In A" }, { "label": "In B" }], 
 		"outs" : [{ "label" : "Out" }],
 		"hide_inputs" : true,

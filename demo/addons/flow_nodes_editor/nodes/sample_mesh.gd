@@ -7,6 +7,7 @@ func _init():
 	meta_node = {
 		"title" : "Sample Mesh",
 		"settings" : SampleMeshNodeSettings,
+		"category" : "Sampler",
 		"ins" : [{ "label": "Meshes", "data_type": FlowData.DataType.NodeMesh }],
 		"outs" : [{ "label" : "Out" }],
 		#"trace" : true

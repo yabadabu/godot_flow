@@ -7,6 +7,7 @@ func _init():
 	meta_node = {
 		"title" : "Surface Sampler",
 		"settings" : SurfaceSamplerNodeSettings,
+		"category" : "Sampler",
 		"ins" : [{ "label": "In" }], 
 		"outs" : [{ "label" : "Out" }],
 		"tooltip" : "Samples points randomly inside the bounds of the input points.",

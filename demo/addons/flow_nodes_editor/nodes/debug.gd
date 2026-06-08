@@ -6,6 +6,7 @@ func _init():
 	meta_node = {
 		"title" : "Debug",
 		"settings" : NodeSettings,
+		"category" : "Debug",
 		"ins" : [{ "label" : "In" }],
 		"outs" : [{ "label" : "Out" }],
 		"is_final" : true,

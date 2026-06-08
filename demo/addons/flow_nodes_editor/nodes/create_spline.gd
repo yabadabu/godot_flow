@@ -5,12 +5,10 @@ func _init():
 	meta_node = {
 		"title" : "Create Spline",
 		"settings" : CreateSplineNodeSettings,
-		"category" : "Generators",
+		"category" : "Spatial",
 		"ins" : [{ "label": "In" }],
 		"outs" : [{ "label" : "Splines", "data_type": FlowData.DataType.NodePath }],
-		"tooltip" : 
-			"Generates a spline from all the input points." + 
-			""
+		"tooltip" : "Generates a spline from all the input points." 
 	}
 
 func spawnNode( root : Node, class_to_spawn ):
