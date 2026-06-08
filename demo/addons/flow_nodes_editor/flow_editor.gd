@@ -512,7 +512,9 @@ func _on_search_add_node_popup_input_selected(id : int):
 
 func _on_search_add_node_popup_action_selected(action_id : int):
 	if action_id == SearchAddNodePopup.ACTION_ADD_NEW_INPUT:
-		print("Add New Input... selected")
+		current_resource.in_params.append(GraphInputParameter.new())
+		inspector.edit(null)		# To force a refresh
+		_on_button_inputs_pressed()
 
 func _on_popup_menu_id_pressed(id: int) -> void:
 	if menu_ids.has( id ):
