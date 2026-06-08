@@ -5,6 +5,15 @@
 [ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="3_byy4n"]
 [ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="4_j7xqx"]
 [ext_resource type="Resource" uid="uid://duluofvop566o" path="res://demos/dungeon/subgraph_dungeon_upper_level.tres" id="5_6bhyk"]
+[ext_resource type="PackedScene" uid="uid://uf8w4l67yqe4" path="res://addons/kaykit_dungeon_remastered/Assets/gltf/wall_cracked.gltf.glb" id="5_wm5gk"]
+[ext_resource type="PackedScene" uid="uid://bd7upyffu0sxq" path="res://addons/kaykit_dungeon_remastered/Assets/gltf/pillar_decorated.gltf.glb" id="6_j7xqx"]
+[ext_resource type="PackedScene" uid="uid://cryqu2b13ljmr" path="res://addons/kaykit_dungeon_remastered/Assets/gltf/wall.gltf.glb" id="6_rxbac"]
+[ext_resource type="PackedScene" uid="uid://fpbhnjxaha5m" path="res://addons/kaykit_dungeon_remastered/Assets/gltf/pillar.gltf.glb" id="7_8dklu"]
+[ext_resource type="PackedScene" uid="uid://cu3gga7dm0tau" path="res://addons/kaykit_dungeon_remastered/Assets/gltf/wall_arched.gltf.glb" id="7_8hoib"]
+[ext_resource type="PackedScene" uid="uid://b712yatb3ml2l" path="res://addons/kaykit_dungeon_remastered/Assets/gltf/wall_window_closed.gltf.glb" id="7_m4ltu"]
+[ext_resource type="PackedScene" uid="uid://bb41g3g318u4h" path="res://addons/kaykit_dungeon_remastered/Assets/gltf/wall_shelves.gltf.glb" id="8_rtfsj"]
+[ext_resource type="PackedScene" uid="uid://cwma0t6ajh0w8" path="res://addons/kaykit_dungeon_remastered/Assets/gltf/wall_gated.gltf.glb" id="9_enrhv"]
+[ext_resource type="PackedScene" uid="uid://cxiuc7yapm02e" path="res://addons/kaykit_dungeon_remastered/Assets/gltf/wall_broken.gltf.glb" id="10_rtfsj"]
 
 [sub_resource type="Resource" id="Resource_i773s"]
 script = ExtResource("4_j7xqx")
@@ -207,7 +216,31 @@ data = {
 "from_node": &"room_style",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0051_subgraph",
+"to_node": &"select_chest_rooms",
+"to_port": 0
+}, {
+"from_node": &"select_chest_rooms",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"chest_corner_slots",
+"to_port": 0
+}, {
+"from_node": &"id_0032_merge",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0064_self_pruning",
+"to_port": 0
+}, {
+"from_node": &"grid_boundary",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"wall_unit_size",
+"to_port": 0
+}, {
+"from_node": &"wall_unit_size",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"spawn_walls",
 "to_port": 0
 }],
 "min_pos": Vector2(-40, 20),
@@ -717,40 +750,6 @@ data = {
 "template": "attribute_random"
 }, {
 "args_port": {
-"Bounds": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0026_grid_fill_bounds",
-"position": Vector2(4440, 840),
-"settings": {
-"bounds_center": Vector3(0, 0, 0),
-"bounds_size": Vector3(10, 1, 10),
-"cell_size": Vector3(1, 1, 1),
-"copy_input_attributes": true,
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 1,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"fill_y_axis": false,
-"inspect_enabled": false,
-"max_points": 100000,
-"random_seed": 3323197853,
-"source_index_attribute": "",
-"title": "Grid Fill Bounds",
-"trace": false,
-"use_input_bounds": true
-},
-"show_disconnected_inputs": false,
-"template": "grid_fill_bounds"
-}, {
-"args_port": {
 "Filled Cells": {
 "connected": true,
 "port": 0
@@ -781,73 +780,6 @@ data = {
 },
 "show_disconnected_inputs": false,
 "template": "grid_boundary"
-}, {
-"args_port": {
-"Filled Cells": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0033_grid_boundary",
-"position": Vector2(5060, 600),
-"settings": {
-"cell_size": Vector3(1, 1, 1),
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"include_corners": true,
-"inspect_enabled": false,
-"normal_attribute": "boundary_normal",
-"random_seed": 4220618259,
-"title": "Corridor  Boundary",
-"trace": false,
-"type_attribute": "boundary_type",
-"wall_height": 1.0,
-"wall_thickness": 0.2
-},
-"show_disconnected_inputs": false,
-"template": "grid_boundary"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"corridor_floor_style",
-"position": Vector2(4620, 640),
-"settings": {
-"cte_bool": false,
-"cte_color": Color(1, 1, 1, 1),
-"cte_float": 0.0,
-"cte_int": 0,
-"cte_resource": null,
-"cte_string": "",
-"cte_vector": Vector3(0, 0, 0),
-"data_type": 2,
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"name": "room_style",
-"random_seed": 258639929,
-"title": "Corridor Floor Style",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "add_attribute"
 }, {
 "args_port": {
 "In": {
@@ -913,63 +845,6 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0032_merge",
-"position": Vector2(4860, 900),
-"settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"random_seed": 4055464860,
-"title": "Merge",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "merge"
-}, {
-"args_port": {
-"In A": {
-"connected": true,
-"port": 0
-},
-"In B": {
-"connected": true,
-"port": 1
-}
-},
-"name": &"id_0034_substract",
-"position": Vector2(5500, 760),
-"settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"operation": 0,
-"random_seed": 3944916852,
-"title": "Substract",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "substract"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
 "name": &"id_0031_add_attribute",
 "position": Vector2(4460, 640),
 "settings": {
@@ -1026,37 +901,6 @@ data = {
 "template": "merge"
 }, {
 "args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"room_style",
-"position": Vector2(4120, 360),
-"settings": {
-"attribute_name": "room_style",
-"data_type": 1,
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"max_value": 3.0,
-"min_value": 0.0,
-"random_seed": 3301,
-"title": "Attribute Random",
-"trace": false,
-"use_index_as_value": false
-},
-"show_disconnected_inputs": false,
-"template": "attribute_random"
-}, {
-"args_port": {
 "In A": {
 "connected": true,
 "port": 0
@@ -1093,19 +937,82 @@ data = {
 "port": 0
 }
 },
+"name": &"corridor_floor_style",
+"position": Vector2(4620, 640),
+"settings": {
+"cte_bool": false,
+"cte_color": Color(1, 1, 1, 1),
+"cte_float": 0.0,
+"cte_int": 0,
+"cte_resource": null,
+"cte_string": "",
+"cte_vector": Vector3(0, 0, 0),
+"data_type": 2,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"name": "room_style",
+"random_seed": 258639929,
+"title": "Corridor Floor Style",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "add_attribute"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"select_chest_rooms",
+"position": Vector2(4460, 740),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"random_seed": 19237,
+"ratio": 0.42,
+"title": "Select Points",
+"trace": false,
+"weight_name": ""
+},
+"show_disconnected_inputs": false,
+"template": "select_points"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
 "name": &"id_0028_grid_connect_points",
-"position": Vector2(4460, 560),
+"position": Vector2(4460, 540),
 "settings": {
 "axis_order": 0,
 "cell_size": Vector3(4, 1, 4),
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
-"debug_enabled": true,
+"debug_enabled": false,
 "debug_mode": 1,
 "debug_modulate_by": "",
 "debug_output": 0,
 "debug_port_combined_index": 0,
-"debug_scale": 1.0,
+"debug_scale": 0.685,
 "deduplicate_cells": true,
 "disabled": false,
 "include_input_points": true,
@@ -1119,13 +1026,144 @@ data = {
 "template": "grid_connect_points"
 }, {
 "args_port": {
-"My rooms": {
+"Anchors": {
 "connected": true,
 "port": 0
 }
 },
+"name": &"chest_corner_slots",
+"position": Vector2(4840, 740),
+"settings": {
+"combine_rotation": true,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inherit_anchor_size": false,
+"inspect_enabled": false,
+"label_attribute": "offset_label",
+"labels": Array[String]([]),
+"local_space": true,
+"offset_index_attribute": "offset_index",
+"offsets": Array[Vector3]([Vector3(0, 0, 0)]),
+"parent_index_attribute": "parent_index",
+"random_seed": 1778259596,
+"rotations": Array[Vector3]([Vector3(0, 0, 0)]),
+"scale_offsets_by_anchor_size": true,
+"sizes": Array[Vector3]([Vector3(1, 1, 1)]),
+"title": "Point Offsets",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "point_offsets"
+}, {
+"args_port": {
+"In A": {
+"connected": true,
+"port": 0
+},
+"In B": {
+"connected": true,
+"port": 1
+}
+},
+"name": &"id_0034_substract",
+"position": Vector2(5500, 760),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"operation": 0,
+"random_seed": 3944916852,
+"title": "Substract",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "substract"
+}, {
+"args_port": {
+"Filled Cells": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0033_grid_boundary",
+"position": Vector2(5060, 600),
+"settings": {
+"cell_size": Vector3(4, 1, 4),
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"include_corners": true,
+"inspect_enabled": false,
+"normal_attribute": "boundary_normal",
+"random_seed": 4220618259,
+"title": "Corridor  Boundary",
+"trace": false,
+"type_attribute": "boundary_type",
+"wall_height": 1.0,
+"wall_thickness": 0.2
+},
+"show_disconnected_inputs": false,
+"template": "grid_boundary"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"room_style",
+"position": Vector2(4100, 380),
+"settings": {
+"attribute_name": "room_style",
+"data_type": 1,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"max_value": 3.0,
+"min_value": 0.0,
+"random_seed": 3301,
+"title": "Attribute Random",
+"trace": false,
+"use_index_as_value": false
+},
+"show_disconnected_inputs": false,
+"template": "attribute_random"
+}, {
+"args_port": {
+"My rooms": {
+"connected": false,
+"port": 0
+}
+},
 "name": &"id_0051_subgraph",
-"position": Vector2(4460, 320),
+"position": Vector2(4420, 380),
 "settings": {
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
@@ -1145,13 +1183,196 @@ data = {
 },
 "show_disconnected_inputs": false,
 "template": "subgraph"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"spawn_walls",
+"position": Vector2(5740, 1340),
+"settings": {
+"assign_attributes": {},
+"assign_target_path": "",
+"clear_previous_instances": true,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"random_seed": 6021,
+"randomize_scene_variants": true,
+"scene_attribute": "",
+"scene_selector_attribute": "",
+"scene_variant_weights": Array[float]([7.0, 1.8, 1.2, 0.9, 0.7, 0.5, 0.4]),
+"scene_variants": Array[PackedScene]([ExtResource("6_rxbac"), ExtResource("5_wm5gk"), ExtResource("7_8hoib"), ExtResource("7_m4ltu"), ExtResource("8_rtfsj"), ExtResource("9_enrhv"), ExtResource("10_rtfsj")]),
+"spawn_parent_path": "",
+"title": "Spawn Scenes",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "spawn_scenes"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"wall_unit_size",
+"position": Vector2(5560, 1340),
+"settings": {
+"bounds_max": Vector3(0.5, 0.5, 0.5),
+"bounds_min": Vector3(-0.5, -0.5, -0.5),
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"mode": 0,
+"random_seed": 680383152,
+"title": "Bounds Modifier",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "bounds_modifier"
+}, {
+"args_port": {
+"Filled Cells": {
+"connected": false,
+"port": 0
+}
+},
+"name": &"grid_boundary",
+"position": Vector2(5300, 1020),
+"settings": {
+"cell_size": Vector3(4, 1, 4),
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"include_corners": true,
+"inspect_enabled": false,
+"normal_attribute": "boundary_normal",
+"random_seed": 2455492645,
+"title": "Grid Boundary",
+"trace": false,
+"type_attribute": "boundary_type",
+"wall_height": 1.0,
+"wall_thickness": 1.0
+},
+"show_disconnected_inputs": false,
+"template": "grid_boundary"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0064_self_pruning",
+"position": Vector2(5060, 900),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": true,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"keep_self_intersections": false,
+"random_seed": 2168484400,
+"title": "Self Pruning",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "self_pruning"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0032_merge",
+"position": Vector2(4860, 900),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 1,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"random_seed": 4055464860,
+"title": "Merge",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "merge"
+}, {
+"args_port": {
+"Bounds": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0026_grid_fill_bounds",
+"position": Vector2(4440, 840),
+"settings": {
+"bounds_center": Vector3(0, 0, 0),
+"bounds_size": Vector3(10, 1, 10),
+"cell_size": Vector3(4, 1, 4),
+"copy_input_attributes": true,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": true,
+"debug_mode": 1,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 0.25,
+"disabled": false,
+"fill_y_axis": false,
+"inspect_enabled": false,
+"max_points": 100000,
+"random_seed": 3323197853,
+"source_index_attribute": "",
+"title": "Grid Fill Bounds",
+"trace": false,
+"use_input_bounds": true
+},
+"show_disconnected_inputs": false,
+"template": "grid_fill_bounds"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
-view_zoom = 0.97149366
-view_offset = Vector2(4216.3022, 215.70627)
-new_name_counter = 52
+view_zoom = 1.1755074
+view_offset = Vector2(5075.583, 731.5746)
+new_name_counter = 65
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 
 [node name="DemoDungeon" type="Node3D" unique_id=729494838]
@@ -1163,7 +1384,76 @@ refresh_inputs = Callable()
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
 
 [node name="FlowGraphNode3D2" type="Node3D" parent="." unique_id=1216533672]
+visible = false
 script = ExtResource("1_dstpa")
 graph = ExtResource("5_6bhyk")
 refresh_inputs = Callable()
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
+
+[node name="Pilars" type="Node3D" parent="FlowGraphNode3D2" unique_id=683033459]
+
+[node name="@Node3D@36706" parent="FlowGraphNode3D2/Pilars" unique_id=1447466965 instance=ExtResource("6_j7xqx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0, -6)
+metadata/flow_owner = &"spawn_upper_pillars"
+
+[node name="@Node3D@36707" parent="FlowGraphNode3D2/Pilars" unique_id=804347895 instance=ExtResource("7_8dklu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0, 6)
+metadata/flow_owner = &"spawn_upper_pillars"
+
+[node name="@Node3D@36708" parent="FlowGraphNode3D2/Pilars" unique_id=65029826 instance=ExtResource("6_j7xqx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, -6)
+metadata/flow_owner = &"spawn_upper_pillars"
+
+[node name="@Node3D@36709" parent="FlowGraphNode3D2/Pilars" unique_id=1754914294 instance=ExtResource("7_8dklu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 6)
+metadata/flow_owner = &"spawn_upper_pillars"
+
+[node name="Walls" type="Node3D" parent="FlowGraphNode3D2" unique_id=1985875362]
+
+[node name="Scene_0000" parent="FlowGraphNode3D2/Walls" unique_id=1179879435 instance=ExtResource("6_rxbac")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -6, 0, -4)
+metadata/flow_owner = &"id_0013_spawn_scenes"
+
+[node name="Scene_0001" parent="FlowGraphNode3D2/Walls" unique_id=1529491712 instance=ExtResource("6_rxbac")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, -6)
+metadata/flow_owner = &"id_0013_spawn_scenes"
+
+[node name="Scene_0002" parent="FlowGraphNode3D2/Walls" unique_id=1162983263 instance=ExtResource("6_rxbac")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -6, 0, 0)
+metadata/flow_owner = &"id_0013_spawn_scenes"
+
+[node name="Scene_0003" parent="FlowGraphNode3D2/Walls" unique_id=905940081 instance=ExtResource("6_rxbac")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -6, 0, 4)
+metadata/flow_owner = &"id_0013_spawn_scenes"
+
+[node name="Scene_0004" parent="FlowGraphNode3D2/Walls" unique_id=1092692091 instance=ExtResource("10_rtfsj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, 6)
+metadata/flow_owner = &"id_0013_spawn_scenes"
+
+[node name="Scene_0005" parent="FlowGraphNode3D2/Walls" unique_id=204681378 instance=ExtResource("7_8hoib")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+metadata/flow_owner = &"id_0013_spawn_scenes"
+
+[node name="Scene_0006" parent="FlowGraphNode3D2/Walls" unique_id=1379658153 instance=ExtResource("6_rxbac")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 6)
+metadata/flow_owner = &"id_0013_spawn_scenes"
+
+[node name="Scene_0007" parent="FlowGraphNode3D2/Walls" unique_id=1197901870 instance=ExtResource("6_rxbac")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 6, 0, -4)
+metadata/flow_owner = &"id_0013_spawn_scenes"
+
+[node name="Scene_0008" parent="FlowGraphNode3D2/Walls" unique_id=100404410 instance=ExtResource("6_rxbac")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, -6)
+metadata/flow_owner = &"id_0013_spawn_scenes"
+
+[node name="Scene_0009" parent="FlowGraphNode3D2/Walls" unique_id=1575239509 instance=ExtResource("6_rxbac")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 6, 0, 0)
+metadata/flow_owner = &"id_0013_spawn_scenes"
+
+[node name="Scene_0010" parent="FlowGraphNode3D2/Walls" unique_id=1647947746 instance=ExtResource("6_rxbac")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 6, 0, 4)
+metadata/flow_owner = &"id_0013_spawn_scenes"
+
+[node name="Scene_0011" parent="FlowGraphNode3D2/Walls" unique_id=406058596 instance=ExtResource("6_rxbac")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 6)
+metadata/flow_owner = &"id_0013_spawn_scenes"
