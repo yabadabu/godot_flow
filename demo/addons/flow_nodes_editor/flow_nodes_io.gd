@@ -21,6 +21,17 @@ static func split_floats(in_str : String) -> Array:
 		vfloats.append( part.to_float() )
 	return vfloats
 
+static func _parse_resource_from_string(s: String) -> String:
+	var start := s.find("res://")
+	if start == -1:
+		return ""
+
+	var end := s.find("):", start)
+	if end == -1:
+		return ""
+
+	return s.substr(start, end - start)
+
 static func _parse_color(value) -> Color:
 	if typeof(value) == TYPE_STRING:
 		var parts = split_floats(value)
@@ -59,7 +70,39 @@ static func dict_to_resource(data: Dictionary, resource: Resource) -> void:
 			TYPE_VECTOR3:
 				resource.set(name, _parse_vector3(value))
 			_:
-				resource.set(name, value)
+				if type == TYPE_ARRAY and typeof(value) == TYPE_ARRAY:
+					var target_arr = resource.get(name)
+					if target_arr != null and target_arr.is_typed():
+						var target_arrary : Array = target_arr
+						target_arr.clear()
+						if target_arr.get_typed_builtin() == TYPE_VECTOR3:
+							for item in value:
+								target_arr.append(_parse_vector3(item))
+						elif target_arr.get_typed_builtin() == TYPE_VECTOR2:
+							for item in value:
+								target_arr.append(_parse_vector2(item))
+						elif target_arr.get_typed_builtin() == TYPE_COLOR:
+							for item in value:
+								target_arr.append(_parse_color(item))
+						elif target_arr.get_typed_builtin() == TYPE_OBJECT:
+							for item in value:
+								if item and typeof(item) == TYPE_STRING:
+									var res_name = _parse_resource_from_string( item )
+									if res_name:
+										var obj = load( res_name )
+										if obj:
+											target_arr.append(obj)
+								else:
+									target_arr.append(item)
+									
+						else:
+							# print( "Array is of type %s" % [ target_arr.get_typed_builtin() ])
+							for item in value:
+								target_arr.append(item)
+					else:
+						resource.set(name, value)
+				else:
+					resource.set(name, value)
 
 static func nodes_as_dict( nodes, frames, editor : FlowGraphEditor ):
 	var exported_node_names = {}
