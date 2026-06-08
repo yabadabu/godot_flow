@@ -13,6 +13,10 @@ func _init():
 
 func execute( ctx : FlowData.EvaluationContext ):
 	var in_data : FlowData.Data = get_input(0)
+	# Check if we have something to transform
+	if not (in_data and in_data.hasStream(FlowData.AttrPosition) and in_data.hasStream(FlowData.AttrRotation) and  in_data.hasStream(FlowData.AttrSize)):
+		set_output( 0, FlowData.Data.new() )
+		return
 	var out_data : FlowData.Data = in_data.duplicate()
 	var spos : PackedVector3Array = out_data.cloneStream( FlowData.AttrPosition )
 	var srot : PackedVector3Array = out_data.cloneStream( FlowData.AttrRotation )
