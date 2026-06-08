@@ -12,7 +12,7 @@
 	- [X] Bridge
 - [ ] Match & Set is not taking into account the weight attr
 - [ ] Integrate with HTerrain plugin
-- [ ] Subgraphs / Loops?
+- [X] Subgraphs / Loops?
 - [ ] Sample spline along N random positions
 - [ ] Discard points too close to hard edges of a mesh
 - [ ] Add noise to position <-- Improve noise

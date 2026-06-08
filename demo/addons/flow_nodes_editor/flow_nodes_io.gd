@@ -217,8 +217,6 @@ static func loadFromResource( editor : FlowGraphEditor ):
 		return
 
 	# Register the input_* and output_* nodes before trying to load the nodes
-	for input in current_resource.in_params:
-		editor.registerInputNodeType( input )
 	if "out_params" in current_resource:
 		for output in current_resource.out_params:
 			editor.registerOutputNodeType( output )

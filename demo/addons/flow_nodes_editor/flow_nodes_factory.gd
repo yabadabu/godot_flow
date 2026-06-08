@@ -32,12 +32,17 @@ func scanAvailableNodes():
 		registerNodeType( stem, file )
 	print( "Registered %d node types" % node_types.size() )
 
-func createNewNode( packed_node, node_template : String, node_name : String, settings = null ):
+func createNewNode( packed_node : Resource, node_template : String, node_name : String, settings = null ):
+	
 	var meta = node_types.get( node_template, null )
 	if not meta:
-		push_error("node_type %s is not registered" % node_template)
-		print( node_types.keys() )
-		return null	
+		if node_template.begins_with("input_"):
+			registerNodeType( node_template, "input.gd")
+			meta = node_types.get( node_template, null )
+		else:
+			push_error("node_type %s is not registered" % node_template)
+			print( node_types.keys() )
+			return null	
 	var node : GraphNode
 	if packed_node:
 		node = packed_node.instantiate() as GraphNode

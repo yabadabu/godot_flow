@@ -118,10 +118,6 @@ func _process(delta: float) -> void:
 		if active_intensity == 0:
 			active_nodes.clear()
 		gedit.queue_redraw()
-		
-func registerInputNodeType( input ):
-	var node_type_name := "input_%s" % input.name
-	nodes_factory.registerNodeType( node_type_name, "input.gd")
 
 func _ready():
 	
@@ -416,7 +412,6 @@ func registerAsParameter( name : String, data_type : FlowData.DataType ):
 	new_input.name = name
 	new_input.data_type = data_type
 	current_resource.in_params.append( new_input )
-	registerInputNodeType( current_resource.in_params.back() )
 
 func _on_in_popup_menu_pressed( id: int, row : FlowConnectorRow ) -> void:
 	if id == IDM_PROMOTE_TO_PARAMETER and row:
@@ -488,7 +483,8 @@ func _on_graph_edit_popup_request(at_position):
 				var exposed_index = auto_connect_to_port - meta.ins.size()
 				var iport = exposed_params[ exposed_index ]
 				required_output_type = iport.get( "data_type", FlowData.DataType.Invalid )
-		print( "auto_connect_to_node: %s:%d -> %d" % [auto_connect_to_node, auto_connect_to_port, required_output_type ])		
+		print( "auto_connect_to_node: %s:%d -> %d" % [auto_connect_to_node, auto_connect_to_port, required_output_type ])
+		
 	var in_params = []
 	var out_params = []
 	if current_resource:
