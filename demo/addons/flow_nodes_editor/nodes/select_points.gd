@@ -19,7 +19,7 @@ func cmp_by_key(a: int, b: int) -> bool:
 	# Comparator used by Array.sort_custom; uses member _keys
 	return _keys[a] < _keys[b]
 
-func uniform_sampling(n: int, k: int, rng: RandomNumberGenerator) -> PackedInt32Array:
+func uniform_sampling(n: int, k: int) -> PackedInt32Array:
 	# Reuse buffer
 	if _uniform_idx.size() != n:
 		_uniform_idx.resize(n)
@@ -37,7 +37,7 @@ func uniform_sampling(n: int, k: int, rng: RandomNumberGenerator) -> PackedInt32
 
 # Efraimidis–Spirakis
 ## O(n log n) — simple & fast when k is not tiny
-func weighted_sampling(weights: PackedFloat32Array, k: int, rng: RandomNumberGenerator) -> PackedInt32Array:
+func weighted_sampling(weights: PackedFloat32Array, k: int) -> PackedInt32Array:
 	var n := weights.size()
 	k = clamp(k, 0, n)
 	var out := PackedInt32Array()
@@ -63,7 +63,7 @@ func weighted_sampling(weights: PackedFloat32Array, k: int, rng: RandomNumberGen
 		_indices[i] = i
 
 	if all_zero:
-		return uniform_sampling(n, k, rng)
+		return uniform_sampling(n, k)
 
 	# Sort indices by key (ascending)
 	_indices.sort_custom(cmp_by_key)
@@ -89,18 +89,15 @@ func execute( ctx : FlowData.EvaluationContext ):
 	var out_size : int = int(round(in_size * ratio))
 	#print( "Select: From %d, took %1.2f%% -> %d" % [ in_size, settings.ratio, out_size ])
 	
-	var rng := RandomNumberGenerator.new()
-	rng.seed = settings.random_seed
-	
 	var indices : PackedInt32Array
 	if attr_name:
 		var weight_stream = in_data.findStream( attr_name )
 		if weight_stream == null:
 			setError( "Input Weight Name %s not found" % [attr_name])
 			return
-		indices = weighted_sampling( weight_stream.container, out_size, rng )
+		indices = weighted_sampling( weight_stream.container, out_size )
 	else:
-		indices = uniform_sampling( in_data.size(), out_size, rng )
+		indices = uniform_sampling( in_data.size(), out_size )
 
 	var out_data = in_data.filter( indices )
 	set_output( 0, out_data )
