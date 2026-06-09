@@ -114,6 +114,7 @@ func _find_owner_of_spawned_nodes( root : Node) -> Node:
 	return new_owner
 		
 func preExecute( ctx : FlowData.EvaluationContext ):
+	super.preExecute( ctx )
 	var spawn_parent = _resolve_spawn_parent(ctx.owner)
 	if settings.clear_previous_instances:
 		removeRegisteredInstancedNodes( spawn_parent )

@@ -75,36 +75,39 @@ class EvaluationContext:
 		eval_id += 1
 		active_nodes.clear()
 		for node in nodes_to_eval:
-			if trace:
+			var trace_node := trace  or node.settings.trace
+			if trace_node:
 				print( "  Eval: %s (%d) Dirty:%s" % [ node.name, node.eval_id, node.dirty ] )
 				
 			# The node has already been evaluated or it's not dirty. No need to reevaluate it
 			if node.eval_id == eval_id or not node.dirty:
-				if trace:
+				if trace_node:
 					print( "  %s Already eval or not diry" % [ node.name ])
 				continue
 			
-			var time_node_start = Time.get_ticks_usec()
+			var time_node_start := Time.get_ticks_usec()
 			active_nodes.append( node )
 			
 			node.preExecute( self )
 			
 			#print( "Evaluating %s" % node.name )
 			if node.settings.disabled:
+				if trace_node:
+					print( "  %s is disabled. Skipping" % [ node.name ])
 				node.executedDisabled( self )
 			else:
+				if trace_node:
+					print( "  %s.run.starts. %d bulks to process" % [ node.name, node.num_connected_bulks ])
 				node.run( self )
 			
-			#if node.settings.inspect_enabled:
-				#data_inspector.refresh()
-			#node.setupDrawDebug()
 			node.dirty = false
-			var time_node_ends = Time.get_ticks_usec()
-			var exec_usec = time_node_ends - time_node_start
+			var time_node_ends := Time.get_ticks_usec()
+			var exec_usec := time_node_ends - time_node_start
 			
 			# Always show execution time on the node
 			node.setExecTime(exec_usec)
-			
+			if trace_node:
+				print( "  %s run completed in %f. Generated %d bulks" % [ node.name, exec_usec, node.num_generated_bulks ])
 
 ## Build a stable orthonormal Basis from a surface normal.
 ## - `normal` is the axis you want to align (default aligns to +Z).

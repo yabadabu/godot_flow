@@ -73,7 +73,7 @@ func preExecute( ctx : FlowData.EvaluationContext ):
 	generated_bulks = []
 	
 	deps.map(func( conn : Dictionary ):
-		# The number of bulkds in the pin 0 defines how many bulks we are going to generate
+		# The number of bulks in the pin 0 defines how many bulks we are going to generate
 		if conn.to_port == 0:
 			var node = ctx.gedit_nodes_by_name.get( conn.from_node )
 			if node:
@@ -597,8 +597,10 @@ func set_output( port_idx : int, data : FlowData.Data ):
 	var bulk : Array = generated_bulks[ num_generated_bulks - 1]
 	if port_idx >= bulk.size():
 		bulk.resize( port_idx + 1 )
-	#print( "Saving bulk %d, port %d with %s (%d entries)" % [ num_generated_bulks - 1, port_idx, data.streams.keys(), data.size() ] )
 	bulk[ port_idx ] = data
+	if settings.trace:
+		print( "%s Saving bulk %d, port %d with %s (%d entries)" % [ name, num_generated_bulks - 1, port_idx, data.streams.keys(), data.size() ] )
+
 	
 func get_input( idx : int ):
 	if idx >= inputs.size():
@@ -681,22 +683,23 @@ func run( ctx : FlowData.EvaluationContext ):
 		execute( ctx )
 
 func removeRegisteredInstancedNodes( new_parent : Node3D ):
-	print( "%s.removeRegisteredInstancedNodes( %s )" % [ name, new_parent.name ] )
+	if settings.trace:
+		print( "%s.removeRegisteredInstancedNodes( %s )" % [ name, new_parent.name ] )
 	var nodes : Array[Node] = []
 	for child in new_parent.get_children():
 		if !child.has_meta( "flow_owner" ):
 			continue
 		if child.get_meta( "flow_owner" ) == name:
-			print( "  Will remove %s.  Owner:%s" % [ child.name, name ] )
 			nodes.append( child )
 	for node in nodes:
-		print( "  Removing %s" % [ node.name ] )
-		
+		if settings.trace:
+			print( "  Removing %s" % [ node.name ] )
 		node.name += "_removed"
 		node.queue_free()
 
 func registerInstancedNode( new_owner : Node3D, new_parent : Node3D, child : Node3D ):
-	print( "%s.registerInstancedNode( Owner:%s, Parent:%s, Child:%s )" % [ name, new_owner.name, new_parent.name, child.name ] )
+	if settings.trace:
+		print( "%s.registerInstancedNode( Owner:%s, Parent:%s, Child:%s )" % [ name, new_owner.name, new_parent.name, child.name ] )
 	new_parent.add_child( child )
 	child.owner = new_owner
 	child.set_meta("flow_owner", name )
