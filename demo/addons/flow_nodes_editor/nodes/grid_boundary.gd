@@ -140,7 +140,7 @@ func execute(_ctx : FlowData.EvaluationContext):
 			var edge_size := Vector3(cell_size.x, settings.wall_height, settings.wall_thickness)
 			if dir.x != 0:
 				edge_rot.y = 90.0
-				edge_size = Vector3(settings.wall_thickness, settings.wall_height, cell_size.z)
+				#edge_size = Vector3(settings.wall_thickness, settings.wall_height, cell_size.z)
 			_append_record(edge_records, edge_pos, edge_rot, edge_size, normal, "edge")
 
 		if settings.include_corners:
