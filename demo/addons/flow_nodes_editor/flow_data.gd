@@ -506,6 +506,27 @@ class Data:
 		s.last_added_stream_name = last_added_stream_name
 		s.tags = tags.duplicate()
 		return s
+
+	# Returns a String if it was not possible to perform the rename
+	# Remember to work in your own copy of the Data
+	func renameStream( old_name : String, new_name : String, allow_override : bool ):
+		old_name = old_name.strip_edges()
+		new_name = new_name.strip_edges()
+		old_name = translateStreamName( old_name )
+		if not streams.has(old_name):
+			return "Data does not have a stream named %s" % old_name
+		if new_name.is_empty():
+			return "new renamed stream can't be empty"
+		if old_name in [ AttrPosition, AttrRotation, AttrSize ]:
+			return "Can't rename position,rotation or size attributes" 
+		if new_name != old_name:
+			if not allow_override and streams.has( new_name ):
+				return "Data already has a stream named %s" % new_name
+			streams[ new_name ] = streams[old_name]
+			streams[ new_name ].name = new_name
+			delStream( old_name )
+			last_added_stream_name = new_name
+		return null
 		
 	func filter( indices : PackedInt32Array ) -> Data:
 		var new_data := Data.new()

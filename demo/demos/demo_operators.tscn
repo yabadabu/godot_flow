@@ -1,0 +1,206 @@
+[gd_scene format=3 uid="uid://b5irswnvinpf7"]
+
+[ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_wih4v"]
+[ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="2_qe5xq"]
+[ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="3_ol62c"]
+
+[sub_resource type="Resource" id="Resource_gur2a"]
+script = ExtResource("3_ol62c")
+data = {
+"frames": [],
+"links": [{
+"from_node": &"id_0003_grid",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0002_add_attribute",
+"to_port": 0
+}, {
+"from_node": &"id_0002_add_attribute",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0005_add_attribute",
+"to_port": 0
+}, {
+"from_node": &"id_0005_add_attribute",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0006_attribute_rename",
+"to_port": 0
+}, {
+"from_node": &"id_0005_add_attribute",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0001_attribute_rename",
+"to_port": 0
+}],
+"min_pos": Vector2(120, 100),
+"nodes": [{
+"args_port": {},
+"name": &"id_0003_grid",
+"position": Vector2(0, 40),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"origin": Vector3(0, 0, 0),
+"random_seed": 618638236,
+"rotation": Vector3(0, 0, 0),
+"size": 1.0,
+"step": Vector3(1, 1, 1),
+"title": "Grid",
+"trace": false,
+"x": 2,
+"y": 1,
+"z": 2
+},
+"show_disconnected_inputs": false,
+"template": "grid"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0002_add_attribute",
+"position": Vector2(160, 40),
+"settings": {
+"cte_bool": false,
+"cte_color": Color(1, 1, 1, 1),
+"cte_float": 2.3,
+"cte_int": 0,
+"cte_resource": null,
+"cte_string": "",
+"cte_vector": Vector3(0, 0, 0),
+"data_type": 2,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"name": "AttrA",
+"random_seed": 1449361021,
+"title": "Add Attribute",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "add_attribute"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0005_add_attribute",
+"position": Vector2(320, 40),
+"settings": {
+"cte_bool": false,
+"cte_color": Color(1, 1, 1, 1),
+"cte_float": 4.0,
+"cte_int": 0,
+"cte_resource": null,
+"cte_string": "",
+"cte_vector": Vector3(0, 0, 0),
+"data_type": 2,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"name": "AttrB",
+"random_seed": 1449361021,
+"title": "Add Attribute",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "add_attribute"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0006_attribute_rename",
+"position": Vector2(520, 0),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"from_name": "@last",
+"inspect_enabled": false,
+"overwrite_existing": true,
+"random_seed": 1383552419,
+"title": "Attribute Rename",
+"to_name": "AttrC",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "attribute_rename"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0001_attribute_rename",
+"position": Vector2(520, 100),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"from_name": "@last",
+"inspect_enabled": true,
+"overwrite_existing": false,
+"random_seed": 1383552419,
+"title": "Attribute Rename",
+"to_name": "AttrA",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "attribute_rename"
+}],
+"type": "flow_graph_nodes",
+"version": 1
+}
+view_offset = Vector2(165, -37)
+new_name_counter = 1
+
+[node name="DemoOperators" type="Node3D" unique_id=80587500]
+
+[node name="FlowGraphNode3D" type="Node3D" parent="." unique_id=420276401]
+script = ExtResource("1_wih4v")
+graph = SubResource("Resource_gur2a")
+refresh_inputs = Callable()
+metadata/_custom_type_script = "uid://d1krtmb1urldl"
