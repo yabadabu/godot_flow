@@ -141,7 +141,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 
 			FilterNodeSettings.eCondition.LogicalXOR:
 				for i in num_elems:
-					if inA[i] == inB[i]:
+					if bool(inA[i]) != bool(inB[i]):
 						indices_true.append(i)
 					else:
 						indices_false.append(i)
