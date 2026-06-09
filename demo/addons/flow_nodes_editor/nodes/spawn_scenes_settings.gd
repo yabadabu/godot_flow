@@ -4,7 +4,6 @@ extends NodeSettings
 
 @export_group("Spawn Scenes")
 
-@export var scene : PackedScene
 @export var scene_attribute : String
 @export var scene_variants : Array[PackedScene] = []
 @export var scene_variant_weights : Array[float] = []

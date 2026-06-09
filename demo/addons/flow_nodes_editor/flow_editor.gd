@@ -205,6 +205,7 @@ func deleteGraphElementsAndRefresh( nodes : Array[GraphNode], frames : Array[Gra
 	queueSave()
 	inspected_node = null
 	inspector.edit(null)
+	removeGeneratedNodes( null )
 	queueRegen()
 	
 func deleteSelectedNodes():
@@ -646,14 +647,15 @@ func getAllNodes() -> Array[ FlowNodeBase ]:
 		nodes.append( node )
 	return nodes
 
-func removeGeneratedNodes():
+func removeGeneratedNodes( flow_owner ):
 	if not resource_owner:
 		return
 	# Remove instances from prev execution
 	var nodes_to_remove = []
 	for child in resource_owner.get_children():
 		if child.has_meta( "flow_owner" ):
-			nodes_to_remove.append(child)
+			if not flow_owner or flow_owner ==child.get_meta( "flow_owner" ): 
+				nodes_to_remove.append(child)
 	#print( "Removing %d generated comps" % [nodes_to_remove.size()])
 	for child in nodes_to_remove:
 		resource_owner.remove_child( child )
@@ -700,7 +702,7 @@ func evalGraph():
 	var time_start = Time.get_ticks_usec()
 	
 	# print( "evalGraph %d starts from %s" % [ ctx.eval_id, resource_owner.name if resource_owner else "null" ] )
-	removeGeneratedNodes()
+	#removeGeneratedNodes()
 	
 	cacheConnections()
 	

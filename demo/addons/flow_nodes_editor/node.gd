@@ -679,3 +679,24 @@ func run( ctx : FlowData.EvaluationContext ):
 		if settings.trace:
 			print( "%s Inputs for bulk %d/%d are %s" % [ name, bulk_index, num_connected_bulks, inputs ])
 		execute( ctx )
+
+func removeRegisteredInstancedNodes( new_parent : Node3D ):
+	print( "%s.removeRegisteredInstancedNodes( %s )" % [ name, new_parent.name ] )
+	var nodes : Array[Node] = []
+	for child in new_parent.get_children():
+		if !child.has_meta( "flow_owner" ):
+			continue
+		if child.get_meta( "flow_owner" ) == name:
+			print( "  Will remove %s.  Owner:%s" % [ child.name, name ] )
+			nodes.append( child )
+	for node in nodes:
+		print( "  Removing %s" % [ node.name ] )
+		
+		node.name += "_removed"
+		node.queue_free()
+
+func registerInstancedNode( new_owner : Node3D, new_parent : Node3D, child : Node3D ):
+	print( "%s.registerInstancedNode( Owner:%s, Parent:%s, Child:%s )" % [ name, new_owner.name, new_parent.name, child.name ] )
+	new_parent.add_child( child )
+	child.owner = new_owner
+	child.set_meta("flow_owner", name )
