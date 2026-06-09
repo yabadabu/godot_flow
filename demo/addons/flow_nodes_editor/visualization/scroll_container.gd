@@ -97,7 +97,7 @@ func drawCol( col_idx : int, y0 : float, top_row_idx : int ):
 		
 
 func drawBackgrounds( y0 : float, row_idx : int ):
-	var bg_color_odd : Color = Color( 0.14, 0.14, 0.16 )
+	var bg_color_odd : Color = Color( 0, 0, 0, 0.1 )
 	var w = size.x
 	var y1 := min( size.y, num_rows * line_height )
 	var pos := Vector2( 0, y0 )

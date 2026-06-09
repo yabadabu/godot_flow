@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://b5a4uh306y0de"]
+[gd_scene format=3 uid="uid://b5a4uh306y0de"]
 
 [ext_resource type="Script" uid="uid://dkek7m8lxexb3" path="res://addons/flow_nodes_editor/visualization/table_view.gd" id="1_j3t5q"]
 [ext_resource type="Script" uid="uid://ccuv3evx8yrn3" path="res://addons/flow_nodes_editor/visualization/scroll_container.gd" id="2_twygl"]
@@ -6,7 +6,7 @@
 [sub_resource type="LabelSettings" id="LabelSettings_twygl"]
 font_size = 12
 
-[node name="TableView" type="VBoxContainer"]
+[node name="TableView" type="VBoxContainer" unique_id=125016029]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -17,34 +17,34 @@ size_flags_vertical = 3
 theme_override_constants/separation = 0
 script = ExtResource("1_j3t5q")
 
-[node name="DebugInfo" type="Label" parent="."]
+[node name="DebugInfo" type="Label" parent="." unique_id=2084536978]
 visible = false
 layout_mode = 2
 label_settings = SubResource("LabelSettings_twygl")
 
-[node name="TitlesContainer" type="ScrollContainer" parent="."]
+[node name="TitlesContainer" type="ScrollContainer" parent="." unique_id=1612926211]
 layout_mode = 2
 size_flags_vertical = 0
 horizontal_scroll_mode = 3
 vertical_scroll_mode = 0
 
-[node name="ColumnTitles" type="HBoxContainer" parent="TitlesContainer"]
+[node name="ColumnTitles" type="HBoxContainer" parent="TitlesContainer" unique_id=2034045967]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="ScrollContainer" type="ScrollContainer" parent="."]
+[node name="ScrollContainer" type="ScrollContainer" parent="." unique_id=845056642]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 scroll_vertical_custom_step = 24.0
 script = ExtResource("2_twygl")
 
-[node name="Contents" type="Control" parent="ScrollContainer"]
+[node name="Contents" type="Control" parent="ScrollContainer" unique_id=2070075831]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Sumary" type="Label" parent="."]
+[node name="Sumary" type="Label" parent="." unique_id=1507385457]
 visible = false
 layout_mode = 2
 text = "Sumary"
