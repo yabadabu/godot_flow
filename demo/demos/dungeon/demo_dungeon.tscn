@@ -21,10 +21,24 @@ data = {
 "frames": [{
 "attached": Array[StringName]([&"id_0013_partition", &"id_0011_subgraph", &"id_0015_merge"]),
 "name": &"id_0035_comment",
-"position": Vector2(3140, 259),
+"position": Vector2(3100, 359),
 "size": Vector2(899, 216),
 "tint_color": Color(0.28235295, 0.23921569, 0.54509807, 1),
 "title": "Remove Overlapped Rooms"
+}, {
+"attached": Array[StringName]([&"wall_unit_size", &"spawn_walls"]),
+"name": &"id_0082_comment",
+"position": Vector2(5440, 699),
+"size": Vector2(399, 153),
+"tint_color": Color(0.28235295, 0.23921569, 0.54509807, 1),
+"title": "Walls"
+}, {
+"attached": Array[StringName]([&"upper_pillar_unit", &"spawn_upper_pillars"]),
+"name": &"id_0083_comment",
+"position": Vector2(5440, 899),
+"size": Vector2(399, 153.00003),
+"tint_color": Color(0.28235295, 0.23921569, 0.54509807, 1),
+"title": "Columns At Corners"
 }],
 "links": [{
 "from_node": &"id_0002_make_bounds",
@@ -135,12 +149,6 @@ data = {
 "to_node": &"room_style",
 "to_port": 0
 }, {
-"from_node": &"id_0026_grid_fill_bounds",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0027_grid_boundary",
-"to_port": 0
-}, {
 "from_node": &"room_style",
 "from_port": 0,
 "keep_alive": false,
@@ -158,18 +166,6 @@ data = {
 "keep_alive": false,
 "to_node": &"id_0029_substract",
 "to_port": 1
-}, {
-"from_node": &"id_0028_grid_connect_points",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0031_add_attribute",
-"to_port": 0
-}, {
-"from_node": &"id_0031_add_attribute",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"corridor_floor_style",
-"to_port": 0
 }, {
 "from_node": &"corridor_floor_style",
 "from_port": 0,
@@ -195,18 +191,6 @@ data = {
 "to_node": &"id_0033_grid_boundary",
 "to_port": 0
 }, {
-"from_node": &"id_0027_grid_boundary",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0034_substract",
-"to_port": 0
-}, {
-"from_node": &"id_0033_grid_boundary",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0034_substract",
-"to_port": 1
-}, {
 "from_node": &"id_0011_subgraph",
 "from_port": 0,
 "keep_alive": false,
@@ -225,12 +209,6 @@ data = {
 "to_node": &"chest_corner_slots",
 "to_port": 0
 }, {
-"from_node": &"id_0032_merge",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0064_self_pruning",
-"to_port": 0
-}, {
 "from_node": &"grid_boundary",
 "from_port": 0,
 "keep_alive": false,
@@ -242,8 +220,32 @@ data = {
 "keep_alive": false,
 "to_node": &"spawn_walls",
 "to_port": 0
+}, {
+"from_node": &"id_0032_merge",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"grid_boundary",
+"to_port": 0
+}, {
+"from_node": &"id_0028_grid_connect_points",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"corridor_floor_style",
+"to_port": 0
+}, {
+"from_node": &"upper_pillar_unit",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"spawn_upper_pillars",
+"to_port": 0
+}, {
+"from_node": &"grid_boundary",
+"from_port": 1,
+"keep_alive": false,
+"to_node": &"upper_pillar_unit",
+"to_port": 0
 }],
-"min_pos": Vector2(-40, 20),
+"min_pos": Vector2(-60, -120),
 "nodes": [{
 "args_port": {
 "In A": {
@@ -256,7 +258,7 @@ data = {
 }
 },
 "name": &"w_make_odd",
-"position": Vector2(920, 0),
+"position": Vector2(940, 140),
 "settings": {
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
@@ -290,7 +292,7 @@ data = {
 }
 },
 "name": &"h_steps_x_2",
-"position": Vector2(1560, 140),
+"position": Vector2(1580, 280),
 "settings": {
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
@@ -324,7 +326,7 @@ data = {
 }
 },
 "name": &"h_make_odd",
-"position": Vector2(1740, 140),
+"position": Vector2(1760, 280),
 "settings": {
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
@@ -358,7 +360,7 @@ data = {
 }
 },
 "name": &"h_to_world",
-"position": Vector2(1920, 140),
+"position": Vector2(1940, 280),
 "settings": {
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
@@ -382,90 +384,6 @@ data = {
 "template": "math_op"
 }, {
 "args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"rand_h_steps",
-"position": Vector2(1400, 140),
-"settings": {
-"attribute_name": "RoomHeightSteps",
-"data_type": 1,
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"max_value": 5.0,
-"min_value": 1.0,
-"random_seed": 23047,
-"title": "Attribute Random",
-"trace": false,
-"use_index_as_value": false
-},
-"show_disconnected_inputs": false,
-"template": "attribute_random"
-}, {
-"args_port": {},
-"name": &"id_0002_make_bounds",
-"position": Vector2(0, 140),
-"settings": {
-"center": Vector3(0, 0, 0),
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"random_seed": 1071964084,
-"size": Vector3(48, 1, 48),
-"title": "Make Bounds",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "make_bounds"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0004_snap_to_grid",
-"position": Vector2(360, 140),
-"settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"grid_size": Vector3(4, 0, 4),
-"inspect_enabled": false,
-"random_seed": 529758338,
-"snap_position": true,
-"snap_rotation": false,
-"snap_scale": false,
-"title": "Snap to Grid",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "snap_to_grid"
-}, {
-"args_port": {
 "In A": {
 "connected": true,
 "port": 0
@@ -476,7 +394,7 @@ data = {
 }
 },
 "name": &"w_to_world",
-"position": Vector2(1100, 0),
+"position": Vector2(1120, 140),
 "settings": {
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
@@ -500,65 +418,6 @@ data = {
 "template": "math_op"
 }, {
 "args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0003_surface_sampler",
-"position": Vector2(200, 140),
-"settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"num_points": 40,
-"point_size": Vector3(1, 1, 1),
-"random_seed": 631456494,
-"title": "Surface Sampler",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "surface_sampler"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0005_attribute_random",
-"position": Vector2(580, 0),
-"settings": {
-"attribute_name": "RoomWidthSteps",
-"data_type": 1,
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"max_value": 5.0,
-"min_value": 1.0,
-"random_seed": 23031,
-"title": "Attribute Random",
-"trace": false,
-"use_index_as_value": false
-},
-"show_disconnected_inputs": false,
-"template": "attribute_random"
-}, {
-"args_port": {
 "In A": {
 "connected": true,
 "port": 0
@@ -569,7 +428,7 @@ data = {
 }
 },
 "name": &"id_0008_math_op",
-"position": Vector2(740, 0),
+"position": Vector2(760, 140),
 "settings": {
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
@@ -596,10 +455,132 @@ data = {
 "In": {
 "connected": true,
 "port": 0
+},
+"attribute_name": {
+"connected": false,
+"port": 1
+},
+"out_partition_attribute": {
+"connected": false,
+"port": 2
+}
+},
+"name": &"id_0013_partition",
+"position": Vector2(3140, 400),
+"settings": {
+"attribute_name": "Index",
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"out_partition_attribute": "",
+"random_seed": 1881242478,
+"title": "Partition",
+"trace": false
+},
+"show_disconnected_inputs": true,
+"template": "partition"
+}, {
+"args_port": {
+"CandidateRoom": {
+"connected": true,
+"port": 0
+},
+"SelectedRooms": {
+"connected": false,
+"port": 1
+}
+},
+"name": &"id_0011_subgraph",
+"position": Vector2(3440, 400),
+"settings": {
+"debug_bulk": 1,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 1,
+"debug_scale": 1.0,
+"disabled": false,
+"graph": ExtResource("2_6bhyk"),
+"inspect_enabled": false,
+"param_overrides": {},
+"random_seed": 3219186451,
+"title": "Subgraph",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "subgraph"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0015_merge",
+"position": Vector2(3820, 480),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"random_seed": 1837664973,
+"title": "Merge",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "merge"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"sort_candidates",
+"position": Vector2(2620, 420),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"random_seed": 1000054401,
+"sort_by": "RoomPriority",
+"sort_descending": true,
+"title": "Sort",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "sort"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
 }
 },
 "name": &"compose_room_size",
-"position": Vector2(2440, 280),
+"position": Vector2(2460, 420),
 "settings": {
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
@@ -630,7 +611,7 @@ data = {
 }
 },
 "name": &"rand_id",
-"position": Vector2(2280, 280),
+"position": Vector2(2300, 420),
 "settings": {
 "attribute_name": "RoomID",
 "data_type": 1,
@@ -658,74 +639,10 @@ data = {
 "In": {
 "connected": true,
 "port": 0
-},
-"attribute_name": {
-"connected": false,
-"port": 1
-},
-"out_partition_attribute": {
-"connected": false,
-"port": 2
-}
-},
-"name": &"id_0013_partition",
-"position": Vector2(3180, 300),
-"settings": {
-"attribute_name": "Index",
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"out_partition_attribute": "",
-"random_seed": 1881242478,
-"title": "Partition",
-"trace": false
-},
-"show_disconnected_inputs": true,
-"template": "partition"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"sort_candidates",
-"position": Vector2(2600, 280),
-"settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"random_seed": 1000054401,
-"sort_by": "RoomPriority",
-"sort_descending": true,
-"title": "Sort",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "sort"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
 }
 },
 "name": &"rand_prio",
-"position": Vector2(2120, 280),
+"position": Vector2(2140, 420),
 "settings": {
 "attribute_name": "RoomPriority",
 "data_type": 0,
@@ -750,15 +667,16 @@ data = {
 "template": "attribute_random"
 }, {
 "args_port": {
-"Filled Cells": {
+"In": {
 "connected": true,
 "port": 0
 }
 },
-"name": &"id_0027_grid_boundary",
-"position": Vector2(4860, 1020),
+"name": &"rand_h_steps",
+"position": Vector2(1420, 280),
 "settings": {
-"cell_size": Vector3(4, 1, 4),
+"attribute_name": "RoomHeightSteps",
+"data_type": 1,
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
@@ -768,18 +686,16 @@ data = {
 "debug_port_combined_index": 0,
 "debug_scale": 1.0,
 "disabled": false,
-"include_corners": false,
 "inspect_enabled": false,
-"normal_attribute": "boundary_normal",
-"random_seed": 285105322,
-"title": "Room Boundary",
+"max_value": 5.0,
+"min_value": 1.0,
+"random_seed": 23047,
+"title": "Attribute Random",
 "trace": false,
-"type_attribute": "boundary_type",
-"wall_height": 1.0,
-"wall_thickness": 1.0
+"use_index_as_value": false
 },
 "show_disconnected_inputs": false,
-"template": "grid_boundary"
+"template": "attribute_random"
 }, {
 "args_port": {
 "In": {
@@ -787,9 +703,11 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0044_merge",
-"position": Vector2(3860, 280),
+"name": &"id_0005_attribute_random",
+"position": Vector2(600, 140),
 "settings": {
+"attribute_name": "RoomWidthSteps",
+"data_type": 1,
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
@@ -800,39 +718,38 @@ data = {
 "debug_scale": 1.0,
 "disabled": false,
 "inspect_enabled": false,
-"random_seed": 1837664973,
-"title": "Merge",
-"trace": false
+"max_value": 5.0,
+"min_value": 1.0,
+"random_seed": 23031,
+"title": "Attribute Random",
+"trace": false,
+"use_index_as_value": false
 },
 "show_disconnected_inputs": false,
-"template": "merge"
+"template": "attribute_random"
 }, {
 "args_port": {
-"CandidateRoom": {
-"connected": true,
-"port": 0
-},
-"SelectedRooms": {
+"My rooms": {
 "connected": false,
-"port": 1
+"port": 0
 }
 },
-"name": &"id_0011_subgraph",
-"position": Vector2(3480, 300),
+"name": &"id_0051_subgraph",
+"position": Vector2(4440, 360),
 "settings": {
-"debug_bulk": 1,
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "",
 "debug_output": 0,
-"debug_port_combined_index": 1,
+"debug_port_combined_index": 0,
 "debug_scale": 1.0,
 "disabled": false,
-"graph": ExtResource("2_6bhyk"),
+"graph": ExtResource("5_6bhyk"),
 "inspect_enabled": false,
 "param_overrides": {},
-"random_seed": 3219186451,
+"random_seed": 1962547679,
 "title": "Subgraph",
 "trace": false
 },
@@ -845,163 +762,8 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0031_add_attribute",
-"position": Vector2(4460, 640),
-"settings": {
-"cte_bool": false,
-"cte_color": Color(1, 1, 1, 1),
-"cte_float": 0.0,
-"cte_int": 0,
-"cte_resource": null,
-"cte_string": "",
-"cte_vector": Vector3(1, 1, 1),
-"data_type": 3,
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"name": "size",
-"random_seed": 492631459,
-"title": "Add Attribute",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "add_attribute"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0015_merge",
-"position": Vector2(3860, 380),
-"settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"random_seed": 1837664973,
-"title": "Merge",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "merge"
-}, {
-"args_port": {
-"In A": {
-"connected": true,
-"port": 0
-},
-"In B": {
-"connected": true,
-"port": 1
-}
-},
-"name": &"id_0029_substract",
-"position": Vector2(4860, 600),
-"settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"operation": 0,
-"random_seed": 198575042,
-"title": "Corridor Only Cells",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "substract"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"corridor_floor_style",
-"position": Vector2(4620, 640),
-"settings": {
-"cte_bool": false,
-"cte_color": Color(1, 1, 1, 1),
-"cte_float": 0.0,
-"cte_int": 0,
-"cte_resource": null,
-"cte_string": "",
-"cte_vector": Vector3(0, 0, 0),
-"data_type": 2,
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"name": "room_style",
-"random_seed": 258639929,
-"title": "Corridor Floor Style",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "add_attribute"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"select_chest_rooms",
-"position": Vector2(4460, 740),
-"settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"random_seed": 19237,
-"ratio": 0.42,
-"title": "Select Points",
-"trace": false,
-"weight_name": ""
-},
-"show_disconnected_inputs": false,
-"template": "select_points"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
 "name": &"id_0028_grid_connect_points",
-"position": Vector2(4460, 540),
+"position": Vector2(4400, 520),
 "settings": {
 "axis_order": 0,
 "cell_size": Vector3(4, 1, 4),
@@ -1026,13 +788,136 @@ data = {
 "template": "grid_connect_points"
 }, {
 "args_port": {
+"Bounds": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0026_grid_fill_bounds",
+"position": Vector2(4400, 660),
+"settings": {
+"bounds_center": Vector3(0, 0, 0),
+"bounds_size": Vector3(10, 1, 10),
+"cell_size": Vector3(4, 1, 4),
+"copy_input_attributes": true,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 0, 1),
+"debug_enabled": false,
+"debug_mode": 1,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"fill_y_axis": false,
+"inspect_enabled": false,
+"max_points": 100000,
+"random_seed": 3323197853,
+"source_index_attribute": "",
+"title": "Grid Fill Bounds",
+"trace": false,
+"use_input_bounds": true
+},
+"show_disconnected_inputs": false,
+"template": "grid_fill_bounds"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0032_merge",
+"position": Vector2(4860, 740),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 1,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"random_seed": 4055464860,
+"title": "Merge",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "merge"
+}, {
+"args_port": {
+"Filled Cells": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0033_grid_boundary",
+"position": Vector2(5120, 460),
+"settings": {
+"cell_size": Vector3(4, 1, 4),
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"include_corners": true,
+"inspect_enabled": false,
+"normal_attribute": "boundary_normal",
+"random_seed": 4220618259,
+"title": "Corridor  Boundary",
+"trace": false,
+"type_attribute": "boundary_type",
+"wall_height": 1.0,
+"wall_thickness": 0.2
+},
+"show_disconnected_inputs": false,
+"template": "grid_boundary"
+}, {
+"args_port": {
+"In A": {
+"connected": true,
+"port": 0
+},
+"In B": {
+"connected": true,
+"port": 1
+}
+},
+"name": &"id_0029_substract",
+"position": Vector2(4960, 480),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(0.48235294, 1, 0.5254902, 1),
+"debug_enabled": false,
+"debug_mode": 1,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.15,
+"disabled": false,
+"inspect_enabled": false,
+"operation": 0,
+"random_seed": 198574992,
+"title": "Corridor Only Cells",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "substract"
+}, {
+"args_port": {
 "Anchors": {
 "connected": true,
 "port": 0
 }
 },
 "name": &"chest_corner_slots",
-"position": Vector2(4840, 740),
+"position": Vector2(4420, 980),
 "settings": {
 "combine_rotation": true,
 "debug_bulk": 0,
@@ -1062,19 +947,11 @@ data = {
 "show_disconnected_inputs": false,
 "template": "point_offsets"
 }, {
-"args_port": {
-"In A": {
-"connected": true,
-"port": 0
-},
-"In B": {
-"connected": true,
-"port": 1
-}
-},
-"name": &"id_0034_substract",
-"position": Vector2(5500, 760),
+"args_port": {},
+"name": &"id_0002_make_bounds",
+"position": Vector2(0, 0),
 "settings": {
+"center": Vector3(0, 0, 0),
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
@@ -1085,24 +962,23 @@ data = {
 "debug_scale": 1.0,
 "disabled": false,
 "inspect_enabled": false,
-"operation": 0,
-"random_seed": 3944916852,
-"title": "Substract",
+"random_seed": 1071964047,
+"size": Vector3(48, 0, 48),
+"title": "Make Bounds",
 "trace": false
 },
 "show_disconnected_inputs": false,
-"template": "substract"
+"template": "make_bounds"
 }, {
 "args_port": {
-"Filled Cells": {
+"In": {
 "connected": true,
 "port": 0
 }
 },
-"name": &"id_0033_grid_boundary",
-"position": Vector2(5060, 600),
+"name": &"id_0003_surface_sampler",
+"position": Vector2(200, 0),
 "settings": {
-"cell_size": Vector3(4, 1, 4),
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
@@ -1112,18 +988,71 @@ data = {
 "debug_port_combined_index": 0,
 "debug_scale": 1.0,
 "disabled": false,
-"include_corners": true,
 "inspect_enabled": false,
-"normal_attribute": "boundary_normal",
-"random_seed": 4220618259,
-"title": "Corridor  Boundary",
-"trace": false,
-"type_attribute": "boundary_type",
-"wall_height": 1.0,
-"wall_thickness": 0.2
+"num_points": 40,
+"point_size": Vector3(1, 1, 1),
+"random_seed": 631456509,
+"title": "Surface Sampler",
+"trace": false
 },
 "show_disconnected_inputs": false,
-"template": "grid_boundary"
+"template": "surface_sampler"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0004_snap_to_grid",
+"position": Vector2(360, 0),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"grid_size": Vector3(4, 0, 4),
+"inspect_enabled": false,
+"random_seed": 529758338,
+"snap_position": true,
+"snap_rotation": false,
+"snap_scale": false,
+"title": "Snap to Grid",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "snap_to_grid"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0044_merge",
+"position": Vector2(3820, 400),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"random_seed": 1837664973,
+"title": "Merge",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "merge"
 }, {
 "args_port": {
 "In": {
@@ -1132,12 +1061,12 @@ data = {
 }
 },
 "name": &"room_style",
-"position": Vector2(4100, 380),
+"position": Vector2(4100, 480),
 "settings": {
 "attribute_name": "room_style",
 "data_type": 1,
 "debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
+"debug_color": Color(1, 1, 1, 0.3882353),
 "debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "",
@@ -1157,13 +1086,13 @@ data = {
 "template": "attribute_random"
 }, {
 "args_port": {
-"My rooms": {
-"connected": false,
+"In": {
+"connected": true,
 "port": 0
 }
 },
-"name": &"id_0051_subgraph",
-"position": Vector2(4420, 380),
+"name": &"select_chest_rooms",
+"position": Vector2(4420, 900),
 "settings": {
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
@@ -1174,15 +1103,15 @@ data = {
 "debug_port_combined_index": 0,
 "debug_scale": 1.0,
 "disabled": false,
-"graph": ExtResource("5_6bhyk"),
 "inspect_enabled": false,
-"param_overrides": {},
-"random_seed": 1962547679,
-"title": "Subgraph",
-"trace": false
+"random_seed": 19237,
+"ratio": 0.42,
+"title": "Select Points",
+"trace": false,
+"weight_name": ""
 },
 "show_disconnected_inputs": false,
-"template": "subgraph"
+"template": "select_points"
 }, {
 "args_port": {
 "In": {
@@ -1190,34 +1119,34 @@ data = {
 "port": 0
 }
 },
-"name": &"spawn_walls",
-"position": Vector2(5740, 1340),
+"name": &"corridor_floor_style",
+"position": Vector2(4560, 520),
 "settings": {
-"assign_attributes": {},
-"assign_target_path": "",
-"clear_previous_instances": true,
+"cte_bool": false,
+"cte_color": Color(1, 1, 1, 1),
+"cte_float": 0.0,
+"cte_int": 0,
+"cte_resource": null,
+"cte_string": "",
+"cte_vector": Vector3(0, 0, 0),
+"data_type": 2,
 "debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
+"debug_color": Color(0, 0.07058824, 1, 1),
 "debug_enabled": false,
-"debug_mode": 0,
+"debug_mode": 1,
 "debug_modulate_by": "",
 "debug_output": 0,
 "debug_port_combined_index": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "inspect_enabled": false,
-"random_seed": 6021,
-"randomize_scene_variants": true,
-"scene_attribute": "",
-"scene_selector_attribute": "",
-"scene_variant_weights": Array[float]([7.0, 1.8, 1.2, 0.9, 0.7, 0.5, 0.4]),
-"scene_variants": Array[PackedScene]([ExtResource("6_rxbac"), ExtResource("5_wm5gk"), ExtResource("7_8hoib"), ExtResource("7_m4ltu"), ExtResource("8_rtfsj"), ExtResource("9_enrhv"), ExtResource("10_rtfsj")]),
-"spawn_parent_path": "",
-"title": "Spawn Scenes",
+"name": "room_style",
+"random_seed": 258639929,
+"title": "Corridor Floor Style",
 "trace": false
 },
 "show_disconnected_inputs": false,
-"template": "spawn_scenes"
+"template": "add_attribute"
 }, {
 "args_port": {
 "In": {
@@ -1226,7 +1155,7 @@ data = {
 }
 },
 "name": &"wall_unit_size",
-"position": Vector2(5560, 1340),
+"position": Vector2(5480, 740),
 "settings": {
 "bounds_max": Vector3(0.5, 0.5, 0.5),
 "bounds_min": Vector3(-0.5, -0.5, -0.5),
@@ -1250,12 +1179,12 @@ data = {
 }, {
 "args_port": {
 "Filled Cells": {
-"connected": false,
+"connected": true,
 "port": 0
 }
 },
 "name": &"grid_boundary",
-"position": Vector2(5300, 1020),
+"position": Vector2(5060, 740),
 "settings": {
 "cell_size": Vector3(4, 1, 4),
 "debug_bulk": 0,
@@ -1286,12 +1215,14 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0064_self_pruning",
-"position": Vector2(5060, 900),
+"name": &"upper_pillar_unit",
+"position": Vector2(5480, 940),
 "settings": {
+"bounds_max": Vector3(0.5, 0.5, 0.5),
+"bounds_min": Vector3(-0.5, -0.5, -0.5),
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
-"debug_enabled": true,
+"debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "",
 "debug_output": 0,
@@ -1299,13 +1230,13 @@ data = {
 "debug_scale": 1.0,
 "disabled": false,
 "inspect_enabled": false,
-"keep_self_intersections": false,
-"random_seed": 2168484400,
-"title": "Self Pruning",
+"mode": 0,
+"random_seed": 3056256483,
+"title": "Bounds Modifier",
 "trace": false
 },
 "show_disconnected_inputs": false,
-"template": "self_pruning"
+"template": "bounds_modifier"
 }, {
 "args_port": {
 "In": {
@@ -1313,66 +1244,76 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0032_merge",
-"position": Vector2(4860, 900),
+"name": &"spawn_upper_pillars",
+"position": Vector2(5660, 940),
 "settings": {
+"assign_attributes": {},
+"assign_target_path": "",
+"clear_previous_instances": true,
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
-"debug_mode": 1,
+"debug_mode": 0,
 "debug_modulate_by": "",
 "debug_output": 0,
 "debug_port_combined_index": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "inspect_enabled": false,
-"random_seed": 4055464860,
-"title": "Merge",
+"random_seed": 3101,
+"randomize_scene_variants": true,
+"scene_attribute": "",
+"scene_selector_attribute": "",
+"scene_variant_weights": Array[float]([3.0, 1.0]),
+"scene_variants": Array[PackedScene]([ExtResource("7_8dklu"), ExtResource("6_j7xqx")]),
+"spawn_parent_path": "",
+"title": "Spawn Scenes",
 "trace": false
 },
 "show_disconnected_inputs": false,
-"template": "merge"
+"template": "spawn_scenes"
 }, {
 "args_port": {
-"Bounds": {
+"In": {
 "connected": true,
 "port": 0
 }
 },
-"name": &"id_0026_grid_fill_bounds",
-"position": Vector2(4440, 840),
+"name": &"spawn_walls",
+"position": Vector2(5660, 740),
 "settings": {
-"bounds_center": Vector3(0, 0, 0),
-"bounds_size": Vector3(10, 1, 10),
-"cell_size": Vector3(4, 1, 4),
-"copy_input_attributes": true,
+"assign_attributes": {},
+"assign_target_path": "",
+"clear_previous_instances": true,
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
-"debug_enabled": true,
-"debug_mode": 1,
+"debug_enabled": false,
+"debug_mode": 0,
 "debug_modulate_by": "",
 "debug_output": 0,
 "debug_port_combined_index": 0,
-"debug_scale": 0.25,
+"debug_scale": 1.0,
 "disabled": false,
-"fill_y_axis": false,
 "inspect_enabled": false,
-"max_points": 100000,
-"random_seed": 3323197853,
-"source_index_attribute": "",
-"title": "Grid Fill Bounds",
-"trace": false,
-"use_input_bounds": true
+"random_seed": 6021,
+"randomize_scene_variants": true,
+"scene_attribute": "",
+"scene_selector_attribute": "",
+"scene_variant_weights": Array[float]([7.0, 1.8, 1.2, 0.9, 0.7, 0.5, 0.4]),
+"scene_variants": Array[PackedScene]([ExtResource("6_rxbac"), ExtResource("5_wm5gk"), ExtResource("7_8hoib"), ExtResource("7_m4ltu"), ExtResource("8_rtfsj"), ExtResource("9_enrhv"), ExtResource("10_rtfsj")]),
+"spawn_parent_path": "",
+"title": "Spawn Scenes",
+"trace": false
 },
 "show_disconnected_inputs": false,
-"template": "grid_fill_bounds"
+"template": "spawn_scenes"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
-view_zoom = 1.1755074
-view_offset = Vector2(5075.583, 731.5746)
-new_name_counter = 65
+view_zoom = 0.883176
+view_offset = Vector2(4321.004, 268.2194)
+new_name_counter = 83
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 
 [node name="DemoDungeon" type="Node3D" unique_id=729494838]
@@ -1382,6 +1323,454 @@ script = ExtResource("1_dstpa")
 graph = SubResource("Resource_i773s")
 refresh_inputs = Callable()
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
+
+[node name="Scene_0000" type="Node3D" parent="FlowGraphNode3D" unique_id=1642117481 instance=ExtResource("6_rxbac")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, -18)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0001" type="Node3D" parent="FlowGraphNode3D" unique_id=1325058673 instance=ExtResource("6_rxbac")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, -22)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0002" type="Node3D" parent="FlowGraphNode3D" unique_id=888796472 instance=ExtResource("6_rxbac")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 0, -18)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0003" type="Node3D" parent="FlowGraphNode3D" unique_id=1755906312 instance=ExtResource("6_rxbac")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 0, -22)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0004" type="Node3D" parent="FlowGraphNode3D" unique_id=1719958626 instance=ExtResource("6_rxbac")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 22, 0, -20)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0005" type="Node3D" parent="FlowGraphNode3D" unique_id=747347209 instance=ExtResource("6_rxbac")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0, -22)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0006" type="Node3D" parent="FlowGraphNode3D" unique_id=303227797 instance=ExtResource("6_rxbac")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 22, 0, -16)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0007" type="Node3D" parent="FlowGraphNode3D" unique_id=1297241938 instance=ExtResource("5_wm5gk")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 18, 0, -16)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0008" type="Node3D" parent="FlowGraphNode3D" unique_id=726600909 instance=ExtResource("10_rtfsj")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 22, 0, -12)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0009" type="Node3D" parent="FlowGraphNode3D" unique_id=1947296595 instance=ExtResource("6_rxbac")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 18, 0, -12)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0010" type="Node3D" parent="FlowGraphNode3D" unique_id=531098278 instance=ExtResource("8_rtfsj")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 22, 0, -8)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0011" type="Node3D" parent="FlowGraphNode3D" unique_id=688105070 instance=ExtResource("6_rxbac")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 18, 0, -8)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0012" type="Node3D" parent="FlowGraphNode3D" unique_id=1698629906 instance=ExtResource("6_rxbac")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 22, 0, -4)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0013" type="Node3D" parent="FlowGraphNode3D" unique_id=1000051404 instance=ExtResource("9_enrhv")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 18, 0, -4)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0014" type="Node3D" parent="FlowGraphNode3D" unique_id=688889588 instance=ExtResource("6_rxbac")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 22, 0, 0)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0015" type="Node3D" parent="FlowGraphNode3D" unique_id=2093839908 instance=ExtResource("10_rtfsj")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 18, 0, 0)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0016" type="Node3D" parent="FlowGraphNode3D" unique_id=144510921 instance=ExtResource("6_rxbac")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, 18)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0017" type="Node3D" parent="FlowGraphNode3D" unique_id=981429301 instance=ExtResource("7_8hoib")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, 14)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0018" type="Node3D" parent="FlowGraphNode3D" unique_id=1884470174 instance=ExtResource("6_rxbac")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -6, 0, 12)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0019" type="Node3D" parent="FlowGraphNode3D" unique_id=1216581335 instance=ExtResource("5_wm5gk")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -6, 0, 8)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0020" type="Node3D" parent="FlowGraphNode3D" unique_id=1921215152 instance=ExtResource("6_rxbac")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -10, 0, 8)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0021" type="Node3D" parent="FlowGraphNode3D" unique_id=1995349639 instance=ExtResource("6_rxbac")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -6, 0, 4)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0022" type="Node3D" parent="FlowGraphNode3D" unique_id=2097216967 instance=ExtResource("5_wm5gk")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -10, 0, 4)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0023" type="Node3D" parent="FlowGraphNode3D" unique_id=1803270669 instance=ExtResource("5_wm5gk")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -6, 0, 0)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0024" type="Node3D" parent="FlowGraphNode3D" unique_id=415706387 instance=ExtResource("10_rtfsj")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -10, 0, 0)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0025" type="Node3D" parent="FlowGraphNode3D" unique_id=142809711 instance=ExtResource("6_rxbac")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -6, 0, -4)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0026" type="Node3D" parent="FlowGraphNode3D" unique_id=982056286 instance=ExtResource("6_rxbac")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -10, 0, -4)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0027" type="Node3D" parent="FlowGraphNode3D" unique_id=1097327328 instance=ExtResource("6_rxbac")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -6, 0, -8)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0028" type="Node3D" parent="FlowGraphNode3D" unique_id=334707885 instance=ExtResource("6_rxbac")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -10, 0, -8)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0029" type="Node3D" parent="FlowGraphNode3D" unique_id=932076237 instance=ExtResource("7_8hoib")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -6, 0, 24)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0030" type="Node3D" parent="FlowGraphNode3D" unique_id=540646498 instance=ExtResource("7_8hoib")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0, 26)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0031" type="Node3D" parent="FlowGraphNode3D" unique_id=2062217296 instance=ExtResource("6_rxbac")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -6, 0, 20)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0032" type="Node3D" parent="FlowGraphNode3D" unique_id=464124567 instance=ExtResource("7_8hoib")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -26, 0, -28)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0033" type="Node3D" parent="FlowGraphNode3D" unique_id=2099722846 instance=ExtResource("5_wm5gk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24, 0, -30)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0034" type="Node3D" parent="FlowGraphNode3D" unique_id=1781938766 instance=ExtResource("6_rxbac")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -26, 0, -24)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0035" type="Node3D" parent="FlowGraphNode3D" unique_id=1642450534 instance=ExtResource("6_rxbac")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -26, 0, -20)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0036" type="Node3D" parent="FlowGraphNode3D" unique_id=1484000838 instance=ExtResource("6_rxbac")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -26, 0, -16)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0037" type="Node3D" parent="FlowGraphNode3D" unique_id=1834281454 instance=ExtResource("6_rxbac")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -26, 0, -12)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0038" type="Node3D" parent="FlowGraphNode3D" unique_id=1272644861 instance=ExtResource("6_rxbac")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24, 0, -10)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0039" type="Node3D" parent="FlowGraphNode3D" unique_id=1297972617 instance=ExtResource("7_m4ltu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 0, -30)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0040" type="Node3D" parent="FlowGraphNode3D" unique_id=1523770449 instance=ExtResource("6_rxbac")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 0, -10)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0041" type="Node3D" parent="FlowGraphNode3D" unique_id=1575040240 instance=ExtResource("6_rxbac")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16, 0, -30)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0042" type="Node3D" parent="FlowGraphNode3D" unique_id=929593306 instance=ExtResource("10_rtfsj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16, 0, -10)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0043" type="Node3D" parent="FlowGraphNode3D" unique_id=1759361320 instance=ExtResource("6_rxbac")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 0, -30)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0044" type="Node3D" parent="FlowGraphNode3D" unique_id=63291244 instance=ExtResource("9_enrhv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 0, -10)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0045" type="Node3D" parent="FlowGraphNode3D" unique_id=1187050316 instance=ExtResource("7_m4ltu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0, -30)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0046" type="Node3D" parent="FlowGraphNode3D" unique_id=1004320136 instance=ExtResource("6_rxbac")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, -30)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0047" type="Node3D" parent="FlowGraphNode3D" unique_id=2045902123 instance=ExtResource("5_wm5gk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, -10)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0048" type="Node3D" parent="FlowGraphNode3D" unique_id=1982296617 instance=ExtResource("6_rxbac")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -30)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0049" type="Node3D" parent="FlowGraphNode3D" unique_id=1557704991 instance=ExtResource("10_rtfsj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0050" type="Node3D" parent="FlowGraphNode3D" unique_id=217837109 instance=ExtResource("6_rxbac")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, -30)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0051" type="Node3D" parent="FlowGraphNode3D" unique_id=13384633 instance=ExtResource("10_rtfsj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, -10)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0052" type="Node3D" parent="FlowGraphNode3D" unique_id=537507189 instance=ExtResource("6_rxbac")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 10, 0, -28)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0053" type="Node3D" parent="FlowGraphNode3D" unique_id=506425237 instance=ExtResource("6_rxbac")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, -30)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0054" type="Node3D" parent="FlowGraphNode3D" unique_id=1090471566 instance=ExtResource("6_rxbac")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 10, 0, -24)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0055" type="Node3D" parent="FlowGraphNode3D" unique_id=45259058 instance=ExtResource("6_rxbac")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 10, 0, -16)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0056" type="Node3D" parent="FlowGraphNode3D" unique_id=2044287319 instance=ExtResource("8_rtfsj")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 10, 0, -12)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0057" type="Node3D" parent="FlowGraphNode3D" unique_id=85942842 instance=ExtResource("6_rxbac")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, -10)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0058" type="Node3D" parent="FlowGraphNode3D" unique_id=936550165 instance=ExtResource("6_rxbac")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -2, 0, 4)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0059" type="Node3D" parent="FlowGraphNode3D" unique_id=1960618622 instance=ExtResource("10_rtfsj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0060" type="Node3D" parent="FlowGraphNode3D" unique_id=1934534920 instance=ExtResource("6_rxbac")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -2, 0, 8)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0061" type="Node3D" parent="FlowGraphNode3D" unique_id=482854574 instance=ExtResource("6_rxbac")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -2, 0, 12)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0062" type="Node3D" parent="FlowGraphNode3D" unique_id=676364919 instance=ExtResource("8_rtfsj")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -2, 0, 20)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0063" type="Node3D" parent="FlowGraphNode3D" unique_id=460440570 instance=ExtResource("6_rxbac")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -2, 0, 24)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0064" type="Node3D" parent="FlowGraphNode3D" unique_id=929480110 instance=ExtResource("6_rxbac")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -2, 0, 28)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0065" type="Node3D" parent="FlowGraphNode3D" unique_id=793358197 instance=ExtResource("5_wm5gk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 30)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0066" type="Node3D" parent="FlowGraphNode3D" unique_id=684580733 instance=ExtResource("8_rtfsj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 2)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0067" type="Node3D" parent="FlowGraphNode3D" unique_id=1478543493 instance=ExtResource("6_rxbac")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 30)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0068" type="Node3D" parent="FlowGraphNode3D" unique_id=1618624937 instance=ExtResource("5_wm5gk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, 2)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0069" type="Node3D" parent="FlowGraphNode3D" unique_id=890500451 instance=ExtResource("6_rxbac")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, 30)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0070" type="Node3D" parent="FlowGraphNode3D" unique_id=309004568 instance=ExtResource("6_rxbac")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, 2)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0071" type="Node3D" parent="FlowGraphNode3D" unique_id=131003916 instance=ExtResource("6_rxbac")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, 30)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0072" type="Node3D" parent="FlowGraphNode3D" unique_id=1227199201 instance=ExtResource("6_rxbac")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 0, 2)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0073" type="Node3D" parent="FlowGraphNode3D" unique_id=861025536 instance=ExtResource("7_m4ltu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 0, 30)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0074" type="Node3D" parent="FlowGraphNode3D" unique_id=537622480 instance=ExtResource("6_rxbac")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0, 30)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0075" type="Node3D" parent="FlowGraphNode3D" unique_id=875414473 instance=ExtResource("7_8hoib")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24, 0, 2)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0076" type="Node3D" parent="FlowGraphNode3D" unique_id=890926989 instance=ExtResource("6_rxbac")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24, 0, 30)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0077" type="Node3D" parent="FlowGraphNode3D" unique_id=958181531 instance=ExtResource("6_rxbac")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 28, 0, 2)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0078" type="Node3D" parent="FlowGraphNode3D" unique_id=1137704177 instance=ExtResource("8_rtfsj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 28, 0, 30)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0079" type="Node3D" parent="FlowGraphNode3D" unique_id=127699232 instance=ExtResource("7_m4ltu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32, 0, 2)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0080" type="Node3D" parent="FlowGraphNode3D" unique_id=227591328 instance=ExtResource("6_rxbac")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32, 0, 30)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0081" type="Node3D" parent="FlowGraphNode3D" unique_id=1499129088 instance=ExtResource("8_rtfsj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36, 0, 2)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0082" type="Node3D" parent="FlowGraphNode3D" unique_id=489664459 instance=ExtResource("6_rxbac")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36, 0, 30)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0083" type="Node3D" parent="FlowGraphNode3D" unique_id=624998068 instance=ExtResource("6_rxbac")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 42, 0, 4)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0084" type="Node3D" parent="FlowGraphNode3D" unique_id=1536702708 instance=ExtResource("7_m4ltu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 40, 0, 2)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0085" type="Node3D" parent="FlowGraphNode3D" unique_id=645703013 instance=ExtResource("7_8hoib")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 42, 0, 8)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0086" type="Node3D" parent="FlowGraphNode3D" unique_id=671720230 instance=ExtResource("7_8hoib")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 42, 0, 12)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0087" type="Node3D" parent="FlowGraphNode3D" unique_id=888293756 instance=ExtResource("7_8hoib")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 42, 0, 16)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0088" type="Node3D" parent="FlowGraphNode3D" unique_id=1267729745 instance=ExtResource("5_wm5gk")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 42, 0, 20)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0089" type="Node3D" parent="FlowGraphNode3D" unique_id=93389305 instance=ExtResource("8_rtfsj")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 42, 0, 24)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0090" type="Node3D" parent="FlowGraphNode3D" unique_id=989999383 instance=ExtResource("6_rxbac")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 42, 0, 28)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0091" type="Node3D" parent="FlowGraphNode3D" unique_id=1785231835 instance=ExtResource("6_rxbac")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 40, 0, 30)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0092" type="Node3D" parent="FlowGraphNode3D" unique_id=2131695925 instance=ExtResource("6_rxbac")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -30, 0, 12)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0093" type="Node3D" parent="FlowGraphNode3D" unique_id=1457105861 instance=ExtResource("6_rxbac")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28, 0, 10)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0094" type="Node3D" parent="FlowGraphNode3D" unique_id=1314547404 instance=ExtResource("10_rtfsj")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -30, 0, 16)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0095" type="Node3D" parent="FlowGraphNode3D" unique_id=1588110368 instance=ExtResource("6_rxbac")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -30, 0, 20)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0096" type="Node3D" parent="FlowGraphNode3D" unique_id=444763348 instance=ExtResource("6_rxbac")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -30, 0, 24)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0097" type="Node3D" parent="FlowGraphNode3D" unique_id=70384624 instance=ExtResource("6_rxbac")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -30, 0, 28)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0098" type="Node3D" parent="FlowGraphNode3D" unique_id=256807235 instance=ExtResource("6_rxbac")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -30, 0, 32)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0099" type="Node3D" parent="FlowGraphNode3D" unique_id=161187109 instance=ExtResource("7_8hoib")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -30, 0, 36)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0100" type="Node3D" parent="FlowGraphNode3D" unique_id=1402724349 instance=ExtResource("7_m4ltu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28, 0, 38)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0101" type="Node3D" parent="FlowGraphNode3D" unique_id=831303439 instance=ExtResource("5_wm5gk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24, 0, 10)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0102" type="Node3D" parent="FlowGraphNode3D" unique_id=2095869265 instance=ExtResource("8_rtfsj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24, 0, 38)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0103" type="Node3D" parent="FlowGraphNode3D" unique_id=1544373325 instance=ExtResource("9_enrhv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 0, 10)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0104" type="Node3D" parent="FlowGraphNode3D" unique_id=333454812 instance=ExtResource("7_m4ltu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 0, 38)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0105" type="Node3D" parent="FlowGraphNode3D" unique_id=832614158 instance=ExtResource("6_rxbac")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16, 0, 10)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0106" type="Node3D" parent="FlowGraphNode3D" unique_id=505986257 instance=ExtResource("6_rxbac")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16, 0, 38)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0107" type="Node3D" parent="FlowGraphNode3D" unique_id=361131089 instance=ExtResource("6_rxbac")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 0, 10)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0108" type="Node3D" parent="FlowGraphNode3D" unique_id=1095823311 instance=ExtResource("7_8hoib")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -10, 0, 28)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0109" type="Node3D" parent="FlowGraphNode3D" unique_id=266297935 instance=ExtResource("6_rxbac")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -10, 0, 32)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0110" type="Node3D" parent="FlowGraphNode3D" unique_id=2022115785 instance=ExtResource("5_wm5gk")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -10, 0, 36)
+metadata/flow_owner = &"spawn_walls"
+
+[node name="Scene_0111" type="Node3D" parent="FlowGraphNode3D" unique_id=1954364905 instance=ExtResource("5_wm5gk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 0, 38)
+metadata/flow_owner = &"spawn_walls"
 
 [node name="FlowGraphNode3D2" type="Node3D" parent="." unique_id=1216533672]
 visible = false

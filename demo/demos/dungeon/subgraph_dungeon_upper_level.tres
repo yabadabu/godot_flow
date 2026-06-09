@@ -255,34 +255,6 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0007_select_points",
-"position": Vector2(180, 80),
-"settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"random_seed": 500363568,
-"ratio": 0.14,
-"title": "Select Points",
-"trace": false,
-"weight_name": ""
-},
-"show_disconnected_inputs": false,
-"template": "select_points"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
 "name": &"lift_upper_rooms",
 "position": Vector2(380, 40),
 "settings": {
@@ -368,41 +340,6 @@ data = {
 },
 "show_disconnected_inputs": false,
 "template": "bounds_modifier"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"spawn_upper_pillars",
-"position": Vector2(1320, 400),
-"settings": {
-"assign_attributes": {},
-"assign_target_path": "",
-"clear_previous_instances": true,
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"random_seed": 3101,
-"randomize_scene_variants": true,
-"scene_attribute": "",
-"scene_selector_attribute": "",
-"scene_variant_weights": Array[float]([3.0, 1.0]),
-"scene_variants": Array[PackedScene]([ExtResource("6_68mnj"), ExtResource("7_e1cbf")]),
-"spawn_parent_path": "",
-"title": "Spawn Scenes",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "spawn_scenes"
 }, {
 "args_port": {
 "In": {
@@ -504,12 +441,75 @@ data = {
 },
 "show_disconnected_inputs": false,
 "template": "grid_fill_bounds"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0007_select_points",
+"position": Vector2(180, 80),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"random_seed": 500363568,
+"ratio": 0.14,
+"title": "Select Points",
+"trace": false,
+"weight_name": ""
+},
+"show_disconnected_inputs": false,
+"template": "select_points"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"spawn_upper_pillars",
+"position": Vector2(1320, 400),
+"settings": {
+"assign_attributes": {},
+"assign_target_path": "",
+"clear_previous_instances": true,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"random_seed": 3101,
+"randomize_scene_variants": true,
+"scene_attribute": "",
+"scene_selector_attribute": "",
+"scene_variant_weights": Array[float]([3.0, 1.0]),
+"scene_variants": Array[PackedScene]([ExtResource("6_68mnj"), ExtResource("7_e1cbf")]),
+"spawn_parent_path": "",
+"title": "Spawn Scenes",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "spawn_scenes"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
-view_zoom = 0.82644624
-view_offset = Vector2(372.27594, -78.16942)
+view_zoom = 1.21
+view_offset = Vector2(1211.0264, 141.33945)
 new_name_counter = 13
 in_params = Array[ExtResource("1_5a3wg")]([SubResource("Resource_5a3wg")])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
