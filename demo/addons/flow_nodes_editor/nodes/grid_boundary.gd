@@ -130,18 +130,16 @@ func execute(_ctx : FlowData.EvaluationContext):
 			var neighbor := cell + dir
 			if occupied.has(_key(neighbor)):
 				continue
-			var normal := Vector3(float(dir.x), 0.0, float(dir.z))
-			var edge_pos := center + Vector3(
-				float(dir.x) * cell_size.x * 0.5,
-				0.0,
-				float(dir.z) * cell_size.z * 0.5
-			)
-			var edge_rot := Vector3.ZERO
+			var edge_pos := center + dir * 0.5 * cell_size
 			var edge_size := Vector3(cell_size.x, settings.wall_height, settings.wall_thickness)
-			if dir.x != 0:
+			var edge_rot := Vector3.ZERO
+			if dir.x == -1.0:
 				edge_rot.y = 90.0
-				#edge_size = Vector3(settings.wall_thickness, settings.wall_height, cell_size.z)
-			_append_record(edge_records, edge_pos, edge_rot, edge_size, normal, "edge")
+			elif dir.x == 1.0:
+				edge_rot.y = -90.0
+			elif dir.z == 1.0:
+				edge_rot.y = 180.0
+			_append_record(edge_records, edge_pos, edge_rot, edge_size, dir, "edge")
 
 		if settings.include_corners:
 			for sx : int in [-1, 1]:
