@@ -32,8 +32,8 @@ In a scene 3D:
 
 * **Shift+A** / **Right-click**: Add node
 * **D**: Toggle 3D point debug
-* **E**: Toggle Data Inspector
-* **G**: Toggle Enable/Disable Node
+* **A**: Toggle Data Inspector
+* **E**: Toggle Enable/Disable Node
 * **C**: Create a comments box around selected nodes
 * **X**: Deletes selected nodes
 * **R**: Forces reevaluation of selected nodes

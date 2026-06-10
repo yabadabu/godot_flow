@@ -690,11 +690,12 @@ func removeRegisteredInstancedNodes( new_parent : Node3D ):
 	if settings.trace:
 		print( "%s.removeRegisteredInstancedNodes( %s )" % [ name, new_parent.name ] )
 	var nodes : Array[Node] = []
-	for child in new_parent.get_children():
-		if !child.has_meta( "flow_owner" ):
-			continue
-		if child.get_meta( "flow_owner" ) == name:
-			nodes.append( child )
+	if new_parent:
+		for child in new_parent.get_children():
+			if !child.has_meta( "flow_owner" ):
+				continue
+			if child.get_meta( "flow_owner" ) == name:
+				nodes.append( child )
 	for node in nodes:
 		if settings.trace:
 			print( "  Removing %s" % [ node.name ] )

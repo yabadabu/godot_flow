@@ -56,6 +56,15 @@ func getMeta() -> Dictionary:
 	meta_node.ins = ins
 	meta_node.outs = outs
 	return meta_node
+
+# Double click to trigger openning the subgraph
+func _gui_input(event: InputEvent):
+	if event is InputEventMouseButton and event.double_click and event.button_index == MOUSE_BUTTON_LEFT:
+		var editor = getEditor()
+		if editor and settings and settings.graph:
+			var owner = editor.resource_owner
+			editor.setResourceToEdit(settings.graph, owner)
+			accept_event()	
 	
 func addNodeFromTemplate( node_template, node_name : String, node_settings = null ):
 	if settings.trace:

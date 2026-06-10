@@ -23,6 +23,11 @@ grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
+[node name="TabBar" type="TabBar" parent="VBoxContainer" unique_id=1925460443]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+
 [node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer" unique_id=862874869]
 layout_mode = 2
 vertical_scroll_mode = 0
@@ -58,13 +63,12 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "Info"
 
-[node name="VSplitContainer" type="VSplitContainer" parent="VBoxContainer" unique_id=633334263]
-custom_minimum_size = Vector2(0, 200)
+[node name="VSplitContainer" type="VSplitContainer" parent="VBoxContainer" unique_id=799780920]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-split_offsets = PackedInt32Array(400)
-split_offset = 400
+split_offsets = PackedInt32Array(300)
+split_offset = 300
 
 [node name="GraphEdit" type="GraphEdit" parent="VBoxContainer/VSplitContainer" unique_id=1731932737]
 unique_name_in_owner = true
@@ -78,6 +82,8 @@ connection_lines_thickness = 2.0
 show_zoom_buttons = false
 show_grid_buttons = false
 
+[connection signal="tab_changed" from="VBoxContainer/TabBar" to="." method="_on_tab_bar_tab_changed"]
+[connection signal="tab_close_pressed" from="VBoxContainer/TabBar" to="." method="_on_tab_bar_tab_close_pressed"]
 [connection signal="pressed" from="VBoxContainer/ScrollContainer/HBoxContainer/ButtonReload" to="." method="_on_button_reload_pressed"]
 [connection signal="pressed" from="VBoxContainer/ScrollContainer/HBoxContainer/ButtonInputs" to="." method="_on_button_inputs_pressed"]
 [connection signal="pressed" from="VBoxContainer/ScrollContainer/HBoxContainer/ButtonSave" to="." method="_on_button_save_pressed"]

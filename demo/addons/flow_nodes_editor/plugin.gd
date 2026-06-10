@@ -92,6 +92,7 @@ func _edit(object: Object) -> void:
 		return
 	var res := object as FlowGraphResource
 	print("Editor requested edit/open for: ", res.resource_path)
+	graph_dock.setResourceToEdit( res, null )
 
 func _selection_changed():
 	
@@ -118,7 +119,6 @@ func onSelectedGraphNodeChanged( node : FlowGraphNode3D, prop_name: String ):
 	if prop_name == "graph_resource":
 		print( "  -> %s" % [node.graph] )
 		graph_dock.setResourceToEdit( node.graph, node )
-		
 
 func _on_history_changed( ):
 	#print("Something changed in the editor (undo/redo history updated)")	

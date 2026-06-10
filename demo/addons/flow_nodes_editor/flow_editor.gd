@@ -12,6 +12,9 @@ var save_pending := false
 var auto_regen := true
 var dump_performance := false
 
+@onready var tab_bar: TabBar = %TabBar
+var open_tabs: Array[Dictionary] = []
+
 @onready var gedit : GraphEdit = %GraphEdit
 @onready var data_inspector : Control
 @onready var info : Label = %LabelInfo
@@ -58,7 +61,12 @@ const IDM_PROMOTE_TO_PARAMETER : int = 100
 
 func setResourceToEdit( new_resource : FlowGraphResource, new_resource_owner : FlowGraphNode3D ):
 	print( "setResourceToEdit %s" % new_resource )
-	
+	var tab_idx = findIndexInTabs( new_resource )
+	if tab_idx < 0:
+		tab_idx = addToTabs( new_resource, new_resource_owner )
+	tab_bar.ensure_tab_visible( tab_idx )
+	tab_bar.current_tab = tab_idx
+
 	# Time to save the current resource
 	if current_resource == new_resource and resource_owner == new_resource_owner:
 		return
@@ -162,7 +170,7 @@ func _ready():
 	splitter.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	splitter.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	splitter.add_child( inspector )
-	splitter.split_offset = 400
+	splitter.split_offset = 300
 	
 	gedit.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	gedit.size_flags_vertical = Control.SIZE_EXPAND_FILL	
@@ -824,3 +832,32 @@ func onEditorSceneChanged():
 		if node.getMeta().get( "scans_scene", false ):
 			node.dirty = true
 	queueRegen()
+
+# new_resource = res://graph02_curves.tres
+# title = graph02_curves
+func addToTabs(  new_resource : FlowGraphResource, new_resource_owner : FlowGraphNode3D ):
+	var title = new_resource.resource_path.get_file().get_basename()
+	var dtab : Dictionary = {
+		resource = new_resource,
+		owner = new_resource_owner,
+		title = title
+	}
+	open_tabs.append( dtab )
+	tab_bar.add_tab( title )
+	return tab_bar.tab_count - 1
+
+func findIndexInTabs( resource ) -> int:
+	for idx in range(open_tabs.size()):
+		var dtab = open_tabs[idx]
+		if dtab.resource == resource:
+			return idx
+	return -1
+
+func _on_tab_bar_tab_close_pressed(tab_idx):
+	open_tabs.remove_at( tab_idx )
+	tab_bar.remove_tab( tab_idx )
+
+func _on_tab_bar_tab_changed(tab_idx):
+	var dtab = open_tabs[ tab_idx ] if tab_idx < open_tabs.size() else null
+	if dtab:
+		setResourceToEdit( dtab.resource, dtab.owner )
