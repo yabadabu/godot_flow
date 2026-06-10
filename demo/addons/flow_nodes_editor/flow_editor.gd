@@ -836,6 +836,7 @@ func onEditorSceneChanged():
 # new_resource = res://graph02_curves.tres
 # title = graph02_curves
 func addToTabs(  new_resource : FlowGraphResource, new_resource_owner : FlowGraphNode3D ):
+	if not new_resource: return -1
 	var title = new_resource.resource_path.get_file().get_basename()
 	var dtab : Dictionary = {
 		resource = new_resource,
