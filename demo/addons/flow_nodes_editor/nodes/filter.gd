@@ -72,7 +72,7 @@ func getOptionalStream( input_index : int, stream_name : String, expected_size :
 		if settings.trace:
 			print( "  instream[%d] has size %d, (vs expected %d)" % [ input_index, num_elems, expected_size ])
 		if num_elems != expected_size:
-			if num_elems == 1 and expected_size > 0 and read_stream.data_type == FlowData.DataType.Float:
+			if num_elems == 1 and expected_size > 0 and (read_stream.data_type == FlowData.DataType.Float or read_stream.data_type == FlowData.DataType.Int):
 				if settings.trace:
 					print( "  Converting cte to stream with value %f" % read_stream.container[0] )
 				read_stream = newFloatStream( expected_size, stream_name + " as float", read_stream.container[0])

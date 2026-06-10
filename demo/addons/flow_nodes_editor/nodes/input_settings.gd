@@ -10,3 +10,6 @@ extends NodeSettings
 func _init():
 	super._init()
 	resource_name = "Input"
+
+func exposeParam( name : String ) -> bool:
+	return name == "name"

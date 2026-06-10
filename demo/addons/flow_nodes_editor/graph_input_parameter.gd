@@ -19,12 +19,35 @@ extends Resource
 		notify_property_list_changed()
 		
 # Default value when type is a bool
-@export var cte_bool: bool = false
-@export var cte_int: int = 0
-@export var cte_float : float = 0.0
-@export var cte_vector : Vector3 = Vector3.ZERO
-@export var cte_resource : Resource
-@export var cte_string : String = ""
+@export var cte_bool: bool = false:
+	set(new_value):
+		cte_bool = new_value
+		emit_changed()
+
+@export var cte_int: int = 0:
+	set(new_value):
+		cte_int = new_value
+		emit_changed()
+		
+@export var cte_float : float = 0.0:
+	set(new_value):
+		cte_float = new_value
+		emit_changed()
+		
+@export var cte_vector : Vector3 = Vector3.ZERO:
+	set(new_value):
+		cte_vector = new_value
+		emit_changed()
+	
+@export var cte_resource : Resource:
+	set(new_value):
+		cte_resource = new_value
+		emit_changed()
+
+@export var cte_string : String = "":
+	set(new_value):
+		cte_string = new_value
+		emit_changed()
 
 func getDataType() -> FlowData.DataType:
 	if is_constant:

@@ -14,6 +14,7 @@ func _init():
 	}
 	
 var output : FlowData.Data
+var last_value_pushed
 	
 func getTitle() -> String:
 	return settings.name
@@ -70,6 +71,7 @@ func preExecute( ctx : FlowData.EvaluationContext ):
 		var container =	output.streams[ settings.name ].container
 		container.resize( 1 )
 		container[0] = new_value
+		last_value_pushed = new_value
 
 	else:
 		if ctx.inputs.has( input.name ):
@@ -78,6 +80,7 @@ func preExecute( ctx : FlowData.EvaluationContext ):
 		else:
 			#print( "input.Reading %s from ctx FAILED. Inputs;%s" % [input.name, ctx.inputs])
 			output = FlowData.Data.new()
+		last_value_pushed = null
 	#output.dump( "input.preexe" )
 
 func execute( ctx : FlowData.EvaluationContext ):

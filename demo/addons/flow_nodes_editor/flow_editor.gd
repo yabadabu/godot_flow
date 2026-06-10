@@ -63,8 +63,11 @@ func setResourceToEdit( new_resource : FlowGraphResource, new_resource_owner : F
 	if current_resource == new_resource and resource_owner == new_resource_owner:
 		return
 	if current_resource:
+		current_resource.in_params_changed.disconnect(_on_inputs_changed)
 		saveResource()
 	current_resource = new_resource
+	if current_resource:
+		current_resource.in_params_changed.connect(_on_inputs_changed)
 	resource_owner = new_resource_owner
 	
 	# Remove exiting nodes
@@ -95,6 +98,28 @@ func saveResource():
 	FlowNodeIO.saveToResource( self )
 	save_pending = false
 	
+func asInputNode( in_node : Node ):
+	var node := in_node as GraphNode
+	return node if node and node.node_template.begins_with("input") else null
+
+func _on_inputs_changed():
+	for child in gedit.get_children():
+		var node = asInputNode( child )
+		if node:
+			var in_name = node.settings.name
+			var curr_input = current_resource.findInParamByName(in_name)
+			if curr_input and curr_input.is_constant:
+				var new_value = curr_input.get_default_value()
+				#print( "Checking name %s -> %s" % [ in_name, new_value ] )
+				if node.last_value_pushed and new_value == node.last_value_pushed:
+					continue
+				else:
+					#print( "Changed from %s to %s" % [ node.last_value_pushed, new_value ] )
+					node.settings.data_type = curr_input.getDataType()
+					node.dirty = true
+					node.refreshFromSettings()
+					queueRegen()
+			
 func _process(delta: float) -> void:
 	if not current_resource:
 		return
@@ -505,7 +530,7 @@ func _on_search_add_node_popup_node_selected(template_name : String):
 func _on_search_add_node_popup_input_selected(id : int):
 	var input = current_resource.in_params[id]
 	var node_type = "input_%s" % input.name
-	print( "Creating a input node: %s (%d) -> %s" % [ input.name, input.data_type, node_type] )
+	print( "Creating an input node: %s (%d) -> %s" % [ input.name, input.data_type, node_type] )
 	var settings := InputNodeSettings.new()
 	settings.name = input.name
 	settings.data_type = input.data_type
