@@ -83,7 +83,15 @@ func on_scene_changed(scene_root: Node) -> void:
 		if flow_node:
 			graph_dock.setResourceToEdit( flow_node.graph, flow_node )
 			break
-		
+
+func _handles(object: Object) -> bool:
+	return object is FlowGraphResource
+
+func _edit(object: Object) -> void:
+	if object == null:
+		return
+	var res := object as FlowGraphResource
+	print("Editor requested edit/open for: ", res.resource_path)
 
 func _selection_changed():
 	
