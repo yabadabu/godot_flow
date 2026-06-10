@@ -83,8 +83,20 @@ func updateNumRowsAndCols():
 				col_streams_names.append( stream_name)
 				col_streams_names.append( stream_name)
 				col_streams_names.append( stream_name)
+				
+			FlowData.DataType.Color:
+				col_titles.append( stream_name )
+				col_titles.append( "%s.R" % stream_name)
+				col_titles.append( "%s.G" % stream_name)
+				col_titles.append( "%s.B" % stream_name)
+				col_titles.append( "%s.A" % stream_name)
+				col_streams_names.append( stream_name )
+				col_streams_names.append( stream_name )
+				col_streams_names.append( stream_name )
+				col_streams_names.append( stream_name )
+				col_streams_names.append( stream_name )
 			_:
-				col_titles.append( "%s" % stream_name)
+				col_titles.append( stream_name )
 				col_streams_names.append( stream_name)
 	num_cols = col_titles.size()
 	#print( col_titles )
@@ -125,6 +137,18 @@ func onColumnBegins( cell : DataTableContainer.CellContents ):
 			tv.setCellCallback( getCellContentsVectorZ )
 	elif stream.data_type == FlowData.DataType.Bool:
 		tv.setCellCallback( getCellContentsBool )
+	elif stream.data_type == FlowData.DataType.Color:
+		if title.ends_with(".R"):
+			tv.setCellCallback( getCellContentsColorR )
+		elif title.ends_with(".G"):
+			tv.setCellCallback( getCellContentsColorG )
+		elif title.ends_with(".B"):
+			tv.setCellCallback( getCellContentsColorB )
+		elif title.ends_with(".A"):
+			tv.setCellCallback( getCellContentsColorA )
+		else:
+			tv.setCellCallback( getCellContentsColor )
+			
 	elif stream.data_type == FlowData.DataType.Int:
 		tv.setCellCallback( getCellContentsInt )
 	elif stream.data_type == FlowData.DataType.Float:
@@ -150,6 +174,27 @@ func getCellContentsVectorY(cell : DataTableContainer.CellContents ):
 func getCellContentsVectorZ(cell : DataTableContainer.CellContents ):
 	var real_row : int = visible_rows[cell.row]
 	cell.text = fmt( container[ real_row ].z )
+	
+func getCellContentsColorR(cell : DataTableContainer.CellContents ):
+	var real_row : int = visible_rows[cell.row]
+	cell.text = fmt( container[ real_row ].r )
+	
+func getCellContentsColorG(cell : DataTableContainer.CellContents ):
+	var real_row : int = visible_rows[cell.row]
+	cell.text = fmt( container[ real_row ].g )
+	
+func getCellContentsColorB(cell : DataTableContainer.CellContents ):
+	var real_row : int = visible_rows[cell.row]
+	cell.text = fmt( container[ real_row ].b )
+	
+func getCellContentsColorA(cell : DataTableContainer.CellContents ):
+	var real_row : int = visible_rows[cell.row]
+	cell.text = fmt( container[ real_row ].a )
+	
+func getCellContentsColor(cell : DataTableContainer.CellContents ):
+	var real_row : int = visible_rows[cell.row]
+	cell
+	cell.color = container[ real_row ]
 	
 func getCellContentsFloat(cell : DataTableContainer.CellContents ):
 	var real_row : int = visible_rows[cell.row]
@@ -343,6 +388,10 @@ func rowMathesQuery( filter_lower : String, row_idx : int) -> bool:
 			FlowData.DataType.Vector:
 				if val is Vector3:
 					if filter_lower in fmt(val.x).to_lower() or filter_lower in fmt(val.y).to_lower() or filter_lower in fmt(val.z).to_lower():
+						return true
+			FlowData.DataType.Color:
+				if val is Color:
+					if filter_lower in fmt(val.r).to_lower() or filter_lower in fmt(val.g).to_lower() or filter_lower in fmt(val.b).to_lower() or filter_lower in fmt(val.a).to_lower():
 						return true
 			FlowData.DataType.Float:
 				if filter_lower in fmt(val).to_lower():

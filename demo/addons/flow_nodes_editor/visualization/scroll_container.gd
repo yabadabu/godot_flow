@@ -54,6 +54,8 @@ func horizontallLine( y0 : int, color : Color ):
 func drawCell( cell_pos : Vector2, width: float, cell : CellContents ):
 	# Pad cell text from grid lines
 	draw_string( font, cell_pos + Vector2(4, 0), cell.text, cell.alignment, width - 8, cell.font_size, cell.color  )
+	if cell.color != Color.WHITE:
+		draw_rect( Rect2( cell_pos + Vector2(4,-10), Vector2( width - 4, cell.font_size - 2 )), cell.color)
 		
 func drawVerticalLines():
 	for idx in range( col_starts.size() ):
