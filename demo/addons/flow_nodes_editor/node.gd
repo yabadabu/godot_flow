@@ -449,11 +449,15 @@ func initFromScript():
 		for arg_name in connected_inputs_by_name.keys():
 			var old_data = connected_inputs_by_name[ arg_name ]
 			var old_port = old_data.port
-			var new_port = args_ports_by_name[ arg_name ].port
-			for old_conn in old_data.conns:
-				var from_node = old_conn[0]
-				var from_port = old_conn[1]
-				flow_editor.connect_nodes( from_node, from_port, name, new_port )
+			
+			# new_data might become invalid if the ins has changed
+			var new_data = args_ports_by_name.get( arg_name )
+			if new_data:
+				var new_port = new_data.port 
+				for old_conn in old_data.conns:
+					var from_node = old_conn[0]
+					var from_port = old_conn[1]
+					flow_editor.connect_nodes( from_node, from_port, name, new_port )
 			flow_editor.queueSave()
 		flow_editor.refreshSignalsInputArgs( self )
 	
