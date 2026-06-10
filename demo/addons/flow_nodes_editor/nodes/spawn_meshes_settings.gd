@@ -4,9 +4,10 @@ extends NodeSettings
 
 @export_group("Spawn Meshes")
 
-@export var mesh : Mesh = preload( "res://addons/flow_nodes_editor/resources/unit_cube.tres" )
 @export var mesh_attribute : String
-@export var mesh_variants : Array[Mesh] = []
+@export var mesh_variants : Array[Mesh] = [
+	preload( "res://addons/flow_nodes_editor/resources/unit_cube.tres" )
+]
 @export var mesh_variant_weights : Array[float] = []
 @export var mesh_selector_attribute : String = ""
 @export var randomize_mesh_variants : bool = false

@@ -11,6 +11,8 @@ func _init():
 		"is_final" : true,
 		"tooltip" : "Spawns a Mesh Instance on each point, applying the translation, rotation and scale.\nThe instanced mesh can be specified by point if a stream contains the mesh resource to be spawned.\nThe generates meshes are MultiMeshInstance3D.",
 	}
+	
+var spawn_id : int = 0
 
 func _exit_tree():
 	#removeInstancedComponents();
@@ -40,13 +42,12 @@ func _resolve_spawn_parent(root : Node3D) -> Node3D:
 	setError("Spawn parent path '%s' is invalid or not a Node3D" % path)
 	return root
 
-func _build_variant_weights() -> Array[float]:
-	var variants = settings.mesh_variants
-	if variants.is_empty():
+func _build_variant_weights( num_variants : int ) -> Array[float]:
+	if num_variants == 0:
 		return []
 	var weights : Array[float] = []
-	weights.resize(variants.size())
-	for i in range(variants.size()):
+	weights.resize(num_variants)
+	for i in range(num_variants):
 		var w = 1.0
 		if i < settings.mesh_variant_weights.size():
 			w = maxf(0.0, float(settings.mesh_variant_weights[i]))
@@ -80,13 +81,8 @@ func _resolve_mesh_for_point(idx : int, meshes_stream, variants : Array[Mesh], v
 		if m != null:
 			return m
 
-	if variants.is_empty():
-		return settings.mesh
-
 	if settings.randomize_mesh_variants:
-		var local_rng := RandomNumberGenerator.new()
-		local_rng.seed = settings.random_seed + idx * 19937
-		var ridx = _pick_weighted_variant(variant_weights, local_rng.randf())
+		var ridx = _pick_weighted_variant(variant_weights, rng.randf())
 		return variants[ridx]
 
 	if selector_stream != null:
@@ -98,6 +94,14 @@ func _resolve_mesh_for_point(idx : int, meshes_stream, variants : Array[Mesh], v
 
 	var cycle_idx = idx % variants.size()
 	return variants[cycle_idx]
+	
+func preExecute( ctx : FlowData.EvaluationContext ):
+	super.preExecute(ctx)
+	var spawn_parent = _resolve_spawn_parent(ctx.owner)
+	if settings.clear_previous_instances:
+		removeRegisteredInstancedNodes( spawn_parent )
+	spawn_id = 0
+		
 func execute( ctx : FlowData.EvaluationContext ):
 	var in_data : FlowData.Data = get_input(0)
 	if !in_data || in_data.size() == 0:
@@ -114,6 +118,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 			setError( "Attribute '%s' should be of type Resource" % settings.mesh_attribute)
 			return
 		meshes = stream_meshes.container
+		
 	var selector_stream = null
 	if settings.mesh_selector_attribute.strip_edges() != "":
 		selector_stream = in_data.findStream(settings.mesh_selector_attribute)
@@ -126,12 +131,13 @@ func execute( ctx : FlowData.EvaluationContext ):
 				setError("Mesh selector attribute '%s' must have %d values or 1 value (got %d)" % [settings.mesh_selector_attribute, in_data.size(), sel_size])
 				return
 
+	# Discard non-valid meshes
 	var variants : Array[Mesh] = []
 	for v in settings.mesh_variants:
 		if v != null:
 			variants.append(v)
-	var variant_weights = _build_variant_weights()
-	
+	var variant_weights = _build_variant_weights( variants.size() )
+
 	var transforms := in_data.getTransformsStream()
 	if transforms == null:
 		setError("Missing transforms information")
@@ -145,8 +151,6 @@ func execute( ctx : FlowData.EvaluationContext ):
 		
 	var spawn_parent = _resolve_spawn_parent(root)
 	var in_size = in_data.size()
-	if settings.clear_previous_instances:
-		removeInstancedComponents( spawn_parent )
 
 	# Find who is going to be the owner of the new nodes
 	# (shoulw be the parent root of the scene, not the parent)
@@ -169,11 +173,8 @@ func execute( ctx : FlowData.EvaluationContext ):
 		while owner_of_mmis.get_parent() and owner_of_mmis.owner:
 			owner_of_mmis = owner_of_mmis.get_parent()
 
-	var default_mesh = getSettingValue(ctx, "mesh")
-	if default_mesh != null and variants.is_empty():
-		variants = [default_mesh]
 	if variants.is_empty() and meshes == null:
-		setError("No mesh source configured. Provide mesh, mesh_attribute, or mesh_variants.")
+		setError("Provide mesh_attribute, or mesh_variants.")
 		return
 
 	# Collect which indices use the same resource.
@@ -197,8 +198,12 @@ func execute( ctx : FlowData.EvaluationContext ):
 			setError("Color attribute '%s' must have %d values or 1 value (got %d)" % [settings.color_attribute, in_size, color_size])
 			return
 
+	var prefix = title
+
 	for res in mmis.keys():
 		var mmi : MultiMeshInstance3D = spawnNode( root, MultiMeshInstance3D )
+		mmi.name = "%s_%04d" % [ prefix, spawn_id ]
+		spawn_id += 1
 		
 		var multimesh := MultiMesh.new()
 		multimesh.mesh = res
@@ -218,13 +223,13 @@ func execute( ctx : FlowData.EvaluationContext ):
 			
 		mmi.multimesh = multimesh
 		if has_colors:
-				# This is kind of arbitrary
+			# This is kind of arbitrary
 			var mat = StandardMaterial3D.new()
 			mat.vertex_color_use_as_albedo = true
 			mat.roughness = 0.3
 			mmi.material_override = mat
-		spawn_parent.add_child( mmi )
-		mmi.owner = owner_of_mmis
+		
+		registerInstancedNode(owner_of_mmis, spawn_parent, mmi)
 	
 	EditorInterface.mark_scene_as_unsaved()
 
