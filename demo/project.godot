@@ -19,11 +19,6 @@ run/main_scene="uid://bl8p4bid734wo"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
 
-[display]
-
-window/size/viewport_width=1600
-window/size/viewport_height=1024
-
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/flow_nodes_editor/plugin.cfg")
