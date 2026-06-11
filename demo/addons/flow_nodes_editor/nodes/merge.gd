@@ -37,7 +37,7 @@ func run( ctx : FlowData.EvaluationContext ):
 				# Create an empty container with the current offset (just before us adding our content)
 				var container = in_data.newContainerOfType( stream.data_type )
 				container.resize( offset )
-				var err = out_data.registerStream( stream_name, container )
+				var err = out_data.registerStream( stream_name, container, stream.data_type )
 				# print( "    Created new stream %s" % err )
 			
 			# Now... access it	

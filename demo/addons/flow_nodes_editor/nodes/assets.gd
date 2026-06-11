@@ -47,7 +47,7 @@ func execute( _ctx : FlowData.EvaluationContext ):
 				TYPE_VECTOR3:
 					new_streams[ prop.name ] = FlowData.DataType.Vector
 				TYPE_COLOR:
-					new_streams[ prop.name ] = FlowData.DataType.Vector
+					new_streams[ prop.name ] = FlowData.DataType.Color
 				TYPE_STRING:
 					new_streams[ prop.name ] = FlowData.DataType.String
 				TYPE_OBJECT:
@@ -81,6 +81,12 @@ func execute( _ctx : FlowData.EvaluationContext ):
 					
 			FlowData.DataType.String:
 				var container : PackedStringArray = output.addStream( prop_name, prop_type )
+				container.resize( count )
+				for idx in range(count):
+					container[idx] = settings.assets[idx].get( prop_name )
+					
+			FlowData.DataType.Color:
+				var container : PackedColorArray = output.addStream( prop_name, prop_type )
 				container.resize( count )
 				for idx in range(count):
 					container[idx] = settings.assets[idx].get( prop_name )
