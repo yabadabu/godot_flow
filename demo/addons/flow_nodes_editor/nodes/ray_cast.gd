@@ -9,6 +9,7 @@ func _init():
 		"outs" : [{ "label" : "Out" }],
 		"aliases" : ["World Ray Hit Query", "Raycast"],
 		"category" : "Spatial",
+		"queries_physics" : true,
 		"tooltip" : "Traces a physics ray per point from the point position (the source attribute can be redefined).\n" +
 					"The hit position, rotation, normal, distance, collider and hit flag can be stored as attributes.\n" +
 					"Filter on the hit attribute (True / 1) to remove the points where the trace failed.\n"

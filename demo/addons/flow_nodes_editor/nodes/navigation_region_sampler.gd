@@ -62,6 +62,19 @@ func _polygon_area(points : PackedVector3Array) -> float:
 		area += ((points[i] - origin).cross(points[i + 1] - origin)).length() * 0.5
 	return area
 
+func computeSceneFingerprint(ctx : FlowData.EvaluationContext) -> Variant:
+	var regions = filterOutGeneratedNodes(_collect_regions(_scene_root(ctx)))
+	var extra := []
+	for region in regions:
+		var nav_mesh = region.get("navigation_mesh")
+		if nav_mesh:
+			extra.append(nav_mesh.get_instance_id())
+			if nav_mesh.has_method("get_vertices"):
+				extra.append(nav_mesh.get_vertices())
+		else:
+			extra.append(0)
+	return hashSceneNodesForFingerprint(ctx, regions, extra)
+
 func execute(ctx : FlowData.EvaluationContext):
 	var regions := _collect_regions(_scene_root(ctx))
 	var positions := PackedVector3Array()

@@ -11,6 +11,7 @@ func _init():
 		"outs" : [{ "label" : "Out" }],
 		"aliases" : ["World Volumetric Query"],
 		"category" : "Spatial",
+		"queries_physics" : true,
 		"tooltip" : "Runs shape-overlap checks per point against the 3D physics world (Godot-specific query node).\nThe overlap count is capped at Max Results. In the editor the query sees the editor world's physics state, which may lag scene edits until physics frames run.",
 	}
 

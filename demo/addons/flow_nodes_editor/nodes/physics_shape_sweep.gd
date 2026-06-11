@@ -11,6 +11,7 @@ func _init():
 		"outs" : [{ "label" : "Out" }],
 		"aliases" : ["Shape Sweep", "Shape Trace"],
 		"category" : "Spatial",
+		"queries_physics" : true,
 		"tooltip" : "Sweeps a sphere or box from each point through the Godot physics world.",
 	}
 

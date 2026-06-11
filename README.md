@@ -90,6 +90,7 @@ appears in the add-node menu.
 
 | | |
 |---|---|
+| **UE PCG forest quick-start** — scan terrain → sample → density noise → filter → spawn ![UE Forest Demo](demo/addons/flow_nodes_editor/doc/demo_ue_forest.webp) | **Procedural dungeon** — rooms, corridors, props, lighting via nested subgraphs (KayKit CC0 assets) ![Dungeon Demo](demo/addons/flow_nodes_editor/doc/demo_dungeon.webp) |
 | **Mesh-surface sampling** with hard-edge rejection ![Sampling Mesh](demo/addons/flow_nodes_editor/doc/demo_sample_mesh.png) | **Weighted subscene scatter** along curves ![Random Subscenes](demo/addons/flow_nodes_editor/doc/demo_random_subscenes.png) |
 | **Distance → density** gradients ![Distance to Density](demo/addons/flow_nodes_editor/doc/demo_distance.png) | **Collapse to subgraph** ![Subgraph Collapse](demo/addons/flow_nodes_editor/doc/demo_subgraph_popup.png) |
 | **Procedural colonnade + rubble** ![Helical Colonnade](demo/addons/flow_nodes_editor/doc/demo_flashy_colonnade_v2.png) | **Per-instance colors** (Fall Guys hexagons) ![Fall Guys Hexagons](demo/addons/flow_nodes_editor/doc/demo_spawn_nodes_v2.png) |

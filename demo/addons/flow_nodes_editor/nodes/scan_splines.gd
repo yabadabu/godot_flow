@@ -53,6 +53,19 @@ func _collect_scene_nodes( ctx : FlowData.EvaluationContext, filter_class_name :
 		scene_nodes.append( node3d )
 	return scene_nodes
 
+func computeSceneFingerprint( ctx : FlowData.EvaluationContext ) -> Variant:
+	var nodes = filterOutGeneratedNodes( _collect_scene_nodes( ctx, "Path3D" ) )
+	var extra := []
+	for node in nodes:
+		var curve : Curve3D = node.curve
+		if curve:
+			extra.append( curve.get_instance_id() )
+			extra.append( curve.get_point_count() )
+			extra.append( curve.get_baked_length() )
+		else:
+			extra.append( 0 )
+	return hashSceneNodesForFingerprint( ctx, nodes, extra )
+
 func execute( ctx : FlowData.EvaluationContext ):
 	var nodes = _collect_scene_nodes( ctx, "Path3D" )
 	# Drop paths without a curve so 'node' and 'curve' streams stay aligned and

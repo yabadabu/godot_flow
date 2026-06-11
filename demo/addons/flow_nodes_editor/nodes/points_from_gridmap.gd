@@ -36,6 +36,22 @@ func _collect_gridmaps(root : Node) -> Array:
 
 	return root.find_children("*", "GridMap", true, false)
 
+func computeSceneFingerprint(_ctx : FlowData.EvaluationContext) -> Variant:
+	var root = _ctx.owner if (_ctx and _ctx.owner) else (EditorInterface.get_edited_scene_root() if Engine.is_editor_hint() else null)
+	if root == null:
+		return hashSceneNodesForFingerprint(_ctx, [])
+	var grids = filterOutGeneratedNodes(_collect_gridmaps(root))
+	var extra := []
+	for grid in grids:
+		extra.append(grid.cell_size)
+		extra.append(grid.mesh_library.get_instance_id() if grid.mesh_library else 0)
+		var used_cells = grid.get_used_cells()
+		for cell in used_cells:
+			extra.append(cell)
+			extra.append(grid.get_cell_item(cell))
+			extra.append(grid.get_cell_item_orientation(cell))
+	return hashSceneNodesForFingerprint(_ctx, grids, extra)
+
 func execute(_ctx : FlowData.EvaluationContext):
 	var root = _ctx.owner if (_ctx and _ctx.owner) else (EditorInterface.get_edited_scene_root() if Engine.is_editor_hint() else null)
 	if root == null:

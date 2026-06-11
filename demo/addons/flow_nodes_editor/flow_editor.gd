@@ -4615,6 +4615,12 @@ func _evaluate_graph_node(node: FlowNodeBase, performance: Array) -> void:
 	if FlowVariableEval.should_refresh_debug_draw( node ):
 		node.setupDrawDebug()
 	node.dirty = false
+	# Baseline for onEditorSceneChanged(): fingerprint the scene state this
+	# evaluation actually consumed
+	var scene_fingerprint = node.computeSceneFingerprint( ctx )
+	if typeof(scene_fingerprint) == TYPE_INT:
+		node.scene_fingerprint = scene_fingerprint
+		node.has_scene_fingerprint = true
 	var time_node_ends = Time.get_ticks_usec()
 	var exec_usec = time_node_ends - time_node_start
 
@@ -4850,13 +4856,25 @@ func onEditorSceneChanged():
 	if suppress_next_editor_scene_changed:
 		suppress_next_editor_scene_changed = false
 		return
-	# When a node in the scene changes, just mark dirty all nodes
-	# which can potentially become dirty
-	# This also triggers as dirty all scan_* nodes when we change
-	# anything in another of our nodes. Not very good
+	# Scene edits can only affect nodes that read the live scene. Compare each
+	# one's scene fingerprint so unrelated edits (camera moves, light tweaks,
+	# undo entries from other docks) don't trigger a regen at all.
+	ctx.owner = resource_owner if is_instance_valid(resource_owner) else null
+	var any_dirty := false
 	for node in getAllNodes():
-		node.dirty = true
-	queueRegen()
+		if node.settings and node.settings.disabled:
+			continue
+		var fingerprint = node.computeSceneFingerprint( ctx )
+		if typeof(fingerprint) == TYPE_STRING_NAME:	# FlowNodeBase.SCENE_INDEPENDENT
+			continue
+		if fingerprint == null or not node.has_scene_fingerprint or fingerprint != node.scene_fingerprint:
+			node.dirty = true
+			any_dirty = true
+		if fingerprint != null:
+			node.scene_fingerprint = fingerprint
+			node.has_scene_fingerprint = true
+	if any_dirty:
+		queueRegen()
 
 func _suppress_next_editor_scene_changed() -> void:
 	suppress_next_editor_scene_changed = true

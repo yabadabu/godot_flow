@@ -44,6 +44,11 @@ var show_disconnected_inputs : bool = false
 
 var dirty : bool = false
 
+# Last value returned by computeSceneFingerprint(); compared on editor scene
+# changes so only nodes whose scene inputs actually changed are re-evaluated.
+var scene_fingerprint : int = 0
+var has_scene_fingerprint : bool = false
+
 # Helper to create the UI
 const connectors_row_prefab = preload( "res://addons/flow_nodes_editor/connectors_row.tscn" )
 const connectors_options_prefab = preload( "res://addons/flow_nodes_editor/connectors_options.tscn" )
@@ -896,6 +901,129 @@ func getSceneRootNode3d( current : Node3D ) -> Node3D:
 	while current and current.get_parent_node_3d():
 		current = current.get_parent_node_3d()
 	return current
+
+# --- Scene fingerprints --------------------------------------------------
+# When the edited scene changes (any undo/redo history entry: moving a light,
+# a camera, an unrelated node...) the editor asks every graph node for a
+# fingerprint of the scene data it reads. Only nodes whose fingerprint changed
+# are marked dirty, so edits that do not affect the graph never trigger a
+# regen. Return values of computeSceneFingerprint():
+#   SCENE_INDEPENDENT - node never reads the scene, scene edits can be ignored
+#   null              - node reads the scene but cannot cheaply summarize it,
+#                       assume it changed (conservative full re-eval)
+#   int               - hash of the scene data the node depends on
+
+const SCENE_INDEPENDENT := &"scene_independent"
+
+# Node templates whose output reads live scene state. Used to decide whether a
+# nested graph (subgraph/loop) must re-run after a scene edit. Keep in sync
+# with the scans_scene / queries_physics meta flags in the node scripts.
+const SCENE_DEPENDENT_TEMPLATES := [
+	"scan_meshes", "scan_splines", "scan_nodes", "points_from_scene",
+	"points_from_gridmap", "points_from_tilemap", "point_from_player_pawn",
+	"navigation_region_sampler", "ray_cast", "physics_overlap_query",
+	"physics_shape_sweep", "projection", "subgraph", "loop",
+]
+
+func computeSceneFingerprint( ctx : FlowData.EvaluationContext ) -> Variant:
+	var meta := getMeta()
+	if meta.get( "queries_physics", false ):
+		return physicsSceneFingerprint( ctx )
+	if meta.get( "scans_scene", false ):
+		return null
+	return SCENE_INDEPENDENT
+
+# Nodes spawned by a flow graph carry the "flow_owner" meta on their subtree
+# root. They are removed before every evaluation, so fingerprints must skip
+# them or the spawn/compare cycle would report a phantom scene change.
+func isGeneratedSceneNode( node : Node ) -> bool:
+	var current := node
+	while current:
+		if current.has_meta( "flow_owner" ):
+			return true
+		current = current.get_parent()
+	return false
+
+func filterOutGeneratedNodes( nodes : Array ) -> Array:
+	return nodes.filter( func( n ): return n != null and not isGeneratedSceneNode( n ) )
+
+func hashSceneNodesForFingerprint( ctx : FlowData.EvaluationContext, nodes : Array, extra : Array = [] ) -> int:
+	var items := []
+	# Generated output is parented under the graph owner, so the owner's own
+	# transform is an implicit input of every scene-dependent node.
+	if ctx and ctx.owner and is_instance_valid( ctx.owner ):
+		items.append( ctx.owner.global_transform )
+	for node in nodes:
+		if node == null or not is_instance_valid( node ) or not node.is_inside_tree():
+			continue
+		items.append( String( node.get_path() ) )
+		items.append( node.get( "global_transform" ) )
+		items.append( node.get( "visible" ) )
+	items.append_array( extra )
+	return items.hash()
+
+# Summary of everything the editor-world physics queries can hit. Colliders,
+# shapes, gridmaps and CSG transforms are included; lights/cameras are not,
+# so moving those never re-triggers raycast/overlap/sweep nodes.
+func physicsSceneFingerprint( ctx : FlowData.EvaluationContext ) -> Variant:
+	if ctx == null or ctx.owner == null or not is_instance_valid( ctx.owner ):
+		return null
+	var root := getSceneRootNode3d( ctx.owner )
+	if root == null:
+		return null
+	var items := []
+	items.append( ctx.owner.global_transform )
+	_appendPhysicsFingerprintItems( root, items )
+	return items.hash()
+
+func _appendPhysicsFingerprintItems( node : Node, items : Array ) -> void:
+	if node.has_meta( "flow_owner" ):
+		return
+	if node is CollisionObject3D:
+		items.append( String( node.get_path() ) )
+		items.append( node.global_transform )
+		items.append( node.collision_layer )
+		items.append( node.visible )
+	elif node is CollisionShape3D:
+		items.append( node.transform )
+		items.append( node.disabled )
+		var shape : Shape3D = node.shape
+		if shape:
+			items.append( shape.get_instance_id() )
+			# Cover in-place edits of the common primitive shapes
+			for prop in [ "size", "radius", "height" ]:
+				var value = shape.get( prop )
+				if value != null:
+					items.append( value )
+	elif node is CollisionPolygon3D:
+		items.append( node.transform )
+		items.append( node.disabled )
+		items.append( node.polygon )
+		items.append( node.depth )
+	elif node.is_class( "GridMap" ):
+		items.append( String( node.get_path() ) )
+		items.append( node.get( "global_transform" ) )
+		items.append( node.get( "cell_size" ) )
+		items.append( node.call( "get_used_cells" ) )
+	elif node.is_class( "CSGShape3D" ):
+		items.append( String( node.get_path() ) )
+		items.append( node.get( "global_transform" ) )
+		items.append( node.get( "use_collision" ) )
+	for child in node.get_children():
+		_appendPhysicsFingerprintItems( child, items )
+
+# Fingerprint helper for nodes that evaluate a nested graph resource: scene
+# edits only matter when the nested graph itself contains scene-reading nodes.
+func nestedGraphSceneFingerprint( graph_resource ) -> Variant:
+	if graph_resource == null:
+		return SCENE_INDEPENDENT
+	var data = graph_resource.get( "data" )
+	if data == null or not data.has( "nodes" ):
+		return SCENE_INDEPENDENT
+	for n_data in data["nodes"]:
+		if n_data.get( "template", "" ) in SCENE_DEPENDENT_TEMPLATES:
+			return null
+	return SCENE_INDEPENDENT
 
 func findNodesMatchingFilters( ctx : FlowData.EvaluationContext, filter_by_class_name : String ) -> Array[ Node3D ]:
 

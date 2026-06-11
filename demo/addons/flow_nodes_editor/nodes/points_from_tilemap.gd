@@ -44,6 +44,20 @@ func _tile_world_position(layer, cell : Vector2i) -> Vector3:
 	var world_pos : Vector2 = layer.to_global(local_pos) * settings.position_scale
 	return Vector3(world_pos.x, settings.height, world_pos.y)
 
+func computeSceneFingerprint(_ctx : FlowData.EvaluationContext) -> Variant:
+	var root = _ctx.owner if (_ctx and _ctx.owner) else (EditorInterface.get_edited_scene_root() if Engine.is_editor_hint() else null)
+	if root == null:
+		return hashSceneNodesForFingerprint(_ctx, [])
+	var layers = filterOutGeneratedNodes(_collect_tilemaps(root))
+	var extra := []
+	for layer in layers:
+		var used_cells = layer.get_used_cells()
+		extra.append(used_cells)
+		for cell in used_cells:
+			extra.append(layer.get_cell_source_id(cell))
+			extra.append(layer.get_cell_alternative_tile(cell))
+	return hashSceneNodesForFingerprint(_ctx, layers, extra)
+
 func execute(_ctx : FlowData.EvaluationContext):
 	var root = _ctx.owner if (_ctx and _ctx.owner) else (EditorInterface.get_edited_scene_root() if Engine.is_editor_hint() else null)
 	if root == null:

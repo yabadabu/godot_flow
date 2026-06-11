@@ -53,6 +53,13 @@ func _collect_scene_nodes( ctx : FlowData.EvaluationContext, filter_class_name :
 		scene_nodes.append( node3d )
 	return scene_nodes
 
+func computeSceneFingerprint( ctx : FlowData.EvaluationContext ) -> Variant:
+	var nodes = filterOutGeneratedNodes( _collect_scene_nodes( ctx, "MeshInstance3D" ) )
+	var extra := []
+	for node in nodes:
+		extra.append( node.mesh.get_instance_id() if node.mesh else 0 )
+	return hashSceneNodesForFingerprint( ctx, nodes, extra )
+
 func execute( ctx : FlowData.EvaluationContext ):
 	var nodes = _collect_scene_nodes( ctx, "MeshInstance3D" )
 	# Drop instances without a mesh so 'node' and 'mesh' streams stay aligned

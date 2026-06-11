@@ -37,7 +37,7 @@ func _find_first_camera(root : Node) -> Node3D:
 			return camera
 	return _find_first_node3d(root.find_children("*", "Camera3D", true, false))
 
-func _find_player(root : Node) -> Node3D:
+func _find_player(root : Node, silent : bool = false) -> Node3D:
 	if root == null:
 		return null
 	if settings.player_node_path != NodePath():
@@ -59,9 +59,16 @@ func _find_player(root : Node) -> Node3D:
 		var camera := _find_first_camera(root)
 		if camera:
 			return camera
-	if root is Node3D:
+	if root is Node3D and not silent:
 		push_warning("PointFromPlayer '%s': no player matched path/group/class filters — falling back to the scene root" % name)
 	return root as Node3D
+
+# The resolved source can be a camera (fallback) — in that case camera moves
+# legitimately re-trigger this node, and only this node.
+func computeSceneFingerprint(ctx : FlowData.EvaluationContext) -> Variant:
+	var player := _find_player(_scene_root(ctx), true)
+	var sources := [] if player == null else [player]
+	return hashSceneNodesForFingerprint(ctx, filterOutGeneratedNodes(sources))
 
 func execute(ctx : FlowData.EvaluationContext):
 	var player := _find_player(_scene_root(ctx))

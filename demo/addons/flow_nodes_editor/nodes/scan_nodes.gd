@@ -192,6 +192,26 @@ func get_combined_aabb(root: Node3D) -> AABB:
 			combined_aabb = combined_aabb.merge(child_aabb)
 	return combined_aabb
 
+# Also inherited by points_from_scene.gd
+func computeSceneFingerprint( ctx : FlowData.EvaluationContext ) -> Variant:
+	var filter_by_class_name = getSettingValue( ctx, "filter_by_class_name" )
+	var nodes = filterOutGeneratedNodes( _collect_scene_nodes( ctx, filter_by_class_name ) )
+	var extra := []
+	if getSettingValue( ctx, "import_metadata" ) as bool:
+		for node in nodes:
+			for meta in node.get_meta_list():
+				extra.append( meta )
+				extra.append( node.get_meta( meta ) )
+	for prop_path in settings.import_properties:
+		if prop_path:
+			var parts = prop_path.split( ":" )
+			for node in nodes:
+				extra.append( get_property_path( node, parts ) )
+	if settings.size_to_bounds:
+		for node in nodes:
+			extra.append( get_combined_aabb( node ) )
+	return hashSceneNodesForFingerprint( ctx, nodes, extra )
+
 func execute( ctx : FlowData.EvaluationContext ):
 	var output := FlowData.Data.new()
 

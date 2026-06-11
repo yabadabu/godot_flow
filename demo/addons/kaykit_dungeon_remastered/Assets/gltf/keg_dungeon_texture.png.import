@@ -3,9 +3,10 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://biaxmsfbuoafv"
-path="res://.godot/imported/keg_dungeon_texture.png-92c889c34493d25ca3a39b4e0f5fefcd.ctex"
+path.s3tc="res://.godot/imported/keg_dungeon_texture.png-92c889c34493d25ca3a39b4e0f5fefcd.s3tc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc"],
+"vram_texture": true
 }
 generator_parameters={
 "md5": "9a714bc33f4314ea4520009f20b048a8"
@@ -14,11 +15,11 @@ generator_parameters={
 [deps]
 
 source_file="res://addons/kaykit_dungeon_remastered/Assets/gltf/keg_dungeon_texture.png"
-dest_files=["res://.godot/imported/keg_dungeon_texture.png-92c889c34493d25ca3a39b4e0f5fefcd.ctex"]
+dest_files=["res://.godot/imported/keg_dungeon_texture.png-92c889c34493d25ca3a39b4e0f5fefcd.s3tc.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0
@@ -40,4 +41,4 @@ process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
-detect_3d/compress_to=1
+detect_3d/compress_to=0

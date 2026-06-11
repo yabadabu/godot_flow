@@ -86,6 +86,9 @@ func onPropChanged( prop_name : String ):
 			_connect_graph(settings.graph)
 		initFromScript()
 
+func computeSceneFingerprint( _ctx : FlowData.EvaluationContext ) -> Variant:
+	return nestedGraphSceneFingerprint( settings.graph if settings else null )
+
 func execute( ctx : FlowData.EvaluationContext ):
 	if not settings.graph:
 		setError("No graph assigned to Subgraph node '%s'" % getTitle())

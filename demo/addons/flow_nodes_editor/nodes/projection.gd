@@ -13,6 +13,7 @@ func _init():
 		"outs" : [{ "label" : "Out" }],
 		"aliases" : ["Projection"],
 		"category" : "Spatial",
+		"queries_physics" : true,
 		"tooltip" : "Projects points along a direction onto colliders.\nSnaps point positions, writes the hit normal, and optionally aligns rotations to it.",
 	}
 

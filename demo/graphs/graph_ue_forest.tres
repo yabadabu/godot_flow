@@ -1,16 +1,16 @@
-[gd_resource type="Resource" script_class="FlowGraphResource" format=3]
+[gd_resource type="Resource" script_class="FlowGraphResource" format=3 uid="uid://b7jg2oru0ojsj"]
 
+[ext_resource type="BoxMesh" uid="uid://7flu82pqtc5d" path="res://addons/flow_nodes_editor/resources/unit_cube.tres" id="1_af87n"]
 [ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="2_qkakh"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tree"]
-albedo_color = Color(0.13, 0.42, 0.16, 1)
-roughness = 0.9
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ymh2k"]
+albedo_color = Color(0.2127671, 0.33677956, 0.021296991, 1)
 
-[sub_resource type="CylinderMesh" id="CylinderMesh_tree"]
-material = SubResource("StandardMaterial3D_tree")
+[sub_resource type="CylinderMesh" id="CylinderMesh_oukmt"]
+material = SubResource("StandardMaterial3D_ymh2k")
 top_radius = 0.0
-bottom_radius = 1.1
-height = 3.2
+radial_segments = 6
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bush"]
 albedo_color = Color(0.28, 0.55, 0.2, 1)
@@ -20,6 +20,8 @@ roughness = 0.95
 material = SubResource("StandardMaterial3D_bush")
 radius = 0.7
 height = 1.1
+radial_segments = 10
+rings = 10
 
 [resource]
 resource_name = "graph_ue_forest"
@@ -51,20 +53,63 @@ data = {
 "to_node": &"id_0005_transform_points",
 "to_port": 0
 }, {
+"from_node": &"id_0004_density_filter",
+"from_port": 1,
+"keep_alive": false,
+"to_node": &"id_0084_transform_points",
+"to_port": 0
+}, {
+"from_node": &"id_0086_attribute_noise",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0087_spawn_meshes",
+"to_port": 0
+}, {
+"from_node": &"id_0084_transform_points",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0086_attribute_noise",
+"to_port": 0
+}, {
 "from_node": &"id_0005_transform_points",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0090_difference",
+"to_port": 0
+}, {
+"from_node": &"id_0084_transform_points",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0090_difference",
+"to_port": 1
+}, {
+"from_node": &"id_0090_difference",
 "from_port": 0,
 "keep_alive": false,
 "to_node": &"id_0006_spawn_meshes",
 "to_port": 0
 }],
+"min_pos": Vector2(0, -80),
 "nodes": [{
 "args_port": {},
 "name": &"id_0001_scan_meshes",
-"position": Vector2(0, 0),
+"position": Vector2(0, 80),
 "settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
 "group_name": "terrain",
+"inspect_enabled": false,
 "random_seed": 12345,
-"title": "Get Landscape Data (Scan Meshes)"
+"recursive": true,
+"required_meta_bool": &"",
+"title": "Get Landscape Data (Scan Meshes)",
+"trace": false
 },
 "show_disconnected_inputs": false,
 "template": "scan_meshes"
@@ -76,13 +121,27 @@ data = {
 }
 },
 "name": &"id_0002_sample_mesh",
-"position": Vector2(420, 0),
+"position": Vector2(420, 80),
 "settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
 "density": 0.55,
+"disabled": false,
+"discard_hard_edges": false,
+"hard_edge_angle_threshold": 45.0,
+"hard_edge_distance_threshold": 0.1,
+"inspect_enabled": false,
 "mode": 0,
+"num_samples": 100,
 "point_size": 1.0,
 "random_seed": 12345,
-"title": "Surface Sampler (Sample Mesh)"
+"title": "Surface Sampler (Sample Mesh)",
+"trace": false
 },
 "show_disconnected_inputs": false,
 "template": "sample_mesh"
@@ -93,33 +152,33 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0003_attribute_noise",
-"position": Vector2(840, 0),
-"settings": {
-"clamp_result": true,
-"mode": 4,
-"noise_max": 1.0,
-"noise_min": 0.0,
-"random_seed": 12345,
-"target_attribute": "density",
-"title": "Attribute Noise (Density)"
-},
-"show_disconnected_inputs": false,
-"template": "attribute_noise"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
 "name": &"id_0004_density_filter",
-"position": Vector2(1260, 0),
+"position": Vector2(1260, 80),
 "settings": {
+"attribute_name": "density",
+"case_sensitive": false,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inclusive_max": true,
+"inclusive_min": true,
+"inspect_enabled": false,
+"invert_filter": false,
 "lower_bound": 0.5,
+"max_value": 1.0,
+"min_value": 0.5,
 "random_seed": 12345,
+"string_match_mode": false,
+"string_match_values": "",
 "title": "Density Filter",
-"upper_bound": 1.0
+"trace": false,
+"upper_bound": 1.0,
+"use_absolute_value": false
 },
 "show_disconnected_inputs": false,
 "template": "density_filter"
@@ -130,15 +189,125 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0005_transform_points",
-"position": Vector2(1680, 0),
+"name": &"id_0003_attribute_noise",
+"position": Vector2(840, 80),
 "settings": {
+"clamp_result": true,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"invert_source": false,
+"mode": 4,
+"noise_max": 1.0,
+"noise_min": 0.0,
 "random_seed": 12345,
+"target_attribute": "density",
+"title": "Attribute Noise (Density)",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "attribute_noise"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0087_spawn_meshes",
+"position": Vector2(2240, 460),
+"settings": {
+"clear_previous_instances": true,
+"color_attribute": "color",
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"mesh": ExtResource("1_af87n"),
+"mesh_attribute": "",
+"mesh_selector_attribute": "",
+"mesh_variant_weights": Array[float]([0.75, 0.25]),
+"mesh_variants": Array[Mesh]([SubResource("CylinderMesh_oukmt")]),
+"random_seed": 12345,
+"randomize_mesh_variants": true,
+"spawn_parent_path": "",
+"title": "Static Mesh Spawner",
+"trace": false,
+"use_vertex_colors": false
+},
+"show_disconnected_inputs": false,
+"template": "spawn_meshes"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0086_attribute_noise",
+"position": Vector2(1880, 460),
+"settings": {
+"clamp_result": true,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"invert_source": false,
+"mode": 4,
+"noise_max": 1.0,
+"noise_min": 0.0,
+"random_seed": 12345,
+"target_attribute": "density",
+"title": "Attribute Noise (Density)",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "attribute_noise"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0005_transform_points",
+"position": Vector2(1640, 0),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"offset_max": Vector3(0, 0, 0),
+"offset_min": Vector3(0, 0, 0),
+"random_seed": 12345,
+"rotation_local_space": false,
 "rotation_max": Vector3(0, 360, 0),
 "rotation_min": Vector3(0, 0, 0),
 "scale_max": Vector3(1.3, 1.3, 1.3),
 "scale_min": Vector3(0.7, 0.7, 0.7),
 "title": "Transform Points",
+"trace": false,
 "uniform_scale": true
 },
 "show_disconnected_inputs": false,
@@ -150,18 +319,104 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0006_spawn_meshes",
-"position": Vector2(2100, 0),
+"name": &"id_0084_transform_points",
+"position": Vector2(1660, 320),
 "settings": {
-"mesh_variant_weights": [0.75, 0.25],
-"mesh_variants": [SubResource("CylinderMesh_tree"), SubResource("SphereMesh_bush")],
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"offset_max": Vector3(0, 0, -0.8),
+"offset_min": Vector3(0, 0, -0.8),
+"random_seed": 12345,
+"rotation_local_space": false,
+"rotation_max": Vector3(-90, 360, 0),
+"rotation_min": Vector3(-90, 0, 0),
+"scale_max": Vector3(3, 3, 3),
+"scale_min": Vector3(0.5, 0.5, 0.5),
+"title": "Transform Points",
+"trace": false,
+"uniform_scale": true
+},
+"show_disconnected_inputs": false,
+"template": "transform_points"
+}, {
+"args_port": {
+"In A": {
+"connected": true,
+"port": 0
+},
+"In B": {
+"connected": true,
+"port": 1
+}
+},
+"name": &"id_0090_difference",
+"position": Vector2(2060, 220),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"intersection_overlap_source": 1,
+"keep_a_on_union_overlap": true,
+"operation": 0,
+"random_seed": 12345,
+"title": "Difference",
+"trace": false,
+"union_overlap_source": 0
+},
+"show_disconnected_inputs": false,
+"template": "difference"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0006_spawn_meshes",
+"position": Vector2(2460, 220),
+"settings": {
+"clear_previous_instances": true,
+"color_attribute": "color",
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"mesh": ExtResource("1_af87n"),
+"mesh_attribute": "",
+"mesh_selector_attribute": "",
+"mesh_variant_weights": Array[float]([0.75, 0.25]),
+"mesh_variants": Array[Mesh]([SubResource("SphereMesh_bush")]),
 "random_seed": 12345,
 "randomize_mesh_variants": true,
+"spawn_parent_path": "",
 "title": "Static Mesh Spawner",
+"trace": false,
 "use_vertex_colors": false
 },
 "show_disconnected_inputs": false,
 "template": "spawn_meshes"
 }],
-"params": []
+"type": "flow_graph_nodes",
+"version": 1
 }
+view_zoom = 0.23256795
+view_offset = Vector2(-247.29932, -113.755936)
+new_name_counter = 90
