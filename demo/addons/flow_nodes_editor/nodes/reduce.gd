@@ -45,7 +45,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 		setError( "Input %s not found" % [settings.in_name])
 		return
 	if sA.data_type != FlowData.DataType.Float && sA.data_type != FlowData.DataType.Vector && sA.data_type != FlowData.DataType.Int:
-		setError( "Input %s must have Float or Vector types" % [settings.in_name])
+		setError( "Input %s must be Float, Int or Vector. (Found %s)" % [settings.in_name, FlowData.DataType.keys()[ sA.data_type ] ])
 		return
 
 	var num_elems := in_data.size()

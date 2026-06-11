@@ -7,12 +7,10 @@
 		Feedback
 
 ---- 
-- [X] Import node: noise
 - [ ] Import node: load csv
 - [ ] Import node: texture sampler
 - [ ] Import node: match and set weight attr
 - [ ] Import node: sample spline
-- [X] Import node: math.color ops
 
 - [ ] named redirectors/acc
 - [ ] debug/session
@@ -32,8 +30,10 @@
 - [X] Subgraphs / Loops?
 - [ ] Sample spline along N random positions
 - [ ] Discard points too close to hard edges of a mesh
-- [ ] Add noise to position <-- Improve noise
+- [X] Add noise to position <-- Improve noise
 - [ ] Spline sampling interior in non grid pattern
+- [X] Import node: math.color ops
+- [X] Import node: noise
 - [X] Allow to filter rows in the inspector
 - [X] Support for virtual streams like front, up, right from rotation.
 - [X] Support for Vector4/Color/PackedVector4Array -> Read SubAttributes / MathNode / SetAttribute / Use in Debug if exists
