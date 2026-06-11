@@ -60,9 +60,11 @@ func execute( _ctx : FlowData.EvaluationContext ):
 				sB = newFloatStream( num_elemsA, sA.name + " as float", sB.container[0])
 			elif sB.data_type == FlowData.DataType.Vector:
 				sB = newStream( num_elemsA, sA.name + " as vector3", sB.container[0], FlowData.DataType.Vector )
+			elif sB.data_type == FlowData.DataType.Color:
+				sB = newStream( num_elemsA, sA.name + " as color", sB.container[0], FlowData.DataType.Color )
 			else:
-				setError( "Num elements from A nd B do not match (%d vs %d). But In B data type must be a float or Vector3" % [num_elemsA, num_elemsB])
-				
+				setError( "Num elements from A nd B do not match (%d vs %d). But In B data type must be a float, Vector3, or Color" % [num_elemsA, num_elemsB])
+				return
 		else:
 			setError( "Num elements from A nd B do not match (%d vs %d)" % [num_elemsA, num_elemsB])
 			return
@@ -231,6 +233,51 @@ func execute( _ctx : FlowData.EvaluationContext ):
 						outC[i] = inA[i] / inB[i]
 				_:
 					setError( "Vector3 vs Float operation not supported yet")
+			out_container = outC
+
+		elif sA.data_type == FlowData.DataType.Color && sB.data_type == FlowData.DataType.Color:
+			var inA : PackedColorArray = sA.container
+			var inB : PackedColorArray = sB.container
+			var outC := PackedColorArray()
+			outC.resize( num_elems )
+			
+			match settings.operation:
+				MathOpNodeSettings.eOperation.Multiply:
+					for i in num_elems:
+						outC[i] = Color(inA[i].r * inB[i].r, inA[i].g * inB[i].g, inA[i].b * inB[i].b, inA[i].a * inB[i].a)
+				MathOpNodeSettings.eOperation.Add:
+					for i in num_elems:
+						outC[i] = Color(inA[i].r + inB[i].r, inA[i].g + inB[i].g, inA[i].b + inB[i].b, inA[i].a + inB[i].a)
+				MathOpNodeSettings.eOperation.Substract:
+					for i in num_elems:
+						outC[i] = Color(inA[i].r - inB[i].r, inA[i].g - inB[i].g, inA[i].b - inB[i].b, inA[i].a - inB[i].a)
+				MathOpNodeSettings.eOperation.Divide:
+					for i in num_elems:
+						outC[i] = Color(inA[i].r / inB[i].r, inA[i].g / inB[i].g, inA[i].b / inB[i].b, inA[i].a / inB[i].a)
+				_:
+					setError( "Color vs Color operation not supported yet")
+			out_container = outC
+
+		elif sA.data_type == FlowData.DataType.Color && sB.data_type == FlowData.DataType.Float:
+			var inA : PackedColorArray = sA.container
+			var inB : PackedFloat32Array = sB.container
+			var outC := PackedColorArray()
+			outC.resize( num_elems )
+			match settings.operation:
+				MathOpNodeSettings.eOperation.Multiply:
+					for i in num_elems:
+						outC[i] = Color(inA[i].r * inB[i], inA[i].g * inB[i], inA[i].b * inB[i], inA[i].a * inB[i])
+				MathOpNodeSettings.eOperation.Divide:
+					for i in num_elems:
+						outC[i] = Color(inA[i].r / inB[i], inA[i].g / inB[i], inA[i].b / inB[i], inA[i].a / inB[i])
+				MathOpNodeSettings.eOperation.Add:
+					for i in num_elems:
+						outC[i] = Color(inA[i].r + inB[i], inA[i].g + inB[i], inA[i].b + inB[i], inA[i].a + inB[i])
+				MathOpNodeSettings.eOperation.Substract:
+					for i in num_elems:
+						outC[i] = Color(inA[i].r - inB[i], inA[i].g - inB[i], inA[i].b - inB[i], inA[i].a - inB[i])
+				_:
+					setError( "Color vs Float operation not supported yet")
 			out_container = outC
 
 		elif sA.data_type == FlowData.DataType.Int && sB.data_type == FlowData.DataType.Int:
