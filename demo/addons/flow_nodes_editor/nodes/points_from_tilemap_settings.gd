@@ -7,6 +7,9 @@ extends NodeSettings
 @export var source_id_filter : int = -1
 @export var alternative_id_filter : int = -1
 @export var height : float = 0.0
+## TileMap positions are in 2D pixels; this scale converts them to world units
+## (e.g. 1/64 for 64px tiles mapping to 1m cells) so positions match cell_size.
+@export var position_scale : float = 1.0
 @export var cell_size : Vector2 = Vector2(1.0, 1.0)
 @export var cell_height : float = 1.0
 @export var include_tile_ids : bool = true:

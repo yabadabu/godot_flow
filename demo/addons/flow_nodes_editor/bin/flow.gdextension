@@ -4,4 +4,6 @@ compatibility_minimum = "4.4"
 
 [libraries]
 windows.x86_64.editor = "res://addons/flow_nodes_editor/bin/libflow.windows.editor.x86_64.dll"
+windows.x86_64.template_release = "res://addons/flow_nodes_editor/bin/libflow.windows.template_release.x86_64.dll"
+windows.x86_64.template_debug = "res://addons/flow_nodes_editor/bin/libflow.windows.template_debug.x86_64.dll"
 macos.debug = "res://addons/flow_nodes_editor/bin/libflow.macos.template_debug.framework"

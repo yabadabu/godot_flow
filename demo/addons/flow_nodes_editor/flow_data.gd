@@ -24,6 +24,9 @@ enum DataType {
 const AttrPosition : StringName = &"position"
 const AttrRotation : StringName = &"rotation"
 const AttrSize     : StringName = &"size"
+const AttrDensity  : StringName = &"density"	# Float, 0..1, soft existence probability (UE $Density)
+const AttrSeed     : StringName = &"seed"		# Int, per-point deterministic seed (UE $Seed)
+const AttrNormal   : StringName = &"normal"		# Vector, surface normal where known
 
 class EvaluationContext:
 	var owner : FlowGraphNode3D
@@ -32,6 +35,23 @@ class EvaluationContext:
 	var gedit_nodes_by_name : Dictionary
 	var runtime_params : Dictionary = {}
 	var variables : Dictionary = {}
+
+## Deterministic per-point seed (UE $Seed parity): hashes the position
+## quantized per component at *1000 (the same quantization mutate_seed.gd
+## uses, so both produce agreeing values) combined with the node seed.
+## Result is masked to a positive 31-bit int so it fits a PackedInt32Array.
+static func point_seed( pos : Vector3, node_seed : int ) -> int:
+	var px = int(round(pos.x * 1000.0))
+	var py = int(round(pos.y * 1000.0))
+	var pz = int(round(pos.z * 1000.0))
+	return hash([px, py, pz, node_seed]) & 0x7fffffff
+
+## Broadcast convention: a stream whose container holds a single element is a
+## "broadcast" stream — that one value applies to every point. Streams with
+## more than one element are read per point. Use this helper to compute the
+## read index into a container that may be broadcast.
+static func bcast_idx( container_size : int, i : int ) -> int:
+	return i if container_size > 1 else 0
 
 ## Build a stable orthonormal Basis from a surface normal.
 ## - `normal` is the axis you want to align (default aligns to +Z).
@@ -334,6 +354,21 @@ class Data:
 
 			if streams.has(name) and streams[name].data_type != data_type:
 				push_warning("Stream name conflict: '%s' already exists with data_type %d, overwriting with data_type %d" % [name, streams[name].data_type, data_type])
+
+			# Length validation: when the Data already has streams, the new
+			# container should match their element count. Exempt: length-1
+			# broadcast streams and empty containers (register-empty-then-fill
+			# idiom). Verbose-only because build-up idioms (merge's offset
+			# padding) legitimately register mismatched sizes mid-construction;
+			# run with --verbose when debugging stream-length corruption.
+			if container.size() > 1 and streams.size() > 0:
+				for existing_name in streams:
+					if existing_name == name:
+						continue
+					var existing_size : int = streams[existing_name].container.size()
+					if existing_size > 1 and existing_size != container.size():
+						print_verbose("registerStream: stream '%s' has %d elements but Data streams have %d — lengths should match (or be 1 for broadcast)" % [name, container.size(), existing_size])
+						break
 
 			streams[ name ] = {
 				"container" : container,

@@ -7,6 +7,8 @@ func _init():
 		"settings" : InputNodeSettings,
 		"ins" : [],
 		"outs" : [{ "label" : "Out" }],
+		"aliases" : ["Input", "graph parameter"],
+		"category" : "Input",
 		"tooltip" : "Exposes an input of the Flow Graph Node into the Graph",
 		"auto_register" : true,
 		"hide_inputs" : true
@@ -134,6 +136,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 			var output := FlowData.Data.new()
 			var new_container = output.addStream( param.name, param.data_type )
 			if new_container == null:
+				setError( "Failed to create stream for input parameter '%s' (data_type %d)" % [param.name, param.data_type] )
 				continue
 			var fixture_data := _data_fixture_for_input(ctx, param.name, param.data_type)
 			if fixture_data != null:
@@ -166,7 +169,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 		var output := FlowData.Data.new()
 		var new_container = output.addStream( settings.name, input.data_type )
 		if new_container == null:
-			setError( "Invalid name %s or data_type %d (bool)" % [settings.name, input.data_type ])
+			setError( "Failed to create stream for input '%s' (data_type %d)" % [settings.name, input.data_type ])
 			return
 
 		var fixture_data := _data_fixture_for_input(ctx, input.name, input.data_type)

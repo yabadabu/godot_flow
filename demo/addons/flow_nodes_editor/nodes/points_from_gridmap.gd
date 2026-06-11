@@ -10,7 +10,8 @@ func _init():
 		"scans_scene" : true,
 		"ins" : [],
 		"outs" : [{ "label" : "Out" }],
-		"tooltip" : "Generates one point per used GridMap cell (Godot-specific 3D tile extraction).",
+		"category" : "Sampler",
+		"tooltip" : "Generates one point per used GridMap cell (Godot-specific 3D tile extraction).\nCell rotation comes from the cell's item orientation combined with the GridMap's own rotation.",
 	}
 
 func _collect_gridmaps(root : Node) -> Array:
@@ -27,9 +28,10 @@ func _collect_gridmaps(root : Node) -> Array:
 	var group_name = settings.group_name.strip_edges()
 	if group_name != "":
 		var out : Array = []
-		for n in root.get_tree().get_nodes_in_group(group_name):
-			if n and n.is_class("GridMap"):
-				out.append(n)
+		if root.get_tree():
+			for n in root.get_tree().get_nodes_in_group(group_name):
+				if n and n.is_class("GridMap"):
+					out.append(n)
 		return out
 
 	return root.find_children("*", "GridMap", true, false)
@@ -63,8 +65,15 @@ func execute(_ctx : FlowData.EvaluationContext):
 			var world_pos : Vector3 = grid.to_global(local_pos)
 			world_pos.y += settings.y_offset
 
+			# Preserve the cell item's orientation (combined with the GridMap's
+			# own world rotation) instead of discarding it.
+			var cell_basis : Basis = grid.global_transform.basis
+			var orientation : int = grid.get_cell_item_orientation(cell)
+			if orientation >= 0:
+				cell_basis = cell_basis * grid.get_basis_with_orthogonal_index(orientation)
+
 			positions.append(world_pos)
-			rotations.append(Vector3.ZERO)
+			rotations.append(FlowData.basisToEuler(cell_basis))
 			sizes.append(csize)
 			cells.append(Vector3(cell.x, cell.y, cell.z))
 			if settings.include_item_id:

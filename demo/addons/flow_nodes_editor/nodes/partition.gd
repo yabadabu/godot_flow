@@ -5,8 +5,10 @@ func _init():
 	meta_node = {
 		"title" : "Partition",
 		"settings" : PartitionNodeSettings,
-		"ins" : [{ "label": "In" }], 
+		"ins" : [{ "label": "In" }],
 		"outs" : [{ "label" : "Out" }],
+		"aliases" : ["Attribute Partition"],
+		"category" : "Metadata",
 		"tooltip" : "Partition data based on the different values an attribute."
 	}
 	
@@ -14,19 +16,18 @@ func getTitle() -> String:
 	return "Partition %s" % [ settings.attribute_name ]
 
 func execute( ctx : FlowData.EvaluationContext ):
-	var in_data = get_input( 0 )
+	var in_data = require_input( 0, ctx )
 	if in_data == null:
-		setError( "partition.Missing input 0" )
 		return
-	
+
 	var stream = in_data.findStream( settings.attribute_name )
 	if stream == null:
 		setError( "Attribute %s not found in input" % settings.attribute_name )
 		return
 	var container = stream.container
-	
+
 	if settings.trace:
-		print( "Partitioning by attribute %s" % container )
+		print( "Partitioning by attribute %s (%d values)" % [ settings.attribute_name, container.size() ] )
 	
 	# Do a quick and dirty partition by string representation of the value
 	# Preserves the indices

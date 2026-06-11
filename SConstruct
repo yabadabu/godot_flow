@@ -42,6 +42,10 @@ if env["platform"] == "macos":
 else:
     env.Append(CFLAGS=["/std:c11"])
     env.Append(CXXFLAGS=["-O2"])
+    # nanoflann (gd_kdtree) requires exception support; godot-cpp disables it by
+    # default on non-macOS targets (equivalent to passing disable_exceptions=no).
+    if not env.get("is_msvc", False):
+        env.Append(CXXFLAGS=["-fexceptions"])
     library = env.SharedLibrary(
         bin_dir + "/libflow{}{}".format(env["suffix"], env["SHLIBSUFFIX"]),
         source=common_sources,

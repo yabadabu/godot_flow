@@ -9,7 +9,9 @@ func _init():
 		"settings" : AttributeSetToPointNodeSettings,
 		"ins" : [{ "label": "In" }],
 		"outs" : [{ "label" : "Out" }],
-		"tooltip" : "Converts attribute rows into point data by providing position/rotation/size streams.",
+		"tooltip" : "Converts attribute rows into point data by providing position/rotation/size streams.\nWith 'Use Defaults When Missing' on, an absent (or mistyped) attribute name falls back to the constant default.",
+		"aliases" : ["Attribute Set To Point", "To Point Data"],
+		"category" : "Metadata",
 	}
 
 func _resolve_vector_stream(in_data : FlowData.Data, attr_name : String, num_points : int, fallback : Vector3, allow_default : bool) -> Dictionary:
@@ -42,9 +44,8 @@ func _resolve_vector_stream(in_data : FlowData.Data, attr_name : String, num_poi
 	return { "ok": true, "container": expanded }
 
 func execute(_ctx : FlowData.EvaluationContext):
-	var in_data : FlowData.Data = get_input(0)
+	var in_data : FlowData.Data = require_input(0, _ctx)
 	if in_data == null:
-		setError("Input not found")
 		return
 
 	var num_points = in_data.size()

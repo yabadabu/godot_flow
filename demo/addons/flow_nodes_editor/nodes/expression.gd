@@ -5,9 +5,11 @@ func _init():
 	meta_node = {
 		"title" : "Expression",
 		"settings" : ExpressionNodeSettings,
-		"ins" : [{ "label": "In" }], 
+		"ins" : [{ "label": "In" }],
 		"outs" : [{ "label" : "Out" }],
-		"tooltip" : 
+		"aliases" : ["Attribute Expression"],
+		"category" : "Metadata",
+		"tooltip" :
 			"Evaluates an expression and stores the result in the output stream\n" + 
 			" * When expose_arrays is set, the values of the point set are exposed as arrays\n" +
 			"   and position[Index] (Index with capital I) must be used to reference the current point\n" + 
@@ -44,7 +46,7 @@ func getExposedParams():
 	
 func getTitle() -> String:
 	size = get_combined_minimum_size()
-	if settings.title != "Expression":
+	if settings.title and settings.title != "Expression":
 		return settings.title
 	if !settings.expression:
 		return "Expression"
@@ -72,7 +74,9 @@ func evaluateAndSaveResult( idx : int, values : Array ):
 	return false
 
 func execute( ctx : FlowData.EvaluationContext ):
-	var in_data : FlowData.Data = get_input(0)
+	var in_data : FlowData.Data = require_input(0, ctx, "Input 'In'")
+	if in_data == null:
+		return
 	_out_data = in_data.duplicate()
 	
 	_in_size = in_data.size()
@@ -100,11 +104,10 @@ func execute( ctx : FlowData.EvaluationContext ):
 		else:
 			values.append( def_value )
 	
-	var container = null
 	if settings.expose_arrays:
 		var containers = in_data.streams.values().map( func( s ): return s.container )
 		values.append_array( containers )
-			
+
 		for idx in range( _in_size ):
 			values[0] = idx
 			if not evaluateAndSaveResult( idx, values ):
@@ -122,10 +125,14 @@ func execute( ctx : FlowData.EvaluationContext ):
 				#print( "  For %d : %s" % [ idx, values ])
 			if not evaluateAndSaveResult( idx, values ):
 				break
+
+	# Register the result stream in both modes (expose_arrays previously
+	# skipped this and silently dropped the computed stream).
+	if _container != null:
 		if settings.trace:
 			print( "Registering stream %s with %s" % [ settings.out_name, _container ])
 		var err_msg = _out_data.registerStream( settings.out_name, _container )
 		if err_msg:
 			setError( err_msg )
-			
+
 	set_output( 0, _out_data )

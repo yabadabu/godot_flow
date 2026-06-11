@@ -19,8 +19,12 @@ var num_rows : int = 0
 var num_cols : int = 0
 var col_titles : Array[String]
 var col_streams_names : Array[String]
-var data : FlowData.Data 
+var data : FlowData.Data
 var visible_rows : Array[int] = []
+
+# View-only column sorting state (never mutates the underlying FlowData)
+var sort_col : int = -1
+var sort_ascending : bool = true
 
 # The slot corresponds to InA, InB, or Out streams for example
 # The setetings are not included
@@ -229,6 +233,7 @@ func refresh():
 		if has_node("%FilterEdit"):
 			filter_text = %FilterEdit.text
 		update_visible_rows(filter_text)
+		apply_sort()
 		
 		# Stats: row/col summary
 		%LabelStats.text = FlowI18n.t("%d rows · %d streams · %d cols") % [ num_rows, data.numFields(), num_cols]
@@ -315,6 +320,87 @@ func _get_flow_editor() -> FlowEditor:
 		current = current.get_parent()
 	return null
 
+func onTitleClicked( col : int ):
+	if col < 0 or data == null:
+		return
+	if sort_col == col:
+		sort_ascending = not sort_ascending
+	else:
+		sort_col = col
+		sort_ascending = true
+	apply_sort()
+	if tv:
+		tv.refreshUI()
+
+# Returns a comparable value for the given data row in the given table column.
+# Column 0 is the index column; data columns map through col_streams_names.
+func _row_sort_value( real_row : int, col : int ):
+	if col == 0:
+		return real_row
+	var data_col = col - 1
+	if data_col >= col_streams_names.size():
+		return null
+	var stream = data.streams.get( col_streams_names[ data_col ], null )
+	if stream == null or real_row >= stream.container.size():
+		return null
+	var val = stream.container[ real_row ]
+	match stream.data_type:
+		FlowData.DataType.Vector:
+			if val is Vector3:
+				var title = col_titles[ data_col ]
+				if title.ends_with(".X"):
+					return val.x
+				elif title.ends_with(".Y"):
+					return val.y
+				elif title.ends_with(".Z"):
+					return val.z
+			return null
+		FlowData.DataType.Bool:
+			return 1 if val else 0
+		FlowData.DataType.Int, FlowData.DataType.Float:
+			return val
+		FlowData.DataType.String:
+			return str(val)
+		FlowData.DataType.Resource:
+			var res = val as Resource
+			return res.resource_path if res else ""
+		FlowData.DataType.NodePath, FlowData.DataType.NodeMesh:
+			var n3d = val as Node3D
+			return ( "$" + n3d.name ) if n3d else ""
+	return str(val)
+
+# Reorders visible_rows by the current sort column/direction. View-only:
+# the underlying FlowData streams are never touched.
+func apply_sort():
+	if sort_col < 0 or data == null or visible_rows.is_empty():
+		return
+	var keys := {}
+	for r in visible_rows:
+		keys[r] = _row_sort_value( r, sort_col )
+	var asc = sort_ascending
+	visible_rows.sort_custom(func(a, b):
+		return _sort_rows_less( keys[a], keys[b], asc, a, b )
+	)
+
+func _sort_rows_less( va, vb, asc : bool, row_a : int, row_b : int ) -> bool:
+	# Nulls always sort last, regardless of direction
+	if va == null or vb == null:
+		if va == null and vb == null:
+			return row_a < row_b
+		return va != null
+	# Numeric-aware: strings that parse as numbers compare numerically
+	if va is String and vb is String and va.is_valid_float() and vb.is_valid_float():
+		va = va.to_float()
+		vb = vb.to_float()
+	var a_num = (va is int) or (va is float)
+	var b_num = (vb is int) or (vb is float)
+	if not (a_num and b_num) and not (va is String and vb is String):
+		va = str(va)
+		vb = str(vb)
+	if va == vb:
+		return row_a < row_b # stable tiebreak on original row index
+	return (va < vb) if asc else (va > vb)
+
 func update_visible_rows(filter_text : String):
 	visible_rows.clear()
 	if data == null:
@@ -372,6 +458,7 @@ func update_visible_rows(filter_text : String):
 
 func _on_filter_edit_text_changed(new_text : String):
 	update_visible_rows(new_text)
+	apply_sort()
 	if tv:
 		tv.num_rows = visible_rows.size()
 		tv.commitColumns()
@@ -381,6 +468,8 @@ func _ready():
 	if not tv.row_double_clicked.is_connected(_on_table_row_double_clicked):
 		tv.row_double_clicked.connect(_on_table_row_double_clicked)
 	refresh_localized_text()
+	if not tv.title_clicked.is_connected(onTitleClicked):
+		tv.title_clicked.connect( onTitleClicked )
 	
 	# Style the header elements for a compact, polished look
 	if has_node("%LabelTitle"):

@@ -9,7 +9,8 @@ func _init():
 		"settings" : PointsFromImportedSceneSettings,
 		"ins" : [],
 		"outs" : [{ "label" : "Out" }],
-		"tooltip" : "Loads imported scene/mesh resources and emits one point per mesh instance or mesh asset.",
+		"category" : "Sampler",
+		"tooltip" : "Loads imported scene/mesh resources and emits one point per mesh instance or mesh asset.\nThe asset is loaded synchronously during graph evaluation — large scenes can stall the editor.",
 	}
 
 func _append_mesh_point(mi : MeshInstance3D, positions : PackedVector3Array, rotations : PackedVector3Array, sizes : PackedVector3Array, meshes : Array, names : PackedStringArray, paths : PackedStringArray, source_path : String) -> void:
@@ -41,7 +42,7 @@ func _walk_meshes(node : Node, positions : PackedVector3Array, rotations : Packe
 func execute(_ctx : FlowData.EvaluationContext):
 	var path : String = settings.asset_path.strip_edges()
 	if path == "":
-		set_output(0, FlowData.Data.new())
+		setError("Asset path is empty — pick a scene or mesh asset to sample")
 		return
 	if not ResourceLoader.exists(path):
 		setError("Imported scene/mesh asset '%s' was not found" % path)
@@ -62,7 +63,9 @@ func execute(_ctx : FlowData.EvaluationContext):
 		var root = res.instantiate()
 		if root:
 			_walk_meshes(root, positions, rotations, sizes, meshes, names, paths, path)
-			root.queue_free()
+			# The instance never enters the tree — free deterministically
+			# instead of relying on queue_free() outside the scene tree.
+			root.free()
 	elif res is Mesh:
 		var aabb : AABB = res.get_aabb()
 		positions.append(aabb.position + aabb.size * 0.5)

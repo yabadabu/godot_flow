@@ -5,6 +5,8 @@ func _init():
 	meta_node = {
 		"title" : "Spawn Scenes",
 		"settings" : SpawnScenesNodeSettings,
+		"aliases" : ["Spawn Actor", "Scene Spawner"],
+		"category" : "Spawner",
 		"ins" : [{ "label" : "In" }],
 		"outs" : [{ "label" : "Out" }],
 		"is_final" : true,
@@ -68,9 +70,9 @@ func _pick_weighted_variant(weights : Array[float], rnd : float) -> int:
 			return i
 	return weights.size() - 1
 
-func _resolve_scene_for_point(idx : int, scenes_stream, variants : Array[PackedScene], variant_weights : Array[float], selector_stream):
+func _resolve_scene_for_point(idx : int, scenes_stream, variants : Array[PackedScene], variant_weights : Array[float], selector_stream, point_seeds):
 	if scenes_stream != null:
-		var read_idx = idx if scenes_stream.size() > 1 else 0
+		var read_idx = FlowData.bcast_idx( scenes_stream.size(), idx )
 		var scene_val = scenes_stream[read_idx] as PackedScene
 		if scene_val != null:
 			return scene_val
@@ -78,11 +80,15 @@ func _resolve_scene_for_point(idx : int, scenes_stream, variants : Array[PackedS
 		return settings.scene
 	if settings.randomize_scene_variants:
 		var local_rng := RandomNumberGenerator.new()
-		local_rng.seed = settings.random_seed + idx * 1237
+		if point_seeds != null:
+			# Per-point seed stream present: derive the pick from it (UE parity)
+			local_rng.seed = int(point_seeds[idx]) ^ settings.random_seed
+		else:
+			local_rng.seed = settings.random_seed + idx * 1237
 		var ridx = _pick_weighted_variant(variant_weights, local_rng.randf())
 		return variants[ridx]
 	if selector_stream != null:
-		var read_idx = idx if selector_stream.container.size() > 1 else 0
+		var read_idx = FlowData.bcast_idx( selector_stream.container.size(), idx )
 		if selector_stream.data_type == FlowData.DataType.Int:
 			var int_idx = clampi(int(selector_stream.container[read_idx]), 0, variants.size() - 1)
 			return variants[int_idx]
@@ -93,14 +99,8 @@ func _resolve_scene_for_point(idx : int, scenes_stream, variants : Array[PackedS
 	return variants[idx % variants.size()]
 		
 func execute( ctx : FlowData.EvaluationContext ):
-	var in_data : FlowData.Data = get_input(0)
-	if in_data:
-		print("SpawnScenes execute: node = ", name, " input size = ", in_data.size())
-	if !in_data:
-		if Engine.is_editor_hint() and ctx.owner == null:
-			set_output(0, FlowData.Data.new())
-			return
-		setError( "Input is invalid")
+	var in_data : FlowData.Data = require_input( 0, ctx )
+	if in_data == null:
 		return
 
 	if in_data.size() == 0:
@@ -117,6 +117,9 @@ func execute( ctx : FlowData.EvaluationContext ):
 			setError( "Attribute '%s' should be of type Resource Packed Scene" % settings.scene_attribute)
 			return
 		scenes = stream_scenes.container
+		if scenes.size() != in_data.size() and scenes.size() != 1:
+			setError("Scene attribute '%s' must have %d values or 1 value (got %d)" % [settings.scene_attribute, in_data.size(), scenes.size()])
+			return
 
 	var selector_stream = null
 	if settings.scene_selector_attribute.strip_edges() != "":
@@ -190,9 +193,15 @@ func execute( ctx : FlowData.EvaluationContext ):
 		setError("No scene source configured. Provide scene, scene_attribute, or scene_variants.")
 		return
 
+	# Per-point seed stream (UE parity): present when a sampler emitted AttrSeed
+	var point_seeds = null
+	var seed_stream = in_data.findStream( FlowData.AttrSeed )
+	if seed_stream != null and seed_stream.data_type == FlowData.DataType.Int and seed_stream.container.size() == in_size:
+		point_seeds = seed_stream.container
+
 	# Collect which indices use the same by resource type
 	for idx in range( in_size ):
-		var packed_scene : PackedScene = _resolve_scene_for_point(idx, scenes, variants, variant_weights, selector_stream)
+		var packed_scene : PackedScene = _resolve_scene_for_point(idx, scenes, variants, variant_weights, selector_stream, point_seeds)
 		if not packed_scene:
 			continue
 		var created = packed_scene.instantiate()

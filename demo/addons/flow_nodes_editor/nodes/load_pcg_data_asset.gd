@@ -9,7 +9,9 @@ func _init():
 		"settings" : LoadPCGDataAssetSettings,
 		"ins" : [],
 		"outs" : [{ "label" : "Out" }],
-		"tooltip" : "Loads JSON or Resource-backed PCG point/attribute data into FlowData streams.",
+		"aliases" : ["Load PCG Data Asset"],
+		"category" : "Input",
+		"tooltip" : "Loads JSON or Resource-backed PCG point/attribute data into FlowData streams.\nNote: JSON numbers always parse as floats, so numeric JSON columns become Float streams (never Int).",
 	}
 
 func _as_vector3(value) -> Dictionary:

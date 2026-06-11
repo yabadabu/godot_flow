@@ -33,4 +33,4 @@ project/assembly_name="Godot Flow App"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/flow_nodes_editor/plugin.cfg", "res://addons/godot_mcp/plugin.cfg")
+enabled=PackedStringArray("res://addons/flow_nodes_editor/plugin.cfg")

@@ -9,6 +9,9 @@ func _init():
 		"settings" : SampleSplineNodeSettings,
 		"ins" : [{ "label": "Splines", "data_type": FlowData.DataType.NodePath }],
 		"outs" : [{ "label" : "Out" }],
+		"aliases" : ["Spline Sampler"],
+		"category" : "Sampler",
+		"tooltip" : "Samples points along Path3D curves (uniform or random), or fills the\nclosed XZ polygon of the curve (grid/random/Poisson).",
 	}
 	
 func get_polygon_bounds(polygon: PackedVector2Array) -> Rect2:
@@ -36,9 +39,9 @@ func points3d_to_polygon2d(points3d : PackedVector3Array) -> PackedVector2Array:
 		polygon[i] = Vector2( points3d[i].x, points3d[i].z )
 	return polygon
 
-func addDistanceAttribute( output : FlowData.Data, target_points : PackedVector3Array ):
+func addDistanceAttribute( output : FlowData.Data, target_points : PackedVector3Array, attr_name : String ):
 	var spos := output.getVector3Container( FlowData.AttrPosition )
-	var sdists : PackedFloat32Array = output.addStream( "distance", FlowData.DataType.Float )
+	var sdists : PackedFloat32Array = output.addStream( attr_name, FlowData.DataType.Float )
 	sdists.resize( output.size() )
 	
 	var time_start_kdtree := Time.get_ticks_usec()
@@ -208,14 +211,13 @@ func execute( ctx : FlowData.EvaluationContext ):
 		
 	var trace := settings.trace
 		
-	var in_data = get_input(0)
+	var in_data : FlowData.Data = require_input(0, ctx, "Input 'Splines'")
 	if in_data == null:
-		setError("Input 'Splines' is not connected")
-		return null
+		return
 	var path3d_nodes = in_data.getContainerChecked( "node", FlowData.DataType.NodePath )
 	if path3d_nodes == null:
 		setError( "Input are not splines")
-		return null
+		return
 	#print( "path3d_nodes", path3d_nodes)
 
 	var output := FlowData.Data.new()
@@ -224,11 +226,11 @@ func execute( ctx : FlowData.EvaluationContext ):
 	var srot := output.getVector3Container( FlowData.AttrRotation )
 	var ssize := output.getVector3Container( FlowData.AttrSize )
 	
+	# Clamp locally — execute() must not write back into settings
 	var uniform_interval = getSettingValue( ctx, "uniform_interval" )
 	if uniform_interval < min_interval:
 		uniform_interval = min_interval
-		settings.uniform_interval = uniform_interval
-		
+
 	var adjust_to_borders : bool = getSettingValue( ctx, "adjust_to_borders" )
 	
 	if getSettingValue( ctx, "fill_curve" ):
@@ -260,13 +262,17 @@ func execute( ctx : FlowData.EvaluationContext ):
 				srot.append( Vector3.ZERO )
 				
 			if settings.distance_attribute:
+				# Use the curve's bake cache at our interval, then restore it —
+				# the Curve3D belongs to the scene, not to this node.
+				var prev_bake_interval : float = curve.bake_interval
 				curve.bake_interval = uniform_interval * 2.0
 				var border_points = curve.get_baked_points()
-				
+				curve.bake_interval = prev_bake_interval
+
 				var path_transform = path_3d.transform
 				for i in range( border_points.size() ):
 					border_points[i] = path_transform * border_points[i]
-				addDistanceAttribute( output, border_points )
+				addDistanceAttribute( output, border_points, settings.distance_attribute )
 		
 	else:
 		var sampling_mode = getSettingValue( ctx, "sampling_mode" )
@@ -294,6 +300,9 @@ func execute( ctx : FlowData.EvaluationContext ):
 		else: # Uniform
 			for path_3d in path3d_nodes:
 				var curve : Curve3D = path_3d.curve
+				# Bake at our interval and restore afterwards — the Curve3D is a
+				# scene resource, not ours to mutate persistently.
+				var prev_bake_interval : float = curve.bake_interval
 				curve.bake_interval = uniform_interval
 				var base = spos.size()
 				var curve_length := curve.get_baked_length()
@@ -306,8 +315,9 @@ func execute( ctx : FlowData.EvaluationContext ):
 					num_samples = int( num_samples_float ) + 1
 				
 				if num_samples <= 0:
+					curve.bake_interval = prev_bake_interval
 					continue
-				
+
 				if getSettingValue( ctx, "sample_segments_centers" ):
 					if num_samples > 2:
 						num_samples -= 1
@@ -342,13 +352,27 @@ func execute( ctx : FlowData.EvaluationContext ):
 
 						#print( "%d : %s %s" % [ idx, spos[ base+idx], srot[ base+idx ] ])
 
+				curve.bake_interval = prev_bake_interval
+
 		uniform_interval = 1.0
-				
+
 	# All the samples have the same size
 	if ssize.size() != spos.size():
 		ssize.resize( spos.size() )
 		var sample_size = Vector3.ONE * uniform_interval
-		print( "Generating size sample", sample_size)
 		ssize.fill(sample_size)
+
+	# Density + per-point seed streams (UE parity)
+	var num_points := spos.size()
+	var node_seed : int = settings.random_seed
+	var sdensity := PackedFloat32Array()
+	sdensity.resize( num_points )
+	sdensity.fill( 1.0 )
+	output.registerStream( FlowData.AttrDensity, sdensity, FlowData.DataType.Float )
+	var sseed := PackedInt32Array()
+	sseed.resize( num_points )
+	for i in range( num_points ):
+		sseed[i] = FlowData.point_seed( spos[i], node_seed )
+	output.registerStream( FlowData.AttrSeed, sseed, FlowData.DataType.Int )
 
 	set_output( 0, output )

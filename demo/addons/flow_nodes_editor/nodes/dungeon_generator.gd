@@ -9,7 +9,9 @@ func _init():
 		"settings" : DungeonGeneratorNodeSettings,
 		"ins" : [],
 		"outs" : [{ "label" : "Out" }],
-		"tooltip" : "Generates procedural floor, wall, pillar, and torch layout points using a grid room-carving algorithm.",
+		"aliases" : ["dungeon", "rooms and corridors", "level generator"],
+		"category" : "Sampler",
+		"tooltip" : "Generates procedural floor, wall, pillar, torch, and chest layout points using a grid room-carving algorithm.\nThe 'type' stream encodes 0=Floor, 1=Wall, 2=Pillar, 3=Torch, 4=Chest.",
 	}
 
 func execute(ctx : FlowData.EvaluationContext):
@@ -42,12 +44,18 @@ func execute(ctx : FlowData.EvaluationContext):
 		if x >= 0 and x < w and y >= 0 and y < h:
 			grid[y * w + x] = val
 
+	if room_min > room_max:
+		setError("room_min_size (%d) must be <= room_max_size (%d)" % [room_min, room_max])
+		return
+
 	var rooms = []
-	
+
 	# 1. Generate Rooms
 	for i in range(max_rooms):
-		var rw = rng.randi_range(room_min, room_max)
-		var rh = rng.randi_range(room_min, room_max)
+		# Clamp so the randi_range bounds below never invert (Godot silently
+		# swaps inverted bounds, which would place rooms outside the margin).
+		var rw = mini(rng.randi_range(room_min, room_max), w - 3)
+		var rh = mini(rng.randi_range(room_min, room_max), h - 3)
 		var rx = rng.randi_range(1, w - rw - 2)
 		var ry = rng.randi_range(1, h - rh - 2)
 		
@@ -126,11 +134,12 @@ func execute(ctx : FlowData.EvaluationContext):
 	# - South (dy=1): wall stands on south edge, faces North (180 degrees)
 	# - East (dx=1): wall stands on east edge, faces West (270 degrees)
 	# - West (dx=-1): wall stands on west edge, faces East (90 degrees)
+	# Rotation stream is Euler DEGREES (TransformsStream applies deg_to_rad on read).
 	var dir_offsets = [
 		{"dx": 0, "dy": -1, "rot": Vector3(0, 0, 0), "offset": Vector3(0, 0, -cell_size * 0.5)}, # North
-		{"dx": 0, "dy": 1, "rot": Vector3(0, PI, 0), "offset": Vector3(0, 0, cell_size * 0.5)},  # South
-		{"dx": 1, "dy": 0, "rot": Vector3(0, -PI * 0.5, 0), "offset": Vector3(cell_size * 0.5, 0, 0)}, # East
-		{"dx": -1, "dy": 0, "rot": Vector3(0, PI * 0.5, 0), "offset": Vector3(-cell_size * 0.5, 0, 0)} # West
+		{"dx": 0, "dy": 1, "rot": Vector3(0, 180.0, 0), "offset": Vector3(0, 0, cell_size * 0.5)},  # South
+		{"dx": 1, "dy": 0, "rot": Vector3(0, -90.0, 0), "offset": Vector3(cell_size * 0.5, 0, 0)}, # East
+		{"dx": -1, "dy": 0, "rot": Vector3(0, 90.0, 0), "offset": Vector3(-cell_size * 0.5, 0, 0)} # West
 	]
 	
 	for y in range(h):
@@ -166,7 +175,7 @@ func execute(ctx : FlowData.EvaluationContext):
 	# 4. Chest points
 	for r in rooms:
 		var chest_pos = Vector3(r.cx * cell_size, 0, r.cy * cell_size)
-		var chest_rot = Vector3(0, rng.randf_range(0, PI * 2), 0)
+		var chest_rot = Vector3(0, rng.randf_range(0.0, 360.0), 0)
 		add_point.call(chest_pos, chest_rot, 4.0) # Type 4.0 = Chest
 
 	# Register outputs

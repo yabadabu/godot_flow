@@ -9,13 +9,13 @@ func _init():
 		"settings" : PointFromMeshNodeSettings,
 		"ins" : [{ "label": "Meshes", "data_type": FlowData.DataType.NodeMesh }],
 		"outs" : [{ "label" : "Out" }],
-		"tooltip" : "Creates one point per mesh node, using mesh bounds for size and node transform for position/rotation.",
+		"category" : "Sampler",
+		"tooltip" : "Creates one point per mesh node, using mesh bounds for size and node transform for position/rotation.\nSize is the local AABB scaled by the node's basis scale — a rotated mesh's size does not re-bound it in world space.",
 	}
 
 func execute(_ctx : FlowData.EvaluationContext):
-	var in_data : FlowData.Data = get_input(0)
+	var in_data : FlowData.Data = require_input(0, _ctx, "Input 'Meshes'")
 	if in_data == null:
-		setError("Input 'Meshes' is not connected")
 		return
 
 	var source_stream_name : String = settings.source_stream_name.strip_edges()
@@ -36,10 +36,12 @@ func execute(_ctx : FlowData.EvaluationContext):
 
 	var out_nodes : Array = []
 	var out_meshes : Array[Resource] = []
+	var num_skipped : int = 0
 
 	for node in nodes:
 		var mi := node as MeshInstance3D
 		if not mi or mi.mesh == null:
+			num_skipped += 1
 			continue
 
 		var aabb : AABB = mi.mesh.get_aabb()
@@ -55,6 +57,9 @@ func execute(_ctx : FlowData.EvaluationContext):
 		ssize.append(world_size)
 		out_nodes.append(mi)
 		out_meshes.append(mi.mesh)
+
+	if num_skipped > 0 and out_nodes.is_empty():
+		push_warning("PointFromMesh '%s': all %d input nodes were skipped (not MeshInstance3D or no mesh assigned) — output is empty" % [name, num_skipped])
 
 	if out_nodes.size() > 0:
 		var err = output.registerStream("node", out_nodes, FlowData.DataType.NodeMesh)

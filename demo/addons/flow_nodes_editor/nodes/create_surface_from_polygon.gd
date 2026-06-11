@@ -9,7 +9,8 @@ func _init():
 		"settings" : CreateSurfaceFromPolygonSettings,
 		"ins" : [{ "label" : "Polygon Points" }],
 		"outs" : [{ "label" : "Surfaces" }],
-		"tooltip" : "Creates bounds-style surface points from ordered polygon point streams.",
+		"tooltip" : "Creates bounds-style surface points from ordered polygon point streams.\nOutput is an axis-aligned bounding-box point (rotation is always zero).\nArea uses the shoelace formula: points must be ordered, planar and non-self-intersecting.",
+		"category" : "Spatial",
 	}
 
 func _to_plane(v : Vector3) -> Vector2:
@@ -52,17 +53,22 @@ func _bounds(points : PackedVector3Array) -> AABB:
 		aabb.size.z = min_t
 	return aabb
 
-func _group_points(in_data : FlowData.Data, positions : PackedVector3Array) -> Array:
+# Returns the grouped point arrays, or null after setError on a malformed group stream
+func _group_points(in_data : FlowData.Data, positions : PackedVector3Array):
 	var group_attr : String = settings.group_attribute.strip_edges()
 	if group_attr == "":
 		return [positions]
 	var stream = in_data.findStream(group_attr)
 	if stream == null:
 		return [positions]
+	var stream_size : int = stream.container.size()
+	if stream_size != positions.size() and stream_size != 1:
+		setError("Group attribute '%s' has %d values but input has %d points (expected %d or 1)" % [group_attr, stream_size, positions.size(), positions.size()])
+		return null
 	var groups := {}
 	var order : Array = []
 	for i in range(positions.size()):
-		var key = stream.container[i] if i < stream.container.size() else 0
+		var key = stream.container[FlowData.bcast_idx(stream_size, i)]
 		if not groups.has(key):
 			groups[key] = PackedVector3Array()
 			order.append(key)
@@ -73,9 +79,8 @@ func _group_points(in_data : FlowData.Data, positions : PackedVector3Array) -> A
 	return out
 
 func execute(_ctx : FlowData.EvaluationContext):
-	var in_data : FlowData.Data = get_input(0)
+	var in_data : FlowData.Data = require_input(0, _ctx, "Polygon Points input")
 	if in_data == null:
-		setError("Polygon Points input not found")
 		return
 	var positions := in_data.getVector3Container(FlowData.AttrPosition)
 	if positions.size() != in_data.size() or positions.size() < 3:
@@ -89,9 +94,14 @@ func execute(_ctx : FlowData.EvaluationContext):
 	var perimeters := PackedFloat32Array()
 	var counts := PackedInt32Array()
 
-	for group in _group_points(in_data, positions):
+	var groups = _group_points(in_data, positions)
+	if groups == null:
+		return
+	var dropped_groups := 0
+	for group in groups:
 		var pts : PackedVector3Array = group
 		if pts.size() < 3:
+			dropped_groups += 1
 			continue
 		var aabb := _bounds(pts)
 		out_positions.append(aabb.position + aabb.size * 0.5)
@@ -100,6 +110,9 @@ func execute(_ctx : FlowData.EvaluationContext):
 		areas.append(_area(pts))
 		perimeters.append(_perimeter(pts))
 		counts.append(pts.size())
+
+	if dropped_groups > 0:
+		push_warning("Create Surface From Polygon: %d group(s) with fewer than 3 points were dropped" % dropped_groups)
 
 	var out := FlowData.Data.new()
 	out.addCommonStreams(out_positions.size())

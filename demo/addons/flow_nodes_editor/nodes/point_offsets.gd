@@ -1,15 +1,17 @@
 @tool
 extends FlowNodeBase
 
+const PointOffsetsNodeSettings = preload("res://addons/flow_nodes_editor/nodes/point_offsets_settings.gd")
+
 func _init():
-	var settings_script = ResourceLoader.load("res://addons/flow_nodes_editor/nodes/point_offsets_settings.gd", "Script", ResourceLoader.CACHE_MODE_REPLACE)
 	meta_node = {
 		"title" : "Point Offsets",
-		"settings" : settings_script,
+		"settings" : PointOffsetsNodeSettings,
 		"ins" : [{ "label": "Anchors" }],
 		"outs" : [{ "label" : "Points" }],
-		"tooltip" : "Creates child points around each input point using local or world offsets. Useful for sockets, tabletop dressing, seating layouts, and repeated prop clusters.",
-		"aliases" : ["children", "sockets", "local offsets", "scatter children"]
+		"tooltip" : "Creates child points around each input point using local or world offsets. Useful for sockets, tabletop dressing, seating layouts, and repeated prop clusters.\nRotations/sizes/labels shorter than the offsets list clamp to their last entry.",
+		"aliases" : ["children", "sockets", "local offsets", "scatter children"],
+		"category" : "Spatial",
 	}
 
 func _copy_streams(in_data : FlowData.Data, out_count : int, offsets_count : int) -> FlowData.Data:
@@ -18,9 +20,13 @@ func _copy_streams(in_data : FlowData.Data, out_count : int, offsets_count : int
 		var stream = in_data.streams[stream_name]
 		var out_container = FlowData.Data.newContainerOfType(stream.data_type)
 		out_container.resize(out_count)
-		for src_idx : int in range(in_data.size()):
-			for offset_idx : int in range(offsets_count):
-				out_container[src_idx * offsets_count + offset_idx] = stream.container[src_idx]
+		var src_size : int = stream.container.size()
+		if src_size > 0:
+			for src_idx : int in range(in_data.size()):
+				# Honor broadcast (size-1) streams instead of indexing out of bounds.
+				var read_idx : int = FlowData.bcast_idx(src_size, src_idx)
+				for offset_idx : int in range(offsets_count):
+					out_container[src_idx * offsets_count + offset_idx] = stream.container[read_idx]
 		out_data.registerStream(stream.name, out_container, stream.data_type)
 	out_data.tags = in_data.tags.duplicate()
 	return out_data
@@ -32,13 +38,9 @@ func _setting_vec(values : Array[Vector3], idx : int, fallback : Vector3) -> Vec
 		return values[idx]
 	return values[values.size() - 1]
 
-func execute(_ctx : FlowData.EvaluationContext):
-	var in_data : FlowData.Data = get_input(0)
+func execute(ctx : FlowData.EvaluationContext):
+	var in_data : FlowData.Data = require_input(0, ctx, "Anchors input")
 	if in_data == null:
-		if _ctx.owner == null and Engine.is_editor_hint():
-			set_output(0, FlowData.Data.new())
-			return
-		setError("Anchors input is missing")
 		return
 
 	if in_data.size() == 0:
@@ -47,7 +49,7 @@ func execute(_ctx : FlowData.EvaluationContext):
 
 	var transforms := in_data.getTransformsStream()
 	if transforms == null:
-		if _ctx.owner == null and Engine.is_editor_hint():
+		if ctx.owner == null and Engine.is_editor_hint():
 			set_output(0, FlowData.Data.new())
 			return
 		setError("Anchors must provide position, rotation, and size streams")

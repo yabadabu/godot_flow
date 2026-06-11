@@ -7,5 +7,12 @@ func _init():
 		"settings" : SizeNodeSettings,
 		"ins" : [{ "label" : "In"}],
 		"outs" : [{ "label" : "Count", "data_type" : FlowData.DataType.Int }],
-		"tooltip" : "Returns the number of entries in the input data.",
+		"aliases" : ["Data Count"],
+		"category" : "Utility",
+		"tooltip" : "Returns the number of entries in the input data.\nNote: UE's Data Count counts data items in a collection; here every input is a single data, so this returns its entry/point count (same as Get Entries Count / Get Points Count).",
 	}
+
+func execute( ctx : FlowData.EvaluationContext ):
+	if require_input(0, ctx, "Input 'In'") == null:
+		return
+	super.execute(ctx)

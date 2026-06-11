@@ -143,11 +143,20 @@ func execute( ctx : FlowData.EvaluationContext ):
 		if not feedback_data:
 			feedback_data = FlowData.Data.new()
 	
+	var FlowNodeIOClass = load("res://addons/flow_nodes_editor/flow_nodes_io.gd")
+	# Recursion guard: evaluate_graph stamps its depth on the ctx it builds;
+	# editor-built contexts have no meta, so default to 0 there.
+	var depth : int = ctx.get_meta("flow_eval_depth", 0)
+	# PERF: evaluate_graph re-instantiates (and now frees) the whole sub-graph's
+	# node Controls once per element. Reusing one parsed graph across iterations
+	# would require splitting evaluate_graph into parse/execute phases with
+	# per-pass state resets (generated_bulks, inputs, fed input nodes) — too
+	# invasive for this fix; correctness first.
 	for idx in range(size):
 		var item_data = in_data.filter(PackedInt32Array([idx]))
 		var input_data_map = {}
 		input_data_map[settings.item_input_name] = item_data
-		
+
 		# Map extra input parameters
 		var input_idx = 1
 		for param in settings.graph.in_params:
@@ -159,9 +168,8 @@ func execute( ctx : FlowData.EvaluationContext ):
 					if extra_in:
 						input_data_map[param.name] = extra_in
 				input_idx += 1
-				
-		var FlowNodeIOClass = load("res://addons/flow_nodes_editor/flow_nodes_io.gd")
-		var child_depth := int(ctx.runtime_params.get("__eval_depth", 0)) + 1
+
+		var child_depth := depth + 1
 		var outputs = FlowNodeIOClass.evaluate_graph(settings.graph, input_data_map, ctx, {}, child_depth)
 		
 		var result_data = outputs.get(settings.output_attribute_name, null)

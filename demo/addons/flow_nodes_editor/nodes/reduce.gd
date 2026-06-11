@@ -5,11 +5,13 @@ func _init():
 	meta_node = {
 		"title" : "Reduce",
 		"settings" : ReduceNodeSettings,
-		"ins" : [{ "label": "In" }], 
+		"ins" : [{ "label": "In" }],
 		"outs" : [{ "label" : "Out" }],
-		"tooltip" : "Computes the min/max/avg values of the specified stream\nLimited to streams of type float, vector3 or ints.",
+		"aliases" : ["Attribute Reduce"],
+		"category" : "Metadata",
+		"tooltip" : "Computes the min/max/avg values of the specified stream\nLimited to streams of type float, vector3 or ints.\nAn empty input produces a Data with no streams.",
 	}
-	
+
 func addSingleValue( out_data : FlowData.Data, stream_name : String, value ):
 	var container
 	if typeof( value ) == TYPE_FLOAT:
@@ -18,6 +20,9 @@ func addSingleValue( out_data : FlowData.Data, stream_name : String, value ):
 		container = PackedVector3Array()
 	elif typeof( value ) == TYPE_INT:
 		container = PackedInt32Array()
+	else:
+		setError( "Reduce can't store a value of type %s" % type_string( typeof( value ) ) )
+		return
 	container.append( value )
 	out_data.registerStream( stream_name, container )
 	
@@ -37,8 +42,10 @@ func execute( ctx : FlowData.EvaluationContext ):
 	if !settings.in_name:
 		setError( "Input attribute not set")
 		return
-	
-	var in_data : FlowData.Data = get_input(0)
+
+	var in_data : FlowData.Data = require_input( 0, ctx )
+	if in_data == null:
+		return
 	var sA = in_data.findStream( settings.in_name )
 	if sA == null:
 		setError( "Input %s not found" % [settings.in_name])

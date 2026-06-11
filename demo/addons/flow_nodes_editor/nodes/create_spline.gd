@@ -7,31 +7,51 @@ func _init():
 		"settings" : CreateSplineNodeSettings,
 		"ins" : [{ "label": "In" }],
 		"outs" : [{ "label" : "Splines", "data_type": FlowData.DataType.NodePath }],
-		"tooltip" : 
-			"Generates a spline from all the input points." + 
-			""
+		"tooltip" : "Generates a spline from all the input points.",
+		"aliases" : ["Create Spline"],
+		"category" : "Spatial",
 	}
 
-func spawnNode( root : Node, class_to_spawn ):
-	var new_node = class_to_spawn.new()
-	#new_node.set_meta("flow_owner", name )	
-	new_node.owner = root
-	return new_node
-	
+func removeInstancedNodes( root : Node ):
+	var nodes : Array[Node] = []
+	for child in root.get_children():
+		if !child.has_meta( "flow_owner" ):
+			continue
+		if child.get_meta( "flow_owner" ) == name:
+			nodes.append( child )
+	for node in nodes:
+		node.queue_free()
+
 func execute( ctx : FlowData.EvaluationContext ):
-	var in_data : FlowData.Data = get_input(0)
+	var in_data : FlowData.Data = require_input(0, ctx)
+	if in_data == null:
+		return
 	var in_trs := in_data.getTransformsStream()
 	if in_trs == null:
 		setError( "Invalid input. Missing required attributes %s/%s/%s" % [ FlowData.AttrPosition, FlowData.AttrRotation, FlowData.AttrSize ])
 		return
-		
+
 	var root = ctx.owner
-	var node_tree = root.get_tree()
-	var scene_root = node_tree.current_scene
-	var path = spawnNode( scene_root, Path3D )
+	if root == null or root.get_tree() == null:
+		if Engine.is_editor_hint():
+			set_output( 0, FlowData.Data.new() )
+			return
+		setError( "Create Spline needs a scene owner to spawn the Path3D under" )
+		return
+
+	# Clean up splines spawned by previous evaluations of this node
+	removeInstancedNodes( root )
+
+	var scene_root = root.get_tree().current_scene
+	var owner_of_spawned_nodes : Node = scene_root if scene_root else root
+
+	var path := Path3D.new()
 	root.add_child( path )
 	path.name = "Spline"
-	path.curve  = Curve3D.new()
+	# Owner must be set AFTER the node is inside the tree or it never persists
+	path.owner = owner_of_spawned_nodes
+	path.set_meta( "flow_owner", name )
+	path.curve = Curve3D.new()
 	var num_idxs : int = in_trs.size()
 	for idx in range( num_idxs ):
 		var pos : Vector3 = in_trs.positions[idx]
@@ -46,4 +66,4 @@ func execute( ctx : FlowData.EvaluationContext ):
 		#print( "  pos[%d]: = %s" % [idx, pos ] )
 	var output := FlowData.Data.new()
 	output.registerStream( "node", [path], FlowData.DataType.NodePath )
-	set_output( 0, output )	
+	set_output( 0, output )

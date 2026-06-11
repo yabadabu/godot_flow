@@ -9,6 +9,7 @@ func _init():
 		"settings" : GridFillBoundsNodeSettings,
 		"ins" : [{ "label": "Bounds" }],
 		"outs" : [{ "label" : "Cells" }],
+		"category" : "Sampler",
 		"tooltip" : "Creates one point per grid cell inside input bounds, or inside configured bounds when no input is connected.",
 	}
 
@@ -118,4 +119,21 @@ func execute(_ctx : FlowData.EvaluationContext):
 		out_sizes[idx] = cell_size
 	if settings.source_index_attribute != "":
 		out_data.registerStream(settings.source_index_attribute, source_indices, FlowData.DataType.Int)
+
+	# Density + per-point seed streams (UE parity). Density copied from the
+	# source bounds (copy_input_attributes) is kept; seeds are always
+	# recomputed because the cell positions are new points.
+	var num_cells : int = positions.size()
+	if not out_data.hasStream(FlowData.AttrDensity):
+		var sdensity := PackedFloat32Array()
+		sdensity.resize(num_cells)
+		sdensity.fill(1.0)
+		out_data.registerStream(FlowData.AttrDensity, sdensity, FlowData.DataType.Float)
+	var node_seed : int = settings.random_seed
+	var sseed := PackedInt32Array()
+	sseed.resize(num_cells)
+	for idx : int in range(num_cells):
+		sseed[idx] = FlowData.point_seed(positions[idx], node_seed)
+	out_data.registerStream(FlowData.AttrSeed, sseed, FlowData.DataType.Int)
+
 	set_output(0, out_data)

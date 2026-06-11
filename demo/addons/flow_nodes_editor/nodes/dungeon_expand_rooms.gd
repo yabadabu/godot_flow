@@ -9,13 +9,14 @@ func _init():
 		"settings" : DungeonExpandRoomsSettings,
 		"ins" : [{ "label" : "In" }],
 		"outs" : [{ "label" : "Out" }],
+		"aliases" : ["expand rooms", "room tiles", "floor tiles"],
+		"category" : "Spatial",
 		"tooltip" : "Expands single room center points into grid floor tiles covering their width and height.",
 	}
 
 func execute( ctx : FlowData.EvaluationContext ):
-	var in_data : FlowData.Data = get_input(0)
+	var in_data : FlowData.Data = require_input(0, ctx, "Input 'In'")
 	if in_data == null:
-		setError("Input 'In' is not connected")
 		return
 	if in_data.size() == 0:
 		set_output(0, FlowData.Data.new())
@@ -69,7 +70,6 @@ func execute( ctx : FlowData.EvaluationContext ):
 		ssize[idx] = Vector3(cell_size, 1.0, cell_size)
 		
 	output.registerStream("RoomID", out_room_ids, FlowData.DataType.Int)
-	output.registerStream("room_id", out_room_ids, FlowData.DataType.Int)
 	output.registerStream("CellType", out_cell_types, FlowData.DataType.String)
 	
 	var out_types = PackedFloat32Array()

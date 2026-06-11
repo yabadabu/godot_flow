@@ -7,9 +7,17 @@ func _init():
 		"settings" : TagsMutateSettings,
 		"ins" : [{ "label": "In" }],
 		"outs" : [{ "label" : "Out" }],
-		"tooltip" : "Replaces all FlowData tags with the provided set.",
+		"aliases" : ["Replace Tags"],
+		"category" : "Metadata",
+		"tooltip" : "Replaces all FlowData tags with the provided set.\nThe 'operation' setting is ignored — this node always replaces.",
 	}
 
 func execute(ctx : FlowData.EvaluationContext):
-	settings.operation = TagsMutateSettings.eOperation.Replace
-	super.execute(ctx)
+	# Always Replace — implemented here instead of forcing settings.operation,
+	# so execute() never mutates the shared/saved settings resource.
+	var in_data : FlowData.Data = require_input(0, ctx)
+	if in_data == null:
+		return
+	var out_data = in_data.duplicate()
+	out_data.tags = _parse_tags()
+	set_output(0, out_data)

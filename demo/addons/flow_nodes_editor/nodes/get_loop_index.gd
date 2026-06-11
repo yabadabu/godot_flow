@@ -9,13 +9,14 @@ func _init():
 		"settings" : GetLoopIndexNodeSettings,
 		"ins" : [{ "label": "In" }],
 		"outs" : [{ "label" : "Out" }],
-		"tooltip" : "Writes a sequential loop/index attribute for each incoming point.",
+		"aliases" : ["Get Loop Index"],
+		"category" : "Utility",
+		"tooltip" : "Writes a sequential index attribute for each incoming point (start_index..start_index+N-1).\nNote: unlike UE's Get Loop Index (which returns the Loop subgraph iteration), this enumerates points — closer to UE's $Index property.",
 	}
 
-func execute(_ctx : FlowData.EvaluationContext):
-	var in_data : FlowData.Data = get_input(0)
+func execute(ctx : FlowData.EvaluationContext):
+	var in_data : FlowData.Data = require_input(0, ctx, "Input 'In'")
 	if in_data == null:
-		setError("Input not found")
 		return
 
 	var out_name = settings.out_name.strip_edges()

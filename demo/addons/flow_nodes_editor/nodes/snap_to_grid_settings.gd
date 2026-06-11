@@ -5,8 +5,25 @@ extends NodeSettings
 @export_group("Snap to Grid")
 @export var grid_size: Vector3 = Vector3.ONE * 2.0
 @export var snap_position: bool = true
-@export var snap_rotation: bool = false
-@export var snap_scale: bool = false
+@export var snap_rotation: bool = false:
+	set(value):
+		snap_rotation = value
+		notify_property_list_changed()
+@export var snap_scale: bool = false:
+	set(value):
+		snap_scale = value
+		notify_property_list_changed()
+## Step used when snapping rotation (Euler degrees); ZERO falls back to grid_size
+@export var rotation_grid_size: Vector3 = Vector3.ZERO
+## Step used when snapping scale; ZERO falls back to grid_size
+@export var scale_grid_size: Vector3 = Vector3.ZERO
+
+func exposeParam(name : String) -> bool:
+	if name == "rotation_grid_size":
+		return snap_rotation
+	if name == "scale_grid_size":
+		return snap_scale
+	return true
 
 func _init():
 	super._init()

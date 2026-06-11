@@ -9,7 +9,9 @@ func _init():
 		"settings" : PointToAttributeSetNodeSettings,
 		"ins" : [{ "label": "In" }],
 		"outs" : [{ "label" : "Out" }],
-		"tooltip" : "Converts point data to attribute-set style data, optionally removing point transform streams.",
+		"aliases" : ["Point To Attribute Set"],
+		"category" : "Metadata",
+		"tooltip" : "Converts point data to attribute-set style data, optionally removing point transform streams.\nWith 'Drop Point Transform Streams' disabled the node is a plain copy.",
 	}
 
 func _clone_stream_container(stream : Dictionary):
@@ -39,9 +41,8 @@ func _copy_stream_if_present(out_data : FlowData.Data, source_name : StringName,
 	return out_data.registerStream(target_name, container, source_stream.data_type)
 
 func execute(_ctx : FlowData.EvaluationContext):
-	var in_data : FlowData.Data = get_input(0)
+	var in_data : FlowData.Data = require_input(0, _ctx)
 	if in_data == null:
-		setError("Input not found")
 		return
 
 	var out_data = in_data.duplicate()

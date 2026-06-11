@@ -5,13 +5,17 @@ func _init():
 	meta_node = {
 		"title" : "Remove Attributes",
 		"settings" : RemoveAttributeNodeSettings,
-		"ins" : [{"label": "In" }], 
+		"ins" : [{"label": "In" }],
 		"outs" : [{ "label" : "Out" }],
-		"tooltip" : "Remove streams from the input connection.",
+		"aliases" : ["Delete Attributes"],
+		"category" : "Metadata",
+		"tooltip" : "Remove streams from the input connection.\nNames are matched exactly. Keep mode deletes everything except the listed names — including position/rotation/size if they are not listed.",
 	}
 
 func execute( ctx : FlowData.EvaluationContext ):
-	var in_data : FlowData.Data = get_input(0)
+	var in_data : FlowData.Data = require_input(0, ctx)
+	if in_data == null:
+		return
 	var out_data : FlowData.Data = in_data.duplicate()
 	
 	var streams_to_remove = settings.names

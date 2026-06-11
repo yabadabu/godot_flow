@@ -5,17 +5,21 @@ func _init():
 	meta_node = {
 		"title" : "Sort",
 		"settings" : SortNodeSettings,
-		"ins" : [{"label": "In" }], 
+		"aliases" : ["Sort Points", "Sort Attributes"],
+		"category" : "Utility",
+		"ins" : [{"label": "In" }],
 		"outs" : [{ "label" : "Out" }],
 		"hide_inputs" : true,
-		"tooltip" : "Reorders the points based on the values of stream",
+		"tooltip" : "Reorders the points based on the values of stream (Float, Int or String).",
 	}
 
 func execute( ctx : FlowData.EvaluationContext ):
-	var in_data : FlowData.Data = get_input(0)
+	var in_data : FlowData.Data = require_input( 0, ctx )
+	if in_data == null:
+		return
 	var sA = in_data.findStream( settings.sort_by )
 	if sA == null:
-		setError( "Input %s not found" % [settings.sort_by])
+		setError( "Sort attribute '%s' not found" % [settings.sort_by])
 		return
 	var indices : PackedInt32Array
 	if sA.data_type == FlowData.DataType.Float:

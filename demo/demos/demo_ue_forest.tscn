@@ -1,0 +1,44 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_flow"]
+[ext_resource type="Resource" path="res://graphs/graph_ue_forest.tres" id="2_graph"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ground"]
+albedo_color = Color(0.36, 0.32, 0.22, 1)
+roughness = 1.0
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_terrain"]
+material = SubResource("StandardMaterial3D_ground")
+size = Vector2(60, 60)
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_sky"]
+sky_horizon_color = Color(0.66, 0.67, 0.69, 1)
+ground_horizon_color = Color(0.66, 0.67, 0.69, 1)
+
+[sub_resource type="Sky" id="Sky_sky"]
+sky_material = SubResource("ProceduralSkyMaterial_sky")
+
+[sub_resource type="Environment" id="Environment_env"]
+background_mode = 2
+sky = SubResource("Sky_sky")
+tonemap_mode = 2
+
+[node name="DemoUEForest" type="Node3D"]
+
+[node name="Terrain" type="MeshInstance3D" parent="." groups=["terrain"]]
+mesh = SubResource("PlaneMesh_terrain")
+
+[node name="PCGForest" type="Node3D" parent="."]
+script = ExtResource("1_flow")
+graph = ExtResource("2_graph")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.866025, -0.353553, 0.353553, 0, 0.707107, 0.707107, -0.5, -0.612372, 0.612372, 0, 18, 0)
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_env")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(0.707107, -0.353553, 0.612372, 0, 0.866025, 0.5, -0.707107, -0.353553, 0.612372, 32, 24, 32)
+current = true

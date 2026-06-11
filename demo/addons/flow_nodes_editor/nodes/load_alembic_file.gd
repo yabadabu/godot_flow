@@ -9,5 +9,7 @@ func _init():
 		"settings" : LoadAlembicFileSettings,
 		"ins" : [],
 		"outs" : [{ "label" : "Out" }],
-		"tooltip" : "UE naming alias for loading Alembic/imported scene resources as mesh points.",
+		"aliases" : ["Load Alembic File"],
+		"category" : "Input",
+		"tooltip" : "UE naming alias of Points From Imported Scene.\nNote: Godot cannot import .abc (Alembic) files natively — point this at an imported PackedScene or Mesh resource instead; one point is emitted per MeshInstance3D.",
 	}

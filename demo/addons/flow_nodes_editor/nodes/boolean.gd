@@ -9,7 +9,9 @@ func _init():
 		"settings" : BooleanNodeSettings,
 		"ins" : [{ "label": "In A", "multiple_connections" : false }, { "label": "In B", "multiple_connections" : false }],
 		"outs" : [{ "label" : "Out" }],
-		"tooltip" : "Applies boolean logic between streams and writes the result as a bool stream.",
+		"tooltip" : "Applies boolean logic between streams and writes the result as a bool stream.\nOperand B resolves in order: constant, stream in Input B, stream in Input A, bool literal.",
+		"aliases" : ["Boolean Op"],
+		"category" : "Metadata",
 	}
 
 func getTitle() -> String:
@@ -48,7 +50,7 @@ func _to_bool(value) -> bool:
 		TYPE_COLOR:
 			return not (is_zero_approx(value.r) and is_zero_approx(value.g) and is_zero_approx(value.b) and is_zero_approx(value.a))
 		TYPE_OBJECT:
-			return value != null
+			return is_instance_valid(value)
 	return false
 
 func _try_parse_bool_literal(text: String, out_value: Array) -> bool:
@@ -89,12 +91,8 @@ func execute(ctx : FlowData.EvaluationContext):
 		setError("Output name can't be empty")
 		return
 
-	var in_dataA : FlowData.Data = get_input(0)
+	var in_dataA : FlowData.Data = require_input(0, ctx, "Input A")
 	if in_dataA == null:
-		if _is_editor_missing_input_context(ctx):
-			_emit_empty_output()
-			return
-		setError("Input A not found")
 		return
 	var sA = in_dataA.findStream(settings.in_nameA)
 	if sA == null:
@@ -116,8 +114,7 @@ func execute(ctx : FlowData.EvaluationContext):
 	var out_values := PackedByteArray()
 	out_values.resize(num_elems)
 
-	var op_idx = clampi(settings.operation, 0, BooleanNodeSettings.eOperation.keys().size() - 1)
-	var op = op_idx
+	var op = clampi(settings.operation, 0, BooleanNodeSettings.eOperation.keys().size() - 1)
 	var unary = settings.isSingleArgument()
 	var b_values := PackedByteArray()
 
@@ -130,6 +127,10 @@ func execute(ctx : FlowData.EvaluationContext):
 			var in_dataB : FlowData.Data = get_optional_input(1)
 			if in_dataB:
 				source_b = in_dataB.findStream(settings.in_nameB)
+			if source_b == null:
+				# Fall back to A's data so a single-input graph can combine two
+				# of its own streams (and the default "@last" resolves sensibly)
+				source_b = in_dataA.findStream(settings.in_nameB)
 
 			if source_b == null:
 				var parsed = [false]

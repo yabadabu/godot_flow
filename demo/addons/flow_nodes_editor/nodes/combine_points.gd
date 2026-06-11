@@ -7,7 +7,9 @@ func _init():
 		"settings" : CombinePointsNodeSettings,
 		"ins" : [{ "label": "In" }], 
 		"outs" : [{ "label" : "Out" }],
-		"tooltip" : "For each input Point Data, outputs a new Point Data containing a single point that encompasses all points in its respective Point Data.",
+		"tooltip" : "For each input Point Data, outputs a new Point Data containing a single point that encompasses all points in its respective Point Data.\nBounds are axis-aligned (point rotation is not accounted for); non-transform attributes keep the first point's value.",
+		"aliases" : ["Combine Points"],
+		"category" : "Spatial",
 	}
 
 func execute( ctx : FlowData.EvaluationContext ):
@@ -28,9 +30,15 @@ func execute( ctx : FlowData.EvaluationContext ):
 	var min_pos := Vector3.ZERO
 	var max_pos := Vector3.ZERO
 	
+	var ssizes_count : int = ssizes.size() if ssizes else 0
 	for i in spos.size():
 		var pos = spos[i]
-		var size = ssizes[i] if ssizes else Vector3.ZERO
+		# Size stream may be a length-1 broadcast (or absent/short) — don't index in lockstep
+		var size := Vector3.ZERO
+		if ssizes_count > 0:
+			var size_idx = FlowData.bcast_idx(ssizes_count, i)
+			if size_idx < ssizes_count:
+				size = ssizes[size_idx]
 		var p_min = pos - size * 0.5
 		var p_max = pos + size * 0.5
 		if first:

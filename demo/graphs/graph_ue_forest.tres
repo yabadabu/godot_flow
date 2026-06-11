@@ -1,0 +1,167 @@
+[gd_resource type="Resource" script_class="FlowGraphResource" format=3]
+
+[ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="1_script"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tree"]
+albedo_color = Color(0.13, 0.42, 0.16, 1)
+roughness = 0.9
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_tree"]
+material = SubResource("StandardMaterial3D_tree")
+top_radius = 0.0
+bottom_radius = 1.1
+height = 3.2
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bush"]
+albedo_color = Color(0.28, 0.55, 0.2, 1)
+roughness = 0.95
+
+[sub_resource type="SphereMesh" id="SphereMesh_bush"]
+material = SubResource("StandardMaterial3D_bush")
+radius = 0.7
+height = 1.1
+
+[resource]
+resource_name = "graph_ue_forest"
+script = ExtResource("1_script")
+data = {
+"frames": [],
+"links": [{
+"from_node": &"id_0001_scan_meshes",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0002_sample_mesh",
+"to_port": 0
+}, {
+"from_node": &"id_0002_sample_mesh",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0003_attribute_noise",
+"to_port": 0
+}, {
+"from_node": &"id_0003_attribute_noise",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0004_density_filter",
+"to_port": 0
+}, {
+"from_node": &"id_0004_density_filter",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0005_transform_points",
+"to_port": 0
+}, {
+"from_node": &"id_0005_transform_points",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0006_spawn_meshes",
+"to_port": 0
+}],
+"nodes": [{
+"args_port": {},
+"name": &"id_0001_scan_meshes",
+"position": Vector2(0, 0),
+"settings": {
+"group_name": "terrain",
+"random_seed": 12345,
+"title": "Get Landscape Data (Scan Meshes)"
+},
+"show_disconnected_inputs": false,
+"template": "scan_meshes"
+}, {
+"args_port": {
+"Meshes": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0002_sample_mesh",
+"position": Vector2(420, 0),
+"settings": {
+"density": 0.55,
+"mode": 0,
+"point_size": 1.0,
+"random_seed": 12345,
+"title": "Surface Sampler (Sample Mesh)"
+},
+"show_disconnected_inputs": false,
+"template": "sample_mesh"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0003_attribute_noise",
+"position": Vector2(840, 0),
+"settings": {
+"clamp_result": true,
+"mode": 4,
+"noise_max": 1.0,
+"noise_min": 0.0,
+"random_seed": 12345,
+"target_attribute": "density",
+"title": "Attribute Noise (Density)"
+},
+"show_disconnected_inputs": false,
+"template": "attribute_noise"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0004_density_filter",
+"position": Vector2(1260, 0),
+"settings": {
+"lower_bound": 0.5,
+"random_seed": 12345,
+"title": "Density Filter",
+"upper_bound": 1.0
+},
+"show_disconnected_inputs": false,
+"template": "density_filter"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0005_transform_points",
+"position": Vector2(1680, 0),
+"settings": {
+"random_seed": 12345,
+"rotation_max": Vector3(0, 360, 0),
+"rotation_min": Vector3(0, 0, 0),
+"scale_max": Vector3(1.3, 1.3, 1.3),
+"scale_min": Vector3(0.7, 0.7, 0.7),
+"title": "Transform Points",
+"uniform_scale": true
+},
+"show_disconnected_inputs": false,
+"template": "transform_points"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0006_spawn_meshes",
+"position": Vector2(2100, 0),
+"settings": {
+"mesh_variant_weights": [0.75, 0.25],
+"mesh_variants": [SubResource("CylinderMesh_tree"), SubResource("SphereMesh_bush")],
+"random_seed": 12345,
+"randomize_mesh_variants": true,
+"title": "Static Mesh Spawner",
+"use_vertex_colors": false
+},
+"show_disconnected_inputs": false,
+"template": "spawn_meshes"
+}],
+"params": []
+}

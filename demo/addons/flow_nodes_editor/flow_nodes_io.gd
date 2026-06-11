@@ -10,7 +10,7 @@ const FAST_GRAPH_LOAD_NODE_THRESHOLD := 24
 static func resource_to_dict(resource: Resource) -> Dictionary:
 	var dict := {}
 	for prop in resource.get_property_list():
-		if prop.name in FlowNodeAssets.discardted_props:
+		if prop.name in FlowNodeAssets.discarded_props:
 			continue
 		if prop.usage & PROPERTY_USAGE_STORAGE != 0:
 			var name = prop.name
@@ -48,7 +48,7 @@ static  func _parse_vector3(value) -> Vector3:
 static func dict_to_resource(data: Dictionary, resource: Resource) -> void:
 	for prop in resource.get_property_list():
 		var name = prop.name
-		if name in FlowNodeAssets.discardted_props:
+		if name in FlowNodeAssets.discarded_props:
 			continue
 		if not data.has(name):
 			continue
@@ -691,6 +691,38 @@ static func build_execution_order(node_list: Array, instances_by_name: Dictionar
 	return ordered_nodes
 
 
+# FlowNodeBase extends GraphNode (a Control, not RefCounted). evaluate_graph
+# instantiates the whole graph without ever adding the nodes to the tree, so
+# they must be freed explicitly — otherwise every runtime evaluation leaks the
+# full node graph (and loop.gd evaluates once per element).
+static func _free_node_instances(node_list: Array) -> void:
+	for node in node_list:
+		if is_instance_valid(node):
+			node.free()
+
+# Runtime args (e.g. FlowGraphNode3D.args) may hold raw primitives instead of
+# FlowData.Data. Wrap supported primitives into a single-entry Data whose
+# stream is named after the input param, so graph-input constants work at
+# runtime. Falsy primitives (0, 0.0, "") are valid values — hence the explicit
+# null/type checks instead of truthiness.
+static func _coerce_input_data(val, input_name: String):
+	if val == null:
+		return null
+	if val is FlowData.Data:
+		return val
+	var data_type = FlowNodeBase.getFlowDataTypeFromObject(val)
+	if data_type == FlowData.DataType.Invalid:
+		push_warning("evaluate_graph: input '%s' got unsupported runtime value of type %s — expected FlowData.Data or float/int/bool/String/Vector3/Color" % [input_name, type_string(typeof(val))])
+		return null
+	var data = load("res://addons/flow_nodes_editor/flow_data.gd").Data.new()
+	var container = data.addStream(input_name, data_type)
+	if container == null:
+		push_warning("evaluate_graph: could not wrap runtime input '%s' (data_type %d)" % [input_name, data_type])
+		return null
+	container.resize(1)
+	container[0] = val
+	return data
+
 static func evaluate_graph(graph: FlowGraphResource, input_data_map: Dictionary, parent_ctx: FlowData.EvaluationContext, runtime_params: Dictionary = {}, depth: int = 0) -> Dictionary:
 	if depth > 20:
 		push_error("PCG graph evaluation exceeded maximum recursion depth (20). Check for circular subgraph references.")
@@ -708,18 +740,30 @@ static func evaluate_graph(graph: FlowGraphResource, input_data_map: Dictionary,
 		if not node_script:
 			push_error("Failed to load node script for template: %s" % template)
 			continue
-		var instance = node_script.new() as FlowNodeBase
+		var raw_instance = node_script.new()
+		var instance := raw_instance as FlowNodeBase
+		if instance == null:
+			push_error("Node script is not a FlowNodeBase: %s" % script_path)
+			if raw_instance is Node:
+				raw_instance.free()
+			continue
 		instance.name = name
 		instance.node_template = template
-		
-		# Initialize settings resource if defined
+
+		# Initialize settings resource if defined. Nodes without a settings
+		# class (e.g. merge_points) fall back to the base NodeSettings,
+		# mirroring the editor — the evaluator reads settings.disabled and
+		# settings.debug_enabled on every node.
 		var meta = instance.getMeta()
 		if meta.has("settings") and meta.settings:
 			instance.settings = meta.settings.new()
-		
+		else:
+			instance.settings = NodeSettings.new()
+
 		# Apply saved settings
-		dict_to_resource(n_data.settings, instance.settings)
-		_stabilize_missing_seed(instance.settings, name, template, n_data.settings)
+		var saved_settings = n_data.get("settings", {})
+		dict_to_resource(saved_settings, instance.settings)
+		_stabilize_missing_seed(instance.settings, name, template, saved_settings)
 		
 		instance.refreshFromSettings()
 		
@@ -755,6 +799,7 @@ static func evaluate_graph(graph: FlowGraphResource, input_data_map: Dictionary,
 	for key in runtime_params.keys():
 		ctx.runtime_params[key] = runtime_params[key]
 	ctx.runtime_params["__eval_depth"] = depth
+	ctx.set_meta("flow_eval_depth", depth)
 	_inherit_flow_variables(ctx, parent_ctx)
 	FlowVariableEval._mirror_variables_to_runtime(ctx)
 	
@@ -774,7 +819,7 @@ static func evaluate_graph(graph: FlowGraphResource, input_data_map: Dictionary,
 			specific_input_name = node.settings.name
 
 		if is_specific_input:
-			var val = input_data_map.get(specific_input_name, null)
+			var val = _coerce_input_data(input_data_map.get(specific_input_name, null), specific_input_name)
 			if val:
 				# Create a new Data object to rename/register the stream under the input's name
 				var target_data = load("res://addons/flow_nodes_editor/flow_data.gd").Data.new()
@@ -795,7 +840,7 @@ static func evaluate_graph(graph: FlowGraphResource, input_data_map: Dictionary,
 			for i in range(graph.in_params.size()):
 				var param = graph.in_params[i]
 				if param:
-					var val = input_data_map.get(param.name, null)
+					var val = _coerce_input_data(input_data_map.get(param.name, null), param.name)
 					var target_data = load("res://addons/flow_nodes_editor/flow_data.gd").Data.new()
 					if val:
 						for stream_name in val.streams:
@@ -838,7 +883,7 @@ static func evaluate_graph(graph: FlowGraphResource, input_data_map: Dictionary,
 					node.inputs[conn.to_port] = src_bulk[conn.from_port]
 					
 		node.preExecute(ctx)
-		if node.settings.disabled:
+		if node.settings != null and node.settings.disabled:
 			node.executedDisabled(ctx)
 		elif not FlowVariableEval.try_fast_execute(node, ctx, instances):
 			node.run(ctx)
@@ -887,4 +932,8 @@ static func evaluate_graph(graph: FlowGraphResource, input_data_map: Dictionary,
 				elif node.inputs.size() > 0 and node.inputs[0] != null:
 					outputs[out_name] = node.inputs[0]
 	_publish_flow_variables(ctx, parent_ctx)
+
+	# Outputs are collected (FlowData.Data is RefCounted, so the references in
+	# `outputs` keep the data alive) — free the instanced node Controls now.
+	_free_node_instances(node_list)
 	return outputs

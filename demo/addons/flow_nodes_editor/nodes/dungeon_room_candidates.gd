@@ -9,6 +9,8 @@ func _init():
 		"settings" : DungeonRoomCandidatesSettings,
 		"ins" : [],
 		"outs" : [{ "label" : "Out" }],
+		"aliases" : ["room candidates", "random rooms"],
+		"category" : "Sampler",
 		"tooltip" : "Generates a random set of room candidates snapped to grid, with priority, ID, and bounds.",
 	}
 
@@ -23,9 +25,13 @@ func execute( ctx : FlowData.EvaluationContext ):
 	var r_max : int = getSettingValue(ctx, "max_room_size", 6)
 	var seed_val : int = getSettingValue(ctx, "random_seed", 12345)
 	
+	if r_min > r_max:
+		setError("min_room_size (%d) must be <= max_room_size (%d)" % [r_min, r_max])
+		return
+
 	var rng := RandomNumberGenerator.new()
 	rng.seed = seed_val
-	
+
 	output.addCommonStreams(n_candidates)
 	var spos = output.getVector3Container(FlowData.AttrPosition)
 	var srot = output.getVector3Container(FlowData.AttrRotation)
@@ -42,9 +48,11 @@ func execute( ctx : FlowData.EvaluationContext ):
 	priorities.resize(n_candidates)
 	
 	for i in range(n_candidates):
-		var rw = rng.randi_range(r_min, r_max)
-		var rh = rng.randi_range(r_min, r_max)
-		
+		# Clamp so the randi_range bounds below never invert (Godot silently
+		# swaps inverted bounds, which would place rooms outside the margin).
+		var rw = mini(rng.randi_range(r_min, r_max), w - 3)
+		var rh = mini(rng.randi_range(r_min, r_max), h - 3)
+
 		# Pick random bottom-left cell rx, ry (ensuring room fits within bounds)
 		var rx = rng.randi_range(1, w - rw - 2)
 		var ry = rng.randi_range(1, h - rh - 2)
@@ -63,7 +71,6 @@ func execute( ctx : FlowData.EvaluationContext ):
 		priorities[i] = rng.randf()
 		
 	output.registerStream("RoomID", ids, FlowData.DataType.Int)
-	output.registerStream("room_id", ids, FlowData.DataType.Int)
 	output.registerStream("RoomWidth", widths, FlowData.DataType.Float)
 	output.registerStream("RoomHeight", heights, FlowData.DataType.Float)
 	output.registerStream("RoomPriority", priorities, FlowData.DataType.Float)

@@ -9,7 +9,8 @@ func _init():
 		"settings" : PointNeighborhoodNodeSettings,
 		"ins" : [{ "label": "In" }],
 		"outs" : [{ "label" : "Out" }],
-		"tooltip" : "Computes neighborhood-derived values such as average center, average density, and distance to center.",
+		"category" : "Spatial",
+		"tooltip" : "Computes neighborhood-derived values such as average center, average density, and distance to center.\nSearch distance 0 means unlimited — every point neighbors every other point (O(n²), avoid on large inputs).\nNote: UE's Point Neighborhood writes averaged density/color/position back onto the points; here they land in separate output attributes and 'distance to center' is the distance to the neighbors' average center.",
 	}
 
 func _validate_output_names() -> String:
@@ -65,9 +66,8 @@ func _read_color_vec(stream, idx : int) -> Vector3:
 	return Vector3.ZERO
 
 func execute(ctx : FlowData.EvaluationContext):
-	var in_data : FlowData.Data = get_input(0)
+	var in_data : FlowData.Data = require_input(0, ctx)
 	if in_data == null:
-		setError("Input not found")
 		return
 
 	var num_points = in_data.size()
@@ -98,7 +98,7 @@ func execute(ctx : FlowData.EvaluationContext):
 	var max_dist : float = maxf(0.0, getSettingValue(ctx, "search_distance", settings.search_distance))
 	var max_dist_sq : float = max_dist * max_dist
 	var has_distance_limit = max_dist_sq > 0.0
-	var include_self : bool = getSettingValue(ctx, "include_self")
+	var include_self : bool = getSettingValue(ctx, "include_self", settings.include_self)
 
 	var density_stream = null
 	if write_avg_density:

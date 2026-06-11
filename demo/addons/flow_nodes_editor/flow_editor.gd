@@ -2180,6 +2180,32 @@ func _find_nearest_connection(screen_pos: Vector2):
 	
 	return best_conn
 
+## Splices a reroute node into an existing connection at the given screen position
+## (double-click on a wire). Records a single undo action covering the node add
+## and the wire splice (disconnect original, connect src -> reroute -> dst).
+func _insert_reroute_on_connection(conn, screen_pos: Vector2):
+	var from_node : StringName = conn.from_node
+	var from_port : int = conn.from_port
+	var to_node : StringName = conn.to_node
+	var to_port : int = conn.to_port
+
+	var before_state = get_graph_snapshot()
+	local_drop_position = screen_pos
+	var node_name = getNewName("reroute")
+	var reroute_node = addNodeFromTemplate("reroute", node_name)
+	if not reroute_node:
+		return
+	# Center the compact reroute on the click point
+	reroute_node.position_offset -= Vector2(15, 15)
+
+	disconnect_nodes(from_node, from_port, to_node, to_port)
+	connect_nodes(from_node, from_port, reroute_node.name, 0)
+	connect_nodes(reroute_node.name, 0, to_node, to_port)
+
+	record_undo_action("Insert Reroute", before_state)
+	update_status_bar("Inserted reroute on %s → %s" % [from_node, to_node])
+	queueRegen()
+
 ## Analyze a specific node (used by hover-based hotkeys).
 func analyzeNode(node: FlowNodeBase):
 	if not data_inspector:
@@ -2961,15 +2987,23 @@ func _on_graph_edit_gui_input(event):
 			gedit.accept_event()
 			return
 
-	# Ctrl+Click on wire to disconnect
-	if evt_mouse and evt_mouse.pressed and evt_mouse.button_index == MOUSE_BUTTON_LEFT and evt_mouse.ctrl_pressed:
+	# Ctrl+Click (or Alt+Click, UE muscle memory) on wire to disconnect
+	if evt_mouse and evt_mouse.pressed and evt_mouse.button_index == MOUSE_BUTTON_LEFT and (evt_mouse.ctrl_pressed or evt_mouse.alt_pressed):
 		var conn = _find_nearest_connection(evt_mouse.position)
 		if conn:
 			_on_graph_edit_disconnection_request(conn.from_node, conn.from_port, conn.to_node, conn.to_port)
 			update_status_bar("Disconnected %s → %s" % [conn.from_node, conn.to_node])
 			gedit.accept_event()
 			return
-	
+
+	# Double-click on wire to insert a reroute node
+	if evt_mouse and evt_mouse.pressed and evt_mouse.double_click and evt_mouse.button_index == MOUSE_BUTTON_LEFT:
+		var conn = _find_nearest_connection(evt_mouse.position)
+		if conn:
+			_insert_reroute_on_connection(conn, evt_mouse.position)
+			gedit.accept_event()
+			return
+
 	var evt_key = event as InputEventKey
 	if evt_key and evt_key.pressed:
 		var no_modifiers = not evt_key.ctrl_pressed and not evt_key.alt_pressed and not evt_key.shift_pressed
@@ -3007,7 +3041,7 @@ func _on_graph_edit_gui_input(event):
 					node.dirty = true
 				evalGraph()
 				gedit.accept_event()
-		elif key == KEY_F:
+		elif key == KEY_F or key == KEY_HOME:
 			if no_modifiers:
 				_zoom_to_fit()
 				gedit.accept_event()
@@ -3128,10 +3162,18 @@ func analyzeSelection():
 
 func addComment():
 	var nodes = getSelectedNodes()
-	var rect = getRectOfNodes( nodes )
-	rect.position -= comment_padding
-	rect.size += comment_padding * 2
-	
+	var rect : Rect2
+	if nodes.is_empty():
+		# No selection: default-size comment centered on the mouse position
+		# (getRectOfNodes would return a degenerate zero rect at the origin).
+		var default_size := Vector2(400, 250)
+		var graph_pos = localToGraphCoords(gedit.get_local_mouse_position())
+		rect = Rect2(graph_pos - default_size * 0.5, default_size)
+	else:
+		rect = getRectOfNodes( nodes )
+		rect.position -= comment_padding
+		rect.size += comment_padding * 2
+
 	var frame := GraphFrame.new()
 	frame.name = getNewName("comment")
 	frame.title = "My Comments..."
@@ -4217,16 +4259,6 @@ func _on_graph_edit_connection_from_empty(to_node: StringName, to_port: int, rel
 	local_drop_position = release_position
 	_on_graph_edit_popup_request( local_drop_position )
 
-func getDeps( node : FlowNodeBase ) -> Array[ FlowNodeBase ]:
-	var deps : Array[ FlowNodeBase ] = [ node ]
-	for conn in node.deps:
-		var dep_node = gedit_nodes_by_name.get( conn.from_node, null )
-		if not dep_node:
-			continue
-		var req_deps = getDeps( dep_node )
-		deps.append_array( req_deps )
-	return deps
-	
 func getAllNodes() -> Array[ FlowNodeBase ]:
 	var nodes : Array[ FlowNodeBase ] = []
 	for child in gedit.get_children():
@@ -4431,7 +4463,6 @@ func getEvalOrder() -> Array[FlowNodeBase]:
 		if flow_node != null:
 			ordered.append(flow_node)
 	return ordered
-
 func removeGeneratedNodes():
 	if not resource_owner:
 		return

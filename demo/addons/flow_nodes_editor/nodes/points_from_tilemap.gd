@@ -10,7 +10,8 @@ func _init():
 		"scans_scene" : true,
 		"ins" : [],
 		"outs" : [{ "label" : "Out" }],
-		"tooltip" : "Generates one point per used TileMapLayer cell (Godot-specific world extraction).",
+		"category" : "Sampler",
+		"tooltip" : "Generates one point per used TileMapLayer cell (Godot-specific world extraction).\nTileMap positions are in 2D pixels — use Position Scale to convert them to world units so they match Cell Size/Cell Height.",
 	}
 
 func _collect_tilemaps(root : Node) -> Array:
@@ -27,16 +28,20 @@ func _collect_tilemaps(root : Node) -> Array:
 	var group_name = settings.group_name.strip_edges()
 	if group_name != "":
 		var out : Array = []
-		for n in root.get_tree().get_nodes_in_group(group_name):
-			if n and n.is_class("TileMapLayer"):
-				out.append(n)
+		if root.get_tree():
+			for n in root.get_tree().get_nodes_in_group(group_name):
+				if n and n.is_class("TileMapLayer"):
+					out.append(n)
 		return out
 
-	return root.find_children("*", "TileMapLayer", true, false)
+	var found = root.find_children("*", "TileMapLayer", true, false)
+	if found.is_empty() and not root.find_children("*", "TileMap", true, false).is_empty():
+		setError("Scene only contains legacy TileMap nodes — this node supports TileMapLayer (Godot 4.3+) only")
+	return found
 
 func _tile_world_position(layer, cell : Vector2i) -> Vector3:
 	var local_pos : Vector2 = layer.map_to_local(cell)
-	var world_pos : Vector2 = layer.to_global(local_pos)
+	var world_pos : Vector2 = layer.to_global(local_pos) * settings.position_scale
 	return Vector3(world_pos.x, settings.height, world_pos.y)
 
 func execute(_ctx : FlowData.EvaluationContext):

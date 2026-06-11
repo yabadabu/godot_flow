@@ -9,31 +9,37 @@ func _init():
 		"settings" : DungeonConnectRoomsSettings,
 		"ins" : [{ "label" : "In" }],
 		"outs" : [{ "label" : "Out" }],
-		"tooltip" : "Generates sequential L-shaped corridor floor points between selected rooms.",
+		"aliases" : ["corridors", "connect rooms", "L corridor"],
+		"category" : "Spatial",
+		"tooltip" : "Generates sequential L-shaped corridor floor points between consecutive input room points (in input order).",
 	}
 
 func execute( ctx : FlowData.EvaluationContext ):
-	var in_data : FlowData.Data = get_input(0)
+	var in_data : FlowData.Data = require_input(0, ctx, "Input 'In'")
 	if in_data == null:
-		setError("Input 'In' is not connected")
 		return
 	if in_data.size() < 2:
 		set_output(0, FlowData.Data.new())
 		return
-		
+
 	var cell_size : float = getSettingValue(ctx, "cell_size", 2.0)
 	var seed_val : int = getSettingValue(ctx, "random_seed", 12345)
-	
+
 	var in_size = in_data.size()
 	var in_pos = in_data.getVector3Container(FlowData.AttrPosition)
-	
-	var s_room_id = in_data.findStream("RoomID")
-	
+
 	var out_positions = PackedVector3Array()
 	var out_cell_types = PackedStringArray()
 	var out_connection_ids = PackedInt32Array()
-	
+
+	# Deduplicate corridor cells: the corner cell of each L is visited by both
+	# legs, and overlapping corridors would otherwise stack duplicate points.
+	var seen_cells := {}
 	var add_cell = func(x: int, y: int, conn_id: int):
+		var key := Vector2i(x, y)
+		if seen_cells.has(key):
+			return
+		seen_cells[key] = true
 		var pos = Vector3(x * cell_size, 0, y * cell_size)
 		out_positions.append(pos)
 		out_cell_types.append("Corridor")

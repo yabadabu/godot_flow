@@ -281,11 +281,15 @@ func setup(p_node_types: Dictionary, p_inputs: Array, p_outputs: Array, p_has_se
 	
 	for key in templates:
 		var meta = node_types[key]
+		# Prefer an explicit "category" in the node's meta, fall back to cat_map (then "Utility")
+		var category = str(meta.get("category", ""))
+		if category == "":
+			category = get_category.call(key)
 		all_items.append({
 			"type": "node",
 			"key": key,
 			"label": meta.title,
-			"category": get_category.call(key),
+			"category": category,
 			"aliases": meta.get("aliases", []),
 			"tooltip": meta.get("tooltip", "")
 		})
@@ -343,7 +347,27 @@ func _item_match_score(item: Dictionary, query: String) -> int:
 				break
 		if all_match:
 			return 30
+	# Subsequence fuzzy matching: query chars appear in order, e.g. "ptneigh"
+	# matches "Point Neighborhood". Scores below substring/token matches.
+	var compact_query = query.replace(" ", "")
+	if _is_subsequence(compact_query, label_lower):
+		return 20
+	for alias in item.get("aliases", []):
+		if _is_subsequence(compact_query, str(alias).to_lower()):
+			return 15
 	return 0
+
+## True when every character of query appears in text, in order (not necessarily contiguous).
+func _is_subsequence(query: String, text: String) -> bool:
+	if query.is_empty():
+		return false
+	var qi = 0
+	for i in range(text.length()):
+		if text[i] == query[qi]:
+			qi += 1
+			if qi >= query.length():
+				return true
+	return false
 
 func _localized_label(item: Dictionary) -> String:
 	if item.type == "node":
@@ -879,7 +903,12 @@ func _cancel_sub_panel_hide_timer():
 func _process(delta):
 	if not visible:
 		return
-		
+
+	# Keyboard-driven flow: never auto-dismiss while the search box has focus.
+	# Distance-based dismissal only applies once focus is lost.
+	if line_edit and line_edit.has_focus():
+		return
+
 	# Bounding box calculation for automatic hide when mouse moves too far away
 	# We use screen-level coordinates from DisplayServer to avoid clamping issues outside the popup window
 	var mouse_screen_pos = DisplayServer.mouse_get_position()

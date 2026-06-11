@@ -13,12 +13,15 @@ func _init():
 		"settings" : NodeSettings,
 		"ins" : [{ "label" : "", "data_type" : FlowData.DataType.Invalid }],
 		"outs" : [{ "label" : "", "data_type" : FlowData.DataType.Invalid }],
+		"aliases" : ["Reroute"],
+		"category" : "Utility",
 		"tooltip" : "Reroute point - passes data through unchanged",
 		"hide_inputs" : false,
 		"auto_register" : false,
 	}
 
 func getTitle() -> String:
+	# Stay compact: the node renders as a 30x30 dot without a visible title.
 	return ""
 
 func getExposedParams():

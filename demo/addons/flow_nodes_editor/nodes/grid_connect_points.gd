@@ -9,7 +9,9 @@ func _init():
 		"settings" : GridConnectPointsNodeSettings,
 		"ins" : [{ "label": "In" }],
 		"outs" : [{ "label" : "Cells" }],
-		"tooltip" : "Connects ordered points with orthogonal grid-cell paths on the XZ plane.",
+		"aliases" : ["connect points", "grid path", "orthogonal path"],
+		"category" : "Spatial",
+		"tooltip" : "Connects ordered points with orthogonal grid-cell paths on the XZ plane.\nY is not walked: each segment keeps its start cell's Y for the whole path.",
 	}
 
 func _safe_cell_size() -> Vector3:
@@ -44,10 +46,9 @@ func _walk_axis(from_cell : Vector3i, to_cell : Vector3i, axis : String, path_id
 		_append_cell(current, path_idx, positions, path_ids, seen, cell_size)
 	return current
 
-func execute(_ctx : FlowData.EvaluationContext):
-	var in_data : FlowData.Data = get_input(0)
+func execute(ctx : FlowData.EvaluationContext):
+	var in_data : FlowData.Data = require_input(0, ctx, "Input 'In'")
 	if in_data == null:
-		setError("Input not found")
 		return
 	var in_positions := in_data.getVector3Container(FlowData.AttrPosition)
 	if in_positions.size() != in_data.size():
@@ -64,7 +65,10 @@ func execute(_ctx : FlowData.EvaluationContext):
 	for idx : int in range(maxi(0, in_positions.size() - 1)):
 		var start_cell := _to_cell(in_positions[idx], cell_size)
 		var end_cell := _to_cell(in_positions[idx + 1], cell_size)
-		if settings.include_input_points:
+		# Only the first segment appends its start cell: for idx > 0 the start
+		# cell was already emitted as the previous segment's end cell (avoids a
+		# duplicate point when deduplicate_cells is off).
+		if settings.include_input_points and idx == 0:
 			_append_cell(start_cell, idx, positions, path_ids, seen, cell_size)
 		var current := start_cell
 		if settings.axis_order == GridConnectPointsNodeSettings.eAxisOrder.XThenZ:
@@ -73,7 +77,9 @@ func execute(_ctx : FlowData.EvaluationContext):
 		else:
 			current = _walk_axis(current, end_cell, "z", idx, positions, path_ids, seen, cell_size)
 			current = _walk_axis(current, end_cell, "x", idx, positions, path_ids, seen, cell_size)
-		if settings.include_input_points:
+		# The walk already lands on end_cell for same-Y segments; the explicit
+		# append is only needed when Y differs (Y is never walked).
+		if settings.include_input_points and current != end_cell:
 			_append_cell(end_cell, idx, positions, path_ids, seen, cell_size)
 
 	var out_data := FlowData.Data.new()

@@ -26,7 +26,9 @@ var node_settings_inspector_plugin : EditorInspectorPlugin
 var current_scene_root = null
 var current_watched_node = null
 
-var selection: EditorSelection
+# Resolved in _enter_tree; null in headless/--import runs where there is no
+# editor selection — every use must null-guard.
+var selection : EditorSelection = null
 
 func _has_valid_graph_dock() -> bool:
 	return (
@@ -190,6 +192,7 @@ func _enter_tree():
 	print("Data Flow plugin enabled")
 	_dock_layout_watch_started_ms = Time.get_ticks_msec()
 	_ensure_graph_dock()
+	selection = EditorInterface.get_selection()
 
 	graph_input_inspector_plugin = load("res://addons/flow_nodes_editor/graph_input_parameter_inspector.gd").new()
 	add_inspector_plugin(graph_input_inspector_plugin)
@@ -208,9 +211,9 @@ func _enter_tree():
 		efs.resources_reimported.connect(_on_resources_reimported)
 
 	selection = EditorInterface.get_selection()
-	if selection:
+	if selection and not selection.selection_changed.is_connected(_selection_changed):
 		selection.selection_changed.connect(_selection_changed)
-	else:
+	elif selection == null:
 		push_warning("Data Flow: EditorSelection unavailable in _enter_tree; selection sync disabled until editor is ready.")
 
 	set_process(true)

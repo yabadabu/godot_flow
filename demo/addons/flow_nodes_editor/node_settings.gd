@@ -33,7 +33,11 @@ enum eDebugMode {
 func _init():
 	# Set default values when resource is created
 	resource_name = "Node Settings"
-	random_seed = randi()
+	# Stable default seed: UE PCG graphs are deterministic by default, so a
+	# fresh node must produce the same result every time. Per-point seeds
+	# (FlowData.point_seed) decorrelate nodes that share this default.
+	# Seeds stored in saved .tres files are unaffected.
+	random_seed = 12345
 
 func exposeParam( name : String ):
 	return true

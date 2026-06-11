@@ -9,8 +9,31 @@ func _init():
 		"settings" : TextureSamplerNodeSettings,
 		"ins" : [{ "label": "In" }],
 		"outs" : [{ "label" : "Out" }],
+		"aliases" : ["Get Texture Data", "Texture Sampler"],
+		"category" : "Sampler",
 		"tooltip" : "Samples a texture using UV or position-derived coordinates and writes sampled attributes.",
 	}
+
+# Sampler parity: points leaving a sampler always carry density + seed streams.
+# This node passes points through, so upstream values are kept when present.
+func _ensure_density_seed(out_data : FlowData.Data):
+	var num_points := out_data.size()
+	if num_points == 0:
+		return
+	if not out_data.hasStream(FlowData.AttrDensity):
+		var sdensity := PackedFloat32Array()
+		sdensity.resize(num_points)
+		sdensity.fill(1.0)
+		out_data.registerStream(FlowData.AttrDensity, sdensity, FlowData.DataType.Float)
+	if not out_data.hasStream(FlowData.AttrSeed):
+		var spos := out_data.getVector3Container(FlowData.AttrPosition)
+		if spos.size() == num_points:
+			var node_seed : int = settings.random_seed
+			var sseed := PackedInt32Array()
+			sseed.resize(num_points)
+			for i in range(num_points):
+				sseed[i] = FlowData.point_seed(spos[i], node_seed)
+			out_data.registerStream(FlowData.AttrSeed, sseed, FlowData.DataType.Int)
 
 func _get_numeric_from_stream(stream, index : int) -> Dictionary:
 	var size = stream.container.size()
@@ -76,15 +99,16 @@ func _sample_value_channel(color : Color) -> float:
 			return color.get_luminance()
 
 func execute(_ctx : FlowData.EvaluationContext):
-	var in_data : FlowData.Data = get_input(0)
+	var in_data : FlowData.Data = require_input(0, _ctx, "Input 'In'")
 	if in_data == null:
-		setError("Input not found")
 		return
 
 	var should_write_color = settings.write_color_attribute
 	var should_write_value = settings.write_value_attribute
 	if not should_write_color and not should_write_value:
-		set_output(0, in_data.duplicate())
+		var passthrough = in_data.duplicate()
+		_ensure_density_seed(passthrough)
+		set_output(0, passthrough)
 		return
 
 	if settings.texture == null:
@@ -95,6 +119,11 @@ func execute(_ctx : FlowData.EvaluationContext):
 	if image == null:
 		setError("Failed to read texture image data")
 		return
+	if image.is_compressed():
+		# Imported textures often arrive VRAM-compressed; get_pixel needs raw data
+		if image.decompress() != OK:
+			setError("Texture image is compressed and could not be decompressed")
+			return
 	var width = image.get_width()
 	var height = image.get_height()
 	if width <= 0 or height <= 0:
@@ -179,4 +208,5 @@ func execute(_ctx : FlowData.EvaluationContext):
 			setError(err)
 			return
 
+	_ensure_density_seed(out_data)
 	set_output(0, out_data)

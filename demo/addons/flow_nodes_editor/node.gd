@@ -826,18 +826,21 @@ func getSettingValue( ctx : FlowData.EvaluationContext, in_name : String, defaul
 					print( "Got the input for %s : %s" % [ in_name, in_streams.keys() ] )
 				if in_streams and in_streams.size() == 1:
 					var stream = in_streams.values()[0]
-					var in_size = in_streams.size()
-					if in_size == 0:
-						setError( "Input %s has no data" % in_name)
-					elif in_size > 1:
-						setError( "Input %s has too many data (%d)" % [ in_name, in_size ])
+					var num_elems = stream.container.size()
+					if num_elems == 0:
+						# Empty container: nothing to read, fall back to the
+						# settings/default value
+						if trace:
+							print( "  -> Input %s has an empty container, keeping %s" % [ in_name, value ])
 					else:
+						# One element is the normal parameter case; with more
+						# than one element we keep reading the first (broadcast)
 						var new_value = stream.container[0]
 						if trace:
 							print( "  -> Using %s = %s" % [ in_name, new_value ])
 						if typeof( new_value ) != typeof( value ):
 							push_warning( "  Type of %s (%d) does not match the expected type (%d)" % [ in_name, typeof(new_value), typeof(value) ])
-							
+
 						return new_value
 	return value
 
@@ -942,6 +945,22 @@ func get_optional_input( idx : int ):
 	if idx >= inputs.size():
 		return null
 	return inputs[ idx ]
+
+## Input guard (PARITY_PLAN #4): returns the FlowData.Data connected at `port`,
+## or null after handling the error path. Handles every failure shape an input
+## read can produce: null (not connected), [] (out-of-range port) and any other
+## non-Data value. In editor preview (ctx.owner == null and the editor hint is
+## set) it emits an empty Data on output 0 and stays silent so disconnected
+## graphs don't spam errors; otherwise it reports "<error_label> not connected".
+func require_input( port : int, ctx, error_label := "Input" ) -> FlowData.Data:
+	var raw = inputs[ port ] if port >= 0 and port < inputs.size() else null
+	if raw is FlowData.Data:
+		return raw
+	if ctx and ctx.owner == null and Engine.is_editor_hint():
+		set_output( 0, FlowData.Data.new() )
+		return null
+	setError( "%s not connected" % error_label )
+	return null
 
 func get_bulk_input( bulk_idx : int, port_idx : int ):
 	if bulk_idx < input_bulks.size() && port_idx < getMeta().ins.size():

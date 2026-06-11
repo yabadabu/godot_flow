@@ -9,7 +9,8 @@ func _init():
 		"settings" : ClipPointsByPolygonSettings,
 		"ins" : [{ "label" : "Points" }, { "label" : "Polygon" }],
 		"outs" : [{ "label" : "Out" }],
-		"tooltip" : "Filters points against one or more Path3D or point-list polygons.",
+		"tooltip" : "Filters points against one or more Path3D or point-list polygons.\nPoint-list polygons assume the input points are ordered as a single closed polygon;\nopen curves are treated as closed.",
+		"category" : "Spatial",
 	}
 
 func _to_plane(v : Vector3) -> Vector2:
@@ -73,9 +74,14 @@ func _is_inside_any(p : Vector2, polygons : Array) -> bool:
 	return false
 
 func execute(ctx : FlowData.EvaluationContext):
-	var points : FlowData.Data = get_input(0)
+	var points : FlowData.Data = require_input(0, ctx, "Points input")
 	if points == null:
-		setError("Points input not found")
+		return
+	# An empty upstream (e.g. a filter that matched nothing) legitimately has no
+	# streams yet — pass the empty set through instead of erroring on the missing
+	# polygon (mirrors attribute_filter_range's empty-input policy).
+	if points.size() == 0:
+		set_output(0, points.duplicate())
 		return
 	var pos := points.getVector3Container(FlowData.AttrPosition)
 	if pos.size() != points.size():

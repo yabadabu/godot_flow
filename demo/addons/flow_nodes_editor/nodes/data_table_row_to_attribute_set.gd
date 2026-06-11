@@ -10,6 +10,8 @@ func _init():
 		"ins" : [{ "label" : "Rows" }],
 		"outs" : [{ "label" : "Out" }],
 		"tooltip" : "Extracts one or more table rows into an attribute-set stream.",
+		"aliases" : ["Data Table Row To Attribute Set"],
+		"category" : "Metadata",
 	}
 
 func _value_matches(value, target : String) -> bool:
@@ -21,9 +23,8 @@ func _value_matches(value, target : String) -> bool:
 	return lhs == rhs
 
 func execute(_ctx : FlowData.EvaluationContext):
-	var in_data : FlowData.Data = get_input(0)
+	var in_data : FlowData.Data = require_input(0, _ctx, "Input rows")
 	if in_data == null:
-		setError("Input rows not found")
 		return
 	var in_size := in_data.size()
 	if in_size == 0:
@@ -33,7 +34,10 @@ func execute(_ctx : FlowData.EvaluationContext):
 	var indices := PackedInt32Array()
 	if settings.selection_mode == DataTableRowToAttributeSetSettings.eSelectionMode.RowIndex:
 		if settings.row_index < 0 or settings.row_index >= in_size:
-			set_output(0, FlowData.Data.new())
+			# Keep the schema/tags of the input (consistent with the MatchAttribute
+			# empty-result path) instead of emitting a fresh schemaless Data
+			push_warning("Data Table Row To Attribute Set: row index %d is out of range (0..%d)" % [settings.row_index, in_size - 1])
+			set_output(0, in_data.filter(PackedInt32Array()))
 			return
 		indices.append(settings.row_index)
 	else:

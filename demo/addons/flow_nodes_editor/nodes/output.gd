@@ -8,6 +8,7 @@ func _init():
 		"ins" : [{ "label" : "In", "data_type" : FlowData.DataType.Float }],
 		"outs" : [],
 		"tooltip" : "Exposes an output parameter of the Subgraph",
+		"aliases" : ["Output"],
 		"auto_register" : true,
 		"hide_outputs" : true
 	}
@@ -43,7 +44,7 @@ func getMeta() -> Dictionary:
 func getTitle() -> String:
 	if is_multi_port():
 		return "Outputs"
-	return settings.name
+	return settings.name if settings else "Output"
 
 func refreshFromSettings():
 	super.refreshFromSettings()
