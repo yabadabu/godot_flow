@@ -7,12 +7,12 @@
 		Feedback
 
 ---- 
-- [ ] Import node: noise
-- [ ] Import node: math.color ops
+- [X] Import node: noise
 - [ ] Import node: load csv
 - [ ] Import node: texture sampler
 - [ ] Import node: match and set weight attr
 - [ ] Import node: sample spline
+- [X] Import node: math.color ops
 
 - [ ] named redirectors/acc
 - [ ] debug/session

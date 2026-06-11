@@ -109,8 +109,11 @@ func preExecute( ctx : FlowData.EvaluationContext ):
 	
 	all_nodes.clear()
 	subctx.gedit_nodes_by_name.clear()
-	print( "Subgraph.Reading resource")
+
+	var time_node_start := Time.get_ticks_usec()
 	FlowNodeIO.create_nodes_from_dict( settings.graph.data, self, Vector2(0,0) )
+	var time_node_end := Time.get_ticks_usec()
+	print( "Subgraph.Readed resource in %s (%s)" % [ time_node_end - time_node_start, settings.graph.resource_path ])
 			
 	subctx.owner = ctx.owner
 	subctx.graph = settings.graph
