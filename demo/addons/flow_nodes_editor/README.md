@@ -9,14 +9,11 @@
 ---- 
 - [ ] Import node: load csv
 - [ ] Import node: texture sampler
-- [ ] Import node: match and set weight attr
 - [ ] Import node: sample spline
 
 - [ ] named redirectors/acc
 - [ ] debug/session
 - [ ] multiple flowgraphs / tabs
-
-- [ ] attribute_random, the use_index_as_value is not clamped between min/max -> Can use Index
 
 - [ ] Demos
 	- [X] Wall of rocks, picking a random point on the top

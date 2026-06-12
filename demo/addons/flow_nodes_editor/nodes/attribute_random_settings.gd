@@ -11,8 +11,6 @@ enum eType { Float, Int }
 @export var min_value: float = 0.0
 @export var max_value: float = 1.0
 
-@export var use_index_as_value: bool = false
-
 func _init():
 	super._init()
 	resource_name = "Attribute Random Settings"
