@@ -26,6 +26,12 @@ data = {
 "keep_alive": false,
 "to_node": &"id_0025_sample_around",
 "to_port": 0
+}, {
+"from_node": &"id_0025_sample_around",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0026_relax",
+"to_port": 0
 }],
 "min_pos": Vector2(80, 180),
 "nodes": [{
@@ -39,6 +45,7 @@ data = {
 "debug_mode": 0,
 "debug_modulate_by": "",
 "debug_output": 0,
+"debug_port_combined_index": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "group_name": "",
@@ -67,6 +74,7 @@ data = {
 "debug_mode": 0,
 "debug_modulate_by": "",
 "debug_output": 0,
+"debug_port_combined_index": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "distance_attribute": "distance",
@@ -100,6 +108,7 @@ data = {
 "debug_mode": 0,
 "debug_modulate_by": "",
 "debug_output": 0,
+"debug_port_combined_index": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "in_nameA": "position.Y",
@@ -125,28 +134,58 @@ data = {
 "settings": {
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
-"debug_enabled": true,
+"debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "",
 "debug_output": 0,
+"debug_port_combined_index": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "inspect_enabled": false,
-"max_points": 133,
-"radius": 0.3,
+"max_points": 121,
+"radius": 0.15,
 "random_seed": 2789012003,
 "title": "Sample Around",
 "trace": false
 },
 "show_disconnected_inputs": false,
 "template": "sample_around"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0026_relax",
+"position": Vector2(700, 0),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": true,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"num_iterations": 17,
+"padding": 0.37,
+"random_seed": 262253606,
+"strength": 0.245,
+"title": "Relax",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "relax"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
 view_zoom = 0.96734935
-view_offset = Vector2(405.38678, -184.32373)
-new_name_counter = 25
+view_offset = Vector2(377.38678, 84.67627)
+new_name_counter = 26
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_lfecj"]
 
