@@ -50,6 +50,8 @@ func isSingleArgument( ) -> bool:
 	   operation == eOperation.OneMinus or \
 	   operation == eOperation.Sign or \
 	   operation == eOperation.Sqrt or \
+	   operation == eOperation.Frac or \
+	   operation == eOperation.Round or \
 	   false
 
 func exposeParam( name : String ) -> bool:

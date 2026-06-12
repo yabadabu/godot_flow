@@ -9,7 +9,9 @@ func _init():
 		"settings" : GridBoundaryNodeSettings,
 		"ins" : [{ "label": "Filled Cells" }],
 		"outs" : [{ "label" : "Edges" }, { "label" : "Corners" }, { "label" : "All" }],
-		"tooltip" : "Extracts exposed edge and corner points from filled grid cells.",
+		"aliases" : ["boundary", "walls from cells", "grid edges"],
+		"category" : "Spatial",
+		"tooltip" : "Extracts exposed edge and corner points from filled grid cells.\nNeighbors are checked on the XZ plane only — stacked layers (different Y cells) get per-layer edges, never floor/ceiling boundaries.",
 	}
 
 func _safe_cell_size() -> Vector3:
@@ -80,10 +82,10 @@ func _records_to_data(records : Array) -> FlowData.Data:
 		out_data.registerStream(settings.type_attribute, types, FlowData.DataType.String)
 	return out_data
 
-func execute(_ctx : FlowData.EvaluationContext):
+func execute(ctx : FlowData.EvaluationContext):
 	var in_data : FlowData.Data = get_input(0)
 	if in_data == null:
-		if Engine.is_editor_hint() and _ctx.owner == null:
+		if Engine.is_editor_hint() and ctx.owner == null:
 			var empty := FlowData.Data.new()
 			set_output(0, empty)
 			set_output(1, empty)
@@ -93,7 +95,7 @@ func execute(_ctx : FlowData.EvaluationContext):
 		return
 	var in_positions := in_data.getVector3Container(FlowData.AttrPosition)
 	if in_positions.size() != in_data.size():
-		if Engine.is_editor_hint() and _ctx.owner == null:
+		if Engine.is_editor_hint() and ctx.owner == null:
 			var empty := FlowData.Data.new()
 			set_output(0, empty)
 			set_output(1, empty)

@@ -5,14 +5,18 @@ func _init():
 	meta_node = {
 		"title" : "Sequence Sample",
 		"settings" : SequenceSampleNodeSettings,
-		"ins" : [{ "label": "In" }], 
+		"aliases" : ["Filter Data By Index", "Slice", "Stride"],
+		"category" : "Filter",
+		"ins" : [{ "label": "In" }],
 		"outs" : [{ "label" : "Out" }],
-		"tooltip" : "Samples 'count' input values from the input, starting at Start and using a 'Step' as gap.\nIf count = 0 means all points.\nNegative values mean backwards",
+		"tooltip" : "Samples 'count' input values from the input, starting at Start and using a 'Step' as gap.\nCount <= 0 means all points.\nA negative Start counts from the end; a negative Step walks backwards.",
 	}
 
 func execute( ctx : FlowData.EvaluationContext ):
-	var in_data : FlowData.Data = get_input(0)
-	
+	var in_data : FlowData.Data = require_input( 0, ctx )
+	if in_data == null:
+		return
+
 	var indices := PackedInt32Array( )
 	
 	var start : int = getSettingValue(ctx, "start")

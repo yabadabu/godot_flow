@@ -10,7 +10,9 @@ func _init():
 		"ins" : [{ "label" : "In" }],
 		"outs" : [{ "label" : "Out" }],
 		"is_final" : true,
-		"tooltip" : "Applies point attributes and optional transforms onto existing scene nodes.",
+		"tooltip" : "Applies point attributes and optional transforms onto existing scene nodes.\nWhen target count != point count, targets are reused cyclically (the last write wins).",
+		"aliases" : ["Apply On Actor"],
+		"category" : "Spawner",
 	}
 
 func _scene_root(ctx : FlowData.EvaluationContext) -> Node:
@@ -28,8 +30,16 @@ func _targets_from_stream(in_data : FlowData.Data) -> Array:
 		setError("Target stream '%s' must contain nodes" % settings.target_stream_attribute)
 		return []
 	var out : Array = []
+	var num_valid := 0
 	for value in stream.container:
-		out.append(value if value is Node else null)
+		if value is Node:
+			out.append(value)
+			num_valid += 1
+		else:
+			out.append(null)
+	if num_valid == 0 and not stream.container.is_empty():
+		setError("Target stream '%s' contains no live Node references" % settings.target_stream_attribute)
+		return []
 	return out
 
 func _targets_from_scene(root : Node) -> Array:
@@ -68,9 +78,8 @@ func _apply_transform(node : Node, in_data : FlowData.Data, idx : int) -> void:
 	node3d.global_transform = trs.atIndex(idx)
 
 func execute(ctx : FlowData.EvaluationContext):
-	var in_data : FlowData.Data = get_input(0)
+	var in_data : FlowData.Data = require_input(0, ctx)
 	if in_data == null:
-		setError("Input not found")
 		return
 	var in_size := in_data.size()
 	if in_size == 0:
@@ -91,6 +100,9 @@ func execute(ctx : FlowData.EvaluationContext):
 		var stream = in_data.findStream(stream_name)
 		if stream == null:
 			continue
+		var stream_size : int = stream.container.size()
+		if stream_size != in_size and stream_size != 1:
+			push_warning("Apply On Actor: stream '%s' has %d values but input has %d points — out-of-range points are skipped" % [stream_name, stream_size, in_size])
 		streams_to_assign.append({ "property": String(prop_name), "stream": stream })
 
 	for i in range(in_size):
@@ -101,7 +113,7 @@ func execute(ctx : FlowData.EvaluationContext):
 		_apply_transform(target, in_data, i)
 		for item in streams_to_assign:
 			var stream = item.stream
-			var read_idx : int = i if stream.container.size() > 1 else 0
+			var read_idx : int = FlowData.bcast_idx(stream.container.size(), i)
 			if read_idx < stream.container.size():
 				target.set(item.property, stream.container[read_idx])
 

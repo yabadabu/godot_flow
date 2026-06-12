@@ -99,4 +99,6 @@ func execute() -> void:
 	ctx.eval_id = 0
 	ctx.gedit_nodes_by_name = {}
 	ctx.runtime_params = {}
-	FlowNodeIOClass.evaluate_graph(graph, args if args != null else {}, ctx, {})
+	# Root evaluation starts the recursion guard at depth 0; nested
+	# subgraph/loop nodes call evaluate_graph with depth + 1.
+	FlowNodeIOClass.evaluate_graph(graph, args if args != null else {}, ctx, {}, 0)

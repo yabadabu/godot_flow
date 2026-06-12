@@ -9,6 +9,8 @@ func _init():
 		"settings" : MutateSeedNodeSettings,
 		"ins" : [{ "label": "In" }],
 		"outs" : [{ "label" : "Out" }],
+		"aliases" : ["Mutate Seed"],
+		"category" : "Metadata",
 		"tooltip" : "Generates deterministic per-point seed values from existing seeds, index, and optional position.",
 	}
 
@@ -39,16 +41,17 @@ func _mutate_seed(base_seed : int, idx : int, pos : Vector3) -> int:
 
 	match settings.mode:
 		MutateSeedNodeSettings.eMode.Add:
-			return int(base_seed + mutated + settings.seed_offset)
+			# seed_offset is already folded into the hash above — adding it
+			# again here double-applied it.
+			return int(base_seed + mutated)
 		MutateSeedNodeSettings.eMode.Xor:
 			return int(base_seed ^ mutated)
 		_:
 			return int(mutated)
 
 func execute(_ctx : FlowData.EvaluationContext):
-	var in_data : FlowData.Data = get_input(0)
+	var in_data : FlowData.Data = require_input(0, _ctx)
 	if in_data == null:
-		setError("Input not found")
 		return
 
 	var out_name = settings.out_seed_attribute.strip_edges()
@@ -65,6 +68,8 @@ func execute(_ctx : FlowData.EvaluationContext):
 	var in_seed_stream = null
 	if in_seed_name != "":
 		in_seed_stream = in_data.findStream(in_seed_name)
+		if in_seed_stream == null:
+			push_warning("MutateSeed '%s': input seed attribute '%s' not found — falling back to the point index as base seed" % [name, in_seed_name])
 		if in_seed_stream and in_seed_stream.data_type != FlowData.DataType.Int and in_seed_stream.data_type != FlowData.DataType.Float and in_seed_stream.data_type != FlowData.DataType.Bool:
 			setError("Input seed attribute '%s' must be Int/Float/Bool" % in_seed_name)
 			return

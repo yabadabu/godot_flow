@@ -7,13 +7,15 @@ func _init():
 		"settings" : NoiseNodeSettings,
 		"ins" : [{ "label" : "In" }],
 		"outs" : [{ "label" : "Out" }],
+		"aliases" : ["Spatial Noise"],
+		"category" : "Density",
 		"tooltip" : "Outputs an attribute with Noise values",
 	}
 
 func _map_noise_type() -> int:
 	match settings.noise_type:
 		NoiseNodeSettings.eNoiseType.ValueCubic:
-			return FastNoiseLite.NoiseType.TYPE_VALUE
+			return FastNoiseLite.NoiseType.TYPE_VALUE_CUBIC
 		NoiseNodeSettings.eNoiseType.Perlin:
 			return FastNoiseLite.NoiseType.TYPE_PERLIN
 		NoiseNodeSettings.eNoiseType.Cellular:
@@ -21,7 +23,7 @@ func _map_noise_type() -> int:
 		NoiseNodeSettings.eNoiseType.Simplex:
 			return FastNoiseLite.NoiseType.TYPE_SIMPLEX
 		NoiseNodeSettings.eNoiseType.SimplexSmooth:
-			return FastNoiseLite.NoiseType.TYPE_SIMPLEX
+			return FastNoiseLite.NoiseType.TYPE_SIMPLEX_SMOOTH
 		_:
 			return FastNoiseLite.NoiseType.TYPE_VALUE
 
@@ -61,9 +63,8 @@ func _sample_noise(noise : FastNoiseLite, p : Vector3) -> float:
 	return noise.get_noise_3d(p.x, p.y, p.z)
 
 func execute( _ctx : FlowData.EvaluationContext ):
-	var in_data : FlowData.Data = get_input(0)
+	var in_data : FlowData.Data = require_input(0, _ctx)
 	if in_data == null:
-		setError("Input not found")
 		return
 
 	var out_data : FlowData.Data = in_data.duplicate()
@@ -91,7 +92,11 @@ func execute( _ctx : FlowData.EvaluationContext ):
 	var target_exists := false
 	var existing_stream = out_data.findStream(settings.out_name)
 	if existing_stream != null and settings.mode == NoiseNodeSettings.eMode.Add:
-		target_exists = true
+		var existing_size : int = existing_stream.container.size()
+		if existing_size == in_size or existing_size == 1:
+			target_exists = true
+		else:
+			push_warning("Noise '%s': existing stream '%s' has %d values but input has %d points — Add mode falls back to Override" % [name, settings.out_name, existing_size, in_size])
 
 	var out_container
 	
@@ -112,19 +117,22 @@ func execute( _ctx : FlowData.EvaluationContext ):
 			
 		if target_exists:
 			var existing_container = existing_stream.container
+			var existing_size : int = existing_container.size()
 			if existing_stream.data_type == FlowData.DataType.Vector:
 				var out_vec := PackedVector3Array()
 				out_vec.resize(in_size)
 				for i in range(in_size):
-					out_vec[i] = existing_container[i] + sout_generated[i]
+					out_vec[i] = existing_container[FlowData.bcast_idx(existing_size, i)] + sout_generated[i]
 				out_container = out_vec
 			elif existing_stream.data_type == FlowData.DataType.Float:
 				var out_vec := PackedVector3Array()
 				out_vec.resize(in_size)
 				for i in range(in_size):
-					out_vec[i] = Vector3(existing_container[i], existing_container[i], existing_container[i]) + sout_generated[i]
+					var e : float = existing_container[FlowData.bcast_idx(existing_size, i)]
+					out_vec[i] = Vector3(e, e, e) + sout_generated[i]
 				out_container = out_vec
 			else:
+				push_warning("Noise '%s': Add mode only supports Float/Vector streams — '%s' is overridden" % [name, settings.out_name])
 				out_container = sout_generated
 		else:
 			out_container = sout_generated
@@ -140,19 +148,21 @@ func execute( _ctx : FlowData.EvaluationContext ):
 			
 		if target_exists:
 			var existing_container = existing_stream.container
+			var existing_size : int = existing_container.size()
 			if existing_stream.data_type == FlowData.DataType.Float:
 				var out_floats := PackedFloat32Array()
 				out_floats.resize(in_size)
 				for i in range(in_size):
-					out_floats[i] = existing_container[i] + sout_generated[i]
+					out_floats[i] = existing_container[FlowData.bcast_idx(existing_size, i)] + sout_generated[i]
 				out_container = out_floats
 			elif existing_stream.data_type == FlowData.DataType.Vector:
 				var out_vec := PackedVector3Array()
 				out_vec.resize(in_size)
 				for i in range(in_size):
-					out_vec[i] = existing_container[i] + Vector3(sout_generated[i], sout_generated[i], sout_generated[i])
+					out_vec[i] = existing_container[FlowData.bcast_idx(existing_size, i)] + Vector3(sout_generated[i], sout_generated[i], sout_generated[i])
 				out_container = out_vec
 			else:
+				push_warning("Noise '%s': Add mode only supports Float/Vector streams — '%s' is overridden" % [name, settings.out_name])
 				out_container = sout_generated
 		else:
 			out_container = sout_generated

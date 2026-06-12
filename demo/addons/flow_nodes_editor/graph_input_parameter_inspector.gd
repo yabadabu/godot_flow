@@ -5,14 +5,44 @@ extends EditorInspectorPlugin
 # So, if the input is defined as float, show only the cte_float member in the inspector
 
 func _can_handle(obj: Object) -> bool:
+	if FlowInspectorPropertyPolicy.is_creating_default_editor(obj):
+		return false
 	return obj is GraphInputParameter
 
 func _parse_property(object: Object, type: Variant.Type, name: String, hint_type: PropertyHint, hint_string: String, usage_flags, wide: bool):
+	var label := ""
 	if name.begins_with("cte_"):
 		var settings := object as GraphInputParameter
 		var name_lc = FlowData.DataType.keys()[ settings.data_type ].to_lower()
 		if name == "cte_" + name_lc:
-			return false
-		# Hide the attribute
+			label = FlowI18n.t(FlowInspectorPropertyPolicy.format_label(name))
+		else:
+			# Hide the attribute
+			return true
+	elif name == "name" or name == "data_type":
+		label = FlowI18n.t(FlowInspectorPropertyPolicy.format_label(name))
+	else:
 		return true
-	return name != "name" and name != "data_type"
+	return _add_localized_property_editor(object, type, name, hint_type, hint_string, usage_flags, wide, label)
+
+func _add_localized_property_editor(
+	object: Object,
+	type: Variant.Type,
+	name: String,
+	hint_type: PropertyHint,
+	hint_string: String,
+	usage_flags,
+	wide: bool,
+	label: String,
+) -> bool:
+	return FlowInspectorPropertyPolicy.add_localized_property_editor(
+		self,
+		object,
+		type,
+		name,
+		hint_type,
+		hint_string,
+		usage_flags,
+		wide,
+		label
+	)

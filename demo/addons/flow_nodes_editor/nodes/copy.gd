@@ -5,9 +5,10 @@ func _init():
 	meta_node = {
 		"title" : "Copy",
 		"settings" : CopyNodeSettings,
-		"ins" : [{ "label": "Source" }, { "label": "Targets" }], 
+		"ins" : [{ "label": "Source" }, { "label": "Targets" }],
 		"outs" : [{ "label" : "Out" }],
 		"tooltip" :"Copies points using linear repeat offsets or source-to-target placement mode.",
+		"category" : "Spatial",
 	}
 
 func _linear_copy(ctx : FlowData.EvaluationContext, in_data : FlowData.Data) -> FlowData.Data:
@@ -19,11 +20,19 @@ func _linear_copy(ctx : FlowData.EvaluationContext, in_data : FlowData.Data) -> 
 	if num_copies <= 0:
 		return FlowData.Data.new()
 
-	# First create all the containers with the correct type
+	# First create all the containers with the correct type. Pass the data_type
+	# explicitly: Resource/Node streams use plain Array containers that fail
+	# registerStream's type inference (used to error + crash on the next loop).
 	for stream_name in in_data.streams:
 		var istream = in_data.streams[stream_name]
 		var container = out_data.newContainerOfType(istream.data_type)
-		out_data.registerStream(stream_name, container)
+		if container == null:
+			setError("Failed to allocate stream '%s'" % stream_name)
+			return null
+		var err = out_data.registerStream(stream_name, container, istream.data_type)
+		if err:
+			setError(err)
+			return null
 
 	# Then duplicate the data N times
 	for stream_name in in_data.streams:
@@ -57,9 +66,9 @@ func _linear_copy(ctx : FlowData.EvaluationContext, in_data : FlowData.Data) -> 
 				var base := n * isize
 				var otrans : Transform3D = itrans * acc_transforms[n]
 				spos[base + j] = otrans.origin
-				srot[base + j] = otrans.basis.get_euler() * 180.0 / PI
+				srot[base + j] = FlowData.basisToEuler(otrans.basis)
 
-	if settings.generate_copy_id:
+	if settings.generate_copy_id.strip_edges() != "":
 		var container = PackedInt32Array()
 		container.resize(num_copies * isize)
 		for n in range(num_copies):
@@ -70,12 +79,17 @@ func _linear_copy(ctx : FlowData.EvaluationContext, in_data : FlowData.Data) -> 
 
 	return out_data
 
-func _pick_source_index(target_idx : int, source_size : int) -> int:
+func _pick_source_index(target_idx : int, source_size : int, point_seed : int = 0, use_point_seed : bool = false) -> int:
 	if source_size <= 0:
 		return 0
 	if settings.source_selection == CopyNodeSettings.eSourceSelection.RandomDeterministic:
 		var local_rng := RandomNumberGenerator.new()
-		local_rng.seed = settings.random_seed + target_idx * 7919
+		# Per-point seed consumption (UE $Seed parity): prefer the target point's
+		# own seed when its data carries a seed stream; legacy spacing otherwise.
+		if use_point_seed:
+			local_rng.seed = point_seed ^ settings.random_seed
+		else:
+			local_rng.seed = settings.random_seed + target_idx * 7919
 		return local_rng.randi_range(0, source_size - 1)
 	return target_idx % source_size
 
@@ -85,14 +99,20 @@ func _source_to_targets_copy(source_data : FlowData.Data, targets_data : FlowDat
 	if source_size == 0 or target_size == 0:
 		return FlowData.Data.new()
 
+	var target_seeds = targets_data.getContainerChecked(FlowData.AttrSeed, FlowData.DataType.Int)
+	if target_seeds != null and target_seeds.size() != target_size:
+		target_seeds = null
+
 	var selected_source := PackedInt32Array()
 	selected_source.resize(target_size)
 	for i in range(target_size):
-		selected_source[i] = _pick_source_index(i, source_size)
+		selected_source[i] = _pick_source_index(i, source_size, target_seeds[i] if target_seeds != null else 0, target_seeds != null)
 
 	var out_data = source_data.filter(selected_source)
 	var source_trs = source_data.getTransformsStream()
 	var target_trs = targets_data.getTransformsStream()
+	if source_trs == null or target_trs == null:
+		push_warning("Copy: SourceToTargets needs %s/%s/%s on both inputs — copies keep their source transforms" % [FlowData.AttrPosition, FlowData.AttrRotation, FlowData.AttrSize])
 	if source_trs and target_trs:
 		var out_pos = out_data.getVector3Container(FlowData.AttrPosition)
 		var out_rot = out_data.getVector3Container(FlowData.AttrRotation)
@@ -131,9 +151,8 @@ func _source_to_targets_copy(source_data : FlowData.Data, targets_data : FlowDat
 	return out_data
 
 func execute(ctx : FlowData.EvaluationContext):
-	var in_data : FlowData.Data = get_input(0)
+	var in_data : FlowData.Data = require_input(0, ctx, "Source input")
 	if in_data == null:
-		setError("Source input is missing")
 		return
 
 	if settings.mode == CopyNodeSettings.eMode.SourceToTargets:
@@ -147,4 +166,7 @@ func execute(ctx : FlowData.EvaluationContext):
 		set_output(0, _source_to_targets_copy(in_data, targets_data))
 		return
 
-	set_output(0, _linear_copy(ctx, in_data))
+	var copied = _linear_copy(ctx, in_data)
+	if copied == null:
+		return
+	set_output(0, copied)

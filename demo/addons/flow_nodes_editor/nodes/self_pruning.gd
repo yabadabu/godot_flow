@@ -5,29 +5,49 @@ func _init():
 	meta_node = {
 		"title" : "Self Pruning",
 		"settings" : SelfPruningSettings,
-		"ins" : [{ "label": "In" }], 
+		"aliases" : ["Self Pruning"],
+		"category" : "Filter",
+		"ins" : [{ "label": "In" }],
 		"outs" : [{ "label" : "Out" }],
 		"tooltip" : "Rejects points that overlap previous points, or removes duplicate grid-cell points.",
 	}
 
-func execute( _ctx : FlowData.EvaluationContext ):
-	var in_dataA: FlowData.Data = get_input(0)
-	
+func execute( ctx : FlowData.EvaluationContext ):
+	var in_dataA: FlowData.Data = require_input( 0, ctx )
+
 	if in_dataA == null:
-		setError( "Input not found")
 		return
 
 	if settings.mode == SelfPruningSettings.ePruneMode.GridCell:
 		_grid_cell_prune(in_dataA)
 		return
-		
-	var tA = GDRTree.new()
+
 	var posA = in_dataA.getVector3Container( FlowData.AttrPosition )
+	if posA.is_empty():
+		set_output( 0, FlowData.Data.new() )
+		return
 	var szA = in_dataA.getVector3Container( FlowData.AttrSize )
+	if szA.size() != posA.size():
+		if szA.size() == 1:
+			# Broadcast the single size to every point
+			var bsize : Vector3 = szA[0]
+			szA = PackedVector3Array()
+			szA.resize( posA.size() )
+			szA.fill( bsize )
+		elif szA.is_empty():
+			szA = PackedVector3Array()
+			szA.resize( posA.size() )
+			szA.fill( Vector3.ONE )
+		else:
+			setError( "Input must provide %s with one entry per point (got %d, expected %d or 1)" % [ FlowData.AttrSize, szA.size(), posA.size() ] )
+			return
+
+	var tA = GDRTree.new()
+	# Note: idxs_overlapped is the KEEP list returned by the native self_prune
 	var result = tA.self_prune( posA, szA, settings.keep_self_intersections )
-	
+
 	var out_data : FlowData.Data = in_dataA.filter( result.idxs_overlapped )
-		
+
 	set_output( 0, out_data )
 
 func _grid_cell_prune(in_data: FlowData.Data):

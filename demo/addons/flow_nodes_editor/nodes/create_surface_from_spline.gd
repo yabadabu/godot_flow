@@ -9,7 +9,8 @@ func _init():
 		"settings" : CreateSurfaceFromSplineSettings,
 		"ins" : [{ "label" : "Splines", "data_type" : FlowData.DataType.NodePath }],
 		"outs" : [{ "label" : "Surfaces" }],
-		"tooltip" : "Creates one bounds-style surface point from each Path3D polygon/spline.",
+		"tooltip" : "Creates one bounds-style surface point from each Path3D polygon/spline.\nOutput is an axis-aligned bounding-box point (rotation is always zero).",
+		"category" : "Spatial",
 	}
 
 func _to_plane(v : Vector3) -> Vector2:
@@ -53,9 +54,8 @@ func _bounds(points : PackedVector3Array) -> AABB:
 	return aabb
 
 func execute(_ctx : FlowData.EvaluationContext):
-	var in_data : FlowData.Data = get_input(0)
+	var in_data : FlowData.Data = require_input(0, _ctx, "Splines input")
 	if in_data == null:
-		setError("Splines input not found")
 		return
 	var stream = in_data.findStream(settings.spline_stream_attribute)
 	if stream == null or stream.data_type != FlowData.DataType.NodePath:
@@ -69,14 +69,17 @@ func execute(_ctx : FlowData.EvaluationContext):
 	var perimeters := PackedFloat32Array()
 	var refs : Array = []
 
+	var skipped := 0
 	for node in stream.container:
 		var path := node as Path3D
 		if path == null or path.curve == null:
+			skipped += 1
 			continue
 		var local_points := path.curve.tessellate(2, 5)
 		if local_points.size() < 3:
 			local_points = path.curve.get_baked_points()
 		if local_points.size() == 0:
+			skipped += 1
 			continue
 		var world_points := PackedVector3Array()
 		for p in local_points:
@@ -89,6 +92,9 @@ func execute(_ctx : FlowData.EvaluationContext):
 		perimeters.append(_perimeter(world_points))
 		if settings.include_spline_ref:
 			refs.append(path)
+
+	if skipped > 0:
+		push_warning("Create Surface From Spline: %d entries were skipped (null, curve-less or empty Path3D)" % skipped)
 
 	var out := FlowData.Data.new()
 	out.addCommonStreams(positions.size())

@@ -14,13 +14,14 @@ func _init():
 			{ "label" : "Torches" },
 			{ "label" : "Pillars" }
 		],
+		"aliases" : ["dungeon walls", "dungeon doors", "wall builder"],
+		"category" : "Spatial",
 		"tooltip" : "Analyzes the FloorPoints set to output walls, doors, torches, and pillars.",
 	}
 
 func execute( ctx : FlowData.EvaluationContext ):
-	var in_data : FlowData.Data = get_input(0)
+	var in_data : FlowData.Data = require_input(0, ctx, "Input 'FloorPoints'")
 	if in_data == null:
-		setError("Input 'FloorPoints' is not connected")
 		return
 	if in_data.size() == 0:
 		set_output(0, FlowData.Data.new())
@@ -58,11 +59,12 @@ func execute( ctx : FlowData.EvaluationContext ):
 		}
 		
 	# North, South, East, West offsets
+	# Rotation stream is Euler DEGREES (TransformsStream applies deg_to_rad on read).
 	var dir_offsets = [
 		{"dx": 0, "dy": -1, "rot": Vector3(0, 0, 0), "offset": Vector3(0, 0, -cell_size * 0.5)}, # North
-		{"dx": 0, "dy": 1, "rot": Vector3(0, PI, 0), "offset": Vector3(0, 0, cell_size * 0.5)},  # South
-		{"dx": 1, "dy": 0, "rot": Vector3(0, -PI * 0.5, 0), "offset": Vector3(cell_size * 0.5, 0, 0)}, # East
-		{"dx": -1, "dy": 0, "rot": Vector3(0, PI * 0.5, 0), "offset": Vector3(-cell_size * 0.5, 0, 0)} # West
+		{"dx": 0, "dy": 1, "rot": Vector3(0, 180.0, 0), "offset": Vector3(0, 0, cell_size * 0.5)},  # South
+		{"dx": 1, "dy": 0, "rot": Vector3(0, -90.0, 0), "offset": Vector3(cell_size * 0.5, 0, 0)}, # East
+		{"dx": -1, "dy": 0, "rot": Vector3(0, 90.0, 0), "offset": Vector3(-cell_size * 0.5, 0, 0)} # West
 	]
 	
 	var wall_positions = PackedVector3Array()

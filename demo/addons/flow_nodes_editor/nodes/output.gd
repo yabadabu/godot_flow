@@ -8,6 +8,7 @@ func _init():
 		"ins" : [{ "label" : "In", "data_type" : FlowData.DataType.Float }],
 		"outs" : [],
 		"tooltip" : "Exposes an output parameter of the Subgraph",
+		"aliases" : ["Output"],
 		"auto_register" : true,
 		"hide_outputs" : true
 	}
@@ -43,7 +44,7 @@ func getMeta() -> Dictionary:
 func getTitle() -> String:
 	if is_multi_port():
 		return "Outputs"
-	return settings.name
+	return settings.name if settings else "Output"
 
 func refreshFromSettings():
 	super.refreshFromSettings()
@@ -90,9 +91,12 @@ func initFromScript():
 		btn.text = "+ Add Output Parameter"
 		btn.alignment = HorizontalAlignment.HORIZONTAL_ALIGNMENT_CENTER
 		btn.add_theme_font_size_override("font_size", 10)
-		if not btn.pressed.is_connected(_on_add_output_pressed):
-			btn.pressed.connect(_on_add_output_pressed)
+		if not btn.pressed.is_connected(_on_add_output_pressed_deferred):
+			btn.pressed.connect(_on_add_output_pressed_deferred)
 		add_child(btn)
+
+func _on_add_output_pressed_deferred():
+	call_deferred("_on_add_output_pressed")
 
 func _on_add_output_pressed():
 	var editor = getEditor()
@@ -107,8 +111,11 @@ func _on_add_output_pressed():
 		new_output.name = uname
 		new_output.data_type = FlowData.DataType.Float
 		editor.current_resource.out_params.append( new_output )
-		editor.current_resource.in_params_changed.emit()
-		editor.queueSave()
+		if editor.has_method("notifyGraphParametersEdited"):
+			editor.call_deferred("notifyGraphParametersEdited", "out_params")
+		else:
+			editor.current_resource.in_params_changed.emit()
+			editor.call_deferred("queueSave")
 
 func _has_out_param_named(res, uname: String) -> bool:
 	for param in res.out_params:
@@ -136,4 +143,3 @@ func execute( ctx : FlowData.EvaluationContext ):
 				target_data.registerStream(settings.name, main_stream.container, settings.data_type)
 				
 			set_output( 0, target_data )
-

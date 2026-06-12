@@ -59,998 +59,2171 @@ script = ExtResource("31_xv8yy")
 data = {
 "frames": [],
 "links": [{
-"from_node": "input_rooms",
+"from_node": &"input_rooms",
 "from_port": 0,
 "keep_alive": false,
-"to_node": "table_room_slots",
+"to_node": &"table_room_slots",
 "to_port": 0
 }, {
-"from_node": "table_room_slots",
+"from_node": &"table_room_slots",
 "from_port": 0,
 "keep_alive": false,
-"to_node": "select_table_rooms",
+"to_node": &"select_table_rooms",
 "to_port": 0
 }, {
-"from_node": "select_table_rooms",
+"from_node": &"select_table_rooms",
 "from_port": 0,
 "keep_alive": false,
-"to_node": "table_unit_size",
+"to_node": &"table_unit_size",
 "to_port": 0
 }, {
-"from_node": "table_unit_size",
+"from_node": &"table_unit_size",
 "from_port": 0,
 "keep_alive": false,
-"to_node": "rotate_tables",
+"to_node": &"rotate_tables",
 "to_port": 0
 }, {
-"from_node": "rotate_tables",
+"from_node": &"rotate_tables",
 "from_port": 0,
 "keep_alive": false,
-"to_node": "spawn_tables",
+"to_node": &"spawn_tables",
 "to_port": 0
 }, {
-"from_node": "rotate_tables",
+"from_node": &"rotate_tables",
 "from_port": 0,
 "keep_alive": false,
-"to_node": "tabletop_plates",
+"to_node": &"tabletop_plates",
 "to_port": 0
 }, {
-"from_node": "rotate_tables",
+"from_node": &"rotate_tables",
 "from_port": 0,
 "keep_alive": false,
-"to_node": "tabletop_bottles",
+"to_node": &"tabletop_bottles",
 "to_port": 0
 }, {
-"from_node": "rotate_tables",
+"from_node": &"rotate_tables",
 "from_port": 0,
 "keep_alive": false,
-"to_node": "tabletop_candles",
+"to_node": &"tabletop_candles",
 "to_port": 0
 }, {
-"from_node": "rotate_tables",
+"from_node": &"rotate_tables",
 "from_port": 0,
 "keep_alive": false,
-"to_node": "table_seats",
+"to_node": &"table_seats",
 "to_port": 0
 }, {
-"from_node": "tabletop_plates",
+"from_node": &"tabletop_plates",
 "from_port": 0,
 "keep_alive": false,
-"to_node": "select_table_plates",
+"to_node": &"select_table_plates",
 "to_port": 0
 }, {
-"from_node": "select_table_plates",
+"from_node": &"select_table_plates",
 "from_port": 0,
 "keep_alive": false,
-"to_node": "spawn_plates",
+"to_node": &"spawn_plates",
 "to_port": 0
 }, {
-"from_node": "tabletop_bottles",
+"from_node": &"tabletop_bottles",
 "from_port": 0,
 "keep_alive": false,
-"to_node": "select_bottles",
+"to_node": &"select_bottles",
 "to_port": 0
 }, {
-"from_node": "select_bottles",
+"from_node": &"select_bottles",
 "from_port": 0,
 "keep_alive": false,
-"to_node": "spawn_bottles",
+"to_node": &"spawn_bottles",
 "to_port": 0
 }, {
-"from_node": "tabletop_candles",
+"from_node": &"tabletop_candles",
 "from_port": 0,
 "keep_alive": false,
-"to_node": "spawn_candles",
+"to_node": &"spawn_candles",
 "to_port": 0
 }, {
-"from_node": "table_seats",
+"from_node": &"table_seats",
 "from_port": 0,
 "keep_alive": false,
-"to_node": "select_table_seats",
+"to_node": &"select_table_seats",
 "to_port": 0
 }, {
-"from_node": "select_table_seats",
+"from_node": &"select_table_seats",
 "from_port": 0,
 "keep_alive": false,
-"to_node": "spawn_seats",
+"to_node": &"spawn_seats",
 "to_port": 0
 }, {
-"from_node": "input_rooms",
+"from_node": &"input_rooms",
 "from_port": 0,
 "keep_alive": false,
-"to_node": "subtract_table_rooms",
+"to_node": &"subtract_table_rooms",
 "to_port": 0
 }, {
-"from_node": "select_table_rooms",
+"from_node": &"select_table_rooms",
 "from_port": 0,
 "keep_alive": false,
-"to_node": "subtract_table_rooms",
+"to_node": &"subtract_table_rooms",
 "to_port": 1
 }, {
-"from_node": "subtract_table_rooms",
+"from_node": &"subtract_table_rooms",
 "from_port": 0,
 "keep_alive": false,
-"to_node": "bed_wall_slots",
+"to_node": &"bed_wall_slots",
 "to_port": 0
 }, {
-"from_node": "bed_wall_slots",
+"from_node": &"bed_wall_slots",
 "from_port": 0,
 "keep_alive": false,
-"to_node": "select_bed_rooms",
+"to_node": &"select_bed_rooms",
 "to_port": 0
 }, {
-"from_node": "select_bed_rooms",
+"from_node": &"select_bed_rooms",
 "from_port": 0,
 "keep_alive": false,
-"to_node": "bed_unit_size",
+"to_node": &"bed_unit_size",
 "to_port": 0
 }, {
-"from_node": "bed_unit_size",
+"from_node": &"bed_unit_size",
 "from_port": 0,
 "keep_alive": false,
-"to_node": "bed_offsets",
+"to_node": &"bed_offsets",
 "to_port": 0
 }, {
-"from_node": "bed_offsets",
+"from_node": &"bed_offsets",
 "from_port": 0,
 "keep_alive": false,
-"to_node": "spawn_beds",
+"to_node": &"spawn_beds",
 "to_port": 0
 }, {
-"from_node": "subtract_table_rooms",
+"from_node": &"subtract_table_rooms",
 "from_port": 0,
 "keep_alive": false,
-"to_node": "subtract_bed_rooms",
+"to_node": &"subtract_bed_rooms",
 "to_port": 0
 }, {
-"from_node": "select_bed_rooms",
+"from_node": &"select_bed_rooms",
 "from_port": 0,
 "keep_alive": false,
-"to_node": "subtract_bed_rooms",
+"to_node": &"subtract_bed_rooms",
 "to_port": 1
 }, {
-"from_node": "subtract_bed_rooms",
+"from_node": &"subtract_bed_rooms",
 "from_port": 0,
 "keep_alive": false,
-"to_node": "storage_wall_slots",
+"to_node": &"storage_wall_slots",
 "to_port": 0
 }, {
-"from_node": "storage_wall_slots",
+"from_node": &"storage_wall_slots",
 "from_port": 0,
 "keep_alive": false,
-"to_node": "select_storage_rooms",
+"to_node": &"select_storage_rooms",
 "to_port": 0
 }, {
-"from_node": "select_storage_rooms",
+"from_node": &"select_storage_rooms",
 "from_port": 0,
 "keep_alive": false,
-"to_node": "storage_unit_size",
+"to_node": &"storage_unit_size",
 "to_port": 0
 }, {
-"from_node": "storage_unit_size",
+"from_node": &"storage_unit_size",
 "from_port": 0,
 "keep_alive": false,
-"to_node": "storage_offsets",
+"to_node": &"storage_offsets",
 "to_port": 0
 }, {
-"from_node": "storage_offsets",
+"from_node": &"storage_offsets",
 "from_port": 0,
 "keep_alive": false,
-"to_node": "prune_storage",
+"to_node": &"prune_storage",
 "to_port": 0
 }, {
-"from_node": "prune_storage",
+"from_node": &"prune_storage",
 "from_port": 0,
 "keep_alive": false,
-"to_node": "spawn_storage",
+"to_node": &"spawn_storage",
 "to_port": 0
 }, {
-"from_node": "subtract_bed_rooms",
+"from_node": &"subtract_bed_rooms",
 "from_port": 0,
 "keep_alive": false,
-"to_node": "subtract_storage_rooms",
+"to_node": &"subtract_storage_rooms",
 "to_port": 0
 }, {
-"from_node": "select_storage_rooms",
+"from_node": &"select_storage_rooms",
 "from_port": 0,
 "keep_alive": false,
-"to_node": "subtract_storage_rooms",
+"to_node": &"subtract_storage_rooms",
 "to_port": 1
 }, {
-"from_node": "subtract_storage_rooms",
+"from_node": &"subtract_storage_rooms",
 "from_port": 0,
 "keep_alive": false,
-"to_node": "select_treasure_rooms",
+"to_node": &"select_treasure_rooms",
 "to_port": 0
 }, {
-"from_node": "select_treasure_rooms",
+"from_node": &"select_treasure_rooms",
 "from_port": 0,
 "keep_alive": false,
-"to_node": "treasure_unit_size",
+"to_node": &"treasure_unit_size",
 "to_port": 0
 }, {
-"from_node": "treasure_unit_size",
+"from_node": &"treasure_unit_size",
 "from_port": 0,
 "keep_alive": false,
-"to_node": "treasure_offsets",
+"to_node": &"treasure_offsets",
 "to_port": 0
 }, {
-"from_node": "treasure_offsets",
+"from_node": &"treasure_offsets",
 "from_port": 0,
 "keep_alive": false,
-"to_node": "spawn_treasure",
+"to_node": &"spawn_treasure",
 "to_port": 0
 }, {
-"from_node": "input_rooms",
+"from_node": &"input_rooms",
 "from_port": 0,
 "keep_alive": false,
-"to_node": "corner_slots",
+"to_node": &"corner_slots",
 "to_port": 0
 }, {
-"from_node": "corner_slots",
+"from_node": &"corner_slots",
 "from_port": 0,
 "keep_alive": false,
-"to_node": "select_corners",
+"to_node": &"select_corners",
 "to_port": 0
 }, {
-"from_node": "select_corners",
+"from_node": &"select_corners",
 "from_port": 0,
 "keep_alive": false,
-"to_node": "corner_size",
+"to_node": &"corner_size",
 "to_port": 0
 }, {
-"from_node": "corner_size",
+"from_node": &"corner_size",
 "from_port": 0,
 "keep_alive": false,
-"to_node": "prune_corners",
+"to_node": &"prune_corners",
 "to_port": 0
 }, {
-"from_node": "prune_corners",
+"from_node": &"prune_corners",
 "from_port": 0,
 "keep_alive": false,
-"to_node": "spawn_corners",
+"to_node": &"spawn_corners",
 "to_port": 0
 }, {
-"from_node": "input_rooms",
+"from_node": &"input_rooms",
 "from_port": 0,
 "keep_alive": false,
-"to_node": "wall_storage_slots",
+"to_node": &"wall_storage_slots",
 "to_port": 0
 }, {
-"from_node": "wall_storage_slots",
+"from_node": &"wall_storage_slots",
 "from_port": 0,
 "keep_alive": false,
-"to_node": "select_wall_storage",
+"to_node": &"select_wall_storage",
 "to_port": 0
 }, {
-"from_node": "select_wall_storage",
+"from_node": &"select_wall_storage",
 "from_port": 0,
 "keep_alive": false,
-"to_node": "wall_storage_size",
+"to_node": &"wall_storage_size",
 "to_port": 0
 }, {
-"from_node": "wall_storage_size",
+"from_node": &"wall_storage_size",
 "from_port": 0,
 "keep_alive": false,
-"to_node": "prune_wall_storage",
+"to_node": &"prune_wall_storage",
 "to_port": 0
 }, {
-"from_node": "prune_wall_storage",
+"from_node": &"prune_wall_storage",
 "from_port": 0,
 "keep_alive": false,
-"to_node": "spawn_wall_storage",
+"to_node": &"spawn_wall_storage",
 "to_port": 0
 }, {
-"from_node": "input_rooms",
+"from_node": &"input_rooms",
 "from_port": 0,
 "keep_alive": false,
-"to_node": "select_clutter_rooms",
+"to_node": &"select_clutter_rooms",
 "to_port": 0
 }, {
-"from_node": "select_clutter_rooms",
+"from_node": &"select_clutter_rooms",
 "from_port": 0,
 "keep_alive": false,
-"to_node": "clutter_unit_size",
+"to_node": &"clutter_unit_size",
 "to_port": 0
 }, {
-"from_node": "clutter_unit_size",
+"from_node": &"clutter_unit_size",
 "from_port": 0,
 "keep_alive": false,
-"to_node": "clutter_offsets",
+"to_node": &"clutter_offsets",
 "to_port": 0
 }, {
-"from_node": "clutter_offsets",
+"from_node": &"clutter_offsets",
 "from_port": 0,
 "keep_alive": false,
-"to_node": "select_clutter_slots",
+"to_node": &"select_clutter_slots",
 "to_port": 0
 }, {
-"from_node": "select_clutter_slots",
+"from_node": &"select_clutter_slots",
 "from_port": 0,
 "keep_alive": false,
-"to_node": "jitter_clutter",
+"to_node": &"jitter_clutter",
 "to_port": 0
 }, {
-"from_node": "jitter_clutter",
+"from_node": &"jitter_clutter",
 "from_port": 0,
 "keep_alive": false,
-"to_node": "prune_clutter",
+"to_node": &"prune_clutter",
 "to_port": 0
 }, {
-"from_node": "prune_clutter",
+"from_node": &"prune_clutter",
 "from_port": 0,
 "keep_alive": false,
-"to_node": "spawn_clutter",
+"to_node": &"spawn_clutter",
 "to_port": 0
 }, {
-"from_node": "input_rooms",
+"from_node": &"input_rooms",
 "from_port": 0,
 "keep_alive": false,
-"to_node": "floor_detail_slots",
+"to_node": &"floor_detail_slots",
 "to_port": 0
 }, {
-"from_node": "floor_detail_slots",
+"from_node": &"floor_detail_slots",
 "from_port": 0,
 "keep_alive": false,
-"to_node": "select_floor_detail",
+"to_node": &"select_floor_detail",
 "to_port": 0
 }, {
-"from_node": "select_floor_detail",
+"from_node": &"select_floor_detail",
 "from_port": 0,
 "keep_alive": false,
-"to_node": "jitter_floor_detail",
+"to_node": &"jitter_floor_detail",
 "to_port": 0
 }, {
-"from_node": "jitter_floor_detail",
+"from_node": &"jitter_floor_detail",
 "from_port": 0,
 "keep_alive": false,
-"to_node": "prune_floor_detail",
+"to_node": &"prune_floor_detail",
 "to_port": 0
 }, {
-"from_node": "prune_floor_detail",
+"from_node": &"prune_floor_detail",
 "from_port": 0,
 "keep_alive": false,
-"to_node": "spawn_floor_detail",
+"to_node": &"spawn_floor_detail",
 "to_port": 0
 }],
-"min_pos": Vector2(0, 0),
+"min_pos": Vector2(-380, -100),
 "nodes": [{
-"args_port": {},
-"name": "input_rooms",
-"position": Vector2(0, 500),
-"settings": {
-"data_type": 2,
-"name": "rooms"
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
 },
-"show_disconnected_inputs": false,
-"template": "input"
-}, {
-"args_port": {},
-"name": "table_room_slots",
-"position": Vector2(160, 80),
+"name": &"select_table_rooms",
+"position": Vector2(680, 180),
 "settings": {
-"inherit_anchor_size": false,
-"labels": ["table_slot"],
-"offsets": [Vector3(0, 0, 0)],
-"rotations": [Vector3(0, 0, 0)],
-"scale_offsets_by_anchor_size": true
-},
-"show_disconnected_inputs": false,
-"template": "point_offsets"
-}, {
-"args_port": {},
-"name": "select_table_rooms",
-"position": Vector2(300, 80),
-"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
 "random_seed": 1101,
-"ratio": 0.4
+"ratio": 0.4,
+"title": "Select Points",
+"trace": false,
+"weight_name": ""
 },
 "show_disconnected_inputs": false,
 "template": "select_points"
 }, {
-"args_port": {},
-"name": "table_unit_size",
-"position": Vector2(600, 80),
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"table_unit_size",
+"position": Vector2(980, 180),
 "settings": {
 "bounds_max": Vector3(1.2, 0.5, 0.8),
-"bounds_min": Vector3(-1.2, -0.5, -0.8)
+"bounds_min": Vector3(-1.2, -0.5, -0.8),
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"mode": 0,
+"random_seed": 12345,
+"title": "Bounds Modifier",
+"trace": false
 },
 "show_disconnected_inputs": false,
 "template": "bounds_modifier"
 }, {
-"args_port": {},
-"name": "rotate_tables",
-"position": Vector2(900, 80),
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"rotate_tables",
+"position": Vector2(1280, 180),
 "settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"offset_max": Vector3(0, 0, 0),
+"offset_min": Vector3(0, 0, 0),
+"random_seed": 12345,
+"rotation_local_space": false,
 "rotation_max": Vector3(0, 360, 0),
 "rotation_min": Vector3(0, 0, 0),
 "scale_max": Vector3(1, 1, 1),
-"scale_min": Vector3(1, 1, 1)
+"scale_min": Vector3(1, 1, 1),
+"title": "Transform",
+"trace": false,
+"uniform_scale": true
 },
 "show_disconnected_inputs": false,
 "template": "transform"
 }, {
-"args_port": {},
-"name": "spawn_tables",
-"position": Vector2(1200, 80),
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"spawn_tables",
+"position": Vector2(1580, 180),
 "settings": {
+"assign_attributes": {},
+"assign_target_path": "",
+"clear_previous_instances": true,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
 "random_seed": 1201,
 "randomize_scene_variants": true,
-"scene_variant_weights": [3.0, 1.1, 1.4, 0.8],
-"scene_variants": [ExtResource("1_x7rkb"), ExtResource("2_dgih6"), ExtResource("3_2fuaf"), ExtResource("4_wgrn1")]
+"scene": null,
+"scene_attribute": "",
+"scene_selector_attribute": "",
+"scene_variant_weights": Array[float]([3.0, 1.1, 1.4, 0.8]),
+"scene_variants": Array[PackedScene]([ExtResource("1_x7rkb"), ExtResource("2_dgih6"), ExtResource("3_2fuaf"), ExtResource("4_wgrn1")]),
+"spawn_parent_path": "",
+"title": "Spawn Scenes",
+"trace": false
 },
 "show_disconnected_inputs": false,
 "template": "spawn_scenes"
 }, {
-"args_port": {},
-"name": "tabletop_plates",
-"position": Vector2(1200, 260),
-"settings": {
-"labels": ["plate", "plate", "plate", "plate"],
-"offsets": [Vector3(-0.42, 1.08, -0.25), Vector3(0.42, 1.08, -0.25), Vector3(-0.42, 1.08, 0.25), Vector3(0.42, 1.08, 0.25)],
-"rotations": [Vector3(0, -8, 0), Vector3(0, 7, 0), Vector3(0, 5, 0), Vector3(0, -6, 0)],
-"sizes": [Vector3(0.48, 0.48, 0.48), Vector3(0.48, 0.48, 0.48), Vector3(0.48, 0.48, 0.48), Vector3(0.48, 0.48, 0.48)]
+"args_port": {
+"Anchors": {
+"connected": true,
+"port": 0
+}
 },
-"show_disconnected_inputs": false,
-"template": "point_offsets"
-}, {
-"args_port": {},
-"name": "select_table_plates",
-"position": Vector2(1370, 260),
-"settings": {
-"random_seed": 1351,
-"ratio": 0.65
-},
-"show_disconnected_inputs": false,
-"template": "select_points"
-}, {
-"args_port": {},
-"name": "spawn_plates",
-"position": Vector2(1500, 260),
-"settings": {
-"random_seed": 1301,
-"randomize_scene_variants": true,
-"scene_variant_weights": [1.0, 1.0, 2.4, 1.6],
-"scene_variants": [ExtResource("5_ns3kw"), ExtResource("6_2c7rp"), ExtResource("7_jhjao"), ExtResource("8_pixxs")]
-},
-"show_disconnected_inputs": false,
-"template": "spawn_scenes"
-}, {
-"args_port": {},
-"name": "tabletop_bottles",
-"position": Vector2(1200, 440),
-"settings": {
-"labels": ["bottle", "bottle"],
-"offsets": [Vector3(-0.24, 1.08, 0.44), Vector3(0.24, 1.08, 0.44)],
-"sizes": [Vector3(0.62, 0.62, 0.62), Vector3(0.62, 0.62, 0.62)]
-},
-"show_disconnected_inputs": false,
-"template": "point_offsets"
-}, {
-"args_port": {},
-"name": "select_bottles",
-"position": Vector2(1500, 440),
-"settings": {
-"random_seed": 1401,
-"ratio": 0.55
-},
-"show_disconnected_inputs": false,
-"template": "select_points"
-}, {
-"args_port": {},
-"name": "spawn_bottles",
-"position": Vector2(1800, 440),
-"settings": {
-"random_seed": 1501,
-"randomize_scene_variants": true,
-"scene_variant_weights": [1.0, 1.0, 0.8, 0.6],
-"scene_variants": [ExtResource("9_a8481"), ExtResource("10_raa5a"), ExtResource("11_l60l6"), ExtResource("12_dd5eb")]
-},
-"show_disconnected_inputs": false,
-"template": "spawn_scenes"
-}, {
-"args_port": {},
-"name": "tabletop_candles",
-"position": Vector2(1200, 620),
-"settings": {
-"labels": ["candle"],
-"offsets": [Vector3(0, 1.08, -0.42)],
-"sizes": [Vector3(0.52, 0.52, 0.52)]
-},
-"show_disconnected_inputs": false,
-"template": "point_offsets"
-}, {
-"args_port": {},
-"name": "spawn_candles",
-"position": Vector2(1500, 620),
-"settings": {
-"random_seed": 1601,
-"randomize_scene_variants": true,
-"scene_variant_weights": [2.0, 0.8, 1.0],
-"scene_variants": [ExtResource("13_4i8pr"), ExtResource("14_xaku3"), ExtResource("15_7klc6")]
-},
-"show_disconnected_inputs": false,
-"template": "spawn_scenes"
-}, {
-"args_port": {},
-"name": "table_seats",
-"position": Vector2(1200, -100),
-"settings": {
-"labels": ["seat", "seat", "seat", "seat"],
-"offsets": [Vector3(-1.36, 0, 0), Vector3(1.36, 0, 0), Vector3(0, 0, -0.94), Vector3(0, 0, 0.94)],
-"rotations": [Vector3(0, 90, 0), Vector3(0, -90, 0), Vector3(0, 180, 0), Vector3(0, 0, 0)],
-"sizes": [Vector3(0.92, 0.92, 0.92), Vector3(0.92, 0.92, 0.92), Vector3(0.92, 0.92, 0.92), Vector3(0.92, 0.92, 0.92)]
-},
-"show_disconnected_inputs": false,
-"template": "point_offsets"
-}, {
-"args_port": {},
-"name": "select_table_seats",
-"position": Vector2(1370, -100),
-"settings": {
-"random_seed": 1751,
-"ratio": 0.75
-},
-"show_disconnected_inputs": false,
-"template": "select_points"
-}, {
-"args_port": {},
-"name": "spawn_seats",
-"position": Vector2(1500, -100),
-"settings": {
-"random_seed": 1701,
-"randomize_scene_variants": true,
-"scene_variant_weights": [4.0, 0.8],
-"scene_variants": [ExtResource("16_pvwxj"), ExtResource("17_2xhk4")]
-},
-"show_disconnected_inputs": false,
-"template": "spawn_scenes"
-}, {
-"args_port": {},
-"name": "subtract_table_rooms",
-"position": Vector2(160, 400),
-"settings": {
-"operation": 0
-},
-"show_disconnected_inputs": false,
-"template": "substract"
-}, {
-"args_port": {},
-"name": "select_bed_rooms",
-"position": Vector2(600, 760),
-"settings": {
-"random_seed": 1801,
-"ratio": 0.25
-},
-"show_disconnected_inputs": false,
-"template": "select_points"
-}, {
-"args_port": {},
-"name": "bed_wall_slots",
-"position": Vector2(400, 760),
-"settings": {
-"inherit_anchor_size": false,
-"labels": ["bed_slot", "bed_slot", "bed_slot", "bed_slot"],
-"offsets": [Vector3(-0.36, 0, 0), Vector3(0.36, 0, 0), Vector3(0, 0, -0.36), Vector3(0, 0, 0.36)],
-"rotations": [Vector3(0, 0, 0), Vector3(0, 180, 0), Vector3(0, 90, 0), Vector3(0, -90, 0)],
-"scale_offsets_by_anchor_size": true
-},
-"show_disconnected_inputs": false,
-"template": "point_offsets"
-}, {
-"args_port": {},
-"name": "bed_unit_size",
-"position": Vector2(800, 760),
-"settings": {
-"bounds_max": Vector3(0.5, 0.5, 0.5),
-"bounds_min": Vector3(-0.5, -0.5, -0.5)
-},
-"show_disconnected_inputs": false,
-"template": "bounds_modifier"
-}, {
-"args_port": {},
-"name": "bed_offsets",
-"position": Vector2(1000, 760),
-"settings": {
-"labels": ["bed"],
-"offsets": [Vector3(-0.36, 0, 0), Vector3(0.36, 0, 0), Vector3(0, 0, -0.36), Vector3(0, 0, 0.36)],
-"rotations": [Vector3(0, 0, 0), Vector3(0, 180, 0), Vector3(0, 90, 0), Vector3(0, -90, 0)],
-"scale_offsets_by_anchor_size": true
-},
-"show_disconnected_inputs": false,
-"template": "point_offsets"
-}, {
-"args_port": {},
-"name": "spawn_beds",
-"position": Vector2(1200, 760),
-"settings": {
-"random_seed": 1901,
-"randomize_scene_variants": true,
-"scene_variant_weights": [1.4, 1.0, 0.8],
-"scene_variants": [ExtResource("18_pv2jp"), ExtResource("19_7ok48"), ExtResource("20_quy1f")]
-},
-"show_disconnected_inputs": false,
-"template": "spawn_scenes"
-}, {
-"args_port": {},
-"name": "subtract_bed_rooms",
-"position": Vector2(400, 880),
-"settings": {
-"operation": 0
-},
-"show_disconnected_inputs": false,
-"template": "substract"
-}, {
-"args_port": {},
-"name": "storage_wall_slots",
-"position": Vector2(400, 960),
-"settings": {
-"inherit_anchor_size": false,
-"labels": ["storage_slot", "storage_slot", "storage_slot", "storage_slot"],
-"offsets": [Vector3(-0.38, 0, 0), Vector3(0.38, 0, 0), Vector3(0, 0, -0.38), Vector3(0, 0, 0.38)],
-"rotations": [Vector3(0, 90, 0), Vector3(0, -90, 0), Vector3(0, 180, 0), Vector3(0, 0, 0)],
-"scale_offsets_by_anchor_size": true
-},
-"show_disconnected_inputs": false,
-"template": "point_offsets"
-}, {
-"args_port": {},
-"name": "select_storage_rooms",
-"position": Vector2(600, 960),
-"settings": {
-"random_seed": 2001,
-"ratio": 0.55
-},
-"show_disconnected_inputs": false,
-"template": "select_points"
-}, {
-"args_port": {},
-"name": "storage_unit_size",
-"position": Vector2(800, 960),
-"settings": {
-"bounds_max": Vector3(0.5, 0.5, 0.5),
-"bounds_min": Vector3(-0.5, -0.5, -0.5)
-},
-"show_disconnected_inputs": false,
-"template": "bounds_modifier"
-}, {
-"args_port": {},
-"name": "storage_offsets",
-"position": Vector2(1000, 960),
-"settings": {
-"labels": ["storage"],
-"offsets": [Vector3(0, 0, 0)],
-"rotations": [Vector3(0, 0, 0)],
-"sizes": [Vector3(0.9, 0.9, 0.9)]
-},
-"show_disconnected_inputs": false,
-"template": "point_offsets"
-}, {
-"args_port": {},
-"name": "prune_storage",
-"position": Vector2(1100, 960),
-"settings": {
-"keep_self_intersections": false
-},
-"show_disconnected_inputs": false,
-"template": "self_pruning"
-}, {
-"args_port": {},
-"name": "spawn_storage",
-"position": Vector2(1200, 960),
-"settings": {
-"random_seed": 2101,
-"randomize_scene_variants": true,
-"scene_variant_weights": [1.5, 2.0, 1.2, 0.8, 0.8, 0.5],
-"scene_variants": [ExtResource("21_s7yth"), ExtResource("22_e68vx"), ExtResource("23_ihulv"), ExtResource("24_uegej"), ExtResource("25_3hrt5"), ExtResource("26_3q2wd")]
-},
-"show_disconnected_inputs": false,
-"template": "spawn_scenes"
-}, {
-"args_port": {},
-"name": "subtract_storage_rooms",
-"position": Vector2(400, 1080),
-"settings": {
-"operation": 0
-},
-"show_disconnected_inputs": false,
-"template": "substract"
-}, {
-"args_port": {},
-"name": "select_treasure_rooms",
-"position": Vector2(600, 1160),
-"settings": {
-"random_seed": 2201,
-"ratio": 0.35
-},
-"show_disconnected_inputs": false,
-"template": "select_points"
-}, {
-"args_port": {},
-"name": "treasure_unit_size",
-"position": Vector2(800, 1160),
-"settings": {
-"bounds_max": Vector3(0.5, 0.5, 0.5),
-"bounds_min": Vector3(-0.5, -0.5, -0.5)
-},
-"show_disconnected_inputs": false,
-"template": "bounds_modifier"
-}, {
-"args_port": {},
-"name": "treasure_offsets",
-"position": Vector2(1000, 1160),
-"settings": {
-"labels": ["treasure"],
-"offsets": [Vector3(0.36, 0, 0.34)],
-"rotations": [Vector3(0, 35, 0)],
-"scale_offsets_by_anchor_size": true,
-"sizes": [Vector3(0.72, 0.72, 0.72)]
-},
-"show_disconnected_inputs": false,
-"template": "point_offsets"
-}, {
-"args_port": {},
-"name": "spawn_treasure",
-"position": Vector2(1200, 1160),
-"settings": {
-"random_seed": 2301,
-"randomize_scene_variants": true,
-"scene_variant_weights": [2.0, 1.0, 0.5],
-"scene_variants": [ExtResource("27_x8ito"), ExtResource("28_avcpc"), ExtResource("29_vifbp")]
-},
-"show_disconnected_inputs": false,
-"template": "spawn_scenes"
-}, {
-"args_port": {},
-"name": "corner_slots",
-"position": Vector2(160, 1380),
-"settings": {
-"labels": ["corner", "corner", "corner", "corner"],
-"offsets": [Vector3(0.42, 0, 0.42), Vector3(-0.42, 0, 0.42), Vector3(0.42, 0, -0.42), Vector3(-0.42, 0, -0.42)],
-"rotations": [Vector3(0, 45, 0), Vector3(0, 135, 0), Vector3(0, -45, 0), Vector3(0, -135, 0)],
-"scale_offsets_by_anchor_size": true,
-"sizes": [Vector3(0.7, 1, 0.7), Vector3(0.7, 1, 0.7), Vector3(0.7, 1, 0.7), Vector3(0.7, 1, 0.7)]
-},
-"show_disconnected_inputs": false,
-"template": "point_offsets"
-}, {
-"args_port": {},
-"name": "select_corners",
-"position": Vector2(400, 1380),
-"settings": {
-"random_seed": 2651,
-"ratio": 0.5
-},
-"show_disconnected_inputs": false,
-"template": "select_points"
-}, {
-"args_port": {},
-"name": "corner_size",
-"position": Vector2(600, 1380),
-"settings": {
-"bounds_max": Vector3(0.6, 0.5, 0.6),
-"bounds_min": Vector3(-0.6, -0.5, -0.6)
-},
-"show_disconnected_inputs": false,
-"template": "bounds_modifier"
-}, {
-"args_port": {},
-"name": "prune_corners",
-"position": Vector2(800, 1380),
-"settings": {
-"keep_self_intersections": false
-},
-"show_disconnected_inputs": false,
-"template": "self_pruning"
-}, {
-"args_port": {},
-"name": "spawn_corners",
-"position": Vector2(1000, 1380),
-"settings": {
-"random_seed": 2661,
-"randomize_scene_variants": true,
-"scene_variant_weights": [0.8, 1.0, 0.6, 0.7, 0.5, 0.9, 0.4],
-"scene_variants": [ExtResource("38_colmn"), ExtResource("21_s7yth"), ExtResource("44_brldec"), ExtResource("39_trnka"), ExtResource("40_trnkb"), ExtResource("24_uegej"), ExtResource("41_rubbl")]
-},
-"show_disconnected_inputs": false,
-"template": "spawn_scenes"
-}, {
-"args_port": {},
-"name": "wall_storage_slots",
-"position": Vector2(160, 1580),
+"name": &"tabletop_plates",
+"position": Vector2(1580, 360),
 "settings": {
 "combine_rotation": true,
-"labels": ["wall_storage", "wall_storage", "wall_storage", "wall_storage"],
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inherit_anchor_size": false,
+"inspect_enabled": false,
+"label_attribute": "offset_label",
+"labels": Array[String](["plate", "plate", "plate", "plate"]),
 "local_space": true,
-"offsets": [Vector3(0.45, 0, 0), Vector3(-0.45, 0, 0), Vector3(0, 0, 0.45), Vector3(0, 0, -0.45)],
-"rotations": [Vector3(0, 90, 0), Vector3(0, -90, 0), Vector3(0, 0, 0), Vector3(0, 180, 0)],
-"scale_offsets_by_anchor_size": true,
-"sizes": [Vector3(0.8, 1, 0.5), Vector3(0.8, 1, 0.5), Vector3(0.8, 1, 0.5), Vector3(0.8, 1, 0.5)]
+"offset_index_attribute": "offset_index",
+"offsets": Array[Vector3]([Vector3(-0.42, 1.08, -0.25), Vector3(0.42, 1.08, -0.25), Vector3(-0.42, 1.08, 0.25), Vector3(0.42, 1.08, 0.25)]),
+"parent_index_attribute": "parent_index",
+"random_seed": 12345,
+"rotations": Array[Vector3]([Vector3(0, -8, 0), Vector3(0, 7, 0), Vector3(0, 5, 0), Vector3(0, -6, 0)]),
+"scale_offsets_by_anchor_size": false,
+"sizes": Array[Vector3]([Vector3(0.48, 0.48, 0.48), Vector3(0.48, 0.48, 0.48), Vector3(0.48, 0.48, 0.48), Vector3(0.48, 0.48, 0.48)]),
+"title": "Point Offsets",
+"trace": false
 },
 "show_disconnected_inputs": false,
 "template": "point_offsets"
 }, {
-"args_port": {},
-"name": "select_wall_storage",
-"position": Vector2(400, 1580),
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"select_table_plates",
+"position": Vector2(1750, 360),
 "settings": {
-"random_seed": 2611,
-"ratio": 0.4
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"random_seed": 1351,
+"ratio": 0.65,
+"title": "Select Points",
+"trace": false,
+"weight_name": ""
 },
 "show_disconnected_inputs": false,
 "template": "select_points"
 }, {
-"args_port": {},
-"name": "wall_storage_size",
-"position": Vector2(600, 1580),
-"settings": {
-"bounds_max": Vector3(0.8, 0.5, 0.4),
-"bounds_min": Vector3(-0.8, -0.5, -0.4)
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
 },
-"show_disconnected_inputs": false,
-"template": "bounds_modifier"
-}, {
-"args_port": {},
-"name": "prune_wall_storage",
-"position": Vector2(800, 1580),
+"name": &"spawn_plates",
+"position": Vector2(1880, 360),
 "settings": {
-"keep_self_intersections": false
-},
-"show_disconnected_inputs": false,
-"template": "self_pruning"
-}, {
-"args_port": {},
-"name": "spawn_wall_storage",
-"position": Vector2(1000, 1580),
-"settings": {
-"random_seed": 2621,
+"assign_attributes": {},
+"assign_target_path": "",
+"clear_previous_instances": true,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"random_seed": 1301,
 "randomize_scene_variants": true,
-"scene_variant_weights": [1.2, 1.0, 0.8, 0.7, 0.9],
-"scene_variants": [ExtResource("26_3q2wd"), ExtResource("42_shlvs"), ExtResource("44_brldec"), ExtResource("43_keg01"), ExtResource("25_3hrt5")]
+"scene": null,
+"scene_attribute": "",
+"scene_selector_attribute": "",
+"scene_variant_weights": Array[float]([1.0, 1.0, 2.4, 1.6]),
+"scene_variants": Array[PackedScene]([ExtResource("5_ns3kw"), ExtResource("6_2c7rp"), ExtResource("7_jhjao"), ExtResource("8_pixxs")]),
+"spawn_parent_path": "",
+"title": "Spawn Scenes",
+"trace": false
 },
 "show_disconnected_inputs": false,
 "template": "spawn_scenes"
 }, {
-"args_port": {},
-"name": "select_clutter_rooms",
-"position": Vector2(300, 1800),
-"settings": {
-"random_seed": 2401,
-"ratio": 0.85
+"args_port": {
+"Anchors": {
+"connected": true,
+"port": 0
+}
 },
-"show_disconnected_inputs": false,
-"template": "select_points"
-}, {
-"args_port": {},
-"name": "clutter_unit_size",
-"position": Vector2(500, 1800),
+"name": &"tabletop_bottles",
+"position": Vector2(1580, 540),
 "settings": {
-"bounds_max": Vector3(0.5, 0.5, 0.5),
-"bounds_min": Vector3(-0.5, -0.5, -0.5)
-},
-"show_disconnected_inputs": false,
-"template": "bounds_modifier"
-}, {
-"args_port": {},
-"name": "clutter_offsets",
-"position": Vector2(700, 1800),
-"settings": {
-"labels": ["clutter", "clutter", "clutter", "clutter", "clutter", "clutter"],
-"offsets": [Vector3(-0.4, 0, -0.4), Vector3(0.4, 0, -0.4), Vector3(-0.4, 0, 0.4), Vector3(0.4, 0, 0.4), Vector3(-0.25, 0, 0), Vector3(0.25, 0, 0)],
-"rotations": [Vector3(0, 45, 0), Vector3(0, -45, 0), Vector3(0, 135, 0), Vector3(0, -135, 0), Vector3(0, 90, 0), Vector3(0, -90, 0)],
-"scale_offsets_by_anchor_size": true,
-"sizes": [Vector3(0.85, 1, 0.85), Vector3(0.85, 1, 0.85), Vector3(0.85, 1, 0.85), Vector3(0.85, 1, 0.85), Vector3(0.85, 1, 0.85), Vector3(0.85, 1, 0.85)]
+"combine_rotation": true,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inherit_anchor_size": false,
+"inspect_enabled": false,
+"label_attribute": "offset_label",
+"labels": Array[String](["bottle", "bottle"]),
+"local_space": true,
+"offset_index_attribute": "offset_index",
+"offsets": Array[Vector3]([Vector3(-0.24, 1.08, 0.44), Vector3(0.24, 1.08, 0.44)]),
+"parent_index_attribute": "parent_index",
+"random_seed": 12345,
+"rotations": Array[Vector3]([Vector3(0, 0, 0)]),
+"scale_offsets_by_anchor_size": false,
+"sizes": Array[Vector3]([Vector3(0.62, 0.62, 0.62), Vector3(0.62, 0.62, 0.62)]),
+"title": "Point Offsets",
+"trace": false
 },
 "show_disconnected_inputs": false,
 "template": "point_offsets"
 }, {
-"args_port": {},
-"name": "select_clutter_slots",
-"position": Vector2(900, 1800),
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"select_bottles",
+"position": Vector2(1880, 540),
 "settings": {
-"random_seed": 2451,
-"ratio": 0.5
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"random_seed": 1401,
+"ratio": 0.55,
+"title": "Select Points",
+"trace": false,
+"weight_name": ""
 },
 "show_disconnected_inputs": false,
 "template": "select_points"
 }, {
-"args_port": {},
-"name": "jitter_clutter",
-"position": Vector2(1100, 1800),
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"spawn_bottles",
+"position": Vector2(2180, 540),
 "settings": {
+"assign_attributes": {},
+"assign_target_path": "",
+"clear_previous_instances": true,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"random_seed": 1501,
+"randomize_scene_variants": true,
+"scene": null,
+"scene_attribute": "",
+"scene_selector_attribute": "",
+"scene_variant_weights": Array[float]([1.0, 1.0, 0.8, 0.6]),
+"scene_variants": Array[PackedScene]([ExtResource("9_a8481"), ExtResource("10_raa5a"), ExtResource("11_l60l6"), ExtResource("12_dd5eb")]),
+"spawn_parent_path": "",
+"title": "Spawn Scenes",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "spawn_scenes"
+}, {
+"args_port": {
+"Anchors": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"tabletop_candles",
+"position": Vector2(1580, 720),
+"settings": {
+"combine_rotation": true,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inherit_anchor_size": false,
+"inspect_enabled": false,
+"label_attribute": "offset_label",
+"labels": Array[String](["candle"]),
+"local_space": true,
+"offset_index_attribute": "offset_index",
+"offsets": Array[Vector3]([Vector3(0, 1.08, -0.42)]),
+"parent_index_attribute": "parent_index",
+"random_seed": 12345,
+"rotations": Array[Vector3]([Vector3(0, 0, 0)]),
+"scale_offsets_by_anchor_size": false,
+"sizes": Array[Vector3]([Vector3(0.52, 0.52, 0.52)]),
+"title": "Point Offsets",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "point_offsets"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"spawn_candles",
+"position": Vector2(1880, 720),
+"settings": {
+"assign_attributes": {},
+"assign_target_path": "",
+"clear_previous_instances": true,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"random_seed": 1601,
+"randomize_scene_variants": true,
+"scene": null,
+"scene_attribute": "",
+"scene_selector_attribute": "",
+"scene_variant_weights": Array[float]([2.0, 0.8, 1.0]),
+"scene_variants": Array[PackedScene]([ExtResource("13_4i8pr"), ExtResource("14_xaku3"), ExtResource("15_7klc6")]),
+"spawn_parent_path": "",
+"title": "Spawn Scenes",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "spawn_scenes"
+}, {
+"args_port": {
+"Anchors": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"table_seats",
+"position": Vector2(1580, 0),
+"settings": {
+"combine_rotation": true,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inherit_anchor_size": false,
+"inspect_enabled": false,
+"label_attribute": "offset_label",
+"labels": Array[String](["seat", "seat", "seat", "seat"]),
+"local_space": true,
+"offset_index_attribute": "offset_index",
+"offsets": Array[Vector3]([Vector3(-1.36, 0, 0), Vector3(1.36, 0, 0), Vector3(0, 0, -0.94), Vector3(0, 0, 0.94)]),
+"parent_index_attribute": "parent_index",
+"random_seed": 12345,
+"rotations": Array[Vector3]([Vector3(0, 90, 0), Vector3(0, -90, 0), Vector3(0, 180, 0), Vector3(0, 0, 0)]),
+"scale_offsets_by_anchor_size": false,
+"sizes": Array[Vector3]([Vector3(0.92, 0.92, 0.92), Vector3(0.92, 0.92, 0.92), Vector3(0.92, 0.92, 0.92), Vector3(0.92, 0.92, 0.92)]),
+"title": "Point Offsets",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "point_offsets"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"select_table_seats",
+"position": Vector2(1750, 0),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"random_seed": 1751,
+"ratio": 0.75,
+"title": "Select Points",
+"trace": false,
+"weight_name": ""
+},
+"show_disconnected_inputs": false,
+"template": "select_points"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"spawn_seats",
+"position": Vector2(1880, 0),
+"settings": {
+"assign_attributes": {},
+"assign_target_path": "",
+"clear_previous_instances": true,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"random_seed": 1701,
+"randomize_scene_variants": true,
+"scene": null,
+"scene_attribute": "",
+"scene_selector_attribute": "",
+"scene_variant_weights": Array[float]([4.0, 0.8]),
+"scene_variants": Array[PackedScene]([ExtResource("16_pvwxj"), ExtResource("17_2xhk4")]),
+"spawn_parent_path": "",
+"title": "Spawn Scenes",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "spawn_scenes"
+}, {
+"args_port": {
+"In A": {
+"connected": true,
+"port": 0
+},
+"In B": {
+"connected": true,
+"port": 1
+}
+},
+"name": &"subtract_table_rooms",
+"position": Vector2(540, 500),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"operation": 0,
+"random_seed": 12345,
+"title": "Substract",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "substract"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"select_bed_rooms",
+"position": Vector2(980, 860),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"random_seed": 1801,
+"ratio": 0.25,
+"title": "Select Points",
+"trace": false,
+"weight_name": ""
+},
+"show_disconnected_inputs": false,
+"template": "select_points"
+}, {
+"args_port": {
+"Anchors": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"bed_wall_slots",
+"position": Vector2(780, 860),
+"settings": {
+"combine_rotation": true,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inherit_anchor_size": false,
+"inspect_enabled": false,
+"label_attribute": "offset_label",
+"labels": Array[String](["bed_slot", "bed_slot", "bed_slot", "bed_slot"]),
+"local_space": true,
+"offset_index_attribute": "offset_index",
+"offsets": Array[Vector3]([Vector3(-0.36, 0, 0), Vector3(0.36, 0, 0), Vector3(0, 0, -0.36), Vector3(0, 0, 0.36)]),
+"parent_index_attribute": "parent_index",
+"random_seed": 12345,
+"rotations": Array[Vector3]([Vector3(0, 0, 0), Vector3(0, 180, 0), Vector3(0, 90, 0), Vector3(0, -90, 0)]),
+"scale_offsets_by_anchor_size": true,
+"sizes": Array[Vector3]([Vector3(1, 1, 1)]),
+"title": "Point Offsets",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "point_offsets"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"bed_unit_size",
+"position": Vector2(1180, 860),
+"settings": {
+"bounds_max": Vector3(0.5, 0.5, 0.5),
+"bounds_min": Vector3(-0.5, -0.5, -0.5),
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"mode": 0,
+"random_seed": 12345,
+"title": "Bounds Modifier",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "bounds_modifier"
+}, {
+"args_port": {
+"Anchors": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"bed_offsets",
+"position": Vector2(1380, 860),
+"settings": {
+"combine_rotation": true,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inherit_anchor_size": false,
+"inspect_enabled": false,
+"label_attribute": "offset_label",
+"labels": Array[String](["bed"]),
+"local_space": true,
+"offset_index_attribute": "offset_index",
+"offsets": Array[Vector3]([Vector3(-0.36, 0, 0), Vector3(0.36, 0, 0), Vector3(0, 0, -0.36), Vector3(0, 0, 0.36)]),
+"parent_index_attribute": "parent_index",
+"random_seed": 12345,
+"rotations": Array[Vector3]([Vector3(0, 0, 0), Vector3(0, 180, 0), Vector3(0, 90, 0), Vector3(0, -90, 0)]),
+"scale_offsets_by_anchor_size": true,
+"sizes": Array[Vector3]([Vector3(1, 1, 1)]),
+"title": "Point Offsets",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "point_offsets"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"spawn_beds",
+"position": Vector2(1580, 860),
+"settings": {
+"assign_attributes": {},
+"assign_target_path": "",
+"clear_previous_instances": true,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"random_seed": 1901,
+"randomize_scene_variants": true,
+"scene": null,
+"scene_attribute": "",
+"scene_selector_attribute": "",
+"scene_variant_weights": Array[float]([1.4, 1.0, 0.8]),
+"scene_variants": Array[PackedScene]([ExtResource("18_pv2jp"), ExtResource("19_7ok48"), ExtResource("20_quy1f")]),
+"spawn_parent_path": "",
+"title": "Spawn Scenes",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "spawn_scenes"
+}, {
+"args_port": {
+"In A": {
+"connected": true,
+"port": 0
+},
+"In B": {
+"connected": true,
+"port": 1
+}
+},
+"name": &"subtract_bed_rooms",
+"position": Vector2(780, 980),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"operation": 0,
+"random_seed": 12345,
+"title": "Substract",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "substract"
+}, {
+"args_port": {
+"Anchors": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"storage_wall_slots",
+"position": Vector2(780, 1060),
+"settings": {
+"combine_rotation": true,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inherit_anchor_size": false,
+"inspect_enabled": false,
+"label_attribute": "offset_label",
+"labels": Array[String](["storage_slot", "storage_slot", "storage_slot", "storage_slot"]),
+"local_space": true,
+"offset_index_attribute": "offset_index",
+"offsets": Array[Vector3]([Vector3(-0.38, 0, 0), Vector3(0.38, 0, 0), Vector3(0, 0, -0.38), Vector3(0, 0, 0.38)]),
+"parent_index_attribute": "parent_index",
+"random_seed": 12345,
+"rotations": Array[Vector3]([Vector3(0, 90, 0), Vector3(0, -90, 0), Vector3(0, 180, 0), Vector3(0, 0, 0)]),
+"scale_offsets_by_anchor_size": true,
+"sizes": Array[Vector3]([Vector3(1, 1, 1)]),
+"title": "Point Offsets",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "point_offsets"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"select_storage_rooms",
+"position": Vector2(980, 1060),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"random_seed": 2001,
+"ratio": 0.55,
+"title": "Select Points",
+"trace": false,
+"weight_name": ""
+},
+"show_disconnected_inputs": false,
+"template": "select_points"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"storage_unit_size",
+"position": Vector2(1180, 1060),
+"settings": {
+"bounds_max": Vector3(0.5, 0.5, 0.5),
+"bounds_min": Vector3(-0.5, -0.5, -0.5),
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"mode": 0,
+"random_seed": 12345,
+"title": "Bounds Modifier",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "bounds_modifier"
+}, {
+"args_port": {
+"Anchors": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"storage_offsets",
+"position": Vector2(1380, 1060),
+"settings": {
+"combine_rotation": true,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inherit_anchor_size": false,
+"inspect_enabled": false,
+"label_attribute": "offset_label",
+"labels": Array[String](["storage"]),
+"local_space": true,
+"offset_index_attribute": "offset_index",
+"offsets": Array[Vector3]([Vector3(0, 0, 0)]),
+"parent_index_attribute": "parent_index",
+"random_seed": 12345,
+"rotations": Array[Vector3]([Vector3(0, 0, 0)]),
+"scale_offsets_by_anchor_size": false,
+"sizes": Array[Vector3]([Vector3(0.9, 0.9, 0.9)]),
+"title": "Point Offsets",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "point_offsets"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"prune_storage",
+"position": Vector2(1480, 1060),
+"settings": {
+"cell_size": 1.0,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"keep_self_intersections": false,
+"mode": 0,
+"prefer_attribute": "",
+"prefer_value": "",
+"random_seed": 12345,
+"title": "Self Pruning",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "self_pruning"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"spawn_storage",
+"position": Vector2(1580, 1060),
+"settings": {
+"assign_attributes": {},
+"assign_target_path": "",
+"clear_previous_instances": true,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"random_seed": 2101,
+"randomize_scene_variants": true,
+"scene": null,
+"scene_attribute": "",
+"scene_selector_attribute": "",
+"scene_variant_weights": Array[float]([1.5, 2.0, 1.2, 0.8, 0.8, 0.5]),
+"scene_variants": Array[PackedScene]([ExtResource("21_s7yth"), ExtResource("22_e68vx"), ExtResource("23_ihulv"), ExtResource("24_uegej"), ExtResource("25_3hrt5"), ExtResource("26_3q2wd")]),
+"spawn_parent_path": "",
+"title": "Spawn Scenes",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "spawn_scenes"
+}, {
+"args_port": {
+"In A": {
+"connected": true,
+"port": 0
+},
+"In B": {
+"connected": true,
+"port": 1
+}
+},
+"name": &"subtract_storage_rooms",
+"position": Vector2(780, 1180),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"operation": 0,
+"random_seed": 12345,
+"title": "Substract",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "substract"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"select_treasure_rooms",
+"position": Vector2(980, 1260),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"random_seed": 2201,
+"ratio": 0.35,
+"title": "Select Points",
+"trace": false,
+"weight_name": ""
+},
+"show_disconnected_inputs": false,
+"template": "select_points"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"treasure_unit_size",
+"position": Vector2(1180, 1260),
+"settings": {
+"bounds_max": Vector3(0.5, 0.5, 0.5),
+"bounds_min": Vector3(-0.5, -0.5, -0.5),
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"mode": 0,
+"random_seed": 12345,
+"title": "Bounds Modifier",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "bounds_modifier"
+}, {
+"args_port": {
+"Anchors": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"treasure_offsets",
+"position": Vector2(1380, 1260),
+"settings": {
+"combine_rotation": true,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inherit_anchor_size": false,
+"inspect_enabled": false,
+"label_attribute": "offset_label",
+"labels": Array[String](["treasure"]),
+"local_space": true,
+"offset_index_attribute": "offset_index",
+"offsets": Array[Vector3]([Vector3(0.36, 0, 0.34)]),
+"parent_index_attribute": "parent_index",
+"random_seed": 12345,
+"rotations": Array[Vector3]([Vector3(0, 35, 0)]),
+"scale_offsets_by_anchor_size": true,
+"sizes": Array[Vector3]([Vector3(0.72, 0.72, 0.72)]),
+"title": "Point Offsets",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "point_offsets"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"spawn_treasure",
+"position": Vector2(1580, 1260),
+"settings": {
+"assign_attributes": {},
+"assign_target_path": "",
+"clear_previous_instances": true,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"random_seed": 2301,
+"randomize_scene_variants": true,
+"scene": null,
+"scene_attribute": "",
+"scene_selector_attribute": "",
+"scene_variant_weights": Array[float]([2.0, 1.0, 0.5]),
+"scene_variants": Array[PackedScene]([ExtResource("27_x8ito"), ExtResource("28_avcpc"), ExtResource("29_vifbp")]),
+"spawn_parent_path": "",
+"title": "Spawn Scenes",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "spawn_scenes"
+}, {
+"args_port": {
+"Anchors": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"corner_slots",
+"position": Vector2(540, 1480),
+"settings": {
+"combine_rotation": true,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inherit_anchor_size": false,
+"inspect_enabled": false,
+"label_attribute": "offset_label",
+"labels": Array[String](["corner", "corner", "corner", "corner"]),
+"local_space": true,
+"offset_index_attribute": "offset_index",
+"offsets": Array[Vector3]([Vector3(0.42, 0, 0.42), Vector3(-0.42, 0, 0.42), Vector3(0.42, 0, -0.42), Vector3(-0.42, 0, -0.42)]),
+"parent_index_attribute": "parent_index",
+"random_seed": 12345,
+"rotations": Array[Vector3]([Vector3(0, 45, 0), Vector3(0, 135, 0), Vector3(0, -45, 0), Vector3(0, -135, 0)]),
+"scale_offsets_by_anchor_size": true,
+"sizes": Array[Vector3]([Vector3(0.7, 1, 0.7), Vector3(0.7, 1, 0.7), Vector3(0.7, 1, 0.7), Vector3(0.7, 1, 0.7)]),
+"title": "Point Offsets",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "point_offsets"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"select_corners",
+"position": Vector2(780, 1480),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"random_seed": 2651,
+"ratio": 0.5,
+"title": "Select Points",
+"trace": false,
+"weight_name": ""
+},
+"show_disconnected_inputs": false,
+"template": "select_points"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"corner_size",
+"position": Vector2(980, 1480),
+"settings": {
+"bounds_max": Vector3(0.6, 0.5, 0.6),
+"bounds_min": Vector3(-0.6, -0.5, -0.6),
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"mode": 0,
+"random_seed": 12345,
+"title": "Bounds Modifier",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "bounds_modifier"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"prune_corners",
+"position": Vector2(1180, 1480),
+"settings": {
+"cell_size": 1.0,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"keep_self_intersections": false,
+"mode": 0,
+"prefer_attribute": "",
+"prefer_value": "",
+"random_seed": 12345,
+"title": "Self Pruning",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "self_pruning"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"spawn_corners",
+"position": Vector2(1380, 1480),
+"settings": {
+"assign_attributes": {},
+"assign_target_path": "",
+"clear_previous_instances": true,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"random_seed": 2661,
+"randomize_scene_variants": true,
+"scene": null,
+"scene_attribute": "",
+"scene_selector_attribute": "",
+"scene_variant_weights": Array[float]([0.8, 1.0, 0.6, 0.7, 0.5, 0.9, 0.4]),
+"scene_variants": Array[PackedScene]([ExtResource("38_colmn"), ExtResource("21_s7yth"), ExtResource("44_brldec"), ExtResource("39_trnka"), ExtResource("40_trnkb"), ExtResource("24_uegej"), ExtResource("41_rubbl")]),
+"spawn_parent_path": "",
+"title": "Spawn Scenes",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "spawn_scenes"
+}, {
+"args_port": {
+"Anchors": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"wall_storage_slots",
+"position": Vector2(540, 1680),
+"settings": {
+"combine_rotation": true,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inherit_anchor_size": false,
+"inspect_enabled": false,
+"label_attribute": "offset_label",
+"labels": Array[String](["wall_storage", "wall_storage", "wall_storage", "wall_storage"]),
+"local_space": true,
+"offset_index_attribute": "offset_index",
+"offsets": Array[Vector3]([Vector3(0.45, 0, 0), Vector3(-0.45, 0, 0), Vector3(0, 0, 0.45), Vector3(0, 0, -0.45)]),
+"parent_index_attribute": "parent_index",
+"random_seed": 12345,
+"rotations": Array[Vector3]([Vector3(0, 90, 0), Vector3(0, -90, 0), Vector3(0, 0, 0), Vector3(0, 180, 0)]),
+"scale_offsets_by_anchor_size": true,
+"sizes": Array[Vector3]([Vector3(0.8, 1, 0.5), Vector3(0.8, 1, 0.5), Vector3(0.8, 1, 0.5), Vector3(0.8, 1, 0.5)]),
+"title": "Point Offsets",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "point_offsets"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"select_wall_storage",
+"position": Vector2(780, 1680),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"random_seed": 2611,
+"ratio": 0.4,
+"title": "Select Points",
+"trace": false,
+"weight_name": ""
+},
+"show_disconnected_inputs": false,
+"template": "select_points"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"wall_storage_size",
+"position": Vector2(980, 1680),
+"settings": {
+"bounds_max": Vector3(0.8, 0.5, 0.4),
+"bounds_min": Vector3(-0.8, -0.5, -0.4),
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"mode": 0,
+"random_seed": 12345,
+"title": "Bounds Modifier",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "bounds_modifier"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"prune_wall_storage",
+"position": Vector2(1180, 1680),
+"settings": {
+"cell_size": 1.0,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"keep_self_intersections": false,
+"mode": 0,
+"prefer_attribute": "",
+"prefer_value": "",
+"random_seed": 12345,
+"title": "Self Pruning",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "self_pruning"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"spawn_wall_storage",
+"position": Vector2(1380, 1680),
+"settings": {
+"assign_attributes": {},
+"assign_target_path": "",
+"clear_previous_instances": true,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"random_seed": 2621,
+"randomize_scene_variants": true,
+"scene": null,
+"scene_attribute": "",
+"scene_selector_attribute": "",
+"scene_variant_weights": Array[float]([1.2, 1.0, 0.8, 0.7, 0.9]),
+"scene_variants": Array[PackedScene]([ExtResource("26_3q2wd"), ExtResource("42_shlvs"), ExtResource("44_brldec"), ExtResource("43_keg01"), ExtResource("25_3hrt5")]),
+"spawn_parent_path": "",
+"title": "Spawn Scenes",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "spawn_scenes"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"select_clutter_rooms",
+"position": Vector2(680, 1900),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"random_seed": 2401,
+"ratio": 0.85,
+"title": "Select Points",
+"trace": false,
+"weight_name": ""
+},
+"show_disconnected_inputs": false,
+"template": "select_points"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"clutter_unit_size",
+"position": Vector2(880, 1900),
+"settings": {
+"bounds_max": Vector3(0.5, 0.5, 0.5),
+"bounds_min": Vector3(-0.5, -0.5, -0.5),
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"mode": 0,
+"random_seed": 12345,
+"title": "Bounds Modifier",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "bounds_modifier"
+}, {
+"args_port": {
+"Anchors": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"clutter_offsets",
+"position": Vector2(1080, 1900),
+"settings": {
+"combine_rotation": true,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inherit_anchor_size": false,
+"inspect_enabled": false,
+"label_attribute": "offset_label",
+"labels": Array[String](["clutter", "clutter", "clutter", "clutter", "clutter", "clutter"]),
+"local_space": true,
+"offset_index_attribute": "offset_index",
+"offsets": Array[Vector3]([Vector3(-0.4, 0, -0.4), Vector3(0.4, 0, -0.4), Vector3(-0.4, 0, 0.4), Vector3(0.4, 0, 0.4), Vector3(-0.25, 0, 0), Vector3(0.25, 0, 0)]),
+"parent_index_attribute": "parent_index",
+"random_seed": 12345,
+"rotations": Array[Vector3]([Vector3(0, 45, 0), Vector3(0, -45, 0), Vector3(0, 135, 0), Vector3(0, -135, 0), Vector3(0, 90, 0), Vector3(0, -90, 0)]),
+"scale_offsets_by_anchor_size": true,
+"sizes": Array[Vector3]([Vector3(0.85, 1, 0.85), Vector3(0.85, 1, 0.85), Vector3(0.85, 1, 0.85), Vector3(0.85, 1, 0.85), Vector3(0.85, 1, 0.85), Vector3(0.85, 1, 0.85)]),
+"title": "Point Offsets",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "point_offsets"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"select_clutter_slots",
+"position": Vector2(1280, 1900),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"random_seed": 2451,
+"ratio": 0.5,
+"title": "Select Points",
+"trace": false,
+"weight_name": ""
+},
+"show_disconnected_inputs": false,
+"template": "select_points"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"jitter_clutter",
+"position": Vector2(1480, 1900),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
 "offset_max": Vector3(0.08, 0, 0.08),
 "offset_min": Vector3(-0.08, 0, -0.08),
+"random_seed": 12345,
+"rotation_local_space": false,
 "rotation_max": Vector3(0, 180, 0),
 "rotation_min": Vector3(0, 0, 0),
 "scale_max": Vector3(1.02, 1.02, 1.02),
 "scale_min": Vector3(0.82, 0.82, 0.82),
+"title": "Transform",
+"trace": false,
 "uniform_scale": true
 },
 "show_disconnected_inputs": false,
 "template": "transform"
 }, {
-"args_port": {},
-"name": "prune_clutter",
-"position": Vector2(1300, 1800),
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"prune_clutter",
+"position": Vector2(1680, 1900),
 "settings": {
-"keep_self_intersections": false
+"cell_size": 1.0,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"keep_self_intersections": false,
+"mode": 0,
+"prefer_attribute": "",
+"prefer_value": "",
+"random_seed": 12345,
+"title": "Self Pruning",
+"trace": false
 },
 "show_disconnected_inputs": false,
 "template": "self_pruning"
 }, {
-"args_port": {},
-"name": "spawn_clutter",
-"position": Vector2(1500, 1800),
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"spawn_clutter",
+"position": Vector2(1880, 1900),
 "settings": {
+"assign_attributes": {},
+"assign_target_path": "",
+"clear_previous_instances": true,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
 "random_seed": 2501,
 "randomize_scene_variants": true,
-"scene_variant_weights": [1.2, 0.8, 1.4, 1.0, 0.7, 0.6, 0.5, 0.4],
-"scene_variants": [ExtResource("30_a8481"), ExtResource("31_raa5a"), ExtResource("32_l60l6"), ExtResource("33_dd5eb"), ExtResource("34_4i8pr"), ExtResource("35_xaku3"), ExtResource("36_7klc6"), ExtResource("37_pvwxj")]
+"scene": null,
+"scene_attribute": "",
+"scene_selector_attribute": "",
+"scene_variant_weights": Array[float]([1.2, 0.8, 1.4, 1.0, 0.7, 0.6, 0.5, 0.4]),
+"scene_variants": Array[PackedScene]([ExtResource("30_a8481"), ExtResource("31_raa5a"), ExtResource("32_l60l6"), ExtResource("33_dd5eb"), ExtResource("34_4i8pr"), ExtResource("35_xaku3"), ExtResource("36_7klc6"), ExtResource("37_pvwxj")]),
+"spawn_parent_path": "",
+"title": "Spawn Scenes",
+"trace": false
 },
 "show_disconnected_inputs": false,
 "template": "spawn_scenes"
 }, {
-"args_port": {},
-"name": "floor_detail_slots",
-"position": Vector2(160, 2020),
+"args_port": {
+"Anchors": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"floor_detail_slots",
+"position": Vector2(540, 2120),
 "settings": {
-"labels": ["rubble", "rubble", "rubble", "rubble", "rubble", "rubble"],
-"offsets": [Vector3(0.2, 0, 0.15), Vector3(-0.18, 0, 0.22), Vector3(0.25, 0, -0.2), Vector3(-0.22, 0, -0.18), Vector3(0.1, 0, 0.35), Vector3(-0.3, 0, 0.05)],
+"combine_rotation": true,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inherit_anchor_size": false,
+"inspect_enabled": false,
+"label_attribute": "offset_label",
+"labels": Array[String](["rubble", "rubble", "rubble", "rubble", "rubble", "rubble"]),
+"local_space": true,
+"offset_index_attribute": "offset_index",
+"offsets": Array[Vector3]([Vector3(0.2, 0, 0.15), Vector3(-0.18, 0, 0.22), Vector3(0.25, 0, -0.2), Vector3(-0.22, 0, -0.18), Vector3(0.1, 0, 0.35), Vector3(-0.3, 0, 0.05)]),
+"parent_index_attribute": "parent_index",
+"random_seed": 12345,
+"rotations": Array[Vector3]([Vector3(0, 0, 0)]),
 "scale_offsets_by_anchor_size": true,
-"sizes": [Vector3(0.4, 0.2, 0.4), Vector3(0.4, 0.2, 0.4), Vector3(0.4, 0.2, 0.4), Vector3(0.4, 0.2, 0.4), Vector3(0.4, 0.2, 0.4), Vector3(0.4, 0.2, 0.4)]
+"sizes": Array[Vector3]([Vector3(0.4, 0.2, 0.4), Vector3(0.4, 0.2, 0.4), Vector3(0.4, 0.2, 0.4), Vector3(0.4, 0.2, 0.4), Vector3(0.4, 0.2, 0.4), Vector3(0.4, 0.2, 0.4)]),
+"title": "Point Offsets",
+"trace": false
 },
 "show_disconnected_inputs": false,
 "template": "point_offsets"
 }, {
-"args_port": {},
-"name": "select_floor_detail",
-"position": Vector2(400, 2020),
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"select_floor_detail",
+"position": Vector2(780, 2120),
 "settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
 "random_seed": 2701,
-"ratio": 0.25
+"ratio": 0.25,
+"title": "Select Points",
+"trace": false,
+"weight_name": ""
 },
 "show_disconnected_inputs": false,
 "template": "select_points"
 }, {
-"args_port": {},
-"name": "jitter_floor_detail",
-"position": Vector2(600, 2020),
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"jitter_floor_detail",
+"position": Vector2(980, 2120),
 "settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
 "offset_max": Vector3(0.1, 0, 0.1),
 "offset_min": Vector3(-0.1, 0, -0.1),
+"random_seed": 12345,
+"rotation_local_space": false,
 "rotation_max": Vector3(0, 360, 0),
 "rotation_min": Vector3(0, 0, 0),
 "scale_max": Vector3(1.1, 1.1, 1.1),
 "scale_min": Vector3(0.8, 0.8, 0.8),
+"title": "Transform",
+"trace": false,
 "uniform_scale": true
 },
 "show_disconnected_inputs": false,
 "template": "transform"
 }, {
-"args_port": {},
-"name": "prune_floor_detail",
-"position": Vector2(800, 2020),
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"prune_floor_detail",
+"position": Vector2(1180, 2120),
 "settings": {
-"keep_self_intersections": false
+"cell_size": 1.0,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"keep_self_intersections": false,
+"mode": 0,
+"prefer_attribute": "",
+"prefer_value": "",
+"random_seed": 12345,
+"title": "Self Pruning",
+"trace": false
 },
 "show_disconnected_inputs": false,
 "template": "self_pruning"
 }, {
-"args_port": {},
-"name": "spawn_floor_detail",
-"position": Vector2(1000, 2020),
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"spawn_floor_detail",
+"position": Vector2(1380, 2120),
 "settings": {
+"assign_attributes": {},
+"assign_target_path": "",
+"clear_previous_instances": true,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
 "random_seed": 2711,
 "randomize_scene_variants": true,
-"scene_variant_weights": [0.8, 0.3, 0.6, 0.7, 0.4, 0.5],
-"scene_variants": [ExtResource("45_rubhf"), ExtResource("47_coin1"), ExtResource("33_dd5eb"), ExtResource("34_4i8pr"), ExtResource("46_torch"), ExtResource("30_a8481")]
+"scene": null,
+"scene_attribute": "",
+"scene_selector_attribute": "",
+"scene_variant_weights": Array[float]([0.8, 0.3, 0.6, 0.7, 0.4, 0.5]),
+"scene_variants": Array[PackedScene]([ExtResource("45_rubhf"), ExtResource("47_coin1"), ExtResource("33_dd5eb"), ExtResource("34_4i8pr"), ExtResource("46_torch"), ExtResource("30_a8481")]),
+"spawn_parent_path": "",
+"title": "Spawn Scenes",
+"trace": false
 },
 "show_disconnected_inputs": false,
 "template": "spawn_scenes"
+}, {
+"args_port": {},
+"name": &"input_rooms",
+"position": Vector2(0, 500),
+"settings": {
+"data_type": 2,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"name": "rooms",
+"random_seed": 12345,
+"title": "Input",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "input"
+}, {
+"args_port": {
+"Anchors": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"table_room_slots",
+"position": Vector2(540, 180),
+"settings": {
+"combine_rotation": true,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inherit_anchor_size": false,
+"inspect_enabled": false,
+"label_attribute": "offset_label",
+"labels": Array[String](["table_slot"]),
+"local_space": true,
+"offset_index_attribute": "offset_index",
+"offsets": Array[Vector3]([Vector3(0, 0, 0)]),
+"parent_index_attribute": "parent_index",
+"random_seed": 12345,
+"rotations": Array[Vector3]([Vector3(0, 0, 0)]),
+"scale_offsets_by_anchor_size": true,
+"sizes": Array[Vector3]([Vector3(1, 1, 1)]),
+"title": "Point Offsets",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "point_offsets"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
-view_zoom = 0.35
+view_zoom = 1.0984501
+view_offset = Vector2(-165.87431, -3.943573)
 new_name_counter = 55
 in_params = Array[ExtResource("30_s3gcd")]([SubResource("Resource_jfvob")])

@@ -9,5 +9,7 @@ func _init():
 		"settings" : ClipPathsSettings,
 		"ins" : [{ "label" : "Points" }, { "label" : "Paths" }],
 		"outs" : [{ "label" : "Out" }],
-		"tooltip" : "UE naming alias for clipping point sets by Path3D polygons.",
+		"tooltip" : "Alias of Clip Points By Polygon with path-style naming.\nClips a point set against polygons built from Path3D splines (no direct UE equivalent;\nthe closest UE workflow is Difference against a spline shape).",
+		"aliases" : ["Clip Points"],
+		"category" : "Spatial",
 	}

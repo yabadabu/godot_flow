@@ -9,5 +9,7 @@ func _init():
 		"settings" : PointFilterRangeNodeSettings,
 		"ins" : [{ "label": "In" }],
 		"outs" : [{ "label" : "Inside" }, { "label" : "Outside" }],
-		"tooltip" : "Point-focused alias of Attribute Filter Range (defaults to position.X).",
+		"aliases" : ["Point Filter"],
+		"category" : "Filter",
+		"tooltip" : "Point-focused alias of Attribute Filter Range (defaults to position.X).\nNumeric range mode coerces Vectors to their length and Colors to their RGB average; enable 'String Match Mode' to filter by comma-separated string values instead.",
 	}

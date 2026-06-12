@@ -12,16 +12,20 @@ env = SConscript("godot-cpp/SConstruct")
 # - CPPDEFINES are for pre-processor defines
 # - LINKFLAGS are for linking flags
 
+addon_dir = "demo/addons/flow_nodes_editor"
+native_src_dir = addon_dir + "/native/src"
+bin_dir = addon_dir + "/bin"
+
 # tweak this if you want to use different folders, or more folders, to store your source code in.
-env.Append(CPPPATH=["plugins/"])
-common_sources = Glob("plugin/*.cpp")
+env.Append(CPPPATH=[native_src_dir])
+common_sources = Glob(native_src_dir + "/*.cpp")
 
 if env["platform"] == "macos":
-    
+
     env.Append(CXXFLAGS=['-fexceptions'])
 
     # Add MacOS frameworks
-    frameworks = [ 
+    frameworks = [
                  #   'AuthenticationServices'
                  #, 'StoreKit'
                  ]
@@ -29,17 +33,18 @@ if env["platform"] == "macos":
         env.Append(LINKFLAGS=['-framework', framework])
 
     library = env.SharedLibrary(
-        "demo/bin/libflow.{}.{}.framework/libflow.{}.{}".format(
+        bin_dir + "/libflow.{}.{}.framework/libflow.{}.{}".format(
             env["platform"], env["target"], env["platform"], env["target"]
         ),
         source=common_sources,
     )
 
 else:
-    env.Append(CFLAGS=["/std:c11"])
+    if env["platform"] == "windows":
+        env.Append(CFLAGS=["/std:c11"])
     env.Append(CXXFLAGS=["-O2"])
     library = env.SharedLibrary(
-        "demo/bin/libflow{}{}".format(env["suffix"], env["SHLIBSUFFIX"]),
+        bin_dir + "/libflow{}{}".format(env["suffix"], env["SHLIBSUFFIX"]),
         source=common_sources,
     )
 

@@ -5,20 +5,24 @@ func _init():
 	meta_node = {
 		"title" : "Duplicate Point",
 		"settings" : DuplicatePointNodeSettings,
-		"ins" : [{ "label": "In" }], 
+		"ins" : [{ "label": "In" }],
 		"outs" : [{ "label" : "Out" }],
+		"aliases" : ["Duplicate Point"],
+		"category" : "Spatial",
 		"tooltip" : "For each point, duplicate the point and move it along an axis defined by the Direction/Offset, and apply a transform on the new point.",
 	}
 
 func execute( ctx : FlowData.EvaluationContext ):
-	var in_data : FlowData.Data = get_input(0)
+	var in_data : FlowData.Data = require_input(0, ctx, "Input 'In'")
 	if in_data == null:
-		setError("Input 'In' is not connected")
 		return
-		
+	if not (in_data.hasStream(FlowData.AttrPosition) and in_data.hasStream(FlowData.AttrRotation) and in_data.hasStream(FlowData.AttrSize)):
+		setError("Input must be point data (position/rotation/size streams required)")
+		return
+
 	var out_data : FlowData.Data = FlowData.Data.new()
 	var in_size = in_data.size()
-	var iters = clampi(settings.iterations, 1, 100)
+	var iters = clampi(getSettingValue(ctx, "iterations", 1), 1, 100)
 	var new_size = in_size * (iters + 1)
 	
 	for name in in_data.streams:
@@ -37,8 +41,8 @@ func execute( ctx : FlowData.EvaluationContext ):
 	var srot = out_data.streams[FlowData.AttrRotation].container
 	var ssizes = out_data.streams[FlowData.AttrSize].container
 	
-	var offset_vec = settings.offset
-	var relative = settings.offset_relative
+	var offset_vec : Vector3 = getSettingValue(ctx, "offset", Vector3(0, 1, 0))
+	var relative : bool = getSettingValue(ctx, "offset_relative", true)
 	
 	for iter in range(1, iters + 1):
 		var dst_start = in_size * iter

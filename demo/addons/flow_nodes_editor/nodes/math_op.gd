@@ -5,8 +5,10 @@ func _init():
 	meta_node = {
 		"title" : "Math",
 		"settings" : MathOpNodeSettings,
-		"ins" : [{ "label": "In A", "multiple_connections" : false }, { "label": "In B", "multiple_connections" : false }], 
+		"ins" : [{ "label": "In A", "multiple_connections" : false }, { "label": "In B", "multiple_connections" : false }],
 		"outs" : [{ "label" : "Out" }],
+		"aliases" : ["Attribute Maths Op", "Attribute Math"],
+		"category" : "Metadata",
 		"tooltip" : "Applies a math operation between two streams, storing the result in a new stream or overriding another.\nYou can read and write substreams like position.X",
 	}
 	
@@ -23,7 +25,9 @@ func execute( ctx : FlowData.EvaluationContext ):
 		return
 	
 	# Check A
-	var in_dataA: FlowData.Data = get_input(0)
+	var in_dataA: FlowData.Data = require_input(0, ctx, "Input A")
+	if in_dataA == null:
+		return
 	var sA = in_dataA.findStream( settings.in_nameA )
 	if sA == null:
 		if ctx.owner == null and Engine.is_editor_hint():
@@ -58,9 +62,10 @@ func execute( ctx : FlowData.EvaluationContext ):
 				return
 
 	# The number of elements should match, unless the B channel has just 1 element
-	# in which case we will expand it. Wwe might need in the future A to be just one 
+	# in which case we will expand it. We might need in the future A to be just one
 	# element and B having lots of elements, or the type not to be float...
-	if num_elemsA != num_elemsB:
+	# (sB can only be null here for single-argument ops, which ignore B.)
+	if sB != null and not is_single_arg and num_elemsA != num_elemsB:
 		if num_elemsB == 1 and num_elemsA > 0:
 			if sB.data_type == FlowData.DataType.Float:
 				sB = newFloatStream( num_elemsA, sA.name + " as float", sB.container[0])
@@ -73,14 +78,14 @@ func execute( ctx : FlowData.EvaluationContext ):
 					var empty_data = FlowData.Data.new()
 					set_output(0, empty_data)
 					return
-				setError( "Num elements from A nd B do not match (%d vs %d). But In B data type must be a float, Vector3, or Color" % [num_elemsA, num_elemsB])
+				setError( "Num elements from A and B do not match (%d vs %d). But In B data type must be a float, Vector3, or Color" % [num_elemsA, num_elemsB])
 				return
 		else:
 			if ctx.owner == null and Engine.is_editor_hint():
 				var empty_data = FlowData.Data.new()
 				set_output(0, empty_data)
 				return
-			setError( "Num elements from A nd B do not match (%d vs %d)" % [num_elemsA, num_elemsB])
+			setError( "Num elements from A and B do not match (%d vs %d)" % [num_elemsA, num_elemsB])
 			return
 	var num_elems := num_elemsA
 	
@@ -123,6 +128,9 @@ func execute( ctx : FlowData.EvaluationContext ):
 					MathOpNodeSettings.eOperation.Round:
 						for i in num_elems:
 							outC[i] = roundf(inA[i])
+					MathOpNodeSettings.eOperation.Frac:
+						for i in num_elems:
+							outC[i] = inA[i] - floorf(inA[i])
 					MathOpNodeSettings.eOperation.OneMinus:
 						for i in num_elems:
 							outC[i] = 1.0 - inA[i]
@@ -153,10 +161,13 @@ func execute( ctx : FlowData.EvaluationContext ):
 						outC[i].x = clampf(inA[i].x, 0.0, 1.0)
 						outC[i].y = clampf(inA[i].y, 0.0, 1.0)
 						outC[i].z = clampf(inA[i].z, 0.0, 1.0)
+				_:
+					setError( "Vector operation %s not supported as single-argument yet" % MathOpNodeSettings.eOperation.keys()[ settings.operation ] )
+					return
 			out_container = outC
-			
+
 		else:
-			setError( "Input A has incompatible/unsupported data types (%s vs %s)" % [sA.data_type])
+			setError( "Input A has unsupported data type for single-argument operation (%s)" % [sA.data_type])
 			return
 			
 	else:
@@ -187,12 +198,6 @@ func execute( ctx : FlowData.EvaluationContext ):
 							return
 						outC[i] = inA[i] / inB[i]
 				MathOpNodeSettings.eOperation.Modulo:
-					for i in num_elems:
-						if inB[i] == 0.0:
-							setError( "Modulo by zero" )
-							return
-						outC[i] = fmod(inA[i], inB[i])
-				MathOpNodeSettings.eOperation.Frac:
 					for i in num_elems:
 						if inB[i] == 0.0:
 							setError( "Modulo by zero" )

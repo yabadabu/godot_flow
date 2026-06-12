@@ -7,7 +7,6 @@ extends NodeSettings
 @export var start : int = 0
 @export var count : int = 0
 @export var step : int = 1
-#@export var wrap_around : bool = false
 
 func _init():
 	super._init()

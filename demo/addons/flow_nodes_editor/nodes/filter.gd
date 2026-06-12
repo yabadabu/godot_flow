@@ -8,18 +8,18 @@ func _init():
 		"ins" : [{ "label": "In A" }, { "label": "In B" }], 
 		"outs" : [{ "label" : "True" }, { "label" : "False" }],
 		"hide_inputs" : true,
-		"tooltip" : "Filter inputs based on some condition.\nThis node returns splits the input stream in two substreams.",
+		"aliases" : ["Filter Attribute Elements"],
+		"category" : "Filter",
+		"tooltip" : "Filter inputs based on some condition.\nThis node splits the input stream in two substreams.",
 	}
 
 func execute( ctx : FlowData.EvaluationContext ):
-	#print( "filter.input: ", inputs )
-	var in_dataA : FlowData.Data = get_input(0)
+	var in_dataA : FlowData.Data = require_input(0, ctx, "Input A")
 	if in_dataA == null:
-		setError( "Input A %s not found" % [settings.in_nameA])
 		return
 	if in_dataA.size() == 0:
 		set_output( 0, in_dataA )
-		set_output( 1, in_dataA )
+		set_output( 1, in_dataA.duplicate() )
 		return
 	var sA = in_dataA.findStream( settings.in_nameA )
 	if sA == null:
@@ -50,6 +50,8 @@ func execute( ctx : FlowData.EvaluationContext ):
 			sB = newFloatStream( in_dataA.size(), "Constant %s" % settings.in_nameB, v )
 		elif settings.in_nameB.to_lower() == "true":
 			sB = newFloatStream( in_dataA.size(), "Constant %s" % settings.in_nameB, 1.0 )
+		elif settings.in_nameB.to_lower() == "false":
+			sB = newFloatStream( in_dataA.size(), "Constant %s" % settings.in_nameB, 0.0 )
 		else:
 			if requires_two_operands:
 				if ctx.owner == null and Engine.is_editor_hint():
@@ -60,8 +62,14 @@ func execute( ctx : FlowData.EvaluationContext ):
 				setError( "Input B %s not found, and can't be interpreted as a constant number (Op:%d)" % [settings.in_nameB, settings.condition])
 				return
 
+	# When comparing int/bool vs floats, promote to float to reduce the casuistics.
+	# Promotion runs before the broadcast check so an Int/Bool B constant or
+	# single-element stream can still be expanded below.
+	if requires_two_operands and sB != null and sA.data_type == FlowData.DataType.Float and (sB.data_type == FlowData.DataType.Int or sB.data_type == FlowData.DataType.Bool):
+		sB = newFloatStream( num_elemsB, sB.name + " as float", func( idx : int ) -> float: return sB.container[idx] )
+
 	# The number of elements should match, unless the B channel has just 1 element
-	# in which case we will expand it. Wwe might need in the future A to be just one 
+	# in which case we will expand it. We might need in the future A to be just one
 	# element and B having lots of elements, or the type not to be float...
 	if requires_two_operands and num_elemsA != num_elemsB:
 		if num_elemsB == 1 and num_elemsA > 0 and sB.data_type == FlowData.DataType.Float:
@@ -72,14 +80,14 @@ func execute( ctx : FlowData.EvaluationContext ):
 				set_output( 0, empty_out )
 				set_output( 1, empty_out )
 				return
-			setError( "Num elements from A nd B do not match (%d vs %d)" % [num_elemsA, num_elemsB])
+			setError( "Num elements from A and B do not match (%d vs %d)" % [num_elemsA, num_elemsB])
 			return
 	var num_elems := num_elemsA
-	
+
 	# When comparing int vs floats, promote the ints to float to reduce the casuistics
 	if requires_two_operands and sA.data_type == FlowData.DataType.Int and sB.data_type == FlowData.DataType.Float:
 		sA = newFloatStream( num_elemsA, sA.name + " as float", func( idx : int ) -> float: return sA.container[idx] )
-		
+
 	# Also, when comparing bools vs floats, promote the bool to float to reduce the casuistics
 	if requires_two_operands and sA.data_type == FlowData.DataType.Bool and sB.data_type == FlowData.DataType.Float:
 		sA = newFloatStream( num_elemsA, sA.name + " as float", func( idx : int ) -> float: return sA.container[idx] )
@@ -94,7 +102,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 		match settings.condition:
 
 			FilterNodeSettings.eCondition.Equal:
-				for i in range(num_elems):
+				for i in num_elems:
 					if inA[i] == inB[i]:
 						indices_true.append(i)
 					else:
@@ -158,19 +166,13 @@ func execute( ctx : FlowData.EvaluationContext ):
 						indices_false.append(i)
 
 			FilterNodeSettings.eCondition.LogicalXOR:
+				# Boolean XOR on truthiness, not raw float inequality
 				for i in num_elems:
-					if inA[i] != inB[i]:
+					if (inA[i] != 0.0) != (inB[i] != 0.0):
 						indices_true.append(i)
 					else:
 						indices_false.append(i)
 
-			FilterNodeSettings.eCondition.IsNull:
-				for i in num_elems:
-					if !inA[i]:
-						indices_true.append(i)
-					else:
-						indices_false.append(i)
-						
 	elif not requires_two_operands:
 		var inA = sA.container
 		match settings.condition:

@@ -5,9 +5,11 @@ func _init():
 	meta_node = {
 		"title" : "Select (Multi)",
 		"settings" : SelectMultiNodeSettings,
-		"ins" : [{ "label": "In 0" }, { "label": "In 1" }, { "label": "In 2" }, { "label": "In 3" }], 
+		"aliases" : ["Select (Multi)", "Select (Integer)"],
+		"category" : "ControlFlow",
+		"ins" : [{ "label": "In 0" }, { "label": "In 1" }, { "label": "In 2" }, { "label": "In 3" }],
 		"outs" : [{ "label" : "Out" }],
-		"tooltip" : "Selects one of multiple inputs to be forwarded to a single output based on an index attribute or value.",
+		"tooltip" : "Selects one of up to 4 inputs to be forwarded to a single output based on an index attribute or value.\nThe selection is constant per evaluation: in attribute mode only element [0] of the attribute is read,\ntaken from the first connected input that has it — there is no per-point selection.\nIndices are clamped to 0..3.",
 	}
 
 func execute( ctx : FlowData.EvaluationContext ):

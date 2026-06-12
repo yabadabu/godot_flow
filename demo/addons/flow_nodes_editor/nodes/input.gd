@@ -7,6 +7,8 @@ func _init():
 		"settings" : InputNodeSettings,
 		"ins" : [],
 		"outs" : [{ "label" : "Out" }],
+		"aliases" : ["Input", "graph parameter"],
+		"category" : "Input",
 		"tooltip" : "Exposes an input of the Flow Graph Node into the Graph",
 		"auto_register" : true,
 		"hide_inputs" : true
@@ -90,9 +92,12 @@ func initFromScript():
 		btn.text = "+ Add Input Parameter"
 		btn.alignment = HorizontalAlignment.HORIZONTAL_ALIGNMENT_CENTER
 		btn.add_theme_font_size_override("font_size", 10)
-		if not btn.pressed.is_connected(_on_add_input_pressed):
-			btn.pressed.connect(_on_add_input_pressed)
+		if not btn.pressed.is_connected(_on_add_input_pressed_deferred):
+			btn.pressed.connect(_on_add_input_pressed_deferred)
 		add_child(btn)
+
+func _on_add_input_pressed_deferred():
+	call_deferred("_on_add_input_pressed")
 
 func _on_add_input_pressed():
 	var editor = getEditor()
@@ -107,8 +112,11 @@ func _on_add_input_pressed():
 		new_input.name = uname
 		new_input.data_type = FlowData.DataType.Float
 		editor.current_resource.in_params.append( new_input )
-		editor.current_resource.in_params_changed.emit()
-		editor.queueSave()
+		if editor.has_method("notifyGraphParametersEdited"):
+			editor.call_deferred("notifyGraphParametersEdited", "in_params")
+		else:
+			editor.current_resource.in_params_changed.emit()
+			editor.call_deferred("queueSave")
 
 func _has_in_param_named(res, uname: String) -> bool:
 	for param in res.in_params:
@@ -128,6 +136,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 			var output := FlowData.Data.new()
 			var new_container = output.addStream( param.name, param.data_type )
 			if new_container == null:
+				setError( "Failed to create stream for input parameter '%s' (data_type %d)" % [param.name, param.data_type] )
 				continue
 			var fixture_data := _data_fixture_for_input(ctx, param.name, param.data_type)
 			if fixture_data != null:
@@ -145,7 +154,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 					new_value = ctx.owner.args[ param.name ]
 			var container = output.streams[ param.name ].container
 			container.resize( 1 )
-			container[0] = new_value
+			FlowData.Data.writeValue( container, 0, new_value, param.data_type )
 			set_output( i, output )
 	else:
 		if ctx.graph.in_params.size() == 0:
@@ -160,7 +169,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 		var output := FlowData.Data.new()
 		var new_container = output.addStream( settings.name, input.data_type )
 		if new_container == null:
-			setError( "Invalid name %s or data_type %d (bool)" % [settings.name, input.data_type ])
+			setError( "Failed to create stream for input '%s' (data_type %d)" % [settings.name, input.data_type ])
 			return
 
 		var fixture_data := _data_fixture_for_input(ctx, input.name, input.data_type)
@@ -181,7 +190,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 
 		var container =	output.streams[ settings.name ].container
 		container.resize( 1 )
-		container[0] = new_value
+		FlowData.Data.writeValue( container, 0, new_value, input.data_type )
 			
 		set_output( 0, output )
 
@@ -190,13 +199,30 @@ func _data_fixture_for_input(ctx: FlowData.EvaluationContext, input_name: String
 		return null
 	if not ctx.owner.has_meta("flow_debug_graph") or not ctx.owner.has_meta("flow_debug_input_data_map"):
 		return null
-	if ctx.owner.get_meta("flow_debug_graph") != ctx.graph:
+	if not _debug_graph_matches(ctx.owner, ctx.graph):
 		return null
 	var data_map: Dictionary = ctx.owner.get_meta("flow_debug_input_data_map")
 	var data_value = data_map.get(input_name, null)
 	if not (data_value is FlowData.Data):
 		return null
 	return _normalize_input_data(data_value, input_name, input_type)
+
+func _debug_graph_matches(owner: Object, graph: FlowGraphResource) -> bool:
+	if owner == null or graph == null:
+		return false
+	var debug_graph = owner.get_meta("flow_debug_graph", null)
+	if debug_graph == graph:
+		return true
+	var graph_path := String(graph.resource_path)
+	if graph_path.is_empty():
+		return false
+	var debug_path := String(owner.get_meta("flow_debug_graph_path", ""))
+	if not debug_path.is_empty() and debug_path == graph_path:
+		return true
+	if debug_graph is FlowGraphResource:
+		var debug_graph_path := String(debug_graph.resource_path)
+		return not debug_graph_path.is_empty() and debug_graph_path == graph_path
+	return false
 
 func _normalize_input_data(data: FlowData.Data, input_name: String, input_type: FlowData.DataType) -> FlowData.Data:
 	var target := FlowData.Data.new()

@@ -9,5 +9,7 @@ func _init():
 		"settings" : PolygonOperationSettings,
 		"ins" : [{ "label" : "Points" }, { "label" : "Polygon" }],
 		"outs" : [{ "label" : "Out" }],
-		"tooltip" : "UE naming alias for polygon clipping/filter operations.",
+		"aliases" : ["Polygon Clip", "Clip Points By Polygon"],
+		"category" : "Filter",
+		"tooltip" : "Alias of Clip Points By Polygon: keeps points inside (or outside) polygons built from the Polygon input, a spline stream, or a scene NodePath.\nNo union/intersect/difference modes — clipping only. Falls back to the settings NodePath when the Polygon input yields no usable polygon.",
 	}

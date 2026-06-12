@@ -7,9 +7,11 @@ func _init():
 	meta_node = {
 		"title" : "Make Bounds",
 		"settings" : MakeBoundsNodeSettings,
-		"ins" : [], 
+		"ins" : [],
 		"outs" : [{ "label" : "Out" }],
-		"tooltip" : "Generates a single bounding point at center with size.",
+		"aliases" : ["Get Bounds"],
+		"category" : "Spatial",
+		"tooltip" : "Generates a single bounding point at center with size.\nUse as the bounds input of nodes like Grid Fill Bounds or Difference.",
 	}
 
 func execute( ctx : FlowData.EvaluationContext ):

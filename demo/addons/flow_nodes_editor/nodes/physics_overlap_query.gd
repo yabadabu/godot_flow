@@ -9,7 +9,10 @@ func _init():
 		"settings" : PhysicsOverlapQuerySettings,
 		"ins" : [{ "label": "In" }],
 		"outs" : [{ "label" : "Out" }],
-		"tooltip" : "Runs shape-overlap checks per point against the 3D physics world (Godot-specific query node).",
+		"aliases" : ["World Volumetric Query"],
+		"category" : "Spatial",
+		"queries_physics" : true,
+		"tooltip" : "Runs shape-overlap checks per point against the 3D physics world (Godot-specific query node).\nThe overlap count is capped at Max Results. In the editor the query sees the editor world's physics state, which may lag scene edits until physics frames run.",
 	}
 
 func _build_exclude_rids(root : Node) -> Array:
@@ -43,21 +46,23 @@ func _create_query_shape(point_size : Vector3) -> Shape3D:
 	return sphere
 
 func execute(_ctx : FlowData.EvaluationContext):
+	var in_data : FlowData.Data = require_input(0, _ctx)
+	if in_data == null:
+		return
+
 	var root = _ctx.owner if (_ctx and _ctx.owner) else (EditorInterface.get_edited_scene_root() if Engine.is_editor_hint() else null)
 	if root == null:
-		set_output(0, FlowData.Data.new())
+		setError("No scene root available to query the physics world")
+		return
+	if not root.has_method("get_world_3d"):
+		setError("Scene root '%s' is not a Node3D — no 3D physics world to query" % root.name)
 		return
 
 	var world = root.get_world_3d()
 	if world == null:
-		set_output(0, FlowData.Data.new())
+		setError("Scene root has no 3D world to query")
 		return
 	var state = world.direct_space_state
-
-	var in_data : FlowData.Data = get_input(0)
-	if in_data == null:
-		setError("Input not found")
-		return
 	var in_size = in_data.size()
 	if in_size == 0:
 		set_output(0, in_data.duplicate())
@@ -86,11 +91,16 @@ func execute(_ctx : FlowData.EvaluationContext):
 	count_values.resize(in_size)
 	first_colliders.resize(in_size)
 
+	# The shape only varies per point when it follows the point size.
+	var shared_shape : Shape3D = null
+	if not settings.use_point_size_for_shape:
+		shared_shape = _create_query_shape(Vector3.ONE)
+
+	var pos_size : int = pos_stream.container.size()
 	for i in range(in_size):
-		var pidx = i if pos_stream.container.size() > 1 else 0
-		var pos : Vector3 = pos_stream.container[pidx]
+		var pos : Vector3 = pos_stream.container[FlowData.bcast_idx(pos_size, i)]
 		var psize = point_sizes[i] if has_point_sizes else Vector3.ONE
-		query.shape = _create_query_shape(psize)
+		query.shape = shared_shape if shared_shape else _create_query_shape(psize)
 		query.transform = Transform3D(Basis.IDENTITY, pos)
 
 		var results : Array = state.intersect_shape(query, settings.max_results)

@@ -9,7 +9,9 @@ func _init():
 		"settings" : LoadDataTableSettings,
 		"ins" : [],
 		"outs" : [{ "label" : "Rows" }],
-		"tooltip" : "Loads CSV/TSV-style rows as attribute-set data with typed columns.",
+		"aliases" : ["Load Data Table", "CSV", "data table"],
+		"category" : "Input",
+		"tooltip" : "Loads CSV/TSV-style rows as attribute-set data with typed columns.\nVector cells like \"1,2,3\" must be quoted when the delimiter is a comma.",
 	}
 
 func _delimiter() -> String:

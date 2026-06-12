@@ -10,7 +10,9 @@ func _init():
 		"scans_scene" : true,
 		"ins" : [],
 		"outs" : [{ "label" : "Out" }],
-		"tooltip" : "Samples Godot NavigationRegion3D meshes into points.",
+		"aliases" : ["Navmesh Sampler"],
+		"category" : "Sampler",
+		"tooltip" : "Samples Godot NavigationRegion3D meshes into points.\nPolygons mode emits one point per navmesh polygon (with area and surface normal); Vertices mode emits one point per vertex (the polygon-index attribute then holds the vertex index).",
 	}
 
 func _scene_root(ctx : FlowData.EvaluationContext) -> Node:
@@ -25,15 +27,31 @@ func _collect_regions(root : Node) -> Array:
 		return []
 	if settings.navigation_region_path != NodePath():
 		var node = root.get_node_or_null(settings.navigation_region_path)
-		return [node] if node and node.is_class("NavigationRegion3D") else []
+		if node and node.is_class("NavigationRegion3D"):
+			return [node]
+		setError("NavigationRegion path '%s' was not found or is not a NavigationRegion3D" % settings.navigation_region_path)
+		return []
 	var group : String = settings.group_name.strip_edges()
 	if group != "" and root.get_tree():
 		var out : Array = []
 		for node in root.get_tree().get_nodes_in_group(group):
 			if node and node.is_class("NavigationRegion3D"):
 				out.append(node)
+		if out.is_empty():
+			setError("No NavigationRegion3D found in group '%s'" % group)
 		return out
 	return root.find_children("*", "NavigationRegion3D", true, false)
+
+func _polygon_normal(points : PackedVector3Array) -> Vector3:
+	# Newell's method — robust against degenerate triangles in the fan.
+	if points.size() < 3:
+		return Vector3.ZERO
+	var n := Vector3.ZERO
+	for i in range(points.size()):
+		var a := points[i]
+		var b := points[(i + 1) % points.size()]
+		n += Vector3((a.y - b.y) * (a.z + b.z), (a.z - b.z) * (a.x + b.x), (a.x - b.x) * (a.y + b.y))
+	return n.normalized() if n.length_squared() > 0.0 else Vector3.ZERO
 
 func _polygon_area(points : PackedVector3Array) -> float:
 	if points.size() < 3:
@@ -44,11 +62,25 @@ func _polygon_area(points : PackedVector3Array) -> float:
 		area += ((points[i] - origin).cross(points[i + 1] - origin)).length() * 0.5
 	return area
 
+func computeSceneFingerprint(ctx : FlowData.EvaluationContext) -> Variant:
+	var regions = filterOutGeneratedNodes(_collect_regions(_scene_root(ctx)))
+	var extra := []
+	for region in regions:
+		var nav_mesh = region.get("navigation_mesh")
+		if nav_mesh:
+			extra.append(nav_mesh.get_instance_id())
+			if nav_mesh.has_method("get_vertices"):
+				extra.append(nav_mesh.get_vertices())
+		else:
+			extra.append(0)
+	return hashSceneNodesForFingerprint(ctx, regions, extra)
+
 func execute(ctx : FlowData.EvaluationContext):
 	var regions := _collect_regions(_scene_root(ctx))
 	var positions := PackedVector3Array()
 	var rotations := PackedVector3Array()
 	var sizes := PackedVector3Array()
+	var normals := PackedVector3Array()
 	var region_refs : Array = []
 	var polygon_indices := PackedInt32Array()
 	var areas := PackedFloat32Array()
@@ -79,6 +111,7 @@ func execute(ctx : FlowData.EvaluationContext):
 				positions.append(center)
 				rotations.append(Vector3.ZERO)
 				sizes.append(settings.point_size)
+				normals.append(_polygon_normal(world_pts))
 				region_refs.append(region)
 				polygon_indices.append(poly_idx)
 				areas.append(_polygon_area(world_pts))
@@ -87,6 +120,7 @@ func execute(ctx : FlowData.EvaluationContext):
 				positions.append(region.global_transform * vertices[i])
 				rotations.append(Vector3.ZERO)
 				sizes.append(settings.point_size)
+				normals.append(Vector3.ZERO)
 				region_refs.append(region)
 				polygon_indices.append(i)
 				areas.append(0.0)
@@ -100,6 +134,18 @@ func execute(ctx : FlowData.EvaluationContext):
 		op[i] = positions[i]
 		orot[i] = rotations[i]
 		osize[i] = sizes[i]
+	# Sampler conventions (UE parity): density 1.0 + deterministic per-point seed.
+	var densities := PackedFloat32Array()
+	densities.resize(positions.size())
+	densities.fill(1.0)
+	out.registerStream(FlowData.AttrDensity, densities, FlowData.DataType.Float)
+	var seeds := PackedInt32Array()
+	seeds.resize(positions.size())
+	for i in range(positions.size()):
+		seeds[i] = FlowData.point_seed(positions[i], settings.random_seed)
+	out.registerStream(FlowData.AttrSeed, seeds, FlowData.DataType.Int)
+	if settings.sample_mode == NavigationRegionSamplerSettings.eSampleMode.Polygons and normals.size() == positions.size():
+		out.registerStream(FlowData.AttrNormal, normals, FlowData.DataType.Vector)
 	if settings.out_region_attribute.strip_edges() != "":
 		out.registerStream(settings.out_region_attribute, region_refs, FlowData.DataType.NodePath)
 	if settings.out_polygon_index_attribute.strip_edges() != "":

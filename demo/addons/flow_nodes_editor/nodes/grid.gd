@@ -7,14 +7,16 @@ func _init():
 		"settings" : GridNodeSettings,
 		"ins" : [],
 		"outs" : [{ "label" : "Out" }],
+		"aliases" : ["Create Points Grid", "Create Points"],
+		"category" : "Sampler",
 		"tooltip" : "Generates a set of points in a grid spatial distribution,\nwhere the separation is step",
 	}
 
 func execute( ctx : FlowData.EvaluationContext ):
 	var output := FlowData.Data.new()
-	var nx : int = getSettingValue( ctx, "x" )
-	var ny : int = getSettingValue( ctx, "y" )
-	var nz : int = getSettingValue( ctx, "z" )
+	var nx : int = getSettingValue( ctx, "x", 3 )
+	var ny : int = getSettingValue( ctx, "y", 1 )
+	var nz : int = getSettingValue( ctx, "z", 3 )
 	var nsamples : int = nx * ny * nz
 	output.addCommonStreams( nsamples )
 	var spos := output.getVector3Container( FlowData.AttrPosition )
@@ -23,10 +25,10 @@ func execute( ctx : FlowData.EvaluationContext ):
 	assert( spos != null )
 	#print( "Spos.size %d of type %s" % [ spos.size(), type_string(typeof(spos)) ])
 	var idx := 0
-	var origin : Vector3 = getSettingValue( ctx, "origin" )
-	var rotation : Vector3 = getSettingValue( ctx, "rotation" )
-	var step : Vector3 = getSettingValue( ctx, "step" )
-	var size : Vector3 = Vector3.ONE * getSettingValue( ctx, "size" )
+	var origin : Vector3 = getSettingValue( ctx, "origin", Vector3.ZERO )
+	var rotation : Vector3 = getSettingValue( ctx, "rotation", Vector3.ZERO )
+	var step : Vector3 = getSettingValue( ctx, "step", Vector3.ONE )
+	var size : Vector3 = Vector3.ONE * getSettingValue( ctx, "size", 1.0 )
 	var transform = Transform3D( FlowData.eulerToBasis(rotation), origin )
 	for iz in range( 0, nz ):
 		for iy in range( 0, ny ):
@@ -36,4 +38,17 @@ func execute( ctx : FlowData.EvaluationContext ):
 				srot[idx] = rotation
 				ssize[idx] = size
 				idx += 1
+
+	# Density + per-point seed streams (UE parity)
+	var node_seed : int = settings.random_seed
+	var sdensity := PackedFloat32Array()
+	sdensity.resize( nsamples )
+	sdensity.fill( 1.0 )
+	output.registerStream( FlowData.AttrDensity, sdensity, FlowData.DataType.Float )
+	var sseed := PackedInt32Array()
+	sseed.resize( nsamples )
+	for i in range( nsamples ):
+		sseed[i] = FlowData.point_seed( spos[i], node_seed )
+	output.registerStream( FlowData.AttrSeed, sseed, FlowData.DataType.Int )
+
 	set_output( 0, output )

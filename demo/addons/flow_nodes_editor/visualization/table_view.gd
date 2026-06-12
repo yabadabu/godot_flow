@@ -13,6 +13,7 @@ var dragging := false
 var separator : PackedScene = preload("res://addons/flow_nodes_editor/visualization/draggable_separator.tscn") 
 
 signal cell_clicked( row : int, col : int )
+signal row_double_clicked( row : int )
 signal title_clicked( col : int )
 
 func clearColumns():
@@ -113,7 +114,11 @@ func setColumnCallback( new_callback : Callable ):
 func _ready():
 	$TitlesContainer.get_h_scroll_bar().value_changed.connect( titlesScrolled )
 	$ScrollContainer.get_h_scroll_bar().value_changed.connect( dataScrolled )
-	#$ScrollContainer/Contents.gui_input.connect( _on_contents_gui_input )
+	var contents: Control = $ScrollContainer.get_node_or_null("Contents") as Control
+	if contents:
+		contents.mouse_filter = Control.MOUSE_FILTER_STOP
+		if not contents.gui_input.is_connected(_on_contents_gui_input):
+			contents.gui_input.connect(_on_contents_gui_input)
 
 func setSelectedRow( new_row : int ):
 	$ScrollContainer.selected_row = new_row
@@ -123,34 +128,59 @@ func setRowHeight( new_height : float ):
 	$ScrollContainer.font_size = new_height
 	$ScrollContainer.line_height = new_height * 1.4
 	
-func findColAtX( ex : float ):
+func findColAtX(ex: float) -> int:
+	if col_starts.size() < 2:
+		return -1
 	ex -= $ScrollContainer.scroll_horizontal
-	for col in range(col_starts.size()-1):
-		if ex >= col_starts[ col ] and ex < col_starts[ col+ 1 ]:
+	if ex < col_starts[0]:
+		return 0
+	for col in range(col_starts.size() - 1):
+		if ex >= col_starts[col] and ex < col_starts[col + 1]:
 			return col
-	return -1
+	return col_starts.size() - 2
 
-func checkSelectedRow( event : InputEvent ):
-	if dragging:
-		var ex = event.position.x
-		var col = findColAtX( ex )
-		if col != -1:
-			var row = int( ( event.position.y ) / $ScrollContainer.line_height )
-			cell_clicked.emit( row, col )
-	
-	
-func _on_contents_gui_input(event: InputEvent) -> void:
+## [param viewport_relative]: true for ScrollContainer / viewport coords; false for Contents content coords.
+func _row_at_local_position(local_pos: Vector2, viewport_relative: bool = true) -> int:
+	if $ScrollContainer.line_height <= 0:
+		return -1
+	var content_y := local_pos.y
+	if viewport_relative:
+		content_y += float($ScrollContainer.scroll_vertical)
+	var row := int(floor(content_y / float($ScrollContainer.line_height)))
+	if row < 0 or row >= $ScrollContainer.num_rows:
+		return -1
+	return row
+
+func _emit_cell_click_at(event: InputEvent, viewport_relative: bool) -> void:
+	var row := _row_at_local_position(event.position, viewport_relative)
+	if row < 0:
+		return
+	var col := findColAtX(event.position.x)
+	if col < 0:
+		col = 0
+	cell_clicked.emit(row, col)
+
+func _handle_table_pointer_event(event: InputEvent, viewport_relative: bool) -> void:
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT:
+			if event.pressed and event.double_click:
+				var row := _row_at_local_position(event.position, viewport_relative)
+				if row >= 0:
+					row_double_clicked.emit(row)
+					accept_event()
+				return
 			if event.pressed:
 				dragging = true
-				checkSelectedRow( event )
+				_emit_cell_click_at(event, viewport_relative)
 			else:
+				if dragging:
+					_emit_cell_click_at(event, viewport_relative)
 				dragging = false
-	elif event is InputEventMouseMotion:
-		if dragging:
-			checkSelectedRow( event )
-				
+	elif event is InputEventMouseMotion and dragging:
+		_emit_cell_click_at(event, viewport_relative)
+
+func _on_contents_gui_input(event: InputEvent) -> void:
+	_handle_table_pointer_event(event, false)
 
 func _on_column_titles_gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
@@ -158,10 +188,6 @@ func _on_column_titles_gui_input(event: InputEvent) -> void:
 			if event.pressed:
 				var col = findColAtX( event.position.x )
 				title_clicked.emit( col )
-
-func _input(event):
-	if visible and get_rect().has_point(get_local_mouse_position()):
-		_on_contents_gui_input( event )
 
 func _on_visibility_changed() -> void:
 	if visible:

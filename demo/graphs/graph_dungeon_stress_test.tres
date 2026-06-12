@@ -103,12 +103,6 @@ data = {
 "to_node": &"sort_candidates",
 "to_port": 0
 }, {
-"from_node": &"sort_candidates",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"room_selector_loop",
-"to_port": 0
-}, {
 "from_node": &"room_floor_cells",
 "from_port": 0,
 "keep_alive": false,
@@ -247,24 +241,6 @@ data = {
 "to_node": &"set_type_chest",
 "to_port": 0
 }, {
-"from_node": &"set_type_torch",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"sub_lighting",
-"to_port": 0
-}, {
-"from_node": &"set_type_pillar",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"sub_pillar",
-"to_port": 0
-}, {
-"from_node": &"set_type_chest",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"sub_chest",
-"to_port": 0
-}, {
 "from_node": &"room_selector_loop",
 "from_port": 1,
 "keep_alive": false,
@@ -313,22 +289,16 @@ data = {
 "to_node": &"set_type_pillar",
 "to_port": 0
 }, {
+"from_node": &"sort_candidates",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"room_selector_loop",
+"to_port": 0
+}, {
 "from_node": &"set_type_floor",
 "from_port": 0,
 "keep_alive": false,
 "to_node": &"sub_floor",
-"to_port": 0
-}, {
-"from_node": &"room_style",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"sub_dressing",
-"to_port": 0
-}, {
-"from_node": &"room_style",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"sub_upper_level",
 "to_port": 0
 }, {
 "from_node": &"set_type_wall",
@@ -337,10 +307,40 @@ data = {
 "to_node": &"sub_wall",
 "to_port": 0
 }, {
+"from_node": &"set_type_pillar",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"sub_pillar",
+"to_port": 0
+}, {
+"from_node": &"set_type_chest",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"sub_chest",
+"to_port": 0
+}, {
+"from_node": &"set_type_torch",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"sub_lighting",
+"to_port": 0
+}, {
+"from_node": &"room_style",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"sub_upper_level",
+"to_port": 0
+}, {
 "from_node": &"grid_boundary",
 "from_port": 0,
 "keep_alive": false,
 "to_node": &"sub_wall_decor",
+"to_port": 0
+}, {
+"from_node": &"room_style",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"sub_dressing",
 "to_port": 0
 }],
 "min_pos": Vector2(0, 240),
@@ -414,6 +414,8 @@ data = {
 "grid_size": Vector3(4, 0, 4),
 "inspect_enabled": false,
 "random_seed": 4010138963,
+"rotation_grid_size": Vector3(0, 0, 0),
+"scale_grid_size": Vector3(0, 0, 0),
 "snap_position": true,
 "snap_rotation": false,
 "snap_scale": false,
@@ -1007,6 +1009,7 @@ data = {
 "disabled": false,
 "graph": ExtResource("4_br400"),
 "inspect_enabled": false,
+"param_overrides": {},
 "random_seed": 2157611369,
 "title": "Subgraph",
 "trace": false
@@ -1184,6 +1187,7 @@ data = {
 "disabled": false,
 "graph": ExtResource("5_woyq1"),
 "inspect_enabled": false,
+"param_overrides": {},
 "random_seed": 3762328283,
 "title": "Subgraph",
 "trace": false
@@ -1254,32 +1258,6 @@ data = {
 "port": 0
 }
 },
-"name": &"sub_dressing",
-"position": Vector2(5420, 820),
-"settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"graph": ExtResource("7_br400"),
-"inspect_enabled": false,
-"random_seed": 2901718801,
-"title": "Subgraph",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "subgraph"
-}, {
-"args_port": {
-"rooms": {
-"connected": true,
-"port": 0
-}
-},
 "name": &"sub_upper_level",
 "position": Vector2(5420, 40),
 "settings": {
@@ -1293,6 +1271,7 @@ data = {
 "disabled": false,
 "graph": ExtResource("8_woyq1"),
 "inspect_enabled": false,
+"param_overrides": {},
 "random_seed": 1977195003,
 "title": "Subgraph",
 "trace": false
@@ -1410,6 +1389,7 @@ data = {
 "disabled": false,
 "graph": ExtResource("3_8t3ph"),
 "inspect_enabled": false,
+"param_overrides": {},
 "random_seed": 521637806,
 "title": "Subgraph",
 "trace": false
@@ -1470,6 +1450,7 @@ data = {
 "disabled": false,
 "graph": ExtResource("6_ysciv"),
 "inspect_enabled": false,
+"param_overrides": {},
 "random_seed": 857627141,
 "title": "Subgraph",
 "trace": false
@@ -1585,6 +1566,7 @@ data = {
 "disabled": false,
 "graph": ExtResource("2_lefd7"),
 "inspect_enabled": false,
+"param_overrides": {},
 "random_seed": 2887409910,
 "title": "Subgraph",
 "trace": false
@@ -1611,6 +1593,7 @@ data = {
 "disabled": false,
 "graph": ExtResource("9_ysciv"),
 "inspect_enabled": false,
+"param_overrides": {},
 "random_seed": 1626203178,
 "title": "Subgraph",
 "trace": false
@@ -1661,7 +1644,7 @@ data = {
 "cte_resource": null,
 "cte_string": "",
 "cte_vector": Vector3(0, 0, 0),
-"data_type": 2,
+"data_type": 1,
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
@@ -1892,10 +1875,37 @@ data = {
 },
 "show_disconnected_inputs": false,
 "template": "spawn_scenes"
+}, {
+"args_port": {
+"rooms": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"sub_dressing",
+"position": Vector2(5420, 820),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"graph": ExtResource("7_br400"),
+"inspect_enabled": false,
+"param_overrides": {},
+"random_seed": 2901718801,
+"title": "Subgraph",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "subgraph"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
-view_zoom = 0.45320922
-view_offset = Vector2(2663.1646, 20.85498)
+view_zoom = 0.7298981
+view_offset = Vector2(3050.2573, 0)
 new_name_counter = 83

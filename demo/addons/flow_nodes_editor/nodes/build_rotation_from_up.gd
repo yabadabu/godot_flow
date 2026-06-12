@@ -5,33 +5,38 @@ func _init():
 	meta_node = {
 		"title" : "Build Rotation From Up Vector",
 		"settings" : BuildRotationFromUpNodeSettings,
-		"ins" : [{ "label": "In" }], 
+		"ins" : [{ "label": "In" }],
 		"outs" : [{ "label" : "Out" }],
 		"tooltip" : "Computes rotation from an up vector stream or constant and applies it to the points.",
+		"aliases" : ["Build Rotation From Up Vector", "Make Rot"],
+		"category" : "Spatial",
 	}
 
 func execute( ctx : FlowData.EvaluationContext ):
-	var in_data : FlowData.Data = get_input(0)
+	var in_data : FlowData.Data = require_input(0, ctx, "Input 'In'")
 	if in_data == null:
-		setError("Input 'In' is not connected")
 		return
-	
+
+	var axis_val : String = String(settings.axis).strip_edges().to_lower()
+	if axis_val not in ["x", "y", "z"]:
+		setError("Axis must be one of x/y/z (got '%s')" % settings.axis)
+		return
+
 	var out_data : FlowData.Data = in_data.duplicate()
 	var num_elems = in_data.size()
 	var srot : PackedVector3Array
-	var cloned = out_data.cloneStream(FlowData.AttrRotation)
-	if cloned != null:
-		srot = cloned
+	if out_data.hasStream(FlowData.AttrRotation):
+		srot = out_data.cloneStream(FlowData.AttrRotation)
 	else:
 		# Input has no rotation stream yet — create one (this node builds rotation from scratch)
 		srot = out_data.addStream(FlowData.AttrRotation, FlowData.DataType.Vector)
-	
+
 	var use_constant = settings.use_constant
 	var up_const = settings.up_vector_constant
 	var attr_name = settings.up_vector_attribute
-	var axis_val = settings.axis
-	
+
 	var stream_up = null
+	var stream_up_size := 0
 	if not use_constant and attr_name != "":
 		stream_up = in_data.findStream(attr_name)
 		if stream_up == null:
@@ -41,13 +46,21 @@ func execute( ctx : FlowData.EvaluationContext ):
 				return
 			setError("Up vector attribute '%s' not found" % attr_name)
 			return
-			
+		if stream_up.data_type != FlowData.DataType.Vector:
+			setError("Up vector attribute '%s' must be a Vector stream" % attr_name)
+			return
+		stream_up_size = stream_up.container.size()
+		if stream_up_size != num_elems and stream_up_size != 1:
+			setError("Up vector attribute '%s' has %d values but input has %d points (expected %d or 1)" % [attr_name, stream_up_size, num_elems, num_elems])
+			return
+
 	for i in num_elems:
 		var up_vec = up_const
 		if stream_up:
-			up_vec = stream_up.container[i]
-		var basis = FlowData.basisFromNormal(up_vec, Vector3.UP if abs(up_vec.dot(Vector3.UP)) < 0.99 else Vector3.RIGHT, axis_val)
+			up_vec = stream_up.container[FlowData.bcast_idx(stream_up_size, i)]
+		# basisFromNormal already falls back to a safe up when nearly parallel
+		var basis = FlowData.basisFromNormal(up_vec, Vector3.UP, axis_val)
 		srot[i] = FlowData.basisToEuler(basis)
-		
+
 	out_data.registerStream(FlowData.AttrRotation, srot, FlowData.DataType.Vector)
 	set_output(0, out_data)

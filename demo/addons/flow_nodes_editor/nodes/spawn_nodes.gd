@@ -7,6 +7,8 @@ func _init():
 	meta_node = {
 		"title" : "Spawn Nodes",
 		"settings" : SpawnNodesNodeSettings,
+		"aliases" : ["Spawn Actor (Nodes)"],
+		"category" : "Spawner",
 		"ins" : [{ "label" : "In" }],
 		"outs" : [{ "label" : "Out" }],
 		"is_final" : true,
@@ -33,22 +35,29 @@ func _resolve_spawn_parent(root : Node3D) -> Node3D:
 	setError("Spawn parent path '%s' is invalid or not a Node3D" % path)
 	return root
 
-func _resolve_class_name_for_point(idx : int, selector_stream) -> String:
+func _build_trimmed_variants() -> Array[String]:
 	var variants : Array[String] = []
 	for entry in settings.node_class_variants:
 		var trimmed = String(entry).strip_edges()
 		if trimmed != "":
 			variants.append(trimmed)
+	return variants
+
+func _resolve_class_name_for_point(idx : int, variants : Array[String], selector_stream, point_seeds) -> String:
 	if variants.is_empty():
 		return settings.node_class.strip_edges()
 
 	if settings.randomize_node_variants:
 		var rng_local := RandomNumberGenerator.new()
-		rng_local.seed = settings.random_seed + idx * 811
+		if point_seeds != null:
+			# Per-point seed stream present: derive the pick from it (UE parity)
+			rng_local.seed = int(point_seeds[idx]) ^ settings.random_seed
+		else:
+			rng_local.seed = settings.random_seed + idx * 811
 		return variants[rng_local.randi_range(0, variants.size() - 1)]
 
 	if selector_stream != null:
-		var read_idx = idx if selector_stream.container.size() > 1 else 0
+		var read_idx = FlowData.bcast_idx( selector_stream.container.size(), idx )
 		var val = int(absf(float(selector_stream.container[read_idx])))
 		return variants[val % variants.size()]
 
@@ -70,9 +79,8 @@ func _instantiate_class_or_script(class_name_to_spawn : String) -> Node:
 	return ClassDB.instantiate(class_name_to_spawn)
 
 func execute( ctx : FlowData.EvaluationContext ):
-	var in_data : FlowData.Data = get_input(0)
-	if !in_data:
-		setError( "Input is invalid")
+	var in_data : FlowData.Data = require_input( 0, ctx )
+	if in_data == null:
 		return
 
 	if in_data.size() == 0:
@@ -102,12 +110,9 @@ func execute( ctx : FlowData.EvaluationContext ):
 	if not node_tree:
 		setError("Invalid current scene")
 		return
-		
+
 	var scene_root = node_tree.current_scene
-	if not root.get_tree():
-		setError("Invalid scene_root scene")
-		return
-		
+
 	var owner_of_spawned_nodes : Node
 	if scene_root:
 		owner_of_spawned_nodes = scene_root
@@ -134,11 +139,23 @@ func execute( ctx : FlowData.EvaluationContext ):
 		var stream_name = settings.assign_attributes[ node_property ]
 		var stream = in_data.findStream( stream_name )
 		if stream:
+			var s_size = stream.container.size()
+			if s_size != in_size and s_size != 1:
+				setError("Assign attribute '%s' must have %d values or 1 value (got %d)" % [stream_name, in_size, s_size])
+				return
 			streams_to_assign.append( { "node_property" : node_property, "container" : stream.container } )
+
+	# Per-point seed stream (UE parity): when present, randomized variant picks
+	# derive from it instead of the index-based fallback
+	var point_seeds = in_data.getContainerChecked( FlowData.AttrSeed, FlowData.DataType.Int )
+	if point_seeds != null and point_seeds.size() != in_size:
+		point_seeds = null
+
+	var variants : Array[String] = _build_trimmed_variants()
 
 	# Spawn nodes
 	for idx in range( in_size ):
-		var class_name_to_spawn = _resolve_class_name_for_point(idx, selector_stream)
+		var class_name_to_spawn = _resolve_class_name_for_point(idx, variants, selector_stream, point_seeds)
 		var node : Node = _instantiate_class_or_script(class_name_to_spawn)
 
 		if not node:
@@ -165,7 +182,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 
 		# Assign mapped attributes to properties
 		for s in streams_to_assign:
-			var read_idx = idx if s.container.size() > 1 else 0
+			var read_idx = FlowData.bcast_idx( s.container.size(), idx )
 			assign_target.set( s.node_property, s.container[ read_idx ])
 	
 	if Engine.is_editor_hint():

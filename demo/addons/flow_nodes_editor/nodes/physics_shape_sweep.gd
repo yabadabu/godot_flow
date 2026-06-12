@@ -9,6 +9,9 @@ func _init():
 		"settings" : PhysicsShapeSweepSettings,
 		"ins" : [{ "label" : "In" }],
 		"outs" : [{ "label" : "Out" }],
+		"aliases" : ["Shape Sweep", "Shape Trace"],
+		"category" : "Spatial",
+		"queries_physics" : true,
 		"tooltip" : "Sweeps a sphere or box from each point through the Godot physics world.",
 	}
 
@@ -46,9 +49,14 @@ func _resolve_vector_stream(in_data : FlowData.Data, name : String, in_size : in
 	if attr == "":
 		return null
 	var stream = in_data.findStream(attr)
-	if stream == null or stream.data_type != FlowData.DataType.Vector:
+	if stream == null:
+		setError("Direction attribute '%s' not found" % attr)
+		return null
+	if stream.data_type != FlowData.DataType.Vector:
+		setError("Direction attribute '%s' must be a Vector stream" % attr)
 		return null
 	if stream.container.size() != in_size and stream.container.size() != 1:
+		setError("Direction attribute '%s' must have %d values or 1 value (got %d)" % [attr, in_size, stream.container.size()])
 		return null
 	return stream.container
 
@@ -58,38 +66,60 @@ func _resolve_scalar_stream(in_data : FlowData.Data, name : String, in_size : in
 		return null
 	var stream = in_data.findStream(attr)
 	if stream == null:
+		setError("Distance attribute '%s' not found" % attr)
 		return null
 	if stream.data_type != FlowData.DataType.Float and stream.data_type != FlowData.DataType.Int:
+		setError("Distance attribute '%s' must be Float or Int" % attr)
 		return null
 	if stream.container.size() != in_size and stream.container.size() != 1:
+		setError("Distance attribute '%s' must have %d values or 1 value (got %d)" % [attr, in_size, stream.container.size()])
 		return null
 	return stream
 
 func execute(ctx : FlowData.EvaluationContext):
-	var in_data : FlowData.Data = get_input(0)
+	var in_data : FlowData.Data = require_input(0, ctx)
 	if in_data == null:
-		setError("Input not found")
 		return
 	var in_size := in_data.size()
 	if in_size == 0:
 		set_output(0, in_data.duplicate())
 		return
 	var root := _scene_root(ctx)
-	if root == null or root.get_world_3d() == null:
-		set_output(0, in_data.duplicate())
+	if root == null:
+		setError("No scene root available to query the physics world")
+		return
+	if not root.has_method("get_world_3d"):
+		setError("Scene root '%s' is not a Node3D — no 3D physics world to query" % root.name)
+		return
+	if root.get_world_3d() == null:
+		setError("Scene root has no 3D world to query")
 		return
 	var state = root.get_world_3d().direct_space_state
 	var positions = in_data.getContainerChecked(settings.position_attribute, FlowData.DataType.Vector)
-	if positions == null or positions.size() != in_size:
-		setError("Position attribute '%s' must be a Vector stream with one value per point" % settings.position_attribute)
+	if positions == null or (positions.size() != in_size and positions.size() != 1):
+		setError("Position attribute '%s' must be a Vector stream with %d values or 1 value" % [settings.position_attribute, in_size])
 		return
+	var pos_size : int = positions.size()
 
-	var directions = _resolve_vector_stream(in_data, settings.direction_attribute, in_size) if settings.direction_mode == PhysicsShapeSweepSettings.eDirectionMode.FromAttribute else null
-	var distances = _resolve_scalar_stream(in_data, settings.distance_attribute, in_size)
+	var directions = null
+	if settings.direction_mode == PhysicsShapeSweepSettings.eDirectionMode.FromAttribute:
+		directions = _resolve_vector_stream(in_data, settings.direction_attribute, in_size)
+		if directions == null:
+			if settings.direction_attribute.strip_edges() == "":
+				setError("Direction mode is FromAttribute but no direction attribute is set")
+			return
+	var distances = null
+	if settings.distance_attribute.strip_edges() != "":
+		distances = _resolve_scalar_stream(in_data, settings.distance_attribute, in_size)
+		if distances == null:
+			return
 	var point_sizes = in_data.getVector3Container(FlowData.AttrSize)
 	var has_point_sizes := point_sizes.size() == in_size
 
-	var out_positions := PackedVector3Array(positions)
+	var out_positions := PackedVector3Array()
+	out_positions.resize(in_size)
+	for i in range(in_size):
+		out_positions[i] = positions[FlowData.bcast_idx(pos_size, i)]
 	var hits := PackedByteArray()
 	var safe_fractions := PackedFloat32Array()
 	var unsafe_fractions := PackedFloat32Array()
@@ -105,18 +135,24 @@ func execute(ctx : FlowData.EvaluationContext):
 	query.collide_with_areas = settings.collide_with_areas
 	query.exclude = _build_exclude_rids(root)
 
+	# The shape only varies per point when it follows the point size.
+	var shared_shape : Shape3D = null
+	if not settings.use_point_size_for_shape:
+		shared_shape = _create_shape(Vector3.ONE)
+
 	for i in range(in_size):
+		var ppos : Vector3 = positions[FlowData.bcast_idx(pos_size, i)]
 		var dir : Vector3 = settings.direction
 		if directions != null:
-			dir = directions[i if directions.size() > 1 else 0]
+			dir = directions[FlowData.bcast_idx(directions.size(), i)]
 		if dir.length_squared() > 0.0000001:
 			dir = dir.normalized()
 		var dist : float = settings.distance
 		if distances != null:
-			dist = float(distances.container[i if distances.container.size() > 1 else 0])
+			dist = float(distances.container[FlowData.bcast_idx(distances.container.size(), i)])
 		var motion := dir * maxf(0.0, dist)
-		query.shape = _create_shape(point_sizes[i] if has_point_sizes else Vector3.ONE)
-		query.transform = Transform3D(Basis.IDENTITY, positions[i])
+		query.shape = shared_shape if shared_shape else _create_shape(point_sizes[i] if has_point_sizes else Vector3.ONE)
+		query.transform = Transform3D(Basis.IDENTITY, ppos)
 		query.motion = motion
 		var result : PackedFloat32Array = state.cast_motion(query)
 		var safe := 1.0
@@ -128,9 +164,12 @@ func execute(ctx : FlowData.EvaluationContext):
 		hits[i] = 1 if hit else 0
 		safe_fractions[i] = safe
 		unsafe_fractions[i] = unsafe
-		out_positions[i] = positions[i] + motion * safe
+		out_positions[i] = ppos + motion * safe
 		if hit and settings.out_collider_attribute.strip_edges() != "":
-			query.transform = Transform3D(Basis.IDENTITY, out_positions[i])
+			# Query the rest info at the UNSAFE (penetrating) fraction — at the
+			# safe fraction the shape is by definition just-not-touching and
+			# get_rest_info would frequently come back empty.
+			query.transform = Transform3D(Basis.IDENTITY, ppos + motion * unsafe)
 			query.motion = Vector3.ZERO
 			var rest : Dictionary = state.get_rest_info(query)
 			if rest:

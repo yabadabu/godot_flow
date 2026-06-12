@@ -4,10 +4,13 @@ class_name FlowNodeIO
 # Here are all functions related to read/write the resources, including 
 # serialization to/from json for the clipboard
 
+const LOAD_PROGRESS_CHUNK_SIZE := 8
+const FAST_GRAPH_LOAD_NODE_THRESHOLD := 24
+
 static func resource_to_dict(resource: Resource) -> Dictionary:
 	var dict := {}
 	for prop in resource.get_property_list():
-		if prop.name in FlowNodeAssets.discardted_props:
+		if prop.name in FlowNodeAssets.discarded_props:
 			continue
 		if prop.usage & PROPERTY_USAGE_STORAGE != 0:
 			var name = prop.name
@@ -45,7 +48,7 @@ static  func _parse_vector3(value) -> Vector3:
 static func dict_to_resource(data: Dictionary, resource: Resource) -> void:
 	for prop in resource.get_property_list():
 		var name = prop.name
-		if name in FlowNodeAssets.discardted_props:
+		if name in FlowNodeAssets.discarded_props:
 			continue
 		if not data.has(name):
 			continue
@@ -85,6 +88,50 @@ static func _stabilize_missing_seed(settings_res: Resource, node_name: String, t
 		stable_seed = 1
 	settings_res.set("random_seed", stable_seed)
 
+static func _serialize_args_ports(node, editor: Control) -> Dictionary:
+	var args_ports: Dictionary = node.args_ports_by_name.duplicate(true)
+	for arg_name in args_ports:
+		args_ports[arg_name].connected = editor.is_node_port_connected(node.name, args_ports[arg_name].port)
+	return args_ports
+
+static func _settings_name(settings) -> String:
+	if settings == null:
+		return ""
+	if settings is Dictionary:
+		return str(settings.get("name", ""))
+	if settings is Object and "name" in settings:
+		return str(settings.name)
+	return ""
+
+static func _canonical_dynamic_node_template(node_template: String, settings) -> String:
+	var param_name := _settings_name(settings)
+	if param_name.is_empty():
+		return node_template
+	if node_template.begins_with("input_"):
+		return "input_%s" % param_name
+	if node_template.begins_with("output_"):
+		return "output_%s" % param_name
+	return node_template
+
+static func _serialized_node_template(node) -> String:
+	return _canonical_dynamic_node_template(str(node.node_template), node.settings)
+
+static func _template_for_load(in_node: Dictionary, editor: Control) -> String:
+	var node_template := str(in_node.get("template", ""))
+	var canonical_template := _canonical_dynamic_node_template(
+		node_template,
+		in_node.get("settings", {})
+	)
+	if editor.has_method("ensureNodeTypeRegistered"):
+		editor.ensureNodeTypeRegistered(canonical_template)
+	return canonical_template
+
+static func _normalize_loaded_node_template(node, editor: Control) -> void:
+	if node == null:
+		return
+	if editor.has_method("normalizeDynamicNodeTemplate"):
+		editor.normalizeDynamicNodeTemplate(node)
+
 static func nodes_as_dict( nodes, frames, editor : Control ):
 	var exported_node_names = {}
 	
@@ -100,14 +147,13 @@ static func nodes_as_dict( nodes, frames, editor : Control ):
 	
 	var nodes_clean = nodes.map( func( node ):
 		exported_node_names[ node.name ] = 1
-		node.refreshConnectionFlags()
 		
 		return {
 			"position" : ( node.position_offset - min_pos ) / editor.ui_scale,
 			"name" : node.name,
-			"template" : node.node_template,
+			"template" : _serialized_node_template(node),
 			"show_disconnected_inputs" : node.show_disconnected_inputs,
-			"args_port" : node.args_ports_by_name,
+			"args_port" : _serialize_args_ports(node, editor),
 			"settings" : resource_to_dict( node.settings ),
 		}
 	)
@@ -156,18 +202,42 @@ static func _paste_nodes_from_dict( dict, editor : Control, at_graph_coords = nu
 	for node in new_nodes:
 		node.selected = true
 
+static func _ensure_unique_set_variable_name(node, editor: Control, variable_name_remaps: Dictionary) -> void:
+	if node == null or node.node_template != "set_variable" or node.settings == null or not ("variable_name" in node.settings):
+		return
+	var original_name := String(node.settings.variable_name).strip_edges()
+	if not editor.has_method("ensureSetVariableNameUnique"):
+		return
+	var unique_name := String(editor.ensureSetVariableNameUnique(node, false))
+	if not original_name.is_empty() and unique_name != original_name:
+		variable_name_remaps[original_name] = unique_name
+
+static func _remap_get_variable_names(nodes: Array, variable_name_remaps: Dictionary) -> void:
+	if variable_name_remaps.is_empty():
+		return
+	for node in nodes:
+		if node == null or node.node_template != "get_variable" or node.settings == null or not ("variable_name" in node.settings):
+			continue
+		var variable_name := String(node.settings.variable_name).strip_edges()
+		if not variable_name_remaps.has(variable_name):
+			continue
+		node.settings.variable_name = variable_name_remaps[variable_name]
+		node.refreshFromSettings()
+
 static func create_nodes_from_dict( dict, editor : Control, paste_offset = null):		
 	if dict.get( "type", null) != "flow_graph_nodes":
 		push_error( "Invalid dict to paste nodes from" )
 		return []
 	var new_nodes = []
 	var old_to_new_names = {}
+	var variable_name_remaps := {}
 	for in_node in dict.nodes:
 		var in_name = in_node.name
+		var node_template = _template_for_load(in_node, editor)
 		var new_name = in_name
 		if editor.gedit_nodes_by_name.has( in_name ):
-			new_name = editor.getNewName(in_node.template)
-		var node = editor.addNodeFromTemplate( in_node.template, new_name )
+			new_name = editor.getNewName(node_template)
+		var node = editor.addNodeFromTemplate( node_template, new_name )
 		if not node:
 			return null
 		var in_pos = _parse_vector2( in_node.position )
@@ -177,6 +247,8 @@ static func create_nodes_from_dict( dict, editor : Control, paste_offset = null)
 		
 		# Apply saved settings...
 		dict_to_resource( in_node.settings, node.settings )
+		_normalize_loaded_node_template(node, editor)
+		_ensure_unique_set_variable_name(node, editor, variable_name_remaps)
 		
 		# Never inport the inspect_enabled
 		node.settings.inspect_enabled = false
@@ -189,6 +261,8 @@ static func create_nodes_from_dict( dict, editor : Control, paste_offset = null)
 		old_to_new_names[ in_name ] = new_name
 		new_nodes.append( node )
 		
+	_remap_get_variable_names(new_nodes, variable_name_remaps)
+
 	# Recreate the links
 	for link in dict.links:
 		var new_from = old_to_new_names.get( link.from_node, null )
@@ -198,6 +272,7 @@ static func create_nodes_from_dict( dict, editor : Control, paste_offset = null)
 			continue
 		editor.connect_nodes(new_from, link.from_port, new_to, link.to_port )
 
+	var attached_names := {}
 	for frame_data in dict.get( "frames", [] ):
 		var frame := GraphFrame.new()
 		frame.name = frame_data.name
@@ -210,10 +285,144 @@ static func create_nodes_from_dict( dict, editor : Control, paste_offset = null)
 		editor.gedit.add_child(frame)
 		for old_name in frame_data.attached:
 			var new_name = old_to_new_names.get( old_name, null )
-			if new_name:
-				editor.gedit.attach_graph_element_to_frame( new_name, frame.name )
+			if _attach_graph_node_to_frame_if_available(editor, new_name, frame.name, attached_names):
+				continue
 
+	if editor.has_method("refreshVariableNodes"):
+		editor.refreshVariableNodes()
+	if editor.has_method("repair_graph_integrity"):
+		editor.repair_graph_integrity()
 	return new_nodes
+
+static func create_nodes_from_dict_with_progress(dict, editor: Control, paste_offset = null, progress_callback: Callable = Callable(), start_progress := 45.0, end_progress := 92.0) -> Array:
+	if dict.get("type", null) != "flow_graph_nodes":
+		push_error("Invalid dict to paste nodes from")
+		return []
+
+	var source_nodes: Array = dict.get("nodes", [])
+	if source_nodes.size() <= FAST_GRAPH_LOAD_NODE_THRESHOLD:
+		return create_nodes_from_dict(dict, editor, paste_offset)
+	var source_links: Array = dict.get("links", [])
+	var source_frames: Array = dict.get("frames", [])
+	var total_steps = maxi(source_nodes.size() * 4 + source_links.size() + source_frames.size(), 1)
+	var completed_steps := 0
+	var new_nodes := []
+	var old_to_new_names := {}
+	var variable_name_remaps := {}
+
+	for in_node in source_nodes:
+		completed_steps += 1
+		if _should_report_load_progress(completed_steps, total_steps):
+			await _report_load_progress(progress_callback, "Building Graph...", completed_steps, total_steps, start_progress, end_progress)
+
+		var in_name = in_node.name
+		var node_template = _template_for_load(in_node, editor)
+		var new_name = in_name
+		if editor.gedit_nodes_by_name.has(in_name):
+			new_name = editor.getNewName(node_template)
+		var node = editor.addNodeFromTemplate(node_template, new_name, null, false)
+		if not node:
+			return []
+		var in_pos = _parse_vector2(in_node.position)
+		node.position_offset = (in_pos + paste_offset) * editor.ui_scale
+		node.show_disconnected_inputs = in_node.get("show_disconnected_inputs", false)
+		node.args_ports_by_name = in_node.get("args_port", {})
+
+		completed_steps += 1
+		if _should_report_load_progress(completed_steps, total_steps):
+			await _report_load_progress(progress_callback, "Building Graph...", completed_steps, total_steps, start_progress, end_progress)
+
+		dict_to_resource(in_node.settings, node.settings)
+		_normalize_loaded_node_template(node, editor)
+		_ensure_unique_set_variable_name(node, editor, variable_name_remaps)
+		node.settings.inspect_enabled = false
+
+		completed_steps += 1
+		if _should_report_load_progress(completed_steps, total_steps):
+			await _report_load_progress(progress_callback, "Building Graph...", completed_steps, total_steps, start_progress, end_progress)
+
+		node.initFromScript()
+		node.refreshFromSettings()
+		editor.refreshSignalsInputArgs(node)
+
+		old_to_new_names[in_name] = new_name
+		new_nodes.append(node)
+		completed_steps += 1
+		if _should_report_load_progress(completed_steps, total_steps):
+			await _report_load_progress(progress_callback, "Building Graph...", completed_steps, total_steps, start_progress, end_progress)
+
+	_remap_get_variable_names(new_nodes, variable_name_remaps)
+
+	for link in source_links:
+		var new_from = old_to_new_names.get(link.from_node, null)
+		var new_to = old_to_new_names.get(link.to_node, null)
+		if new_from == null or new_to == null:
+			push_error("Failed to identify params links", link)
+		else:
+			editor.connect_nodes(new_from, link.from_port, new_to, link.to_port)
+		completed_steps += 1
+		if _should_report_load_progress(completed_steps, total_steps):
+			await _report_load_progress(progress_callback, "Connecting Nodes...", completed_steps, total_steps, start_progress, end_progress)
+
+	var attached_names := {}
+	for frame_data in source_frames:
+		var frame := GraphFrame.new()
+		frame.name = frame_data.name
+		frame.title = frame_data.title
+		var in_pos = _parse_vector2(frame_data.position)
+		frame.position_offset = (in_pos + paste_offset) * editor.ui_scale
+		frame.size = _parse_vector2(frame_data.size)
+		frame.tint_color = _parse_color(frame_data.tint_color)
+		frame.tint_color_enabled = true
+		editor.gedit.add_child(frame)
+		for old_name in frame_data.attached:
+			var new_name = old_to_new_names.get(old_name, null)
+			if _attach_graph_node_to_frame_if_available(editor, new_name, frame.name, attached_names):
+				continue
+		completed_steps += 1
+		if _should_report_load_progress(completed_steps, total_steps):
+			await _report_load_progress(progress_callback, "Restoring Frames...", completed_steps, total_steps, start_progress, end_progress)
+
+	if editor.has_method("refreshVariableNodes"):
+		editor.refreshVariableNodes()
+	if editor.has_method("repair_graph_integrity"):
+		editor.repair_graph_integrity()
+	return new_nodes
+
+static func _can_attach_graph_node(editor: Control, node_name: StringName) -> bool:
+	if String(node_name).is_empty():
+		return false
+	if editor.has_method("_has_graph_node"):
+		return editor._has_graph_node(node_name)
+	var gedit: GraphEdit = editor.gedit
+	if gedit == null:
+		return false
+	var node: GraphNode = gedit.get_node_or_null(NodePath(node_name)) as GraphNode
+	return node != null and is_instance_valid(node) and node.get_parent() == gedit
+
+static func _attach_graph_node_to_frame_if_available(
+	editor: Control,
+	node_name,
+	frame_name: StringName,
+	attached_names: Dictionary
+) -> bool:
+	if node_name == null:
+		return false
+	var attach_name := StringName(node_name)
+	if attached_names.has(attach_name):
+		return false
+	if editor.has_method("_attach_graph_node_to_frame_if_available"):
+		return editor._attach_graph_node_to_frame_if_available(attach_name, frame_name, attached_names)
+	if not _can_attach_graph_node(editor, attach_name):
+		return false
+	var frame: GraphFrame = editor.gedit.get_node_or_null(NodePath(frame_name)) as GraphFrame
+	if frame == null or frame.get_parent() != editor.gedit:
+		return false
+	if editor.gedit.get_element_frame(attach_name) != null:
+		return false
+	editor.gedit.attach_graph_element_to_frame(attach_name, frame_name)
+	attached_names[attach_name] = true
+	return true
 
 static func copySelectionToClipboard( editor : Control ):
 	var nodes = editor.getSelectedNodes()
@@ -241,7 +450,7 @@ static func saveToResource( editor : Control ):
 		return n is GraphNode
 	)
 	var all_frames = gedit.get_children().filter( func( n ):
-		return n is GraphFrame
+		return n is GraphFrame and not n.has_meta("flow_retired")
 	)
 	current_resource.data = nodes_as_dict( all_nodes, all_frames, editor )
 	current_resource.view_zoom = gedit.zoom
@@ -268,6 +477,246 @@ static func loadFromResource( editor : Control ):
 	editor.gedit.scroll_offset = current_resource.view_offset
 	editor.new_name_counter = current_resource.new_name_counter
 	editor.data_inspector.setNode( null )
+	if editor.has_method("repair_graph_integrity"):
+		editor.repair_graph_integrity()
+
+static func loadFromResourceWithProgress(editor: Control, progress_callback: Callable = Callable()) -> void:
+	var current_resource = editor.current_resource
+	if current_resource == null:
+		return
+
+	if editor.has_method("_should_use_fast_graph_load") and editor._should_use_fast_graph_load(current_resource):
+		loadFromResource(editor)
+		return
+
+	await _call_load_progress(progress_callback, "Registering Parameters...", 45.0)
+	for input in current_resource.in_params:
+		editor.registerInputNodeType(input)
+	if "out_params" in current_resource:
+		for output in current_resource.out_params:
+			editor.registerOutputNodeType(output)
+
+	if current_resource.data and not current_resource.data.is_empty():
+		var paste_offset = _parse_vector2(current_resource.data.min_pos)
+		await create_nodes_from_dict_with_progress(current_resource.data, editor, paste_offset, progress_callback, 48.0, 90.0)
+
+	await _call_load_progress(progress_callback, "Restoring View...", 92.0)
+	editor.gedit.zoom = current_resource.view_zoom
+	editor.gedit.scroll_offset = current_resource.view_offset
+	editor.new_name_counter = current_resource.new_name_counter
+	editor.data_inspector.setNode(null)
+	if editor.has_method("repair_graph_integrity"):
+		editor.repair_graph_integrity()
+
+static func _should_report_load_progress(completed_steps: int, total_steps: int) -> bool:
+	if completed_steps == total_steps:
+		return true
+	if total_steps <= FAST_GRAPH_LOAD_NODE_THRESHOLD * 4:
+		return false
+	var chunk := maxi(total_steps / 20, LOAD_PROGRESS_CHUNK_SIZE)
+	return completed_steps % chunk == 0
+
+static func _report_load_progress(progress_callback: Callable, message: String, completed_steps: int, total_steps: int, start_progress: float, end_progress: float) -> void:
+	var ratio := float(completed_steps) / float(maxi(total_steps, 1))
+	await _call_load_progress(progress_callback, message, lerpf(start_progress, end_progress, ratio))
+
+static func _call_load_progress(progress_callback: Callable, message: String, value: float) -> void:
+	if progress_callback.is_valid():
+		await progress_callback.call(message, value)
+
+static func _node_variable_name(node) -> String:
+	return FlowVariableEval.variable_name_from_node(node)
+
+static func _inherit_flow_variables(target_ctx: FlowData.EvaluationContext, parent_ctx: FlowData.EvaluationContext) -> void:
+	target_ctx.variables.clear()
+	if parent_ctx == null:
+		return
+	for var_name in parent_ctx.variables.keys():
+		target_ctx.variables[var_name] = parent_ctx.variables[var_name]
+
+
+static func _publish_flow_variables(child_ctx: FlowData.EvaluationContext, parent_ctx: FlowData.EvaluationContext) -> void:
+	if parent_ctx == null:
+		return
+	for var_name in child_ctx.variables.keys():
+		parent_ctx.variables[var_name] = child_ctx.variables[var_name]
+	FlowVariableEval._mirror_variables_to_runtime(parent_ctx)
+
+
+static func _is_topo_final_root(node: FlowNodeBase) -> bool:
+	if node.node_template == "output" or node.node_template.begins_with("output_"):
+		return true
+	if node.settings.inspect_enabled or node.settings.debug_enabled:
+		return true
+	if not node.getMeta().get("is_final", false):
+		return false
+	return true
+
+
+static func _needs_input_order_stabilization(node: FlowNodeBase) -> bool:
+	if node.node_template == "subgraph":
+		return true
+	# MapGen finals (scene_3d_plan, layer subgraph feeds, etc.) can be scheduled too early
+	# when multiple finals are merged; only adjust nodes that still have in-graph wires.
+	if node.getMeta().get("is_final", false):
+		for conn in node.deps:
+			if not conn.get("virtual_variable", false):
+				return true
+	return false
+
+
+static func _stabilize_consumer_input_order(ordered_nodes: Array) -> void:
+	var index_by_name: Dictionary = {}
+	for index in range(ordered_nodes.size()):
+		index_by_name[ordered_nodes[index].name] = index
+	var changed := true
+	while changed:
+		changed = false
+		for node in ordered_nodes:
+			if not _needs_input_order_stabilization(node):
+				continue
+			var node_index: int = int(index_by_name.get(node.name, -1))
+			if node_index < 0:
+				continue
+			for conn in node.deps:
+				if conn.get("virtual_variable", false):
+					continue
+				var src_index: int = int(index_by_name.get(conn.from_node, -1))
+				if src_index < 0 or src_index < node_index:
+					continue
+				ordered_nodes.remove_at(node_index)
+				ordered_nodes.insert(src_index + 1, node)
+				for reorder_index in range(ordered_nodes.size()):
+					index_by_name[ordered_nodes[reorder_index].name] = reorder_index
+				changed = true
+				break
+			if changed:
+				break
+
+
+static func _stabilize_variable_execution_order(ordered_nodes: Array) -> void:
+	var index_by_name: Dictionary = {}
+	for index in range(ordered_nodes.size()):
+		index_by_name[ordered_nodes[index].name] = index
+	var changed := true
+	while changed:
+		changed = false
+		for node in ordered_nodes:
+			if node.node_template != "get_variable":
+				continue
+			for conn in node.deps:
+				if not conn.get("virtual_variable", false):
+					continue
+				var set_index: int = int(index_by_name.get(conn.from_node, -1))
+				var get_index: int = int(index_by_name.get(node.name, -1))
+				if set_index < 0 or get_index < 0 or set_index < get_index:
+					continue
+				ordered_nodes.remove_at(get_index)
+				ordered_nodes.insert(set_index, node)
+				for reorder_index in range(ordered_nodes.size()):
+					index_by_name[ordered_nodes[reorder_index].name] = reorder_index
+				changed = true
+				break
+			if changed:
+				break
+
+
+static func _add_virtual_variable_dependencies(node_list: Array) -> void:
+	var set_nodes_by_name := {}
+	for node in node_list:
+		if node.node_template != "set_variable":
+			continue
+		var variable_name := _node_variable_name(node)
+		if variable_name.is_empty():
+			continue
+		if not set_nodes_by_name.has(variable_name):
+			set_nodes_by_name[variable_name] = []
+		set_nodes_by_name[variable_name].append(node)
+
+	for node in node_list:
+		if node.node_template != "get_variable":
+			continue
+		var variable_name := _node_variable_name(node)
+		if variable_name.is_empty() or not set_nodes_by_name.has(variable_name):
+			continue
+		var set_nodes : Array = set_nodes_by_name[variable_name].duplicate()
+		set_nodes.reverse()
+		for set_node in set_nodes:
+			var conn = {
+				"from_node": set_node.name,
+				"from_port": 0,
+				"to_node": node.name,
+				"to_port": -1,
+				"virtual_variable": true,
+			}
+			set_node.dependants.append(conn)
+			node.deps.append(conn)
+
+
+## Shared execution order for evaluate_graph() and the editor's evalGraph().
+## node_list entries must already have physical deps; call _add_virtual_variable_dependencies first when needed.
+static func build_execution_order(node_list: Array, instances_by_name: Dictionary) -> Array:
+	var ordered_nodes: Array = []
+	var topo_visited: Dictionary = {}
+	var topo_in_progress: Dictionary = {}
+	var visit_node = func(node, this_func) -> void:
+		if topo_visited.has(node.name):
+			return
+		if topo_in_progress.has(node.name):
+			push_warning("Circular dependency detected involving node: " + node.name)
+			return
+		topo_in_progress[node.name] = true
+		for conn in node.deps:
+			var dep_node = instances_by_name.get(conn.from_node)
+			if dep_node:
+				this_func.call(dep_node, this_func)
+		topo_in_progress.erase(node.name)
+		topo_visited[node.name] = true
+		ordered_nodes.append(node)
+
+	var finals = node_list.filter(func(node):
+		if node.settings != null and node.settings.disabled:
+			return false
+		return _is_topo_final_root(node)
+	)
+	for node in finals:
+		visit_node.call(node, visit_node)
+	_stabilize_variable_execution_order(ordered_nodes)
+	_stabilize_consumer_input_order(ordered_nodes)
+	return ordered_nodes
+
+
+# FlowNodeBase extends GraphNode (a Control, not RefCounted). evaluate_graph
+# instantiates the whole graph without ever adding the nodes to the tree, so
+# they must be freed explicitly — otherwise every runtime evaluation leaks the
+# full node graph (and loop.gd evaluates once per element).
+static func _free_node_instances(node_list: Array) -> void:
+	for node in node_list:
+		if is_instance_valid(node):
+			node.free()
+
+# Runtime args (e.g. FlowGraphNode3D.args) may hold raw primitives instead of
+# FlowData.Data. Wrap supported primitives into a single-entry Data whose
+# stream is named after the input param, so graph-input constants work at
+# runtime. Falsy primitives (0, 0.0, "") are valid values — hence the explicit
+# null/type checks instead of truthiness.
+static func _coerce_input_data(val, input_name: String):
+	if val == null:
+		return null
+	if val is FlowData.Data:
+		return val
+	var data_type = FlowNodeBase.getFlowDataTypeFromObject(val)
+	if data_type == FlowData.DataType.Invalid:
+		push_warning("evaluate_graph: input '%s' got unsupported runtime value of type %s — expected FlowData.Data or float/int/bool/String/Vector3/Color" % [input_name, type_string(typeof(val))])
+		return null
+	var data = load("res://addons/flow_nodes_editor/flow_data.gd").Data.new()
+	var container = data.addStream(input_name, data_type)
+	if container == null:
+		push_warning("evaluate_graph: could not wrap runtime input '%s' (data_type %d)" % [input_name, data_type])
+		return null
+	container.resize(1)
+	container[0] = val
+	return data
 
 static func evaluate_graph(graph: FlowGraphResource, input_data_map: Dictionary, parent_ctx: FlowData.EvaluationContext, runtime_params: Dictionary = {}, depth: int = 0) -> Dictionary:
 	if depth > 20:
@@ -278,27 +727,38 @@ static func evaluate_graph(graph: FlowGraphResource, input_data_map: Dictionary,
 	for n_data in graph.data.get("nodes", []):
 		var template = n_data.template
 		var name = n_data.name
-		var script_path = "res://addons/flow_nodes_editor/nodes/" + template + ".gd"
-		if template.begins_with("input_"):
-			script_path = "res://addons/flow_nodes_editor/nodes/input.gd"
-		elif template.begins_with("output_"):
-			script_path = "res://addons/flow_nodes_editor/nodes/output.gd"
+		var script_path = FlowNodeRegistry.get_node_script_path(template)
+		if script_path.is_empty():
+			push_error("Failed to resolve node script for template: %s. Make sure its provider addon registered its node directory before evaluation." % template)
+			continue
 		var node_script = load(script_path)
 		if not node_script:
 			push_error("Failed to load node script for template: %s" % template)
 			continue
-		var instance = node_script.new() as FlowNodeBase
+		var raw_instance = node_script.new()
+		var instance := raw_instance as FlowNodeBase
+		if instance == null:
+			push_error("Node script is not a FlowNodeBase: %s" % script_path)
+			if raw_instance is Node:
+				raw_instance.free()
+			continue
 		instance.name = name
 		instance.node_template = template
-		
-		# Initialize settings resource if defined
+
+		# Initialize settings resource if defined. Nodes without a settings
+		# class (e.g. merge_points) fall back to the base NodeSettings,
+		# mirroring the editor — the evaluator reads settings.disabled and
+		# settings.debug_enabled on every node.
 		var meta = instance.getMeta()
 		if meta.has("settings") and meta.settings:
 			instance.settings = meta.settings.new()
-		
+		else:
+			instance.settings = NodeSettings.new()
+
 		# Apply saved settings
-		dict_to_resource(n_data.settings, instance.settings)
-		_stabilize_missing_seed(instance.settings, name, template, n_data.settings)
+		var saved_settings = n_data.get("settings", {})
+		dict_to_resource(saved_settings, instance.settings)
+		_stabilize_missing_seed(instance.settings, name, template, saved_settings)
 		
 		instance.refreshFromSettings()
 		
@@ -312,35 +772,17 @@ static func evaluate_graph(graph: FlowGraphResource, input_data_map: Dictionary,
 		if src_node and dst_node:
 			src_node.dependants.append(conn)
 			dst_node.deps.append(conn)
-
-	# Topological sort
-	var get_deps_recursive = func(node, visited: Dictionary, this_func) -> Array:
-		if visited.has(node.name):
-			push_warning("Circular dependency detected involving node: " + node.name)
-			return []
-		visited[node.name] = true
-		var deps = [node]
-		for conn in node.deps:
-			var dep_node = instances.get(conn.from_node)
-			if dep_node:
-				deps.append_array(this_func.call(dep_node, visited, this_func))
-		return deps
-
-	var finals = node_list.filter(func(node):
-		return node.node_template == "output" or node.getMeta().get("is_final", false) or node.settings.debug_enabled or node.settings.inspect_enabled
-	)
-
-	var all_deps = []
-	for node in finals:
-		all_deps.append_array(get_deps_recursive.call(node, {}, get_deps_recursive))
-	all_deps.reverse()
-	
-	var ordered_nodes = []
-	var visited = {}
-	for node in all_deps:
-		if not visited.has(node.name):
-			visited[node.name] = true
-			ordered_nodes.append(node)
+	_add_virtual_variable_dependencies(node_list)
+	var ordered_nodes: Array = build_execution_order(node_list, instances)
+	if OS.get_environment("MAPGEN_DEBUG_ORDER") == "1":
+		for ordered_node in ordered_nodes:
+			if (
+				"assemble_map_plan" in ordered_node.node_template
+				or ordered_node.node_template == "set_variable"
+				or ordered_node.node_template == "get_variable"
+				or "pcg_map_plan" in ordered_node.name
+			):
+				print("eval_order: %s (%s)" % [ordered_node.name, ordered_node.node_template])
 			
 	# Construct EvaluationContext for subgraph
 	var ctx = load("res://addons/flow_nodes_editor/flow_data.gd").EvaluationContext.new()
@@ -351,6 +793,10 @@ static func evaluate_graph(graph: FlowGraphResource, input_data_map: Dictionary,
 	ctx.runtime_params = parent_ctx.runtime_params.duplicate(true) if parent_ctx.runtime_params else {}
 	for key in runtime_params.keys():
 		ctx.runtime_params[key] = runtime_params[key]
+	ctx.runtime_params["__eval_depth"] = depth
+	ctx.set_meta("flow_eval_depth", depth)
+	_inherit_flow_variables(ctx, parent_ctx)
+	FlowVariableEval._mirror_variables_to_runtime(ctx)
 	
 	# Feed subgraph inputs from input_data_map
 	for node in ordered_nodes:
@@ -368,7 +814,7 @@ static func evaluate_graph(graph: FlowGraphResource, input_data_map: Dictionary,
 			specific_input_name = node.settings.name
 
 		if is_specific_input:
-			var val = input_data_map.get(specific_input_name, null)
+			var val = _coerce_input_data(input_data_map.get(specific_input_name, null), specific_input_name)
 			if val:
 				# Create a new Data object to rename/register the stream under the input's name
 				var target_data = load("res://addons/flow_nodes_editor/flow_data.gd").Data.new()
@@ -389,7 +835,7 @@ static func evaluate_graph(graph: FlowGraphResource, input_data_map: Dictionary,
 			for i in range(graph.in_params.size()):
 				var param = graph.in_params[i]
 				if param:
-					var val = input_data_map.get(param.name, null)
+					var val = _coerce_input_data(input_data_map.get(param.name, null), param.name)
 					var target_data = load("res://addons/flow_nodes_editor/flow_data.gd").Data.new()
 					if val:
 						for stream_name in val.streams:
@@ -406,7 +852,7 @@ static func evaluate_graph(graph: FlowGraphResource, input_data_map: Dictionary,
 						var container = target_data.addStream(param.name, param.data_type)
 						if container != null:
 							container.resize(1)
-							container[0] = new_value
+							FlowData.Data.writeValue(container, 0, new_value, param.data_type)
 					node.set_output(i, target_data)
 
 	# Execute nodes in topological order
@@ -423,6 +869,8 @@ static func evaluate_graph(graph: FlowGraphResource, input_data_map: Dictionary,
 				num_ins = max(num_ins, 1)
 		node.inputs.resize(num_ins)
 		for conn in node.deps:
+			if conn.get("virtual_variable", false):
+				continue
 			var src = instances.get(conn.from_node)
 			if src and src.generated_bulks.size() > 0:
 				var src_bulk = src.generated_bulks[src.generated_bulks.size() - 1]
@@ -430,10 +878,12 @@ static func evaluate_graph(graph: FlowGraphResource, input_data_map: Dictionary,
 					node.inputs[conn.to_port] = src_bulk[conn.from_port]
 					
 		node.preExecute(ctx)
-		if node.settings.disabled:
+		if node.settings != null and node.settings.disabled:
 			node.executedDisabled(ctx)
-		else:
+		elif not FlowVariableEval.try_fast_execute(node, ctx, instances):
 			node.run(ctx)
+		if FlowVariableEval.should_refresh_debug_draw(node):
+			node.setupDrawDebug()
 		
 	# Collect output data
 	var outputs = {}
@@ -476,4 +926,9 @@ static func evaluate_graph(graph: FlowGraphResource, input_data_map: Dictionary,
 						outputs[out_name] = bulk[0]
 				elif node.inputs.size() > 0 and node.inputs[0] != null:
 					outputs[out_name] = node.inputs[0]
+	_publish_flow_variables(ctx, parent_ctx)
+
+	# Outputs are collected (FlowData.Data is RefCounted, so the references in
+	# `outputs` keep the data alive) — free the instanced node Controls now.
+	_free_node_instances(node_list)
 	return outputs

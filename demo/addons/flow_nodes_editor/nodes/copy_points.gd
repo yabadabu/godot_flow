@@ -7,5 +7,7 @@ func _init():
 		"settings" : CopyNodeSettings,
 		"ins" : [{ "label": "Source" }, { "label": "Targets" }],
 		"outs" : [{ "label" : "Out" }],
-		"tooltip" : "Godot-facing alias of Copy for point data.",
+		"tooltip" : "Alias of Copy for point data (UE: Copy Points).\nUse SourceToTargets mode to place one source point per target point.",
+		"aliases" : ["Copy Points", "Copy Every Point"],
+		"category" : "Spatial",
 	}

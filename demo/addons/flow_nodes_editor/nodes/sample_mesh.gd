@@ -1,15 +1,15 @@
 @tool
 extends FlowNodeBase
 
-const min_interval := 0.1
-
 func _init():
 	meta_node = {
 		"title" : "Sample Mesh",
 		"settings" : SampleMeshNodeSettings,
 		"ins" : [{ "label": "Meshes", "data_type": FlowData.DataType.NodeMesh }],
 		"outs" : [{ "label" : "Out" }],
-		#"trace" : true
+		"aliases" : ["Mesh Sampler"],
+		"category" : "Sampler",
+		"tooltip" : "Samples points on mesh surfaces: random area-weighted, one per vertex,\nor one per triangle center. Writes density, seed and normal streams.",
 	}
 	
 ## Uniform surface sampling on a MeshInstance3D
@@ -21,8 +21,7 @@ static func sampleMeshSurface(mi: MeshInstance3D, n: int = -1, density: float = 
 	assert(mesh != null)
 
 	var rng := RandomNumberGenerator.new()
-	if seed != 0:
-		rng.seed = seed
+	rng.seed = seed
 
 	var gt := mi.global_transform
 
@@ -35,7 +34,6 @@ static func sampleMeshSurface(mi: MeshInstance3D, n: int = -1, density: float = 
 	for s in mesh.get_surface_count():
 		var arrs := mesh.surface_get_arrays(s)
 		var vtx : PackedVector3Array = arrs[Mesh.ARRAY_VERTEX]
-		var nrm : PackedVector3Array = arrs[Mesh.ARRAY_NORMAL]
 		var idx : PackedInt32Array = arrs[Mesh.ARRAY_INDEX]
 
 		# If the surface is non-indexed, synthesize indices 0..N-1 (already triangles in Godot)
@@ -116,6 +114,74 @@ static func sampleMeshSurface(mi: MeshInstance3D, n: int = -1, density: float = 
 
 		out_pts[k] = p
 		out_nrm[k] = tri_normals[ti]  # (fast) per-triangle normal
+
+	return { "points": out_pts, "normals": out_nrm }
+
+## One point per (deduplicated) vertex, with world-space vertex normals.
+## Vertices shared between surfaces/triangles are emitted once (quantized at *1000).
+## Returns: { points: PackedVector3Array, normals: PackedVector3Array }
+static func meshVertexPoints(mi: MeshInstance3D) -> Dictionary:
+	var mesh := mi.mesh
+	assert(mesh != null)
+
+	var gt := mi.global_transform
+	# Inverse-transpose keeps normals correct under non-uniform scale
+	var normal_basis := gt.basis.inverse().transposed()
+
+	var out_pts := PackedVector3Array()
+	var out_nrm := PackedVector3Array()
+	var seen := {}
+
+	for s in mesh.get_surface_count():
+		var arrs := mesh.surface_get_arrays(s)
+		var vtx : PackedVector3Array = arrs[Mesh.ARRAY_VERTEX]
+		var nrm_raw = arrs[Mesh.ARRAY_NORMAL]
+		var nrm : PackedVector3Array = nrm_raw if nrm_raw != null else PackedVector3Array()
+
+		for i in range(vtx.size()):
+			var v := vtx[i]
+			var key := Vector3i(int(round(v.x * 1000.0)), int(round(v.y * 1000.0)), int(round(v.z * 1000.0)))
+			if seen.has(key):
+				continue
+			seen[key] = true
+			out_pts.append(gt * v)
+			var n := Vector3.UP
+			if i < nrm.size():
+				n = (normal_basis * nrm[i]).normalized()
+			out_nrm.append(n)
+
+	return { "points": out_pts, "normals": out_nrm }
+
+## One point per triangle, placed at the triangle centroid with the face normal.
+## Returns: { points: PackedVector3Array, normals: PackedVector3Array }
+static func meshFaceCenterPoints(mi: MeshInstance3D) -> Dictionary:
+	var mesh := mi.mesh
+	assert(mesh != null)
+
+	var gt := mi.global_transform
+	var out_pts := PackedVector3Array()
+	var out_nrm := PackedVector3Array()
+
+	for s in mesh.get_surface_count():
+		var arrs := mesh.surface_get_arrays(s)
+		var vtx : PackedVector3Array = arrs[Mesh.ARRAY_VERTEX]
+		var idx : PackedInt32Array = arrs[Mesh.ARRAY_INDEX]
+
+		if idx.is_empty():
+			idx = PackedInt32Array()
+			idx.resize(vtx.size())
+			for i in range(vtx.size()):
+				idx[i] = i
+
+		for i in range(0, idx.size(), 3):
+			var a := gt * vtx[idx[i + 0]]
+			var b := gt * vtx[idx[i + 1]]
+			var c := gt * vtx[idx[i + 2]]
+			var face_n := (b - a).cross(c - a)
+			if face_n.length_squared() <= 0.0:
+				continue # degenerate triangle
+			out_pts.append((a + b + c) / 3.0)
+			out_nrm.append(face_n.normalized())
 
 	return { "points": out_pts, "normals": out_nrm }
 
@@ -240,34 +306,25 @@ static func basis_from_normal(normal: Vector3, up: Vector3 = Vector3.UP, axis: S
 	return basis.orthonormalized()
 
 func execute( ctx : FlowData.EvaluationContext ):
-	
-	var root = ctx.owner if (ctx and ctx.owner) else (EditorInterface.get_edited_scene_root() if Engine.is_editor_hint() else null)
-	if not root:
-		return null
-		
-	var in_data = get_input(0)
+
+	var in_data : FlowData.Data = require_input(0, ctx, "Input 'Meshes'")
 	if in_data == null:
-		setError("Input 'Meshes' is not connected")
-		return null
+		return
 	var nodes = in_data.getContainerChecked( "node", FlowData.DataType.NodeMesh )
 	if nodes == null:
 		setError( "Input are not meshes")
-		return null		
-		
+		return
+
 	var output := FlowData.Data.new()
 	output.addCommonStreams( 0 )
 	var spos := output.getVector3Container( FlowData.AttrPosition )
 	var srot := output.getVector3Container( FlowData.AttrRotation )
-	
-	#var uniform_interval = getSettingValue( ctx, "uniform_interval" )
-	#if uniform_interval < min_interval:
-		#uniform_interval = min_interval
-		#settings.uniform_interval = uniform_interval
+	var snormals := PackedVector3Array()
 
 	var num_samples = getSettingValue(ctx, "num_samples" )
 	var density = getSettingValue(ctx, "density")
 	var point_size = getSettingValue(ctx, "point_size")
-	
+
 	var discard_hard_edges = getSettingValue(ctx, "discard_hard_edges")
 	var hard_edge_angle = getSettingValue(ctx, "hard_edge_angle_threshold")
 	var hard_edge_dist = getSettingValue(ctx, "hard_edge_distance_threshold")
@@ -277,14 +334,26 @@ func execute( ctx : FlowData.EvaluationContext ):
 	elif settings.mode == SampleMeshNodeSettings.eMode.UseNumSamples:
 		density = -1.0
 
+	var node_seed : int = settings.random_seed
+	var node_idx : int = -1
 	for node in nodes:
+		node_idx += 1
 		var mesh : Mesh = node.mesh
 		if mesh == null:
 			continue
-		var ans = sampleMeshSurface( node, num_samples, density, settings.random_seed )
+		var ans : Dictionary
+		match settings.mode:
+			SampleMeshNodeSettings.eMode.OnePerVertex:
+				ans = meshVertexPoints( node )
+			SampleMeshNodeSettings.eMode.FaceCenters:
+				ans = meshFaceCenterPoints( node )
+			_:
+				# Decorrelate meshes: each mesh gets its own derived seed
+				var mesh_seed : int = hash([ node_seed, node_idx ]) & 0x7fffffff
+				ans = sampleMeshSurface( node, num_samples, density, mesh_seed )
 		var points : PackedVector3Array = ans.points
 		var normals : PackedVector3Array = ans.normals
-		
+
 		# Discard points close to hard edges
 		if discard_hard_edges:
 			var hard_edges = get_hard_edges(node, hard_edge_angle)
@@ -306,19 +375,33 @@ func execute( ctx : FlowData.EvaluationContext ):
 				normals = filtered_nrms
 
 		var num_points := points.size()
-		var base := spos.size()			
+		var base := spos.size()
 		spos.resize( base + num_points )
 		srot.resize( base + num_points )
-		var up := Vector3(0,1,0)
+		snormals.resize( base + num_points )
 		for idx in range( num_points ):
 			spos[base + idx] = points[idx]
 			var n := normals[idx]
 			srot[base + idx] = FlowData.basisToEuler( FlowData.basisFromNormal( n ) )
-				
+			snormals[base + idx] = n
+
 	# All the samples have the same size
 	var ssize := output.getVector3Container( FlowData.AttrSize )
 	ssize.resize( spos.size() )
 	var sample_size = Vector3.ONE * point_size
 	ssize.fill(sample_size)
+
+	# Density + per-point seed + surface normal streams (UE parity)
+	var total := spos.size()
+	var sdensity := PackedFloat32Array()
+	sdensity.resize( total )
+	sdensity.fill( 1.0 )
+	output.registerStream( FlowData.AttrDensity, sdensity, FlowData.DataType.Float )
+	var sseed := PackedInt32Array()
+	sseed.resize( total )
+	for i in range( total ):
+		sseed[i] = FlowData.point_seed( spos[i], node_seed )
+	output.registerStream( FlowData.AttrSeed, sseed, FlowData.DataType.Int )
+	output.registerStream( FlowData.AttrNormal, snormals, FlowData.DataType.Vector )
 
 	set_output( 0, output )
