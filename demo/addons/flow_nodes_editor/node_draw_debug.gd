@@ -77,6 +77,11 @@ func setupColors( out_data : FlowData.Data ):
 				var c := smod[idx]
 				RenderingServer.multimesh_instance_set_color( multimesh_rid, idx, color * Color( c.x, c.y, c.z, 1.0 ) )
 			return
+		elif stream.data_type == FlowData.DataType.Color:
+			var smod : PackedColorArray = stream.container
+			for idx in range( instance_count ):
+				RenderingServer.multimesh_instance_set_color( multimesh_rid, idx, color * smod[idx] )
+			return
 		else:
 			node.setError( "Attribute %s must be of type float or vector to modulate" % node.settings.debug_modulate_by )
 			
