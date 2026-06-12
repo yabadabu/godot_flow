@@ -7,7 +7,7 @@
 #include <godot_cpp/variant/packed_int32_array.hpp>
 #include "rtree.h"
 
-using RTree3Df = RTree<int, float, 3>;
+using RTree3Df = RTree<int, real_t, 3>;
 
 namespace godot {
 
@@ -24,7 +24,7 @@ protected:
 public:
   GDRTree();
   ~GDRTree();
-  
+
   void clear();
   bool add( const PackedVector3Array& in_centers, const PackedVector3Array& in_sizes );
   Dictionary overlaps( const PackedVector3Array& others_centers, const PackedVector3Array& others_sizes, bool return_overlapped ) const;

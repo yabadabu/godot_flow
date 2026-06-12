@@ -72,7 +72,7 @@ func _ready():
 	refreshInspectMark()
 	refreshDebugMark()
 	update_node_style()
-	
+
 func checkDrawDebug():
 	if not is_instance_valid(draw_debug) or draw_debug.get_parent() != self:
 		draw_debug = NodeDrawDebug.new()
@@ -80,7 +80,7 @@ func checkDrawDebug():
 		add_child(draw_debug)
 		# if the helper gets freed, clear our reference
 		draw_debug.tree_exited.connect(func(): draw_debug = null)
-		
+
 func setupDrawDebug():
 	checkDrawDebug()
 	draw_debug.setupDraw()
@@ -153,7 +153,7 @@ func preExecute( ctx : FlowData.EvaluationContext ):
 	num_connected_bulks = 0
 	input_bulks = []
 	generated_bulks = []
-	
+
 	for conn in deps:
 		if conn.get("virtual_variable", false):
 			continue
@@ -173,7 +173,7 @@ func refreshDebugMark():
 
 func refreshInspectMark():
 	redrawUI()
-	
+
 func onPropChanged( prop_name : String ):
 	dirty = true
 
@@ -338,12 +338,12 @@ func refreshFromSettings():
 	refreshInspectMark()
 	refreshLocalizedText()
 	modulate = Color( 0.7, 0.7, 0.7, 0.5 ) if settings.disabled else Color.WHITE
-	
+
 	update_node_style()
-	
+
 	if ( not settings.debug_enabled and draw_debug ) or settings.disabled:
 		draw_debug.cleanup_multimesh_direct()
-	
+
 	if settings and "data_type" in settings and node_template != "add_attribute" and node_template != "attribute_random":
 		var meta := getMeta()
 		var outs = meta.get("outs", [])
@@ -356,14 +356,14 @@ func refreshFromSettings():
 					if is_slot_enabled_right(idx):
 						set_slot_color_right(idx, color)
 						set_slot_type_right(idx, settings.data_type)
-	
+
 func setError( new_err : String ):
 	if new_err:
 		push_error( "Node.Err %s : %s" % [ name, new_err ])
 		editor_state_changed.emit()
 	err = new_err
 	redrawUI()
-		
+
 func setActivity( amount : float ):
 	if settings.disabled:
 		return
@@ -378,25 +378,22 @@ func setExecTime(usec: int):
 	set_meta("exec_time_usec", usec)
 	if is_inside_tree():
 		queue_redraw()
-		
+
 func _on_draw() -> void:
-	
+
 	if not settings:
 		return
 
 	if err:
 		var sz = 16 * ui_scale
 		draw_string( ThemeDB.fallback_font, Vector2(0,size.y + sz), err, HORIZONTAL_ALIGNMENT_LEFT, -1, sz )
-		
+
 	if settings.inspect_enabled:
 		var clr : Color = Color.YELLOW / self_modulate
 		draw_circle( Vector2(0,0), marker_radius * ui_scale, clr )
 	if settings.debug_enabled:
 		var clr : Color = Color.CYAN / self_modulate
 		draw_circle( Vector2(size.x,0), marker_radius * ui_scale, clr )
-
-	# Draw point count badges on output ports
-	_draw_output_badges()
 
 	# Draw bottom decoration handle (Figma node style)
 	var handle_w = 22.0 * ui_scale
@@ -408,7 +405,7 @@ func _on_draw() -> void:
 	handle_sb.corner_radius_top_left = 2
 	handle_sb.corner_radius_top_right = 2
 	draw_style_box(handle_sb, Rect2(handle_x, handle_y, handle_w, handle_h))
-	
+
 	# Draw execution time badge (top-right, near titlebar)
 	var exec_time_usec = get_meta("exec_time_usec", 0)
 	if exec_time_usec > 100:
@@ -430,53 +427,9 @@ func _on_draw() -> void:
 		var ty = 12.0 * ui_scale
 		draw_string(time_font, Vector2(tx, ty), time_text, HORIZONTAL_ALIGNMENT_LEFT, -1, time_font_size, time_color)
 
-func _draw_output_badges():
-	var output_summaries = get_meta("output_summaries", [])
-	if output_summaries.is_empty():
-		return
-	var font = ThemeDB.fallback_font
-	var font_size := int(10 * ui_scale)
-	var badge_h := font_size + 4
-	
-	var port_controls = get_children().filter(func(c): return c is FlowConnectorRow)
-	
-	for port_idx in range(mini(output_summaries.size(), num_out_ports)):
-		var summary = output_summaries[port_idx]
-		if summary == null:
-			continue
-		var pts = summary.points
-		var badge_text: String
-		if pts >= 1000:
-			badge_text = "%.*fk" % [1, pts / 1000.0]
-		else:
-			badge_text = "%d pts" % pts
-		
-		# Get the Y position of this output port using custom control filter (safer than get_output_port_position)
-		var port_y := 0.0
-		if port_idx < port_controls.size():
-			var ctrl = port_controls[port_idx]
-			port_y = ctrl.position.y + ctrl.size.y * 0.5
-		else:
-			continue # if control isn't in tree yet
-			
-		var text_width = font.get_string_size(badge_text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x
-		var badge_w = text_width + 8
-		
-		# Draw badge background (pill shape)
-		var badge_x = size.x - badge_w - 18 * ui_scale
-		var badge_y = port_y - badge_h * 0.5
-		var badge_sb = StyleBoxFlat.new()
-		badge_sb.bg_color = Color(0.13, 0.72, 0.93, 0.2) # Subtle cyan
-		badge_sb.set_corner_radius_all(int(badge_h * 0.5))
-		draw_style_box(badge_sb, Rect2(badge_x, badge_y, badge_w, badge_h))
-		
-		# Draw badge text
-		var text_y = badge_y + badge_h - 3
-		draw_string(font, Vector2(badge_x + 4, text_y), badge_text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, Color(0.13, 0.72, 0.93, 0.85))
-
 func getMeta() -> Dictionary:
 	return meta_node
-	
+
 func getTitle() -> String:
 	if settings:
 		return settings.title
@@ -569,17 +522,17 @@ static func getGdScriptTypeForFlowDataType( data_type : FlowData.DataType ) -> i
 		FlowData.DataType.Color:
 			return TYPE_COLOR
 	return TYPE_NIL
-	
+
 static func getFlowDataTypeFromGdScriptType( gd_type : int  ) -> FlowData.DataType:
 	match( gd_type ):
 		TYPE_BOOL:
 			return FlowData.DataType.Bool
 		TYPE_INT:
 			return FlowData.DataType.Int
-		TYPE_FLOAT: 
+		TYPE_FLOAT:
 			return FlowData.DataType.Float
 		TYPE_STRING:
-			return FlowData.DataType.String 
+			return FlowData.DataType.String
 		TYPE_VECTOR3:
 			return FlowData.DataType.Vector
 		TYPE_COLOR:
@@ -587,7 +540,7 @@ static func getFlowDataTypeFromGdScriptType( gd_type : int  ) -> FlowData.DataTy
 	return FlowData.DataType.Invalid
 
 static func getFlowDataTypeFromObject( obj  ) -> FlowData.DataType:
-	var data_type = getFlowDataTypeFromGdScriptType( typeof(obj) ) 
+	var data_type = getFlowDataTypeFromGdScriptType( typeof(obj) )
 	if data_type != FlowData.DataType.Invalid:
 		return data_type
 	if obj is Resource:
@@ -621,7 +574,7 @@ func getExposedParams():
 			continue
 		if !inside_my_vars:
 			continue
-			
+
 		var data = {
 			"name" : prop.name,
 			"label" : editorDisplayName( prop.name ),
@@ -630,10 +583,10 @@ func getExposedParams():
 			"is_parameter" : true,
 			"port" : -1,
 		}
-		
+
 		if not exposedAsInputNode( data ):
 			continue
-		
+
 		params.append( data )
 	return params
 
@@ -645,17 +598,17 @@ func getEditor():
 func initFromScript():
 	var meta := getMeta()
 	var trace = meta.get( "trace", false )
-	
+
 	var ins = meta.get( "ins", [] )
 	var outs = meta.get( "outs", [] )
 	var num_ins = ins.size()
 	var num_outs = outs.size()
-	
+
 	var exposed_params = getExposedParams()
 	var has_exposed_params = exposed_params.size() > 0
-	
+
 	# Access to my parent container editor
-	# We need to remember which nodes were connected as we might be expanded/contracting the list and want to 
+	# We need to remember which nodes were connected as we might be expanded/contracting the list and want to
 	# maintain the same connected entries
 	var flow_editor = getEditor()
 	var connected_inputs_by_name = {}
@@ -670,7 +623,7 @@ func initFromScript():
 					var from_node = old_conn[0]
 					var from_port = old_conn[1]
 					flow_editor.disconnect_nodes( from_node, from_port, name, arg_port )
-		
+
 		if not show_disconnected_inputs:
 			exposed_params = exposed_params.filter( func( data ):
 				return args_ports_by_name.has( data.name ) and args_ports_by_name[ data.name ].connected
@@ -678,20 +631,20 @@ func initFromScript():
 	else:
 		# When we just instantiate the node
 		exposed_params = []
-		
+
 	if trace:
 		print( "flow_editor: %s" % flow_editor)
 		print( "show_disconnected_inputs: %s" % show_disconnected_inputs)
 		print( "all_exposed_params: %s" % exposed_params.size())
 		print( "exposed_params: %s" % exposed_params.size())
 		print( "args_ports_by_name: %s" % args_ports_by_name)
-		
+
 	# Total inputs are flow in streams + exposed parameters of the node
 	var num_inputs = num_ins + exposed_params.size()
 	num_ports = max( num_inputs, num_outs )
 	num_in_ports = num_inputs
 	num_out_ports = num_outs
-	
+
 	# Delete current children
 	clear_all_slots()
 	for child in get_children():
@@ -699,63 +652,63 @@ func initFromScript():
 			continue
 		child.queue_free()
 		remove_child( child )
-	
+
 	args_ports_by_name = {}
 	for idx in range( 0, num_ports ):
 		var ctrl = connectors_row_prefab.instantiate() as FlowConnectorRow
 		add_child( ctrl )
 		# Figma: PORT_ROW = 26px height
 		ctrl.custom_minimum_size.y = 26
-		
+
 		var lbl_in = ctrl.getInLabel()
 		var lbl_out = ctrl.getOutLabel()
-		
+
 		# Figma label typography & color overrides
 		lbl_in.add_theme_color_override("font_color", Color("8b90a8"))
 		lbl_in.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-		
+
 		lbl_out.add_theme_color_override("font_color", Color("8b90a8"))
 		lbl_out.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-		
+
 		# Is there an input active
 		if idx < num_inputs:
 			var in_data
-			
+
 			# Decide if it's a flow input, or just a param input
 			if idx < num_ins:
 				in_data = ins[idx]
 			else:
 				in_data = exposed_params[ idx - num_ins ]
 			lbl_in.text = _localized_node_text(str(in_data.get("label", "")))
-			
+
 			var in_name = in_data.get( "name", in_data.label )
-			
+
 			set_slot_enabled_left( idx, true )
-			
+
 			# Change color
 			var data_type = in_data.get( "data_type", FlowData.DataType.Invalid )
 			if data_type == FlowData.DataType.Invalid and in_data.has( "type"):
 				data_type = getFlowDataTypeFromGdScriptType( in_data.type )
 			if data_type != FlowData.DataType.Invalid:
-				var color = getColorForFlowDataType( data_type )	
+				var color = getColorForFlowDataType( data_type )
 				set_slot_color_left( idx, color )
 				set_slot_type_left( idx, data_type )
-				
+
 			in_data.port = idx
 			ctrl.setData( in_data )
-			
+
 			args_ports_by_name[ in_name ] = { "port" : idx, "connected" : connected_inputs_by_name.has( in_name ) }
 			if trace:
 				print( "%s : Assigning slot %d for input %s" % [ name, idx, in_name ])
 		else:
 			lbl_in.text = ""
-			
+
 		if idx < num_outs:
 			var out_data = outs[idx]
 			if out_data:
 				lbl_out.text = _localized_node_text(str(out_data.get("label", "")))
 				set_slot_enabled_right( idx, true )
-					
+
 				# Change color
 				var data_type = out_data.get( "data_type", FlowData.DataType.Invalid )
 				if data_type == FlowData.DataType.Invalid and out_data.has( "type"):
@@ -763,13 +716,13 @@ func initFromScript():
 				if data_type == FlowData.DataType.Invalid and settings and "data_type" in settings and node_template != "add_attribute" and node_template != "attribute_random":
 					data_type = settings.data_type
 				if data_type != FlowData.DataType.Invalid:
-					var color = getColorForFlowDataType( data_type )	
+					var color = getColorForFlowDataType( data_type )
 					set_slot_color_right( idx, color )
-					set_slot_type_right( idx, data_type )					
-					
+					set_slot_type_right( idx, data_type )
+
 		else:
 			lbl_out.text = ""
-	
+
 	# Add a button to show/hide all props and maybe more options in the future
 	if has_exposed_params:
 		var ctrl = connectors_options_prefab.instantiate() as FlowConnectorOptions
@@ -779,11 +732,11 @@ func initFromScript():
 
 	# Force a readjust of the node in the flow editor
 	size = get_combined_minimum_size()
-	
+
 	if trace:
 		for arg_name in args_ports_by_name.keys():
 			print( "  %s : %s" % [ arg_name, args_ports_by_name[ arg_name ] ] )
-	
+
 	if flow_editor:
 		# Reconnect nodes
 		for arg_name in connected_inputs_by_name.keys():
@@ -796,13 +749,13 @@ func initFromScript():
 				flow_editor.connect_nodes( from_node, from_port, name, new_port )
 			flow_editor.queueSave()
 		flow_editor.refreshSignalsInputArgs( self )
-	
-func refreshConnectionFlags( ):	
+
+func refreshConnectionFlags( ):
 	var editor = getEditor()
 	if editor:
 		for arg_name in args_ports_by_name:
 			args_ports_by_name[ arg_name ].connected = editor.is_node_port_connected( name, args_ports_by_name[ arg_name ].port )
-		
+
 func nodeOptionsChanged( expanded : bool ):
 	if show_disconnected_inputs == expanded:
 		return
@@ -810,12 +763,12 @@ func nodeOptionsChanged( expanded : bool ):
 	refreshConnectionFlags( )
 	initFromScript()
 	setupDrawDebug()
-	
+
 # This returns the current value of the input configuration taking into account potencial connections and overrides of the inputs
 func getSettingValue( ctx : FlowData.EvaluationContext, in_name : String, default_value = null):
 	var meta = getMeta()
 	var trace = meta.get( "trace", false )
-	
+
 	var value = settings.get( in_name )
 	if value == null:
 		value = default_value
@@ -888,12 +841,12 @@ func newStream( size : int, new_name : String, init_value, data_type : FlowData.
 				return null
 	else:
 		new_container.fill( init_value )
-	return { 
+	return {
 		"data_type" : data_type,
 		"container" : new_container,
 		"name" : new_name
 	}
-	
+
 func newFloatStream( size : int, new_name : String, init_value ):
 	return newStream( size, new_name, init_value, FlowData.DataType.Float )
 
@@ -1028,7 +981,7 @@ func nestedGraphSceneFingerprint( graph_resource ) -> Variant:
 func findNodesMatchingFilters( ctx : FlowData.EvaluationContext, filter_by_class_name : String ) -> Array[ Node3D ]:
 
 	var group_name = getSettingValue( ctx, "group_name" )
-	
+
 	var all_nodes : Array[Node] = []
 	#var scene_root = ctx.owner.get_tree().root
 	if group_name:
@@ -1036,10 +989,10 @@ func findNodesMatchingFilters( ctx : FlowData.EvaluationContext, filter_by_class
 	elif ctx.owner:
 		var root = getSceneRootNode3d( ctx.owner )
 		all_nodes = root.get_children()
-	
+
 	if settings.trace:
 		print( "all_nodes", all_nodes )
-	
+
 	# Filter to only include nodes in the current scene
 	var scene_nodes : Array[ Node3D ] = []
 	for node in all_nodes:
@@ -1062,7 +1015,7 @@ func set_output( port_idx : int, data : FlowData.Data ):
 		bulk.resize( port_idx + 1 )
 	#print( "Saving bulk %d, port %d with %s (%d entries)" % [ num_generated_bulks - 1, port_idx, data.streams.keys(), data.size() ] )
 	bulk[ port_idx ] = data
-	
+
 func get_input( idx : int ):
 	if idx >= inputs.size():
 		push_error( "Input.%d does not exists in node %s" % [ idx, name ])
@@ -1094,7 +1047,7 @@ func get_bulk_input( bulk_idx : int, port_idx : int ):
 	if bulk_idx < input_bulks.size() && port_idx < getMeta().ins.size():
 		return input_bulks[ bulk_idx ][ port_idx ]
 	return null
-	
+
 func get_bulk_output( bulk_idx : int, port_idx : int ):
 	if bulk_idx >= generated_bulks.size():
 		push_error( "Node %s has not generated bulk %d" % [ name, bulk_idx ])
@@ -1130,7 +1083,7 @@ func readAllInputsForBulk( ctx : FlowData.EvaluationContext, bulk_idx : int ):
 	var num_inputs : int = getMeta().ins.size()
 	for port_idx in range( num_inputs ):
 		inputs.append( _getInputForBulkInContext( ctx, bulk_idx, port_idx ))
-	
+
 	# Read the options inputs, assuming they only generate a single bulk
 	var option_idx = num_inputs
 	for conn in deps:
@@ -1145,7 +1098,7 @@ func readAllInputsForBulk( ctx : FlowData.EvaluationContext, bulk_idx : int ):
 	input_bulks.append( inputs )
 
 # Defines the behaviour of the node in it's disabled status
-# The default behaviour is to pass all inputs as outputs	
+# The default behaviour is to pass all inputs as outputs
 func executedDisabled( ctx : FlowData.EvaluationContext ):
 	for bulk_index in range( num_connected_bulks ):
 		readAllInputsForBulk( ctx, bulk_index )

@@ -241,7 +241,7 @@ func _reconcile_graph_dock_after_editor_layout() -> void:
 func _save_external_data():
 	if _has_valid_graph_dock() and graph_dock.has_method("saveResource"):
 		graph_dock.saveResource()
-	
+
 func _exit_tree():
 	setWatchedNode(null)
 	if undo_redo and undo_redo.history_changed.is_connected(_on_history_changed):
@@ -279,19 +279,18 @@ func _ready():
 func on_scene_changed(scene_root: Node) -> void:
 	if not _has_valid_graph_dock() or scene_root == null:
 		return
-	print( "Scene Changed detected %s : %s -> %s" % [graph_dock.current_resource, is_instance_valid(graph_dock.resource_owner), scene_root.name ] )
 	if is_instance_valid(graph_dock.resource_owner):
 		var node = graph_dock.resource_owner
 		if scene_root and (node.get_owner() != scene_root and not scene_root.is_ancestor_of(node)):
 			graph_dock.setResourceToEdit( null, null )
-			
+
 	# Auto activate the first flow node graph found in the scene
 	for node in scene_root.get_children():
 		var flow_node = node as FlowGraphNode3D
 		if flow_node:
 			graph_dock.setResourceToEdit( flow_node.graph, flow_node )
 			break
-		
+
 
 func _selection_changed():
 	if not _has_valid_graph_dock():
@@ -326,10 +325,10 @@ func onSelectedGraphNodeChanged( node : FlowGraphNode3D, prop_name: String ):
 	if prop_name == "graph_resource":
 		print( "  -> %s" % [node.graph] )
 		graph_dock.setResourceToEdit( node.graph, node )
-		
+
 
 func _on_history_changed( ):
-	#print("Something changed in the editor (undo/redo history updated)")	
+	#print("Something changed in the editor (undo/redo history updated)")
 	if _has_valid_graph_dock():
 		graph_dock.onEditorSceneChanged()
 

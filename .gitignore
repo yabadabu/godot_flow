@@ -1,3 +1,5 @@
+.vscode
+
 # Godot 4+ specific ignores
 .godot/
 .nomedia
@@ -16,6 +18,7 @@ data_*/
 mono_crash.*.json
 demo/addons/flow_nodes_editor/native/src/*.obj
 demo/addons/flow_nodes_editor/native/src/*.os
+demo/addons/editor_icon_previewer
 
 *.DS_Store
 

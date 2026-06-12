@@ -35,9 +35,6 @@ var is_output : bool = true
 var container
 var _flow_editor: FlowEditor
 
-func set_flow_editor(editor: FlowEditor) -> void:
-	_flow_editor = editor
-
 func setNode( new_node : FlowNodeBase ):
 	# If there was already one active... disabled it
 	if node:
@@ -45,7 +42,7 @@ func setNode( new_node : FlowNodeBase ):
 		if node.settings:
 			node.settings.inspect_enabled = false
 			node.refreshFromSettings()
-		
+
 	if node != new_node and new_node:
 		if new_node.has_method("getLocalizedTitle"):
 			%LabelTitle.text = new_node.getLocalizedTitle()
@@ -59,17 +56,17 @@ func setNode( new_node : FlowNodeBase ):
 		node = null
 		refresh()
 	populateSlots()
-	
+
 func setLabelNumber( label : Label, value : float ):
 	var new_text = fmt( value )
 	if new_text != label.text:
 		label.text = new_text
-	
+
 func updateNumRowsAndCols():
 	num_rows = data.size()
 	col_titles.clear()
 	col_streams_names.clear()
-	for stream in data.streams.values():	
+	for stream in data.streams.values():
 		var stream_name : String = stream.name
 		match stream.data_type:
 			FlowData.DataType.Vector:
@@ -84,7 +81,7 @@ func updateNumRowsAndCols():
 				col_streams_names.append( stream_name)
 	num_cols = col_titles.size()
 	#print( col_titles )
-	
+
 func fmt( v : float ) -> String:
 	return "%1.3f" % v
 
@@ -93,24 +90,24 @@ func fmt( v : float ) -> String:
 # have the same type
 func onColumnBegins( cell : DataTableContainer.CellContents ):
 	cell.alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	
+
 	if cell.col == 0:
 		tv.setCellCallback( getCellContentsIndex )
-		return	
-	
+		return
+
 	# col = 0 is for the Index
 	var data_col = cell.col - 1
 	if data_col >= col_streams_names.size():
 		tv.cell_contents = null
 		return
-		
+
 	var stream_name = col_streams_names[ data_col ]
 	var stream = data.streams.get( stream_name, null )
 	if !stream:
 		tv.cell_contents = null
 		return
 	container = stream.container
-		
+
 	var title = col_titles[ data_col ]
 	if stream.data_type == FlowData.DataType.Vector:
 		if title.ends_with(".X"):
@@ -151,38 +148,38 @@ func _container_index_for_cell(cell_row: int) -> int:
 func getCellContentsVectorX(cell : DataTableContainer.CellContents ):
 	var real_row := _container_index_for_cell(cell.row)
 	cell.text = fmt( container[ real_row ].x ) if real_row >= 0 else ""
-	
+
 func getCellContentsVectorY(cell : DataTableContainer.CellContents ):
 	var real_row := _container_index_for_cell(cell.row)
 	cell.text = fmt( container[ real_row ].y ) if real_row >= 0 else ""
-	
+
 func getCellContentsVectorZ(cell : DataTableContainer.CellContents ):
 	var real_row := _container_index_for_cell(cell.row)
 	cell.text = fmt( container[ real_row ].z ) if real_row >= 0 else ""
-	
+
 func getCellContentsFloat(cell : DataTableContainer.CellContents ):
 	var real_row := _container_index_for_cell(cell.row)
 	cell.text = fmt( container[ real_row ] ) if real_row >= 0 else ""
-	
+
 func getCellContentsBool(cell : DataTableContainer.CellContents ):
 	var real_row := _container_index_for_cell(cell.row)
 	if real_row < 0:
 		cell.text = ""
 		return
 	cell.text = FlowI18n.t("True") if container[ real_row ] else FlowI18n.t("False")
-	
+
 func getCellContentsInt(cell : DataTableContainer.CellContents ):
 	var real_row := _container_index_for_cell(cell.row)
 	cell.text = "%d" % container[ real_row ] if real_row >= 0 else ""
-	
+
 func getCellContentsIndex(cell : DataTableContainer.CellContents ):
 	var real_row = visible_rows[cell.row] if cell.row < visible_rows.size() else cell.row
 	cell.text = "%d" % real_row
-	
+
 func getCellContentsString(cell : DataTableContainer.CellContents ):
 	var real_row := _container_index_for_cell(cell.row)
 	cell.text = container[ real_row ] if real_row >= 0 else ""
-	
+
 func getCellContentsResource(cell : DataTableContainer.CellContents ):
 	var real_row := _container_index_for_cell(cell.row)
 	if real_row < 0:
@@ -190,7 +187,7 @@ func getCellContentsResource(cell : DataTableContainer.CellContents ):
 		return
 	var res = container[ real_row ] as Resource
 	cell.text = res.resource_path if res else ""
-			
+
 func getCellContentsNode(cell : DataTableContainer.CellContents ):
 	var real_row := _container_index_for_cell(cell.row)
 	if real_row < 0:
@@ -198,19 +195,19 @@ func getCellContentsNode(cell : DataTableContainer.CellContents ):
 		return
 	var node = container[ real_row ] as Node3D
 	cell.text = ( "$" + node.name ) if node else ""
-		
+
 func refresh():
-	
+
 	if tv == null:
 		return
 
 	tv.clearColumns()
 	tv.setColumnCallback( onColumnBegins )
-	
+
 	data = null
-	
+
 	if node:
-			
+
 		if is_output:
 			if current_bulk_index >= node.generated_bulks.size():
 				current_bulk_index = 0
@@ -218,14 +215,14 @@ func refresh():
 			if node.settings.debug_bulk != current_bulk_index:
 				print( "Updating node.settings.debug_bulk to %d" % [ current_bulk_index ])
 				node.settings.debug_bulk = current_bulk_index
-				node.setupDrawDebug()				
-				
+				node.setupDrawDebug()
+
 			data = node.get_bulk_output( current_bulk_index, current_port_index )
 			#print( "Requesting out bulk %d:%d -> %s" % [ current_bulk_index, current_port_index, data ])
 			#data.dump( "Data refresh")
 		else:
 			data = node.get_bulk_input( current_bulk_index, current_port_index )
-		
+
 	if data != null:
 
 		updateNumRowsAndCols()
@@ -234,16 +231,16 @@ func refresh():
 			filter_text = %FilterEdit.text
 		update_visible_rows(filter_text)
 		apply_sort()
-		
+
 		# Stats: row/col summary
 		%LabelStats.text = FlowI18n.t("%d rows · %d streams · %d cols") % [ num_rows, data.numFields(), num_cols]
-		
+
 		# Index column
 		tv.addColumn( "#", 0 )
 		tv.num_rows = visible_rows.size()
 		var row_height := get_theme_default_font_size()
 		tv.setRowHeight( row_height )
-		
+
 		# Auto-size columns based on header text width
 		var base_font = ThemeDB.fallback_font
 		var header_font_size = 12
@@ -251,7 +248,7 @@ func refresh():
 			var text_w = base_font.get_string_size(title, HORIZONTAL_ALIGNMENT_LEFT, -1, header_font_size).x
 			var col_w = int(max(text_w + 16, 60)) # min 60px, pad 16px
 			tv.addColumn( title, col_w )
-			
+
 	tv.commitColumns()
 
 func onCellClicked( row : int, col : int ):
@@ -405,7 +402,7 @@ func update_visible_rows(filter_text : String):
 	visible_rows.clear()
 	if data == null:
 		return
-	
+
 	if filter_text.is_empty():
 		for i in range(data.size()):
 			visible_rows.append(i)
@@ -462,6 +459,9 @@ func _on_filter_edit_text_changed(new_text : String):
 	if tv:
 		tv.num_rows = visible_rows.size()
 		tv.commitColumns()
+		
+func set_flow_editor(editor: FlowEditor) -> void:
+	_flow_editor = editor
 
 func _ready():
 	tv.cell_clicked.connect( onCellClicked )
@@ -470,13 +470,13 @@ func _ready():
 	refresh_localized_text()
 	if not tv.title_clicked.is_connected(onTitleClicked):
 		tv.title_clicked.connect( onTitleClicked )
-	
+
 	# Style the header elements for a compact, polished look
 	if has_node("%LabelTitle"):
 		%LabelTitle.add_theme_color_override("font_color", Color("22d3ee"))
 	if has_node("%LabelStats"):
 		%LabelStats.add_theme_color_override("font_color", Color("8b95a5"))
-	
+
 	refresh()
 
 func refresh_localized_text() -> void:
@@ -501,7 +501,7 @@ func _on_slot_selector_item_selected(index: int) -> void:
 	print( "_on_slot_selector_item_selected %d node: %s" % [ index, node ] )
 	if not node:
 		return
-		
+
 	var meta = node.getMeta()
 	if index < meta.outs.size():
 		is_output = true
@@ -525,12 +525,12 @@ func _on_bulk_selector_item_selected(index):
 
 func populateSlots():
 	slot_selector.clear()
-	
+
 	if not node:
 		return
-	
+
 	var meta = node.getMeta()
-	
+
 	var idx = 0
 	for slot in meta.outs:
 		slot_selector.add_item( FlowI18n.tn(slot.label), idx )
@@ -540,7 +540,7 @@ func populateSlots():
 		slot_selector.add_item( FlowI18n.tn(slot.label), idx )
 		idx +=1
 	populateBulks()
-	
+
 func populateBulks():
 	bulk_selector.clear()
 	if is_output:

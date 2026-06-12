@@ -9,21 +9,11 @@ const TOOLBAR_ICON_BY_NAME := {
 	"ButtonSave": "Save",
 	"ButtonBrowse": "ShowInFileSystem",
 	"ButtonReload": "Reload",
-	"ButtonAnalyze": "Search",
+	"ButtonAnalyze": "PackedDataContainer",
 	"ButtonRegenerate": "RandomNumberGenerator",
 	"ButtonMinimap": "GridMinimap",
 	"ButtonInputs": "GraphEdit",
 	"ButtonSettings": "Tools",
-}
-const TOOLBAR_TOOLTIP_BY_NAME := {
-	"ButtonSave": "Save the current FlowGraph resource",
-	"ButtonBrowse": "Reveal the saved graph resource in the FileSystem dock",
-	"ButtonReload": "Reload the current FlowGraph resource",
-	"ButtonAnalyze": "Inspect selected node raw data (A)",
-	"ButtonRegenerate": "Regenerate the graph output",
-	"ButtonMinimap": "Toggle the graph minimap.",
-	"ButtonInputs": "Edit graph inputs",
-	"ButtonSettings": "Open Flow editor settings",
 }
 
 
@@ -48,6 +38,15 @@ static func clear_initialized(host: Control) -> void:
 		host.remove_meta(INITIALIZED_META)
 
 
+static func _is_editing_host_scene(refs: Refs) -> bool:
+	if not Engine.is_editor_hint() or refs.host == null:
+		return false
+	var tree := refs.host.get_tree()
+	if tree == null:
+		return false
+	return tree.edited_scene_root == refs.host
+
+
 static func setup(refs: Refs) -> void:
 	if not refs.is_valid():
 		return
@@ -56,37 +55,15 @@ static func setup(refs: Refs) -> void:
 		apply_styles(refs)
 		apply_translations(refs)
 		return
-	enforce_vbox_order(refs)
 	_attach_toolbar_to_graph_menu(refs)
 	connect_signals(refs)
 	apply_styles(refs)
 	apply_translations(refs)
 	refs.host.set_meta(INITIALIZED_META, true)
 
-
-static func enforce_vbox_order(refs: Refs) -> void:
-	var vbox := refs.host.get_node_or_null("VBoxContainer")
-	if vbox == null:
-		return
-	var legacy_breadcrumb := vbox.get_node_or_null("BreadcrumbPanel")
-	if legacy_breadcrumb:
-		legacy_breadcrumb.free()
-	var legacy_open := refs.toolbar_hbox.get_node_or_null("ButtonOpenGraph")
-	if legacy_open:
-		legacy_open.free()
-	var order := [
-		"TabBarPanel",
-		"ScrollContainer",
-		"VSplitContainer",
-		"StatusPanel",
-	]
-	for i in order.size():
-		var node := vbox.get_node_or_null(order[i])
-		if node:
-			vbox.move_child(node, i)
-
-
 static func _attach_toolbar_to_graph_menu(refs: Refs) -> void:
+	if _is_editing_host_scene(refs):
+		return
 	if refs.graph_edit == null:
 		return
 	var graph_menu_hbox := refs.graph_edit.get_menu_hbox()
@@ -164,46 +141,15 @@ static func _connect_toggled(refs: Refs, node_name: String, callback: Callable) 
 static func apply_styles(refs: Refs) -> void:
 	if not refs.is_valid():
 		return
-	_attach_toolbar_to_graph_menu(refs)
+	var editing_host_scene := _is_editing_host_scene(refs)
+	if not editing_host_scene:
+		_attach_toolbar_to_graph_menu(refs)
 	var vbox := refs.host.get_node_or_null("VBoxContainer")
 	if vbox == null:
 		return
-	var tab_panel := vbox.get_node_or_null("TabBarPanel") as PanelContainer
-	if tab_panel:
-		var tab_sb := StyleBoxFlat.new()
-		tab_sb.bg_color = Color("0e1016")
-		tab_sb.content_margin_left = 4
-		tab_sb.content_margin_right = 4
-		tab_sb.content_margin_top = 2
-		tab_sb.content_margin_bottom = 0
-		tab_panel.add_theme_stylebox_override("panel", tab_sb)
 	var toolbar_container := vbox.get_node_or_null("ScrollContainer") as ScrollContainer
 	if toolbar_container:
-		toolbar_container.visible = false
-	_style_graph_menu_toolbar(refs)
-	var status_panel := vbox.get_node_or_null("StatusPanel") as PanelContainer
-	if status_panel:
-		var status_sb := StyleBoxFlat.new()
-		status_sb.bg_color = Color("0a0c12")
-		status_sb.border_width_top = 1
-		status_sb.border_color = Color(1.0, 1.0, 1.0, 0.04)
-		status_sb.content_margin_left = 12
-		status_sb.content_margin_right = 12
-		status_sb.content_margin_top = 4
-		status_sb.content_margin_bottom = 4
-		status_panel.add_theme_stylebox_override("panel", status_sb)
-	for child in refs.toolbar_hbox.get_children():
-		if child is Button:
-			var button := child as Button
-			if TOOLBAR_ICON_BY_NAME.has(button.name):
-				_style_toolbar_icon_button(button, String(TOOLBAR_ICON_BY_NAME[button.name]))
-			else:
-				_style_toolbar_button(button)
-	if refs.open_graph_button:
-		_style_open_graph_button(refs.open_graph_button)
-	if refs.expand_graph_button:
-		_style_expand_graph_button(refs.expand_graph_button)
-
+		toolbar_container.visible = editing_host_scene
 
 static func apply_translations(refs: Refs) -> void:
 	if not refs.is_valid():
@@ -222,14 +168,6 @@ static func apply_translations(refs: Refs) -> void:
 	var tooltip_by_name := {
 		"ButtonExpandGraph": "Float Graph Panel",
 	}
-	for node_name in TOOLBAR_TOOLTIP_BY_NAME:
-		var control := _get_control(refs, node_name)
-		if control:
-			control.tooltip_text = FlowI18n.t(String(TOOLBAR_TOOLTIP_BY_NAME[node_name]))
-	for node_name in tooltip_by_name:
-		var control := _get_control(refs, node_name)
-		if control:
-			control.tooltip_text = FlowI18n.t(String(tooltip_by_name[node_name]))
 	if refs.open_graph_button:
 		refs.open_graph_button.text = ""
 		refs.open_graph_button.tooltip_text = FlowI18n.t("Open a FlowGraph resource")
