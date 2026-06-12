@@ -859,6 +859,6 @@ func _on_tab_bar_tab_close_pressed(tab_idx):
 	tab_bar.remove_tab( tab_idx )
 
 func _on_tab_bar_tab_changed(tab_idx):
-	var dtab = open_tabs[ tab_idx ] if tab_idx < open_tabs.size() else null
+	var dtab = open_tabs[ tab_idx ] if tab_idx >= 0 and tab_idx < open_tabs.size() else null
 	if dtab:
 		setResourceToEdit( dtab.resource, dtab.owner )
