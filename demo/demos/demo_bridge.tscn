@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://dutcbhdexb7k1"]
+[gd_scene format=3 uid="uid://dutcbhdexb7k1"]
 
 [ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_gywrk"]
 [ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="2_wdrda"]
@@ -138,6 +138,7 @@ data = {
 "debug_mode": 0,
 "debug_modulate_by": "",
 "debug_output": 0,
+"debug_port_combined_index": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "in_nameA": "@last",
@@ -175,6 +176,7 @@ data = {
 "debug_mode": 0,
 "debug_modulate_by": "",
 "debug_output": 0,
+"debug_port_combined_index": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "inspect_enabled": false,
@@ -208,6 +210,7 @@ data = {
 "debug_mode": 0,
 "debug_modulate_by": "",
 "debug_output": 0,
+"debug_port_combined_index": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "in_nameA": "@last",
@@ -245,6 +248,7 @@ data = {
 "debug_mode": 0,
 "debug_modulate_by": "",
 "debug_output": 0,
+"debug_port_combined_index": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "inspect_enabled": false,
@@ -278,6 +282,7 @@ data = {
 "debug_mode": 0,
 "debug_modulate_by": "",
 "debug_output": 0,
+"debug_port_combined_index": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "inspect_enabled": false,
@@ -312,6 +317,7 @@ data = {
 "debug_mode": 0,
 "debug_modulate_by": "",
 "debug_output": 0,
+"debug_port_combined_index": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "distance_attribute": "",
@@ -349,6 +355,7 @@ data = {
 "debug_mode": 0,
 "debug_modulate_by": "",
 "debug_output": 0,
+"debug_port_combined_index": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "inspect_enabled": false,
@@ -386,6 +393,7 @@ data = {
 "debug_mode": 0,
 "debug_modulate_by": "",
 "debug_output": 0,
+"debug_port_combined_index": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "in_nameA": "@last",
@@ -410,6 +418,7 @@ data = {
 "position": Vector2(500, 340),
 "settings": {
 "cte_bool": false,
+"cte_color": Color(1, 1, 1, 1),
 "cte_float": 1.68,
 "cte_int": 0,
 "cte_resource": null,
@@ -422,6 +431,7 @@ data = {
 "debug_mode": 0,
 "debug_modulate_by": "",
 "debug_output": 0,
+"debug_port_combined_index": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "inspect_enabled": false,
@@ -443,6 +453,7 @@ data = {
 "debug_mode": 0,
 "debug_modulate_by": "",
 "debug_output": 0,
+"debug_port_combined_index": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "group_name": "",
@@ -471,6 +482,7 @@ data = {
 "debug_mode": 0,
 "debug_modulate_by": "",
 "debug_output": 0,
+"debug_port_combined_index": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "distance_attribute": "",
@@ -500,6 +512,7 @@ data = {
 "debug_mode": 0,
 "debug_modulate_by": "",
 "debug_output": 0,
+"debug_port_combined_index": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "inspect_enabled": false,
@@ -524,6 +537,7 @@ data = {
 "position": Vector2(20, 380),
 "settings": {
 "cte_bool": false,
+"cte_color": Color(1, 1, 1, 1),
 "cte_float": 0.9,
 "cte_int": 0,
 "cte_resource": null,
@@ -536,6 +550,7 @@ data = {
 "debug_mode": 0,
 "debug_modulate_by": "",
 "debug_output": 0,
+"debug_port_combined_index": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "inspect_enabled": false,
@@ -594,6 +609,7 @@ data = {
 "debug_mode": 0,
 "debug_modulate_by": "",
 "debug_output": 0,
+"debug_port_combined_index": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "inspect_enabled": false,
@@ -617,8 +633,6 @@ data = {
 }
 view_zoom = 0.826446
 view_offset = Vector2(1103.16, -425.24)
-new_name_counter = 24
-in_params = Array[ExtResource("2_wdrda")]([])
 
 [sub_resource type="Curve3D" id="Curve3D_gywrk"]
 bake_interval = 0.795
@@ -628,14 +642,14 @@ _data = {
 }
 point_count = 2
 
-[node name="DemoBridge" type="Node3D"]
+[node name="DemoBridge" type="Node3D" unique_id=1573480408]
 
-[node name="FlowGraphNode3D" type="Node3D" parent="."]
+[node name="FlowGraphNode3D" type="Node3D" parent="." unique_id=1943747497]
 script = ExtResource("1_gywrk")
 graph = SubResource("Resource_akmbg")
 refresh_inputs = Callable()
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
 
-[node name="Path3D" type="Path3D" parent="."]
+[node name="Path3D" type="Path3D" parent="." unique_id=1471292669]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.68727, 0)
 curve = SubResource("Curve3D_gywrk")

@@ -15,22 +15,28 @@ data = {
 "to_node": &"id_0003_sample_spline",
 "to_port": 0
 }, {
-"from_node": &"id_0003_sample_spline",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0018_math_op",
-"to_port": 0
-}, {
 "from_node": &"id_0018_math_op",
 "from_port": 0,
 "keep_alive": false,
 "to_node": &"id_0025_sample_around",
 "to_port": 0
 }, {
-"from_node": &"id_0025_sample_around",
+"from_node": &"id_0018_math_op",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0026_relax",
+"to_node": &"id_0028_transform",
+"to_port": 0
+}, {
+"from_node": &"id_0029_random_color",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0018_math_op",
+"to_port": 0
+}, {
+"from_node": &"id_0003_sample_spline",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0029_random_color",
 "to_port": 0
 }],
 "min_pos": Vector2(80, 180),
@@ -57,6 +63,34 @@ data = {
 },
 "show_disconnected_inputs": false,
 "template": "scan_splines"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0025_sample_around",
+"position": Vector2(820, 0),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": true,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": true,
+"max_points": 139,
+"radius": 0.45,
+"random_seed": 2789012003,
+"title": "Sample Around",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "sample_around"
 }, {
 "args_port": {
 "Splines": {
@@ -90,6 +124,40 @@ data = {
 "template": "sample_spline"
 }, {
 "args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0028_transform",
+"position": Vector2(820, 120),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": true,
+"debug_mode": 0,
+"debug_modulate_by": "color",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"offset_max": Vector3(0, 0, 0),
+"offset_min": Vector3(0, 0, 0),
+"random_seed": 3946766092,
+"rotation_local_space": false,
+"rotation_max": Vector3(0, 0, 0),
+"rotation_min": Vector3(0, 0, 0),
+"scale_max": Vector3(0.25, 5, 0.25),
+"scale_min": Vector3(0.25, 5, 0.25),
+"title": "Transform",
+"trace": false,
+"uniform_scale": false
+},
+"show_disconnected_inputs": false,
+"template": "transform"
+}, {
+"args_port": {
 "In A": {
 "connected": true,
 "port": 0
@@ -100,7 +168,7 @@ data = {
 }
 },
 "name": &"id_0018_math_op",
-"position": Vector2(340, 0),
+"position": Vector2(600, 0),
 "settings": {
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
@@ -129,63 +197,41 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0025_sample_around",
-"position": Vector2(520, 0),
+"name": &"id_0029_random_color",
+"position": Vector2(380, 0),
 "settings": {
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
-"debug_modulate_by": "",
+"debug_modulate_by": "color",
 "debug_output": 0,
 "debug_port_combined_index": 0,
 "debug_scale": 1.0,
 "disabled": false,
+"hue_center": 0.0,
+"hue_width": 1.0,
 "inspect_enabled": false,
-"max_points": 121,
-"radius": 0.15,
-"random_seed": 2789012003,
-"title": "Sample Around",
-"trace": false
+"out_name": "color",
+"palette": Array[Color]([Color(1, 0.078, 0.576, 1), Color(0, 0.749, 1, 1), Color(1, 0.843, 0, 1)]),
+"random_seed": 437912405,
+"sat_max": 1.0,
+"sat_min": 1.0,
+"title": "Random Color",
+"trace": false,
+"use_palette": false,
+"val_max": 1.0,
+"val_min": 1.0
 },
 "show_disconnected_inputs": false,
-"template": "sample_around"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0026_relax",
-"position": Vector2(700, 0),
-"settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": true,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"num_iterations": 17,
-"padding": 0.37,
-"random_seed": 262253606,
-"strength": 0.245,
-"title": "Relax",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "relax"
+"template": "random_color"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
-view_zoom = 0.96734935
-view_offset = Vector2(377.38678, 84.67627)
-new_name_counter = 26
+view_zoom = 0.8794085
+view_offset = Vector2(422.57465, 39.920563)
+new_name_counter = 29
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_lfecj"]
 

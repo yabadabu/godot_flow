@@ -1,7 +1,6 @@
-[gd_resource type="Resource" script_class="FlowGraphResource" load_steps=4 format=3 uid="uid://doldqxmlcvh80"]
+[gd_resource type="Resource" script_class="FlowGraphResource" format=3 uid="uid://doldqxmlcvh80"]
 
 [ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="1_hovoc"]
-[ext_resource type="PackedScene" uid="uid://b6q4l56g02tqn" path="res://scenes/scene_3p.tscn" id="1_kx8in"]
 [ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="1_pwag0"]
 
 [resource]
@@ -63,6 +62,7 @@ data = {
 "debug_mode": 0,
 "debug_modulate_by": "",
 "debug_output": 0,
+"debug_port_combined_index": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "group_name": "",
@@ -91,6 +91,7 @@ data = {
 "debug_mode": 0,
 "debug_modulate_by": "",
 "debug_output": 0,
+"debug_port_combined_index": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "distance_attribute": "distance",
@@ -120,6 +121,7 @@ data = {
 "debug_mode": 0,
 "debug_modulate_by": "",
 "debug_output": 0,
+"debug_port_combined_index": 0,
 "debug_scale": 1.0,
 "dir": Vector3(0, -1, 0),
 "disabled": false,
@@ -151,6 +153,7 @@ data = {
 "debug_mode": 1,
 "debug_modulate_by": "",
 "debug_output": 0,
+"debug_port_combined_index": 0,
 "debug_scale": 0.395,
 "disabled": false,
 "inspect_enabled": false,
@@ -181,10 +184,12 @@ data = {
 "debug_mode": 0,
 "debug_modulate_by": "",
 "debug_output": 0,
+"debug_port_combined_index": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "in_nameA": "@last",
 "in_nameB": "True",
+"in_nameC": "@last",
 "inspect_enabled": false,
 "random_seed": 2799373273,
 "threshold": 0.1,
@@ -204,18 +209,25 @@ data = {
 "position": Vector2(1180, 0),
 "settings": {
 "assign_attributes": {},
+"assign_target_path": "",
+"clear_previous_instances": true,
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "",
 "debug_output": 0,
+"debug_port_combined_index": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "inspect_enabled": false,
 "random_seed": 4115871725,
-"scene": ExtResource("1_kx8in"),
+"randomize_scene_variants": false,
 "scene_attribute": "",
+"scene_selector_attribute": "",
+"scene_variant_weights": Array[float]([]),
+"scene_variants": Array[PackedScene]([]),
+"spawn_parent_path": "",
 "title": "Spawn Scenes",
 "trace": false
 },
@@ -237,6 +249,7 @@ data = {
 "debug_mode": 0,
 "debug_modulate_by": "",
 "debug_output": 0,
+"debug_port_combined_index": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "inspect_enabled": false,
@@ -270,6 +283,7 @@ data = {
 "debug_mode": 0,
 "debug_modulate_by": "",
 "debug_output": 0,
+"debug_port_combined_index": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "inspect_enabled": false,
@@ -292,7 +306,6 @@ data = {
 "version": 1
 }
 view_zoom = 1.00902
-view_offset = Vector2(-196.173, -423.492)
+view_offset = Vector2(-354.1132, -190.58432)
 new_name_counter = 9
-in_params = Array[ExtResource("1_hovoc")]([])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"

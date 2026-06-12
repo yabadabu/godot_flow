@@ -3,6 +3,11 @@
 [ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="1_qjg5v"]
 [ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="2_qcw35"]
 
+[sub_resource type="Resource" id="Resource_qjg5v"]
+script = ExtResource("1_qjg5v")
+name = "limit"
+cte_float = 1.6
+
 [resource]
 script = ExtResource("2_qcw35")
 data = {
@@ -25,72 +30,21 @@ data = {
 "keep_alive": false,
 "to_node": &"id_0006_attribute_rename",
 "to_port": 0
+}, {
+"from_node": &"id_0003_grid",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0011_filter",
+"to_port": 0
+}, {
+"from_node": &"id_0014_input_limit",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0011_filter",
+"to_port": 1
 }],
-"min_pos": Vector2(80, 240),
+"min_pos": Vector2(-80, 240),
 "nodes": [{
-"args_port": {},
-"name": &"id_0003_grid",
-"position": Vector2(0, 0),
-"settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"origin": Vector3(0, 0, 0),
-"random_seed": 618638236,
-"rotation": Vector3(0, 0, 0),
-"size": 1.0,
-"step": Vector3(1, 1, 1),
-"title": "Grid",
-"trace": false,
-"x": 2,
-"y": 1,
-"z": 2
-},
-"show_disconnected_inputs": false,
-"template": "grid"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0002_add_attribute",
-"position": Vector2(160, 0),
-"settings": {
-"cte_bool": false,
-"cte_color": Color(1, 1, 1, 1),
-"cte_float": 2.3,
-"cte_int": 0,
-"cte_resource": null,
-"cte_string": "",
-"cte_vector": Vector3(0, 0, 0),
-"data_type": 2,
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"name": "AttrA",
-"random_seed": 1449361021,
-"title": "Add Attribute",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "add_attribute"
-}, {
 "args_port": {
 "In": {
 "connected": true,
@@ -98,7 +52,7 @@ data = {
 }
 },
 "name": &"id_0005_add_attribute",
-"position": Vector2(320, 0),
+"position": Vector2(480, 0),
 "settings": {
 "cte_bool": false,
 "cte_color": Color(1, 1, 1, 1),
@@ -133,7 +87,7 @@ data = {
 }
 },
 "name": &"id_0006_attribute_rename",
-"position": Vector2(480, 0),
+"position": Vector2(640, 0),
 "settings": {
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
@@ -154,10 +108,137 @@ data = {
 },
 "show_disconnected_inputs": false,
 "template": "attribute_rename"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0002_add_attribute",
+"position": Vector2(320, 0),
+"settings": {
+"cte_bool": false,
+"cte_color": Color(1, 1, 1, 1),
+"cte_float": 2.3,
+"cte_int": 0,
+"cte_resource": null,
+"cte_string": "",
+"cte_vector": Vector3(0, 0, 0),
+"data_type": 2,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"name": "AttrA",
+"random_seed": 1449361021,
+"title": "Add Attribute",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "add_attribute"
+}, {
+"args_port": {},
+"name": &"id_0003_grid",
+"position": Vector2(0, 0),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"origin": Vector3(0, 0, 0),
+"random_seed": 618638236,
+"rotation": Vector3(0, 0, 0),
+"size": 1.0,
+"step": Vector3(1, 1, 1),
+"title": "Grid",
+"trace": false,
+"x": 7,
+"y": 1,
+"z": 1
+},
+"show_disconnected_inputs": false,
+"template": "grid"
+}, {
+"args_port": {
+"In A": {
+"connected": true,
+"port": 0
+},
+"In B": {
+"connected": true,
+"port": 1
+},
+"In C": {
+"connected": false,
+"port": 2
+}
+},
+"name": &"id_0011_filter",
+"position": Vector2(200, 160),
+"settings": {
+"condition": 12,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"in_nameA": "position.X",
+"in_nameB": "@last",
+"in_nameC": "4.0",
+"inspect_enabled": false,
+"random_seed": 56830341,
+"threshold": 0.1,
+"title": "Filter",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "filter"
+}, {
+"args_port": {},
+"name": &"id_0014_input_limit",
+"position": Vector2(0, 220),
+"settings": {
+"data_type": 2,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"name": "limit",
+"random_seed": 1812025184,
+"title": "Input",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "input_limit"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
-view_offset = Vector2(-43, -24)
-new_name_counter = 6
+view_zoom = 0.82644624
+view_offset = Vector2(-131.94345, 104.58127)
+new_name_counter = 15
+in_params = Array[ExtResource("1_qjg5v")]([SubResource("Resource_qjg5v")])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"

@@ -204,6 +204,29 @@ data = {
 "show_disconnected_inputs": false,
 "template": "output"
 }, {
+"args_port": {},
+"name": &"id_0002_input_CandidateRoom",
+"position": Vector2(0, 0),
+"settings": {
+"data_type": 999,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"name": "CandidateRoom",
+"random_seed": 769082763,
+"title": "Input",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "input_CandidateRoom"
+}, {
 "args_port": {
 "In A": {
 "connected": true,
@@ -234,35 +257,12 @@ data = {
 },
 "show_disconnected_inputs": false,
 "template": "substract"
-}, {
-"args_port": {},
-"name": &"id_0002_input_CandidateRoom",
-"position": Vector2(0, 0),
-"settings": {
-"data_type": 999,
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"name": "CandidateRoom",
-"random_seed": 769082763,
-"title": "Input",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "input_CandidateRoom"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
-view_zoom = 1.0999999
-view_offset = Vector2(33.935425, -340.97815)
+view_zoom = 0.62092113
+view_offset = Vector2(41.780426, -101.035675)
 new_name_counter = 8
 in_params = Array[ExtResource("1_1gq41")]([SubResource("Resource_o1y0f"), SubResource("Resource_k2nxl")])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"

@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="FlowGraphResource" load_steps=3 format=3 uid="uid://c6tic21gyki1f"]
+[gd_resource type="Resource" script_class="FlowGraphResource" format=3 uid="uid://c6tic21gyki1f"]
 
 [ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="1_4ly6f"]
 [ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="1_a1se2"]
@@ -16,28 +16,6 @@ data = {
 }],
 "min_pos": Vector2(40, 140),
 "nodes": [{
-"args_port": {},
-"name": &"id_0003_sample_spline",
-"position": Vector2(0, 0),
-"settings": {
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_scale": 1.0,
-"distance_attribute": "distance",
-"enabled": true,
-"fill_curve": false,
-"inspect_enabled": false,
-"random_seed": 2842677187,
-"required_meta_bool": &"",
-"title": "Sample Spline",
-"trace": false,
-"uniform_interval": 1.94
-},
-"show_disconnected_inputs": false,
-"template": "sample_spline"
-}, {
 "args_port": {
 "In": {
 "connected": true,
@@ -47,16 +25,20 @@ data = {
 "name": &"id_0002_transform",
 "position": Vector2(200, 0),
 "settings": {
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
 "debug_scale": 1.0,
-"enabled": true,
+"disabled": false,
 "inspect_enabled": false,
 "offset_max": Vector3(0, 0, 0),
 "offset_min": Vector3(0, 0, 0),
 "random_seed": 2046638687,
+"rotation_local_space": false,
 "rotation_max": Vector3(0, 360, 0),
 "rotation_min": Vector3(0, 0, -0.555),
 "scale_max": Vector3(1, 1, 1),
@@ -67,6 +49,37 @@ data = {
 },
 "show_disconnected_inputs": false,
 "template": "transform"
+}, {
+"args_port": {
+"Splines": {
+"connected": false,
+"port": 0
+}
+},
+"name": &"id_0003_sample_spline",
+"position": Vector2(0, 0),
+"settings": {
+"adjust_to_borders": true,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"distance_attribute": "distance",
+"fill_curve": false,
+"inspect_enabled": false,
+"random_seed": 2842677187,
+"sample_segments_centers": false,
+"title": "Sample Spline",
+"trace": false,
+"uniform_interval": 1.94
+},
+"show_disconnected_inputs": false,
+"template": "sample_spline"
 }],
 "type": "flow_graph_nodes",
 "version": 1
@@ -74,5 +87,4 @@ data = {
 view_zoom = 0.957918
 view_offset = Vector2(-158.332, -307.405)
 new_name_counter = 1
-in_params = Array[ExtResource("1_a1se2")]([])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"

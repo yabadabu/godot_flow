@@ -10,6 +10,10 @@
 [ext_resource type="PackedScene" uid="uid://fpbhnjxaha5m" path="res://addons/kaykit_dungeon_remastered/Assets/gltf/pillar.gltf.glb" id="6_68mnj"]
 [ext_resource type="PackedScene" uid="uid://bd7upyffu0sxq" path="res://addons/kaykit_dungeon_remastered/Assets/gltf/pillar_decorated.gltf.glb" id="7_e1cbf"]
 
+[sub_resource type="CylinderMesh" id="CylinderMesh_68mnj"]
+
+[sub_resource type="PrismMesh" id="PrismMesh_68mnj"]
+
 [sub_resource type="Resource" id="Resource_5a3wg"]
 script = ExtResource("1_5a3wg")
 name = "My rooms"
@@ -90,6 +94,42 @@ data = {
 "from_port": 0,
 "keep_alive": false,
 "to_node": &"spawn_upper_pillars",
+"to_port": 0
+}, {
+"from_node": &"id_0014_grid",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0015_noise",
+"to_port": 0
+}, {
+"from_node": &"id_0015_noise",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0017_add_attribute",
+"to_port": 0
+}, {
+"from_node": &"id_0017_add_attribute",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0018_match_and_set",
+"to_port": 0
+}, {
+"from_node": &"id_0019_add_attribute",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0021_merge",
+"to_port": 0
+}, {
+"from_node": &"id_0020_add_attribute",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0021_merge",
+"to_port": 0
+}, {
+"from_node": &"id_0021_merge",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0022_expression",
 "to_port": 0
 }],
 "min_pos": Vector2(60, 40),
@@ -374,40 +414,6 @@ data = {
 "template": "grid_boundary"
 }, {
 "args_port": {
-"Bounds": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"upper_floor_cells",
-"position": Vector2(560, 40),
-"settings": {
-"bounds_center": Vector3(0, 0, 0),
-"bounds_size": Vector3(10, 1, 10),
-"cell_size": Vector3(4, 1, 4),
-"copy_input_attributes": true,
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 1,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.585,
-"disabled": false,
-"fill_y_axis": false,
-"inspect_enabled": false,
-"max_points": 256,
-"random_seed": 3254929993,
-"source_index_attribute": "",
-"title": "Grid Fill Bounds",
-"trace": false,
-"use_input_bounds": true
-},
-"show_disconnected_inputs": false,
-"template": "grid_fill_bounds"
-}, {
-"args_port": {
 "In": {
 "connected": true,
 "port": 0
@@ -504,12 +510,308 @@ data = {
 },
 "show_disconnected_inputs": false,
 "template": "spawn_scenes"
+}, {
+"args_port": {
+"Bounds": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"upper_floor_cells",
+"position": Vector2(560, 40),
+"settings": {
+"bounds_center": Vector3(0, 0, 0),
+"bounds_size": Vector3(10, 1, 10),
+"cell_size": Vector3(4, 1, 4),
+"copy_input_attributes": true,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 1,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.585,
+"disabled": false,
+"fill_y_axis": false,
+"inspect_enabled": false,
+"max_points": 256,
+"random_seed": 3254929993,
+"source_index_attribute": "",
+"title": "Grid Fill Bounds",
+"trace": false,
+"use_input_bounds": true
+},
+"show_disconnected_inputs": false,
+"template": "grid_fill_bounds"
+}, {
+"args_port": {},
+"name": &"id_0014_grid",
+"position": Vector2(240, 780),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"origin": Vector3(0, 0, 0),
+"random_seed": 1563306425,
+"rotation": Vector3(0, 0, 0),
+"size": 1.0,
+"step": Vector3(5, 1, 5),
+"title": "Grid",
+"trace": false,
+"x": 10,
+"y": 1,
+"z": 10
+},
+"show_disconnected_inputs": false,
+"template": "grid"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0015_noise",
+"position": Vector2(380, 780),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"fractal_gain": -0.245,
+"fractal_lacunarity": 3.77,
+"fractal_octaves": 1,
+"fractal_ping_pong_strength": 2.0,
+"fractal_type": 0,
+"in_scale": 13.015,
+"inspect_enabled": false,
+"mode": 1,
+"noise_amplitude": 2.775,
+"noise_bias": 0.0,
+"noise_type": 4,
+"out_name": "position",
+"output_range": 1,
+"output_type": 1,
+"random_seed": 3235300469,
+"sample_attribute": "position",
+"sample_space": 0,
+"title": "Noise",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "noise"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0017_add_attribute",
+"position": Vector2(540, 780),
+"settings": {
+"cte_bool": false,
+"cte_color": Color(1, 1, 1, 1),
+"cte_float": 0.0,
+"cte_int": 0,
+"cte_resource": null,
+"cte_string": "",
+"cte_vector": Vector3(0, 0, 0),
+"data_type": 2,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": true,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"name": "position.y",
+"random_seed": 1359989037,
+"title": "Add Attribute",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "add_attribute"
+}, {
+"args_port": {
+"In": {
+"connected": false,
+"port": 0
+}
+},
+"name": &"id_0020_add_attribute",
+"position": Vector2(200, 1100),
+"settings": {
+"cte_bool": false,
+"cte_color": Color(1, 1, 1, 1),
+"cte_float": 0.0,
+"cte_int": 0,
+"cte_resource": SubResource("CylinderMesh_68mnj"),
+"cte_string": "",
+"cte_vector": Vector3(0, 0, 0),
+"data_type": 5,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"name": "Mesh",
+"random_seed": 400441025,
+"title": "Add Attribute",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "add_attribute"
+}, {
+"args_port": {
+"In": {
+"connected": false,
+"port": 0
+}
+},
+"name": &"id_0019_add_attribute",
+"position": Vector2(200, 1000),
+"settings": {
+"cte_bool": false,
+"cte_color": Color(1, 1, 1, 1),
+"cte_float": 0.0,
+"cte_int": 0,
+"cte_resource": SubResource("PrismMesh_68mnj"),
+"cte_string": "",
+"cte_vector": Vector3(0, 0, 0),
+"data_type": 5,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"name": "Mesh",
+"random_seed": 400441025,
+"title": "Add Attribute",
+"trace": true
+},
+"show_disconnected_inputs": false,
+"template": "add_attribute"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0021_merge",
+"position": Vector2(400, 1060),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"random_seed": 3173762396,
+"title": "Merge",
+"trace": true
+},
+"show_disconnected_inputs": false,
+"template": "merge"
+}, {
+"args_port": {
+"Attributes": {
+"connected": false,
+"port": 1
+},
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0018_match_and_set",
+"position": Vector2(900, 780),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": true,
+"match_attr": "",
+"random_seed": 2063051233,
+"title": "Match And Set",
+"trace": false,
+"weight_attr": ""
+},
+"show_disconnected_inputs": false,
+"template": "match_and_set"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0022_expression",
+"position": Vector2(580, 1060),
+"settings": {
+"args": {},
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"expose_arrays": false,
+"expression": "( 1 + Index ) * 4 ",
+"inspect_enabled": false,
+"out_name": "Weight",
+"random_seed": 3027670790,
+"title": "Expression",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "expression"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
-view_zoom = 1.21
-view_offset = Vector2(699.02637, 1.339447)
-new_name_counter = 13
+view_zoom = 0.79946244
+view_offset = Vector2(443.94992, 496.77545)
+new_name_counter = 22
 in_params = Array[ExtResource("1_5a3wg")]([SubResource("Resource_5a3wg")])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"

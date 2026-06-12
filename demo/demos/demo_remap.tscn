@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://dqudb7lrter5h"]
+[gd_scene format=3 uid="uid://dqudb7lrter5h"]
 
 [ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_8ag8x"]
 [ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="2_cwlch"]
@@ -26,12 +26,6 @@ data = {
 "to_node": &"id_0006_math_op",
 "to_port": 0
 }, {
-"from_node": &"id_0006_math_op",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0005_select",
-"to_port": 0
-}, {
 "from_node": &"id_0001_grid",
 "from_port": 0,
 "keep_alive": false,
@@ -46,96 +40,44 @@ data = {
 }],
 "min_pos": Vector2(80, 200),
 "nodes": [{
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0004_remap",
-"position": Vector2(400, 140),
+"args_port": {},
+"name": &"id_0003_scan_nodes",
+"position": Vector2(0, 120),
 "settings": {
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": true,
-"debug_mode": 0,
-"debug_modulate_by": "distance",
-"debug_scale": 1.0,
-"disabled": false,
-"in_name": "distance",
-"inspect_enabled": false,
-"out_name": "@in_name",
-"random_seed": 2803866490,
-"remap_curve": SubResource("Curve_8ag8x"),
-"title": "Remap",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "remap"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0005_select",
-"position": Vector2(740, 140),
-"settings": {
-"debug_color": Color(1, 0, 0, 1),
-"debug_enabled": true,
-"debug_mode": 1,
-"debug_modulate_by": "",
-"debug_scale": 0.085,
-"disabled": false,
-"inspect_enabled": false,
-"random_seed": 484334038,
-"ratio": 0.138,
-"title": "Select",
-"trace": false,
-"weight_name": "distance"
-},
-"show_disconnected_inputs": false,
-"template": "select"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-},
-"Target": {
-"connected": true,
-"port": 1
-}
-},
-"name": &"id_0002_distance",
-"position": Vector2(180, 0),
-"settings": {
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
-"debug_modulate_by": "distance",
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
 "debug_scale": 1.0,
 "disabled": false,
-"in_nameA": "position",
-"in_nameB": "position",
+"filter_by_class_name": "",
+"filter_by_name": "",
+"group_name": "RefPoints",
+"import_metadata": false,
+"import_properties": Array[StringName]([]),
 "inspect_enabled": false,
-"max_distance": 0.0,
-"out_name": "distance",
-"random_seed": 2100802008,
-"title": "Distance",
+"random_seed": 393844403,
+"size_to_bounds": false,
+"title": "Scan Nodes",
 "trace": false
 },
 "show_disconnected_inputs": false,
-"template": "distance"
+"template": "scan_nodes"
 }, {
 "args_port": {},
 "name": &"id_0001_grid",
 "position": Vector2(0, 0),
 "settings": {
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "inspect_enabled": false,
@@ -153,29 +95,68 @@ data = {
 "show_disconnected_inputs": false,
 "template": "grid"
 }, {
-"args_port": {},
-"name": &"id_0003_scan_nodes",
-"position": Vector2(0, 120),
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0004_remap",
+"position": Vector2(400, 140),
 "settings": {
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
-"debug_modulate_by": "",
+"debug_modulate_by": "distance",
+"debug_output": 0,
+"debug_port_combined_index": 0,
 "debug_scale": 1.0,
 "disabled": false,
-"filter_by_class_name": "",
-"filter_by_name": "",
-"group_name": "RefPoints",
-"import_metadata": false,
-"import_properties": Array[StringName]([]),
+"in_name": "distance",
 "inspect_enabled": false,
-"random_seed": 393844403,
-"size_to_bounds": false,
-"title": "Scan Nodes",
+"out_name": "@in_name",
+"random_seed": 2803866490,
+"remap_curve": SubResource("Curve_8ag8x"),
+"title": "Remap",
 "trace": false
 },
 "show_disconnected_inputs": false,
-"template": "scan_nodes"
+"template": "remap"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+},
+"Target": {
+"connected": true,
+"port": 1
+}
+},
+"name": &"id_0002_distance",
+"position": Vector2(180, 0),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "distance",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"in_nameA": "position",
+"in_nameB": "position",
+"inspect_enabled": false,
+"max_distance": 0.0,
+"out_name": "distance",
+"random_seed": 2100802008,
+"title": "Distance",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "distance"
 }, {
 "args_port": {
 "In A": {
@@ -190,10 +171,13 @@ data = {
 "name": &"id_0006_math_op",
 "position": Vector2(560, 140),
 "settings": {
+"debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "distance",
+"debug_output": 0,
+"debug_port_combined_index": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "in_nameA": "@last",
@@ -211,19 +195,18 @@ data = {
 "type": "flow_graph_nodes",
 "version": 1
 }
-view_zoom = 0.909091
-view_offset = Vector2(64.291, -70.6541)
+view_zoom = 0.8264463
+view_offset = Vector2(118.63727, 8.068939)
 new_name_counter = 7
-in_params = Array[ExtResource("2_cwlch")]([])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 
-[node name="DemoRemap" type="Node3D"]
+[node name="DemoRemap" type="Node3D" unique_id=1772731809]
 
-[node name="FlowGraphNode3D" type="Node3D" parent="."]
+[node name="FlowGraphNode3D" type="Node3D" parent="." unique_id=1090447753]
 script = ExtResource("1_8ag8x")
 graph = SubResource("Resource_b8voe")
 refresh_inputs = Callable()
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
 
-[node name="RefPoint" type="Node3D" parent="." groups=["RefPoints"]]
+[node name="RefPoint" type="Node3D" parent="." unique_id=1928387909 groups=["RefPoints"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.35342, 0.0712216, 1.59026)
