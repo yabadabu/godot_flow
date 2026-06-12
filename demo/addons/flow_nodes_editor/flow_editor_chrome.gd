@@ -168,14 +168,6 @@ static func apply_translations(refs: Refs) -> void:
 	var tooltip_by_name := {
 		"ButtonExpandGraph": "Float Graph Panel",
 	}
-	for node_name in TOOLBAR_TOOLTIP_BY_NAME:
-		var control := _get_control(refs, node_name)
-		if control:
-			control.tooltip_text = FlowI18n.t(String(TOOLBAR_TOOLTIP_BY_NAME[node_name]))
-	for node_name in tooltip_by_name:
-		var control := _get_control(refs, node_name)
-		if control:
-			control.tooltip_text = FlowI18n.t(String(tooltip_by_name[node_name]))
 	if refs.open_graph_button:
 		refs.open_graph_button.text = ""
 		refs.open_graph_button.tooltip_text = FlowI18n.t("Open a FlowGraph resource")

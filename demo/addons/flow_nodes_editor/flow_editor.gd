@@ -1853,7 +1853,6 @@ func _float_graph_panel():
 	var main_window := EditorInterface.get_base_control().get_window()
 	if current_window and current_window != main_window:
 		_focus_graph_panel_window()
-		_sync_internal_inspector_mode_if_needed()
 		return
 
 	var float_button := _get_dock_float_button()
@@ -1866,7 +1865,6 @@ func _float_graph_panel():
 
 	float_button.pressed.emit()
 	await get_tree().process_frame
-	_sync_internal_inspector_mode_if_needed()
 	_focus_graph_panel_window()
 
 func _get_dock_float_button() -> Button:
@@ -1888,6 +1886,15 @@ func _get_dock_float_button() -> Button:
 	if not popup:
 		return null
 	return _find_dock_float_button(popup)
+	
+func _get_editor_dock() -> Control:
+	var node: Node = self
+	while node:
+		var parent := node.get_parent()
+		if parent is TabContainer and node is Control:
+			return node as Control
+		node = parent
+	return null
 
 func _find_dock_float_button(node: Node) -> Button:
 	for child in node.get_children():
