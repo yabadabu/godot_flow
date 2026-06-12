@@ -17,8 +17,8 @@ extends NodeSettings
 	Color(1.0, 0.843, 0.0, 1.0)    # Fall Guys Yellow
 ]
 
-@export_range(0.0, 1.0) var hue_min : float = 0.0
-@export_range(0.0, 1.0) var hue_max : float = 1.0
+@export_range(0.0, 1.0) var hue_center : float = 0.0
+@export_range(0.0, 1.0) var hue_width  : float = 1.0
 @export_range(0.0, 1.0) var sat_min : float = 0.6
 @export_range(0.0, 1.0) var sat_max : float = 1.0
 @export_range(0.0, 1.0) var val_min : float = 0.6

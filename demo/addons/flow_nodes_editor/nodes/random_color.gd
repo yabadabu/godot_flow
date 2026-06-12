@@ -31,14 +31,15 @@ func execute( ctx : FlowData.EvaluationContext ):
 			var idx = rng.randi_range(0, palette_size - 1)
 			colors[i] = palette[idx]
 	else:
-		var h_min : float = settings.hue_min
-		var h_max : float = settings.hue_max
+		var h_center : float = settings.hue_center
+		var h_width : float = settings.hue_width
 		var s_min : float= settings.sat_min
 		var s_max : float= settings.sat_max
 		var v_min : float= settings.val_min
 		var v_max : float= settings.val_max
 		for i in range(in_size):
-			var h = rng.randf_range(h_min, h_max)
+			# Hue needs to wrap
+			var h = fposmod( h_center + rng.randf_range(-h_width, h_width), 1.0)
 			var s = rng.randf_range(s_min, s_max)
 			var v = rng.randf_range(v_min, v_max)
 			colors[i] = Color.from_hsv(h, s, v, 1.0)
