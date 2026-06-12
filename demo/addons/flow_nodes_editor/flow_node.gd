@@ -66,7 +66,7 @@ func refreshInputs():
 					pass
 
 		var keys_to_delete = []
-		print( "Args:", args)
+		#print( "Args:", args)
 		for arg_name in args.keys():
 			var input = graph.findInParamByName( arg_name )
 			if input == null:

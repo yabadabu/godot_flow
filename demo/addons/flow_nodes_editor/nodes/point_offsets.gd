@@ -37,9 +37,6 @@ func _setting_vec(values : Array[Vector3], idx : int, fallback : Vector3) -> Vec
 func execute(_ctx : FlowData.EvaluationContext):
 	var in_data : FlowData.Data = get_input(0)
 	if in_data == null:
-		if _ctx.owner == null and Engine.is_editor_hint():
-			set_output(0, FlowData.Data.new())
-			return
 		setError("Anchors input is missing")
 		return
 
@@ -49,9 +46,6 @@ func execute(_ctx : FlowData.EvaluationContext):
 
 	var transforms := in_data.getTransformsStream()
 	if transforms == null:
-		if _ctx.owner == null and Engine.is_editor_hint():
-			set_output(0, FlowData.Data.new())
-			return
 		setError("Anchors must provide position, rotation, and size streams")
 		return
 

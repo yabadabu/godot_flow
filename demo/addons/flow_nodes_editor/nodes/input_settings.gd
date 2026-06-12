@@ -12,4 +12,4 @@ func _init():
 	resource_name = "Input"
 
 func exposeParam( name : String ) -> bool:
-	return name == "name"
+	return name != "data_type"

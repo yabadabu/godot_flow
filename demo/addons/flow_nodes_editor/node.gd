@@ -571,7 +571,6 @@ func findNodesMatchingFilters( ctx : FlowData.EvaluationContext, filter_by_class
 	var group_name = getSettingValue( ctx, "group_name" )
 	
 	var all_nodes : Array[Node] = []
-	#var scene_root = ctx.owner.get_tree().root
 	if group_name:
 		all_nodes = ctx.owner.get_tree().get_nodes_in_group( group_name )
 	elif ctx.owner:

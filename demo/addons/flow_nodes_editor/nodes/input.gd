@@ -64,6 +64,7 @@ func preExecute( ctx : FlowData.EvaluationContext ):
 		var new_value = input.get_default_value()
 		if ctx.owner and ctx.owner.args.has( input.name ):
 			var ctx_value = ctx.owner.args[ input.name ]
+			if settings.trace: print( "input ctx_value %s. Owner:%s" % [ ctx_value, ctx.owner.name ] )
 			if FlowNodeBase.getFlowDataTypeFromGdScriptType( typeof( ctx_value ) ) == input.data_type:
 				new_value = ctx.owner.args[ input.name ]
 
@@ -72,6 +73,8 @@ func preExecute( ctx : FlowData.EvaluationContext ):
 		container.resize( 1 )
 		container[0] = new_value
 		last_value_pushed = new_value
+		
+		if settings.trace: print( "input outputs %s" % new_value )
 
 	else:
 		if ctx.inputs.has( input.name ):
@@ -81,7 +84,7 @@ func preExecute( ctx : FlowData.EvaluationContext ):
 			#print( "input.Reading %s from ctx FAILED. Inputs;%s" % [input.name, ctx.inputs])
 			output = FlowData.Data.new()
 		last_value_pushed = null
-	#output.dump( "input.preexe" )
+	#output.dump( "input.preExe.done" )
 
 func execute( ctx : FlowData.EvaluationContext ):
 	#print( "input. using cached data %s from ctx -> %s" % [name, output])

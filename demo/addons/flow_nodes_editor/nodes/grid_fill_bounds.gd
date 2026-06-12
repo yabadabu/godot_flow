@@ -78,9 +78,6 @@ func execute(_ctx : FlowData.EvaluationContext):
 		var in_positions := in_data.getVector3Container(FlowData.AttrPosition)
 		var in_sizes := in_data.getVector3Container(FlowData.AttrSize)
 		if in_positions.size() != in_data.size():
-			if Engine.is_editor_hint() and _ctx.owner == null:
-				set_output(0, FlowData.Data.new())
-				return
 			setError("Input bounds must provide position for each point")
 			return
 		for idx : int in range(in_data.size()):
