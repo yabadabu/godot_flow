@@ -14,6 +14,7 @@
 - [ ] named redirectors/acc
 - [ ] debug/session
 - [ ] multiple flowgraphs / tabs
+- [ ] use the WeightsRandomSampler from match_and_set in more places (sample mesh/sample scene)
 
 - [ ] Demos
 	- [X] Wall of rocks, picking a random point on the top
@@ -22,7 +23,7 @@
 	- [X] Mark an area with a spline, have a path remove all flowers
 		- [X] Change density based on the distance to the spline contour
 	- [X] Bridge
-- [ ] Match & Set is not taking into account the weight attr
+- [ ] Match & Set is not taking into account the weight attr, when matching attr is set
 - [ ] Integrate with HTerrain plugin
 - [X] Subgraphs / Loops?
 - [ ] Sample spline along N random positions

@@ -13,6 +13,33 @@ func _init():
 					"\nThe weight_attr controls if some assets should be picked more frequently than others." + 
 					"\nIf none are set, a random point from the Attributes entry is picked and assigned to each In point" 
 	}
+	
+class WeightsRandomSampler:
+	var cumulative  : PackedFloat32Array
+	var num_weights : int = 0
+	var total_weight : float = 0.0
+	func _init( in_weights : PackedFloat32Array ):
+		cumulative  = PackedFloat32Array()
+		num_weights = in_weights.size()
+		cumulative .resize(num_weights)
+		total_weight = 0.0
+		for i in num_weights:
+			total_weight += maxf(in_weights[i], 0.0)
+			cumulative[i] = total_weight
+			
+	func sample( unit_val : float ) -> int:
+		if total_weight <= 0.0:
+			return -1
+		var r := unit_val * total_weight
+		var lo := 0
+		var hi := cumulative.size() - 1
+		while lo < hi:
+			var mid := (lo + hi) / 2
+			if r < cumulative[mid]:
+				hi = mid
+			else:
+				lo = mid + 1
+		return lo
 
 func execute( ctx : FlowData.EvaluationContext ):
 	var in_data : FlowData.Data = get_input(0)
@@ -43,18 +70,30 @@ func execute( ctx : FlowData.EvaluationContext ):
 			lut[ value ].append( attr_index )
 			attr_index += 1
 		using_lut = true
+		
+	var weight_attr : String = getSettingValue( ctx, "weight_attr" )
+	var weight_stream = attrs_data.findStream( weight_attr )
+	if weight_attr and not weight_stream:
+		setError( "Can't find weight attribute %s" % weight_attr )
+		return
+	if weight_attr and weight_stream and weight_stream.data_type != FlowData.DataType.Float:
+		setError( "Weight attribute %s should have type float" % weight_attr )
 	
 	# Create the new streams
 	var out_data : FlowData.Data = in_data.duplicate()
-	var in_containers = []
-	var out_containers = []
+	var in_containers := []
+	var out_containers := []
 	for attr_stream in attrs_data.streams.values():
 		var new_container = out_data.addStream( attr_stream.name, attr_stream.data_type )
 		# print( "new_container: ", attr_stream, " Sz:", new_container.size())
 		in_containers.append( attr_stream.container )
 		out_containers.append( new_container )
-		
 	var num_new_streams := out_containers.size()		
+		
+	var copyPoint := func( dst_idx : int, src_idx : int ):
+		for j in range(num_new_streams):
+			out_containers[ j ][ dst_idx ] = in_containers[ j ][ src_idx ]
+		
 	if using_lut:
 		var missings = {}
 		for idx in range( out_data.size() ):
@@ -65,20 +104,26 @@ func execute( ctx : FlowData.EvaluationContext ):
 				var choice_index := rng.randi_range( 0, num_choices - 1 )
 				var attr_idx := candidate_indices[ choice_index ]
 				#print( "OutPoint: %d Using attr index %d" % [ idx, attr_idx ])
-				for j in range(num_new_streams):
-					out_containers[ j ][ idx ] = in_containers[ j ][ attr_idx ]
+				copyPoint.call( idx, attr_idx )
 			else:
 				missings[ in_lut_value ] = true
 				#print( "%s not found in lut Type:%s" % [ ín_lut_value, type_string(typeof( ín_lut_value )) ])
 				pass
 
 	else:
-		var num_choices = attrs_data.size()
+		var num_choices := attrs_data.size()
 		if num_choices > 0 && num_new_streams > 0:
-			for idx in range( out_data.size() ):
-				var attr_idx = rng.randi_range( 0, num_choices - 1 )
-				# print( "Copy all attr of in_attr[%d] into out_data[%d]" % [attr_idx, idx])
-				for j in range(num_new_streams):
-					out_containers[ j ][ idx ] = in_containers[ j ][ attr_idx ]
+			
+			if weight_stream:
+				var sampler := WeightsRandomSampler.new( weight_stream.container )
+				for idx in range( out_data.size() ):
+					var attr_idx := sampler.sample( rng.randf() )
+					copyPoint.call( idx, attr_idx )
+				
+			else:
+				for idx in range( out_data.size() ):
+					var attr_idx := rng.randi_range( 0, num_choices - 1 )
+					# print( "Copy all attr of in_attr[%d] into out_data[%d]" % [attr_idx, idx])
+					copyPoint.call( idx, attr_idx )
 			
 	set_output( 0, out_data )
