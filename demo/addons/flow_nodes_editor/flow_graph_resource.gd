@@ -24,6 +24,7 @@ class_name FlowGraphResource
 		return in_params
 
 # The compilation version of the resource, which is shared between all the instances using this resource
+var compiled : bool = false
 var nodes_by_name : Dictionary
 var all_nodes : Array[ FlowNodeBase ]
 var input_nodes : Array[ FlowNodeBase ]
@@ -105,3 +106,4 @@ func compile():
 	print( "FlowGraph.Compiled in %s (%s)" % [ time_node_end - time_node_start, resource_path ])
 	for node in input_nodes:
 		print( "  Input: %s %s" % [ node.name, node.settings.name ])
+	compiled = true

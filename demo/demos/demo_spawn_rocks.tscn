@@ -17,22 +17,22 @@ script = ExtResource("3_q2g6x")
 data = {
 "frames": [],
 "links": [{
-"from_node": &"id_0016_input_Grid - X",
+"from_node": &"id_0022_input_Grid - X",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0017_grid",
+"to_node": &"id_0023_grid",
 "to_port": 0
 }, {
-"from_node": &"id_0017_grid",
+"from_node": &"id_0023_grid",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0018_spawn_meshes",
+"to_node": &"id_0024_spawn_meshes",
 "to_port": 0
 }],
 "min_pos": Vector2(40, 80),
 "nodes": [{
 "args_port": {},
-"name": &"id_0016_input_Grid - X",
+"name": &"id_0022_input_Grid - X",
 "position": Vector2(0, 0),
 "settings": {
 "debug_bulk": 0,
@@ -59,7 +59,7 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0017_grid",
+"name": &"id_0023_grid",
 "position": Vector2(160, 0),
 "settings": {
 "debug_bulk": 0,
@@ -92,7 +92,7 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0018_spawn_meshes",
+"name": &"id_0024_spawn_meshes",
 "position": Vector2(360, 0),
 "settings": {
 "clear_previous_instances": true,
@@ -133,11 +133,11 @@ script = ExtResource("4_y5sxr")
 param_id = &"Grid - X"
 enabled = true
 
-[sub_resource type="MultiMesh" id="MultiMesh_3h15l"]
+[sub_resource type="MultiMesh" id="MultiMesh_q2g6x"]
 transform_format = 1
-instance_count = 18
+instance_count = 15
 mesh = ExtResource("2_q2g6x")
-buffer = PackedFloat32Array(0.59, 0, 0, 0, 0, 0.59, 0, 0, 0, 0, 0.59, 0, 0.59, 0, 0, 1, 0, 0.59, 0, 0, 0, 0, 0.59, 0, 0.59, 0, 0, 2, 0, 0.59, 0, 0, 0, 0, 0.59, 0, 0.59, 0, 0, 3, 0, 0.59, 0, 0, 0, 0, 0.59, 0, 0.59, 0, 0, 4, 0, 0.59, 0, 0, 0, 0, 0.59, 0, 0.59, 0, 0, 5, 0, 0.59, 0, 0, 0, 0, 0.59, 0, 0.59, 0, 0, 0, 0, 0.59, 0, 0, 0, 0, 0.59, 1, 0.59, 0, 0, 1, 0, 0.59, 0, 0, 0, 0, 0.59, 1, 0.59, 0, 0, 2, 0, 0.59, 0, 0, 0, 0, 0.59, 1, 0.59, 0, 0, 3, 0, 0.59, 0, 0, 0, 0, 0.59, 1, 0.59, 0, 0, 4, 0, 0.59, 0, 0, 0, 0, 0.59, 1, 0.59, 0, 0, 5, 0, 0.59, 0, 0, 0, 0, 0.59, 1, 0.59, 0, 0, 0, 0, 0.59, 0, 0, 0, 0, 0.59, 2, 0.59, 0, 0, 1, 0, 0.59, 0, 0, 0, 0, 0.59, 2, 0.59, 0, 0, 2, 0, 0.59, 0, 0, 0, 0, 0.59, 2, 0.59, 0, 0, 3, 0, 0.59, 0, 0, 0, 0, 0.59, 2, 0.59, 0, 0, 4, 0, 0.59, 0, 0, 0, 0, 0.59, 2, 0.59, 0, 0, 5, 0, 0.59, 0, 0, 0, 0, 0.59, 2)
+buffer = PackedFloat32Array(0.59, 0, 0, 0, 0, 0.59, 0, 0, 0, 0, 0.59, 0, 0.59, 0, 0, 1, 0, 0.59, 0, 0, 0, 0, 0.59, 0, 0.59, 0, 0, 2, 0, 0.59, 0, 0, 0, 0, 0.59, 0, 0.59, 0, 0, 3, 0, 0.59, 0, 0, 0, 0, 0.59, 0, 0.59, 0, 0, 4, 0, 0.59, 0, 0, 0, 0, 0.59, 0, 0.59, 0, 0, 0, 0, 0.59, 0, 0, 0, 0, 0.59, 1, 0.59, 0, 0, 1, 0, 0.59, 0, 0, 0, 0, 0.59, 1, 0.59, 0, 0, 2, 0, 0.59, 0, 0, 0, 0, 0.59, 1, 0.59, 0, 0, 3, 0, 0.59, 0, 0, 0, 0, 0.59, 1, 0.59, 0, 0, 4, 0, 0.59, 0, 0, 0, 0, 0.59, 1, 0.59, 0, 0, 0, 0, 0.59, 0, 0, 0, 0, 0.59, 2, 0.59, 0, 0, 1, 0, 0.59, 0, 0, 0, 0, 0.59, 2, 0.59, 0, 0, 2, 0, 0.59, 0, 0, 0, 0, 0.59, 2, 0.59, 0, 0, 3, 0, 0.59, 0, 0, 0, 0, 0.59, 2, 0.59, 0, 0, 4, 0, 0.59, 0, 0, 0, 0, 0.59, 2)
 
 [node name="DemoSpawnRocks" type="Node3D" unique_id=1575867418]
 
@@ -147,9 +147,9 @@ graph = SubResource("Resource_y5sxr")
 overrides = Array[ExtResource("4_y5sxr")]([SubResource("Resource_q2g6x")])
 regenerate = Callable()
 "flow_override/Grid - X/enabled" = true
-"flow_override/Grid - X/value" = 6
+"flow_override/Grid - X/value" = 5
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
 
-[node name="Spawn Meshes_0000" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=1793565000]
-multimesh = SubResource("MultiMesh_3h15l")
-metadata/flow_owner = &"id_0018_spawn_meshes"
+[node name="Spawn Meshes_0000" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=211418901]
+multimesh = SubResource("MultiMesh_q2g6x")
+metadata/flow_owner = &"id_0024_spawn_meshes"
