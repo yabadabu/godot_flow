@@ -5,10 +5,16 @@ extends EditorInspectorPlugin
 # So, if the input is defined as float, show only the cte_float member in the inspector
 
 func _can_handle(obj: Object) -> bool:
-	return obj is FlowGraphResource
+	return obj is FlowGraphResource # or obj is FlowGraphNode3D
 
-func _parse_property(object: Object, type: Variant.Type, name: String, hint_type: PropertyHint, hint_string: String, usage_flags, wide: bool):
-	if name == "in_params":
-		return false
+func _parse_property(obj: Object, type: Variant.Type, name: String, hint_type: PropertyHint, hint_string: String, usage_flags, wide: bool):
+	if obj is FlowGraphResource:
+		if name == "in_params":
+			return false
+		return true
+	if name == "overrides":
+		return true
+	#if name == "in_params":
+		#return false
 	# Returning true, meaning we already handled... because we are not, these become invisible
-	return true
+	return false

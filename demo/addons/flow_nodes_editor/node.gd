@@ -75,7 +75,7 @@ func preExecute( ctx : FlowData.EvaluationContext ):
 	deps.map(func( conn : Dictionary ):
 		# The number of bulks in the pin 0 defines how many bulks we are going to generate
 		if conn.to_port == 0:
-			var node = ctx.gedit_nodes_by_name.get( conn.from_node )
+			var node = ctx.graph.nodes_by_name.get( conn.from_node )
 			if node:
 				num_connected_bulks += node.num_generated_bulks
 	)
@@ -476,7 +476,7 @@ func nodeOptionsChanged( expanded : bool ):
 # This returns the current value of the input configuration taking into account potencial connections and overrides of the inputs
 func getSettingValue( ctx : FlowData.EvaluationContext, in_name : String, default_value = null):
 	var meta = getMeta()
-	var trace = meta.get( "trace", false )
+	var trace = meta.get( "trace", false ) or settings.trace
 	
 	var value = settings.get( in_name )
 	if value == null:
@@ -640,7 +640,7 @@ func _getInputForBulkInContext( ctx : FlowData.EvaluationContext, bulk_idx : int
 		var to_port = conn.to_port
 		if to_port != port_idx:
 			continue
-		var src_node = ctx.gedit_nodes_by_name.get( conn.from_node )
+		var src_node = ctx.graph.nodes_by_name.get( conn.from_node )
 		if not src_node:
 			continue
 		#print( "  Found.src_node is %s. Has generated %d bulks. So far we have explored %d bulks" % [ src_node, src_node.generated_bulks.size(), bulk_counter ] )

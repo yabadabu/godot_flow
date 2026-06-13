@@ -29,6 +29,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 	var scene_root = node_tree.current_scene
 	var path = spawnNode( scene_root, Path3D )
 	root.add_child( path )
+	
 	path.name = "Spline"
 	path.curve  = Curve3D.new()
 	var num_idxs : int = in_trs.size()

@@ -45,15 +45,14 @@ var menu_ids : Dictionary = {}
 var comment_padding = Vector2( 40, 40 )
 
 # Required during evaluation
-var gedit_nodes_by_name = {}
 var input_sources := {} # key: Pair(to_node, to_port) -> value: Array[(from_node, from_port)]
 
 # Activate connections and nodes
 var active_intensity = 0.0
 var active_nodes = []
+var gedit_nodes_by_name = {}
 
 var ui_scale = 1.0
-var nodes_factory = FlowNodesFactory.new()
 
 var popup_menu_inputs : PopupMenu
 var popup_on_over_input = null
@@ -70,7 +69,7 @@ func setResourceToEdit( new_resource : FlowGraphResource, new_resource_owner : F
 	# Time to save the current resource
 	if current_resource == new_resource and resource_owner == new_resource_owner:
 		return
-	if current_resource:
+	if current_resource and current_resource.in_params_changed.is_connected(_on_inputs_changed):
 		current_resource.in_params_changed.disconnect(_on_inputs_changed)
 		saveResource()
 	current_resource = new_resource
@@ -90,7 +89,6 @@ func setResourceToEdit( new_resource : FlowGraphResource, new_resource_owner : F
 	for child in children:
 		gedit.remove_child( child )
 	
-	gedit_nodes_by_name.clear()
 	inspector.edit( null )
 	inspected_node = null
 	
@@ -98,7 +96,6 @@ func setResourceToEdit( new_resource : FlowGraphResource, new_resource_owner : F
 	
 	ctx.graph = current_resource
 	ctx.owner = resource_owner
-	ctx.gedit_nodes_by_name = gedit_nodes_by_name
 	markAllNodesAsDirty()
 	queueRegen()
 
@@ -111,23 +108,23 @@ func asInputNode( in_node : Node ):
 	return node if node and node.node_template.begins_with("input") else null
 
 func _on_inputs_changed():
+	print( "Editor._on_inputs_changed" )
+	var num_changes := 0
 	for child in gedit.get_children():
 		var node = asInputNode( child )
 		if node:
 			var in_name = node.settings.name
 			var curr_input = current_resource.findInParamByName(in_name)
 			if curr_input and curr_input.is_constant:
-				var new_value = curr_input.get_default_value()
-				#print( "Checking name %s -> %s" % [ in_name, new_value ] )
-				if node.last_value_pushed and new_value == node.last_value_pushed:
-					continue
-				else:
-					#print( "Changed from %s to %s" % [ node.last_value_pushed, new_value ] )
-					node.settings.data_type = curr_input.getDataType()
+				if node.change_id != curr_input.change_id:
+					node.change_id = curr_input.change_id
 					node.dirty = true
 					node.refreshFromSettings()
+					print( "InputNode %s becomes dirty" % [ node.name ] )
 					queueRegen()
-			
+					num_changes += 1
+	print( "Editor._on_inputs_changed changed %d nodes" % [ num_changes ] )
+	
 func _process(delta: float) -> void:
 	if not current_resource:
 		return
@@ -152,6 +149,9 @@ func _process(delta: float) -> void:
 			active_nodes.clear()
 		gedit.queue_redraw()
 
+func getFactory() -> FlowNodesFactory:
+	return FlowPlugin.get_instance().nodes_factory
+
 func _ready():
 	
 	if not Engine.is_editor_hint():
@@ -161,8 +161,6 @@ func _ready():
 	var dpi = DisplayServer.screen_get_dpi()
 	if dpi > 150:
 		ui_scale *= 2.0
-				
-	nodes_factory.scanAvailableNodes()
 	
 	inspector = EditorInspector.new()
 	inspector.custom_minimum_size = Vector2( 200, 600 )
@@ -287,8 +285,8 @@ func refreshSignalsInputArgs( node ):
 
 func addNodeFromTemplate( node_template, node_name : String, settings = null ):
 	if gedit_nodes_by_name.has( node_name ):
-		node_name = nodes_factory.getNewName(node_template)
-	var node = nodes_factory.createNewNode( packed_node, node_template, node_name, settings )
+		node_name = getFactory().getNewName(node_template)
+	var node = getFactory().createNewNode( packed_node, node_template, node_name, settings )
 	if node:
 		node.ui_scale = ui_scale
 		node.position_offset = localToGraphCoords(local_drop_position)
@@ -322,7 +320,7 @@ func canConnect( src : FlowNodeBase, src_port : int, dst : FlowNodeBase, dst_por
 	return true
 	
 func addNode( node_template, settings = null ):
-	var node_name = nodes_factory.getNewName(node_template)
+	var node_name = getFactory().getNewName(node_template)
 	var node = addNodeFromTemplate( node_template, node_name, settings )
 	if not node:
 		return null
@@ -412,7 +410,7 @@ func addComment():
 	rect.size += comment_padding * 2
 	
 	var frame := GraphFrame.new()
-	frame.name = nodes_factory.getNewName("comment")
+	frame.name = getFactory().getNewName("comment")
 	frame.title = "My Comments..."
 	frame.position_offset = rect.position
 	frame.size = rect.size
@@ -461,6 +459,7 @@ func _on_in_popup_menu_pressed( id: int, row : FlowConnectorRow ) -> void:
 			new_input_node.position_offset.y -= new_input_node.size.y - 15
 			# Connect the input to the node
 			_on_graph_edit_connection_request( new_input_node.name, 0, node.name, row.data.port )
+		current_resource.validateAndWatchNewInputs()
 		
 func _on_graph_edit_delete_nodes_request(node_names : Array):
 	print( "_on_graph_edit_delete_nodes_request: ", node_names )
@@ -524,7 +523,7 @@ func _on_graph_edit_popup_request(at_position):
 	if current_resource:
 		in_params = current_resource.in_params
 		
-	search_add_node_popup.setup( nodes_factory.node_types, in_params, out_params, required_input_type, required_output_type )
+	search_add_node_popup.setup( getFactory().node_types, in_params, out_params, required_input_type, required_output_type )
 	search_add_node_popup.appearAt(get_screen_position() + at_position)
 	
 	
@@ -541,7 +540,7 @@ func _on_search_add_node_popup_input_selected(id : int):
 	print( "Creating an input node: %s (%d) -> %s" % [ input.name, input.data_type, node_type] )
 	var settings := InputNodeSettings.new()
 	settings.name = input.name
-	settings.data_type = input.data_type
+	#settings.data_type = input.data_type
 	return addNode( node_type, settings )
 
 func _on_search_add_node_popup_action_selected(action_id : int):
@@ -774,7 +773,7 @@ func evalGraph():
 		dump_performance = false
 
 func _on_button_reload_pressed() -> void:
-	nodes_factory.scanAvailableNodes()
+	getFactory().scanAvailableNodes()
 
 func _on_button_save_pressed() -> void:
 	if current_resource:

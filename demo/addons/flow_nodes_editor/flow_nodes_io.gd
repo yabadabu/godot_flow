@@ -183,13 +183,16 @@ static func create_nodes_from_dict( dict, container, paste_offset = null):
 		return []
 	var new_nodes = []
 	var old_to_new_names = {}
+	
+	var ui_scale = 1.0			# container.ui_scale
+	
 	for in_node in dict.nodes:
 		var in_name = in_node.name
 		var node = container.addNodeFromTemplate( in_node.template, in_name )
 		if not node:
 			return null
 		var in_pos = _parse_vector2( in_node.position )
-		node.position_offset = ( in_pos + paste_offset ) * container.ui_scale
+		node.position_offset = ( in_pos + paste_offset ) * ui_scale
 		node.show_disconnected_inputs = in_node.get("show_disconnected_inputs", false)
 		node.args_ports_by_name = in_node.get("args_port", {})
 		
@@ -252,7 +255,7 @@ static func saveToResource( editor : FlowGraphEditor ):
 	current_resource.data = nodes_as_dict( all_nodes, all_frames, editor )
 	current_resource.view_zoom = gedit.zoom
 	current_resource.view_offset = gedit.scroll_offset
-	current_resource.new_name_counter = editor.nodes_factory.new_name_counter
+	#current_resource.new_name_counter = FlowPlugin.get_instance().nodes_factory.new_name_counter
 
 static func loadFromResource( editor : FlowGraphEditor ):
 	var current_resource = editor.current_resource
@@ -270,5 +273,5 @@ static func loadFromResource( editor : FlowGraphEditor ):
 		
 	editor.gedit.zoom = current_resource.view_zoom
 	editor.gedit.scroll_offset = current_resource.view_offset
-	editor.nodes_factory.new_name_counter = current_resource.new_name_counter
+	#FlowPlugin.get_instance().nodes_factory.new_name_counter = current_resource.new_name_counter
 	editor.data_inspector.setNode( null )

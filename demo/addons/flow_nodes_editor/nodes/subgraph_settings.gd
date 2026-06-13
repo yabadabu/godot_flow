@@ -21,7 +21,7 @@ func _init():
 func get_param_value(param: GraphInputParameter) -> Variant:
 	if param_overrides.has(param.name):
 		return param_overrides[param.name]
-	return param.get_default_value()
+	return param.getDefaultValue()
 
 ## Sets a per-instance override for a parameter.
 func set_param_override(param_name: String, value: Variant):

@@ -26,24 +26,66 @@ const AttrRotation : StringName = &"rotation"
 const AttrSize     : StringName = &"size"
 
 class EvaluationContext:
+	var parent_ctx : EvaluationContext
 	var owner : FlowGraphNode3D
 	var eval_id : int = 0
 	var graph : FlowGraphResource
 	var gedit_nodes_by_name : Dictionary
+	
 	# Used by loops/subgraphs/non_ctes_input_params : string : FlowData
 	var inputs : Dictionary = {}
+	
+	# For debug/identification
 	var trace : bool = false
+	var name : String 
 	
 	# Filled by the user of the context
 	var nodes_to_eval : Array[ FlowNodeBase ]
 	var active_nodes = []
 	
+	# Priority:
+	#   ctx.inputs
+	#   ctx.owner?.args
+	#   ctx.graph.in_params
+	#   ctx.parent_ctx?.resolveInput
+	func resolveInput( input_name : String ) -> FlowData.Data:
+		var input = inputs.get( input_name )
+		if input: 
+			if trace:
+				print( "Input %s requested to ctx %s -> ctx.input -> %s" % [ input_name, name, input ])
+			return input
+		
+		if owner:
+			input = owner.get_or_create_override( input_name )
+			if input: 
+				if trace:
+					print( "Input %s requested to ctx %s -> ctx.owner.args -> %s" % [ input_name, name, input ])
+				return input.getAsFlowData()
+		else:
+			print( "Input %s requested, owner is null," % [ input_name ])
+		
+		input = graph.findInParamByName( input_name )
+		if input: 
+			if trace:
+				print( "Input %s requested to ctx %s -> ctx.graph.inputs defs -> %s" % [ input_name, name, input ])
+			return input.getAsFlowData()
+		
+		if parent_ctx:
+			input = parent_ctx.resolveInput( input_name )
+			if trace:
+				print( "Input %s requested to ctx %s -> ctx.parent_ctx -> %s" % [ input_name, name, input ])
+			return input
+				
+		return FlowData.Data.new()
+	
 	func getDeps( node : FlowNodeBase ) -> Array[ FlowNodeBase ]:
 		var deps : Array[ FlowNodeBase ] = [ node ]
 		for conn in node.deps:
-			var dep_node = gedit_nodes_by_name.get( conn.from_node, null )
+			var dep_node = graph.nodes_by_name.get( conn.from_node, null )
 			if not dep_node:
-				print( "dep_node %s NOT FOUND" %[ conn.from_node ])
+				print( "dep_node %s NOT FOUND in the %d" %[ conn.from_node, graph.nodes_by_name.size() ])
+				for n in graph.nodes_by_name:
+					print( "  %s" % n )
 				continue
 			var req_deps = getDeps( dep_node )
 			deps.append_array( req_deps )

@@ -1,4 +1,5 @@
 @tool
+class_name FlowPlugin
 extends EditorPlugin
 
 # This is the entry point for the plugin
@@ -12,12 +13,18 @@ var undo_redo: EditorUndoRedoManager
 var graph_input_inspector_plugin : EditorInspectorPlugin
 var node_settings_inspector_plugin : EditorInspectorPlugin
 var flow_graph_resource_inspector_plugin : EditorInspectorPlugin
+var nodes_factory = FlowNodesFactory.new()
 
 # To detect scene changes
 var current_scene_root = null
 var current_watched_node = null
 
 @onready var selection = EditorInterface.get_selection()
+
+static var instance : FlowPlugin
+
+static func get_instance() -> FlowPlugin:
+	return instance
 
 func spawnDock( res_template : String, title : String, bottom : bool ) -> Control:
 	var packed : PackedScene = load( res_template )
@@ -30,6 +37,7 @@ func spawnDock( res_template : String, title : String, bottom : bool ) -> Contro
 	return new_control
 
 func _enter_tree():
+	instance = self
 	print("Data Flow plugin enabled")
 	graph_dock = spawnDock("res://addons/flow_nodes_editor/flow_editor.tscn", "Data Flow", false ) as FlowGraphEditor
 	data_inspector_dock = spawnDock("res://addons/flow_nodes_editor/data_inspector.tscn", "Data Inspector", true)
@@ -63,10 +71,13 @@ func _exit_tree():
 	remove_control_from_bottom_panel(data_inspector_dock)
 	data_inspector_dock.free()
 	selection.selection_changed.disconnect(_selection_changed)
+	if instance == self:
+		instance = null
 
 func _ready():
 	selection.selection_changed.connect(_selection_changed)
 	_selection_changed()
+	nodes_factory.scanAvailableNodes()
 
 # This is called after the a new scene is loaded, but the 'selection' event of the new
 # scene is called first.
@@ -119,6 +130,10 @@ func onSelectedGraphNodeChanged( node : FlowGraphNode3D, prop_name: String ):
 	if prop_name == "graph_resource":
 		print( "  -> %s" % [node.graph] )
 		graph_dock.setResourceToEdit( node.graph, node )
+	else:
+		if graph_dock.resource_owner == node:
+			print( "Input %s changed" % [prop_name] )
+			graph_dock.queueRegen()
 
 func _on_history_changed( ):
 	#print("Something changed in the editor (undo/redo history updated)")	
