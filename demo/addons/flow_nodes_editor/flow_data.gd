@@ -18,12 +18,18 @@ enum DataType {
 	NodeMesh,
 	NodePath,
 	Color,
+	Quaternion,		# Rotation as a unit quaternion, stored as a Vector4 (x,y,z,w)
 	Invalid = 999
 }
 
 const AttrPosition : StringName = &"position"
 const AttrRotation : StringName = &"rotation"
 const AttrSize     : StringName = &"size"
+# Optional canonical stream: when present it WINS over AttrRotation (Euler) for
+# building point bases (see getTransformsStream). Stored as DataType.Quaternion
+# (PackedVector4Array of x,y,z,w). Absent by default — Euler stays the default
+# authoring representation and existing graphs are unaffected.
+const AttrRotationQuat : StringName = &"rotation_quat"
 const AttrDensity  : StringName = &"density"	# Float, 0..1, soft existence probability (UE $Density)
 const AttrSeed     : StringName = &"seed"		# Int, per-point deterministic seed (UE $Seed)
 const AttrNormal   : StringName = &"normal"		# Vector, surface normal where known
@@ -103,17 +109,54 @@ static func eulerToBasis( euler : Vector3) -> Basis:
 	euler.z = deg_to_rad( euler.z )
 	return Basis.from_euler( euler )
 
+# --- Quaternion helpers ---------------------------------------------------
+# A Quaternion stream stores each rotation as a Vector4 (x,y,z,w) so it can live
+# in a PackedVector4Array container. These convert between that storage form and
+# Godot's Quaternion/Basis without any degree<->radian round-trips.
+
+static func vec4ToQuat( v : Vector4 ) -> Quaternion:
+	return Quaternion( v.x, v.y, v.z, v.w )
+
+static func quatToVec4( q : Quaternion ) -> Vector4:
+	return Vector4( q.x, q.y, q.z, q.w )
+
+static func quatToBasis( q : Quaternion ) -> Basis:
+	return Basis( q )
+
+static func basisToQuat( basis : Basis ) -> Quaternion:
+	return basis.orthonormalized().get_rotation_quaternion()
+
+# Euler (degrees) <-> Quaternion bridges, layered on the existing Euler helpers
+# so both representations agree.
+static func eulerToQuat( euler : Vector3 ) -> Quaternion:
+	return eulerToBasis( euler ).get_rotation_quaternion()
+
+static func quatToEuler( q : Quaternion ) -> Vector3:
+	return basisToEuler( Basis( q ) )
+
 # A wrapper around the Position/Rotation/Scale streams
 class TransformsStream:
 	var positions : PackedVector3Array
 	var eulers : PackedVector3Array
 	var sizes : PackedVector3Array
+	# When an AttrRotationQuat stream is present, getTransformsStream fills these
+	# and sets use_quats = true. The quaternion path then WINS over the Euler one.
+	# When absent (the default), use_quats stays false and behavior is identical
+	# to the historical Euler-only path.
+	var quats : PackedVector4Array
+	var use_quats : bool = false
+
+	func basisAt( id: int ) -> Basis:
+		if use_quats:
+			return FlowData.quatToBasis( FlowData.vec4ToQuat( quats[id] ) )
+		return FlowData.eulerToBasis( eulers[id] )
+
 	func atIndex( id: int ) -> Transform3D:
-		var basis := FlowData.eulerToBasis( eulers[id] )
+		var basis := basisAt( id )
 		return Transform3D( basis.scaled( sizes[id] ), positions[id] )
-	
+
 	func atIndexAbsScale( id: int, scale: float ) -> Transform3D:
-		var basis := FlowData.eulerToBasis( eulers[id] )
+		var basis := basisAt( id )
 		return Transform3D( basis.scaled( Vector3.ONE * scale ), positions[id] )
 
 	func size() -> int:
@@ -146,6 +189,8 @@ class Data:
 				return Array([], TYPE_OBJECT, "Node", null)
 			DataType.Color:
 				return PackedColorArray()
+			DataType.Quaternion:
+				return PackedVector4Array()
 			_:
 				push_error( "newContainerOfType(%d) type not supported" % [ data_type ])
 		return null
@@ -179,6 +224,12 @@ class Data:
 			DataType.Color:
 				var typed_container : PackedColorArray = container
 				typed_container[index] = value
+			DataType.Quaternion:
+				var typed_container : PackedVector4Array = container
+				if value is Quaternion:
+					typed_container[index] = FlowData.quatToVec4( value )
+				else:
+					typed_container[index] = value
 			_:
 				push_error( "writeValue(%d) type not supported" % [ data_type ])
 	
@@ -349,6 +400,8 @@ class Data:
 				data_type = FlowData.DataType.Vector
 			elif container is PackedColorArray:
 				data_type = FlowData.DataType.Color
+			elif container is PackedVector4Array:
+				data_type = FlowData.DataType.Quaternion
 			elif container is PackedStringArray:
 				data_type = FlowData.DataType.String
 			elif container is PackedByteArray:
@@ -418,6 +471,8 @@ class Data:
 				#print( "Duped container vec3 %s %s" % [ name, new_container ])
 			DataType.Color:
 				new_container = PackedColorArray( prev_stream.container )
+			DataType.Quaternion:
+				new_container = PackedVector4Array( prev_stream.container )
 			DataType.String:
 				new_container = PackedStringArray( prev_stream.container )
 			_:  # Resource
@@ -468,7 +523,15 @@ class Data:
 				for idx in range( new_size ):
 					new_container[idx] = old_container[ indices[idx] ]
 				return new_container
-				
+
+			DataType.Quaternion:
+				var old_container : PackedVector4Array = old_stream.container
+				var new_container := PackedVector4Array( )
+				new_container.resize( new_size )
+				for idx in range( new_size ):
+					new_container[idx] = old_container[ indices[idx] ]
+				return new_container
+
 			DataType.String:
 				var old_container : PackedStringArray = old_stream.container
 				var new_container : PackedStringArray
@@ -609,15 +672,48 @@ class Data:
 			out[i] = clampf( typed[ FlowData.bcast_idx( typed.size(), i ) ], 0.0, 1.0 )
 		return out
 
+	func getVector4Container( stream_name : StringName ) -> PackedVector4Array:
+		var container = getContainerChecked( stream_name, DataType.Quaternion )
+		if container == null:
+			container = PackedVector4Array()
+		return container
+
 	func getTransformsStream() -> TransformsStream:
-		if not (streams.has(AttrPosition) and streams.has(AttrRotation) and streams.has(AttrSize)):
+		# Position and size are always required. Rotation can come from either the
+		# Euler `rotation` stream (default) or the optional `rotation_quat`
+		# quaternion stream. The quaternion stream WINS when present.
+		var has_quat : bool = streams.has(AttrRotationQuat)
+		if not (streams.has(AttrPosition) and streams.has(AttrSize)):
+			return null
+		if not (streams.has(AttrRotation) or has_quat):
 			return null
 		var trs := TransformsStream.new()
 		trs.positions = getVector3Container( AttrPosition )
-		trs.eulers = getVector3Container( AttrRotation )
 		trs.sizes = getVector3Container( AttrSize )
-		if trs.positions.is_empty() or trs.eulers.is_empty() or trs.sizes.is_empty():
+		if trs.positions.is_empty() or trs.sizes.is_empty():
 			return null
-		if trs.sizes.size() == trs.positions.size() && trs.sizes.size() == trs.eulers.size():
+		if trs.sizes.size() != trs.positions.size():
+			return null
+
+		if has_quat:
+			# Quaternion path wins over Euler when rotation_quat is present.
+			trs.quats = getVector4Container( AttrRotationQuat )
+			if trs.quats.is_empty() or trs.quats.size() != trs.positions.size():
+				return null
+			trs.use_quats = true
+			# Keep eulers populated too (derived from the quats) so consumers that
+			# read trs.eulers directly still get a consistent value.
+			var derived_eulers := PackedVector3Array()
+			derived_eulers.resize( trs.quats.size() )
+			for i in range( trs.quats.size() ):
+				derived_eulers[i] = FlowData.quatToEuler( FlowData.vec4ToQuat( trs.quats[i] ) )
+			trs.eulers = derived_eulers
+			return trs
+
+		# Euler path: unchanged from the historical behavior.
+		trs.eulers = getVector3Container( AttrRotation )
+		if trs.eulers.is_empty():
+			return null
+		if trs.sizes.size() == trs.eulers.size():
 			return trs
 		return null
