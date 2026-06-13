@@ -105,9 +105,9 @@ of that intent shipped.
 
 ## Engine-hardening notes (not UE features, but parity blockers)
 
-These are correctness items from the core-engine review that gate the roadmap above, listed so the roadmap stays honest:
+**All four items below are now resolved as of the 2026-06 pass.**
 
-- **Runtime evaluator leaks node instances per evaluation** (worst inside `loop`, which re-evaluates its subgraph per element). Fix precedes any async/HiGen work.
-- **Primitive graph-input args crash the runtime feed** of `FlowGraphNode3D.execute()`; `Data`-typed inputs work. Fix makes "runs in exported game" unconditional.
-- **Editor and runtime evaluators differ**: the runtime path has the correct post-order topological sort with cycle detection; the editor path still uses a pre-order walk that misorders diamonds and can recurse on cycles. Unify on the runtime ordering.
-- **Stream-length invariants are unchecked** — a mismatched stream silently corrupts downstream filtering. Cheap validation in `registerStream` plus the shared broadcast-read helper closes it.
+- ~~**Runtime evaluator leaks node instances per evaluation**~~ → **Fixed.** `_free_node_instances` pools and frees every instantiated node after `evaluate_graph` completes, including inside `loop` subgraph re-evaluations.
+- ~~**Primitive graph-input args crash the runtime feed**~~ → **Fixed.** `_coerce_input_data` wraps supported primitives (float/int/bool/String/Vector3/Color) into a single-entry `FlowData.Data` before feeding the graph, so `FlowGraphNode3D.execute()` with raw scalar args no longer crashes.
+- ~~**Editor and runtime evaluators differ**~~ → **Fixed.** Both now share `build_execution_order` — a unified post-order topological sort with cycle detection and `on_stack` recursion guard, plus `_stabilize_consumer_input_order` / `_stabilize_variable_execution_order` for diamond and set-variable edge cases.
+- ~~**Stream-length invariants are unchecked**~~ → **Fixed.** `registerStream` emits a `print_verbose` warning when a non-broadcast stream's length mismatches existing streams, making length corruption debuggable without breaking production graphs.
