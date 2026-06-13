@@ -57,7 +57,7 @@ class EvaluationContext:
 		
 		if owner:
 			input = owner.get_or_create_override( input_name )
-			if input: 
+			if input and input.enabled: 
 				if trace:
 					print( "Input %s requested to ctx %s -> ctx.owner.args -> %s" % [ input_name, name, input ])
 				return input.getAsFlowData()
