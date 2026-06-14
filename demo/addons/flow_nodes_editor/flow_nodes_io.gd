@@ -919,6 +919,10 @@ static func _build_evaluation_state(graph: FlowGraphResource, input_data_map: Di
 		"node_list": node_list,
 		"ordered_nodes": ordered_nodes,
 		"ctx": ctx,
+		# Local overrides passed into THIS subgraph invocation. Carried so
+		# _finalize_evaluation can tell _publish_runtime_params which keys are
+		# local (must not leak to the parent) vs. genuinely produced downstream.
+		"local_params": runtime_params,
 	}
 
 
@@ -962,6 +966,7 @@ static func _finalize_evaluation(state: Dictionary) -> Dictionary:
 	var node_list: Array = state["node_list"]
 	var ctx: FlowData.EvaluationContext = state["ctx"]
 	var parent_ctx: FlowData.EvaluationContext = state["parent_ctx"]
+	var local_params: Dictionary = state.get("local_params", {})
 
 	# Collect output data
 	var outputs = {}
@@ -1005,7 +1010,7 @@ static func _finalize_evaluation(state: Dictionary) -> Dictionary:
 				elif node.inputs.size() > 0 and node.inputs[0] != null:
 					outputs[out_name] = node.inputs[0]
 	_publish_flow_variables(ctx, parent_ctx)
-	_publish_runtime_params(ctx, parent_ctx, ctx.runtime_params)
+	_publish_runtime_params(ctx, parent_ctx, local_params)
 
 	# Outputs are collected (FlowData.Data is RefCounted, so the references in
 	# `outputs` keep the data alive) — free the instanced node Controls now.
