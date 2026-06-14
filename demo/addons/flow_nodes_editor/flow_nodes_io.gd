@@ -881,6 +881,9 @@ static func _build_evaluation_state(graph: FlowGraphResource, input_data_map: Di
 						main_stream_name = val.streams.keys()[val.streams.size() - 1]
 					var main_stream = val.streams[main_stream_name]
 					target_data.registerStream(specific_input_name, main_stream.container, main_stream.data_type)
+				# Carry per-data domain attributes and kind across the subgraph boundary.
+				target_data.data_attrs = val.data_attrs.duplicate()
+				target_data.kind = val.kind
 				node.set_output(0, target_data)
 		elif node.node_template == "input":
 			# Generic multi-port inputs node
@@ -899,6 +902,8 @@ static func _build_evaluation_state(graph: FlowGraphResource, input_data_map: Di
 								main_stream_name = val.streams.keys()[val.streams.size() - 1]
 							var main_stream = val.streams[main_stream_name]
 							target_data.registerStream(param.name, main_stream.container, main_stream.data_type)
+						target_data.data_attrs = val.data_attrs.duplicate()
+						target_data.kind = val.kind
 					else:
 						var new_value = param.get_default_value()
 						var container = target_data.addStream(param.name, param.data_type)

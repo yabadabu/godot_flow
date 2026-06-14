@@ -59,6 +59,34 @@ func _safe_sizes(data : FlowData.Data, expected_size : int, input_label : String
 
 	return { "ok": true, "error": "", "sizes": out_sizes }
 
+# Build broadphase (center, half_extent) from effective bounds so the RTree
+# uses the same AABB as the narrowphase. Falls back to _safe_sizes when no
+# per-point bounds_min/bounds_max streams are present.
+func _broadphase_params(data : FlowData.Data, positions : PackedVector3Array) -> Dictionary:
+	var n := positions.size()
+	var has_bounds := data.hasStream(FlowData.AttrBoundsMin) and data.hasStream(FlowData.AttrBoundsMax)
+	if not has_bounds:
+		var sr := _safe_sizes(data, n, "")
+		if not sr.ok:
+			return { "ok": false, "error": sr.error }
+		return { "ok": true, "centers": positions, "half_extents": sr.sizes }
+
+	var world := BoundsOverlap.world_aabbs(data, positions)
+	var wmin : PackedVector3Array = world.min
+	var wmax : PackedVector3Array = world.max
+	var centers := PackedVector3Array()
+	var halves := PackedVector3Array()
+	centers.resize(n)
+	halves.resize(n)
+	for i in range(n):
+		centers[i] = (wmin[i] + wmax[i]) * 0.5
+		var h : Vector3 = (wmax[i] - wmin[i]) * 0.5
+		h.x = maxf(h.x, 0.0001)
+		h.y = maxf(h.y, 0.0001)
+		h.z = maxf(h.z, 0.0001)
+		halves[i] = h
+	return { "ok": true, "centers": centers, "half_extents": halves }
+
 func _sanitize_indices(indices, max_size : int) -> PackedInt32Array:
 	var out := PackedInt32Array()
 	if max_size <= 0:
@@ -194,26 +222,27 @@ func execute(ctx : FlowData.EvaluationContext):
 			setError("Input B has non-finite position at index %d" % i)
 			return
 
-	var size_result_a = _safe_sizes(in_dataA, posA.size(), "A")
-	if not size_result_a.ok:
-		setError(size_result_a.error)
+	# Use effective bounds (bounds_min/bounds_max when present, else size-derived)
+	# for both the broadphase RTree and the narrowphase so they stay consistent.
+	# Convert world AABB [min, max] → (center, half_extent) for GDRTree.add.
+	var bp_a := _broadphase_params(in_dataA, posA)
+	var bp_b := _broadphase_params(in_dataB, posB)
+	if not bp_a.ok:
+		setError(bp_a.error)
 		return
-	var size_result_b = _safe_sizes(in_dataB, posB.size(), "B")
-	if not size_result_b.ok:
-		setError(size_result_b.error)
+	if not bp_b.ok:
+		setError(bp_b.error)
 		return
-	var szA : PackedVector3Array = size_result_a.sizes
-	var szB : PackedVector3Array = size_result_b.sizes
 
 	var tA = GDRTree.new()
 	var tB = GDRTree.new()
-	tA.add(posA, szA)
-	tB.add(posB, szB)
+	tA.add(bp_a.centers, bp_a.half_extents)
+	tB.add(bp_b.centers, bp_b.half_extents)
 
-	var a_only = _sanitize_indices(tA.overlaps(posB, szB, false).idxs_overlapped, in_dataA.size())
-	var a_overlap = _sanitize_indices(tA.overlaps(posB, szB, true).idxs_overlapped, in_dataA.size())
-	var b_only = _sanitize_indices(tB.overlaps(posA, szA, false).idxs_overlapped, in_dataB.size())
-	var b_overlap = _sanitize_indices(tB.overlaps(posA, szA, true).idxs_overlapped, in_dataB.size())
+	var a_only = _sanitize_indices(tA.overlaps(bp_b.centers, bp_b.half_extents, false).idxs_overlapped, in_dataA.size())
+	var a_overlap = _sanitize_indices(tA.overlaps(bp_b.centers, bp_b.half_extents, true).idxs_overlapped, in_dataA.size())
+	var b_only = _sanitize_indices(tB.overlaps(bp_a.centers, bp_a.half_extents, false).idxs_overlapped, in_dataB.size())
+	var b_overlap = _sanitize_indices(tB.overlaps(bp_a.centers, bp_a.half_extents, true).idxs_overlapped, in_dataB.size())
 
 	# Density-function attenuation only applies to the subtractive operations and
 	# only when not Binary. Binary (the default) preserves the legacy hard-remove

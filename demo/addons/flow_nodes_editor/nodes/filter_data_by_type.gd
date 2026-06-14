@@ -34,7 +34,8 @@ func execute( ctx : FlowData.EvaluationContext ):
 			FilterDataByTypeNodeSettings.eTargetType.AttributeSet:
 				match_found = in_data.kind == FlowData.Kind.AttrSet
 	else:
-		var has_points = in_data.hasStream(FlowData.AttrPosition) and in_data.hasStream(FlowData.AttrRotation) and in_data.hasStream(FlowData.AttrSize)
+		var has_rotation = in_data.hasStream(FlowData.AttrRotation) or in_data.hasStream(FlowData.AttrRotationQuat)
+		var has_points = in_data.hasStream(FlowData.AttrPosition) and has_rotation and in_data.hasStream(FlowData.AttrSize)
 		var has_splines = in_data.hasStream("node") and in_data.streams["node"].data_type == FlowData.DataType.NodePath
 
 		if target == FilterDataByTypeNodeSettings.eTargetType.PointData:
