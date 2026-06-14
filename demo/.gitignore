@@ -14,3 +14,5 @@ export_credentials.cfg
 .mono/
 data_*/
 mono_crash.*.json
+
+addons/kaykit_dungeon_remastered
