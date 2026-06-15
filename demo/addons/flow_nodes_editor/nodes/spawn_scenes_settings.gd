@@ -10,7 +10,6 @@ extends NodeSettings
 @export var scene_selector_attribute : String = ""
 @export var randomize_scene_variants : bool = false
 @export var spawn_parent_path : String = ""
-@export var clear_previous_instances : bool = true
 @export var assign_target_path : String = ""
 @export var assign_attributes: Dictionary
 

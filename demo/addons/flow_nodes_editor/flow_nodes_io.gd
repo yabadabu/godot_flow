@@ -107,7 +107,7 @@ static func dict_to_resource(data: Dictionary, resource: Resource) -> void:
 static func nodes_as_dict( nodes, frames, editor : FlowGraphEditor ):
 	var exported_node_names = {}
 	
-	# Find the top-left coord of all nodes
+	# Find the top-left coord of all nodes beign exported
 	var min_pos = null
 	for node in nodes:
 		var pos = node.position_offset / editor.ui_scale
@@ -167,7 +167,7 @@ static func _paste_nodes_from_dict( dict, editor : FlowGraphEditor, at_graph_coo
 	if at_graph_coords:
 		graph_coords = at_graph_coords
 		
-	var new_nodes = create_nodes_from_dict( dict, editor, graph_coords )
+	var new_nodes = create_nodes_from_dict( dict, editor.current_resource, graph_coords )
 	
 	# Update selection
 	for node in editor.getSelectedNodes():
@@ -177,6 +177,10 @@ static func _paste_nodes_from_dict( dict, editor : FlowGraphEditor, at_graph_coo
 		for node in new_nodes:
 			node.selected = true
 
+# Expects container to provide the following methods:
+#   addNodeFromTemplate
+#   connect_nodes
+#   addFrame
 static func create_nodes_from_dict( dict, container, paste_offset = null):		
 	if dict.get( "type", null) != "flow_graph_nodes":
 		push_error( "Invalid dict to paste nodes from" )
@@ -187,12 +191,17 @@ static func create_nodes_from_dict( dict, container, paste_offset = null):
 	var ui_scale = 1.0			# container.ui_scale
 	
 	for in_node in dict.nodes:
+		if not in_node:
+			return null
 		var in_name = in_node.name
+		print( "Parsing node %s" % in_name )
+		
 		var node = container.addNodeFromTemplate( in_node.template, in_name )
 		if not node:
 			return null
 		var in_pos = _parse_vector2( in_node.position )
 		node.position_offset = ( in_pos + paste_offset ) * ui_scale
+		print( "New node pos %s will be %s" % [ in_name, node.position_offset ] )
 		node.show_disconnected_inputs = in_node.get("show_disconnected_inputs", false)
 		node.args_ports_by_name = in_node.get("args_port", {})
 		
@@ -241,37 +250,16 @@ static func duplicateSelecteddNodes( editor : FlowGraphEditor ):
 	var dict = nodes_as_dict(nodes, frames, editor )
 	_paste_nodes_from_dict( dict, editor )
 
-static func saveToResource( editor : FlowGraphEditor ):
-	var current_resource = editor.current_resource
-	if current_resource == null:
-		return
-	var gedit = editor.gedit
-	var all_nodes = gedit.get_children().filter( func( n ):
-		return n is FlowNodeBase
-	)
-	var all_frames = gedit.get_children().filter( func( n ):
+static func saveEditorStateToResource( editor : FlowGraphEditor ):
+	var all_nodes := editor.getAllNodes()
+	for node in all_nodes:
+		print( "Node %s is at %s" % [ node.name, node.position_offset ])
+	var all_frames = editor.gedit.get_children().filter( func( n ):
 		return n is GraphFrame
 	)
-	current_resource.data = nodes_as_dict( all_nodes, all_frames, editor )
-	current_resource.view_zoom = gedit.zoom
-	current_resource.view_offset = gedit.scroll_offset
-	#current_resource.new_name_counter = FlowPlugin.get_instance().nodes_factory.new_name_counter
-
-static func loadFromResource( editor : FlowGraphEditor ):
-	var current_resource = editor.current_resource
-	if current_resource == null:
-		return
-
-	# Register the input_* and output_* nodes before trying to load the nodes
-	if "out_params" in current_resource:
-		for output in current_resource.out_params:
-			editor.registerOutputNodeType( output )
-		
-	if current_resource.data and not current_resource.data.is_empty():
-		var paste_offset = _parse_vector2( current_resource.data.min_pos )
-		create_nodes_from_dict( current_resource.data, editor, paste_offset )
-		
-	editor.gedit.zoom = current_resource.view_zoom
-	editor.gedit.scroll_offset = current_resource.view_offset
-	#FlowPlugin.get_instance().nodes_factory.new_name_counter = current_resource.new_name_counter
-	editor.data_inspector.setNode( null )
+	var res = editor.current_resource
+	print( "unbindResourceFromEditor %d nodes, %d conns and %d frames" % [ all_nodes.size(), editor.gedit.connections.size(), all_frames.size() ] )
+	res.data = FlowNodeIO.nodes_as_dict( all_nodes, all_frames, editor )
+	res.view_zoom = editor.gedit.zoom
+	res.view_offset = editor.gedit.scroll_offset
+	print( res.data )

@@ -30,7 +30,6 @@ class EvaluationContext:
 	var owner : FlowGraphNode3D
 	var eval_id : int = 0
 	var graph : FlowGraphResource
-	var gedit_nodes_by_name : Dictionary
 	
 	# Used by loops/subgraphs/non_ctes_input_params : string : FlowData
 	var inputs : Dictionary = {}
@@ -80,15 +79,16 @@ class EvaluationContext:
 	
 	func getDeps( node : FlowNodeBase ) -> Array[ FlowNodeBase ]:
 		var deps : Array[ FlowNodeBase ] = [ node ]
-		for conn in node.deps:
-			var dep_node = graph.nodes_by_name.get( conn.from_node, null )
-			if not dep_node:
-				print( "dep_node %s NOT FOUND in the %d" %[ conn.from_node, graph.nodes_by_name.size() ])
-				for n in graph.nodes_by_name:
-					print( "  %s" % n )
-				continue
-			var req_deps = getDeps( dep_node )
-			deps.append_array( req_deps )
+		if graph:
+			for conn in node.deps:
+				var dep_node = graph.nodes_by_name.get( conn.from_node, null )
+				if not dep_node:
+					push_error( "dep_node %s NOT FOUND in the nodes_by_name %d" %[ conn.from_node, graph.nodes_by_name.size() ])
+					for n in graph.nodes_by_name:
+						print( "  %s" % n )
+					continue
+				var req_deps = getDeps( dep_node )
+				deps.append_array( req_deps )
 		return deps
 		
 	func getEvalOrder( all_nodes : Array[ FlowNodeBase ] ):
@@ -106,13 +106,67 @@ class EvaluationContext:
 		var all_deps : Array[ FlowNodeBase ]
 		for node in finals:
 			var node_deps = getDeps( node )
+			if trace:
+				print( "Deps of %s:" % node.name)
+				for dep_node in node_deps:
+					print( "  Dep: %s" % dep_node.name)
 			all_deps.append_array( node_deps )
 		
 		# Evaluate in inverse order
 		# B, A, C, D
 		all_deps.reverse()	
+		
+		if trace:
+			print( "%s Nodes to eval in order:" % name)
+			for node in all_nodes:
+				print( "  -> %s" % node.name if node else "<null>" )
+		
 		return all_deps
-	
+		
+	func resolveSpawnParent( node : FlowNodeBase ) -> Node3D:
+		var path = node.getPreferredSpawnPath()
+		if path:
+			var n = owner.get_node_or_null(path)
+			if n is Node3D:
+				return n
+			node.setError("Spawn parent path '%s' is invalid or not a Node3D" % path)
+		return owner
+		
+	func removeRegisteredInstancedNodes( node : FlowNodeBase ):
+		var spawn_root := resolveSpawnParent( node )
+		node.removeRegisteredInstancedNodes( spawn_root )
+
+	func getDirtyNodes() -> Array[ FlowNodeBase ]:
+		var dirty_nodes : Array[ FlowNodeBase ]
+		for node in graph.all_nodes:
+			if node and node.dirty:
+				dirty_nodes.append( node )
+		return dirty_nodes
+		
+	func expandDirtyFlagToDependants( node : FlowNodeBase ):
+		#print( "%s is dirty" % [ node.name ] )
+		for out_conn in node.dependants:
+			#print( "  -> %s" % [ out_conn ])
+			var dst_node = graph.nodes_by_name.get( out_conn.to_node )
+			if dst_node:
+				if not dst_node.dirty:
+					dst_node.dirty = true
+					expandDirtyFlagToDependants( dst_node )
+				
+	func computeDirtyNodesAndRun():
+		var dirty_nodes := getDirtyNodes()
+		print( "computeDirtyNodesAndRun %d/%d dirty nodes at %s..." % [dirty_nodes.size(), graph.all_nodes.size(), name ])
+		for node in dirty_nodes:
+			expandDirtyFlagToDependants( node )
+		print( "computeDirtyNodesAndRun:" )
+		for node in graph.all_nodes:
+			if node:
+				print( "  %s : %s" % [node.name, node.dirty ] )
+			else:
+				print( "  _null_" )
+		nodes_to_eval = getEvalOrder( graph.all_nodes )
+		run()
+		
 	func run():
 		eval_id += 1
 		active_nodes.clear()
@@ -522,6 +576,7 @@ class Data:
 				for idx in range( new_size ):
 					new_container[idx] = old_container[ indices[idx] ]
 				return new_container
+				
 			DataType.NodeMesh:
 				var old_container : Array = old_stream.container
 				var new_container : Array = []
@@ -529,6 +584,7 @@ class Data:
 				for idx in range( new_size ):
 					new_container[idx] = old_container[ indices[idx] ]
 				return new_container
+				
 			DataType.NodePath:
 				var old_container : Array = old_stream.container
 				var new_container : Array = []

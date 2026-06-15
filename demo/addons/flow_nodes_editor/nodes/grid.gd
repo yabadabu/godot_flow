@@ -22,7 +22,8 @@ func execute( ctx : FlowData.EvaluationContext ):
 	var srot := output.getVector3Container( FlowData.AttrRotation )
 	var ssize := output.getVector3Container( FlowData.AttrSize )
 	assert( spos != null )
-	#print( "Spos.size %d of type %s" % [ spos.size(), type_string(typeof(spos)) ])
+	if settings.trace:
+		print( "Grid.size %d x %d x %d" % [ nx, ny, nz ])
 	var idx := 0
 	var origin : Vector3 = getSettingValue( ctx, "origin" )
 	var rotation : Vector3 = getSettingValue( ctx, "rotation" )

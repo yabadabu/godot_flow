@@ -3,8 +3,6 @@ extends FlowNodeBase
 
 #var _connected_graph: FlowGraphResource = null
 var subctx := FlowData.EvaluationContext.new()
-var all_nodes : Array[ FlowNodeBase ]
-var out_nodes : Dictionary
 
 func _init():
 	meta_node = {
@@ -66,49 +64,12 @@ func _gui_input(event: InputEvent):
 			editor.setResourceToEdit(settings.graph, owner)
 			accept_event()	
 	
-func addNodeFromTemplate( node_template, node_name : String, node_settings = null ):
-	if settings.trace:
-		print( "subgraph parsing ", node_template, " InName:", node_name)
-	var node = FlowPlugin.get_instance().nodes_factory.createNewNode( null, node_template, node_name, node_settings )
-	if settings.trace:
-		print( "  Registering ", node.name, " -> ", node)
-	if node:
-		subctx.gedit_nodes_by_name[ node.name ] = node
-		all_nodes.append( node )
-		node.dirty = true
-		node.runtime_only = true
-		#add_child(node)
-		return node
-	
-func connect_nodes( from_node: StringName, from_port: int, to_node: StringName, to_port: int) -> void:
-	var src_node : FlowNodeBase = subctx.gedit_nodes_by_name.get(from_node)
-	var dst_node : FlowNodeBase = subctx.gedit_nodes_by_name.get(to_node)
-	if src_node and dst_node:
-		var conn = { "from_node" : src_node.name, "from_port" : from_port, "to_node" : dst_node.name, "to_port" : to_port }
-		src_node.dependants.append(conn)
-		dst_node.deps.append(conn)
-		#dst_node.args_ports_by_name[ ]
-		#print( "subgraph.conn.ok From:%s:%d To:%s:%d (%s)" % [ from_node, from_port, to_node, to_port, conn ])
-	else:
-		print( "subgraph.conn FAILED From:%s:%d To:%s:%d" % [ from_node, from_port, to_node, to_port ])
-		print( "subctx.gedit_nodes_by_name: %s" % [ subctx.gedit_nodes_by_name ])
-		if not src_node:
-			print( "  from_node is %s" % [ from_node ])
-		if not dst_node:
-			print( "  to_node is %s" % [ to_node ])
-		
-func addFrame( frame_data : Dictionary, old_to_new_names : Dictionary, paste_offset  ):
-	pass
-	
 # This ctx is the context evaluating the subgraph node, not the subgraph itself
 func preExecute( ctx : FlowData.EvaluationContext ):
 	super.preExecute( ctx )
 	
-	all_nodes.clear()
-	subctx.gedit_nodes_by_name.clear()
-
 	var time_node_start := Time.get_ticks_usec()
-	FlowNodeIO.create_nodes_from_dict( settings.graph.data, self, Vector2(0,0) )
+	FlowNodeIO.create_nodes_from_dict( settings.graph.data, settings.graph, Vector2(0,0) )
 	var time_node_end := Time.get_ticks_usec()
 	print( "Subgraph.Readed resource in %s (%s)" % [ time_node_end - time_node_start, settings.graph.resource_path ])
 			
@@ -117,10 +78,7 @@ func preExecute( ctx : FlowData.EvaluationContext ):
 	subctx.trace = settings.trace
 	subctx.parent_ctx = ctx
 	subctx.name = "exec_%s" % name
-	
-	#print( "subctx.gedit_nodes_by_name", subctx.gedit_nodes_by_name )
-	var nodes = subctx.getEvalOrder( all_nodes )
-	subctx.nodes_to_eval = nodes
+	subctx.nodes_to_eval = subctx.getEvalOrder( subctx.graph.all_nodes )
 
 func execute( ctx : FlowData.EvaluationContext ):
 	if not settings.graph:
@@ -135,7 +93,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 	
 	#print( settings.graph.data )
 	#print( "All nodes", all_nodes )
-	for node in all_nodes:
+	for node in settings.graph.all_nodes:
 		node.dirty = true
 	
 	#print( "Subgraph.Nodes to eval in order", nodes )
@@ -147,7 +105,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 		for output in outs:
 			if output.label == input.label:
 				#print( "  Output and Input labels match!!")
-				var node_output : FlowNodeBase = subctx.gedit_nodes_by_name.get( output.provider_node )
+				var node_output : FlowNodeBase = settings.graph.nodes_by_name.get( output.provider_node )
 				if node_output:
 					#print( "  Found node_output: %d" % [node_output.num_connected_bulks])
 					var last_output = node_output.get_bulk_input(0, 0)
@@ -163,12 +121,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 			subctx.inputs[ input.label ] = get_input(input_idx)
 		input_idx += 1
 		
-		# Invalidate the input nodes as they have new values
-		#var in_node = subctx.gedit_nodes_by_name.get( input.label )
-		#if in_node:
-			#in_node.dirty = true
-		
-	for node in all_nodes:
+	for node in settings.graph.all_nodes:
 		node.dirty = true
 		
 	subctx.run()
@@ -176,7 +129,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 	var output_idx : int = 0
 	for output in outs:
 		#print( "Subgraph.Output[%d] was %s" % [output_idx, output])
-		var node_output = subctx.gedit_nodes_by_name.get( output.provider_node )
+		var node_output = subctx.graph.nodes_by_name.get( output.provider_node )
 		if node_output:
 			#print( " found the provider node %s NumBulks:%d " % [node_output.name, node_output.num_connected_bulks] )
 			for bulk_idx in node_output.num_connected_bulks:

@@ -13,7 +13,7 @@ var undo_redo: EditorUndoRedoManager
 var graph_input_inspector_plugin : EditorInspectorPlugin
 var node_settings_inspector_plugin : EditorInspectorPlugin
 var flow_graph_resource_inspector_plugin : EditorInspectorPlugin
-var nodes_factory = FlowNodesFactory.new()
+var nodes_factory := FlowNodesFactory.new()
 
 # To detect scene changes
 var current_scene_root = null
@@ -101,6 +101,7 @@ func _handles(object: Object) -> bool:
 func _edit(object: Object) -> void:
 	if object == null:
 		return
+	return
 	var res := object as FlowGraphResource
 	print("Editor requested edit/open for: ", res.resource_path)
 	graph_dock.setResourceToEdit( res, null )

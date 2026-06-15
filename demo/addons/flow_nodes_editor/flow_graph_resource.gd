@@ -26,8 +26,11 @@ class_name FlowGraphResource
 # The compilation version of the resource, which is shared between all the instances using this resource
 var compiled : bool = false
 var nodes_by_name : Dictionary
+var all_connections : Array[ Dictionary ]
 var all_nodes : Array[ FlowNodeBase ]
 var input_nodes : Array[ FlowNodeBase ]
+
+var editor : FlowGraphEditor
 
 signal in_params_changed
 
@@ -64,20 +67,37 @@ func findInParamByName( requested_name : String ) -> GraphInputParameter:
 	
 # Compile callbacks
 func addNodeFromTemplate( node_template, node_name : String, node_settings = null ):
-	var node = FlowPlugin.get_instance().nodes_factory.createNewNode( null, node_template, node_name, node_settings )
+	
+	print( "addNodeFromTemplate %s %s" % [ node_template, node_name ])
+	var factory := FlowPlugin.get_instance().nodes_factory
+	if node_name and nodes_by_name.has( node_name ):
+		node_name = factory.getNewName(node_template)
+		print( "will use new name %s" % [ node_name ])
+	var node =factory.createNewNode( null, node_template, node_name, node_settings )
 	if node:
 		nodes_by_name[ node.name ] = node
 		all_nodes.append( node )
 		node.dirty = true
-		node.runtime_only = true
-		#add_child(node)
+		node.runtime_only = editor == null
 		
 		if node and node.settings and node.settings is InputNodeSettings:
 			input_nodes.append( node )
 		
+		if editor:
+			editor.onNodeCreated(node)
+		
 		return node
 	
+func disconnect_nodes( from_node: StringName, from_port: int, to_node: StringName, to_port: int) -> void:
+	var idx = all_connections.find_custom( func( c : Dictionary ) -> bool:
+		return c.from_node == from_node and c.from_port == from_port and c.to_node == to_node and c.to_port == to_port
+	)
+	if idx >= 0:
+		all_connections.remove_at( idx )
+	
 func connect_nodes( from_node: StringName, from_port: int, to_node: StringName, to_port: int) -> void:
+	var c = { "from_node": from_node, "from_port" : from_port, "to_node" : to_node, "to_port" : to_port }
+	all_connections.append( c )
 	var src_node : FlowNodeBase = nodes_by_name.get(from_node)
 	var dst_node : FlowNodeBase = nodes_by_name.get(to_node)
 	if src_node and dst_node:
@@ -85,25 +105,41 @@ func connect_nodes( from_node: StringName, from_port: int, to_node: StringName, 
 		src_node.dependants.append(conn)
 		dst_node.deps.append(conn)
 	else:
-		print( "subgraph.conn FAILED From:%s:%d To:%s:%d" % [ from_node, from_port, to_node, to_port ])
-		print( "subctx.nodes_by_name: %s" % [ nodes_by_name ])
+		print( "graph.conn FAILED From:%s:%d To:%s:%d" % [ from_node, from_port, to_node, to_port ])
+		print( "nodes_by_name: %s" % [ nodes_by_name ])
 		if not src_node:
 			print( "  from_node is %s" % [ from_node ])
 		if not dst_node:
 			print( "  to_node is %s" % [ to_node ])
+			
+	if editor:
+		editor.onConnCreated( c )
 		
 func addFrame( frame_data : Dictionary, old_to_new_names : Dictionary, paste_offset  ):
-	# frames are not parsed
-	pass	
+	if editor:
+		editor.addFrame( frame_data, old_to_new_names, paste_offset)
+	
+func dump():
+	print( ">>>> FlowGraph %s.. Compiled:%s" % [resource_name, compiled] )
+	print( "  %d Nodes" % all_nodes.size() )
+	for node in all_nodes:
+		print( "    %s" % node.name )
+	print( "  %d Input Nodes" % input_nodes.size() )
+	for node in input_nodes:
+		print( "    %s %s" % [ node.name, node.settings.name ])
+	print( "  %d Connections" % all_connections.size() )
 	
 func compile():
+	if compiled:
+		return
+	all_connections.clear()
 	all_nodes.clear()
 	nodes_by_name.clear()
 	input_nodes.clear()
 	var time_node_start := Time.get_ticks_usec()
-	FlowNodeIO.create_nodes_from_dict( data, self, Vector2(0,0) )
+	if data and not data.is_empty():
+		FlowNodeIO.create_nodes_from_dict( data, self, Vector2(0,0) )
 	var time_node_end := Time.get_ticks_usec()
 	print( "FlowGraph.Compiled in %s (%s)" % [ time_node_end - time_node_start, resource_path ])
-	for node in input_nodes:
-		print( "  Input: %s %s" % [ node.name, node.settings.name ])
+	dump()
 	compiled = true

@@ -2,9 +2,36 @@
 
 [ext_resource type="Script" uid="uid://4epcqfovpgk7" path="res://addons/flow_nodes_editor/node.gd" id="1_3mr3y"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3mr3y"]
+content_margin_left = 8.0
+content_margin_top = 0.0
+content_margin_right = 8.0
+content_margin_bottom = 0.0
+bg_color = Color(0.3, 0.15, 0.24000007, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xojoh"]
+content_margin_left = 8.0
+content_margin_top = 0.0
+content_margin_right = 8.0
+content_margin_bottom = 0.0
+bg_color = Color(0.3, 0.15, 0.24000007, 1)
+border_color = Color(0.325, 0.325, 0.325, 0.6)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
 [node name="NodeBase" type="GraphNode" unique_id=663199301]
 offset_right = 208.0
 offset_bottom = 158.0
+theme_override_styles/titlebar = SubResource("StyleBoxFlat_3mr3y")
+theme_override_styles/titlebar_selected = SubResource("StyleBoxFlat_xojoh")
 title = "Title"
 ignore_invalid_connection_type = true
 script = ExtResource("1_3mr3y")

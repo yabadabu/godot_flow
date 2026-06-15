@@ -32,16 +32,6 @@ func spawnNode( root : Node, class_to_spawn ):
 	new_node.set_meta("flow_owner", name )	
 	return new_node
 
-func _resolve_spawn_parent(root : Node3D) -> Node3D:
-	var path = settings.spawn_parent_path.strip_edges()
-	if path == "":
-		return root
-	var n = root.get_node_or_null(path)
-	if n is Node3D:
-		return n
-	setError("Spawn parent path '%s' is invalid or not a Node3D" % path)
-	return root
-
 func _build_variant_weights( num_variants : int ) -> Array[float]:
 	if num_variants == 0:
 		return []
@@ -97,9 +87,7 @@ func _resolve_mesh_for_point(idx : int, meshes_stream, variants : Array[Mesh], v
 	
 func preExecute( ctx : FlowData.EvaluationContext ):
 	super.preExecute(ctx)
-	var spawn_parent = _resolve_spawn_parent(ctx.owner)
-	if settings.clear_previous_instances:
-		removeRegisteredInstancedNodes( spawn_parent )
+	ctx.removeRegisteredInstancedNodes( self )
 	spawn_id = 0
 		
 func execute( ctx : FlowData.EvaluationContext ):
@@ -146,10 +134,10 @@ func execute( ctx : FlowData.EvaluationContext ):
 	var root = ctx.owner
 	if not root:
 		set_output(0, in_data)
-		setError("Failed to find root")
+		setError("Failed to find root. ctx.owner is null")
 		return
 		
-	var spawn_parent = _resolve_spawn_parent(root)
+	var spawn_parent = ctx.resolveSpawnParent(self)
 	var in_size = in_data.size()
 
 	# Find who is going to be the owner of the new nodes

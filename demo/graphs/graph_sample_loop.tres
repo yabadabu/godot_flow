@@ -49,13 +49,12 @@ data = {
 "to_node": &"id_0006_add_attribute",
 "to_port": 1
 }],
-"min_pos": Vector2(160, 180),
+"min_pos": Vector2(0, 0),
 "nodes": [{
 "args_port": {},
 "name": &"id_0002_input_InData",
 "position": Vector2(0, 0),
 "settings": {
-"data_type": 999,
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
@@ -207,7 +206,6 @@ data = {
 "name": &"id_0003_input_Counter",
 "position": Vector2(0, 140),
 "settings": {
-"data_type": 999,
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
@@ -230,7 +228,7 @@ data = {
 "version": 1
 }
 view_zoom = 1.2875423
-view_offset = Vector2(169.0676, -69.82425)
+view_offset = Vector2(0, -69.82425)
 new_name_counter = 11
 in_params = Array[ExtResource("1_kqlyv")]([SubResource("Resource_kqlyv"), SubResource("Resource_3c0op")])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"

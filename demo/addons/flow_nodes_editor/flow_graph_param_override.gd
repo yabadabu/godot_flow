@@ -11,6 +11,9 @@ signal value_changed(param_id: StringName, value: Variant)
 		enabled = v
 		emit_changed()
 
+func _init():
+	resource_local_to_scene = true
+
 var value: Variant:
 	set(v):
 		value = v

@@ -10,21 +10,31 @@ class_name FlowGraphNode3D
 @export var graph : FlowGraphResource :
 	set(new_value):
 		if _graph and _graph.in_params_changed.is_connected(_on_graph_inputs_change):
+			clearInstances( )
 			_graph.in_params_changed.disconnect(_on_graph_inputs_change)
 		_graph = new_value
 		if _graph:
 			_graph.in_params_changed.connect(_on_graph_inputs_change)
+		ctx.graph = _graph
 		graph_node_changed.emit( self, "graph_resource" )
 	get:
 		return _graph
 		
 var _graph : FlowGraphResource = FlowGraphResource.new()
 signal graph_node_changed( graph_node : FlowGraphNode3D, prop_name : String )
+var ctx = FlowData.EvaluationContext.new()
+var _initialized := false
 
 @export var overrides: Array[FlowGraphParamOverride] = []
+	
+func _ready():
+	ctx.owner = self
+	if Engine.is_editor_hint() and not _initialized:
+		_initialized = true
+		duplicateOverrides()
 
 func _on_graph_inputs_change():
-	print( "_on_graph_inputs_change" )
+	print( "_on_graph_inputs_change. Checking if new param overrides are required" )
 	var existing := {}
 	for o in overrides:
 		existing[o.param_id] = o
@@ -40,17 +50,6 @@ func _on_graph_inputs_change():
 			new_overrides.append(o)
 	overrides = new_overrides
 
-# You can also use get_property_list() for more control
-func _get_property_listx():
-	return [
-		{
-			"name": "refresh_inputs",
-			"type": TYPE_CALLABLE,
-			"hint": PROPERTY_HINT_TOOL_BUTTON | PROPERTY_USAGE_EDITOR,
-			"hint_string": "Refresh Inputs"
-		}
-	]
-
 func _get_property_list() -> Array:
 	var props := []
 
@@ -64,6 +63,14 @@ func _get_property_list() -> Array:
 			"type": TYPE_CALLABLE,
 			"hint": PROPERTY_HINT_TOOL_BUTTON | PROPERTY_USAGE_EDITOR,
 			"hint_string": "Regenerate"
+		}
+	)
+	props.append(
+		{
+			"name": "clearInstances",
+			"type": TYPE_CALLABLE,
+			"hint": PROPERTY_HINT_TOOL_BUTTON | PROPERTY_USAGE_EDITOR,
+			"hint_string": "Clear"
 		}
 	)
 
@@ -88,7 +95,7 @@ func _get_property_list() -> Array:
 			"usage": PROPERTY_USAGE_EDITOR | PROPERTY_USAGE_STORAGE
 		})
 
-	print( "At FlowGraphNode3D._get_property_list ", props)
+	#print( "At FlowGraphNode3D._get_property_list ", props)
 	return props
 	
 func _get(property: StringName) -> Variant:
@@ -126,15 +133,19 @@ func _set(property: StringName, value: Variant) -> bool:
 			return true
 		print( "Setting override value %s (id:%s field:%s) with %s" % [property, id, field, value])
 		
+		var changed := false
 		if field == "enabled":
 			o.enabled = value
-			return true
+			print( "FlowGraphNode.Inputs.%s.enabled = %s" % [id, value])
+			changed = true
 
-		if field == "value":
+		elif field == "value":
 			o.value = value
 			o.enabled = true
-			print( "FlowGraphNode.New Input value saved %s" % [value])
-			
+			print( "FlowGraphNode.Inputs.%s.value = %s" % [id, value])
+			changed = true
+		
+		if changed:	
 			var graph_input = graph.findInParamByName( id )
 			if graph_input:
 				graph_input.notifyChanged()
@@ -142,8 +153,6 @@ func _set(property: StringName, value: Variant) -> bool:
 				#graph._on_input_changed()
 			# Notify the graph the values are dirty
 			#graph_node_changed.emit( self, id )
-			
-			
 			return true
 			
 	return false
@@ -154,16 +163,27 @@ func get_or_create_override( id : StringName ) -> FlowGraphParamOverride:
 			return o
 	return null
 
+func duplicateOverrides():
+	var new_overrides: Array[FlowGraphParamOverride] = []
+	for o in overrides:
+		new_overrides.append(o.duplicate(true))
+	overrides = new_overrides
+
+func clearInstances():
+	print( "clearInstances.Starts %s" % graph )
+	if ctx.graph:
+		for node in ctx.graph.all_nodes:
+			ctx.removeRegisteredInstancedNodes( node )
+
 func regenerate():
-	print( "regenerate.Starts %s" % graph )
+	# _ready has not yet been called.
+	if not ctx.owner:
+		return
+	print( "regenerate.Starts %s by %s (%s)" % [ graph, name, graph.compiled ] )
 	graph.compile()
-	var ctx = FlowData.EvaluationContext.new()
 	for node in graph.input_nodes:
 		node.dirty = true
-	ctx.graph = graph
-	ctx.owner = self
 	ctx.trace = true
-	ctx.nodes_to_eval = ctx.getEvalOrder( graph.all_nodes )
-	ctx.run()
+	ctx.computeDirtyNodesAndRun()
 	print( "regenerate.Ends %s" % graph )
 	

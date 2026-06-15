@@ -14,7 +14,6 @@ extends NodeSettings
 @export var color_attribute : String = "color"
 @export var use_vertex_colors : bool = true
 @export var spawn_parent_path : String = ""
-@export var clear_previous_instances : bool = true
 
 func _init():
 	super._init()

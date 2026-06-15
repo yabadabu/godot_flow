@@ -18,17 +18,6 @@ func _exit_tree():
 	#removeInstancedComponents();
 	pass
 
-
-func _resolve_spawn_parent(root : Node3D) -> Node3D:
-	var path = settings.spawn_parent_path.strip_edges()
-	if path == "":
-		return root
-	var n = root.get_node_or_null(path)
-	if n is Node3D:
-		return n
-	setError("Spawn parent path '%s' is invalid or not a Node3D" % path)
-	return root
-
 func _build_variant_weights() -> Array[float]:
 	var variants = settings.scene_variants
 	if variants.is_empty():
@@ -115,9 +104,7 @@ func _find_owner_of_spawned_nodes( root : Node) -> Node:
 		
 func preExecute( ctx : FlowData.EvaluationContext ):
 	super.preExecute( ctx )
-	var spawn_parent = _resolve_spawn_parent(ctx.owner)
-	if settings.clear_previous_instances:
-		removeRegisteredInstancedNodes( spawn_parent )
+	ctx.removeRegisteredInstancedNodes( self )
 	spawn_id = 0
 		
 func execute( ctx : FlowData.EvaluationContext ):
@@ -156,12 +143,6 @@ func execute( ctx : FlowData.EvaluationContext ):
 				setError("Scene selector attribute '%s' must have %d values or 1 value (got %d)" % [settings.scene_selector_attribute, in_data.size(), sel_size])
 				return
 
-	var root = ctx.owner
-	if not root:
-		setError("Failed to find root")
-		set_output(0, in_data)
-		return
-
 	var transforms = in_data.getTransformsStream()
 	if transforms == null:
 		setError("Missing required streams %s/%s" % [ FlowData.AttrPosition, FlowData.AttrRotation ])
@@ -169,8 +150,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 		return
 
 	var owner_of_spawned_nodes := _find_owner_of_spawned_nodes( ctx.owner )
-		
-	var spawn_parent = _resolve_spawn_parent(root)
+	var spawn_parent = ctx.resolveSpawnParent(self)
 
 	var variants : Array[PackedScene] = []
 	for v in settings.scene_variants:

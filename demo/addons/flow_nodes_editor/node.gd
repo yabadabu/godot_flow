@@ -22,7 +22,7 @@ var num_ports : int = 0			 # Max of (in,out)
 var meta_node: Dictionary = {}
 
 var node_template : String
-var show_disconnected_inputs : bool = false
+var show_disconnected_inputs : bool = true
 var runtime_only : bool = false
 
 var dirty : bool = false
@@ -178,6 +178,8 @@ func _on_draw() -> void:
 		var tx = size.x - tw - 8 * ui_scale
 		var ty = size.y - 9.0 * ui_scale
 		draw_string(time_font, Vector2(tx, ty), time_text, HORIZONTAL_ALIGNMENT_LEFT, -1, time_font_size, time_color)
+
+	draw_string(ThemeDB.fallback_font, Vector2(2, -5), name, HORIZONTAL_ALIGNMENT_LEFT, -1, 12 * ui_scale)
 
 func getMeta() -> Dictionary:
 	return meta_node
@@ -347,7 +349,6 @@ func initFromScript():
 		if not runtime_only:
 			# This clears the initial list of exposed parameters
 			exposed_params = []
-		pass
 		
 	if trace:
 		print( "initFromScript: %s" % getTitle())
@@ -602,8 +603,10 @@ func set_output( port_idx : int, data : FlowData.Data ):
 		bulk.resize( port_idx + 1 )
 	bulk[ port_idx ] = data
 	if settings.trace:
-		print( "%s Saving bulk %d, port %d with %s (%d entries)" % [ name, num_generated_bulks - 1, port_idx, data.streams.keys(), data.size() ] )
-
+		if data:
+			print( "%s Saving bulk %d, port %d with %s (%d entries)" % [ name, num_generated_bulks - 1, port_idx, data.streams.keys(), data.size() ] )
+		else:
+			print( "%s Saving bulk %d, port %d output is null" % [ name, num_generated_bulks - 1, port_idx ] )
 	
 func get_input( idx : int ):
 	if idx >= inputs.size():
@@ -678,6 +681,9 @@ func executedDisabled( ctx : FlowData.EvaluationContext ):
 		if inputs.size() > 0:
 			set_output( 0, inputs[0] )
 
+func getPreferredSpawnPath():
+	return null
+
 func run( ctx : FlowData.EvaluationContext ):
 	for bulk_index in range( num_connected_bulks ):
 		readAllInputsForBulk( ctx, bulk_index )
@@ -685,12 +691,12 @@ func run( ctx : FlowData.EvaluationContext ):
 			print( "%s Inputs for bulk %d/%d are %s" % [ name, bulk_index, num_connected_bulks, inputs ])
 		execute( ctx )
 
-func removeRegisteredInstancedNodes( new_parent : Node3D ):
+func removeRegisteredInstancedNodes( spawn_parent : Node3D ):
 	if settings.trace:
-		print( "%s.removeRegisteredInstancedNodes( %s )" % [ name, new_parent.name ] )
+		print( "%s.removeRegisteredInstancedNodes( %s )" % [ name, spawn_parent.name ] )
 	var nodes : Array[Node] = []
-	if new_parent:
-		for child in new_parent.get_children():
+	if spawn_parent:
+		for child in spawn_parent.get_children():
 			if !child.has_meta( "flow_owner" ):
 				continue
 			if child.get_meta( "flow_owner" ) == name:
