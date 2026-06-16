@@ -90,7 +90,6 @@ func _get_property_list() -> Array:
 		props.append({
 			"name": "flow_override/%s/value" % input.name,
 			"type": FlowNodeBase.getGdScriptTypeForFlowDataType(input.getDataType()),
-			"hint": PROPERTY_USAGE_EDITOR,
 			"hint_string": input.name,
 			"usage": PROPERTY_USAGE_EDITOR | PROPERTY_USAGE_STORAGE
 		})
