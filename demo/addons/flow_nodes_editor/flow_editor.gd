@@ -76,9 +76,8 @@ func bindResourceToEditor(res : FlowGraphResource):
 		return
 	res.compile()
 	
-	print( "bindResourceToEditor %d nodes, %d conns" % [ res.all_nodes.size(), res.all_connections.size() ])
-	res.dump()
-	
+	print( "bindResourceToEditor %d nodes, %d conns (%s)" % [ res.all_nodes.size(), res.all_connections.size(), res.resource_path ])
+
 	res.in_params_changed.connect(_on_inputs_changed)
 	
 	gedit.zoom = res.view_zoom
@@ -107,14 +106,16 @@ func setResourceToEdit( new_resource : FlowGraphResource, new_resource_owner : F
 		tab_idx = addToTabs( new_resource, new_resource_owner )
 	tab_bar.ensure_tab_visible( tab_idx )
 	tab_bar.current_tab = tab_idx
-
-	unbindResourceFromEditor( current_resource )
-	current_resource = new_resource
+	
+	if current_resource != new_resource:
+		unbindResourceFromEditor( current_resource )
+		current_resource = new_resource
+		bindResourceToEditor( current_resource )
+	else:
+		print( "The resource has not changed, no need to rebind the graph")
 	resource_owner = new_resource_owner
-	bindResourceToEditor( current_resource )
 	
 	markAllNodesAsDirty()
-	
 	if resource_owner:
 		queueRegen()
 	
@@ -309,6 +310,8 @@ func localToGraphCoords( local_coords : Vector2 ):
 func setOnOverInParam( row ):
 	popup_on_over_input = row
 	
+# Bind right button to make appear a popup to bind an argument as 
+# input of the graph
 func refreshSignalsInputArgs( node ):
 	for child in node.get_children():
 		var row = child as FlowConnectorRow
@@ -867,7 +870,7 @@ func _on_tab_bar_tab_close_pressed(tab_idx):
 
 func _on_tab_bar_tab_changed(tab_idx):
 	var dtab = open_tabs[ tab_idx ] if tab_idx >= 0 and tab_idx < open_tabs.size() else null
-	if dtab:
+	if dtab and is_instance_valid(dtab.resource) and is_instance_valid(dtab.owner):
 		setResourceToEdit( dtab.resource, dtab.owner )
 	else:
 		setResourceToEdit( null, null )

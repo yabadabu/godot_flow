@@ -110,10 +110,9 @@ func _get(property: StringName) -> Variant:
 		if o:
 			if field == "enabled":
 				return o.enabled
-
-			if field == "value":
+			elif field == "value":
 				return o.value
-		if _graph:
+		elif _graph:
 			if field == "enabled":
 				return false
 			var input = _graph.findInParamByName( id )
@@ -130,7 +129,7 @@ func _set(property: StringName, value: Variant) -> bool:
 		
 		var o := get_or_create_override(id)
 		if not o:
-			return true
+			return false
 		print( "Setting override value %s (id:%s field:%s) with %s" % [property, id, field, value])
 		
 		var changed := false

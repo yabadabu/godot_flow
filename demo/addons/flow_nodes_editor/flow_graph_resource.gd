@@ -73,7 +73,7 @@ func addNodeFromTemplate( node_template, node_name : String, node_settings = nul
 	if node_name and nodes_by_name.has( node_name ):
 		node_name = factory.getNewName(node_template)
 		print( "will use new name %s" % [ node_name ])
-	var node =factory.createNewNode( null, node_template, node_name, node_settings )
+	var node = factory.createNewNode( null, node_template, node_name, node_settings )
 	if node:
 		nodes_by_name[ node.name ] = node
 		all_nodes.append( node )

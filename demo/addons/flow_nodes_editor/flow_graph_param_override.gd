@@ -11,10 +11,7 @@ signal value_changed(param_id: StringName, value: Variant)
 		enabled = v
 		emit_changed()
 
-func _init():
-	resource_local_to_scene = true
-
-var value: Variant:
+@export var value: Variant:
 	set(v):
 		value = v
 		emit_changed()
@@ -22,7 +19,24 @@ var value: Variant:
 
 func getAsFlowData() -> FlowData.Data:
 	var data = FlowData.Data.new()
-	var container = data.addStream( param_id, FlowData.DataType.Int )
-	container.resize( 1 )
-	container[0] = int(value)
+	
+	if typeof( value ) == TYPE_FLOAT:
+		var container = data.addStream( param_id, FlowData.DataType.Float )
+		container.resize( 1 )
+		if value == null:
+			container[0] = 0.0
+		else:
+			container[0] = float(value)
+	
+	elif typeof( value ) == TYPE_INT:
+		var container = data.addStream( param_id, FlowData.DataType.Int )
+		container.resize( 1 )
+		if value == null:
+			container[0] = 0.0
+		else:
+			container[0] = int(value)
+			
+	else:
+		push_warning( "Override param %s -> %s" % [ param_id, value ])	
+		
 	return data

@@ -67,18 +67,18 @@ func _gui_input(event: InputEvent):
 # This ctx is the context evaluating the subgraph node, not the subgraph itself
 func preExecute( ctx : FlowData.EvaluationContext ):
 	super.preExecute( ctx )
-	
-	var time_node_start := Time.get_ticks_usec()
-	FlowNodeIO.create_nodes_from_dict( settings.graph.data, settings.graph, Vector2(0,0) )
-	var time_node_end := Time.get_ticks_usec()
-	print( "Subgraph.Readed resource in %s (%s)" % [ time_node_end - time_node_start, settings.graph.resource_path ])
-			
-	subctx.owner = ctx.owner
-	subctx.graph = settings.graph
-	subctx.trace = settings.trace
-	subctx.parent_ctx = ctx
-	subctx.name = "exec_%s" % name
-	subctx.nodes_to_eval = subctx.getEvalOrder( subctx.graph.all_nodes )
+	if settings.graph:
+		var time_node_start := Time.get_ticks_usec()
+		FlowNodeIO.create_nodes_from_dict( settings.graph.data, settings.graph, Vector2(0,0) )
+		var time_node_end := Time.get_ticks_usec()
+		print( "Subgraph.Readed resource in %s (%s)" % [ time_node_end - time_node_start, settings.graph.resource_path ])
+				
+		subctx.owner = ctx.owner
+		subctx.graph = settings.graph
+		subctx.trace = settings.trace
+		subctx.parent_ctx = ctx
+		subctx.name = "exec_%s" % name
+		subctx.nodes_to_eval = subctx.getEvalOrder( subctx.graph.all_nodes )
 
 func execute( ctx : FlowData.EvaluationContext ):
 	if not settings.graph:

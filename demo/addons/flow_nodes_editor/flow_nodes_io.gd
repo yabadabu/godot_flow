@@ -258,8 +258,8 @@ static func saveEditorStateToResource( editor : FlowGraphEditor ):
 		return n is GraphFrame
 	)
 	var res = editor.current_resource
-	print( "unbindResourceFromEditor %d nodes, %d conns and %d frames" % [ all_nodes.size(), editor.gedit.connections.size(), all_frames.size() ] )
+	print( "unbindResourceFromEditor %d nodes, %d conns and %d frames (%s)" % [ all_nodes.size(), editor.gedit.connections.size(), all_frames.size(), res.resource_path ] )
 	res.data = FlowNodeIO.nodes_as_dict( all_nodes, all_frames, editor )
 	res.view_zoom = editor.gedit.zoom
 	res.view_offset = editor.gedit.scroll_offset
-	print( res.data )
+	#print( "Saved graph:", res.data )

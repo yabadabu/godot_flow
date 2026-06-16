@@ -74,11 +74,13 @@ func getDefaultValue():
 			return cte_resource
 		FlowData.DataType.String:
 			return cte_string
+	push_error( "InputParam.%s.getDefaultValue. Invalid data_type %s" % [ name, data_type]  )
 	return null
 
 func getAsFlowData() -> FlowData.Data:
 	var data = FlowData.Data.new()
 	var container = data.addStream( name, getDataType() )
-	container.resize( 1 )
-	container[0] = getDefaultValue()
+	if container:
+		container.resize( 1 )
+		container[0] = getDefaultValue()
 	return data
