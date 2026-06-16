@@ -16,7 +16,7 @@ script = ExtResource("3_5ifn7")
 data = {
 "frames": [],
 "links": [],
-"min_pos": Vector2(0, 0),
+"min_pos": Vector2(-20, 0),
 "nodes": [{
 "args_port": {},
 "name": &"id_0015_input_Ins",
