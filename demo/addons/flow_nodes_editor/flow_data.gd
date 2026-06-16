@@ -157,15 +157,19 @@ class EvaluationContext:
 				
 	func computeDirtyNodesAndRun():
 		var dirty_nodes := getDirtyNodes()
-		print( "computeDirtyNodesAndRun %d/%d dirty nodes at %s..." % [dirty_nodes.size(), graph.all_nodes.size(), name ])
+		
+		if trace:
+			print( "computeDirtyNodesAndRun %d/%d dirty nodes at %s..." % [ dirty_nodes.size(), graph.all_nodes.size(), owner ])
 		for node in dirty_nodes:
 			expandDirtyFlagToDependants( node )
-		print( "computeDirtyNodesAndRun:" )
-		for node in graph.all_nodes:
-			if node:
-				print( "  %s : %s" % [node.name, node.dirty ] )
-			else:
-				print( "  _null_" )
+		
+		if trace:
+			print( "computeDirtyNodesAndRun:" )
+			for node in graph.all_nodes:
+				if node:
+					print( "  %s : %s" % [node.name, node.dirty ] )
+				else:
+					print( "  _null_" )
 		nodes_to_eval = getEvalOrder( graph.all_nodes )
 		run()
 		
@@ -173,7 +177,7 @@ class EvaluationContext:
 		eval_id += 1
 		active_nodes.clear()
 		for node in nodes_to_eval:
-			var trace_node := trace  or node.settings.trace
+			var trace_node := trace or node.settings.trace
 			if trace_node:
 				print( "  Eval: %s (%d) Dirty:%s" % [ node.name, node.eval_id, node.dirty ] )
 				

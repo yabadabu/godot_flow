@@ -81,11 +81,13 @@ func _gui_input(event: InputEvent):
 func preExecute( ctx : FlowData.EvaluationContext ):
 	super.preExecute( ctx )
 	if settings.graph:
-		print( "Subgraph.Ensuring graph is compiled" )
+		if settings.trace:
+			print( "Subgraph.Ensuring graph is compiled" )
 		var time_node_start := Time.get_ticks_usec()
 		settings.graph.compile()
 		var time_node_end := Time.get_ticks_usec()
-		print( "Subgraph.Readed resource in %s (%s)" % [ time_node_end - time_node_start, settings.graph.resource_path ])
+		if settings.trace:
+			print( "Subgraph.Readed resource in %s (%s)" % [ time_node_end - time_node_start, settings.graph.resource_path ])
 				
 		subctx.owner = ctx.owner
 		subctx.graph = settings.graph
@@ -116,7 +118,8 @@ func execute( ctx : FlowData.EvaluationContext ):
 	subctx.inputs.clear()
 	var input_idx : int = 0
 	for input in ins:
-		#print( "Checking subgraph input %s" % [ input.label ])
+		if settings.trace:
+			print( "  Checking subgraph input %s" % [ input.label ])
 		var is_feedback := false
 		for output in outs:
 			if output.label == input.label:
@@ -134,7 +137,11 @@ func execute( ctx : FlowData.EvaluationContext ):
 						#print( "  No output yet, can't feedback yet...")
 						pass
 		if not is_feedback:
-			subctx.inputs[ input.label ] = get_input(input_idx)
+			var input_nth = get_input(input_idx)
+			if settings.trace:
+				print( "  Input[%d] %s is not feedback, value is %s" % [ input_idx, input.label, input_nth ])
+				input_nth.dump( "input of subgraph" )
+			subctx.inputs[ input.label ] = input_nth
 		input_idx += 1
 		
 	for node in settings.graph.all_nodes:

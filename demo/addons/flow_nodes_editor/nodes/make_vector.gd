@@ -13,12 +13,13 @@ func _init():
 	}
 
 func execute( ctx : FlowData.EvaluationContext ):
-	var ix = getSettingValue( ctx, "x")
+	var ix : float = getSettingValue( ctx, "x")
 	var iy = getSettingValue( ctx, "y")
-	var iz = getSettingValue( ctx, "z")
+	var iz : float = getSettingValue( ctx, "z")
 
 	var output := FlowData.Data.new()
 	var container : PackedVector3Array = output.addStream( settings.out_name, FlowData.DataType.Vector )
 	container.resize( 1 )
-	container[0] = Vector3( ix, iy, iz )
+	if typeof(ix) == TYPE_FLOAT and typeof(iy) == TYPE_FLOAT and typeof(iz) == TYPE_FLOAT:
+		container[0] = Vector3( ix, iy, iz )
 	set_output( 0, output )

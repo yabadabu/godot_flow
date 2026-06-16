@@ -39,7 +39,8 @@ func onPropChanged( prop_name : String ):
 	refreshFromSettings()
 
 func execute( ctx : FlowData.EvaluationContext ):
-	#print( "input. using cached data %s from ctx -> %s" % [name, output])
 	var output = ctx.resolveInput( settings.name )
+	if settings.trace:
+		print( "%s Output %s resolved to: %s" % [name, settings.name, output])
 	set_output( 0, output )
 	

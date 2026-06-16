@@ -43,6 +43,7 @@ var ui_scale = 1.0
 var marker_radius : float = 9
 
 var debug_row : int = -1
+var flow_graph : FlowGraphResource = null
 
 func _ready():
 	ignore_invalid_connection_type = true
@@ -307,6 +308,10 @@ func getEditor():
 	return flow_editor
 
 func initFromScript():
+	
+	if flow_graph and flow_graph.editor == null:
+		return
+	
 	var meta := getMeta()
 	var trace = meta.get( "trace", false )
 	
@@ -469,10 +474,10 @@ func refreshConnectionFlags( ):
 			args_ports_by_name[ arg_name ].connected = editor.is_node_port_connected( name, args_ports_by_name[ arg_name ].port )
 		
 func nodeOptionsChanged( expanded : bool ):
-	show_disconnected_inputs = not show_disconnected_inputs
+	show_disconnected_inputs = expanded
 	refreshConnectionFlags( )
 	initFromScript()
-	setupDrawDebug()
+	#setupDrawDebug()
 	
 # This returns the current value of the input configuration taking into account potencial connections and overrides of the inputs
 func getSettingValue( ctx : FlowData.EvaluationContext, in_name : String, default_value = null):
@@ -502,12 +507,13 @@ func getSettingValue( ctx : FlowData.EvaluationContext, in_name : String, defaul
 					elif in_size > 1:
 						setError( "Input %s has too many data (%d)" % [ in_name, in_size ])
 					else:
+						#print( "in_size is %d" % [ in_size ] )
+						#print( "  stream is %s" % [ stream ] )
 						var new_value = stream.container[0]
 						if trace:
 							print( "  -> Using %s = %s" % [ in_name, new_value ])
 						if typeof( new_value ) != typeof( value ):
 							push_warning( "  Type of %s (%d) does not match the expected type (%d)" % [ in_name, typeof(new_value), typeof(value) ])
-							
 						return new_value
 	
 	if trace:
@@ -690,9 +696,11 @@ func getPreferredSpawnPath():
 
 func run( ctx : FlowData.EvaluationContext ):
 	for bulk_index in range( num_connected_bulks ):
+		if settings.trace:
+			print( "%s Preparing inputs for bulk %d/%d" % [ name, bulk_index, num_connected_bulks ])
 		readAllInputsForBulk( ctx, bulk_index )
 		if settings.trace:
-			print( "%s Inputs for bulk %d/%d are %s" % [ name, bulk_index, num_connected_bulks, inputs ])
+			print( "%s Inputs for bulk %d/%d are %s (%d)" % [ name, bulk_index, num_connected_bulks, inputs, inputs.size() ])
 		execute( ctx )
 
 func removeRegisteredInstancedNodes( spawn_parent : Node3D ):

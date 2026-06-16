@@ -5,12 +5,14 @@
 	Batch concepts
 	Subgraphs
 		Feedback
+
 - 
 ---- 
 - [ ] Import node: load csv
 - [ ] Import node: texture sampler
 - [ ] Import node: sample spline
 
+- [ ] subgraph overrides
 - [ ] named redirectors/acc
 - [ ] debug/session
 - [ ] multiple flowgraphs / tabs

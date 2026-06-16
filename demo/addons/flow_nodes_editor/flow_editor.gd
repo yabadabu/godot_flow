@@ -63,6 +63,7 @@ func unbindResourceFromEditor(res : FlowGraphResource):
 	res.editor = null
 	res.in_params_changed.disconnect(_on_inputs_changed)
 	for node in getAllNodes():
+		print( "unbindResourceFromEditor. kicking out %s" % node.name)
 		node.runtime_only = true
 		node.draw.disconnect( node._on_draw )
 		gedit.remove_child( node )
@@ -88,12 +89,13 @@ func bindResourceToEditor(res : FlowGraphResource):
 		onNodeCreated( node )
 	for conn in res.all_connections:
 		onConnCreated( conn )
-		
-	for node in res.all_nodes:
-		if node.show_disconnected_inputs:
-			node.nodeOptionsChanged( false )
 	
 	res.editor = self
+		
+	for node in res.all_nodes:
+		print( "  Node %s show_disconnected_inputs = %s" % [node.name, node.show_disconnected_inputs ])
+		if node.show_disconnected_inputs:
+			node.nodeOptionsChanged( false )
 	
 func setResourceToEdit( new_resource : FlowGraphResource, new_resource_owner : FlowGraphNode3D ):
 	#if new_resource == current_resource && ( new_resource_owner == null or new_resource_owner == resource_owner ):
@@ -739,7 +741,6 @@ func evalGraph():
 	if resource_owner and resource_owner.ctx and resource_owner.ctx.graph == current_resource:
 		
 		var time_start = Time.get_ticks_usec()
-		
 		cacheConnections()
 		
 		active_intensity = 1.0
@@ -748,7 +749,7 @@ func evalGraph():
 		var performance = []
 		resource_owner.ctx.computeDirtyNodesAndRun()
 		active_nodes = resource_owner.ctx.active_nodes
-		print( active_nodes )
+		#print( active_nodes )
 		
 		for node in active_nodes:
 			if node.settings.inspect_enabled:

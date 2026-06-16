@@ -17,6 +17,7 @@ class_name FlowGraphNode3D
 			_graph.in_params_changed.connect(_on_graph_inputs_change)
 		ctx.graph = _graph
 		graph_node_changed.emit( self, "graph_resource" )
+		#notify_property_list_changed()
 	get:
 		return _graph
 		
@@ -25,10 +26,18 @@ signal graph_node_changed( graph_node : FlowGraphNode3D, prop_name : String )
 var ctx := FlowData.EvaluationContext.new()
 var _initialized := false
 
+@export var trace : bool:
+	set(new_value):
+		ctx.trace = new_value
+	get:
+		return ctx.trace
+
 @export var overrides: Array[FlowGraphParamOverride] = []
 	
 func _ready():
 	ctx.owner = self
+	for o in overrides:
+		print( "  Saving override %s : %s : %s" % [ o.param_id, o.enabled, o.value ])
 	# To ensure the overrides are unique to each instance
 	if Engine.is_editor_hint() and not _initialized:
 		_initialized = true
@@ -38,12 +47,15 @@ func _on_graph_inputs_change():
 	print( "_on_graph_inputs_change. Checking existing %d overrides. The graph has %d inputs" % [overrides.size(), graph.in_params.size()] )
 	var existing := {}
 	for o in overrides:
+		print( "  Saving override %s : %s : %s" % [ o.param_id, o.enabled, o.value ])
 		existing[o.param_id] = o
 	var new_overrides : Array[FlowGraphParamOverride] = []
 	for input in graph.in_params:
 		if existing.has(input.name):
+			print( "  Reusing existing override for input named %s" % [ input.name ])
 			new_overrides.append(existing[input.name])
 		else:
+			print( "  Creating new existing override for input named %s" % [ input.name ])
 			var o := FlowGraphParamOverride.new()
 			o.param_id = input.name
 			o.value = input.getDefaultValue()
@@ -148,7 +160,7 @@ func _set(property: StringName, value: Variant) -> bool:
 			var graph_input = graph.findInParamByName( id )
 			if graph_input:
 				graph_input.notifyChanged()
-			regenerate()
+			#regenerate()
 				#graph._on_input_changed()
 			# Notify the graph the values are dirty
 			#graph_node_changed.emit( self, id )
@@ -160,7 +172,15 @@ func get_or_create_override( id : StringName ) -> FlowGraphParamOverride:
 	for o in overrides:
 		if o.param_id == id:
 			return o
-	return null
+	var o := FlowGraphParamOverride.new()
+	o.param_id = id
+	o.enabled = false
+	if _graph:
+		var input = _graph.findInParamByName(id)
+		if input:
+			o.value = input.getDefaultValue()
+	overrides.append(o)
+	return o
 
 func duplicateOverrides():
 	var new_overrides: Array[FlowGraphParamOverride] = []
@@ -182,7 +202,7 @@ func regenerate():
 	graph.compile()
 	for node in graph.input_nodes:
 		node.dirty = true
-	ctx.trace = true
+	#ctx.trace = false
 	ctx.computeDirtyNodesAndRun()
 	print( "regenerate.Ends %s" % graph )
 	
