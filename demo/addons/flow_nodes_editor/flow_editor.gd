@@ -261,11 +261,8 @@ func deleteNodes( nodes : Array[GraphNode] ):
 			remove_all_inputs_to_target_connection( node.name, n )
 		for n in range( node.getMeta().outs.size() ):
 			remove_all_inputs_to_source_connection( node.name, n )
-		current_resource.nodes_by_name.erase( node.name )
-		current_resource.all_nodes.erase( node )
-		current_resource.input_nodes.erase( node )
 		gedit.remove_child( node )
-		node.queue_free()
+		current_resource.delete_node( node )
 
 func deleteGraphElementsAndRefresh( nodes : Array[GraphNode], frames : Array[GraphFrame] ):
 	deleteFrames( frames )
@@ -874,3 +871,8 @@ func _on_tab_bar_tab_changed(tab_idx):
 		setResourceToEdit( dtab.resource, dtab.owner )
 	else:
 		setResourceToEdit( null, null )
+
+func _on_button_dump_pressed():
+	var res := current_resource
+	if res:
+		res.dump()

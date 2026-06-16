@@ -58,6 +58,10 @@ text = "Auto Regen"
 layout_mode = 2
 text = "Regenerate"
 
+[node name="ButtonDump" type="Button" parent="VBoxContainer/ScrollContainer/HBoxContainer" unique_id=1485960402]
+layout_mode = 2
+text = "Dump"
+
 [node name="LabelInfo" type="Label" parent="VBoxContainer/ScrollContainer/HBoxContainer" unique_id=136781516]
 unique_name_in_owner = true
 layout_mode = 2
@@ -89,6 +93,7 @@ show_grid_buttons = false
 [connection signal="pressed" from="VBoxContainer/ScrollContainer/HBoxContainer/ButtonSave" to="." method="_on_button_save_pressed"]
 [connection signal="toggled" from="VBoxContainer/ScrollContainer/HBoxContainer/AutoRegen" to="." method="_on_auto_regen_toggled"]
 [connection signal="pressed" from="VBoxContainer/ScrollContainer/HBoxContainer/ButtonRegenerate" to="." method="_on_button_regenerate_pressed"]
+[connection signal="pressed" from="VBoxContainer/ScrollContainer/HBoxContainer/ButtonDump" to="." method="_on_button_dump_pressed"]
 [connection signal="connection_from_empty" from="VBoxContainer/VSplitContainer/GraphEdit" to="." method="_on_graph_edit_connection_from_empty"]
 [connection signal="connection_request" from="VBoxContainer/VSplitContainer/GraphEdit" to="." method="_on_graph_edit_connection_request"]
 [connection signal="connection_to_empty" from="VBoxContainer/VSplitContainer/GraphEdit" to="." method="_on_graph_edit_connection_to_empty"]

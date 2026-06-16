@@ -48,7 +48,7 @@ func execute( _ctx : FlowData.EvaluationContext ):
 			sB = newFloatStream( in_dataA.size(), "Constant %s" % settings.in_nameB, v )
 		else:
 			if not is_single_arg:
-				setError( "Input B %s not found, and can't be interpreted as a constant number" % [settings.in_nameB])
+				setError( "Input B %s not found, and can't be interpreted as a constant number. #Inputs:%d" % [settings.in_nameB, inputs.size()])
 				return
 
 	# The number of elements should match, unless the B channel has just 1 element

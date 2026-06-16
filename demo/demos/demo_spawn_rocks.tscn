@@ -29,12 +29,36 @@ data = {
 "to_node": &"id_0044_spawn_meshes",
 "to_port": 0
 }],
-"min_pos": Vector2(-200, 120),
+"min_pos": Vector2(0, 0),
 "nodes": [{
 "args_port": {
-"y": {
+"origin": {
+"connected": false,
+"port": 4
+},
+"rotation": {
+"connected": false,
+"port": 5
+},
+"size": {
+"connected": false,
+"port": 6
+},
+"step": {
+"connected": false,
+"port": 3
+},
+"x": {
 "connected": true,
 "port": 0
+},
+"y": {
+"connected": false,
+"port": 1
+},
+"z": {
+"connected": false,
+"port": 2
 }
 },
 "name": &"id_0041_grid",
@@ -68,6 +92,38 @@ data = {
 "In": {
 "connected": true,
 "port": 0
+},
+"color_attribute": {
+"connected": false,
+"port": 6
+},
+"mesh_attribute": {
+"connected": false,
+"port": 1
+},
+"mesh_selector_attribute": {
+"connected": false,
+"port": 4
+},
+"mesh_variant_weights": {
+"connected": false,
+"port": 3
+},
+"mesh_variants": {
+"connected": false,
+"port": 2
+},
+"randomize_mesh_variants": {
+"connected": false,
+"port": 5
+},
+"spawn_parent_path": {
+"connected": false,
+"port": 8
+},
+"use_vertex_colors": {
+"connected": false,
+"port": 7
 }
 },
 "name": &"id_0044_spawn_meshes",
@@ -123,7 +179,8 @@ data = {
 "type": "flow_graph_nodes",
 "version": 1
 }
-view_offset = Vector2(-196, 0)
+view_zoom = 1.1
+view_offset = Vector2(182.3, -80.399994)
 in_params = Array[ExtResource("2_y5sxr")]([SubResource("Resource_q2g6x")])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 
@@ -132,24 +189,26 @@ resource_local_to_scene = true
 script = ExtResource("4_y5sxr")
 param_id = &"Grid - Y"
 enabled = true
+value = 2
 
 [sub_resource type="MultiMesh" id="MultiMesh_q2g6x"]
 transform_format = 1
-instance_count = 36
+instance_count = 6
 mesh = ExtResource("2_q2g6x")
-buffer = PackedFloat32Array(0.74, 0, 0, 0, 0, 0.74, 0, 0, 0, 0, 0.74, 0, 0.74, 0, 0, 1, 0, 0.74, 0, 0, 0, 0, 0.74, 0, 0.74, 0, 0, 2, 0, 0.74, 0, 0, 0, 0, 0.74, 0, 0.74, 0, 0, 3, 0, 0.74, 0, 0, 0, 0, 0.74, 0, 0.74, 0, 0, 4, 0, 0.74, 0, 0, 0, 0, 0.74, 0, 0.74, 0, 0, 5, 0, 0.74, 0, 0, 0, 0, 0.74, 0, 0.74, 0, 0, 0, 0, 0.74, 0, 1, 0, 0, 0.74, 0, 0.74, 0, 0, 1, 0, 0.74, 0, 1, 0, 0, 0.74, 0, 0.74, 0, 0, 2, 0, 0.74, 0, 1, 0, 0, 0.74, 0, 0.74, 0, 0, 3, 0, 0.74, 0, 1, 0, 0, 0.74, 0, 0.74, 0, 0, 4, 0, 0.74, 0, 1, 0, 0, 0.74, 0, 0.74, 0, 0, 5, 0, 0.74, 0, 1, 0, 0, 0.74, 0, 0.74, 0, 0, 0, 0, 0.74, 0, 0, 0, 0, 0.74, 1, 0.74, 0, 0, 1, 0, 0.74, 0, 0, 0, 0, 0.74, 1, 0.74, 0, 0, 2, 0, 0.74, 0, 0, 0, 0, 0.74, 1, 0.74, 0, 0, 3, 0, 0.74, 0, 0, 0, 0, 0.74, 1, 0.74, 0, 0, 4, 0, 0.74, 0, 0, 0, 0, 0.74, 1, 0.74, 0, 0, 5, 0, 0.74, 0, 0, 0, 0, 0.74, 1, 0.74, 0, 0, 0, 0, 0.74, 0, 1, 0, 0, 0.74, 1, 0.74, 0, 0, 1, 0, 0.74, 0, 1, 0, 0, 0.74, 1, 0.74, 0, 0, 2, 0, 0.74, 0, 1, 0, 0, 0.74, 1, 0.74, 0, 0, 3, 0, 0.74, 0, 1, 0, 0, 0.74, 1, 0.74, 0, 0, 4, 0, 0.74, 0, 1, 0, 0, 0.74, 1, 0.74, 0, 0, 5, 0, 0.74, 0, 1, 0, 0, 0.74, 1, 0.74, 0, 0, 0, 0, 0.74, 0, 0, 0, 0, 0.74, 2, 0.74, 0, 0, 1, 0, 0.74, 0, 0, 0, 0, 0.74, 2, 0.74, 0, 0, 2, 0, 0.74, 0, 0, 0, 0, 0.74, 2, 0.74, 0, 0, 3, 0, 0.74, 0, 0, 0, 0, 0.74, 2, 0.74, 0, 0, 4, 0, 0.74, 0, 0, 0, 0, 0.74, 2, 0.74, 0, 0, 5, 0, 0.74, 0, 0, 0, 0, 0.74, 2, 0.74, 0, 0, 0, 0, 0.74, 0, 1, 0, 0, 0.74, 2, 0.74, 0, 0, 1, 0, 0.74, 0, 1, 0, 0, 0.74, 2, 0.74, 0, 0, 2, 0, 0.74, 0, 1, 0, 0, 0.74, 2, 0.74, 0, 0, 3, 0, 0.74, 0, 1, 0, 0, 0.74, 2, 0.74, 0, 0, 4, 0, 0.74, 0, 1, 0, 0, 0.74, 2, 0.74, 0, 0, 5, 0, 0.74, 0, 1, 0, 0, 0.74, 2)
+buffer = PackedFloat32Array(0.74, 0, 0, 0, 0, 0.74, 0, 0, 0, 0, 0.74, 0, 0.74, 0, 0, 1, 0, 0.74, 0, 0, 0, 0, 0.74, 0, 0.74, 0, 0, 0, 0, 0.74, 0, 0, 0, 0, 0.74, 1, 0.74, 0, 0, 1, 0, 0.74, 0, 0, 0, 0, 0.74, 1, 0.74, 0, 0, 0, 0, 0.74, 0, 0, 0, 0, 0.74, 2, 0.74, 0, 0, 1, 0, 0.74, 0, 0, 0, 0, 0.74, 2)
 
-[sub_resource type="Resource" id="Resource_wc44r"]
+[sub_resource type="Resource" id="Resource_lceee"]
 resource_local_to_scene = true
 script = ExtResource("4_y5sxr")
 param_id = &"Grid - Y"
 enabled = true
+value = 3
 
 [sub_resource type="MultiMesh" id="MultiMesh_3h15l"]
 transform_format = 1
-instance_count = 54
+instance_count = 9
 mesh = ExtResource("2_q2g6x")
-buffer = PackedFloat32Array(0.74, 0, 0, 0, 0, 0.74, 0, 0, 0, 0, 0.74, 0, 0.74, 0, 0, 1, 0, 0.74, 0, 0, 0, 0, 0.74, 0, 0.74, 0, 0, 2, 0, 0.74, 0, 0, 0, 0, 0.74, 0, 0.74, 0, 0, 3, 0, 0.74, 0, 0, 0, 0, 0.74, 0, 0.74, 0, 0, 4, 0, 0.74, 0, 0, 0, 0, 0.74, 0, 0.74, 0, 0, 5, 0, 0.74, 0, 0, 0, 0, 0.74, 0, 0.74, 0, 0, 0, 0, 0.74, 0, 1, 0, 0, 0.74, 0, 0.74, 0, 0, 1, 0, 0.74, 0, 1, 0, 0, 0.74, 0, 0.74, 0, 0, 2, 0, 0.74, 0, 1, 0, 0, 0.74, 0, 0.74, 0, 0, 3, 0, 0.74, 0, 1, 0, 0, 0.74, 0, 0.74, 0, 0, 4, 0, 0.74, 0, 1, 0, 0, 0.74, 0, 0.74, 0, 0, 5, 0, 0.74, 0, 1, 0, 0, 0.74, 0, 0.74, 0, 0, 0, 0, 0.74, 0, 2, 0, 0, 0.74, 0, 0.74, 0, 0, 1, 0, 0.74, 0, 2, 0, 0, 0.74, 0, 0.74, 0, 0, 2, 0, 0.74, 0, 2, 0, 0, 0.74, 0, 0.74, 0, 0, 3, 0, 0.74, 0, 2, 0, 0, 0.74, 0, 0.74, 0, 0, 4, 0, 0.74, 0, 2, 0, 0, 0.74, 0, 0.74, 0, 0, 5, 0, 0.74, 0, 2, 0, 0, 0.74, 0, 0.74, 0, 0, 0, 0, 0.74, 0, 0, 0, 0, 0.74, 1, 0.74, 0, 0, 1, 0, 0.74, 0, 0, 0, 0, 0.74, 1, 0.74, 0, 0, 2, 0, 0.74, 0, 0, 0, 0, 0.74, 1, 0.74, 0, 0, 3, 0, 0.74, 0, 0, 0, 0, 0.74, 1, 0.74, 0, 0, 4, 0, 0.74, 0, 0, 0, 0, 0.74, 1, 0.74, 0, 0, 5, 0, 0.74, 0, 0, 0, 0, 0.74, 1, 0.74, 0, 0, 0, 0, 0.74, 0, 1, 0, 0, 0.74, 1, 0.74, 0, 0, 1, 0, 0.74, 0, 1, 0, 0, 0.74, 1, 0.74, 0, 0, 2, 0, 0.74, 0, 1, 0, 0, 0.74, 1, 0.74, 0, 0, 3, 0, 0.74, 0, 1, 0, 0, 0.74, 1, 0.74, 0, 0, 4, 0, 0.74, 0, 1, 0, 0, 0.74, 1, 0.74, 0, 0, 5, 0, 0.74, 0, 1, 0, 0, 0.74, 1, 0.74, 0, 0, 0, 0, 0.74, 0, 2, 0, 0, 0.74, 1, 0.74, 0, 0, 1, 0, 0.74, 0, 2, 0, 0, 0.74, 1, 0.74, 0, 0, 2, 0, 0.74, 0, 2, 0, 0, 0.74, 1, 0.74, 0, 0, 3, 0, 0.74, 0, 2, 0, 0, 0.74, 1, 0.74, 0, 0, 4, 0, 0.74, 0, 2, 0, 0, 0.74, 1, 0.74, 0, 0, 5, 0, 0.74, 0, 2, 0, 0, 0.74, 1, 0.74, 0, 0, 0, 0, 0.74, 0, 0, 0, 0, 0.74, 2, 0.74, 0, 0, 1, 0, 0.74, 0, 0, 0, 0, 0.74, 2, 0.74, 0, 0, 2, 0, 0.74, 0, 0, 0, 0, 0.74, 2, 0.74, 0, 0, 3, 0, 0.74, 0, 0, 0, 0, 0.74, 2, 0.74, 0, 0, 4, 0, 0.74, 0, 0, 0, 0, 0.74, 2, 0.74, 0, 0, 5, 0, 0.74, 0, 0, 0, 0, 0.74, 2, 0.74, 0, 0, 0, 0, 0.74, 0, 1, 0, 0, 0.74, 2, 0.74, 0, 0, 1, 0, 0.74, 0, 1, 0, 0, 0.74, 2, 0.74, 0, 0, 2, 0, 0.74, 0, 1, 0, 0, 0.74, 2, 0.74, 0, 0, 3, 0, 0.74, 0, 1, 0, 0, 0.74, 2, 0.74, 0, 0, 4, 0, 0.74, 0, 1, 0, 0, 0.74, 2, 0.74, 0, 0, 5, 0, 0.74, 0, 1, 0, 0, 0.74, 2, 0.74, 0, 0, 0, 0, 0.74, 0, 2, 0, 0, 0.74, 2, 0.74, 0, 0, 1, 0, 0.74, 0, 2, 0, 0, 0.74, 2, 0.74, 0, 0, 2, 0, 0.74, 0, 2, 0, 0, 0.74, 2, 0.74, 0, 0, 3, 0, 0.74, 0, 2, 0, 0, 0.74, 2, 0.74, 0, 0, 4, 0, 0.74, 0, 2, 0, 0, 0.74, 2, 0.74, 0, 0, 5, 0, 0.74, 0, 2, 0, 0, 0.74, 2)
+buffer = PackedFloat32Array(0.74, 0, 0, 0, 0, 0.74, 0, 0, 0, 0, 0.74, 0, 0.74, 0, 0, 1, 0, 0.74, 0, 0, 0, 0, 0.74, 0, 0.74, 0, 0, 2, 0, 0.74, 0, 0, 0, 0, 0.74, 0, 0.74, 0, 0, 0, 0, 0.74, 0, 0, 0, 0, 0.74, 1, 0.74, 0, 0, 1, 0, 0.74, 0, 0, 0, 0, 0.74, 1, 0.74, 0, 0, 2, 0, 0.74, 0, 0, 0, 0, 0.74, 1, 0.74, 0, 0, 0, 0, 0.74, 0, 0, 0, 0, 0.74, 2, 0.74, 0, 0, 1, 0, 0.74, 0, 0, 0, 0, 0.74, 2, 0.74, 0, 0, 2, 0, 0.74, 0, 0, 0, 0, 0.74, 2)
 
 [node name="DemoSpawnRocks" type="Node3D" unique_id=1575867418]
 
@@ -163,7 +222,7 @@ clearInstances = Callable()
 "flow_override/Grid - Y/value" = 2
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
 
-[node name="Spawn Meshes_0000" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=195062609]
+[node name="Spawn Meshes_0000" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=772979402]
 multimesh = SubResource("MultiMesh_q2g6x")
 metadata/flow_owner = &"id_0044_spawn_meshes"
 
@@ -171,13 +230,13 @@ metadata/flow_owner = &"id_0044_spawn_meshes"
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3.8386216)
 script = ExtResource("1_p5fc5")
 graph = SubResource("Resource_p5fc5")
-overrides = Array[ExtResource("4_y5sxr")]([SubResource("Resource_wc44r")])
+overrides = Array[ExtResource("4_y5sxr")]([SubResource("Resource_lceee")])
 regenerate = Callable()
 clearInstances = Callable()
 "flow_override/Grid - Y/enabled" = true
 "flow_override/Grid - Y/value" = 3
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
 
-[node name="Spawn Meshes_0000" type="MultiMeshInstance3D" parent="FlowGraphNode3D2" unique_id=334807539]
+[node name="Spawn Meshes_0000" type="MultiMeshInstance3D" parent="FlowGraphNode3D2" unique_id=707672806]
 multimesh = SubResource("MultiMesh_3h15l")
 metadata/flow_owner = &"id_0044_spawn_meshes"

@@ -83,7 +83,7 @@ class EvaluationContext:
 			for conn in node.deps:
 				var dep_node = graph.nodes_by_name.get( conn.from_node, null )
 				if not dep_node:
-					push_error( "dep_node %s NOT FOUND in the nodes_by_name %d" %[ conn.from_node, graph.nodes_by_name.size() ])
+					push_error( "%s dep %s NOT FOUND in the nodes_by_name %d" %[ node, conn.from_node, graph.nodes_by_name.size() ])
 					for n in graph.nodes_by_name:
 						print( "  %s" % n )
 					continue
@@ -105,6 +105,8 @@ class EvaluationContext:
 		# D -> C -> A -> B
 		var all_deps : Array[ FlowNodeBase ]
 		for node in finals:
+			if trace:
+				print( "finals.dep %s:" % node.name)
 			var node_deps = getDeps( node )
 			if trace:
 				print( "Deps of %s:" % node.name)
@@ -118,7 +120,7 @@ class EvaluationContext:
 		
 		if trace:
 			print( "%s Nodes to eval in order:" % name)
-			for node in all_nodes:
+			for node in all_deps:
 				print( "  -> %s" % node.name if node else "<null>" )
 		
 		return all_deps

@@ -22,19 +22,20 @@ class_name FlowGraphNode3D
 		
 var _graph : FlowGraphResource = FlowGraphResource.new()
 signal graph_node_changed( graph_node : FlowGraphNode3D, prop_name : String )
-var ctx = FlowData.EvaluationContext.new()
+var ctx := FlowData.EvaluationContext.new()
 var _initialized := false
 
 @export var overrides: Array[FlowGraphParamOverride] = []
 	
 func _ready():
 	ctx.owner = self
+	# To ensure the overrides are unique to each instance
 	if Engine.is_editor_hint() and not _initialized:
 		_initialized = true
 		duplicateOverrides()
 
 func _on_graph_inputs_change():
-	print( "_on_graph_inputs_change. Checking if new param overrides are required" )
+	print( "_on_graph_inputs_change. Checking existing %d overrides. The graph has %d inputs" % [overrides.size(), graph.in_params.size()] )
 	var existing := {}
 	for o in overrides:
 		existing[o.param_id] = o

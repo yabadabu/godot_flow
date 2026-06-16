@@ -15,6 +15,9 @@ func _init():
 		"tooltip" : "Evaluates a nested graph inside this node",
 	}
 
+func _ready():
+	subctx.name = name + "_ctx"
+
 func getTitle() -> String:
 	if settings and settings.graph:
 		var path = settings.graph.resource_path
@@ -60,16 +63,27 @@ func _gui_input(event: InputEvent):
 	if event is InputEventMouseButton and event.double_click and event.button_index == MOUSE_BUTTON_LEFT:
 		var editor = getEditor()
 		if editor and settings and settings.graph:
+			var graph : FlowGraphResource = settings.graph
 			var owner = editor.resource_owner
+			print( "settings.graph.data", graph.data)
+			print( "settings.graph.resource_name", graph.resource_name )
+			print( "settings.graph.resource_path", graph.resource_path )
+			
+			if settings.graph and settings.graph.data.size() == 0:
+				print( "The graph is new!")
+				
+			
 			editor.setResourceToEdit(settings.graph, owner)
+			
 			accept_event()	
 	
 # This ctx is the context evaluating the subgraph node, not the subgraph itself
 func preExecute( ctx : FlowData.EvaluationContext ):
 	super.preExecute( ctx )
 	if settings.graph:
+		print( "Subgraph.Ensuring graph is compiled" )
 		var time_node_start := Time.get_ticks_usec()
-		FlowNodeIO.create_nodes_from_dict( settings.graph.data, settings.graph, Vector2(0,0) )
+		settings.graph.compile()
 		var time_node_end := Time.get_ticks_usec()
 		print( "Subgraph.Readed resource in %s (%s)" % [ time_node_end - time_node_start, settings.graph.resource_path ])
 				
@@ -79,7 +93,9 @@ func preExecute( ctx : FlowData.EvaluationContext ):
 		subctx.parent_ctx = ctx
 		subctx.name = "exec_%s" % name
 		subctx.nodes_to_eval = subctx.getEvalOrder( subctx.graph.all_nodes )
-
+	else:
+		print( "subgraph has no active graph" )
+		
 func execute( ctx : FlowData.EvaluationContext ):
 	if not settings.graph:
 		setError("No graph assigned to Subgraph node '%s'" % getTitle())
@@ -124,7 +140,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 	for node in settings.graph.all_nodes:
 		node.dirty = true
 		
-	subctx.run()
+	subctx.computeDirtyNodesAndRun()
 	
 	var output_idx : int = 0
 	for output in outs:

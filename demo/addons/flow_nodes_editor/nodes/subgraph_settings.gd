@@ -16,8 +16,3 @@ var _graph : FlowGraphResource = FlowGraphResource.new()
 func _init():
 	super._init()
 	resource_name = "Subgraph"
-
-func exposeParam(name : String) -> bool:
-	if name == "graph":
-		return false
-	return true

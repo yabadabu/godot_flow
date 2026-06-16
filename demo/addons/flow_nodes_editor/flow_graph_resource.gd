@@ -79,6 +79,7 @@ func addNodeFromTemplate( node_template, node_name : String, node_settings = nul
 		all_nodes.append( node )
 		node.dirty = true
 		node.runtime_only = editor == null
+		node.flow_graph = self
 		
 		if node and node.settings and node.settings is InputNodeSettings:
 			input_nodes.append( node )
@@ -93,15 +94,23 @@ func disconnect_nodes( from_node: StringName, from_port: int, to_node: StringNam
 		return c.from_node == from_node and c.from_port == from_port and c.to_node == to_node and c.to_port == to_port
 	)
 	if idx >= 0:
+		
+		# Remove the cached connections
+		var from_node_ptr = nodes_by_name.get( from_node )
+		if from_node_ptr:
+			_delete_connections_involving_node( from_node_ptr.dependants, to_node )
+		var to_node_ptr = nodes_by_name.get( to_node )
+		if to_node_ptr:
+			_delete_connections_involving_node( to_node_ptr.deps, from_node )
+			
 		all_connections.remove_at( idx )
 	
 func connect_nodes( from_node: StringName, from_port: int, to_node: StringName, to_port: int) -> void:
-	var c = { "from_node": from_node, "from_port" : from_port, "to_node" : to_node, "to_port" : to_port }
-	all_connections.append( c )
+	var conn = { "from_node": from_node, "from_port" : from_port, "to_node" : to_node, "to_port" : to_port }
+	all_connections.append( conn )
 	var src_node : FlowNodeBase = nodes_by_name.get(from_node)
 	var dst_node : FlowNodeBase = nodes_by_name.get(to_node)
 	if src_node and dst_node:
-		var conn = { "from_node" : src_node.name, "from_port" : from_port, "to_node" : dst_node.name, "to_port" : to_port }
 		src_node.dependants.append(conn)
 		dst_node.deps.append(conn)
 	else:
@@ -113,8 +122,34 @@ func connect_nodes( from_node: StringName, from_port: int, to_node: StringName, 
 			print( "  to_node is %s" % [ to_node ])
 			
 	if editor:
-		editor.onConnCreated( c )
+		editor.onConnCreated( conn )
 		
+func _delete_connections_involving_node( conns : Array[ Dictionary ], node_name : StringName ):
+	for i in range(conns.size() - 1, -1, -1):
+		var conn := conns[i]
+		if conn.from_node == node_name or conn.to_node == node_name:
+			conns.remove_at(i)
+		
+func delete_node( node : FlowNodeBase ):
+	var node_name : StringName = node.name
+	# remove connections to that node
+	_delete_connections_involving_node( all_connections, node_name )
+	
+	for conn_dep in node.deps:
+		var other_node = nodes_by_name.get( conn_dep.from_node )
+		if other_node:
+			_delete_connections_involving_node( other_node.dependants, node_name )
+			
+	for conn_dependant in node.dependants:
+		var other_node = nodes_by_name.get( conn_dependant.to_node )
+		if other_node:
+			_delete_connections_involving_node( other_node.deps, node_name )
+			
+	nodes_by_name.erase( node_name )
+	all_nodes.erase( node )
+	input_nodes.erase( node )
+	node.queue_free()
+
 func addFrame( frame_data : Dictionary, old_to_new_names : Dictionary, paste_offset  ):
 	if editor:
 		editor.addFrame( frame_data, old_to_new_names, paste_offset)
@@ -124,10 +159,16 @@ func dump():
 	print( "  %d Nodes" % all_nodes.size() )
 	for node in all_nodes:
 		print( "    %s" % node.name )
+		for dep in node.deps:
+			print( "      Dep %s" % dep)
+		for dependant in node.dependants:
+			print( "      Dependant %s" % dependant)
 	print( "  %d Input Nodes" % input_nodes.size() )
 	for node in input_nodes:
 		print( "    %s %s" % [ node.name, node.settings.name ])
 	print( "  %d Connections" % all_connections.size() )
+	for conn in all_connections:
+		print( "    %s:%d <-> %s:%d" % [ conn.from_node, conn.from_port, conn.to_node, conn.to_port ])
 	
 func compile():
 	if compiled:
