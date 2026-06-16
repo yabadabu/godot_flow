@@ -80,7 +80,7 @@ func getDefaultValue():
 func getAsFlowData() -> FlowData.Data:
 	var data = FlowData.Data.new()
 	var container = data.addStream( name, getDataType() )
-	if container:
+	if container != null:
 		container.resize( 1 )
 		container[0] = getDefaultValue()
 	return data
