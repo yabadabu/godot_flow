@@ -1,7 +1,6 @@
 @tool
 extends FlowNodeBase
 
-#var _connected_graph: FlowGraphResource = null
 var subctx := FlowData.EvaluationContext.new()
 
 func _init():
@@ -12,18 +11,16 @@ func _init():
 		"ins" : [],
 		"outs" : [],
 		"is_final" : true,
-		"tooltip" : "Evaluates a nested graph inside this node",
+		"tooltip" : "Evaluates a nested graph inside this node"
 	}
 
 func _ready():
+	super._ready()
 	subctx.name = name + "_ctx"
 
 func getTitle() -> String:
 	if settings and settings.graph:
-		var path = settings.graph.resource_path
-		if path != "":
-			return "Subgraph: %s" % path.get_file().get_basename()
-		return "Subgraph (New Graph)"
+		return settings.graph.graph_name
 	return "Subgraph"
 
 func getMeta() -> Dictionary:
@@ -36,13 +33,6 @@ func getMeta() -> Dictionary:
 					"label": param.name,
 					"data_type": param.getDataType()
 				})
-		#if "out_params" in settings.graph and settings.graph.out_params.size() > 0:
-			#for param in settings.graph.out_params:
-				#if param:
-					#outs.append({
-						#"label": param.name,
-						#"data_type": param.data_type
-					#})
 		if settings.graph.data and settings.graph.data.has("nodes"):
 			for n_data in settings.graph.data["nodes"]:
 				if n_data.get("template") == "output":
@@ -69,10 +59,10 @@ func _gui_input(event: InputEvent):
 			print( "settings.graph.resource_name", graph.resource_name )
 			print( "settings.graph.resource_path", graph.resource_path )
 			
-			if settings.graph and settings.graph.data.size() == 0:
+			if graph.data.size() == 0:
 				print( "The graph is new!")
+				#FlowNodeIO.create_nodes_from_dict( graph.data, editor, Vector2(0,0))
 				
-			
 			editor.setResourceToEdit(settings.graph, owner)
 			
 			accept_event()	

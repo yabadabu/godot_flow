@@ -45,7 +45,7 @@ data = {
 "to_node": &"id_0010_make_vector",
 "to_port": 0
 }],
-"min_pos": Vector2(100, 100),
+"min_pos": Vector2(0, 0),
 "nodes": [{
 "args_port": {},
 "name": &"id_0008_input_Ins",
@@ -110,7 +110,7 @@ data = {
 }
 },
 "name": &"id_0010_make_vector",
-"position": Vector2(160, 100),
+"position": Vector2(200, 100),
 "settings": {
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
@@ -186,8 +186,14 @@ data = {
 "type": "flow_graph_nodes",
 "version": 1
 }
-view_offset = Vector2(0, -123)
+graph_name = "Elevated"
+view_zoom = 1.1
+view_offset = Vector2(-178, -178.68701)
 in_params = Array[ExtResource("2_mmqr1")]([SubResource("Resource_mmqr1"), SubResource("Resource_5ifn7")])
+
+[sub_resource type="Resource" id="Resource_c03w7"]
+script = ExtResource("3_5ifn7")
+graph_name = "Vamos"
 
 [sub_resource type="Resource" id="Resource_x3i3k"]
 script = ExtResource("2_mmqr1")
@@ -199,6 +205,12 @@ script = ExtResource("3_5ifn7")
 data = {
 "frames": [],
 "links": [{
+"from_node": &"id_0007_subgraph",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0014_spawn_meshes",
+"to_port": 0
+}, {
 "from_node": &"id_0006_grid",
 "from_port": 0,
 "keep_alive": false,
@@ -210,96 +222,9 @@ data = {
 "keep_alive": false,
 "to_node": &"id_0007_subgraph",
 "to_port": 1
-}, {
-"from_node": &"id_0007_subgraph",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0014_spawn_meshes",
-"to_port": 0
 }],
-"min_pos": Vector2(-380, -120),
+"min_pos": Vector2(0, 0),
 "nodes": [{
-"args_port": {},
-"name": &"id_0006_grid",
-"position": Vector2(0, 0),
-"settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"origin": Vector3(0, 0, 0),
-"random_seed": 1565012789,
-"rotation": Vector3(0, 0, 0),
-"size": 0.87,
-"step": Vector3(1, 1, 1),
-"title": "Grid",
-"trace": false,
-"x": 3,
-"y": 1,
-"z": 3
-},
-"show_disconnected_inputs": false,
-"template": "grid"
-}, {
-"args_port": {},
-"name": &"id_0004_input_Height",
-"position": Vector2(0, 120),
-"settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"name": "Height",
-"random_seed": 939309640,
-"title": "Input",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "input_Height"
-}, {
-"args_port": {
-"Ins": {
-"connected": true,
-"port": 0
-},
-"Make Vector - Y": {
-"connected": true,
-"port": 1
-}
-},
-"name": &"id_0007_subgraph",
-"position": Vector2(180, 0),
-"settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 1,
-"debug_scale": 1.0,
-"disabled": false,
-"graph": SubResource("Resource_se51d"),
-"inspect_enabled": false,
-"random_seed": 890886526,
-"title": "Subgraph",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "subgraph"
-}, {
 "args_port": {
 "In": {
 "connected": true,
@@ -333,30 +258,129 @@ data = {
 },
 "show_disconnected_inputs": false,
 "template": "spawn_meshes"
+}, {
+"args_port": {},
+"name": &"id_0004_input_Height",
+"position": Vector2(0, 100),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"name": "Height",
+"random_seed": 939309640,
+"title": "Input",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "input_Height"
+}, {
+"args_port": {},
+"name": &"id_0006_grid",
+"position": Vector2(0, 0),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"origin": Vector3(0, 0, 0),
+"random_seed": 1565012789,
+"rotation": Vector3(0, 0, 0),
+"size": 0.87,
+"step": Vector3(1, 1, 1),
+"title": "Grid",
+"trace": false,
+"x": 3,
+"y": 1,
+"z": 3
+},
+"show_disconnected_inputs": false,
+"template": "grid"
+}, {
+"args_port": {
+"Ins": {
+"connected": true,
+"port": 0
+},
+"Make Vector - Y": {
+"connected": true,
+"port": 1
+}
+},
+"name": &"id_0007_subgraph",
+"position": Vector2(180, 0),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 1,
+"debug_scale": 1.0,
+"disabled": false,
+"graph": SubResource("Resource_se51d"),
+"inspect_enabled": false,
+"random_seed": 890886526,
+"title": "Subgraph",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "subgraph"
+}, {
+"args_port": {
+"graph": {
+"connected": false,
+"port": 0
+}
+},
+"name": &"id_0003_subgraph",
+"position": Vector2(180, 140),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"graph": SubResource("Resource_c03w7"),
+"inspect_enabled": false,
+"random_seed": 2852835942,
+"title": "Subgraph",
+"trace": false
+},
+"show_disconnected_inputs": true,
+"template": "subgraph"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
-view_zoom = 0.87940866
-view_offset = Vector2(-366.48224, -313.45496)
+graph_name = "demo subgraph"
+view_zoom = 1.4162962
+view_offset = Vector2(-63.909103, -155.72728)
 new_name_counter = 1
 in_params = Array[ExtResource("2_mmqr1")]([SubResource("Resource_x3i3k")])
 
 [sub_resource type="Resource" id="Resource_kxdvx"]
 script = ExtResource("4_mmqr1")
-param_id = &"Ins"
-value = null
-
-[sub_resource type="Resource" id="Resource_c03w7"]
-script = ExtResource("4_mmqr1")
 param_id = &"Height"
 enabled = true
 value = 2.66
-
-[sub_resource type="Resource" id="Resource_s1eqc"]
-script = ExtResource("4_mmqr1")
-param_id = &"Make Vector - Y"
-value = null
 
 [sub_resource type="MultiMesh" id="MultiMesh_5ifn7"]
 transform_format = 1
@@ -369,13 +393,13 @@ buffer = PackedFloat32Array(0.87, 0, 0, 0, 0, 0.87, 0, 2.66, 0, 0, 0.87, 0, 0.87
 [node name="FlowGraphNode3D" type="Node3D" parent="." unique_id=85644735]
 script = ExtResource("1_dx0d7")
 graph = SubResource("Resource_nyqj1")
-overrides = Array[ExtResource("4_mmqr1")]([SubResource("Resource_kxdvx"), SubResource("Resource_c03w7"), SubResource("Resource_s1eqc")])
+overrides = Array[ExtResource("4_mmqr1")]([SubResource("Resource_kxdvx")])
 regenerate = Callable()
 clearInstances = Callable()
 flow_override/Height/enabled = true
 flow_override/Height/value = 2.66
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
 
-[node name="Spawn Meshes_0000" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=1346482802]
+[node name="Spawn Meshes_0000" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=1370102459]
 multimesh = SubResource("MultiMesh_5ifn7")
 metadata/flow_owner = &"id_0014_spawn_meshes"

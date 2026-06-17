@@ -8,6 +8,18 @@ class_name FlowGraphResource
 
 # Where we store the graph_nodes + custom settings as a dict
 @export var data: Dictionary = {}
+@export var graph_name : String:
+	set(value):
+		graph_name = value
+		emit_changed()
+	get:
+		if graph_name:
+			return graph_name
+		if resource_name != "":
+			return resource_name
+		if resource_path != "":
+			return resource_path.get_file().get_basename()
+		return "Flow Graph"
 
 # Visualization params
 @export var view_zoom : float = 1.0
@@ -23,7 +35,7 @@ class_name FlowGraphResource
 	get:
 		return in_params
 
-# The compilation version of the resource, which is shared between all the instances using this resource
+# The compilated version of the resource, which is shared between all the instances using this resource
 var compiled : bool = false
 var nodes_by_name : Dictionary
 var all_connections : Array[ Dictionary ]
@@ -155,7 +167,7 @@ func addFrame( frame_data : Dictionary, old_to_new_names : Dictionary, paste_off
 		editor.addFrame( frame_data, old_to_new_names, paste_offset)
 	
 func dump():
-	print( ">>>> FlowGraph %s.. Compiled:%s" % [resource_name, compiled] )
+	print( ">>>> FlowGraph %s.. %s Compiled:%s" % [resource_name, graph_name, compiled] )
 	print( "  %d Nodes" % all_nodes.size() )
 	for node in all_nodes:
 		print( "    %s" % node.name )

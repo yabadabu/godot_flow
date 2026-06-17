@@ -63,7 +63,7 @@ func unbindResourceFromEditor(res : FlowGraphResource):
 	res.editor = null
 	res.in_params_changed.disconnect(_on_inputs_changed)
 	for node in getAllNodes():
-		print( "unbindResourceFromEditor. kicking out %s" % node.name)
+		#print( "unbindResourceFromEditor. kicking out %s" % node.name)
 		node.runtime_only = true
 		node.draw.disconnect( node._on_draw )
 		gedit.remove_child( node )
@@ -98,8 +98,6 @@ func bindResourceToEditor(res : FlowGraphResource):
 			node.nodeOptionsChanged( false )
 	
 func setResourceToEdit( new_resource : FlowGraphResource, new_resource_owner : FlowGraphNode3D ):
-	#if new_resource == current_resource && ( new_resource_owner == null or new_resource_owner == resource_owner ):
-		#return
 	print( "setResourceToEdit:%s Owner:%s" % [ new_resource, new_resource_owner ] )
 	
 	# Ensure we have a tab for this resource
@@ -845,11 +843,10 @@ func onEditorSceneChanged():
 # title = graph02_curves
 func addToTabs(  new_resource : FlowGraphResource, new_resource_owner : FlowGraphNode3D ):
 	if not new_resource: return -1
-	var title = new_resource.resource_path.get_file().get_basename()
+	var title = new_resource.graph_name
 	var dtab : Dictionary = {
 		resource = new_resource,
 		owner = new_resource_owner,
-		title = title
 	}
 	open_tabs.append( dtab )
 	tab_bar.add_tab( title )

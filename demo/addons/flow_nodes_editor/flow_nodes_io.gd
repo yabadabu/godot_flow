@@ -181,7 +181,7 @@ static func _paste_nodes_from_dict( dict, editor : FlowGraphEditor, at_graph_coo
 #   addNodeFromTemplate
 #   connect_nodes
 #   addFrame
-static func create_nodes_from_dict( dict, container, paste_offset = null):		
+static func create_nodes_from_dict( dict, graph : FlowGraphResource, paste_offset = null):		
 	if dict.get( "type", null) != "flow_graph_nodes":
 		push_error( "Invalid dict to paste nodes from" )
 		return []
@@ -196,7 +196,7 @@ static func create_nodes_from_dict( dict, container, paste_offset = null):
 		var in_name = in_node.name
 		print( "Parsing node %s" % in_name )
 		
-		var node = container.addNodeFromTemplate( in_node.template, in_name )
+		var node = graph.addNodeFromTemplate( in_node.template, in_name )
 		if not node:
 			return null
 		var in_pos = _parse_vector2( in_node.position )
@@ -226,10 +226,10 @@ static func create_nodes_from_dict( dict, container, paste_offset = null):
 		if new_from == null or new_to == null:
 			push_error( "Failed to identify params links", link)
 			continue
-		container.connect_nodes(new_from, link.from_port, new_to, link.to_port )
+		graph.connect_nodes(new_from, link.from_port, new_to, link.to_port )
 
 	for frame_data in dict.get( "frames", [] ):
-		container.addFrame(frame_data, old_to_new_names, paste_offset)
+		graph.addFrame(frame_data, old_to_new_names, paste_offset)
 
 	return new_nodes
 
@@ -251,13 +251,15 @@ static func duplicateSelecteddNodes( editor : FlowGraphEditor ):
 	_paste_nodes_from_dict( dict, editor )
 
 static func saveEditorStateToResource( editor : FlowGraphEditor ):
+	var res = editor.current_resource
+	if res:
+		return
 	var all_nodes := editor.getAllNodes()
-	for node in all_nodes:
-		print( "Node %s is at %s" % [ node.name, node.position_offset ])
+	#for node in all_nodes:
+		#print( "Node %s is at %s" % [ node.name, node.position_offset ])
 	var all_frames = editor.gedit.get_children().filter( func( n ):
 		return n is GraphFrame
 	)
-	var res = editor.current_resource
 	print( "unbindResourceFromEditor %d nodes, %d conns and %d frames (%s) (%d:%d)" % [ all_nodes.size(), editor.gedit.connections.size(), all_frames.size(), res.resource_path, res.all_nodes.size(), res.all_connections.size() ] )
 	res.data = FlowNodeIO.nodes_as_dict( all_nodes, all_frames, editor )
 	res.view_zoom = editor.gedit.zoom
