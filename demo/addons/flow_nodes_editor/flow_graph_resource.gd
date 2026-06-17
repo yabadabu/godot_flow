@@ -166,6 +166,10 @@ func addFrame( frame_data : Dictionary, old_to_new_names : Dictionary, paste_off
 	if editor:
 		editor.addFrame( frame_data, old_to_new_names, paste_offset)
 	
+func markAllNodesDirty():
+	for node in all_nodes:
+		node.dirty = true
+	
 func dump():
 	print( ">>>> FlowGraph %s.. %s Compiled:%s" % [resource_name, graph_name, compiled] )
 	print( "  %d Nodes" % all_nodes.size() )

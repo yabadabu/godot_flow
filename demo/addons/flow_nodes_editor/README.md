@@ -15,6 +15,7 @@
 - [ ] subgraph overrides
 - [ ] named redirectors/acc
 - [ ] debug/session
+	- [ ] Register / debug Subgraphs
 - [ ] multiple flowgraphs / tabs
 - [ ] use the WeightsRandomSampler from match_and_set in more places (sample mesh/sample scene)
 

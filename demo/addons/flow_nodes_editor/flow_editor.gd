@@ -120,7 +120,7 @@ func setResourceToEdit( new_resource : FlowGraphResource, new_resource_owner : F
 	resource_owner = new_resource_owner
 	refresh_executors()
 	
-	markAllNodesAsDirty()
+	markAllNodesDirty()
 	if resource_owner:
 		queueRegen()
 	
@@ -791,9 +791,9 @@ func _on_button_save_pressed() -> void:
 		saveResource()
 		ResourceSaver.save(current_resource)
 
-func markAllNodesAsDirty():
-	for node in getAllNodes():
-		node.dirty = true	
+func markAllNodesDirty():
+	if current_resource:
+		current_resource.markAllNodesDirty()
 
 func _on_button_regenerate_pressed() -> void:
 	#for key in input_sources.keys():
@@ -804,7 +804,7 @@ func _on_button_regenerate_pressed() -> void:
 		#print( conn )
 	print( "_on_button_regenerate_pressed" )
 	dump_performance = true
-	markAllNodesAsDirty()
+	markAllNodesDirty()
 	queueRegen()
 	#for n : FlowNodeBase in getSelectedNodes():
 		#print( "Node: %s  Ins:%d  Outs:%d" % [ n.name, n.num_in_ports, n.num_out_ports ])
@@ -899,5 +899,5 @@ func _on_cb_executors_item_selected(index):
 		if node:
 			print( "Changed node to executor %d %s" % [ index, node.name ] )
 			resource_owner = node
-			markAllNodesAsDirty()
+			markAllNodesDirty()
 			evalGraph()
