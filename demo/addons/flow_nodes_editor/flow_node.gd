@@ -10,6 +10,8 @@ class_name FlowGraphNode3D
 @export var graph : FlowGraphResource :
 	set(new_value):
 		if _graph and _graph.in_params_changed.is_connected(_on_graph_inputs_change):
+			if Engine.is_editor_hint() and is_inside_tree():
+				FlowPlugin.get_instance().unregister_executor(self)
 			clearInstances( )
 			_graph.in_params_changed.disconnect(_on_graph_inputs_change)
 		_graph = new_value
@@ -18,6 +20,8 @@ class_name FlowGraphNode3D
 		ctx.graph = _graph
 		graph_node_changed.emit( self, "graph_resource" )
 		#notify_property_list_changed()
+		if Engine.is_editor_hint() and is_inside_tree():
+			FlowPlugin.get_instance().register_executor(self)
 	get:
 		return _graph
 		
@@ -37,12 +41,20 @@ var _initialized := false
 func _ready():
 	ctx.owner = self
 	for o in overrides:
-		print( "  Saving override %s : %s : %s" % [ o.param_id, o.enabled, o.value ])
-	# To ensure the overrides are unique to each instance
+		print( "  Current override %s : %s : %s" % [ o.param_id, o.enabled, o.value ])
+	# To ensure the overrides are unique to each instance when copy/pasteing a node in the scene
 	if Engine.is_editor_hint() and not _initialized:
 		_initialized = true
 		duplicateOverrides()
+		
+func _enter_tree() -> void:
+	if Engine.is_editor_hint():
+		FlowPlugin.get_instance().register_executor(self)
 
+func _exit_tree() -> void:
+	if Engine.is_editor_hint():
+		FlowPlugin.get_instance().unregister_executor(self)
+		
 func _on_graph_inputs_change():
 	print( "_on_graph_inputs_change. Checking existing %d overrides. The graph has %d inputs" % [overrides.size(), graph.in_params.size()] )
 	var existing := {}
@@ -202,7 +214,8 @@ func regenerate():
 	graph.compile()
 	for node in graph.input_nodes:
 		node.dirty = true
-	#ctx.trace = false
 	ctx.computeDirtyNodesAndRun()
+		
+	FlowPlugin.get_instance().register_executor( self )
 	print( "regenerate.Ends %s" % graph )
 	

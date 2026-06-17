@@ -174,6 +174,7 @@ class EvaluationContext:
 		run()
 		
 	func run():
+		
 		eval_id += 1
 		active_nodes.clear()
 		for node in nodes_to_eval:

@@ -14,6 +14,7 @@ var graph_input_inspector_plugin : EditorInspectorPlugin
 var node_settings_inspector_plugin : EditorInspectorPlugin
 var flow_graph_resource_inspector_plugin : EditorInspectorPlugin
 var nodes_factory := FlowNodesFactory.new()
+var executors := {}
 
 # To detect scene changes
 var current_scene_root = null
@@ -145,3 +146,34 @@ func _process( elapsed : float ):
 	if scene_root != current_scene_root:
 		current_scene_root = scene_root
 		on_scene_changed(scene_root)
+
+func register_executor(node: FlowGraphNode3D) -> void:
+	var graph : FlowGraphResource = node.graph
+	if graph == null:
+		return
+	var id := node.get_instance_id()
+	if not executors.has( graph ):
+		executors[graph] = { }
+	if not executors[ graph ].has( id ):
+		executors[graph][id] = { "count" : 0 }
+	executors[graph][id].count += 1
+	executors[graph][id].node_ref = weakref(node)
+
+func unregister_executor(node: FlowGraphNode3D) -> void:
+	var graph : FlowGraphResource = node.graph
+	if graph == null:
+		return
+	executors[graph].erase(node.get_instance_id())
+	
+func get_live_executors( graph : FlowGraphResource ) -> Array:
+	var result := []
+	if graph:
+		var graph_executors = executors.get(graph)
+		if graph_executors:
+			for id in graph_executors.keys():
+				var node = graph_executors[id].node_ref.get_ref()
+				if node == null or not is_instance_valid(node) or not node.is_inside_tree():
+					executors.erase(id)
+					continue
+				result.append(graph_executors[id])
+	return result

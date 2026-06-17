@@ -26,6 +26,7 @@ var show_disconnected_inputs : bool = true
 var runtime_only : bool = false
 
 var dirty : bool = false
+var draw_node_name : bool = false
 
 # Helper to create the UI
 const connectors_row_prefab = preload( "res://addons/flow_nodes_editor/connectors_row.tscn" )
@@ -180,7 +181,8 @@ func _on_draw() -> void:
 		var ty = size.y - 9.0 * ui_scale
 		draw_string(time_font, Vector2(tx, ty), time_text, HORIZONTAL_ALIGNMENT_LEFT, -1, time_font_size, time_color)
 
-	draw_string(ThemeDB.fallback_font, Vector2(2, -5), name, HORIZONTAL_ALIGNMENT_LEFT, -1, 12 * ui_scale)
+	if draw_node_name:
+		draw_string(ThemeDB.fallback_font, Vector2(2, -5), name, HORIZONTAL_ALIGNMENT_LEFT, -1, 12 * ui_scale)
 
 func getMeta() -> Dictionary:
 	return meta_node

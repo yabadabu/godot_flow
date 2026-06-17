@@ -386,7 +386,25 @@ in_params = Array[ExtResource("2_mmqr1")]([SubResource("Resource_x3i3k")])
 script = ExtResource("4_mmqr1")
 param_id = &"Height"
 enabled = true
-value = 2.66
+value = 3.525
+
+[sub_resource type="MultiMesh" id="MultiMesh_5ifn7"]
+transform_format = 1
+instance_count = 9
+mesh = ExtResource("2_5ifn7")
+buffer = PackedFloat32Array(0.87, 0, 0, 0, 0, 0.87, 0, 3.525, 0, 0, 0.87, 0, 0.87, 0, 0, 1, 0, 0.87, 0, 3.525, 0, 0, 0.87, 0, 0.87, 0, 0, 2, 0, 0.87, 0, 3.525, 0, 0, 0.87, 0, 0.87, 0, 0, 0, 0, 0.87, 0, 3.525, 0, 0, 0.87, 1, 0.87, 0, 0, 1, 0, 0.87, 0, 3.525, 0, 0, 0.87, 1, 0.87, 0, 0, 2, 0, 0.87, 0, 3.525, 0, 0, 0.87, 1, 0.87, 0, 0, 0, 0, 0.87, 0, 3.525, 0, 0, 0.87, 2, 0.87, 0, 0, 1, 0, 0.87, 0, 3.525, 0, 0, 0.87, 2, 0.87, 0, 0, 2, 0, 0.87, 0, 3.525, 0, 0, 0.87, 2)
+
+[sub_resource type="Resource" id="Resource_opyov"]
+script = ExtResource("4_mmqr1")
+param_id = &"Height"
+enabled = true
+value = 1.7
+
+[sub_resource type="MultiMesh" id="MultiMesh_nyqj1"]
+transform_format = 1
+instance_count = 9
+mesh = ExtResource("2_5ifn7")
+buffer = PackedFloat32Array(0.87, 0, 0, 0, 0, 0.87, 0, 1.7, 0, 0, 0.87, 0, 0.87, 0, 0, 1, 0, 0.87, 0, 1.7, 0, 0, 0.87, 0, 0.87, 0, 0, 2, 0, 0.87, 0, 1.7, 0, 0, 0.87, 0, 0.87, 0, 0, 0, 0, 0.87, 0, 1.7, 0, 0, 0.87, 1, 0.87, 0, 0, 1, 0, 0.87, 0, 1.7, 0, 0, 0.87, 1, 0.87, 0, 0, 2, 0, 0.87, 0, 1.7, 0, 0, 0.87, 1, 0.87, 0, 0, 0, 0, 0.87, 0, 1.7, 0, 0, 0.87, 2, 0.87, 0, 0, 1, 0, 0.87, 0, 1.7, 0, 0, 0.87, 2, 0.87, 0, 0, 2, 0, 0.87, 0, 1.7, 0, 0, 0.87, 2)
 
 [node name="DemoSubgraph" type="Node3D" unique_id=1826795326]
 
@@ -397,5 +415,24 @@ overrides = Array[ExtResource("4_mmqr1")]([SubResource("Resource_kxdvx")])
 regenerate = Callable()
 clearInstances = Callable()
 flow_override/Height/enabled = true
-flow_override/Height/value = 2.66
+flow_override/Height/value = 3.525
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
+
+[node name="Spawn Meshes_0000" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=2047467797]
+multimesh = SubResource("MultiMesh_5ifn7")
+metadata/flow_owner = &"id_0014_spawn_meshes"
+
+[node name="FlowGraphNode3D2" type="Node3D" parent="." unique_id=357897790]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.699516, 0, 0)
+script = ExtResource("1_dx0d7")
+graph = SubResource("Resource_nyqj1")
+overrides = Array[ExtResource("4_mmqr1")]([SubResource("Resource_opyov")])
+regenerate = Callable()
+clearInstances = Callable()
+flow_override/Height/enabled = true
+flow_override/Height/value = 1.7
+metadata/_custom_type_script = "uid://d1krtmb1urldl"
+
+[node name="Spawn Meshes_0000" type="MultiMeshInstance3D" parent="FlowGraphNode3D2" unique_id=41593068]
+multimesh = SubResource("MultiMesh_nyqj1")
+metadata/flow_owner = &"id_0014_spawn_meshes"

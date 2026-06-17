@@ -46,10 +46,13 @@ var comment_padding = Vector2( 40, 40 )
 # Required during nodes connection
 var input_sources := {} # key: Pair(to_node, to_port) -> value: Array[(from_node, from_port)]
 
-# Activate connections and nodes
+# Active connections and nodes (to highlight them)
 var active_intensity = 0.0
 var active_nodes = []
 
+var executor_candidates = []
+
+# Apple devices have a different ui_scale
 var ui_scale = 1.0
 
 var popup_menu_inputs : PopupMenu
@@ -113,7 +116,9 @@ func setResourceToEdit( new_resource : FlowGraphResource, new_resource_owner : F
 		bindResourceToEditor( current_resource )
 	else:
 		print( "The resource has not changed, no need to rebind the graph")
+	
 	resource_owner = new_resource_owner
+	refresh_executors()
 	
 	markAllNodesAsDirty()
 	if resource_owner:
@@ -422,11 +427,11 @@ func toggleDisabled():
 func toggleInspection():
 	if not data_inspector:
 		return
-	var nodes = getSelectedNodes()
+	var nodes := getSelectedNodes()
 	if nodes.size() != 1:
 		data_inspector.setNode( null )
 		return
-	var node = nodes[0]
+	var node := nodes[0]
 	data_inspector.setNode( node )
 	node.dirty = true
 	node.refreshFromSettings()
@@ -874,3 +879,25 @@ func _on_button_dump_pressed():
 	var res := current_resource
 	if res:
 		res.dump()
+		var my_execs = FlowPlugin.get_instance().executors.get( res )
+		print( my_execs )
+		refresh_executors()
+	
+func refresh_executors():
+	var combo := %CBExecutors
+	combo.clear()
+	executor_candidates = FlowPlugin.get_instance().get_live_executors( current_resource )
+	for exec in executor_candidates:
+		var node := exec.node_ref.get_ref() as FlowGraphNode3D
+		combo.add_item(node.name)
+		if node == resource_owner:
+			combo.select( combo.get_item_count() - 1 )
+	
+func _on_cb_executors_item_selected(index):
+	if index >= 0 and index < executor_candidates.size():
+		var node := executor_candidates[index].node_ref.get_ref() as FlowGraphNode3D
+		if node:
+			print( "Changed node to executor %d %s" % [ index, node.name ] )
+			resource_owner = node
+			markAllNodesAsDirty()
+			evalGraph()
