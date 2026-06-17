@@ -191,9 +191,15 @@ view_zoom = 1.1
 view_offset = Vector2(-178, -178.68701)
 in_params = Array[ExtResource("2_mmqr1")]([SubResource("Resource_mmqr1"), SubResource("Resource_5ifn7")])
 
+[sub_resource type="Resource" id="Resource_s1eqc"]
+script = ExtResource("2_mmqr1")
+name = "In"
+is_constant = false
+
 [sub_resource type="Resource" id="Resource_c03w7"]
 script = ExtResource("3_5ifn7")
 graph_name = "Vamos"
+in_params = Array[ExtResource("2_mmqr1")]([SubResource("Resource_s1eqc")])
 
 [sub_resource type="Resource" id="Resource_x3i3k"]
 script = ExtResource("2_mmqr1")
@@ -400,6 +406,6 @@ flow_override/Height/enabled = true
 flow_override/Height/value = 2.66
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
 
-[node name="Spawn Meshes_0000" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=1370102459]
+[node name="Spawn Meshes_0000" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=1840491579]
 multimesh = SubResource("MultiMesh_5ifn7")
 metadata/flow_owner = &"id_0014_spawn_meshes"

@@ -52,16 +52,41 @@ func getMeta() -> Dictionary:
 func _gui_input(event: InputEvent):
 	if event is InputEventMouseButton and event.double_click and event.button_index == MOUSE_BUTTON_LEFT:
 		var editor = getEditor()
-		if editor and settings and settings.graph:
+		if editor and settings:
+			if not settings.graph:
+				settings.graph = FlowGraphResource.new()
 			var graph : FlowGraphResource = settings.graph
 			var owner = editor.resource_owner
 			print( "settings.graph.data", graph.data)
 			print( "settings.graph.resource_name", graph.resource_name )
 			print( "settings.graph.resource_path", graph.resource_path )
 			
-			if graph.data.size() == 0:
+			if not graph.data:
 				print( "The graph is new!")
-				#FlowNodeIO.create_nodes_from_dict( graph.data, editor, Vector2(0,0))
+				graph.data = {
+					"type": "flow_graph_nodes",
+					"version": 1,
+					"min_pos" : "(80.0, 160.0)",
+					"links" : [],
+					"nodes" : [{
+						"name": "id_0001_input_In",
+						"position": "(80.0, 80.0)",
+						"template": "input_In",
+						"settings": { "name": "In", }
+					}, 
+					{
+						"name": "id_0002_output",
+						"position": "(400.0, 80.0)",
+						"template": "output",
+						"settings": { "name": "Out", }
+					}]
+				}
+				var in_p = GraphInputParameter.new()
+				in_p.is_constant = false
+				in_p.name = "In"
+				in_p.data_type = FlowData.DataType.Invalid
+				graph.in_params.append( in_p )
+				FlowNodeIO.create_nodes_from_dict( graph.data, graph, Vector2(0,0))
 				
 			editor.setResourceToEdit(settings.graph, owner)
 			
