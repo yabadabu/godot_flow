@@ -538,6 +538,7 @@ data = {
 "type": "flow_graph_nodes",
 "version": 1
 }
+graph_name = "graph_distance"
 view_zoom = 0.75065875
 view_offset = Vector2(278.76477, 119.59845)
 new_name_counter = 88

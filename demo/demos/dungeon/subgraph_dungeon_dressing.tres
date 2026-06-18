@@ -237,6 +237,7 @@ data = {
 "type": "flow_graph_nodes",
 "version": 1
 }
+graph_name = "subgraph_dungeon_dressing"
 view_zoom = 0.82644624
 view_offset = Vector2(-131.94345, 104.58127)
 new_name_counter = 15
