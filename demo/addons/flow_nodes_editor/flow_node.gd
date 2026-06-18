@@ -21,7 +21,7 @@ class_name FlowGraphNode3D
 		graph_node_changed.emit( self, "graph_resource" )
 		#notify_property_list_changed()
 		if Engine.is_editor_hint() and is_inside_tree():
-			FlowPlugin.get_instance().register_executor(self)
+			FlowPlugin.get_instance().register_executor(self, self.graph, 0)
 	get:
 		return _graph
 		
@@ -40,6 +40,7 @@ var _initialized := false
 	
 func _ready():
 	ctx.owner = self
+	ctx.graph = _graph
 	for o in overrides:
 		print( "  Current override %s : %s : %s" % [ o.param_id, o.enabled, o.value ])
 	# To ensure the overrides are unique to each instance when copy/pasteing a node in the scene
@@ -49,7 +50,7 @@ func _ready():
 		
 func _enter_tree() -> void:
 	if Engine.is_editor_hint():
-		FlowPlugin.get_instance().register_executor(self)
+		FlowPlugin.get_instance().register_executor(self, self.graph, 0)
 
 func _exit_tree() -> void:
 	if Engine.is_editor_hint():
@@ -208,7 +209,7 @@ func clearInstances():
 
 func regenerate():
 	# _ready has not yet been called.
-	if not ctx.owner:
+	if not ctx.owner or not graph:
 		return
 	print( "regenerate.Starts %s by %s (%s)" % [ graph, name, graph.compiled ] )
 	graph.compile()
@@ -216,6 +217,6 @@ func regenerate():
 		node.dirty = true
 	ctx.computeDirtyNodesAndRun()
 		
-	FlowPlugin.get_instance().register_executor( self )
+	FlowPlugin.get_instance().register_executor( self, self.graph, 0 )
 	print( "regenerate.Ends %s" % graph )
 	

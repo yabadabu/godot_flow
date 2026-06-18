@@ -147,17 +147,17 @@ func _process( elapsed : float ):
 		current_scene_root = scene_root
 		on_scene_changed(scene_root)
 
-func register_executor(node: FlowGraphNode3D) -> void:
-	var graph : FlowGraphResource = node.graph
+func register_executor(node: FlowGraphNode3D, graph : FlowGraphResource, run_idx : int ) -> void:
 	if graph == null:
 		return
 	var id := node.get_instance_id()
 	if not executors.has( graph ):
 		executors[graph] = { }
 	if not executors[ graph ].has( id ):
-		executors[graph][id] = { "count" : 0 }
+		executors[graph][id] = { "count" : 0, "runs" : {} }
 	executors[graph][id].count += 1
 	executors[graph][id].node_ref = weakref(node)
+	executors[graph][id].runs[ run_idx ] = 1
 
 func unregister_executor(node: FlowGraphNode3D) -> void:
 	var graph : FlowGraphResource = node.graph

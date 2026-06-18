@@ -176,9 +176,13 @@ func dump():
 	for node in all_nodes:
 		print( "    %s" % node.name )
 		for dep in node.deps:
-			print( "      Dep %s" % dep)
+			if dep.to_node != node.name:
+				push_error( "In node %s. Inconsistency in dep %s" % [node.name, dep])
+			print( "      DependsOn %s:%d to me:%d" % [dep.from_node, dep.from_port, dep.to_port])
 		for dependant in node.dependants:
-			print( "      Dependant %s" % dependant)
+			if dependant.from_node != node.name:
+				push_error( "In node %s. Inconsistency in dependant %s" % [node.name, dependant])
+			print( "      Dependant me:%d to %s:%d" % [dependant.from_port, dependant.to_node, dependant.to_port])
 	print( "  %d Input Nodes" % input_nodes.size() )
 	for node in input_nodes:
 		print( "    %s %s" % [ node.name, node.settings.name ])

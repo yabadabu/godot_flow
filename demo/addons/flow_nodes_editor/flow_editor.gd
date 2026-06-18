@@ -776,10 +776,14 @@ func evalGraph():
 			push_warning( "Inconsistency resource_owner is null")
 		elif not resource_owner.ctx:
 			push_warning( "Inconsistency resource_owner.ctx is null")
+		elif not resource_owner.ctx.graph:
+			push_warning( "Inconsistency resource_owner.ctx.graph is null")
+		elif not resource_owner.ctx.owner:
+			push_warning( "Inconsistency resource_owner.ctx.owner is null")
 		elif not resource_owner.ctx.graph != current_resource:
-			push_warning( "Inconsistency resource_owner.ctx != current_resource %s %s" % [ resource_owner.ctx, current_resource ])
+			push_warning( "Inconsistency resource_owner.ctx.graph != current_resource %s %s" % [ resource_owner.ctx, current_resource ])
 		else:
-			push_warning( "Inconsistency resource_owner. Owner: %s  Owner.Ctx:%s" % [ resource_owner, resource_owner.ctx ])
+			push_warning( "Inconsistency resource_owner. Owner: %s  Owner.Ctx:%s" % [ resource_owner.name, resource_owner.ctx.owner.name ])
 		
 	regen_pending = false
 
@@ -888,10 +892,13 @@ func refresh_executors():
 	combo.clear()
 	executor_candidates = FlowPlugin.get_instance().get_live_executors( current_resource )
 	for exec in executor_candidates:
-		var node := exec.node_ref.get_ref() as FlowGraphNode3D
-		combo.add_item(node.name)
-		if node == resource_owner:
-			combo.select( combo.get_item_count() - 1 )
+		for run in exec.runs:
+			print( "Run %s" % run )
+			var node := exec.node_ref.get_ref() as FlowGraphNode3D
+			var title = "%s - %d" % [ node.name, run ]
+			combo.add_item(title)
+			if node == resource_owner:
+				combo.select( combo.get_item_count() - 1 )
 	
 func _on_cb_executors_item_selected(index):
 	if index >= 0 and index < executor_candidates.size():

@@ -252,7 +252,7 @@ static func duplicateSelecteddNodes( editor : FlowGraphEditor ):
 
 static func saveEditorStateToResource( editor : FlowGraphEditor ):
 	var res = editor.current_resource
-	if res:
+	if not res:
 		return
 	var all_nodes := editor.getAllNodes()
 	#for node in all_nodes:

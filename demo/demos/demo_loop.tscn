@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://d2uirw257u3id"]
+
+[ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_rxdep"]
+[ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="2_4lgao"]
+[ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="3_amu1w"]
+[ext_resource type="Script" uid="uid://dhpu3ptt872as" path="res://addons/flow_nodes_editor/flow_graph_param_override.gd" id="4_4lgao"]
+
+[sub_resource type="Resource" id="Resource_rxdep"]
+script = ExtResource("3_amu1w")
+graph_name = "demo_loop"
+metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
+
+[sub_resource type="Resource" id="Resource_amu1w"]
+script = ExtResource("4_4lgao")
+param_id = &"In"
+value = null
+
+[node name="DemoLoop" type="Node3D" unique_id=658281225]
+
+[node name="FlowGraphNode3D" type="Node3D" parent="." unique_id=485763321]
+script = ExtResource("1_rxdep")
+graph = SubResource("Resource_rxdep")
+overrides = Array[ExtResource("4_4lgao")]([SubResource("Resource_amu1w")])
+regenerate = Callable()
+clearInstances = Callable()
+metadata/_custom_type_script = "uid://d1krtmb1urldl"

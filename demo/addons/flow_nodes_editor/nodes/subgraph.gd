@@ -2,6 +2,7 @@
 extends FlowNodeBase
 
 var subctx := FlowData.EvaluationContext.new()
+var loop_index := 0
 
 func _init():
 	meta_node = {
@@ -95,6 +96,7 @@ func _gui_input(event: InputEvent):
 # This ctx is the context evaluating the subgraph node, not the subgraph itself
 func preExecute( ctx : FlowData.EvaluationContext ):
 	super.preExecute( ctx )
+	loop_index = 0
 	if settings.graph:
 		if settings.trace:
 			print( "Subgraph.Ensuring graph is compiled" )
@@ -159,8 +161,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 			subctx.inputs[ input.label ] = input_nth
 		input_idx += 1
 		
-	for node in settings.graph.all_nodes:
-		node.dirty = true
+	settings.graph.markAllNodesDirty()
 		
 	subctx.computeDirtyNodesAndRun()
 	
@@ -182,4 +183,5 @@ func execute( ctx : FlowData.EvaluationContext ):
 			set_output(output_idx, FlowData.Data.new())
 		output_idx += 1
 			
-			
+	FlowPlugin.get_instance().register_executor( ctx.owner, settings.graph, loop_index )
+	loop_index += 1

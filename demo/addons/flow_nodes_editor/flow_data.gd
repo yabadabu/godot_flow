@@ -160,6 +160,7 @@ class EvaluationContext:
 		
 		if trace:
 			print( "computeDirtyNodesAndRun %d/%d dirty nodes at %s..." % [ dirty_nodes.size(), graph.all_nodes.size(), owner ])
+		
 		for node in dirty_nodes:
 			expandDirtyFlagToDependants( node )
 		
