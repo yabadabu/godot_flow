@@ -15,28 +15,42 @@ var label : Label
 var panel_sb: StyleBoxFlat
 var panel_selected_sb: StyleBoxFlat
 
+func _ready():
+	super._ready()
+	label = Label.new()
+	label.label_settings = LabelSettings.new()
+	label.label_settings.font_size = 16
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	label.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	settings.hue = randf()
+	add_child( label )
+	
+	resizable = true
+
 func refreshFromSettings():
 	settings.disabled = false
 	settings.inspect_enabled = false
 	settings.debug_enabled = false
 	super.refreshFromSettings()
-	if not label:
-		label = Label.new()
-		label.label_settings = LabelSettings.new()
-		label.label_settings.font_size = 16
-		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		label.size_flags_vertical = Control.SIZE_EXPAND_FILL
-		settings.hue = randf()
-		add_child( label )
+	
+	settings.hue = int(settings.hue * 20) * 0.05
+	
+	if not panel_sb:
 		panel_sb = get_theme_stylebox("panel", "GraphNode").duplicate(true)
+		panel_sb.border_width_bottom = 0
+		panel_sb.border_width_left = 0
+		panel_sb.border_width_right = 0
 		panel_selected_sb = get_theme_stylebox("panel_selected", "GraphNode").duplicate(true)
+		panel_selected_sb.border_width_bottom = 2
+		panel_selected_sb.border_width_left = 2
+		panel_selected_sb.border_width_right = 2
+		panel_selected_sb.border_color = Color.WHITE
 		add_theme_stylebox_override("panel", panel_sb)
 		add_theme_stylebox_override("panel_selected", panel_selected_sb)
-		#add_theme_stylebox_override("titlebar", panel_sb)
-		#add_theme_stylebox_override("titlebar_selected", panel_selected_sb)
-		resizable = true
 	
-	panel_sb.bg_color = Color.from_hsv( settings.hue, 0.5, 0.2 )
-	label.text = settings.text
-	panel_selected_sb.bg_color = Color.from_hsv( settings.hue, 0.5, 0.4 )
+	if panel_sb:
+		panel_sb.bg_color = Color.from_hsv( settings.hue, 0.5, 0.4 )
+		panel_selected_sb.bg_color = Color.from_hsv( settings.hue, 0.5, 0.4 )
+		if label:
+			label.text = settings.text
