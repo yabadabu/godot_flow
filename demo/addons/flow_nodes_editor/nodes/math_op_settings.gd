@@ -24,6 +24,7 @@ enum eOperation {
 	Round,
 	Sign,
 	Sqrt,
+	Set,
 }
 
 @export var operation : eOperation = eOperation.Add:

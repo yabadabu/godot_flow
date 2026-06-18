@@ -1,17 +1,31 @@
 @tool
 extends FlowNodeBase
 
+var inA = { "label": "In A", "multiple_connections" : false }
+var inB = { "label": "In B", "multiple_connections" : false }
+
 func _init():
 	meta_node = {
 		"title" : "Math",
 		"settings" : MathOpNodeSettings,
 		"category" : "Math",
-		"ins" : [{ "label": "In A", "multiple_connections" : false }, { "label": "In B", "multiple_connections" : false }], 
+		"ins" : [inA, inB], 
 		"outs" : [{ "label" : "Out" }],
 		"tooltip" : "Applies a math operation between two streams, storing the result in a new stream or overriding another.\nYou can read and write substreams like position.X",
 		"keywords" : [ "multiply", "add" ],
 	}
 	
+func getMeta() -> Dictionary:
+	if settings:
+		var curr_num_args = meta_node.ins.size()
+		var required_num_args = 1 if settings.isSingleArgument() else 2
+		if curr_num_args != required_num_args:
+			match required_num_args:
+				1: meta_node.ins = [inA]
+				2: meta_node.ins = [inA, inB]
+			initFromScript()
+	return meta_node
+		
 func getTitle() -> String:
 	return MathOpNodeSettings.eOperation.keys()[settings.operation]	
 
@@ -26,6 +40,9 @@ func execute( _ctx : FlowData.EvaluationContext ):
 	
 	# Check A
 	var in_dataA: FlowData.Data = get_input(0)
+	if not in_dataA:
+		setError( "Input A has no data" )
+		return
 	var sA = in_dataA.findStream( settings.in_nameA )
 	if sA == null:
 		setError( "Input A %s not found" % [settings.in_nameA])
@@ -118,6 +135,8 @@ func execute( _ctx : FlowData.EvaluationContext ):
 					MathOpNodeSettings.eOperation.Sqrt:
 						for i in num_elems:
 							outC[i] = sqrt( max( 0.0, inA[i] ) )
+					_:
+						setError( "Scalar single arg op %s not yet supported" % MathOpNodeSettings.eOperation.keys()[ settings.operation ]  )
 				out_container = outC
 		
 		elif sA.data_type == FlowData.DataType.Vector:
@@ -139,6 +158,8 @@ func execute( _ctx : FlowData.EvaluationContext ):
 						outC[i].x = clampf(inA[i].x, 0.0, 1.0)
 						outC[i].y = clampf(inA[i].y, 0.0, 1.0)
 						outC[i].z = clampf(inA[i].z, 0.0, 1.0)
+				_:
+					setError( "Vector single arg op %s not yet supported" % MathOpNodeSettings.eOperation.keys()[ settings.operation ]  )
 			out_container = outC
 			
 		else:
@@ -192,6 +213,9 @@ func execute( _ctx : FlowData.EvaluationContext ):
 				MathOpNodeSettings.eOperation.Pow:
 					for i in num_elems:
 						outC[i] = pow( inA[i], inB[i] )
+				MathOpNodeSettings.eOperation.Set:
+					for i in num_elems:
+						outC[i] = inB[i]
 				_:
 					setError( "Float vs Float operation %s not supported yet" % MathOpNodeSettings.eOperation.keys()[ settings.operation ]  )
 			if settings.trace: print( "Math.Loop: %f (%d)" % [ Time.get_ticks_usec() - time_start, num_elems ] )
@@ -215,6 +239,9 @@ func execute( _ctx : FlowData.EvaluationContext ):
 				MathOpNodeSettings.eOperation.Divide:
 					for i in num_elems:
 						outC[i] = inA[i] / inB[i]
+				MathOpNodeSettings.eOperation.Set:
+					for i in num_elems:
+						outC[i] = inB[i]
 				_:
 					setError( "Vector3 vs Vector3 operation not supported yet")
 			out_container = outC
