@@ -138,26 +138,31 @@ func execute( ctx : FlowData.EvaluationContext ):
 		if settings.trace:
 			print( "  Checking subgraph input %s" % [ input.label ])
 		var is_feedback := false
-		for output in outs:
-			if output.label == input.label:
-				#print( "  Output and Input labels match!!")
-				var node_output : FlowNodeBase = settings.graph.nodes_by_name.get( output.provider_node )
-				if node_output:
-					#print( "  Found node_output: %d" % [node_output.num_connected_bulks])
-					var last_output = node_output.get_bulk_input(0, 0)
-					if last_output:
-						#last_output.dump( "  Last output" )
-						subctx.inputs[ input.label ] = last_output
-						is_feedback = true
-						break
-					else:
-						#print( "  No output yet, can't feedback yet...")
-						pass
+		# Feedback does not happen in the first bulk
+		if loop_index > 0:
+			for output in outs:
+				if output.label == input.label:
+					#print( "  Output and Input labels match!!")
+					var node_output : FlowNodeBase = settings.graph.nodes_by_name.get( output.provider_node )
+					if node_output:
+						#print( "  Found node_output: %d" % [node_output.num_connected_bulks])
+						var last_output = node_output.get_bulk_input(0, 0)
+						if last_output:
+							#last_output.dump( "  Last output" )
+							subctx.inputs[ input.label ] = last_output
+							is_feedback = true
+							break
+						else:
+							#print( "  No output yet, can't feedback yet...")
+							pass
 		if not is_feedback:
 			var input_nth = get_input(input_idx)
 			if settings.trace:
 				print( "  Input[%d] %s is not feedback, value is %s" % [ input_idx, input.label, input_nth ])
-				input_nth.dump( "input of subgraph" )
+				if input_nth:
+					input_nth.dump( "    input of subgraph" )
+				else:
+					print( "    Input is null!!!")
 			subctx.inputs[ input.label ] = input_nth
 		input_idx += 1
 		
