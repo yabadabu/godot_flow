@@ -227,6 +227,7 @@ data = {
 "type": "flow_graph_nodes",
 "version": 1
 }
+graph_name = "graph_sample_loop"
 view_zoom = 1.2875423
 view_offset = Vector2(0, -69.82425)
 new_name_counter = 11

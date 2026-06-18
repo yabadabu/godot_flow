@@ -207,6 +207,7 @@ data = {
 "type": "flow_graph_nodes",
 "version": 1
 }
+graph_name = "spawn_smalls"
 view_zoom = 0.9999999
 view_offset = Vector2(-40.82666, -48.266724)
 new_name_counter = 29

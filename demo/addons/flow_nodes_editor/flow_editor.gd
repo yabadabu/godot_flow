@@ -70,6 +70,7 @@ func unbindResourceFromEditor(res : FlowGraphResource):
 		node.runtime_only = true
 		node.draw.disconnect( node._on_draw )
 		gedit.remove_child( node )
+	deleteFrames( getAllFrames() )
 	gedit.clear_connections()
 	input_sources.clear()
 	inspector.edit( null )
@@ -88,6 +89,8 @@ func bindResourceToEditor(res : FlowGraphResource):
 		onNodeCreated( node )
 	for conn in res.all_connections:
 		onConnCreated( conn )
+	for frame in res.all_frames:
+		onFrameCreated( frame )
 		
 	# Properties must be sec after we add the nodes
 	gedit.zoom = res.view_zoom
@@ -105,11 +108,12 @@ func setResourceToEdit( new_resource : FlowGraphResource, new_resource_owner : F
 	print( "setResourceToEdit:%s Owner:%s" % [ new_resource, new_resource_owner ] )
 	
 	# Ensure we have a tab for this resource
-	var tab_idx = findIndexInTabs( new_resource )
-	if tab_idx < 0:
-		tab_idx = addToTabs( new_resource, new_resource_owner )
-	tab_bar.ensure_tab_visible( tab_idx )
-	tab_bar.current_tab = tab_idx
+	if new_resource:
+		var tab_idx = findIndexInTabs( new_resource )
+		if tab_idx < 0:
+			tab_idx = addToTabs( new_resource, new_resource_owner )
+		tab_bar.ensure_tab_visible( tab_idx )
+		tab_bar.current_tab = tab_idx
 	
 	if current_resource != new_resource:
 		unbindResourceFromEditor( current_resource )
@@ -139,6 +143,20 @@ func onConnCreated( conn : Dictionary ):
 	if not input_sources.has(key):
 		input_sources.set( key, [])
 	input_sources[key].append([conn.from_node, conn.from_port])
+	
+func onFrameCreated( frame_data : Dictionary ) -> GraphFrame:
+	var frame := GraphFrame.new()
+	frame.name = frame_data.name
+	frame.title = frame_data.title
+	#var in_pos = FlowNodeIO._parse_vector2( frame_data.position )
+	#frame.position_offset = (in_pos + paste_offset ) * ui_scale
+	frame.size = FlowNodeIO._parse_vector2( frame_data.size )
+	frame.tint_color = FlowNodeIO._parse_color( frame_data.tint_color )
+	frame.tint_color_enabled = true
+	gedit.add_child(frame)
+	for name in frame_data.attached:
+		gedit.attach_graph_element_to_frame( name, frame.name )
+	return frame	
 	
 func saveResource():
 	FlowNodeIO.saveEditorStateToResource( self )
@@ -249,8 +267,17 @@ func getSelectedFrames() -> Array[GraphFrame]:
 
 func deleteFrames( frames : Array[GraphFrame] ):
 	for node in frames:
+		current_resource.delete_frame( node.name )
 		gedit.remove_child( node )
 		node.queue_free()
+
+func getAllFrames() -> Array[GraphFrame]:
+	var nodes : Array[GraphFrame] = []
+	for child in gedit.get_children():
+		var node = child as GraphFrame
+		if node:
+			nodes.push_back(node)
+	return nodes
 	
 # ------------------------------------------------
 func getSelectedNodes() -> Array[GraphNode]:
@@ -442,18 +469,16 @@ func addComment():
 	var rect = getRectOfNodes( nodes )
 	rect.position -= comment_padding
 	rect.size += comment_padding * 2
-	
-	var frame := GraphFrame.new()
-	frame.name = getFactory().getNewName("comment")
-	frame.title = "My Comments..."
-	frame.position_offset = rect.position
-	frame.size = rect.size
-	frame.tint_color = Color.DARK_SLATE_BLUE
-	frame.tint_color_enabled = true
-	gedit.add_child(frame)
-	
-	for node in nodes:
-		gedit.attach_graph_element_to_frame( node.name, frame.name )
+	var frame_data = {
+		"position" : rect.position,
+		"size" : rect.size,
+		"name" : getFactory().getNewName("comment"),
+		"tint_color" : Color.DARK_SLATE_BLUE,
+		"title" : "My Comments...",
+		"attached" : nodes.map( func( node ): return node.name )
+	}
+	print( "addComment -> %s" % frame_data)
+	current_resource.addFrame( frame_data )
 	
 func _on_graph_edit_node_selected(node):
 	
@@ -594,21 +619,6 @@ func _on_popup_menu_id_pressed(id: int) -> void:
 			var node = nodes[0]
 			var target = nodes[1]
 			gedit.set_connection_activity( node.name, 0, target.name, 0, 1.0)
-	
-func addFrame( frame_data : Dictionary, old_to_new_names : Dictionary, paste_offset  ):
-	var frame := GraphFrame.new()
-	frame.name = frame_data.name
-	frame.title = frame_data.title
-	var in_pos = FlowNodeIO._parse_vector2( frame_data.position )
-	frame.position_offset = (in_pos + paste_offset ) * ui_scale
-	frame.size = FlowNodeIO._parse_vector2( frame_data.size )
-	frame.tint_color = FlowNodeIO._parse_color( frame_data.tint_color )
-	frame.tint_color_enabled = true
-	gedit.add_child(frame)
-	for old_name in frame_data.attached:
-		var new_name = old_to_new_names.get( old_name, null )
-		if new_name:
-			gedit.attach_graph_element_to_frame( new_name, frame.name )
 
 func disconnect_nodes(from_node: StringName, from_port: int, to_node: StringName, to_port: int) -> void:
 	current_resource.disconnect_nodes(from_node, from_port, to_node, to_port)
@@ -735,14 +745,9 @@ func cacheConnections():
 			src_node.dependants.append( conn )
 			dst_node.deps.append( conn )
 
-	#for node in getAllNodes():
-		#print( "Node: %s" % [ node.name ])
-		#print( "  deps: %s" % [ node.deps ])
-		#print( "  dependants: %s" % [ node.dependants ])
-
 func evalGraph():
 	
-	if resource_owner and resource_owner.ctx and resource_owner.ctx.graph == current_resource:
+	if resource_owner and current_resource and resource_owner.ctx and resource_owner.ctx.graph == current_resource:
 		
 		var time_start = Time.get_ticks_usec()
 		cacheConnections()
@@ -784,7 +789,7 @@ func evalGraph():
 		elif not resource_owner.ctx.graph != current_resource:
 			push_warning( "Inconsistency resource_owner.ctx.graph != current_resource %s %s" % [ resource_owner.ctx, current_resource ])
 		else:
-			push_warning( "Inconsistency resource_owner. Owner: %s  Owner.Ctx:%s" % [ resource_owner.name, resource_owner.ctx.owner.name ])
+			push_warning( "Inconsistency resource_owner. Owner: %s  Owner.Ctx:%s CurrentResource:%s resource_owner.ctx.graph:%s" % [ resource_owner.name, resource_owner.ctx.owner.name, current_resource, resource_owner.ctx.graph ])
 		
 	regen_pending = false
 
@@ -875,6 +880,9 @@ func _on_tab_bar_tab_close_pressed(tab_idx):
 
 func _on_tab_bar_tab_changed(tab_idx):
 	var dtab = open_tabs[ tab_idx ] if tab_idx >= 0 and tab_idx < open_tabs.size() else null
+	print( "On tab index %d / %d" % [ tab_idx, open_tabs.size() ])
+	if dtab:
+		print( "Tab is %s" % dtab)
 	if dtab and is_instance_valid(dtab.resource) and is_instance_valid(dtab.owner):
 		setResourceToEdit( dtab.resource, dtab.owner )
 	else:
@@ -884,9 +892,13 @@ func _on_button_dump_pressed():
 	var res := current_resource
 	if res:
 		res.dump()
+		refresh_executors()
 		var my_execs = FlowPlugin.get_instance().executors.get( res )
 		print( my_execs )
-		refresh_executors()
+		print( "Edit: Zoom: %s  Offset%s" % [ gedit.zoom, gedit.scroll_offset])
+		print( ">>>> %d TABS" % open_tabs.size() )
+		for tab in open_tabs:
+			print( tab )
 	
 func refresh_executors():
 	var combo := %CBExecutors

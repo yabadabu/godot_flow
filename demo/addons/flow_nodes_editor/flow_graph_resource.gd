@@ -39,6 +39,7 @@ class_name FlowGraphResource
 var compiled : bool = false
 var nodes_by_name : Dictionary
 var all_connections : Array[ Dictionary ]
+var all_frames : Array[ Dictionary ]
 var all_nodes : Array[ FlowNodeBase ]
 var input_nodes : Array[ FlowNodeBase ]
 
@@ -162,10 +163,17 @@ func delete_node( node : FlowNodeBase ):
 	input_nodes.erase( node )
 	node.queue_free()
 
-func addFrame( frame_data : Dictionary, old_to_new_names : Dictionary, paste_offset  ):
+func delete_frame( frame_name ):
+	var idx = all_frames.find_custom( func( c ) : return c.name == frame_name )
+	print( "Deleteing frame %s returned idx %d" % [ frame_name, idx ])
+	if idx >= 0:
+		all_frames.remove_at( idx )
+		
+func addFrame( frame_data : Dictionary ):
+	all_frames.append( frame_data )
 	if editor:
-		editor.addFrame( frame_data, old_to_new_names, paste_offset)
-	
+		editor.onFrameCreated( frame_data )
+		
 func markAllNodesDirty():
 	for node in all_nodes:
 		node.dirty = true
@@ -189,7 +197,10 @@ func dump():
 	print( "  %d Connections" % all_connections.size() )
 	for conn in all_connections:
 		print( "    %s:%d <-> %s:%d" % [ conn.from_node, conn.from_port, conn.to_node, conn.to_port ])
-	
+	print( "  %d Frames" % all_frames.size() )
+	for frame in all_frames:
+		print( "    %s" % [ frame ])
+
 func compile():
 	if compiled:
 		return

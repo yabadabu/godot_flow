@@ -177,10 +177,6 @@ static func _paste_nodes_from_dict( dict, editor : FlowGraphEditor, at_graph_coo
 		for node in new_nodes:
 			node.selected = true
 
-# Expects container to provide the following methods:
-#   addNodeFromTemplate
-#   connect_nodes
-#   addFrame
 static func create_nodes_from_dict( dict, graph : FlowGraphResource, paste_offset = null):		
 	if dict.get( "type", null) != "flow_graph_nodes":
 		push_error( "Invalid dict to paste nodes from" )
@@ -229,7 +225,15 @@ static func create_nodes_from_dict( dict, graph : FlowGraphResource, paste_offse
 		graph.connect_nodes(new_from, link.from_port, new_to, link.to_port )
 
 	for frame_data in dict.get( "frames", [] ):
-		graph.addFrame(frame_data, old_to_new_names, paste_offset)
+		print( "Parsing frames %s" % frame_data )
+		var new_names = []
+		for old_name in frame_data.attached:
+			new_names.append( old_to_new_names.get( old_name, null ) )
+		frame_data.attached = new_names
+		
+		var in_pos = _parse_vector2( frame_data.position )
+		frame_data.position = ( in_pos + paste_offset ) * ui_scale
+		graph.addFrame(frame_data)
 
 	return new_nodes
 
