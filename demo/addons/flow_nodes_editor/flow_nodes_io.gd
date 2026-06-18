@@ -107,6 +107,9 @@ static func dict_to_resource(data: Dictionary, resource: Resource) -> void:
 static func nodes_as_dict( nodes, frames, editor : FlowGraphEditor ):
 	var exported_node_names = {}
 	
+	nodes.sort_custom(func(a, b): return a.name < b.name)
+	frames.sort_custom(func(a, b): return a.name < b.name)
+	
 	# Find the top-left coord of all nodes beign exported
 	var min_pos = null
 	for node in nodes:
