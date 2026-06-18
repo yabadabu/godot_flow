@@ -5,12 +5,567 @@
 [ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="3_amu1w"]
 [ext_resource type="Script" uid="uid://dhpu3ptt872as" path="res://addons/flow_nodes_editor/flow_graph_param_override.gd" id="4_4lgao"]
 
-[sub_resource type="Resource" id="Resource_rxdep"]
-script = ExtResource("3_amu1w")
-graph_name = "demo_loop"
-metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
+[sub_resource type="Resource" id="Resource_4lgao"]
+script = ExtResource("2_4lgao")
+name = "In"
+is_constant = false
+data_type = 999
 
 [sub_resource type="Resource" id="Resource_amu1w"]
+script = ExtResource("2_4lgao")
+name = "CurrentY"
+
+[sub_resource type="Resource" id="Resource_a44us"]
+script = ExtResource("3_amu1w")
+data = {
+"frames": [],
+"links": [{
+"from_node": &"id_0008_math_op",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0007_output",
+"to_port": 0
+}, {
+"from_node": &"id_0001_input_In",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0008_math_op",
+"to_port": 0
+}, {
+"from_node": &"id_0001_input_In",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0024_math_op",
+"to_port": 0
+}, {
+"from_node": &"id_0008_math_op",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0024_math_op",
+"to_port": 1
+}, {
+"from_node": &"id_0006_input_CurrentY",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0008_math_op",
+"to_port": 1
+}, {
+"from_node": &"id_0009_expression",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0002_output",
+"to_port": 0
+}, {
+"from_node": &"id_0001_input_In",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0009_expression",
+"to_port": 0
+}],
+"min_pos": Vector2(0, -120),
+"nodes": [{
+"args_port": {},
+"name": &"id_0001_input_In",
+"position": Vector2(0, 120),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"name": "In",
+"random_seed": 3732036808,
+"title": "Input",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "input_In"
+}, {
+"args_port": {},
+"name": &"id_0002_output",
+"position": Vector2(760, 120),
+"settings": {
+"data_type": 999,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"name": "Out",
+"random_seed": 3974272851,
+"title": "Output",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "output"
+}, {
+"args_port": {},
+"name": &"id_0006_input_CurrentY",
+"position": Vector2(0, 240),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"name": "CurrentY",
+"random_seed": 181167368,
+"title": "Input",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "input_CurrentY"
+}, {
+"args_port": {
+"Out": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0007_output",
+"position": Vector2(760, 220),
+"settings": {
+"data_type": 2,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"name": "CurrentY",
+"random_seed": 1178146813,
+"title": "Output",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "output"
+}, {
+"args_port": {
+"In A": {
+"connected": true,
+"port": 0
+},
+"In B": {
+"connected": true,
+"port": 1
+}
+},
+"name": &"id_0008_math_op",
+"position": Vector2(180, 200),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"in_nameA": "size.y",
+"in_nameB": "@last",
+"inspect_enabled": false,
+"operation": 0,
+"out_name": "NewY",
+"random_seed": 1905097586,
+"title": "Math",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "math_op"
+}, {
+"args_port": {
+"In A": {
+"connected": true,
+"port": 0
+},
+"In B": {
+"connected": true,
+"port": 1
+}
+},
+"name": &"id_0024_math_op",
+"position": Vector2(400, 120),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"in_nameA": "size.x",
+"in_nameB": "@last",
+"inspect_enabled": false,
+"operation": 19,
+"out_name": "NewY",
+"random_seed": 2405810238,
+"title": "Math",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "math_op"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0009_expression",
+"position": Vector2(400, 0),
+"settings": {
+"args": {},
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"expose_arrays": false,
+"expression": "acc_y + size.y * 0.5",
+"inspect_enabled": false,
+"out_name": "new_y",
+"random_seed": 3045977532,
+"title": "Expression",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "expression"
+}],
+"type": "flow_graph_nodes",
+"version": 1
+}
+graph_name = "TheLoop"
+view_zoom = 0.82644624
+view_offset = Vector2(140.28925, -274.7934)
+in_params = Array[ExtResource("2_4lgao")]([SubResource("Resource_4lgao"), SubResource("Resource_amu1w")])
+
+[sub_resource type="Resource" id="Resource_rxdep"]
+script = ExtResource("3_amu1w")
+data = {
+"frames": [],
+"links": [{
+"from_node": &"id_0018_sort",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0002_partition",
+"to_port": 0
+}, {
+"from_node": &"id_0001_grid",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0010_transform",
+"to_port": 0
+}, {
+"from_node": &"id_0003_subgraph",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0020_merge",
+"to_port": 0
+}, {
+"from_node": &"id_0025_math_op",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0018_sort",
+"to_port": 0
+}, {
+"from_node": &"id_0010_transform",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0025_math_op",
+"to_port": 0
+}, {
+"from_node": &"id_0010_transform",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0025_math_op",
+"to_port": 1
+}, {
+"from_node": &"id_0002_partition",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0003_subgraph",
+"to_port": 0
+}, {
+"from_node": &"id_0006_make_float",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0003_subgraph",
+"to_port": 1
+}],
+"min_pos": Vector2(0, 0),
+"nodes": [{
+"args_port": {},
+"name": &"id_0001_grid",
+"position": Vector2(0, 0),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"origin": Vector3(0, 0, 0),
+"random_seed": 1493028908,
+"rotation": Vector3(0, 0, 0),
+"size": 0.82,
+"step": Vector3(2, 1, 1),
+"title": "Grid",
+"trace": false,
+"x": 5,
+"y": 1,
+"z": 1
+},
+"show_disconnected_inputs": false,
+"template": "grid"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0010_transform",
+"position": Vector2(200, 0),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"offset_max": Vector3(0, 0, 0),
+"offset_min": Vector3(0, 0, 0),
+"random_seed": 174492287,
+"rotation_local_space": false,
+"rotation_max": Vector3(0, 0, 0),
+"rotation_min": Vector3(0, 0, 0),
+"scale_max": Vector3(4.23, 4, 1),
+"scale_min": Vector3(-0.475, 1, 1),
+"title": "Transform",
+"trace": false,
+"uniform_scale": false
+},
+"show_disconnected_inputs": false,
+"template": "transform"
+}, {
+"args_port": {
+"In A": {
+"connected": true,
+"port": 0
+},
+"In B": {
+"connected": true,
+"port": 1
+}
+},
+"name": &"id_0025_math_op",
+"position": Vector2(360, 0),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"in_nameA": "size.x",
+"in_nameB": "size.x",
+"inspect_enabled": false,
+"operation": 19,
+"out_name": "size.z",
+"random_seed": 2826320829,
+"title": "Math",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "math_op"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0002_partition",
+"position": Vector2(840, 220),
+"settings": {
+"attribute_name": "Index",
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"out_partition_attribute": "Id",
+"random_seed": 3707290272,
+"title": "Partition",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "partition"
+}, {
+"args_port": {},
+"name": &"id_0006_make_float",
+"position": Vector2(860, 340),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"out_name": "Float",
+"random_seed": 762761135,
+"title": "Make Float",
+"trace": false,
+"value": 0.495
+},
+"show_disconnected_inputs": false,
+"template": "make_float"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0018_sort",
+"position": Vector2(540, 0),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": true,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"random_seed": 4148900739,
+"sort_by": "size.x",
+"sort_descending": true,
+"title": "Sort",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "sort"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0020_merge",
+"position": Vector2(1380, 220),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": true,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": true,
+"random_seed": 1425879892,
+"title": "Merge",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "merge"
+}, {
+"args_port": {
+"CurrentY": {
+"connected": true,
+"port": 1
+},
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0003_subgraph",
+"position": Vector2(1040, 220),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 3,
+"debug_scale": 1.0,
+"disabled": false,
+"graph": SubResource("Resource_a44us"),
+"inspect_enabled": false,
+"random_seed": 2779718557,
+"title": "Subgraph",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "subgraph"
+}],
+"type": "flow_graph_nodes",
+"version": 1
+}
+graph_name = "graph demo loop"
+view_zoom = 1.0999999
+view_offset = Vector2(1238, 68)
+metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
+
+[sub_resource type="Resource" id="Resource_ohf2o"]
+script = ExtResource("4_4lgao")
+param_id = &"CurrentY"
+value = null
+
+[sub_resource type="Resource" id="Resource_5dgyh"]
 script = ExtResource("4_4lgao")
 param_id = &"In"
 value = null
@@ -20,7 +575,7 @@ value = null
 [node name="FlowGraphNode3D" type="Node3D" parent="." unique_id=485763321]
 script = ExtResource("1_rxdep")
 graph = SubResource("Resource_rxdep")
-overrides = Array[ExtResource("4_4lgao")]([SubResource("Resource_amu1w")])
+overrides = Array[ExtResource("4_4lgao")]([SubResource("Resource_ohf2o"), SubResource("Resource_5dgyh")])
 regenerate = Callable()
 clearInstances = Callable()
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
