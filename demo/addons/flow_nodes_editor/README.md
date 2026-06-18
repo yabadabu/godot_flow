@@ -13,6 +13,8 @@
 - [ ] Import node: sample spline
 
 - [ ] subgraph overrides
+	- [ ] Comments not saved in subgraphs
+	- [ ] Errors during initial load
 - [ ] named redirectors/acc
 - [ ] debug/session
 	- [ ] Register / debug Subgraphs

@@ -133,12 +133,12 @@ func onNodeCreated( node : FlowNodeBase ):
 	node.ui_scale = ui_scale
 	refreshSignalsInputArgs( node )
 	gedit.add_child(node)
-	print( "gedit.addChild %s" % [ node.name ])
+	#print( "gedit.addChild %s" % [ node.name ])
 	node.draw.connect( node._on_draw )
 	
 func onConnCreated( conn : Dictionary ):
 	gedit.connect_node(conn.from_node, conn.from_port, conn.to_node, conn.to_port)
-	print( "gedit.addConn %s:%d to %s:%d" % [ conn.from_node, conn.from_port, conn.to_node, conn.to_port ])
+	#print( "gedit.addConn %s:%d to %s:%d" % [ conn.from_node, conn.from_port, conn.to_node, conn.to_port ])
 	var key = [conn.to_node, conn.to_port]
 	if not input_sources.has(key):
 		input_sources.set( key, [])

@@ -11,32 +11,30 @@ func _init():
 		"tooltip" : "Adds a custom text to the graph",
 	}
 
-var label : Label 
+var label : Label
 var panel_sb: StyleBoxFlat
 var panel_selected_sb: StyleBoxFlat
 
 func _ready():
-	super._ready()
-	label = Label.new()
-	label.label_settings = LabelSettings.new()
-	label.label_settings.font_size = 16
-	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	label.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	label = null
 	settings.hue = randf()
-	add_child( label )
-	
-	resizable = true
+	super._ready()
 
 func refreshFromSettings():
 	settings.disabled = false
 	settings.inspect_enabled = false
 	settings.debug_enabled = false
 	super.refreshFromSettings()
-	
 	settings.hue = int(settings.hue * 20) * 0.05
-	
-	if not panel_sb:
+	if not label:
+		label = Label.new()
+		label.label_settings = LabelSettings.new()
+		label.label_settings.font_size = 16
+		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		label.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		
+		add_child( label )
 		panel_sb = get_theme_stylebox("panel", "GraphNode").duplicate(true)
 		panel_sb.border_width_bottom = 0
 		panel_sb.border_width_left = 0
@@ -54,3 +52,5 @@ func refreshFromSettings():
 		panel_selected_sb.bg_color = Color.from_hsv( settings.hue, 0.5, 0.4 )
 		if label:
 			label.text = settings.text
+
+	resizable = true

@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://btpo777vcetcv"]
+[gd_scene format=3 uid="uid://btpo777vcetcv"]
 
 [ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_70s76"]
 [ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="2_ygdt0"]
@@ -136,15 +136,15 @@ data = {
 "type": "flow_graph_nodes",
 "version": 1
 }
-view_zoom = 1.0
+graph_name = "demo_spline_create"
 view_offset = Vector2(0, -197)
 new_name_counter = 7
-in_params = Array[ExtResource("2_ygdt0")]([])
 
-[node name="DemoSplineCreate" type="Node3D"]
+[node name="DemoSplineCreate" type="Node3D" unique_id=1844363366]
 
-[node name="FlowGraphNode3D" type="Node3D" parent="."]
+[node name="FlowGraphNode3D" type="Node3D" parent="." unique_id=1291063301]
 script = ExtResource("1_70s76")
 graph = SubResource("Resource_owq4s")
-refresh_inputs = Callable()
+regenerate = Callable()
+clearInstances = Callable()
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
