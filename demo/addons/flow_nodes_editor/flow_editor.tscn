@@ -38,6 +38,7 @@ size_flags_horizontal = 3
 
 [node name="ButtonReload" type="Button" parent="VBoxContainer/ScrollContainer/HBoxContainer" unique_id=1410979393]
 layout_mode = 2
+tooltip_text = "Reload nodes scripts. Used durig development"
 text = "↻"
 
 [node name="ButtonInputs" type="Button" parent="VBoxContainer/ScrollContainer/HBoxContainer" unique_id=1012244081]
@@ -55,8 +56,8 @@ layout_mode = 2
 [node name="AutoRegen" type="CheckBox" parent="VBoxContainer/ScrollContainer/HBoxContainer" unique_id=483718617]
 unique_name_in_owner = true
 layout_mode = 2
+tooltip_text = "Auto regenerate on each change"
 button_pressed = true
-text = "Auto Regen"
 
 [node name="ButtonRegenerate" type="Button" parent="VBoxContainer/ScrollContainer/HBoxContainer" unique_id=173258778]
 layout_mode = 2

@@ -668,10 +668,9 @@ func readAllInputsForBulk( ctx : FlowData.EvaluationContext, bulk_idx : int ):
 	for port_idx in range( num_inputs ):
 		var input =  _getInputForBulkInContext( ctx, bulk_idx, port_idx )
 		if settings.trace:
-			print( "%s Input for bulk %d is %s" % [ name, bulk_idx, input ])
+			print( "%s Input for bulk %d port %d is %s" % [ name, bulk_idx, port_idx, input ])
 		inputs.append(input)
 		
-	
 	# Read the options inputs, assuming they only generate a single bulk
 	var option_idx = num_inputs
 	for conn in deps:

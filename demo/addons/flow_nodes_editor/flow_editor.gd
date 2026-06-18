@@ -83,16 +83,17 @@ func bindResourceToEditor(res : FlowGraphResource):
 	print( "bindResourceToEditor %d nodes, %d conns (%s)" % [ res.all_nodes.size(), res.all_connections.size(), res.resource_path ])
 
 	res.in_params_changed.connect(_on_inputs_changed)
-	
-	gedit.zoom = res.view_zoom
-	gedit.scroll_offset = res.view_offset
-	data_inspector.setNode( null )
 
 	for node in res.all_nodes:
 		onNodeCreated( node )
 	for conn in res.all_connections:
 		onConnCreated( conn )
-	
+		
+	# Properties must be sec after we add the nodes
+	gedit.zoom = res.view_zoom
+	gedit.scroll_offset = res.view_offset
+	data_inspector.setNode( null )
+
 	res.editor = self
 		
 	for node in res.all_nodes:
