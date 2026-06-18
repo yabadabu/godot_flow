@@ -318,6 +318,7 @@ func _on_bulk_selector_item_selected(index):
 
 func populateSlots():
 	slot_selector.clear()
+	bulk_selector.clear()
 	
 	if not node:
 		return
