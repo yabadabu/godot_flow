@@ -6,6 +6,7 @@ extends NodeSettings
 
 @export var offset_min := Vector3(0,0,0)
 @export var offset_max := Vector3(0,0,0)
+@export var offset_local_space := true
 @export var rotation_min := Vector3(0,0,0)
 @export var rotation_max := Vector3(0,0,0)
 @export var rotation_local_space := false

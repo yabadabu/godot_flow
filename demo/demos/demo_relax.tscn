@@ -32,8 +32,14 @@ data = {
 "keep_alive": false,
 "to_node": &"id_0019_relax",
 "to_port": 0
+}, {
+"from_node": &"id_0018_math_op",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0012_transform",
+"to_port": 0
 }],
-"min_pos": Vector2(80, 180),
+"min_pos": Vector2(0, 0),
 "nodes": [{
 "args_port": {},
 "name": &"id_0001_scan_splines",
@@ -45,6 +51,7 @@ data = {
 "debug_mode": 0,
 "debug_modulate_by": "",
 "debug_output": 0,
+"debug_port_combined_index": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "group_name": "",
@@ -73,6 +80,7 @@ data = {
 "debug_mode": 0,
 "debug_modulate_by": "",
 "debug_output": 0,
+"debug_port_combined_index": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "distance_attribute": "distance",
@@ -86,39 +94,6 @@ data = {
 },
 "show_disconnected_inputs": false,
 "template": "sample_spline"
-}, {
-"args_port": {
-"In A": {
-"connected": true,
-"port": 0
-},
-"In B": {
-"connected": false,
-"port": 1
-}
-},
-"name": &"id_0018_math_op",
-"position": Vector2(500, 0),
-"settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"in_nameA": "position.Y",
-"in_nameB": "0.0",
-"inspect_enabled": true,
-"operation": 2,
-"out_name": "position.Y",
-"random_seed": 820617526,
-"title": "Math",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "math_op"
 }, {
 "args_port": {
 "In": {
@@ -135,6 +110,7 @@ data = {
 "debug_mode": 0,
 "debug_modulate_by": "",
 "debug_output": 0,
+"debug_port_combined_index": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "distribution": 3,
@@ -171,6 +147,7 @@ data = {
 "debug_mode": 0,
 "debug_modulate_by": "",
 "debug_output": 0,
+"debug_port_combined_index": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "inspect_enabled": false,
@@ -183,12 +160,82 @@ data = {
 },
 "show_disconnected_inputs": false,
 "template": "relax"
+}, {
+"args_port": {
+"In A": {
+"connected": true,
+"port": 0
+},
+"In B": {
+"connected": false,
+"port": 1
+}
+},
+"name": &"id_0018_math_op",
+"position": Vector2(500, 0),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"in_nameA": "position.Y",
+"in_nameB": "0.0",
+"inspect_enabled": false,
+"operation": 2,
+"out_name": "position.Y",
+"random_seed": 820617526,
+"title": "Math",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "math_op"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0012_transform",
+"position": Vector2(700, 160),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": true,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"offset_local_space": false,
+"offset_max": Vector3(0, 0, -7),
+"offset_min": Vector3(0, 0, -7),
+"random_seed": 4118807937,
+"rotation_local_space": false,
+"rotation_max": Vector3(0, 0, 0),
+"rotation_min": Vector3(0, 0, 0),
+"scale_max": Vector3(1, 1, 1),
+"scale_min": Vector3(1, 1, 1),
+"title": "Transform",
+"trace": false,
+"uniform_scale": true
+},
+"show_disconnected_inputs": true,
+"template": "transform"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
-view_zoom = 1.0640846
-view_offset = Vector2(593.29944, -139.25586)
+graph_name = "demo_relax"
+view_zoom = 0.8794087
+view_offset = Vector2(202.47058, -103.3685)
 new_name_counter = 19
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_lfecj"]
@@ -209,7 +256,8 @@ point_count = 5
 [node name="FlowGraphNode3D" type="Node3D" parent="." unique_id=768904491]
 script = ExtResource("1_wobnc")
 graph = SubResource("Resource_huh3s")
-refresh_inputs = Callable()
+regenerate = Callable()
+clearInstances = Callable()
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
 
 [node name="Ground" type="MeshInstance3D" parent="FlowGraphNode3D" unique_id=1146039181]

@@ -28,11 +28,16 @@ func execute( ctx : FlowData.EvaluationContext ):
 	var scale_min : Vector3 = getSettingValue( ctx, "scale_min" )
 	var scale_max : Vector3 = getSettingValue( ctx, "scale_max" )
 	var uniform_scale : bool = getSettingValue( ctx, "uniform_scale" )
+	var offset_local_space : bool = getSettingValue( ctx, "offset_local_space" )
 	var rotation_local_space : bool = getSettingValue( ctx, "rotation_local_space" )
 	for i in spos.size():
 		var amount_pos = Vector3( rng.randf(), rng.randf(), rng.randf() )
 		var basis := FlowData.eulerToBasis( srot[i] )
-		spos[i] += basis * (offset_min + ( offset_max - offset_min ) * amount_pos)
+		if offset_local_space:
+			spos[i] += basis * (offset_min + ( offset_max - offset_min ) * amount_pos)
+		else:
+			spos[i] += (offset_min + ( offset_max - offset_min ) * amount_pos)
+			
 		var amount_rot = Vector3( rng.randf(), rng.randf(), rng.randf() )
 		if rotation_local_space:
 			var delta_rot = rotation_min + ( rotation_max - rotation_min ) * amount_rot
