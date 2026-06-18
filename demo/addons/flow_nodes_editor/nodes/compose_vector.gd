@@ -10,7 +10,7 @@ func _init():
 		"category" : "Metadata",
 		"ins" : [{ "label": "In" }], 
 		"outs" : [{ "label" : "Out" }],
-		"tooltip" : "Composes a Vector3 attribute from float attributes or default values.",
+		"tooltip" : "Composes a Vector3 attribute from float attributes or default values.\nCan NOT use constant values like 2.5 on the attribute name",
 	}
 
 func execute( ctx : FlowData.EvaluationContext ):
