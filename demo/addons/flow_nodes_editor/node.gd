@@ -49,9 +49,9 @@ var flow_graph : FlowGraphResource = null
 func _ready():
 	ignore_invalid_connection_type = true
 	checkDrawDebug()
+	updateStyle()
 	refreshInspectMark()
 	refreshDebugMark()
-	updateStyle()
 	
 func checkDrawDebug():
 	if not is_instance_valid(draw_debug) or draw_debug.get_parent() != self:
