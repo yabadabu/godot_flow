@@ -3,7 +3,7 @@ class_name NodeSettings
 extends Resource
 
 # Base class for the settings of all nodes
-# Each concrete node implmenets it's own NodeSettings derived class with the 
+# Each concrete node implements it's own NodeSettings derived class with the 
 # arguments that can be tweaked
 
 enum eDebugMode {
@@ -36,5 +36,5 @@ func _init():
 	resource_name = "Node Settings"
 	random_seed = randi()
 
-func exposeParam( name : String ):
+func exposeParam( name : String ) -> bool:
 	return true

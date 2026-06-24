@@ -41,10 +41,11 @@ func exposeParam( name : String ) -> bool:
 	var arg_from_axis_and_angle = name == "axis" or name == "angle"
 	if name == "operation" or name == "out_name":
 		return true
-	if operation == eOperation.From_Z:
-		return arg_from_z
-	elif operation == eOperation.From_Z_And_Y:
-		return arg_from_z_and_y
-	elif operation == eOperation.From_Axis_And_Angle:
-		return arg_from_axis_and_angle
+	if arg_from_z or arg_from_z_and_y or arg_from_axis_and_angle:
+		if operation == eOperation.From_Z:
+			return arg_from_z
+		elif operation == eOperation.From_Z_And_Y:
+			return arg_from_z_and_y
+		elif operation == eOperation.From_Axis_And_Angle:
+			return arg_from_axis_and_angle
 	return true
