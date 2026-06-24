@@ -318,6 +318,13 @@ class Data:
 	func hasStreamOfType( name : StringName, data_type : DataType ) -> bool:
 		return streams.has( name ) and streams[ name ].data_type == data_type
 	
+	func markStreamAsRotation( name : StringName ):
+		var stream = streams.get( name, null )
+		stream.is_rotation = true
+	
+	static func isStreamARotation( stream : Dictionary ):
+		return stream.has( "is_rotation" )
+	
 	func getContainerChecked( name : String, data_type : DataType ):
 		var stream = streams.get( name, null )
 		if stream and stream.data_type == data_type:
@@ -330,6 +337,7 @@ class Data:
 			if not last_added_stream_name:
 				push_error( "@last is not valid" )
 			return last_added_stream_name
+		# as described in the doc X = Pitch, Y = Yaw, Z = Roll
 		if name == "Yaw":
 			return "%s.Y" % FlowData.AttrRotation
 		if name == "Pitch":
@@ -624,7 +632,7 @@ class Data:
 		if new_name.is_empty():
 			return "new renamed stream can't be empty"
 		if old_name in [ AttrPosition, AttrRotation, AttrSize ]:
-			return "Can't rename position,rotation or size attributes" 
+			return "Can't rename position, rotation or size attributes" 
 		if new_name != old_name:
 			if not allow_override and streams.has( new_name ):
 				return "Data already has a stream named %s" % new_name
@@ -655,6 +663,7 @@ class Data:
 		var spos = addStream( FlowData.AttrPosition, FlowData.DataType.Vector )
 		spos.resize( num_points )
 		var srot = addStream( FlowData.AttrRotation, FlowData.DataType.Vector )
+		markStreamAsRotation( FlowData.AttrRotation )
 		srot.resize( num_points )
 		
 		# Initialize with ones
