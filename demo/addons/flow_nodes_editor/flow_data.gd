@@ -319,8 +319,10 @@ class Data:
 		return streams.has( name ) and streams[ name ].data_type == data_type
 	
 	func markStreamAsRotation( name : StringName ):
+		name = translateStreamName( name )
 		var stream = streams.get( name, null )
-		stream.is_rotation = true
+		if stream:
+			stream.is_rotation = true
 	
 	static func isStreamARotation( stream : Dictionary ):
 		return stream.has( "is_rotation" )
@@ -333,16 +335,17 @@ class Data:
 		
 	# converts 'Yaw' into "Rotation.Y" 
 	func translateStreamName( name : String ):
+		name = name.to_lower()
 		if name == "@last":
 			if not last_added_stream_name:
 				push_error( "@last is not valid" )
 			return last_added_stream_name
 		# as described in the doc X = Pitch, Y = Yaw, Z = Roll
-		if name == "Yaw":
+		if name == "yaw":
 			return "%s.Y" % FlowData.AttrRotation
-		if name == "Pitch":
+		if name == "pitch":
 			return "%s.X" % FlowData.AttrRotation
-		if name == "Roll":
+		if name == "roll":
 			return "%s.Z" % FlowData.AttrRotation
 		return name
 		
@@ -402,8 +405,7 @@ class Data:
 		
 	func findStream( name : String ):
 		name = translateStreamName( name )
-		var name_lower := name.to_lower()
-		if name_lower == "front" or name_lower == "up" or name_lower == "right":
+		if name == "front" or name == "up" or name == "right":
 			var rot_stream = streams.get(AttrRotation, null)
 			if rot_stream != null:
 				var eulers = rot_stream.container
@@ -411,7 +413,7 @@ class Data:
 				new_container.resize(eulers.size())
 				for idx in range(eulers.size()):
 					var basis := FlowData.eulerToBasis(eulers[idx])
-					match name_lower:
+					match name:
 						"front":
 							new_container[idx] = basis.z
 						"up":
