@@ -350,14 +350,14 @@ class Data:
 		return name
 		
 	func getSubStreamIndex(  sub_comp : String ):
-		var sc_up = sub_comp.to_upper()
-		if sc_up == "X" or sc_up == "R":
+		var sc_up = sub_comp.to_lower()
+		if sc_up == "x" or sc_up == "r" or sc_up == "pitch":
 			return 0
-		elif sc_up == "Y" or sc_up == "G":
+		elif sc_up == "y" or sc_up == "g" or sc_up == "yaw":
 			return 1
-		elif sc_up == "Z" or sc_up == "B":
+		elif sc_up == "z" or sc_up == "b" or sc_up == "roll":
 			return 2
-		elif sc_up == "W" or sc_up == "A":
+		elif sc_up == "w" or sc_up == "a":
 			return 3
 		return -1
 	
