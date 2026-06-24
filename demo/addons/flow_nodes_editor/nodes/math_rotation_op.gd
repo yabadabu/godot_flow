@@ -138,7 +138,10 @@ func execute( _ctx : FlowData.EvaluationContext ):
 		match settings.operation:
 			MathRotationOpNodeSettings.eOperation.Combine:
 				for i in num_elems:
-					outC[i] = inA[i] + inB[i]
+					var qA := Quaternion.from_euler( inA[i] * PI / 180.0 )
+					var qB := Quaternion.from_euler( inB[i] * PI / 180.0 )
+					var qC := qB * qA
+					outC[i] = qC.get_euler() * 180 / PI
 			_:
 				setError( "Rotation Vector3 vs Vector3 not supported yet")
 
