@@ -87,7 +87,6 @@ func execute( _ctx : FlowData.EvaluationContext ):
 	# if C is not connected, we might have a constant
 	if sC == null:
 		# Check if the name looks like a float
-		print( "Checking if %s is a float" % settings.in_nameC)
 		if settings.in_nameC.is_valid_float():
 			var v = settings.in_nameC.to_float()
 			sC = newFloatStream( num_elemsA, "Constant %s" % settings.in_nameC, v )

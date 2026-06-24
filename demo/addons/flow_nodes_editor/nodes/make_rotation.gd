@@ -18,18 +18,19 @@ func _init():
 	}
 	
 func getMeta() -> Dictionary:
-	if settings.operation == MakeRotationNodeSettings.eOperation.From_Z:
-		if meta_node.ins.size() != 1 or meta_node.ins[0] != inZ:
-			meta_node.ins = [ inZ ]
-			initFromScript()
-	elif settings.operation == MakeRotationNodeSettings.eOperation.From_Z_And_Y:
-		if meta_node.ins.size() != 2 or meta_node.ins[0] != inZ:
-			meta_node.ins = [ inZ, inY ]
-			initFromScript()
-	elif settings.operation == MakeRotationNodeSettings.eOperation.From_Axis_And_Angle:
-		if meta_node.ins.size() != 2 or meta_node.ins[0] != inAxis:
-			meta_node.ins = [ inAxis, inAngle ]
-			initFromScript()
+	if settings:
+		if settings.operation == MakeRotationNodeSettings.eOperation.From_Z:
+			if meta_node.ins.size() != 1 or meta_node.ins[0] != inZ:
+				meta_node.ins = [ inZ ]
+				initFromScript()
+		elif settings.operation == MakeRotationNodeSettings.eOperation.From_Z_And_Y:
+			if meta_node.ins.size() != 2 or meta_node.ins[0] != inZ:
+				meta_node.ins = [ inZ, inY ]
+				initFromScript()
+		elif settings.operation == MakeRotationNodeSettings.eOperation.From_Axis_And_Angle:
+			if meta_node.ins.size() != 2 or meta_node.ins[0] != inAxis:
+				meta_node.ins = [ inAxis, inAngle ]
+				initFromScript()
 	return meta_node
 
 func get_input_container( in_idx : int ):

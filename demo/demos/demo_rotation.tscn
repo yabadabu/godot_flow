@@ -27,12 +27,6 @@ data = {
 "to_node": &"id_0006_math_rotation_op",
 "to_port": 2
 }, {
-"from_node": &"id_0006_math_op",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0010_make_rotation",
-"to_port": 0
-}, {
 "from_node": &"id_0010_make_rotation",
 "from_port": 0,
 "keep_alive": false,
@@ -57,10 +51,10 @@ data = {
 "to_node": &"id_0016_math_rotation_op",
 "to_port": 1
 }, {
-"from_node": &"id_0006_math_rotation_op",
+"from_node": &"id_0006_math_op",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0014_make_rotation",
+"to_node": &"id_0010_make_rotation",
 "to_port": 0
 }, {
 "from_node": &"id_0013_add_attribute",
@@ -68,6 +62,12 @@ data = {
 "keep_alive": false,
 "to_node": &"id_0014_make_rotation",
 "to_port": 1
+}, {
+"from_node": &"id_0006_math_rotation_op",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0014_make_rotation",
+"to_port": 0
 }],
 "min_pos": Vector2(0, 0),
 "nodes": [{
@@ -190,7 +190,7 @@ data = {
 "title": "Make Rotation",
 "trace": false
 },
-"show_disconnected_inputs": true,
+"show_disconnected_inputs": false,
 "template": "make_rotation"
 }, {
 "args_port": {
@@ -268,48 +268,13 @@ data = {
 "template": "math_rotation_op"
 }, {
 "args_port": {
-"In A": {
-"connected": true,
-"port": 0
-},
-"In B": {
-"connected": true,
-"port": 1
-}
-},
-"name": &"id_0016_math_rotation_op",
-"position": Vector2(920, 40),
-"settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": true,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"in_nameA": "rotation",
-"in_nameB": "@last",
-"in_nameC": "@last",
-"inspect_enabled": false,
-"operation": 0,
-"out_name": "rotation",
-"random_seed": 1147320551,
-"title": "Rotation",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "math_rotation_op"
-}, {
-"args_port": {
 "In": {
 "connected": false,
 "port": 0.0
 }
 },
 "name": &"id_0013_add_attribute",
-"position": Vector2(580, 200),
+"position": Vector2(580, 220),
 "settings": {
 "cte_bool": false,
 "cte_color": Color(1, 1, 1, 1),
@@ -364,22 +329,57 @@ data = {
 "debug_port_combined_index": 0,
 "debug_scale": 1.0,
 "disabled": false,
-"inspect_enabled": true,
+"inspect_enabled": false,
 "operation": 2,
-"out_name": "NewRotation",
+"out_name": "delta_rot",
 "random_seed": 2296726865,
 "title": "Make Rotation",
 "trace": false
 },
-"show_disconnected_inputs": true,
+"show_disconnected_inputs": false,
 "template": "make_rotation"
+}, {
+"args_port": {
+"In A": {
+"connected": true,
+"port": 0
+},
+"In B": {
+"connected": true,
+"port": 1
+}
+},
+"name": &"id_0016_math_rotation_op",
+"position": Vector2(920, 40),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": true,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"in_nameA": "rotation",
+"in_nameB": "@last",
+"in_nameC": "@last",
+"inspect_enabled": false,
+"operation": 0,
+"out_name": "@source",
+"random_seed": 1147320551,
+"title": "Rotation",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "math_rotation_op"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
 graph_name = "demo_rotation"
-view_zoom = 1.1
-view_offset = Vector2(500.5553, -274.3186)
+view_zoom = 0.9090909
+view_offset = Vector2(371.30707, -390.24426)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_chni2"]
 albedo_color = Color(0.043137256, 1, 1, 1)
@@ -397,5 +397,5 @@ clearInstances = Callable()
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
 
 [node name="Target" type="MeshInstance3D" parent="." unique_id=1336705541]
-transform = Transform3D(0.57, 0, 0, 0, 0.57, 0, 0, 0, 0.57, 1.45752, 2.3714483, 3.857254)
+transform = Transform3D(0.57, 0, 0, 0, 0.57, 0, 0, 0, 0.57, 3.4031363, 2.3714485, 5.340668)
 mesh = SubResource("SphereMesh_srhpv")
