@@ -849,9 +849,10 @@ func onEditorSceneChanged():
 	# which can potentially become dirty
 	# This also triggers as dirty all scan_* nodes when we change
 	# anything in another of our nodes. Not very good
-	for node in getAllNodes():
-		if node.getMeta().get( "scans_scene", false ):
-			node.dirty = true
+	if current_resource and resource_owner:
+		for node in getAllNodes():
+			if node.getMeta().get( "scans_scene", false ):
+				node.onSceneChanged( resource_owner.ctx )
 	queueRegen()
 
 # new_resource = res://graph02_curves.tres

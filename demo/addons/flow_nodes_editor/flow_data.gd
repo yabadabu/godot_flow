@@ -327,6 +327,9 @@ class Data:
 	static func isStreamARotation( stream : Dictionary ):
 		return stream.has( "is_rotation" )
 	
+	func equals( other : FlowData.Data ) -> bool:
+		return size() == other.size() and tags == other.tags && streams == other.streams
+	
 	func getContainerChecked( name : String, data_type : DataType ):
 		var stream = streams.get( name, null )
 		if stream and stream.data_type == data_type:

@@ -695,6 +695,34 @@ func executedDisabled( ctx : FlowData.EvaluationContext ):
 func getPreferredSpawnPath():
 	return null
 
+func onSceneChanged( ctx : FlowData.EvaluationContext ):
+	
+	# Just supporting nodes without inputs, that have flagged as scans_scene = true
+	# basically looking for all scan_* nodes
+	if num_connected_bulks != 1 or meta_node.ins.size() > 0 or not meta_node.get( "scans_scene", false):
+		return
+		
+	# Check if we have something generated
+	if generated_bulks.size() == 1 and generated_bulks[0].size() == 1:
+		var last_output = get_bulk_output( 0, 0 )
+		if last_output:
+			# last_output.dump( "Last output" )
+			# We need to run the preExecute otherwise a second evaluation will appear as a second bulk
+			preExecute( ctx )
+			execute( ctx )
+			var current_output = get_bulk_output( 0, 0 )
+			if current_output:
+				#current_output.dump( "New output")
+				
+				# Do not become dirty if the output has not changed by doing a early exit
+				if last_output.equals( current_output ):
+					# print( "The regenerated data for %s is the same. So the node does not become dirty" % name )
+					return;
+
+	# if we reach this point, the node requires is dirty and all dependants will do. We have evaluated the
+	# node twice but potentially saved a lot of nodes in the general case
+	dirty = true
+
 func run( ctx : FlowData.EvaluationContext ):
 	for bulk_index in range( num_connected_bulks ):
 		if settings.trace:
