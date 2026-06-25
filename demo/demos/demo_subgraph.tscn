@@ -174,7 +174,7 @@ data = {
 "debug_port_combined_index": 0,
 "debug_scale": 1.0,
 "disabled": false,
-"inspect_enabled": true,
+"inspect_enabled": false,
 "name": "Out",
 "random_seed": 928555403,
 "title": "Output",
@@ -219,8 +219,58 @@ data = {
 "to_node": &"id_0007_subgraph",
 "to_port": 1
 }],
-"min_pos": Vector2(0, 0),
+"min_pos": Vector2(-100, -120),
 "nodes": [{
+"args_port": {},
+"name": &"id_0006_grid",
+"position": Vector2(100, 120),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"origin": Vector3(0, 0, 0),
+"random_seed": 1565012789,
+"rotation": Vector3(0, 0, 0),
+"size": 0.87,
+"step": Vector3(1, 1, 1),
+"title": "Grid",
+"trace": false,
+"x": 3,
+"y": 1,
+"z": 3
+},
+"show_disconnected_inputs": false,
+"template": "grid"
+}, {
+"args_port": {},
+"name": &"id_0004_input_Height",
+"position": Vector2(100, 220),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"name": "Height",
+"random_seed": 939309640,
+"title": "Input",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "input_Height"
+}, {
 "args_port": {
 "In": {
 "connected": true,
@@ -228,7 +278,7 @@ data = {
 }
 },
 "name": &"id_0014_spawn_meshes",
-"position": Vector2(420, 0),
+"position": Vector2(520, 120),
 "settings": {
 "color_attribute": "color",
 "debug_bulk": 0,
@@ -255,56 +305,6 @@ data = {
 "show_disconnected_inputs": false,
 "template": "spawn_meshes"
 }, {
-"args_port": {},
-"name": &"id_0004_input_Height",
-"position": Vector2(0, 100),
-"settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"name": "Height",
-"random_seed": 939309640,
-"title": "Input",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "input_Height"
-}, {
-"args_port": {},
-"name": &"id_0006_grid",
-"position": Vector2(0, 0),
-"settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"origin": Vector3(0, 0, 0),
-"random_seed": 1565012789,
-"rotation": Vector3(0, 0, 0),
-"size": 0.87,
-"step": Vector3(1, 1, 1),
-"title": "Grid",
-"trace": false,
-"x": 3,
-"y": 1,
-"z": 3
-},
-"show_disconnected_inputs": false,
-"template": "grid"
-}, {
 "args_port": {
 "Ins": {
 "connected": true,
@@ -316,7 +316,7 @@ data = {
 }
 },
 "name": &"id_0007_subgraph",
-"position": Vector2(180, 0),
+"position": Vector2(280, 120),
 "settings": {
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
@@ -335,13 +335,37 @@ data = {
 },
 "show_disconnected_inputs": false,
 "template": "subgraph"
+}, {
+"args_port": {},
+"name": &"id_0001_comment",
+"position": Vector2(0, 0),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"hue": 0.65,
+"inspect_enabled": false,
+"random_seed": 2313414386,
+"text": "Each scene Node3D in the demo scene provides it's own custom input arguments 
+for the height, so the grid is elevated a different height",
+"title": "Comments",
+"trace": false
+},
+"show_disconnected_inputs": true,
+"template": "comment"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
 graph_name = "demo subgraph"
-view_zoom = 0.87940836
-view_offset = Vector2(-38.119843, -90.87283)
+view_zoom = 0.79946214
+view_offset = Vector2(-170.65057, -324.5094)
 new_name_counter = 1
 in_params = Array[ExtResource("2_mmqr1")]([SubResource("Resource_x3i3k")])
 
@@ -351,7 +375,7 @@ param_id = &"Height"
 enabled = true
 value = 3.525
 
-[sub_resource type="MultiMesh" id="MultiMesh_5ifn7"]
+[sub_resource type="MultiMesh" id="MultiMesh_c03w7"]
 transform_format = 1
 instance_count = 9
 mesh = ExtResource("2_5ifn7")
@@ -381,8 +405,8 @@ flow_override/Height/enabled = true
 flow_override/Height/value = 3.525
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
 
-[node name="Spawn Meshes_0000" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=212420096]
-multimesh = SubResource("MultiMesh_5ifn7")
+[node name="Spawn Meshes_0000" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=330689484]
+multimesh = SubResource("MultiMesh_c03w7")
 metadata/flow_owner = &"id_0014_spawn_meshes"
 
 [node name="FlowGraphNode3D2" type="Node3D" parent="." unique_id=357897790]
@@ -396,6 +420,6 @@ flow_override/Height/enabled = true
 flow_override/Height/value = 1.7
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
 
-[node name="Spawn Meshes_0000" type="MultiMeshInstance3D" parent="FlowGraphNode3D2" unique_id=2060929016]
+[node name="Spawn Meshes_0000" type="MultiMeshInstance3D" parent="FlowGraphNode3D2" unique_id=1613755414]
 multimesh = SubResource("MultiMesh_nyqj1")
 metadata/flow_owner = &"id_0014_spawn_meshes"

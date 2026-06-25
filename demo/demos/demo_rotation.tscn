@@ -397,5 +397,5 @@ clearInstances = Callable()
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
 
 [node name="Target" type="MeshInstance3D" parent="." unique_id=1336705541]
-transform = Transform3D(0.57, 0, 0, 0, 0.57, 0, 0, 0, 0.57, 3.4031363, 2.3714485, 5.340668)
+transform = Transform3D(0.57, 0, 0, 0, 0.57, 0, 0, 0, 0.57, 1.4616053, 2.3714485, 6.2426333)
 mesh = SubResource("SphereMesh_srhpv")

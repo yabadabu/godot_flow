@@ -17,52 +17,23 @@ script = ExtResource("3_q2g6x")
 data = {
 "frames": [],
 "links": [{
-"from_node": &"id_0045_input_Grid - Y",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0041_grid",
-"to_port": 0
-}, {
 "from_node": &"id_0041_grid",
 "from_port": 0,
 "keep_alive": false,
 "to_node": &"id_0044_spawn_meshes",
 "to_port": 0
+}, {
+"from_node": &"id_0045_input_Grid - Y",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0041_grid",
+"to_port": 0
 }],
 "min_pos": Vector2(0, 0),
 "nodes": [{
-"args_port": {
-"origin": {
-"connected": false,
-"port": 4
-},
-"rotation": {
-"connected": false,
-"port": 5
-},
-"size": {
-"connected": false,
-"port": 6
-},
-"step": {
-"connected": false,
-"port": 3
-},
-"x": {
-"connected": true,
-"port": 0
-},
-"y": {
-"connected": false,
-"port": 1
-},
-"z": {
-"connected": false,
-"port": 2
-}
-},
-"name": &"id_0041_grid",
-"position": Vector2(180, 0),
+"args_port": {},
+"name": &"id_0045_input_Grid - Y",
+"position": Vector2(0, 0),
 "settings": {
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
@@ -74,19 +45,13 @@ data = {
 "debug_scale": 1.0,
 "disabled": false,
 "inspect_enabled": false,
-"origin": Vector3(0, 0, 0),
-"random_seed": 1442968195,
-"rotation": Vector3(0, 0, 0),
-"size": 0.74,
-"step": Vector3(1, 1, 1),
-"title": "Grid",
-"trace": false,
-"x": 6,
-"y": 1,
-"z": 3
+"name": "Grid - Y",
+"random_seed": 580236535,
+"title": "Input",
+"trace": false
 },
 "show_disconnected_inputs": false,
-"template": "grid"
+"template": "input_Grid - Y"
 }, {
 "args_port": {
 "In": {
@@ -154,9 +119,14 @@ data = {
 "show_disconnected_inputs": false,
 "template": "spawn_meshes"
 }, {
-"args_port": {},
-"name": &"id_0045_input_Grid - Y",
-"position": Vector2(0, 0),
+"args_port": {
+"x": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0041_grid",
+"position": Vector2(180, 0),
 "settings": {
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
@@ -168,19 +138,26 @@ data = {
 "debug_scale": 1.0,
 "disabled": false,
 "inspect_enabled": false,
-"name": "Grid - Y",
-"random_seed": 580236535,
-"title": "Input",
-"trace": false
+"origin": Vector3(0, 0, 0),
+"random_seed": 1442968195,
+"rotation": Vector3(0, 0, 0),
+"size": 0.74,
+"step": Vector3(1, 1, 1),
+"title": "Grid",
+"trace": false,
+"x": 6,
+"y": 1,
+"z": 3
 },
 "show_disconnected_inputs": false,
-"template": "input_Grid - Y"
+"template": "grid"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
-view_zoom = 1.1
-view_offset = Vector2(182.3, -80.399994)
+graph_name = "demo_spawn_rocks"
+view_zoom = 0.9090909
+view_offset = Vector2(-126.52893, -228.19835)
 in_params = Array[ExtResource("2_y5sxr")]([SubResource("Resource_q2g6x")])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 
@@ -191,7 +168,7 @@ param_id = &"Grid - Y"
 enabled = true
 value = 2
 
-[sub_resource type="MultiMesh" id="MultiMesh_q2g6x"]
+[sub_resource type="MultiMesh" id="MultiMesh_wc44r"]
 transform_format = 1
 instance_count = 6
 mesh = ExtResource("2_q2g6x")
@@ -204,7 +181,7 @@ param_id = &"Grid - Y"
 enabled = true
 value = 3
 
-[sub_resource type="MultiMesh" id="MultiMesh_3h15l"]
+[sub_resource type="MultiMesh" id="MultiMesh_aupd6"]
 transform_format = 1
 instance_count = 9
 mesh = ExtResource("2_q2g6x")
@@ -222,8 +199,8 @@ clearInstances = Callable()
 "flow_override/Grid - Y/value" = 2
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
 
-[node name="Spawn Meshes_0000" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=772979402]
-multimesh = SubResource("MultiMesh_q2g6x")
+[node name="Spawn Meshes_0000" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=1112084073]
+multimesh = SubResource("MultiMesh_wc44r")
 metadata/flow_owner = &"id_0044_spawn_meshes"
 
 [node name="FlowGraphNode3D2" type="Node3D" parent="." unique_id=1191537015]
@@ -237,6 +214,6 @@ clearInstances = Callable()
 "flow_override/Grid - Y/value" = 3
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
 
-[node name="Spawn Meshes_0000" type="MultiMeshInstance3D" parent="FlowGraphNode3D2" unique_id=707672806]
-multimesh = SubResource("MultiMesh_3h15l")
+[node name="Spawn Meshes_0000" type="MultiMeshInstance3D" parent="FlowGraphNode3D2" unique_id=1918497091]
+multimesh = SubResource("MultiMesh_aupd6")
 metadata/flow_owner = &"id_0044_spawn_meshes"

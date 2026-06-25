@@ -27,69 +27,11 @@ data = {
 "to_node": &"id_0007_sample_spline",
 "to_port": 0
 }],
-"min_pos": Vector2(0, 0),
+"min_pos": Vector2(0, -140),
 "nodes": [{
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0006_create_spline",
-"position": Vector2(420, 0),
-"settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"random_seed": 1070075698,
-"title": "Create Spline",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "create_spline"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0004_expression",
-"position": Vector2(140, 0),
-"settings": {
-"args": {
-"freq": 1.07
-},
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": true,
-"debug_mode": 1,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 0.32,
-"disabled": false,
-"expose_arrays": false,
-"expression": "Vector3( Index, sin( Index * freq ), cos( Index * freq ) )",
-"inspect_enabled": false,
-"out_name": "position",
-"random_seed": 1229476284,
-"title": "Expression",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "expression"
-}, {
 "args_port": {},
 "name": &"id_0001_grid",
-"position": Vector2(0, 0),
+"position": Vector2(0, 140),
 "settings": {
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
@@ -116,13 +58,71 @@ data = {
 "template": "grid"
 }, {
 "args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0004_expression",
+"position": Vector2(140, 140),
+"settings": {
+"args": {
+"freq": 1.07
+},
+"debug_bulk": 0,
+"debug_color": Color(0, 1, 1, 1),
+"debug_enabled": true,
+"debug_mode": 1,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 0.32,
+"disabled": false,
+"expose_arrays": false,
+"expression": "Vector3( Index, sin( Index * freq ), cos( Index * freq ) )",
+"inspect_enabled": false,
+"out_name": "position",
+"random_seed": 1229476284,
+"title": "Expression",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "expression"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0006_create_spline",
+"position": Vector2(420, 140),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": true,
+"random_seed": 1070075698,
+"title": "Create Spline",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "create_spline"
+}, {
+"args_port": {
 "Splines": {
 "connected": true,
 "port": 0
 }
 },
 "name": &"id_0007_sample_spline",
-"position": Vector2(600, 0),
+"position": Vector2(600, 140),
 "settings": {
 "adjust_to_borders": true,
 "debug_bulk": 0,
@@ -145,13 +145,37 @@ data = {
 },
 "show_disconnected_inputs": false,
 "template": "sample_spline"
+}, {
+"args_port": {},
+"name": &"id_0002_comment",
+"position": Vector2(0, 0),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"hue": 0.65,
+"inspect_enabled": false,
+"random_seed": 1776215324,
+"text": "Using a grid and a expression node to create position the knots of the spline (Blue Boxes)
+Then create a SplineNode, then sample it (white Boxes)",
+"title": "Comments",
+"trace": false
+},
+"show_disconnected_inputs": true,
+"template": "comment"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
 graph_name = "demo_spline_create"
-view_zoom = 1.1
-view_offset = Vector2(9.800018, -249)
+view_zoom = 0.82644624
+view_offset = Vector2(-35.501877, -281.25397)
 new_name_counter = 7
 
 [node name="DemoSplineCreate" type="Node3D" unique_id=1844363366]
