@@ -36,7 +36,14 @@ class_name FlowGraphResource
 		return in_params
 
 # The compilated version of the resource, which is shared between all the instances using this resource
+var loading : bool = false:
+	set(value):
+		loading = value
+		print( "Res %s.loading = %s  InSize:%d" % [ graph_name, value, in_params.size() ])
+	get:
+		return loading
 var compiled : bool = false
+		
 var nodes_by_name : Dictionary
 var all_connections : Array[ Dictionary ]
 var all_frames : Array[ Dictionary ]
@@ -86,6 +93,7 @@ func addNodeFromTemplate( node_template, node_name : String, node_settings = nul
 	if node_name and nodes_by_name.has( node_name ):
 		node_name = factory.getNewName(node_template)
 		print( "will use new name %s" % [ node_name ])
+	
 	var node = factory.createNewNode( null, node_template, node_name, node_settings )
 	if node:
 		nodes_by_name[ node.name ] = node
@@ -93,6 +101,8 @@ func addNodeFromTemplate( node_template, node_name : String, node_settings = nul
 		node.dirty = true
 		node.runtime_only = editor == null
 		node.flow_graph = self
+		if not node.settings.title:
+			node.settings.title = node.getTitle()
 		
 		if node and node.settings and node.settings is InputNodeSettings:
 			input_nodes.append( node )
@@ -204,6 +214,7 @@ func dump():
 func compile():
 	if compiled:
 		return
+	print( "FlowGraph.Compilation.Starts (%s)" % [ resource_path ])
 	all_connections.clear()
 	all_nodes.clear()
 	nodes_by_name.clear()
@@ -212,6 +223,6 @@ func compile():
 	if data and not data.is_empty():
 		FlowNodeIO.create_nodes_from_dict( data, self, Vector2(0,0) )
 	var time_node_end := Time.get_ticks_usec()
-	print( "FlowGraph.Compiled in %s (%s)" % [ time_node_end - time_node_start, resource_path ])
-	dump()
+	print( "FlowGraph.Compilation.Ends in %s (%s)" % [ time_node_end - time_node_start, resource_path ])
 	compiled = true
+	dump()

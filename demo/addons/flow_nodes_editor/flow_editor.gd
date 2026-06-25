@@ -105,10 +105,13 @@ func bindResourceToEditor(res : FlowGraphResource):
 			node.nodeOptionsChanged( false )
 	
 func setResourceToEdit( new_resource : FlowGraphResource, new_resource_owner : FlowGraphNode3D ):
+	if new_resource and new_resource.loading:
+		return
 	print( "setResourceToEdit:%s Owner:%s" % [ new_resource, new_resource_owner ] )
 	
 	# Ensure we have a tab for this resource
 	if new_resource:
+		print( "Activating tab" )
 		var tab_idx = findIndexInTabs( new_resource )
 		if tab_idx < 0:
 			tab_idx = addToTabs( new_resource, new_resource_owner )
@@ -116,6 +119,7 @@ func setResourceToEdit( new_resource : FlowGraphResource, new_resource_owner : F
 		tab_bar.current_tab = tab_idx
 	
 	if current_resource != new_resource:
+		print( "unbinding old, bindning new" )
 		unbindResourceFromEditor( current_resource )
 		current_resource = new_resource
 		bindResourceToEditor( current_resource )
@@ -133,12 +137,12 @@ func onNodeCreated( node : FlowNodeBase ):
 	node.ui_scale = ui_scale
 	refreshSignalsInputArgs( node )
 	gedit.add_child(node)
-	print( "gedit.addChild %s" % [ node.name ])
+	#print( "gedit.addChild %s" % [ node.name ])
 	node.draw.connect( node._on_draw )
 	
 func onConnCreated( conn : Dictionary ):
 	gedit.connect_node(conn.from_node, conn.from_port, conn.to_node, conn.to_port)
-	print( "gedit.addConn %s:%d to %s:%d" % [ conn.from_node, conn.from_port, conn.to_node, conn.to_port ])
+	#print( "gedit.addConn %s:%d to %s:%d" % [ conn.from_node, conn.from_port, conn.to_node, conn.to_port ])
 	var key = [conn.to_node, conn.to_port]
 	if not input_sources.has(key):
 		input_sources.set( key, [])

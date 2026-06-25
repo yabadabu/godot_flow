@@ -86,6 +86,7 @@ func on_scene_changed(scene_root: Node) -> void:
 	print( "Scene Changed detected %s : %s -> %s" % [graph_dock.current_resource, is_instance_valid(graph_dock.resource_owner), scene_root.name ] )
 	if graph_dock.resource_owner:
 		var node = graph_dock.resource_owner
+		print( "Close current dock?" )
 		if scene_root and (node.get_owner() != scene_root and not scene_root.is_ancestor_of(node)):
 			graph_dock.setResourceToEdit( null, null )
 			

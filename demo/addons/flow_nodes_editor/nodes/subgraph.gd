@@ -24,7 +24,7 @@ func getTitle() -> String:
 		return settings.graph.graph_name
 	return "Subgraph"
 
-func getMeta() -> Dictionary:
+func refreshFromSettings():
 	var ins = []
 	var outs = []
 	if settings and settings.graph:
@@ -47,8 +47,9 @@ func getMeta() -> Dictionary:
 					})
 	meta_node.ins = ins
 	meta_node.outs = outs
-	return meta_node
-
+	print( "%s.subgraph refreshFromSettings ins=%d Graph=%s" % [ name, ins.size(), settings.graph ])
+	super.refreshFromSettings()
+	
 # Double click to trigger openning the subgraph
 func _gui_input(event: InputEvent):
 	if event is InputEventMouseButton and event.double_click and event.button_index == MOUSE_BUTTON_LEFT:

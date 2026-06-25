@@ -1,7 +1,7 @@
 # TODO
 
 - [ ] Documentation
-	Stream Names
+	Stream Names, lowercase
 	Batch concepts
 	Subgraphs
 		Feedback
@@ -18,6 +18,7 @@
 	- [ ] Register / debug Subgraphs
 - [ ] multiple flowgraphs / tabs
 - [ ] use the WeightsRandomSampler from match_and_set in more places (sample mesh/sample scene)
+- [X] optimize scan node always becoming dirty when something changes in the level.
 
 - [ ] Demos
 	- [X] Wall of rocks, picking a random point on the top

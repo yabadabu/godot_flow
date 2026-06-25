@@ -177,10 +177,12 @@ static func _paste_nodes_from_dict( dict, editor : FlowGraphEditor, at_graph_coo
 		for node in new_nodes:
 			node.selected = true
 
-static func create_nodes_from_dict( dict, graph : FlowGraphResource, paste_offset = null):		
+static func create_nodes_from_dict( dict, graph : FlowGraphResource, paste_offset = null):
+	print( "at create_nodes_from_dict")
 	if dict.get( "type", null) != "flow_graph_nodes":
 		push_error( "Invalid dict to paste nodes from" )
 		return []
+	graph.loading = true
 	var new_nodes = []
 	var old_to_new_names = {}
 	
@@ -190,26 +192,26 @@ static func create_nodes_from_dict( dict, graph : FlowGraphResource, paste_offse
 		if not in_node:
 			return null
 		var in_name = in_node.name
-		print( "Parsing node %s" % in_name )
+		print( "Parsing node %s  Template:%s Settings:%s" % [ in_name, in_node.template, in_node.settings ] )
 		
-		var node = graph.addNodeFromTemplate( in_node.template, in_name )
+		# Apply saved settings...
+		#dict_to_resource( in_node.settings, settings )
+		
+		# Never import the inspect_enabled
+		in_node.settings.inspect_enabled = false
+		
+		print( "Creating node %s" % in_name )
+		var node = graph.addNodeFromTemplate( in_node.template, in_name, in_node.settings )
 		if not node:
 			return null
 		var in_pos = _parse_vector2( in_node.position )
 		node.position_offset = ( in_pos + paste_offset ) * ui_scale
-		print( "New node pos %s will be %s" % [ in_name, node.position_offset ] )
+		#print( "New node pos %s will be %s" % [ in_name, node.position_offset ] )
 		node.show_disconnected_inputs = in_node.get("show_disconnected_inputs", false)
 		node.args_ports_by_name = in_node.get("args_port", {})
 		
-		# Apply saved settings...
-		dict_to_resource( in_node.settings, node.settings )
-		
-		# Never inport the inspect_enabled
-		node.settings.inspect_enabled = false
-		
-		node.initFromScript();
-		
-		node.refreshFromSettings()
+		#node.refreshFromSettings()
+		#node.initFromScript()
 		
 		# Update relation old -> new for the links
 		old_to_new_names[ in_name ] = node.name
@@ -235,6 +237,7 @@ static func create_nodes_from_dict( dict, graph : FlowGraphResource, paste_offse
 		frame_data.position = ( in_pos + paste_offset ) * ui_scale
 		graph.addFrame(frame_data)
 
+	graph.loading = false
 	return new_nodes
 
 static func copySelectionToClipboard( editor : FlowGraphEditor ):
