@@ -16,38 +16,23 @@ data = {
 "links": [],
 "min_pos": Vector2(0, 0),
 "nodes": [{
-"args_port": {},
-"name": &"id_0018_input_In",
-"position": Vector2(0, 0),
-"settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"name": "In",
-"random_seed": 1305654154,
-"title": "Input",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "input_In"
-}, {
 "args_port": {
-"Out": {
+"x": {
 "connected": false,
 "port": 0
+},
+"y": {
+"connected": false,
+"port": 1
+},
+"z": {
+"connected": false,
+"port": 2
 }
 },
-"name": &"id_0024_output",
-"position": Vector2(500, 0),
+"name": &"id_0022_make_vector",
+"position": Vector2(0, 140),
 "settings": {
-"data_type": 999,
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
@@ -58,13 +43,16 @@ data = {
 "debug_scale": 1.0,
 "disabled": false,
 "inspect_enabled": false,
-"name": "Elevated",
-"random_seed": 947836005,
-"title": "Output",
-"trace": false
+"out_name": "Vector",
+"random_seed": 2880357212,
+"title": "Make Vector",
+"trace": false,
+"x": 0.0,
+"y": 1.0,
+"z": 0.0
 },
 "show_disconnected_inputs": false,
-"template": "output"
+"template": "make_vector"
 }, {
 "args_port": {
 "In": {
@@ -133,6 +121,34 @@ data = {
 "template": "spawn_meshes"
 }, {
 "args_port": {
+"Out": {
+"connected": false,
+"port": 0
+}
+},
+"name": &"id_0024_output",
+"position": Vector2(500, 0),
+"settings": {
+"data_type": 999,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"name": "Elevated",
+"random_seed": 947836005,
+"title": "Output",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "output"
+}, {
+"args_port": {
 "In A": {
 "connected": false,
 "port": 0
@@ -166,22 +182,9 @@ data = {
 "show_disconnected_inputs": false,
 "template": "math_op"
 }, {
-"args_port": {
-"x": {
-"connected": false,
-"port": 0
-},
-"y": {
-"connected": false,
-"port": 1
-},
-"z": {
-"connected": false,
-"port": 2
-}
-},
-"name": &"id_0022_make_vector",
-"position": Vector2(0, 140),
+"args_port": {},
+"name": &"id_0018_input_In",
+"position": Vector2(0, 0),
 "settings": {
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
@@ -193,16 +196,13 @@ data = {
 "debug_scale": 1.0,
 "disabled": false,
 "inspect_enabled": false,
-"out_name": "Vector",
-"random_seed": 2880357212,
-"title": "Make Vector",
-"trace": false,
-"x": 0.0,
-"y": 1.0,
-"z": 0.0
+"name": "In",
+"random_seed": 1305654154,
+"title": "Input",
+"trace": false
 },
 "show_disconnected_inputs": false,
-"template": "make_vector"
+"template": "input_In"
 }],
 "type": "flow_graph_nodes",
 "version": 1

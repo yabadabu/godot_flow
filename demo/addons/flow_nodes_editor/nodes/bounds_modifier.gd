@@ -18,30 +18,45 @@ func execute( ctx : FlowData.EvaluationContext ):
 		return
 		
 	var out_data : FlowData.Data = in_data.duplicate()
-	if not out_data.hasStream(FlowData.AttrSize):
-		setError("Input must provide a size stream")
-		return
-		
 	var ssizes = out_data.cloneStream(FlowData.AttrSize)
-	if ssizes == null:
-		setError("Input must provide a size stream")
+	var spos = out_data.cloneStream(FlowData.AttrPosition)
+	var srot = out_data.findStream(FlowData.AttrRotation)
+	if spos == null or ssizes == null or srot == null:
 		return
+	var eulers = srot.container
+	var uniform_scale : float = getSettingValue( ctx, "uniform_scale", 1.0 )
 	
-	var mode = settings.mode
-	var b_min = settings.bounds_min
-	var b_max = settings.bounds_max
-	var size_val = b_max - b_min
-	if size_val.x < 0: size_val.x = -size_val.x
-	if size_val.y < 0: size_val.y = -size_val.y
-	if size_val.z < 0: size_val.z = -size_val.z
+	var b_min : Vector3 = settings.bounds_min
+	var b_max : Vector3 = settings.bounds_max
+	var size_val := ( b_max - b_min ) * 0.5
+	var center := ( b_max + b_min ) * 0.25
 	
-	for i in ssizes.size():
-		if mode == BoundsModifierNodeSettings.eMode.Set:
-			ssizes[i] = size_val
-		elif mode == BoundsModifierNodeSettings.eMode.Add:
-			ssizes[i] += size_val
-		elif mode == BoundsModifierNodeSettings.eMode.Multiply:
-			ssizes[i] = ssizes[i] * size_val
+	match settings.mode:
+		BoundsModifierNodeSettings.eMode.Set:
+			for i in ssizes.size():
+				var basis := FlowData.eulerToBasis(eulers[i]).inverse()
+				ssizes[i] = size_val
+				spos[i] += center * basis
+		
+		BoundsModifierNodeSettings.eMode.Add:
+			for i in ssizes.size():
+				var basis := FlowData.eulerToBasis(eulers[i]).inverse()
+				ssizes[i] += size_val
+				spos[i] += center * basis
+		
+		BoundsModifierNodeSettings.eMode.Multiply:
+			size_val *= 0.5
+			for i in ssizes.size():
+				var basis := FlowData.eulerToBasis(eulers[i]).inverse()
+				var offset_center : Vector3 = ssizes[i] * size_val
+				spos[i] += offset_center * basis
+				ssizes[i] *= ( b_max + b_min ) * 0.5
+		
+		BoundsModifierNodeSettings.eMode.AddPadding:
+			size_val = ( settings.padding ) * uniform_scale
+			for i in ssizes.size():
+				ssizes[i] += size_val 
 			
+	out_data.registerStream(FlowData.AttrPosition, spos, FlowData.DataType.Vector)
 	out_data.registerStream(FlowData.AttrSize, ssizes, FlowData.DataType.Vector)
 	set_output(0, out_data)
