@@ -200,7 +200,7 @@ static func create_nodes_from_dict( dict, graph : FlowGraphResource, paste_offse
 			return null
 		var in_pos = _parse_vector2( in_node.position )
 		node.position_offset = ( in_pos + paste_offset ) * ui_scale
-		print( "New node pos %s will be %s" % [ in_name, node.position_offset ] )
+		#print( "New node pos %s will be %s" % [ in_name, node.position_offset ] )
 		node.show_disconnected_inputs = in_node.get("show_disconnected_inputs", false)
 		node.args_ports_by_name = in_node.get("args_port", {})
 		
