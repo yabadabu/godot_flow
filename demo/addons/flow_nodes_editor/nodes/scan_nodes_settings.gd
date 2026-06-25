@@ -10,6 +10,7 @@ extends NodeSettings
 @export var import_metadata : bool = false
 @export var import_properties : Array[ StringName ]
 @export var size_to_bounds : bool = false
+@export var required_meta_bool : StringName
 
 func _init():
 	super._init()
