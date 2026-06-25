@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://dc8qy4ejmlaip"]
+[gd_scene format=3 uid="uid://dc8qy4ejmlaip"]
 
 [ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_5ex6f"]
 [ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="2_50g47"]
@@ -33,41 +33,11 @@ data = {
 "to_node": &"id_0012_reduce",
 "to_port": 0
 }],
-"min_pos": Vector2(60, 100),
+"min_pos": Vector2(0, 20),
 "nodes": [{
-"args_port": {
-"In A": {
-"connected": true,
-"port": 0
-},
-"In B": {
-"connected": true,
-"port": 1
-}
-},
-"name": &"id_0009_substract",
-"position": Vector2(471, 110),
-"settings": {
-"debug_bulk": 0,
-"debug_color": Color(0.239216, 1, 1, 1),
-"debug_enabled": true,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"operation": 0,
-"random_seed": 3590355377,
-"title": "Substract",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "substract"
-}, {
 "args_port": {},
 "name": &"id_0010_grid",
-"position": Vector2(0, 320),
+"position": Vector2(0, 200),
 "settings": {
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
@@ -75,6 +45,7 @@ data = {
 "debug_mode": 0,
 "debug_modulate_by": "",
 "debug_output": 0,
+"debug_port_combined_index": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "inspect_enabled": false,
@@ -92,9 +63,37 @@ data = {
 "show_disconnected_inputs": false,
 "template": "grid"
 }, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0012_reduce",
+"position": Vector2(820, 100),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": true,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"in_name": "position",
+"inspect_enabled": false,
+"out_prefix": "",
+"random_seed": 1519025600,
+"title": "Reduce",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "reduce"
+}, {
 "args_port": {},
-"name": &"id_0011_grid",
-"position": Vector2(80, 0),
+"name": &"id_0115_comment",
+"position": Vector2(400, 0),
 "settings": {
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
@@ -102,6 +101,66 @@ data = {
 "debug_mode": 0,
 "debug_modulate_by": "",
 "debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"hue": 0.2,
+"inspect_enabled": false,
+"random_seed": 2922347474,
+"text": "Try to change the operation mode
+of the substract node",
+"title": "Comments",
+"trace": false
+},
+"show_disconnected_inputs": true,
+"template": "comment"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0013_transform",
+"position": Vector2(180, 200),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"offset_local_space": true,
+"offset_max": Vector3(4, 0, 1),
+"offset_min": Vector3(4, 0, 1),
+"random_seed": 2729993948,
+"rotation_local_space": false,
+"rotation_max": Vector3(0, 0, 0),
+"rotation_min": Vector3(0, 0, 0),
+"scale_max": Vector3(2, 2, 4),
+"scale_min": Vector3(2, 2, 4),
+"title": "Transform",
+"trace": false,
+"uniform_scale": false
+},
+"show_disconnected_inputs": false,
+"template": "transform"
+}, {
+"args_port": {},
+"name": &"id_0011_grid",
+"position": Vector2(180, 20),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "inspect_enabled": false,
@@ -120,77 +179,50 @@ data = {
 "template": "grid"
 }, {
 "args_port": {
-"In": {
+"In A": {
 "connected": true,
 "port": 0
+},
+"In B": {
+"connected": true,
+"port": 1
 }
 },
-"name": &"id_0012_reduce",
-"position": Vector2(680, 300),
+"name": &"id_0009_substract",
+"position": Vector2(460, 100),
 "settings": {
 "debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
+"debug_color": Color(0.239216, 1, 1, 1),
 "debug_enabled": true,
 "debug_mode": 0,
 "debug_modulate_by": "",
 "debug_output": 0,
+"debug_port_combined_index": 0,
 "debug_scale": 1.0,
 "disabled": false,
-"in_name": "position",
 "inspect_enabled": false,
-"out_prefix": "",
-"random_seed": 1519025600,
-"title": "Reduce",
+"operation": 0,
+"random_seed": 3590355377,
+"title": "Substract",
 "trace": false
 },
 "show_disconnected_inputs": false,
-"template": "reduce"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0013_transform",
-"position": Vector2(180, 320),
-"settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"offset_max": Vector3(4, 0, 1),
-"offset_min": Vector3(4, 0, 1),
-"random_seed": 2729993948,
-"rotation_max": Vector3(0, 0, 0),
-"rotation_min": Vector3(0, 0, 0),
-"scale_max": Vector3(2, 2, 4),
-"scale_min": Vector3(2, 2, 4),
-"title": "Transform",
-"trace": false,
-"uniform_scale": false
-},
-"show_disconnected_inputs": false,
-"template": "transform"
+"template": "substract"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
+graph_name = "demo_intersect"
 view_zoom = 0.909091
-view_offset = Vector2(-195.091, -116.273)
+view_offset = Vector2(136.909, -138.27301)
 new_name_counter = 7
-in_params = Array[ExtResource("2_50g47")]([])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 
-[node name="DemoIntersect" type="Node3D"]
+[node name="DemoIntersect" type="Node3D" unique_id=1124230953]
 
-[node name="PCG_Intersect" type="Node3D" parent="."]
+[node name="PCG_Intersect" type="Node3D" parent="." unique_id=1634238230]
 script = ExtResource("1_5ex6f")
 graph = SubResource("Resource_gj6dq")
-refresh_inputs = Callable()
+regenerate = Callable()
+clearInstances = Callable()
 metadata/_custom_type_script = "uid://d1krtmb1urldl"

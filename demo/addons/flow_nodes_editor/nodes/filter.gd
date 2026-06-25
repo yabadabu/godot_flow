@@ -27,17 +27,16 @@ func camel_to_words(text: String) -> String:
 func getTitle() -> String:
 	return camel_to_words(FilterNodeSettings.eCondition.keys()[settings.condition])	
 	
-func getMeta() -> Dictionary:
-	if settings:
-		var curr_num_args = meta_node.ins.size()
-		var required_num_args = getNumArgsRequired()
-		if curr_num_args != required_num_args:
-			match required_num_args:
-				1: meta_node.ins = [{ "label": "In A" }]
-				2: meta_node.ins = [{ "label": "In A" }, { "label": "In B" }]
-				3: meta_node.ins = [{ "label": "In A" }, { "label": "In B" }, { "label": "In C" }]
-			initFromScript()
-	return meta_node
+func refreshFromSettings():
+	var curr_num_args = meta_node.ins.size()
+	var required_num_args = getNumArgsRequired()
+	if curr_num_args != required_num_args:
+		match required_num_args:
+			1: meta_node.ins = [{ "label": "In A" }]
+			2: meta_node.ins = [{ "label": "In A" }, { "label": "In B" }]
+			3: meta_node.ins = [{ "label": "In A" }, { "label": "In B" }, { "label": "In C" }]
+		initFromScript()
+	super.refreshFromSettings()
 	
 func getOptionalStream( input_index : int, stream_name : String, expected_size : int ):
 	# B is optional, can be replaced by a cte

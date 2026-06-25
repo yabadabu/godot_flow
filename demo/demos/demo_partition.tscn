@@ -188,6 +188,7 @@ data = {
 "type": "flow_graph_nodes",
 "version": 1
 }
+graph_name = "demo_partition"
 view_zoom = 1.1
 view_offset = Vector2(187.616, -45.2)
 new_name_counter = 17

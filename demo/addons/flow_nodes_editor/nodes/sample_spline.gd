@@ -204,7 +204,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 	if ssize.size() != spos.size():
 		ssize.resize( spos.size() )
 		var sample_size = Vector3.ONE * uniform_interval
-		print( "Generating size sample", sample_size)
+		#print( "Generating size sample", sample_size)
 		ssize.fill(sample_size)
 
 	set_output( 0, output )

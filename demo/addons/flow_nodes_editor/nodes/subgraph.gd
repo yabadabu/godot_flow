@@ -12,12 +12,20 @@ func _init():
 		"ins" : [],
 		"outs" : [],
 		"is_final" : true,
-		"tooltip" : "Evaluates a nested graph inside this node"
+		"tooltip" : "Evaluates a nested graph inside this node",
+		"trace" : true
 	}
 
 func _ready():
 	super._ready()
 	subctx.name = name + "_ctx"
+
+func initFromScript():
+	super.initFromScript()
+	if settings and settings.graph:
+		var time_node_start := Time.get_ticks_usec()
+		settings.graph.compile()
+		var time_node_end := Time.get_ticks_usec()
 
 func getTitle() -> String:
 	if settings and settings.graph:
@@ -47,9 +55,40 @@ func refreshFromSettings():
 					})
 	meta_node.ins = ins
 	meta_node.outs = outs
-	print( "%s.subgraph refreshFromSettings ins=%d Graph=%s" % [ name, ins.size(), settings.graph ])
+
+	if meta_node.trace:
+		print( "%s.subgraph refreshFromSettings ins=%d Graph=%s" % [ name, ins.size(), settings.graph ])
+		print( "Subgraph meta", meta_node )
+
 	super.refreshFromSettings()
-	
+
+func resetSubgraph( graph : FlowGraphResource ):
+	print( "The graph is new!")
+	graph.data = {
+		"type": "flow_graph_nodes",
+		"version": 1,
+		"min_pos" : "(80.0, 160.0)",
+		"links" : [],
+		"nodes" : [{
+			"name": "id_0001_input_In",
+			"position": "(80.0, 80.0)",
+			"template": "input_In",
+			"settings": { "name": "In", }
+		}, 
+		{
+			"name": "id_0002_output",
+			"position": "(400.0, 80.0)",
+			"template": "output",
+			"settings": { "name": "Out", }
+		}]
+	}
+	var in_p = GraphInputParameter.new()
+	in_p.is_constant = false
+	in_p.name = "In"
+	in_p.data_type = FlowData.DataType.Invalid
+	graph.in_params.append( in_p )
+	FlowNodeIO.create_nodes_from_dict( graph.data, graph, Vector2(0,0))
+
 # Double click to trigger openning the subgraph
 func _gui_input(event: InputEvent):
 	if event is InputEventMouseButton and event.double_click and event.button_index == MOUSE_BUTTON_LEFT:
@@ -62,34 +101,8 @@ func _gui_input(event: InputEvent):
 			print( "settings.graph.data", graph.data)
 			print( "settings.graph.resource_name", graph.resource_name )
 			print( "settings.graph.resource_path", graph.resource_path )
-			
 			if not graph.data:
-				print( "The graph is new!")
-				graph.data = {
-					"type": "flow_graph_nodes",
-					"version": 1,
-					"min_pos" : "(80.0, 160.0)",
-					"links" : [],
-					"nodes" : [{
-						"name": "id_0001_input_In",
-						"position": "(80.0, 80.0)",
-						"template": "input_In",
-						"settings": { "name": "In", }
-					}, 
-					{
-						"name": "id_0002_output",
-						"position": "(400.0, 80.0)",
-						"template": "output",
-						"settings": { "name": "Out", }
-					}]
-				}
-				var in_p = GraphInputParameter.new()
-				in_p.is_constant = false
-				in_p.name = "In"
-				in_p.data_type = FlowData.DataType.Invalid
-				graph.in_params.append( in_p )
-				FlowNodeIO.create_nodes_from_dict( graph.data, graph, Vector2(0,0))
-				
+				resetSubgraph( graph )
 			editor.setResourceToEdit(settings.graph, owner)
 			
 			accept_event()	
