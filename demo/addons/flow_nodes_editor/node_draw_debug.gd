@@ -11,7 +11,35 @@ var multimesh_rid : RID
 var instance_rid : RID
 var mesh_resource: Mesh = preload( "res://addons/flow_nodes_editor/resources/unit_cube.tres" )
 var selection_color := Color.MAGENTA
+
+func create_axis_mesh() -> Mesh:
+	var mesh := ImmediateMesh.new()
+	mesh.surface_begin(Mesh.PRIMITIVE_LINES)
+
+	# X axis (red)
+	mesh.surface_set_color(Color.RED)
+	mesh.surface_add_vertex(Vector3.ZERO)
+	mesh.surface_add_vertex(Vector3.RIGHT)
+
+	# Y axis (green)
+	mesh.surface_set_color(Color.GREEN)
+	mesh.surface_add_vertex(Vector3.ZERO)
+	mesh.surface_add_vertex(Vector3.UP)
+
+	# Z axis (blue)
+	mesh.surface_set_color(Color.BLUE)
+	mesh.surface_add_vertex(Vector3.ZERO)
+	mesh.surface_add_vertex(Vector3.FORWARD)
+	mesh.surface_end()
 	
+	var mat = StandardMaterial3D.new()
+	mat.vertex_color_use_as_albedo = true
+	mat.disable_fog = true
+	mat.shading_mode = BaseMaterial3D.SHADING_MODE_PER_VERTEX
+	mesh.surface_set_material( 0, mat )
+	
+	return mesh
+
 func _ready():
 	var viewport = get_viewport()
 	if viewport and viewport.get_world_3d():
