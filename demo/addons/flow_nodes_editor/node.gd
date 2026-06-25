@@ -83,7 +83,7 @@ func preExecute( ctx : FlowData.EvaluationContext ):
 	)
 	if num_connected_bulks == 0:
 		num_connected_bulks = 1
-
+		
 func redrawUI():
 	queue_redraw()
 
@@ -578,7 +578,8 @@ func getSceneRootNode3d( current : Node3D ) -> Node3D:
 func findNodesMatchingFilters( ctx : FlowData.EvaluationContext, filter_by_class_name : String ) -> Array[ Node3D ]:
 
 	var group_name = getSettingValue( ctx, "group_name" )
-	
+	var required_meta : StringName = settings.required_meta_bool
+
 	var all_nodes : Array[Node] = []
 	if group_name:
 		all_nodes = ctx.owner.get_tree().get_nodes_in_group( group_name )
@@ -598,6 +599,11 @@ func findNodesMatchingFilters( ctx : FlowData.EvaluationContext, filter_by_class
 				if settings.trace:
 					print( "%s.%s discarted by class_name %s" % [ node3d.name, node3d.get_class(), filter_by_class_name ])
 				continue
+
+			if not required_meta.is_empty():
+				if not node3d.has_meta( required_meta ) or not bool( node3d.get_meta( required_meta ) ):
+					continue
+	
 			scene_nodes.append(node3d)
 	return scene_nodes
 
