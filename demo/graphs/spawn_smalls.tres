@@ -17,22 +17,15 @@ data = {
 "min_pos": Vector2(0, 0),
 "nodes": [{
 "args_port": {
-"x": {
+"Out": {
 "connected": false,
 "port": 0
-},
-"y": {
-"connected": false,
-"port": 1
-},
-"z": {
-"connected": false,
-"port": 2
 }
 },
-"name": &"id_0022_make_vector",
-"position": Vector2(0, 140),
+"name": &"id_0024_output",
+"position": Vector2(500, 0),
 "settings": {
+"data_type": 999,
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
@@ -43,16 +36,13 @@ data = {
 "debug_scale": 1.0,
 "disabled": false,
 "inspect_enabled": false,
-"out_name": "Vector",
-"random_seed": 2880357212,
-"title": "Make Vector",
-"trace": false,
-"x": 0.0,
-"y": 1.0,
-"z": 0.0
+"name": "Elevated",
+"random_seed": 947836005,
+"title": "Output",
+"trace": false
 },
 "show_disconnected_inputs": false,
-"template": "make_vector"
+"template": "output"
 }, {
 "args_port": {
 "In": {
@@ -121,15 +111,22 @@ data = {
 "template": "spawn_meshes"
 }, {
 "args_port": {
-"Out": {
+"x": {
 "connected": false,
 "port": 0
+},
+"y": {
+"connected": false,
+"port": 1
+},
+"z": {
+"connected": false,
+"port": 2
 }
 },
-"name": &"id_0024_output",
-"position": Vector2(500, 0),
+"name": &"id_0022_make_vector",
+"position": Vector2(0, 140),
 "settings": {
-"data_type": 999,
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
@@ -140,13 +137,16 @@ data = {
 "debug_scale": 1.0,
 "disabled": false,
 "inspect_enabled": false,
-"name": "Elevated",
-"random_seed": 947836005,
-"title": "Output",
-"trace": false
+"out_name": "Vector",
+"random_seed": 2880357212,
+"title": "Make Vector",
+"trace": false,
+"x": 0.0,
+"y": 1.0,
+"z": 0.0
 },
 "show_disconnected_inputs": false,
-"template": "output"
+"template": "make_vector"
 }, {
 "args_port": {
 "In A": {
@@ -209,7 +209,7 @@ data = {
 }
 graph_name = "spawn_smalls"
 view_zoom = 0.9999999
-view_offset = Vector2(-40.82666, -48.266724)
+view_offset = Vector2(-74.82666, -149.26672)
 new_name_counter = 29
 in_params = Array[ExtResource("1_7eoxu")]([SubResource("Resource_7eoxu")])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
