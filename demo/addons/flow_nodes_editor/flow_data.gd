@@ -318,6 +318,15 @@ class Data:
 	func hasStreamOfType( name : StringName, data_type : DataType ) -> bool:
 		return streams.has( name ) and streams[ name ].data_type == data_type
 	
+	func markStreamAsRotation( name : StringName ):
+		name = translateStreamName( name )
+		var stream = streams.get( name, null )
+		if stream:
+			stream.is_rotation = true
+	
+	static func isStreamARotation( stream : Dictionary ):
+		return stream.has( "is_rotation" )
+	
 	func getContainerChecked( name : String, data_type : DataType ):
 		var stream = streams.get( name, null )
 		if stream and stream.data_type == data_type:
@@ -326,27 +335,29 @@ class Data:
 		
 	# converts 'Yaw' into "Rotation.Y" 
 	func translateStreamName( name : String ):
+		name = name.to_lower()
 		if name == "@last":
 			if not last_added_stream_name:
 				push_error( "@last is not valid" )
 			return last_added_stream_name
-		if name == "Yaw":
+		# as described in the doc X = Pitch, Y = Yaw, Z = Roll
+		if name == "yaw":
 			return "%s.Y" % FlowData.AttrRotation
-		if name == "Pitch":
+		if name == "pitch":
 			return "%s.X" % FlowData.AttrRotation
-		if name == "Roll":
+		if name == "roll":
 			return "%s.Z" % FlowData.AttrRotation
 		return name
 		
 	func getSubStreamIndex(  sub_comp : String ):
-		var sc_up = sub_comp.to_upper()
-		if sc_up == "X" or sc_up == "R":
+		var sc_up = sub_comp.to_lower()
+		if sc_up == "x" or sc_up == "r" or sc_up == "pitch":
 			return 0
-		elif sc_up == "Y" or sc_up == "G":
+		elif sc_up == "y" or sc_up == "g" or sc_up == "yaw":
 			return 1
-		elif sc_up == "Z" or sc_up == "B":
+		elif sc_up == "z" or sc_up == "b" or sc_up == "roll":
 			return 2
-		elif sc_up == "W" or sc_up == "A":
+		elif sc_up == "w" or sc_up == "a":
 			return 3
 		return -1
 	
@@ -394,8 +405,7 @@ class Data:
 		
 	func findStream( name : String ):
 		name = translateStreamName( name )
-		var name_lower := name.to_lower()
-		if name_lower == "front" or name_lower == "up" or name_lower == "right":
+		if name == "front" or name == "up" or name == "right":
 			var rot_stream = streams.get(AttrRotation, null)
 			if rot_stream != null:
 				var eulers = rot_stream.container
@@ -403,7 +413,7 @@ class Data:
 				new_container.resize(eulers.size())
 				for idx in range(eulers.size()):
 					var basis := FlowData.eulerToBasis(eulers[idx])
-					match name_lower:
+					match name:
 						"front":
 							new_container[idx] = basis.z
 						"up":
@@ -624,7 +634,7 @@ class Data:
 		if new_name.is_empty():
 			return "new renamed stream can't be empty"
 		if old_name in [ AttrPosition, AttrRotation, AttrSize ]:
-			return "Can't rename position,rotation or size attributes" 
+			return "Can't rename position, rotation or size attributes" 
 		if new_name != old_name:
 			if not allow_override and streams.has( new_name ):
 				return "Data already has a stream named %s" % new_name
@@ -655,6 +665,7 @@ class Data:
 		var spos = addStream( FlowData.AttrPosition, FlowData.DataType.Vector )
 		spos.resize( num_points )
 		var srot = addStream( FlowData.AttrRotation, FlowData.DataType.Vector )
+		markStreamAsRotation( FlowData.AttrRotation )
 		srot.resize( num_points )
 		
 		# Initialize with ones

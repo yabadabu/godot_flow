@@ -77,9 +77,14 @@ func updateNumRowsAndCols():
 		var stream_name : String = stream.name
 		match stream.data_type:
 			FlowData.DataType.Vector:
-				col_titles.append( "%s.X" % stream_name)
-				col_titles.append( "%s.Y" % stream_name)
-				col_titles.append( "%s.Z" % stream_name)
+				if FlowData.Data.isStreamARotation(stream):
+					col_titles.append( "%s.Roll" % stream_name)
+					col_titles.append( "%s.Pitch" % stream_name)
+					col_titles.append( "%s.Yaw" % stream_name)
+				else:
+					col_titles.append( "%s.X" % stream_name)
+					col_titles.append( "%s.Y" % stream_name)
+					col_titles.append( "%s.Z" % stream_name)
 				col_streams_names.append( stream_name)
 				col_streams_names.append( stream_name)
 				col_streams_names.append( stream_name)
@@ -135,6 +140,14 @@ func onColumnBegins( cell : DataTableContainer.CellContents ):
 			tv.setCellCallback( getCellContentsVectorY )
 		elif title.ends_with(".Z"):
 			tv.setCellCallback( getCellContentsVectorZ )
+			
+		elif title.ends_with(".Yaw"):
+			tv.setCellCallback( getCellContentsVectorYaw )
+		elif title.ends_with(".Pitch"):
+			tv.setCellCallback( getCellContentsVectorPitch )
+		elif title.ends_with(".Roll"):
+			tv.setCellCallback( getCellContentsVectorRoll )
+			
 	elif stream.data_type == FlowData.DataType.Bool:
 		tv.setCellCallback( getCellContentsBool )
 	elif stream.data_type == FlowData.DataType.Color:
@@ -174,7 +187,19 @@ func getCellContentsVectorY(cell : DataTableContainer.CellContents ):
 func getCellContentsVectorZ(cell : DataTableContainer.CellContents ):
 	var real_row : int = visible_rows[cell.row]
 	cell.text = fmt( container[ real_row ].z )
+
+func getCellContentsVectorPitch(cell : DataTableContainer.CellContents ):
+	var real_row : int = visible_rows[cell.row]
+	cell.text = fmt( ( container[ real_row ].x ) )
+
+func getCellContentsVectorRoll(cell : DataTableContainer.CellContents ):
+	var real_row : int = visible_rows[cell.row]
+	cell.text = fmt( ( container[ real_row ].z ) )
 	
+func getCellContentsVectorYaw(cell : DataTableContainer.CellContents ):
+	var real_row : int = visible_rows[cell.row]
+	cell.text = fmt( ( container[ real_row ].y ) )	
+
 func getCellContentsColorR(cell : DataTableContainer.CellContents ):
 	var real_row : int = visible_rows[cell.row]
 	cell.text = fmt( container[ real_row ].r )

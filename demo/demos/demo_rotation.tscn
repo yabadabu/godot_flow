@@ -1,0 +1,401 @@
+[gd_scene format=3 uid="uid://xiakejx66iaq"]
+
+[ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_rrro2"]
+[ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="2_2bj4a"]
+[ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="3_dkhyy"]
+
+[sub_resource type="Resource" id="Resource_vatum"]
+script = ExtResource("3_dkhyy")
+data = {
+"frames": [],
+"links": [{
+"from_node": &"id_0003_grid",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0006_math_op",
+"to_port": 0
+}, {
+"from_node": &"id_0004_scan_nodes",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0006_math_op",
+"to_port": 1
+}, {
+"from_node": &"id_0004_add_attribute",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0006_math_rotation_op",
+"to_port": 2
+}, {
+"from_node": &"id_0010_make_rotation",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0006_math_rotation_op",
+"to_port": 0
+}, {
+"from_node": &"id_0010_make_rotation",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0006_math_rotation_op",
+"to_port": 1
+}, {
+"from_node": &"id_0006_math_rotation_op",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0016_math_rotation_op",
+"to_port": 0
+}, {
+"from_node": &"id_0014_make_rotation",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0016_math_rotation_op",
+"to_port": 1
+}, {
+"from_node": &"id_0006_math_op",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0010_make_rotation",
+"to_port": 0
+}, {
+"from_node": &"id_0013_add_attribute",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0014_make_rotation",
+"to_port": 1
+}, {
+"from_node": &"id_0006_math_rotation_op",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0014_make_rotation",
+"to_port": 0
+}],
+"min_pos": Vector2(0, 0),
+"nodes": [{
+"args_port": {},
+"name": &"id_0003_grid",
+"position": Vector2(0, 0),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 1,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 0.445,
+"disabled": false,
+"inspect_enabled": false,
+"origin": Vector3(0, 0, 0),
+"random_seed": 2344573681,
+"rotation": Vector3(0, 0, 0),
+"size": 0.56,
+"step": Vector3(1, 1, 1),
+"title": "Grid",
+"trace": false,
+"x": 5,
+"y": 1,
+"z": 5
+},
+"show_disconnected_inputs": false,
+"template": "grid"
+}, {
+"args_port": {},
+"name": &"id_0004_scan_nodes",
+"position": Vector2(0, 100),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"filter_by_class_name": "MeshInstance3D",
+"filter_by_name": "Target",
+"group_name": "",
+"import_metadata": false,
+"import_properties": Array[StringName]([]),
+"inspect_enabled": false,
+"random_seed": 2105302391,
+"size_to_bounds": false,
+"title": "Scan Target",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "scan_nodes"
+}, {
+"args_port": {
+"In A": {
+"connected": true,
+"port": 0
+},
+"In B": {
+"connected": true,
+"port": 1
+}
+},
+"name": &"id_0006_math_op",
+"position": Vector2(180, 40),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"in_nameA": "position",
+"in_nameB": "position",
+"inspect_enabled": false,
+"operation": 1,
+"out_name": "axis_z",
+"random_seed": 809333894,
+"title": "Math",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "math_op"
+}, {
+"args_port": {
+"Z": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0010_make_rotation",
+"position": Vector2(380, 40),
+"settings": {
+"angle": "@last",
+"attribute_y": "@last",
+"attribute_z": "@last",
+"axis": "@last",
+"axis_y": Vector3(0, 1, 0),
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"operation": 0,
+"out_name": "new_rot",
+"random_seed": 1078580975,
+"title": "Make Rotation",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "make_rotation"
+}, {
+"args_port": {
+"In": {
+"connected": false,
+"port": 0
+}
+},
+"name": &"id_0004_add_attribute",
+"position": Vector2(380, 160),
+"settings": {
+"cte_bool": false,
+"cte_color": Color(1, 1, 1, 1),
+"cte_float": 1.0,
+"cte_int": 0,
+"cte_resource": null,
+"cte_string": "",
+"cte_vector": Vector3(0, 0, 0),
+"data_type": 2,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"name": "weights",
+"random_seed": 3237133093,
+"title": "Add Attribute",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "add_attribute"
+}, {
+"args_port": {
+"In A": {
+"connected": true,
+"port": 0
+},
+"In B": {
+"connected": true,
+"port": 1
+},
+"Weights": {
+"connected": true,
+"port": 2
+}
+},
+"name": &"id_0006_math_rotation_op",
+"position": Vector2(540, 40),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"in_nameA": "rotation",
+"in_nameB": "@last",
+"in_nameC": "@last",
+"inspect_enabled": false,
+"operation": 2,
+"out_name": "rotation",
+"random_seed": 1147320551,
+"title": "Rotation",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "math_rotation_op"
+}, {
+"args_port": {
+"In": {
+"connected": false,
+"port": 0.0
+}
+},
+"name": &"id_0013_add_attribute",
+"position": Vector2(580, 220),
+"settings": {
+"cte_bool": false,
+"cte_color": Color(1, 1, 1, 1),
+"cte_float": 0.0,
+"cte_int": 0,
+"cte_resource": null,
+"cte_string": "",
+"cte_vector": Vector3(0, 0, 0),
+"data_type": 2,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"name": "Angle",
+"random_seed": 3237133093,
+"title": "Add Attribute",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "add_attribute"
+}, {
+"args_port": {
+"Angle": {
+"connected": true,
+"port": 1
+},
+"Axis": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0014_make_rotation",
+"position": Vector2(740, 120),
+"settings": {
+"angle": "@last",
+"attribute_y": "@last",
+"attribute_z": "@last",
+"axis": "up",
+"axis_y": Vector3(0, 1, 0),
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"operation": 2,
+"out_name": "delta_rot",
+"random_seed": 2296726865,
+"title": "Make Rotation",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "make_rotation"
+}, {
+"args_port": {
+"In A": {
+"connected": true,
+"port": 0
+},
+"In B": {
+"connected": true,
+"port": 1
+}
+},
+"name": &"id_0016_math_rotation_op",
+"position": Vector2(920, 40),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": true,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"in_nameA": "rotation",
+"in_nameB": "@last",
+"in_nameC": "@last",
+"inspect_enabled": false,
+"operation": 0,
+"out_name": "@source",
+"random_seed": 1147320551,
+"title": "Rotation",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "math_rotation_op"
+}],
+"type": "flow_graph_nodes",
+"version": 1
+}
+graph_name = "demo_rotation"
+view_zoom = 0.9090909
+view_offset = Vector2(371.30707, -390.24426)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_chni2"]
+albedo_color = Color(0.043137256, 1, 1, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_srhpv"]
+material = SubResource("StandardMaterial3D_chni2")
+
+[node name="DemoRotation" type="Node3D" unique_id=390683971]
+
+[node name="FlowGraphNode3D" type="Node3D" parent="." unique_id=555888997]
+script = ExtResource("1_rrro2")
+graph = SubResource("Resource_vatum")
+regenerate = Callable()
+clearInstances = Callable()
+metadata/_custom_type_script = "uid://d1krtmb1urldl"
+
+[node name="Target" type="MeshInstance3D" parent="." unique_id=1336705541]
+transform = Transform3D(0.57, 0, 0, 0, 0.57, 0, 0, 0, 0.57, 3.4031363, 2.3714485, 5.340668)
+mesh = SubResource("SphereMesh_srhpv")

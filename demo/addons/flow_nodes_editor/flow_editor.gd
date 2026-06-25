@@ -92,7 +92,7 @@ func bindResourceToEditor(res : FlowGraphResource):
 	for frame in res.all_frames:
 		onFrameCreated( frame )
 		
-	# Properties must be sec after we add the nodes
+	# Properties must be set after we add the nodes
 	gedit.zoom = res.view_zoom
 	gedit.scroll_offset = res.view_offset
 	data_inspector.setNode( null )
