@@ -11,6 +11,9 @@ func _init():
 		"outs" : [{ "label" : "Out", "data_type" : FlowData.DataType.NodePath }],
 	}
 	
+func onSceneChanged( ctx : FlowData.EvaluationContext ):
+	dirty = true
+	
 func execute( ctx : FlowData.EvaluationContext ):
 	var nodes = findNodesMatchingFilters( ctx, "Path3D")
 	var output := FlowData.Data.new()
