@@ -18,21 +18,7 @@ name = "CurrentY"
 [sub_resource type="Resource" id="Resource_a44us"]
 script = ExtResource("3_amu1w")
 data = {
-"frames": [{
-"attached": Array[StringName]([&"id_0002_output", &"id_0023_math_op", &"id_0022_math_op"]),
-"name": &"id_0032_comment",
-"position": Vector2(160, -40),
-"size": Vector2(765, 165),
-"tint_color": Color(0.28235295, 0.23921569, 0.54509807, 1),
-"title": "Return Acc Height + Half Size"
-}, {
-"attached": Array[StringName]([&"id_0007_output", &"id_0008_math_op"]),
-"name": &"id_0031_comment",
-"position": Vector2(500, 179),
-"size": Vector2(425, 165),
-"tint_color": Color(0.28235295, 0.23921569, 0.54509807, 1),
-"title": "Return Total accumulated so far"
-}],
+"frames": [],
 "links": [{
 "from_node": &"id_0008_math_op",
 "from_port": 0,
@@ -76,11 +62,20 @@ data = {
 "to_node": &"id_0023_math_op",
 "to_port": 1
 }],
-"min_pos": Vector2(0, 60),
+"min_pos": Vector2(0, 120),
 "nodes": [{
-"args_port": {},
-"name": &"id_0001_input_In",
-"position": Vector2(0, 140),
+"args_port": {
+"In A": {
+"connected": true,
+"port": 0
+},
+"In B": {
+"connected": false,
+"port": 1
+}
+},
+"name": &"id_0022_math_op",
+"position": Vector2(200, 0),
 "settings": {
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
@@ -91,14 +86,17 @@ data = {
 "debug_port_combined_index": 0,
 "debug_scale": 1.0,
 "disabled": false,
+"in_nameA": "size.y",
+"in_nameB": "0.5",
 "inspect_enabled": false,
-"name": "In",
-"random_seed": 3732036808,
-"title": "Input",
+"operation": 2,
+"out_name": "half_height",
+"random_seed": 790349011,
+"title": "Math",
 "trace": false
 },
 "show_disconnected_inputs": false,
-"template": "input_In"
+"template": "math_op"
 }, {
 "args_port": {},
 "name": &"id_0002_output",
@@ -122,28 +120,6 @@ data = {
 },
 "show_disconnected_inputs": false,
 "template": "output"
-}, {
-"args_port": {},
-"name": &"id_0006_input_CurrentY",
-"position": Vector2(0, 240),
-"settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"name": "CurrentY",
-"random_seed": 181167368,
-"title": "Input",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "input_CurrentY"
 }, {
 "args_port": {
 "In A": {
@@ -179,18 +155,9 @@ data = {
 "show_disconnected_inputs": false,
 "template": "math_op"
 }, {
-"args_port": {
-"In A": {
-"connected": true,
-"port": 0
-},
-"In B": {
-"connected": false,
-"port": 1
-}
-},
-"name": &"id_0022_math_op",
-"position": Vector2(200, 0),
+"args_port": {},
+"name": &"id_0006_input_CurrentY",
+"position": Vector2(0, 240),
 "settings": {
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
@@ -201,17 +168,36 @@ data = {
 "debug_port_combined_index": 0,
 "debug_scale": 1.0,
 "disabled": false,
-"in_nameA": "size.y",
-"in_nameB": "0.5",
 "inspect_enabled": false,
-"operation": 2,
-"out_name": "half_height",
-"random_seed": 790349011,
-"title": "Math",
+"name": "CurrentY",
+"random_seed": 181167368,
+"title": "Input",
 "trace": false
 },
 "show_disconnected_inputs": false,
-"template": "math_op"
+"template": "input_CurrentY"
+}, {
+"args_port": {},
+"name": &"id_0001_input_In",
+"position": Vector2(0, 140),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"name": "In",
+"random_seed": 3732036808,
+"title": "Input",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "input_In"
 }, {
 "args_port": {
 "Out": {
@@ -345,20 +331,11 @@ data = {
 "to_node": &"id_0003_subgraph",
 "to_port": 1
 }],
-"min_pos": Vector2(0, -100),
+"min_pos": Vector2(0, 0),
 "nodes": [{
-"args_port": {
-"In A": {
-"connected": true,
-"port": 0
-},
-"In B": {
-"connected": true,
-"port": 1
-}
-},
-"name": &"id_0025_math_op",
-"position": Vector2(360, 100),
+"args_port": {},
+"name": &"id_0027_comment",
+"position": Vector2(780, 120),
 "settings": {
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
@@ -369,27 +346,57 @@ data = {
 "debug_port_combined_index": 0,
 "debug_scale": 1.0,
 "disabled": false,
-"in_nameA": "size.x",
-"in_nameB": "size.x",
+"hue": 0.39470518,
 "inspect_enabled": false,
-"operation": 19,
-"out_name": "size.z",
-"random_seed": 2826320829,
-"title": "Math",
+"random_seed": 2136273546,
+"text": "Process one point at a time, and keep track of the accumulated height.
+Then collect all the points again in a single batch",
+"title": "Comments",
 "trace": false
 },
 "show_disconnected_inputs": false,
-"template": "math_op"
+"template": "comment"
+}, {
+"args_port": {},
+"name": &"id_0024_comment",
+"position": Vector2(180, 0),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"hue": 0.8792339,
+"inspect_enabled": false,
+"random_seed": 3962488378,
+"text": "Randomize Width and Heigh, then sort by Heights",
+"title": "Comments",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "comment"
 }, {
 "args_port": {
 "In": {
-"connected": true,
+"connected": false,
 "port": 0
 }
 },
-"name": &"id_0018_sort",
-"position": Vector2(540, 100),
+"name": &"id_0050_add_attribute",
+"position": Vector2(780, 400),
 "settings": {
+"cte_bool": false,
+"cte_color": Color(1, 1, 1, 1),
+"cte_float": 0.0,
+"cte_int": 0,
+"cte_resource": null,
+"cte_string": "",
+"cte_vector": Vector3(0, 0, 0),
+"data_type": 2,
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
@@ -400,68 +407,13 @@ data = {
 "debug_scale": 1.0,
 "disabled": false,
 "inspect_enabled": false,
-"random_seed": 4148900739,
-"sort_by": "size.x",
-"sort_descending": true,
-"title": "Sort",
+"name": "Initial Height",
+"random_seed": 1767661471,
+"title": "Add Attribute",
 "trace": false
 },
 "show_disconnected_inputs": false,
-"template": "sort"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0020_merge",
-"position": Vector2(1260, 300),
-"settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"random_seed": 1425879892,
-"title": "Merge",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "merge"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0002_partition",
-"position": Vector2(780, 300),
-"settings": {
-"attribute_name": "Index",
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"out_partition_attribute": "Id",
-"random_seed": 3707290272,
-"title": "Partition",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "partition"
+"template": "add_attribute"
 }, {
 "args_port": {},
 "name": &"id_0001_grid",
@@ -558,43 +510,47 @@ data = {
 "template": "compose_vector"
 }, {
 "args_port": {
+"In A": {
+"connected": true,
+"port": 0
+},
+"In B": {
+"connected": true,
+"port": 1
+}
+},
+"name": &"id_0025_math_op",
+"position": Vector2(360, 100),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"in_nameA": "size.x",
+"in_nameB": "size.x",
+"inspect_enabled": false,
+"operation": 19,
+"out_name": "size.z",
+"random_seed": 2826320829,
+"title": "Math",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "math_op"
+}, {
+"args_port": {
 "In": {
-"connected": false,
+"connected": true,
 "port": 0
 }
 },
-"name": &"id_0050_add_attribute",
-"position": Vector2(780, 400),
-"settings": {
-"cte_bool": false,
-"cte_color": Color(1, 1, 1, 1),
-"cte_float": 0.0,
-"cte_int": 0,
-"cte_resource": null,
-"cte_string": "",
-"cte_vector": Vector3(0, 0, 0),
-"data_type": 2,
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"name": "Initial Height",
-"random_seed": 1767661471,
-"title": "Add Attribute",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "add_attribute"
-}, {
-"args_port": {},
-"name": &"id_0024_comment",
-"position": Vector2(180, 0),
+"name": &"id_0020_merge",
+"position": Vector2(1260, 300),
 "settings": {
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
@@ -605,39 +561,13 @@ data = {
 "debug_port_combined_index": 0,
 "debug_scale": 1.0,
 "disabled": false,
-"hue": 0.5,
 "inspect_enabled": false,
-"random_seed": 3962488378,
-"text": "Randomize Width and Heigh, then sort by Heights",
-"title": "Comments",
+"random_seed": 1425879892,
+"title": "Merge",
 "trace": false
 },
 "show_disconnected_inputs": false,
-"template": "comment"
-}, {
-"args_port": {},
-"name": &"id_0027_comment",
-"position": Vector2(780, 180),
-"settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"hue": 0.5,
-"inspect_enabled": false,
-"random_seed": 2136273546,
-"text": "Process one point at a time, and keep track of the accumulated height.
-Then collect all the points again in a single batch",
-"title": "Comments",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "comment"
+"template": "merge"
 }, {
 "args_port": {
 "CurrentY": {
@@ -669,29 +599,76 @@ Then collect all the points again in a single batch",
 },
 "show_disconnected_inputs": false,
 "template": "subgraph"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0002_partition",
+"position": Vector2(780, 300),
+"settings": {
+"attribute_name": "Index",
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"out_partition_attribute": "Id",
+"random_seed": 3707290272,
+"title": "Partition",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "partition"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0018_sort",
+"position": Vector2(540, 100),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"random_seed": 4148900739,
+"sort_by": "size.x",
+"sort_descending": true,
+"title": "Sort",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "sort"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
 graph_name = "graph demo loop"
 view_zoom = 0.9673491
-view_offset = Vector2(648.4938, -68.867584)
+view_offset = Vector2(699, 11.132416)
 in_params = Array[ExtResource("2_4lgao")]([SubResource("Resource_rijiu")])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 
 [sub_resource type="Resource" id="Resource_ohf2o"]
 script = ExtResource("4_4lgao")
-param_id = &"CurrentY"
-value = null
-
-[sub_resource type="Resource" id="Resource_5dgyh"]
-script = ExtResource("4_4lgao")
-param_id = &"In"
-value = null
-
-[sub_resource type="Resource" id="Resource_78vc5"]
-script = ExtResource("4_4lgao")
 param_id = &"arg_name"
+enabled = true
 value = 0.0
 
 [node name="DemoLoop" type="Node3D" unique_id=658281225]
@@ -699,9 +676,9 @@ value = 0.0
 [node name="FlowGraphNode3D" type="Node3D" parent="." unique_id=485763321]
 script = ExtResource("1_rxdep")
 graph = SubResource("Resource_rxdep")
-overrides = Array[ExtResource("4_4lgao")]([SubResource("Resource_ohf2o"), SubResource("Resource_5dgyh"), SubResource("Resource_78vc5")])
+overrides = Array[ExtResource("4_4lgao")]([SubResource("Resource_ohf2o")])
 regenerate = Callable()
 clearInstances = Callable()
-flow_override/arg_name/enabled = false
+flow_override/arg_name/enabled = true
 flow_override/arg_name/value = 0.0
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
