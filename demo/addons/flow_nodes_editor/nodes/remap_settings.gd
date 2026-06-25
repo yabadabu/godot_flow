@@ -5,7 +5,7 @@ extends NodeSettings
 @export_group("Remap")
 
 @export var in_name : String = "density"
-@export var out_name : String = "@in_name"
+@export var out_name : String = "@source"
 @export var remap_curve : Curve
 
 func _init():

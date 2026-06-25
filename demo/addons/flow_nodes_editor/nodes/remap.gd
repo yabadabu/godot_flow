@@ -25,7 +25,7 @@ func execute( _ctx : FlowData.EvaluationContext ):
 		return
 		
 	var out_name = settings.out_name
-	if out_name == "@in_name":
+	if out_name == "@source":
 		out_name = sA.name
 		
 	var out_data : FlowData.Data = in_data.duplicate()
