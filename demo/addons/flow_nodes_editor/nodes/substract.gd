@@ -39,14 +39,13 @@ func getMergedB(ctx : FlowData.EvaluationContext ) -> FlowData.Data :
 	return all_Bs
 	
 func run( ctx : FlowData.EvaluationContext ):
-	print( "substract starts. num_connected_bulks= %d" % num_connected_bulks)
 	var all_Bs := getMergedB( ctx )
 	for bulk_index in range( num_connected_bulks ):
 		inputs = []
 		var input =  _getInputForBulkInContext( ctx, bulk_index, 0 )
-		print( "Executing bulk index %d" % bulk_index)
 		inputs.append(input)
 		inputs.append(all_Bs)
+		input_bulks.append( inputs )
 		execute( ctx )
 	
 func execute( _ctx : FlowData.EvaluationContext ):

@@ -8,13 +8,18 @@
 
 - 
 ---- 
+# Bugs
+- [ ] Closing a scene leaves the debug meshes there
+- [ ] Comments not saved in subgraphs
+
+# Features
 - [ ] Import node: load csv
 - [ ] Import node: texture sampler
 - [ ] Import node: sample spline
 
+- [ ] Expand the scan_* to a base folder
 - [ ] subgraph overrides
-	- [ ] Comments not saved in subgraphs
-	- [ ] Errors during initial load
+	- [X] Errors during initial load
 - [ ] named redirectors/acc
 - [ ] debug/session
 	- [ ] Register / debug Subgraphs
