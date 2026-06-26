@@ -40,7 +40,7 @@ In a scene 3D:
 
 ## Features
 
-* **+30 nodes** including:
+* **+60 nodes** including:
     - Sampling splines (contour and interior)
     - Sampling meshes
     - CSG-like ops on point sets (union/intersect/diff behavior)
