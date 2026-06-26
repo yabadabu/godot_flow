@@ -26,13 +26,15 @@ func refreshFromSettings():
 	settings.debug_enabled = false
 	super.refreshFromSettings()
 	settings.hue = int(settings.hue * 20) * 0.05
-	
 	# Otherwise I have problems with the copy/paste of nodes
 	# and the direct creation of new nodes
 	if not is_inside_tree():
 		call_deferred("refreshFromSettings")
 		return
-		
+	if label:
+		label.text = settings.text
+	
+func initFromScript():
 	if not label:
 		label = Label.new()
 		label.name = "TitleLabel"
