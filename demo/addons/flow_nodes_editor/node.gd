@@ -22,7 +22,7 @@ var num_ports : int = 0			 # Max of (in,out)
 var meta_node: Dictionary = {}
 
 var node_template : String
-var show_disconnected_inputs : bool = true
+var show_disconnected_inputs : bool = false
 var runtime_only : bool = false
 
 var dirty : bool = false
@@ -305,13 +305,12 @@ func getExposedParams():
 	return params
 
 func getEditor():
-	var gedit = get_parent_control() as GraphEdit
-	var flow_editor = gedit.get_parent_control().get_parent_control().get_parent_control() as FlowGraphEditor if gedit else null
-	return flow_editor
+	return flow_graph.editor if flow_graph else null
 
 func initFromScript():
 	
-	if flow_graph and flow_graph.editor == null:
+	var flow_editor = getEditor()
+	if flow_editor == null:
 		return
 	
 	var meta := getMeta()
@@ -327,35 +326,28 @@ func initFromScript():
 	
 	var exposed_params = getExposedParams()
 	if trace:
-		print( "initFromScript.exposed_params: %s" % exposed_params)
+		print( "initFromScript.exposed_params: %s" % exposed_params.size())
 	var has_exposed_params = exposed_params.size() > 0
 	
 	# Access to my parent container editor
 	# We need to remember which nodes were connected as we might be expanded/contracting the list and want to 
 	# maintain the same connected entries
-	var flow_editor = getEditor()
 	var connected_inputs_by_name = {}
-	if flow_editor:
-		for arg_name in args_ports_by_name:
-			var arg_port = args_ports_by_name[ arg_name ].port
-			var curr_connections = flow_editor.get_connected_sources( name, arg_port )
-			#print( "Checking if %s is connected at port %d -> %d conns" % [ arg_name, arg_port, curr_connections.size() ] )
-			if not curr_connections.is_empty():
-				connected_inputs_by_name[ arg_name ] = { "port" : arg_port, "conns" : curr_connections.duplicate() }
-				for old_conn in curr_connections:
-					var from_node = old_conn[0]
-					var from_port = old_conn[1]
-					flow_editor.disconnect_nodes( from_node, from_port, name, arg_port )
-		
-		if not show_disconnected_inputs:
-			exposed_params = exposed_params.filter( func( data ):
-				return args_ports_by_name.has( data.name ) and args_ports_by_name[ data.name ].connected
-			)
-	else:
-		# When we just instantiate the node
-		if not runtime_only:
-			# This clears the initial list of exposed parameters
-			exposed_params = []
+	for arg_name in args_ports_by_name:
+		var arg_port = args_ports_by_name[ arg_name ].port
+		var curr_connections = flow_editor.get_connected_sources( name, arg_port )
+		#print( "Checking if %s is connected at port %d -> %d conns" % [ arg_name, arg_port, curr_connections.size() ] )
+		if not curr_connections.is_empty():
+			connected_inputs_by_name[ arg_name ] = { "port" : arg_port, "conns" : curr_connections.duplicate() }
+			for old_conn in curr_connections:
+				var from_node = old_conn[0]
+				var from_port = old_conn[1]
+				flow_editor.disconnect_nodes( from_node, from_port, name, arg_port )
+	
+	if not show_disconnected_inputs:
+		exposed_params = exposed_params.filter( func( data ):
+			return args_ports_by_name.has( data.name ) and args_ports_by_name[ data.name ].connected
+		)
 		
 	if trace:
 		print( "initFromScript: %s" % getTitle())
@@ -452,22 +444,21 @@ func initFromScript():
 		for arg_name in args_ports_by_name.keys():
 			print( "  %s : %s" % [ arg_name, args_ports_by_name[ arg_name ] ] )
 	
-	if flow_editor:
-		# Reconnect nodes
-		for arg_name in connected_inputs_by_name.keys():
-			var old_data = connected_inputs_by_name[ arg_name ]
-			var old_port = old_data.port
-			
-			# new_data might become invalid if the ins has changed
-			var new_data = args_ports_by_name.get( arg_name )
-			if new_data:
-				var new_port = new_data.port 
-				for old_conn in old_data.conns:
-					var from_node = old_conn[0]
-					var from_port = old_conn[1]
-					flow_editor.connect_nodes( from_node, from_port, name, new_port )
-			flow_editor.queueSave()
-		flow_editor.refreshSignalsInputArgs( self )
+	# Reconnect nodes
+	for arg_name in connected_inputs_by_name.keys():
+		var old_data = connected_inputs_by_name[ arg_name ]
+		var old_port = old_data.port
+		
+		# new_data might become invalid if the ins has changed
+		var new_data = args_ports_by_name.get( arg_name )
+		if new_data:
+			var new_port = new_data.port 
+			for old_conn in old_data.conns:
+				var from_node = old_conn[0]
+				var from_port = old_conn[1]
+				flow_editor.connect_nodes( from_node, from_port, name, new_port )
+		flow_editor.queueSave()
+	flow_editor.refreshSignalsInputArgs( self )
 	
 func refreshConnectionFlags( ):	
 	var editor = getEditor()

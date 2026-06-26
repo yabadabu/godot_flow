@@ -50,10 +50,10 @@ func createNewNode( packed_node : Resource, node_template : String, node_name : 
 		node.set_script(meta.factory)
 	else:
 		node = meta.factory.new() as FlowNodeBase
-	print( "createNewNode.Meta:", str(meta) )
-	print( packed_node )
-	print( node_template )
-	print( node_name )
+	#print( "createNewNode.Meta:", str(meta) )
+	#print( "packed_node:", packed_node )
+	#print( "node_template:", node_template )
+	#print( "node_name:", node_name )
 	node.node_template = node_template
 	node.name = node_name
 	node.settings = meta.settings.new()
@@ -66,5 +66,4 @@ func createNewNode( packed_node : Resource, node_template : String, node_name : 
 	node.size = Vector2(32,32)
 	node.tooltip_text = meta.get( "tooltip", "" )
 	node.refreshFromSettings()
-	node.initFromScript()
 	return node

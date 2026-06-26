@@ -54,6 +54,7 @@ func _enter_tree() -> void:
 
 func _exit_tree() -> void:
 	if Engine.is_editor_hint():
+		clearInstances( )
 		FlowPlugin.get_instance().unregister_executor(self)
 		
 func _on_graph_inputs_change():

@@ -195,7 +195,7 @@ static func create_nodes_from_dict( dict, graph : FlowGraphResource, paste_offse
 		if not in_node:
 			return null
 		var in_name = in_node.name
-		print( "Parsing node %s  Template:%s Settings:%s" % [ in_name, in_node.template, in_node.settings ] )
+		#print( "Parsing node %s  Template:%s Settings:%s" % [ in_name, in_node.template, in_node.settings ] )
 		
 		# Apply saved settings...
 		#dict_to_resource( in_node.settings, settings )
@@ -203,7 +203,7 @@ static func create_nodes_from_dict( dict, graph : FlowGraphResource, paste_offse
 		# Never import the inspect_enabled
 		in_node.settings.inspect_enabled = false
 		
-		print( "Creating node %s" % in_name )
+		#print( "Creating node %s" % in_name )
 		var node = graph.addNodeFromTemplate( in_node.template, in_name, in_node.settings )
 		if not node:
 			return null
@@ -213,8 +213,7 @@ static func create_nodes_from_dict( dict, graph : FlowGraphResource, paste_offse
 		node.show_disconnected_inputs = in_node.get("show_disconnected_inputs", false)
 		node.args_ports_by_name = in_node.get("args_port", {})
 		
-		#node.refreshFromSettings()
-		#node.initFromScript()
+		#print( "Node %s show_disconnected:%s args_ports:%s" % [node.name, node.show_disconnected_inputs, node.args_ports_by_name])
 		
 		# Update relation old -> new for the links
 		old_to_new_names[ in_name ] = node.name

@@ -85,6 +85,8 @@ func bindResourceToEditor(res : FlowGraphResource):
 
 	res.in_params_changed.connect(_on_inputs_changed)
 
+	res.editor = self
+
 	for node in res.all_nodes:
 		onNodeCreated( node )
 	for conn in res.all_connections:
@@ -96,13 +98,11 @@ func bindResourceToEditor(res : FlowGraphResource):
 	gedit.zoom = res.view_zoom
 	gedit.scroll_offset = res.view_offset
 	data_inspector.setNode( null )
-
-	res.editor = self
 		
-	for node in res.all_nodes:
-		print( "  Node %s show_disconnected_inputs = %s" % [node.name, node.show_disconnected_inputs ])
-		if node.show_disconnected_inputs:
-			node.nodeOptionsChanged( false )
+	#for node in res.all_nodes:
+		##print( "  Node %s show_disconnected_inputs = %s" % [node.name, node.show_disconnected_inputs ])
+		#if node.show_disconnected_inputs:
+			#node.nodeOptionsChanged( false )
 	
 func setResourceToEdit( new_resource : FlowGraphResource, new_resource_owner : FlowGraphNode3D ):
 	if new_resource and new_resource.loading:
@@ -111,20 +111,24 @@ func setResourceToEdit( new_resource : FlowGraphResource, new_resource_owner : F
 	
 	# Ensure we have a tab for this resource
 	if new_resource:
-		print( "Activating tab" )
+		#print( "Activating tab" )
 		var tab_idx = findIndexInTabs( new_resource )
 		if tab_idx < 0:
+			print( "Adding new tab and leaving. addTabs has already trigger the activation of the resource")
 			tab_idx = addToTabs( new_resource, new_resource_owner )
+			return
+		#print( "tab idx is %d vs current tab %d" % [ tab_idx, tab_bar.current_tab ] )
 		tab_bar.ensure_tab_visible( tab_idx )
-		tab_bar.current_tab = tab_idx
+		if tab_bar.current_tab != tab_idx:
+			tab_bar.current_tab = tab_idx
 	
 	if current_resource != new_resource:
 		print( "unbinding old, bindning new" )
 		unbindResourceFromEditor( current_resource )
 		current_resource = new_resource
 		bindResourceToEditor( current_resource )
-	else:
-		print( "The resource has not changed, no need to rebind the graph")
+	#else:
+		#print( "The resource has not changed, no need to rebind the graph")
 	
 	resource_owner = new_resource_owner
 	refresh_executors()
@@ -135,6 +139,7 @@ func setResourceToEdit( new_resource : FlowGraphResource, new_resource_owner : F
 	
 func onNodeCreated( node : FlowNodeBase ):
 	node.ui_scale = ui_scale
+	node.initFromScript()
 	refreshSignalsInputArgs( node )
 	gedit.add_child(node)
 	#print( "gedit.addChild %s" % [ node.name ])
@@ -381,6 +386,8 @@ func canConnect( src : FlowNodeBase, src_port : int, dst : FlowNodeBase, dst_por
 	return true
 	
 func addNode( node_template, settings = null ):
+	if current_resource == null:
+		return
 	var node_name = getFactory().getNewName( node_template )
 	
 	var node = current_resource.addNodeFromTemplate( node_template, node_name, settings )
@@ -911,7 +918,7 @@ func refresh_executors():
 	executor_candidates = FlowPlugin.get_instance().get_live_executors( current_resource )
 	for exec in executor_candidates:
 		for run in exec.runs:
-			print( "Run %s" % run )
+			#print( "Run %s" % run )
 			var node := exec.node_ref.get_ref() as FlowGraphNode3D
 			var title = "%s - %d" % [ node.name, run ]
 			combo.add_item(title)
