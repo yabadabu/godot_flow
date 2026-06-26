@@ -20,13 +20,6 @@ func _ready():
 	super._ready()
 	subctx.name = name + "_ctx"
 
-func initFromScript():
-	super.initFromScript()
-	if settings and settings.graph:
-		var time_node_start := Time.get_ticks_usec()
-		settings.graph.compile()
-		var time_node_end := Time.get_ticks_usec()
-
 func getTitle() -> String:
 	if settings and settings.graph:
 		return settings.graph.graph_name
@@ -36,6 +29,11 @@ func refreshFromSettings():
 	var ins = []
 	var outs = []
 	if settings and settings.graph:
+		
+		var time_node_start := Time.get_ticks_usec()
+		settings.graph.compile()
+		var time_node_end := Time.get_ticks_usec()
+		
 		for param in settings.graph.in_params:
 			if param:
 				ins.append({
@@ -98,9 +96,9 @@ func _gui_input(event: InputEvent):
 				settings.graph = FlowGraphResource.new()
 			var graph : FlowGraphResource = settings.graph
 			var owner = editor.resource_owner
-			print( "settings.graph.data", graph.data)
-			print( "settings.graph.resource_name", graph.resource_name )
-			print( "settings.graph.resource_path", graph.resource_path )
+			#print( "settings.graph.data", graph.data)
+			#print( "settings.graph.resource_name", graph.resource_name )
+			#print( "settings.graph.resource_path", graph.resource_path )
 			if not graph.data:
 				resetSubgraph( graph )
 			editor.setResourceToEdit(settings.graph, owner)

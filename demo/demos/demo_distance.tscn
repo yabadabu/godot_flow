@@ -3,7 +3,13 @@
 [ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_pkkv1"]
 [ext_resource type="Resource" uid="uid://chy06hdyr5neh" path="res://graphs/graph_distance.tres" id="2_66ode"]
 [ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="3_pkkv1"]
+[ext_resource type="Script" uid="uid://dhpu3ptt872as" path="res://addons/flow_nodes_editor/flow_graph_param_override.gd" id="3_scy5f"]
 [ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="4_scy5f"]
+
+[sub_resource type="Resource" id="Resource_rs64b"]
+script = ExtResource("3_scy5f")
+param_id = &"Make Vector - Y"
+value = 0.845
 
 [sub_resource type="Curve3D" id="Curve3D_pkkv1"]
 bake_interval = 0.295
@@ -126,11 +132,17 @@ data = {
 "type": "flow_graph_nodes",
 "version": 1
 }
+graph_name = "demo_distance"
 view_zoom = 0.909091
 view_offset = Vector2(-1196, -368.854)
 new_name_counter = 24
 in_params = Array[ExtResource("3_pkkv1")]([SubResource("Resource_o2vll")])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
+
+[sub_resource type="Resource" id="Resource_hh6fu"]
+script = ExtResource("3_scy5f")
+param_id = &"Grid - Rotation"
+value = Vector3(0, 0, 0)
 
 [sub_resource type="Curve3D" id="Curve3D_scy5f"]
 bake_interval = 0.295
@@ -149,10 +161,11 @@ size = Vector3(5.07344, 1, 1.17883)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.999684, 0, -3.50492)
 script = ExtResource("1_pkkv1")
 graph = ExtResource("2_66ode")
-args = {
-"Make Vector - Y": 0.725
-}
-refresh_inputs = Callable()
+overrides = Array[ExtResource("3_scy5f")]([SubResource("Resource_rs64b")])
+regenerate = Callable()
+clearInstances = Callable()
+"flow_override/Make Vector - Y/enabled" = false
+"flow_override/Make Vector - Y/value" = 0.845
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
 
 [node name="PathA" type="Path3D" parent="." unique_id=47680660 groups=["Curves"]]
@@ -172,10 +185,11 @@ surface_material_override/0 = SubResource("StandardMaterial3D_3kbeu")
 transform = Transform3D(0.0357097, -0.282802, 0.638324, 0.130265, 0.630633, 0.272108, -0.685905, 0.105045, 0.0849105, 0, 0, 0)
 script = ExtResource("1_pkkv1")
 graph = SubResource("Resource_3kbeu")
-args = {
-"Grid - Rotation": Vector3(0, 0, 0)
-}
-refresh_inputs = Callable()
+overrides = Array[ExtResource("3_scy5f")]([SubResource("Resource_hh6fu")])
+regenerate = Callable()
+clearInstances = Callable()
+"flow_override/Grid - Rotation/enabled" = false
+"flow_override/Grid - Rotation/value" = Vector3(0, 0, 0)
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
 
 [node name="Path3D" type="Path3D" parent="." unique_id=1495015690]

@@ -89,6 +89,8 @@ func on_scene_changed(scene_root: Node) -> void:
 		print( "Close current dock?" )
 		if scene_root and (node.get_owner() != scene_root and not scene_root.is_ancestor_of(node)):
 			graph_dock.setResourceToEdit( null, null )
+	else:
+		graph_dock.setResourceToEdit( null, null )
 			
 	# Auto activate the first flow node graph found in the scene
 	for node in scene_root.get_children():
@@ -165,6 +167,8 @@ func unregister_executor(node: FlowGraphNode3D) -> void:
 	if graph == null:
 		return
 	executors[graph].erase(node.get_instance_id())
+	if executors[ graph ].is_empty():
+		print( "Executors remaining of this graph: %s" % executors[ graph ] )
 	
 func get_live_executors( graph : FlowGraphResource ) -> Array:
 	var result := []

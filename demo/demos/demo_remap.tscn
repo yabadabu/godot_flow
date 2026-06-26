@@ -195,6 +195,7 @@ data = {
 "type": "flow_graph_nodes",
 "version": 1
 }
+graph_name = "demo_remap"
 view_zoom = 1.21
 view_offset = Vector2(556.27856, 179.55673)
 new_name_counter = 7
@@ -205,7 +206,8 @@ metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 [node name="FlowGraphNode3D" type="Node3D" parent="." unique_id=1090447753]
 script = ExtResource("1_8ag8x")
 graph = SubResource("Resource_b8voe")
-refresh_inputs = Callable()
+regenerate = Callable()
+clearInstances = Callable()
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
 
 [node name="RefPoint" type="Node3D" parent="." unique_id=1928387909 groups=["RefPoints"]]
