@@ -71,6 +71,9 @@ And the Associated graph
 
 ![Demo Bridge Graph](demo/addons/flow_nodes_editor/doc/demo_bridge_graph.png) 
 
+### Demo Village With in a forest
+![demo_forest](demo/addons/flow_nodes_editor/doc/demo_forest.gif)
+
 ### Demo Non Uniform Sampling
 ![demo_non_uniform_sampling](demo/addons/flow_nodes_editor/doc/demo_non_uniform_sampling.png)
 
