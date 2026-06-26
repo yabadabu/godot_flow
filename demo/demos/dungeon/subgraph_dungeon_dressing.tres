@@ -43,25 +43,51 @@ data = {
 "to_node": &"id_0011_filter",
 "to_port": 1
 }],
-"min_pos": Vector2(-80, 240),
+"min_pos": Vector2(0, 0),
 "nodes": [{
 "args_port": {
-"In": {
+"In A": {
 "connected": true,
 "port": 0
+},
+"In B": {
+"connected": true,
+"port": 1
+},
+"In C": {
+"connected": false,
+"port": 2
 }
 },
-"name": &"id_0005_add_attribute",
-"position": Vector2(480, 0),
+"name": &"id_0011_filter",
+"position": Vector2(200, 160),
 "settings": {
-"cte_bool": false,
-"cte_color": Color(1, 1, 1, 1),
-"cte_float": 4.0,
-"cte_int": 0,
-"cte_resource": null,
-"cte_string": "",
-"cte_vector": Vector3(0, 0, 0),
-"data_type": 2,
+"condition": 12,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"in_nameA": "position.X",
+"in_nameB": "@last",
+"in_nameC": "4.0",
+"inspect_enabled": false,
+"random_seed": 56830341,
+"threshold": 0.1,
+"title": "Filter",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "filter"
+}, {
+"args_port": {},
+"name": &"id_0014_input_limit",
+"position": Vector2(0, 220),
+"settings": {
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
@@ -72,13 +98,13 @@ data = {
 "debug_scale": 1.0,
 "disabled": false,
 "inspect_enabled": false,
-"name": "AttrB",
-"random_seed": 1449361021,
-"title": "Add Attribute",
+"name": "limit",
+"random_seed": 1812025184,
+"title": "Input",
 "trace": false
 },
 "show_disconnected_inputs": false,
-"template": "add_attribute"
+"template": "input_limit"
 }, {
 "args_port": {
 "In": {
@@ -144,6 +170,41 @@ data = {
 "show_disconnected_inputs": false,
 "template": "add_attribute"
 }, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0005_add_attribute",
+"position": Vector2(480, 0),
+"settings": {
+"cte_bool": false,
+"cte_color": Color(1, 1, 1, 1),
+"cte_float": 4.0,
+"cte_int": 0,
+"cte_resource": null,
+"cte_string": "",
+"cte_vector": Vector3(0, 0, 0),
+"data_type": 2,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"name": "AttrB",
+"random_seed": 1449361021,
+"title": "Add Attribute",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "add_attribute"
+}, {
 "args_port": {},
 "name": &"id_0003_grid",
 "position": Vector2(0, 0),
@@ -171,68 +232,6 @@ data = {
 },
 "show_disconnected_inputs": false,
 "template": "grid"
-}, {
-"args_port": {
-"In A": {
-"connected": true,
-"port": 0
-},
-"In B": {
-"connected": true,
-"port": 1
-},
-"In C": {
-"connected": false,
-"port": 2
-}
-},
-"name": &"id_0011_filter",
-"position": Vector2(200, 160),
-"settings": {
-"condition": 12,
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"in_nameA": "position.X",
-"in_nameB": "@last",
-"in_nameC": "4.0",
-"inspect_enabled": false,
-"random_seed": 56830341,
-"threshold": 0.1,
-"title": "Filter",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "filter"
-}, {
-"args_port": {},
-"name": &"id_0014_input_limit",
-"position": Vector2(0, 220),
-"settings": {
-"data_type": 2,
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"name": "limit",
-"random_seed": 1812025184,
-"title": "Input",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "input_limit"
 }],
 "type": "flow_graph_nodes",
 "version": 1

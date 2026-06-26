@@ -767,7 +767,7 @@ data = {
 "debug_port_combined_index": 0,
 "debug_scale": 1.0,
 "disabled": false,
-"inspect_enabled": true,
+"inspect_enabled": false,
 "match_attr": "",
 "random_seed": 2063051233,
 "title": "Match And Set",

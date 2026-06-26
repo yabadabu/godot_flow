@@ -50,12 +50,22 @@ data = {
 "to_node": &"id_0092_transform",
 "to_port": 0
 }],
-"min_pos": Vector2(-440, -20),
+"min_pos": Vector2(0, 0),
 "nodes": [{
-"args_port": {},
-"name": &"id_0002_scan_splines",
-"position": Vector2(0, 0),
+"args_port": {
+"In A": {
+"connected": true,
+"port": 0
+},
+"In B": {
+"connected": false,
+"port": 1
+}
+},
+"name": &"id_0006_filter",
+"position": Vector2(640, 0),
 "settings": {
+"condition": 0,
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
@@ -65,15 +75,17 @@ data = {
 "debug_port_combined_index": 0,
 "debug_scale": 1.0,
 "disabled": false,
-"group_name": "",
+"in_nameA": "@last",
+"in_nameB": "True",
+"in_nameC": "@last",
 "inspect_enabled": false,
-"random_seed": 1511423728,
-"required_meta_bool": &"",
-"title": "Scan Splines",
+"random_seed": 2799373273,
+"threshold": 0.1,
+"title": "Filter",
 "trace": false
 },
 "show_disconnected_inputs": false,
-"template": "scan_splines"
+"template": "filter"
 }, {
 "args_port": {
 "Splines": {
@@ -144,6 +156,41 @@ data = {
 "port": 0
 }
 },
+"name": &"id_0092_transform",
+"position": Vector2(320, 0),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": true,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"offset_local_space": true,
+"offset_max": Vector3(0, 0, 0),
+"offset_min": Vector3(0, 0, 0),
+"random_seed": 2752293856,
+"rotation_local_space": false,
+"rotation_max": Vector3(0, 0, 0),
+"rotation_min": Vector3(0, 0, 0),
+"scale_max": Vector3(0.36, 1, 1),
+"scale_min": Vector3(0.36, 1, 1),
+"title": "Transform",
+"trace": false,
+"uniform_scale": true
+},
+"show_disconnected_inputs": false,
+"template": "transform"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
 "name": &"id_0007_debug",
 "position": Vector2(820, 120),
 "settings": {
@@ -165,19 +212,14 @@ data = {
 "template": "debug"
 }, {
 "args_port": {
-"In A": {
+"In": {
 "connected": true,
 "port": 0
-},
-"In B": {
-"connected": false,
-"port": 1
 }
 },
-"name": &"id_0006_filter",
-"position": Vector2(640, 0),
+"name": &"id_0008_transform",
+"position": Vector2(1020, 0),
 "settings": {
-"condition": 0,
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
@@ -187,17 +229,45 @@ data = {
 "debug_port_combined_index": 0,
 "debug_scale": 1.0,
 "disabled": false,
-"in_nameA": "@last",
-"in_nameB": "True",
-"in_nameC": "@last",
 "inspect_enabled": false,
-"random_seed": 2799373273,
-"threshold": 0.1,
-"title": "Filter",
+"offset_local_space": true,
+"offset_max": Vector3(0, 0, 0),
+"offset_min": Vector3(0, 0, 0),
+"random_seed": 658432836,
+"rotation_local_space": true,
+"rotation_max": Vector3(0, 360, 0),
+"rotation_min": Vector3(0, 0, 0),
+"scale_max": Vector3(1, 1, 1),
+"scale_min": Vector3(1, 1, 1),
+"title": "Transform",
+"trace": false,
+"uniform_scale": true
+},
+"show_disconnected_inputs": false,
+"template": "transform"
+}, {
+"args_port": {},
+"name": &"id_0002_scan_splines",
+"position": Vector2(0, 0),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"group_name": "",
+"inspect_enabled": false,
+"random_seed": 1511423728,
+"required_meta_bool": &"",
+"title": "Scan Splines",
 "trace": false
 },
 "show_disconnected_inputs": false,
-"template": "filter"
+"template": "scan_splines"
 }, {
 "args_port": {
 "In": {
@@ -210,7 +280,6 @@ data = {
 "settings": {
 "assign_attributes": {},
 "assign_target_path": "",
-"clear_previous_instances": true,
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
@@ -233,80 +302,12 @@ data = {
 },
 "show_disconnected_inputs": false,
 "template": "spawn_scenes"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0008_transform",
-"position": Vector2(1020, 0),
-"settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"offset_max": Vector3(0, 0, 0),
-"offset_min": Vector3(0, 0, 0),
-"random_seed": 658432836,
-"rotation_local_space": true,
-"rotation_max": Vector3(0, 360, 0),
-"rotation_min": Vector3(0, 0, 0),
-"scale_max": Vector3(1, 1, 1),
-"scale_min": Vector3(1, 1, 1),
-"title": "Transform",
-"trace": false,
-"uniform_scale": true
-},
-"show_disconnected_inputs": false,
-"template": "transform"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0092_transform",
-"position": Vector2(320, 0),
-"settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": true,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"offset_max": Vector3(0, 0, 0),
-"offset_min": Vector3(0, 0, 0),
-"random_seed": 2752293856,
-"rotation_local_space": false,
-"rotation_max": Vector3(0, 0, 0),
-"rotation_min": Vector3(0, 0, 0),
-"scale_max": Vector3(0.36, 1, 1),
-"scale_min": Vector3(0.36, 1, 1),
-"title": "Transform",
-"trace": false,
-"uniform_scale": true
-},
-"show_disconnected_inputs": false,
-"template": "transform"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
 graph_name = "graph01"
 view_zoom = 1.00902
-view_offset = Vector2(-354.1132, -190.58432)
+view_offset = Vector2(1079.4952, -220.33487)
 new_name_counter = 9
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"

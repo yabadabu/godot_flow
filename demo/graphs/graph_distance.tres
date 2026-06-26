@@ -106,6 +106,41 @@ data = {
 "port": 0
 }
 },
+"name": &"id_0033_transform",
+"position": Vector2(560, 380),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"offset_local_space": true,
+"offset_max": Vector3(0, 0, 0),
+"offset_min": Vector3(0, 0, 0),
+"random_seed": 345771434,
+"rotation_local_space": false,
+"rotation_max": Vector3(0, 0, 0),
+"rotation_min": Vector3(0, 0, 0),
+"scale_max": Vector3(0.1, 0.5, 0.1),
+"scale_min": Vector3(0.1, 0.5, 0.1),
+"title": "Transform",
+"trace": false,
+"uniform_scale": false
+},
+"show_disconnected_inputs": false,
+"template": "transform"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
 "name": &"id_0027_transform",
 "position": Vector2(560, 0),
 "settings": {
@@ -137,13 +172,21 @@ data = {
 }, {
 "args_port": {
 "In": {
-"connected": true,
+"connected": false,
 "port": 0
 }
 },
-"name": &"id_0033_transform",
-"position": Vector2(560, 380),
+"name": &"id_0025_add_attribute",
+"position": Vector2(1100, 340),
 "settings": {
+"cte_bool": false,
+"cte_color": Color(1, 1, 1, 1),
+"cte_float": 0.765,
+"cte_int": 0,
+"cte_resource": null,
+"cte_string": "",
+"cte_vector": Vector3(0, 0, 0),
+"data_type": 2,
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
@@ -154,56 +197,13 @@ data = {
 "debug_scale": 1.0,
 "disabled": false,
 "inspect_enabled": false,
-"offset_local_space": true,
-"offset_max": Vector3(0, 0, 0),
-"offset_min": Vector3(0, 0, 0),
-"random_seed": 345771434,
-"rotation_local_space": false,
-"rotation_max": Vector3(0, 0, 0),
-"rotation_min": Vector3(0, 0, 0),
-"scale_max": Vector3(0.1, 0.5, 0.1),
-"scale_min": Vector3(0.1, 0.5, 0.1),
-"title": "Transform",
-"trace": false,
-"uniform_scale": false
-},
-"show_disconnected_inputs": false,
-"template": "transform"
-}, {
-"args_port": {
-"In A": {
-"connected": true,
-"port": 0
-},
-"In B": {
-"connected": true,
-"port": 1
-}
-},
-"name": &"id_0035_filter",
-"position": Vector2(1280, 240),
-"settings": {
-"condition": 2,
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"in_nameA": "distance",
-"in_nameB": "Threshold",
-"in_nameC": "@last",
-"inspect_enabled": false,
-"random_seed": 934950267,
-"threshold": 0.175,
-"title": "Filter",
+"name": "Threshold",
+"random_seed": 3924440885,
+"title": "Add Attribute",
 "trace": false
 },
 "show_disconnected_inputs": false,
-"template": "filter"
+"template": "add_attribute"
 }, {
 "args_port": {
 "step": {
@@ -282,6 +282,98 @@ data = {
 "template": "transform"
 }, {
 "args_port": {
+"In A": {
+"connected": true,
+"port": 0
+},
+"In B": {
+"connected": true,
+"port": 1
+}
+},
+"name": &"id_0035_filter",
+"position": Vector2(1280, 240),
+"settings": {
+"condition": 2,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"in_nameA": "distance",
+"in_nameB": "Threshold",
+"in_nameC": "@last",
+"inspect_enabled": false,
+"random_seed": 934950267,
+"threshold": 0.175,
+"title": "Filter",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "filter"
+}, {
+"args_port": {},
+"name": &"id_0087_input_Make Vector - Y",
+"position": Vector2(1300, 480),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": true,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"name": "Make Vector - Y",
+"random_seed": 1812357170,
+"title": "Input",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "input_Make Vector - Y"
+}, {
+"args_port": {
+"In": {
+"connected": false,
+"port": 0
+}
+},
+"name": &"id_0034_add_attribute",
+"position": Vector2(0, 140),
+"settings": {
+"cte_bool": false,
+"cte_color": Color(1, 1, 1, 1),
+"cte_float": 0.205,
+"cte_int": 0,
+"cte_resource": null,
+"cte_string": "",
+"cte_vector": Vector3(0, 0, 0),
+"data_type": 2,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"name": "Step",
+"random_seed": 1435980282,
+"title": "Add Attribute",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "add_attribute"
+}, {
+"args_port": {
 "y": {
 "connected": true,
 "port": 0
@@ -307,6 +399,40 @@ data = {
 "x": 0.0,
 "y": 0.0,
 "z": 0.0
+},
+"show_disconnected_inputs": false,
+"template": "make_vector"
+}, {
+"args_port": {
+"x": {
+"connected": true,
+"port": 0
+},
+"z": {
+"connected": true,
+"port": 1
+}
+},
+"name": &"id_0026_make_vector",
+"position": Vector2(200, 120),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"out_name": "Vector",
+"random_seed": 559977034,
+"title": "Make Vector",
+"trace": false,
+"x": 0.41,
+"y": 1.0,
+"z": 0.28
 },
 "show_disconnected_inputs": false,
 "template": "make_vector"
@@ -376,110 +502,6 @@ data = {
 "show_disconnected_inputs": false,
 "template": "distance"
 }, {
-"args_port": {
-"In": {
-"connected": false,
-"port": 0
-}
-},
-"name": &"id_0025_add_attribute",
-"position": Vector2(1100, 340),
-"settings": {
-"cte_bool": false,
-"cte_color": Color(1, 1, 1, 1),
-"cte_float": 0.765,
-"cte_int": 0,
-"cte_resource": null,
-"cte_string": "",
-"cte_vector": Vector3(0, 0, 0),
-"data_type": 2,
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"name": "Threshold",
-"random_seed": 3924440885,
-"title": "Add Attribute",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "add_attribute"
-}, {
-"args_port": {
-"x": {
-"connected": true,
-"port": 0
-},
-"z": {
-"connected": true,
-"port": 1
-}
-},
-"name": &"id_0026_make_vector",
-"position": Vector2(200, 120),
-"settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"out_name": "Vector",
-"random_seed": 559977034,
-"title": "Make Vector",
-"trace": false,
-"x": 0.41,
-"y": 1.0,
-"z": 0.28
-},
-"show_disconnected_inputs": false,
-"template": "make_vector"
-}, {
-"args_port": {
-"In": {
-"connected": false,
-"port": 0
-}
-},
-"name": &"id_0034_add_attribute",
-"position": Vector2(0, 140),
-"settings": {
-"cte_bool": false,
-"cte_color": Color(1, 1, 1, 1),
-"cte_float": 0.205,
-"cte_int": 0,
-"cte_resource": null,
-"cte_string": "",
-"cte_vector": Vector3(0, 0, 0),
-"data_type": 2,
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"name": "Step",
-"random_seed": 1435980282,
-"title": "Add Attribute",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "add_attribute"
-}, {
 "args_port": {},
 "name": &"id_0085_scan_splines",
 "position": Vector2(80, 380),
@@ -502,28 +524,6 @@ data = {
 },
 "show_disconnected_inputs": false,
 "template": "scan_splines"
-}, {
-"args_port": {},
-"name": &"id_0087_input_Make Vector - Y",
-"position": Vector2(1300, 480),
-"settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": true,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"name": "Make Vector - Y",
-"random_seed": 1812357170,
-"title": "Input",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "input_Make Vector - Y"
 }],
 "type": "flow_graph_nodes",
 "version": 1
