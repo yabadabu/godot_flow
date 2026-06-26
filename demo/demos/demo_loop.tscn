@@ -330,36 +330,109 @@ data = {
 "keep_alive": false,
 "to_node": &"id_0003_subgraph",
 "to_port": 1
-}],
-"min_pos": Vector2(0, 0),
-"nodes": [{
-"args_port": {},
-"name": &"id_0027_comment",
-"position": Vector2(780, 120),
-"settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"hue": 0.39470518,
-"inspect_enabled": false,
-"random_seed": 2136273546,
-"text": "Process one point at a time, and keep track of the accumulated height.
-Then collect all the points again in a single batch",
-"title": "Comments",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "comment"
 }, {
-"args_port": {},
-"name": &"id_0024_comment",
-"position": Vector2(180, 0),
+"from_node": &"id_0018_sort",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0005_transform",
+"to_port": 0
+}, {
+"from_node": &"id_0001_grid",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0006_transform",
+"to_port": 0
+}, {
+"from_node": &"id_0020_merge",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0007_transform",
+"to_port": 0
+}],
+"min_pos": Vector2(0, -120),
+"nodes": [{
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0005_transform",
+"position": Vector2(781.5172, 81.88803),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": true,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"offset_local_space": true,
+"offset_max": Vector3(0, 0, -10),
+"offset_min": Vector3(0, 0, -10),
+"random_seed": 1687507641,
+"rotation_local_space": false,
+"rotation_max": Vector3(0, 0, 0),
+"rotation_min": Vector3(0, 0, 0),
+"scale_max": Vector3(1, 1, 1),
+"scale_min": Vector3(1, 1, 1),
+"title": "Transform",
+"trace": false,
+"uniform_scale": true
+},
+"show_disconnected_inputs": false,
+"template": "transform"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0.0
+}
+},
+"name": &"id_0007_transform",
+"position": Vector2(1480, 280),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": true,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"offset_local_space": true,
+"offset_max": Vector3(0, 0, -10),
+"offset_min": Vector3(0, 0, -10),
+"random_seed": 1687507641,
+"rotation_local_space": false,
+"rotation_max": Vector3(0, 0, 0),
+"rotation_min": Vector3(0, 0, 0),
+"scale_max": Vector3(1, 1, 1),
+"scale_min": Vector3(1, 1, 1),
+"title": "Transform",
+"trace": false,
+"uniform_scale": true
+},
+"show_disconnected_inputs": false,
+"template": "transform"
+}, {
+"args_port": {
+"CurrentY": {
+"connected": true,
+"port": 1
+},
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0003_subgraph",
+"position": Vector2(980, 420),
 "settings": {
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
@@ -367,18 +440,17 @@ Then collect all the points again in a single batch",
 "debug_mode": 0,
 "debug_modulate_by": "",
 "debug_output": 0,
-"debug_port_combined_index": 0,
+"debug_port_combined_index": 3,
 "debug_scale": 1.0,
 "disabled": false,
-"hue": 0.8792339,
+"graph": SubResource("Resource_a44us"),
 "inspect_enabled": false,
-"random_seed": 3962488378,
-"text": "Randomize Width and Heigh, then sort by Heights",
-"title": "Comments",
+"random_seed": 2779718557,
+"title": "Subgraph",
 "trace": false
 },
 "show_disconnected_inputs": false,
-"template": "comment"
+"template": "subgraph"
 }, {
 "args_port": {
 "In": {
@@ -387,7 +459,7 @@ Then collect all the points again in a single batch",
 }
 },
 "name": &"id_0050_add_attribute",
-"position": Vector2(780, 400),
+"position": Vector2(780, 520),
 "settings": {
 "cte_bool": false,
 "cte_color": Color(1, 1, 1, 1),
@@ -416,8 +488,8 @@ Then collect all the points again in a single batch",
 "template": "add_attribute"
 }, {
 "args_port": {},
-"name": &"id_0001_grid",
-"position": Vector2(0, 100),
+"name": &"id_0027_comment",
+"position": Vector2(780, 240),
 "settings": {
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
@@ -428,20 +500,73 @@ Then collect all the points again in a single batch",
 "debug_port_combined_index": 0,
 "debug_scale": 1.0,
 "disabled": false,
+"hue": 0.45,
 "inspect_enabled": false,
-"origin": Vector3(0, 0, 0),
-"random_seed": 1493028908,
-"rotation": Vector3(0, 0, 0),
-"size": 0.82,
-"step": Vector3(2, 1, 1),
-"title": "Grid",
-"trace": false,
-"x": 5,
-"y": 1,
-"z": 1
+"random_seed": 2136273546,
+"text": "Process one point at a time, and keep track of the accumulated height.
+Then collect all the points again in a single batch",
+"title": "Comments",
+"trace": false
 },
 "show_disconnected_inputs": false,
-"template": "grid"
+"template": "comment"
+}, {
+"args_port": {},
+"name": &"id_0024_comment",
+"position": Vector2(180, 120),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"hue": 0.05,
+"inspect_enabled": false,
+"random_seed": 3962488378,
+"text": "Randomize Width and Heigh, then sort by Heights",
+"title": "Comments",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "comment"
+}, {
+"args_port": {
+"In A": {
+"connected": true,
+"port": 0
+},
+"In B": {
+"connected": true,
+"port": 1
+}
+},
+"name": &"id_0025_math_op",
+"position": Vector2(360, 220),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"in_nameA": "size.x",
+"in_nameB": "size.x",
+"inspect_enabled": false,
+"operation": 19,
+"out_name": "size.z",
+"random_seed": 2826320829,
+"title": "Math",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "math_op"
 }, {
 "args_port": {
 "In": {
@@ -450,7 +575,7 @@ Then collect all the points again in a single batch",
 }
 },
 "name": &"id_0025_transform",
-"position": Vector2(180, 100),
+"position": Vector2(180, 220),
 "settings": {
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
@@ -484,8 +609,118 @@ Then collect all the points again in a single batch",
 "port": 0
 }
 },
+"name": &"id_0020_merge",
+"position": Vector2(1260, 420),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": true,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"random_seed": 1425879892,
+"title": "Merge",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "merge"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0018_sort",
+"position": Vector2(540, 220),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"random_seed": 4148900739,
+"sort_by": "size.x",
+"sort_descending": true,
+"title": "Sort",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "sort"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0002_partition",
+"position": Vector2(780, 420),
+"settings": {
+"attribute_name": "Index",
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"out_partition_attribute": "Id",
+"random_seed": 3707290272,
+"title": "Partition",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "partition"
+}, {
+"args_port": {},
+"name": &"id_0001_grid",
+"position": Vector2(0, 220),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"origin": Vector3(0, 0, 0),
+"random_seed": 1493028908,
+"rotation": Vector3(0, 0, 0),
+"size": 0.82,
+"step": Vector3(2, 1, 1),
+"title": "Grid",
+"trace": false,
+"x": 5,
+"y": 1,
+"z": 1
+},
+"show_disconnected_inputs": false,
+"template": "grid"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
 "name": &"id_0001_compose_vector",
-"position": Vector2(1500, 300),
+"position": Vector2(1500, 420),
 "settings": {
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
@@ -510,51 +745,17 @@ Then collect all the points again in a single batch",
 "template": "compose_vector"
 }, {
 "args_port": {
-"In A": {
-"connected": true,
-"port": 0
-},
-"In B": {
-"connected": true,
-"port": 1
-}
-},
-"name": &"id_0025_math_op",
-"position": Vector2(360, 100),
-"settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"in_nameA": "size.x",
-"in_nameB": "size.x",
-"inspect_enabled": false,
-"operation": 19,
-"out_name": "size.z",
-"random_seed": 2826320829,
-"title": "Math",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "math_op"
-}, {
-"args_port": {
 "In": {
 "connected": true,
-"port": 0
+"port": 0.0
 }
 },
-"name": &"id_0020_merge",
-"position": Vector2(1260, 300),
+"name": &"id_0006_transform",
+"position": Vector2(180, 0),
 "settings": {
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
+"debug_enabled": true,
 "debug_mode": 0,
 "debug_modulate_by": "",
 "debug_output": 0,
@@ -562,106 +763,28 @@ Then collect all the points again in a single batch",
 "debug_scale": 1.0,
 "disabled": false,
 "inspect_enabled": false,
-"random_seed": 1425879892,
-"title": "Merge",
-"trace": false
+"offset_local_space": true,
+"offset_max": Vector3(0, 0, -15),
+"offset_min": Vector3(0, 0, -15),
+"random_seed": 1687507641,
+"rotation_local_space": false,
+"rotation_max": Vector3(0, 0, 0),
+"rotation_min": Vector3(0, 0, 0),
+"scale_max": Vector3(1, 1, 1),
+"scale_min": Vector3(1, 1, 1),
+"title": "Transform",
+"trace": false,
+"uniform_scale": true
 },
 "show_disconnected_inputs": false,
-"template": "merge"
-}, {
-"args_port": {
-"CurrentY": {
-"connected": true,
-"port": 1
-},
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0003_subgraph",
-"position": Vector2(980, 300),
-"settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 3,
-"debug_scale": 1.0,
-"disabled": false,
-"graph": SubResource("Resource_a44us"),
-"inspect_enabled": false,
-"random_seed": 2779718557,
-"title": "Subgraph",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "subgraph"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0002_partition",
-"position": Vector2(780, 300),
-"settings": {
-"attribute_name": "Index",
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"out_partition_attribute": "Id",
-"random_seed": 3707290272,
-"title": "Partition",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "partition"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0018_sort",
-"position": Vector2(540, 100),
-"settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"random_seed": 4148900739,
-"sort_by": "size.x",
-"sort_descending": true,
-"title": "Sort",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "sort"
+"template": "transform"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
 graph_name = "graph demo loop"
-view_zoom = 0.9673491
-view_offset = Vector2(699, 11.132416)
+view_zoom = 0.799462
+view_offset = Vector2(1077.8306, -112.53284)
 in_params = Array[ExtResource("2_4lgao")]([SubResource("Resource_rijiu")])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 
@@ -682,3 +805,10 @@ clearInstances = Callable()
 flow_override/arg_name/enabled = true
 flow_override/arg_name/value = 0.0
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
+
+[node name="Hint" type="Label3D" parent="." unique_id=1097408059]
+transform = Transform3D(3.466592e-05, -0.99998033, 0.006265551, 0.0055325613, 0.00626567, 0.9999651, -0.9999847, 0, 0.00553267, 4.376411, -0.07534159, 3.451079)
+pixel_size = 0.02
+text = "Points with random width and heights, 
+ordered  by width, then rearraced 
+using a loop subgraph"

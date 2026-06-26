@@ -37,8 +37,14 @@ data = {
 "keep_alive": false,
 "to_node": &"id_0002_distance",
 "to_port": 1
+}, {
+"from_node": &"id_0002_distance",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0004_transform",
+"to_port": 0
 }],
-"min_pos": Vector2(80, 200),
+"min_pos": Vector2(0, -29.68685),
 "nodes": [{
 "args_port": {
 "In": {
@@ -46,8 +52,43 @@ data = {
 "port": 0
 }
 },
+"name": &"id_0004_transform",
+"position": Vector2(384.18356, 0),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"offset_local_space": true,
+"offset_max": Vector3(0, 0, 0),
+"offset_min": Vector3(0, 0, 0),
+"random_seed": 344616237,
+"rotation_local_space": false,
+"rotation_max": Vector3(0, 0, 0),
+"rotation_min": Vector3(0, 0, 0),
+"scale_max": Vector3(1, 1, 1),
+"scale_min": Vector3(1, 1, 1),
+"title": "Transform",
+"trace": false,
+"uniform_scale": true
+},
+"show_disconnected_inputs": false,
+"template": "transform"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
 "name": &"id_0004_remap",
-"position": Vector2(400, 140),
+"position": Vector2(400, 169.68684),
 "settings": {
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
@@ -60,7 +101,7 @@ data = {
 "disabled": false,
 "in_name": "distance",
 "inspect_enabled": false,
-"out_name": "@in_name",
+"out_name": "@source",
 "random_seed": 2803866490,
 "remap_curve": SubResource("Curve_8ag8x"),
 "title": "Remap",
@@ -69,9 +110,43 @@ data = {
 "show_disconnected_inputs": false,
 "template": "remap"
 }, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+},
+"Target": {
+"connected": true,
+"port": 1
+}
+},
+"name": &"id_0002_distance",
+"position": Vector2(180, 29.68685),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "distance",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"in_nameA": "position",
+"in_nameB": "position",
+"inspect_enabled": false,
+"max_distance": 0.0,
+"out_name": "distance",
+"random_seed": 2100802008,
+"title": "Distance",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "distance"
+}, {
 "args_port": {},
 "name": &"id_0001_grid",
-"position": Vector2(0, 0),
+"position": Vector2(0, 29.68685),
 "settings": {
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
@@ -98,78 +173,13 @@ data = {
 "template": "grid"
 }, {
 "args_port": {
-"In": {
-"connected": true,
-"port": 0
-},
-"Target": {
-"connected": true,
-"port": 1
-}
-},
-"name": &"id_0002_distance",
-"position": Vector2(180, 0),
-"settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "distance",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"in_nameA": "position",
-"in_nameB": "position",
-"inspect_enabled": false,
-"max_distance": 0.0,
-"out_name": "distance",
-"random_seed": 2100802008,
-"title": "Distance",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "distance"
-}, {
-"args_port": {},
-"name": &"id_0003_scan_nodes",
-"position": Vector2(0, 120),
-"settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"filter_by_class_name": "",
-"filter_by_name": "",
-"group_name": "RefPoints",
-"import_metadata": false,
-"import_properties": Array[StringName]([]),
-"inspect_enabled": false,
-"random_seed": 393844403,
-"size_to_bounds": false,
-"title": "Scan Nodes",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "scan_nodes"
-}, {
-"args_port": {
 "In A": {
 "connected": true,
 "port": 0
-},
-"In B": {
-"connected": false,
-"port": 1
 }
 },
 "name": &"id_0006_math_op",
-"position": Vector2(580, 140),
+"position": Vector2(580, 169.68684),
 "settings": {
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
@@ -191,13 +201,41 @@ data = {
 },
 "show_disconnected_inputs": false,
 "template": "math_op"
+}, {
+"args_port": {},
+"name": &"id_0003_scan_nodes",
+"position": Vector2(0, 149.68684),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"filter_by_class_name": "",
+"filter_by_name": "",
+"group_name": "RefPoints",
+"import_metadata": false,
+"import_properties": Array[StringName]([]),
+"inspect_enabled": false,
+"random_seed": 393844403,
+"required_meta_bool": &"",
+"size_to_bounds": false,
+"title": "Scan Nodes",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "scan_nodes"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
 graph_name = "demo_remap"
-view_zoom = 1.21
-view_offset = Vector2(556.27856, 179.55673)
+view_zoom = 0.75131476
+view_offset = Vector2(155.64279, -293.30417)
 new_name_counter = 7
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 
@@ -211,4 +249,10 @@ clearInstances = Callable()
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
 
 [node name="RefPoint" type="Node3D" parent="." unique_id=1928387909 groups=["RefPoints"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4127862, 0.0712216, 2.1530252)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.7842267, 0.0712216, 2.4149547)
+
+[node name="Hint" type="Label3D" parent="." unique_id=65373884]
+transform = Transform3D(3.466592e-05, -0.99998033, 0.006265551, 0.0055325613, 0.00626567, 0.9999651, -0.9999847, 0, 0.00553267, -1.7177186, 0, 1.9688678)
+pixel_size = 0.02
+text = "The distance to the Ref point is  remapped 
+using a curve to create this donut-like shape"

@@ -21,7 +21,7 @@ In a scene 3D:
 
 * Add a node of type ```FlowGraphNode3D```
 * Open the Data Flow dock (appears on the right when the plugin is enabled).
-* Press **Shit+A** (or **Right click**) in the graph to open **Add Node….**
+* **Right click** in the graph to open **Add Node….**
 * Add a node, e.g. ```Grid```
 * Press ```D``` to toggle the 3D debug on that node - points appear as white boxes in the viewport.
 * Adjust the selected node’s parameters (e.g. grid count/size).
@@ -30,7 +30,7 @@ In a scene 3D:
 
 ## Handy Shortcuts
 
-* **Shift+A** / **Right-click**: Add node
+* **Right-click**: Add node
 * **D**: Toggle 3D point debug
 * **A**: Toggle Data Inspector
 * **E**: Toggle Enable/Disable Node
@@ -51,6 +51,7 @@ In a scene 3D:
     - Match and Set to assign custom assets to the points
     - Change point distribution using godot Curve editors
     - Scene scanning to gather metadata/attributes into the flow
+    - Subgraph with loopbacks parameters
 * **Grid-based Data Inspector** with selection highlighting
 * **3D Debug** overlays with color cues
 * **Graphs as resource** with optional **typed inputs**
@@ -58,7 +59,7 @@ In a scene 3D:
 
 ## Samples
 
-A ready-to-run Godot 4.4 project is in demo folder. Explore graphs in demo/demos.
+A ready-to-run Godot 4.6 project is in demo folder. Explore graphs in demo/demos.
 
 ### Sampling Top Faces of Mesh
 ![Sampling Top Faces of Mesh](demo/addons/flow_nodes_editor/doc/demo_sample_mesh.png)
@@ -69,6 +70,24 @@ A ready-to-run Godot 4.4 project is in demo folder. Explore graphs in demo/demos
 And the Associated graph
 
 ![Demo Bridge Graph](demo/addons/flow_nodes_editor/doc/demo_bridge_graph.png) 
+
+### Demo Non Uniform Sampling
+![demo_non_uniform_sampling](demo/addons/flow_nodes_editor/doc/demo_non_uniform_sampling.png)
+
+### Demo Loops to create towers
+![Demo Loops to create towers](demo/addons/flow_nodes_editor/doc/demo_loop.png)
+
+### Demo Relax Points
+![demo_relax](demo/addons/flow_nodes_editor/doc/demo_relax.png)
+
+### Demo Rotations
+![demo_rotation](demo/addons/flow_nodes_editor/doc/demo_rotation.png)
+
+### Demo Remap With Curves
+![demo_remap](demo/addons/flow_nodes_editor/doc/demo_remap.png)
+
+### Demo Simple Mesh
+![demo_sample_spline](demo/addons/flow_nodes_editor/doc/demo_sample_spline.png)
 
 ## Platforms
     

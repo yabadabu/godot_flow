@@ -6,11 +6,9 @@
 	Subgraphs
 		Feedback
 
-- 
 ---- 
 # Bugs
 - [ ] Closing a scene leaves the debug meshes there
-- [ ] Comments not saved in subgraphs
 
 # Features
 - [ ] Import node: load csv
@@ -19,11 +17,10 @@
 
 - [ ] Expand the scan_* to a base folder
 - [ ] subgraph overrides
-	- [X] Errors during initial load
 - [ ] named redirectors/acc
 - [ ] debug/session
-	- [ ] Register / debug Subgraphs
-- [ ] multiple flowgraphs / tabs
+	- [/] Register / debug Subgraphs
+- [/] multiple flowgraphs / tabs
 - [ ] use the WeightsRandomSampler from match_and_set in more places (sample mesh/sample scene)
 - [X] optimize scan node always becoming dirty when something changes in the level.
 

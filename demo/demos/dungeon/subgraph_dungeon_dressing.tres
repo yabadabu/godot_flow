@@ -46,6 +46,92 @@ data = {
 "min_pos": Vector2(0, 0),
 "nodes": [{
 "args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0006_attribute_rename",
+"position": Vector2(640, 0),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"from_name": "@last",
+"inspect_enabled": false,
+"overwrite_existing": true,
+"random_seed": 1383552419,
+"title": "Attribute Rename",
+"to_name": "AttrC",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "attribute_rename"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0005_add_attribute",
+"position": Vector2(480, 0),
+"settings": {
+"cte_bool": false,
+"cte_color": Color(1, 1, 1, 1),
+"cte_float": 4.0,
+"cte_int": 0,
+"cte_resource": null,
+"cte_string": "",
+"cte_vector": Vector3(0, 0, 0),
+"data_type": 2,
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"name": "AttrB",
+"random_seed": 1449361021,
+"title": "Add Attribute",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "add_attribute"
+}, {
+"args_port": {},
+"name": &"id_0014_input_limit",
+"position": Vector2(0, 220),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"name": "limit",
+"random_seed": 1812025184,
+"title": "Input",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "input_limit"
+}, {
+"args_port": {
 "In A": {
 "connected": true,
 "port": 0
@@ -84,57 +170,6 @@ data = {
 "show_disconnected_inputs": false,
 "template": "filter"
 }, {
-"args_port": {},
-"name": &"id_0014_input_limit",
-"position": Vector2(0, 220),
-"settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"name": "limit",
-"random_seed": 1812025184,
-"title": "Input",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "input_limit"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0006_attribute_rename",
-"position": Vector2(640, 0),
-"settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"from_name": "@last",
-"inspect_enabled": false,
-"overwrite_existing": true,
-"random_seed": 1383552419,
-"title": "Attribute Rename",
-"to_name": "AttrC",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "attribute_rename"
-}, {
 "args_port": {
 "In": {
 "connected": true,
@@ -163,41 +198,6 @@ data = {
 "disabled": false,
 "inspect_enabled": false,
 "name": "AttrA",
-"random_seed": 1449361021,
-"title": "Add Attribute",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "add_attribute"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0005_add_attribute",
-"position": Vector2(480, 0),
-"settings": {
-"cte_bool": false,
-"cte_color": Color(1, 1, 1, 1),
-"cte_float": 4.0,
-"cte_int": 0,
-"cte_resource": null,
-"cte_string": "",
-"cte_vector": Vector3(0, 0, 0),
-"data_type": 2,
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"name": "AttrB",
 "random_seed": 1449361021,
 "title": "Add Attribute",
 "trace": false
@@ -238,7 +238,7 @@ data = {
 }
 graph_name = "subgraph_dungeon_dressing"
 view_zoom = 0.82644624
-view_offset = Vector2(-131.94345, 104.58127)
+view_offset = Vector2(-104.94345, -158.41873)
 new_name_counter = 15
 in_params = Array[ExtResource("1_qjg5v")]([SubResource("Resource_qjg5v")])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"

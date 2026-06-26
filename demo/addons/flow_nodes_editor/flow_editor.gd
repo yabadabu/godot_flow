@@ -424,13 +424,10 @@ func _on_graph_edit_gui_input(event):
 			if no_modifiers:
 				deleteSelectedNodes()
 		elif key == KEY_A:
-			if evt_key.shift_pressed:
-				openAddMenu()
-			else:
-				if no_modifiers:
-					toggleInspection()
-					evalGraph()
-					make_inspector_visible.call()
+			if no_modifiers:
+				toggleInspection()
+				evalGraph()
+				make_inspector_visible.call()
 		elif key == KEY_C:
 			if no_modifiers:
 				addComment()

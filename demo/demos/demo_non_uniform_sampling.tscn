@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://cd1045jnwr8wg"]
+[gd_scene format=3 uid="uid://cd1045jnwr8wg"]
 
 [ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_3she7"]
 [ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="2_1mcnb"]
@@ -39,12 +39,6 @@ data = {
 "to_node": &"id_0008_math_op",
 "to_port": 0
 }, {
-"from_node": &"id_0008_math_op",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0007_select",
-"to_port": 0
-}, {
 "from_node": &"id_0002_self_pruning",
 "from_port": 0,
 "keep_alive": false,
@@ -63,8 +57,148 @@ data = {
 "to_node": &"id_0003_sample_mesh",
 "to_port": 0
 }],
-"min_pos": Vector2(-60, 380),
+"min_pos": Vector2(0, 0),
 "nodes": [{
+"args_port": {},
+"name": &"id_0012_scan_meshes",
+"position": Vector2(0, 0),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"group_name": "",
+"inspect_enabled": false,
+"random_seed": 2999513834,
+"required_meta_bool": &"",
+"title": "Scan Meshes",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "scan_meshes"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0002_self_pruning",
+"position": Vector2(320, 0),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"keep_self_intersections": false,
+"random_seed": 2830869655,
+"title": "Self Pruning",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "self_pruning"
+}, {
+"args_port": {
+"Meshes": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0003_sample_mesh",
+"position": Vector2(140, 0),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"density": 19.05,
+"disabled": false,
+"inspect_enabled": false,
+"mode": 0,
+"num_samples": 100,
+"point_size": 0.19,
+"random_seed": 310741729,
+"title": "Sample Mesh",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "sample_mesh"
+}, {
+"args_port": {
+"In A": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0009_math_op",
+"position": Vector2(1200, 140),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "distance",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"in_nameA": "@last",
+"in_nameB": "@last",
+"inspect_enabled": false,
+"operation": 6,
+"out_name": "@last",
+"random_seed": 2125795760,
+"title": "Math",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "math_op"
+}, {
+"args_port": {
+"In A": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0008_math_op",
+"position": Vector2(1380, 140),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": true,
+"debug_mode": 0,
+"debug_modulate_by": "distance",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"in_nameA": "@last",
+"in_nameB": "4",
+"inspect_enabled": false,
+"operation": 14,
+"out_name": "@last",
+"random_seed": 2764706821,
+"title": "Math",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "math_op"
+}, {
 "args_port": {
 "In A": {
 "connected": true,
@@ -84,47 +218,15 @@ data = {
 "debug_mode": 0,
 "debug_modulate_by": "distance",
 "debug_output": 0,
+"debug_port_combined_index": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "in_nameA": "@last",
-"in_nameB": "2",
+"in_nameB": "3",
 "inspect_enabled": false,
 "operation": 2,
 "out_name": "@last",
 "random_seed": 1671374794,
-"title": "Math",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "math_op"
-}, {
-"args_port": {
-"In A": {
-"connected": true,
-"port": 0
-},
-"In B": {
-"connected": false,
-"port": 1
-}
-},
-"name": &"id_0009_math_op",
-"position": Vector2(1200, 140),
-"settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "distance",
-"debug_output": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"in_nameA": "@last",
-"in_nameB": "@last",
-"inspect_enabled": false,
-"operation": 6,
-"out_name": "@last",
-"random_seed": 2125795760,
 "title": "Math",
 "trace": false
 },
@@ -150,6 +252,7 @@ data = {
 "debug_mode": 0,
 "debug_modulate_by": "distance",
 "debug_output": 0,
+"debug_port_combined_index": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "in_nameA": "@last",
@@ -169,41 +272,6 @@ data = {
 "connected": true,
 "port": 0
 },
-"ratio": {
-"connected": false,
-"port": 1
-},
-"weight_name": {
-"connected": false,
-"port": 2
-}
-},
-"name": &"id_0007_select",
-"position": Vector2(1560, 140),
-"settings": {
-"debug_bulk": 0,
-"debug_color": Color(0.929412, 0, 0.109804, 1),
-"debug_enabled": true,
-"debug_mode": 1,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_scale": 0.21,
-"disabled": false,
-"inspect_enabled": false,
-"random_seed": 2664181666,
-"ratio": 0.2,
-"title": "Select",
-"trace": false,
-"weight_name": "distance"
-},
-"show_disconnected_inputs": true,
-"template": "select"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-},
 "Target": {
 "connected": true,
 "port": 1
@@ -214,14 +282,15 @@ data = {
 }
 },
 "name": &"id_0014_distance",
-"position": Vector2(540, 140),
+"position": Vector2(540, 120),
 "settings": {
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
-"debug_enabled": true,
+"debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "distance",
 "debug_output": 0,
+"debug_port_combined_index": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "in_nameA": "position",
@@ -236,116 +305,6 @@ data = {
 "show_disconnected_inputs": true,
 "template": "distance"
 }, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0002_self_pruning",
-"position": Vector2(320, 0),
-"settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"keep_self_intersections": false,
-"random_seed": 2830869655,
-"title": "Self Pruning",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "self_pruning"
-}, {
-"args_port": {},
-"name": &"id_0012_scan_meshes",
-"position": Vector2(0, 0),
-"settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"group_name": "",
-"inspect_enabled": false,
-"random_seed": 2999513834,
-"required_meta_bool": &"",
-"title": "Scan Meshes",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "scan_meshes"
-}, {
-"args_port": {
-"Meshes": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0003_sample_mesh",
-"position": Vector2(140, 0),
-"settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_scale": 1.0,
-"density": 19.05,
-"disabled": false,
-"inspect_enabled": false,
-"mode": 0,
-"num_samples": 100,
-"point_size": 0.19,
-"random_seed": 310741729,
-"title": "Sample Mesh",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "sample_mesh"
-}, {
-"args_port": {
-"In A": {
-"connected": true,
-"port": 0
-},
-"In B": {
-"connected": false,
-"port": 1
-}
-},
-"name": &"id_0008_math_op",
-"position": Vector2(1380, 140),
-"settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "distance",
-"debug_output": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"in_nameA": "@last",
-"in_nameB": "4",
-"inspect_enabled": false,
-"operation": 14,
-"out_name": "@last",
-"random_seed": 2764706821,
-"title": "Math",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "math_op"
-}, {
 "args_port": {},
 "name": &"id_0004_scan_nodes",
 "position": Vector2(260, 200),
@@ -356,6 +315,7 @@ data = {
 "debug_mode": 0,
 "debug_modulate_by": "",
 "debug_output": 0,
+"debug_port_combined_index": 0,
 "debug_scale": 1.0,
 "disabled": false,
 "filter_by_class_name": "",
@@ -365,9 +325,10 @@ data = {
 "import_properties": Array[StringName]([]),
 "inspect_enabled": false,
 "random_seed": 1687206785,
+"required_meta_bool": &"",
 "size_to_bounds": false,
 "title": "Scan Nodes",
-"trace": false
+"trace": true
 },
 "show_disconnected_inputs": false,
 "template": "scan_nodes"
@@ -375,26 +336,35 @@ data = {
 "type": "flow_graph_nodes",
 "version": 1
 }
-view_zoom = 1.1
-view_offset = Vector2(-22.13, 179.215)
+graph_name = "demo_non_uniform_sampling"
+view_zoom = 0.82644624
+view_offset = Vector2(-28.05481, -280.4234)
 new_name_counter = 12
-in_params = Array[ExtResource("2_1mcnb")]([])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_aj3gx"]
 
-[node name="DemoNonUniformSampling" type="Node3D"]
+[node name="DemoNonUniformSampling" type="Node3D" unique_id=558634235]
 
-[node name="FlowGraphNode3D" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.92835, 0, 0.805319)
+[node name="FlowGraphNode3D" type="Node3D" parent="." unique_id=198536120]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.663269, 0, 2.2277777)
 script = ExtResource("1_3she7")
 graph = SubResource("Resource_7xx0y")
-refresh_inputs = Callable()
+regenerate = Callable()
+clearInstances = Callable()
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+[node name="Plane" type="MeshInstance3D" parent="." unique_id=251878179]
 transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 0, 0)
 mesh = SubResource("PlaneMesh_aj3gx")
 
-[node name="RefPoint" type="Node3D" parent="." groups=["RefPoints"]]
-transform = Transform3D(10.6068, 0, 0, 0, 1, 0, 0, 0, 5.01689, 2.21347, -0.668378, -2.77652)
+[node name="RefPoint" type="Node3D" parent="." unique_id=74711105 groups=["RefPoints"]]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -1.189744, 0.573, -0.8644953)
+
+[node name="Hint" type="Label3D" parent="." unique_id=26062884]
+transform = Transform3D(1.733296e-05, -0.49999017, 0.0031327754, 0.0027662807, 0.003132835, 0.49998254, -0.49999234, 0, 0.002766335, -6.7997417, 0.12960124, 0)
+pixel_size = 0.02
+text = "1. Points are randomly generated over the surface of the Plane.
+2. The RefPoint position is scanned because it's part of the  Godot Group Ref Points
+3. Distance is computed and stored as an attribute
+4. The values are remapped and colorized"

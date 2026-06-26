@@ -326,11 +326,11 @@ func _on_slot_selector_item_selected(index: int) -> void:
 		current_port_index = index
 		if current_bulk_index >= node.generated_bulks.size():
 			current_bulk_index = 0
-		print( "Selected output Bulk:%d Port:%d" % [ current_bulk_index, current_port_index ] )
+		#print( "Selected output Bulk:%d Port:%d" % [ current_bulk_index, current_port_index ] )
 	else:
 		current_port_index = index - meta.outs.size()
 		is_output = false
-		print( "Selected input Bulk:%d Port:%d" % [ current_bulk_index, current_port_index ] )
+		#print( "Selected input Bulk:%d Port:%d" % [ current_bulk_index, current_port_index ] )
 
 	current_bulk_index = 0
 	populateBulks()

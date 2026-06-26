@@ -8,7 +8,7 @@
 script = ExtResource("3_a7jnm")
 data = {
 "frames": [{
-"attached": Array[StringName]([&"id_0005_math_op", &"id_0004_math_op", &"id_0012_add_attribute"]),
+"attached": [&"id_0005_math_op", &"id_0004_math_op", &"id_0012_add_attribute"],
 "name": &"id_0013_comment",
 "position": Vector2(480, -41),
 "size": Vector2(543, 186),
@@ -252,21 +252,17 @@ data = {
 "type": "flow_graph_nodes",
 "version": 1
 }
+graph_name = "demo_expression"
 view_zoom = 1.2875425
 view_offset = Vector2(-27.08139, -362.0707)
 new_name_counter = 13
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
-
-[sub_resource type="BoxMesh" id="BoxMesh_bqsfa"]
 
 [node name="DemoExpression" type="Node3D" unique_id=2009467157]
 
 [node name="FlowGraphNode3D" type="Node3D" parent="." unique_id=1128725941]
 script = ExtResource("1_bqsfa")
 graph = SubResource("Resource_pmt32")
-refresh_inputs = Callable()
+regenerate = Callable()
+clearInstances = Callable()
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1840222496]
-transform = Transform3D(0.9659258, 0, 0.25881904, 0, 1, 0, -0.25881904, 0, 0.9659258, 0, 0, 16.009853)
-mesh = SubResource("BoxMesh_bqsfa")
