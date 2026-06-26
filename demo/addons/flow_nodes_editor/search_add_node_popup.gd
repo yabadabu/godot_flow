@@ -62,10 +62,17 @@ func setup( node_types : Dictionary, p_inputs: Array, _p_outputs: Array, require
 func _input(event : InputEvent):
 	if not visible:
 		return
-	if event is InputEventKey and event.pressed and event.keycode == KEY_ESCAPE:
-		hide()
-		on_closed.emit()
-		return
+	if event is InputEventKey and event.pressed:
+		if event.keycode == KEY_ESCAPE:
+			hide()
+			on_closed.emit()
+			return
+		if event.keycode == KEY_ENTER:
+			if search_results.get_child_count() == 1:
+				var b = search_results.get_child(0) as Button
+				#print( "Click on %s" % b.text )
+				b.pressed.emit()
+			return
 	if event is InputEventMouseButton and event.pressed:
 		var mouse_event := event as InputEventMouseButton
 		if not _is_position_over_interactive_content(mouse_event.position):
