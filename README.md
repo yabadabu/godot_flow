@@ -89,8 +89,12 @@ And the Associated graph
 ### Demo Remap With Curves
 ![demo_remap](demo/addons/flow_nodes_editor/doc/demo_remap.png)
 
-### Demo Simple Mesh
+### Demo Simple Fence from a spline
 ![demo_sample_spline](demo/addons/flow_nodes_editor/doc/demo_sample_spline.png)
+
+## Contributing
+
+See [CONTRIBUTORS.md](CONTRIBUTORS.md) for everyone who has helped make this project better.
 
 ## Platforms
     
