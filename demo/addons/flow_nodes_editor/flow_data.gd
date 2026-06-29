@@ -454,15 +454,15 @@ class Data:
 			return null
 		return streams.get( name, null )
 	
-	func registerStream( name : String, container, data_type : DataType = FlowData.DataType.Invalid ):
-		if not name:
+	func registerStream( in_name : String, container, data_type : DataType = FlowData.DataType.Invalid ):
+		if not in_name:
 			print( "registerStream empty name!. Container size:", container.size() )
 			push_error("registerStream name can't be empty of data_type %d" % [ data_type ] )
 			return null
 		if container == null:
-			push_error("registerStream. Can't register a null container with name %s" %  name )
+			push_error("registerStream. Can't register a null container with name %s" % in_name )
 			return null			
-		name = translateStreamName( name )
+		var name : String = translateStreamName( in_name )
 		var parts = name.split( "." )
 		if parts.size() == 2:
 			var s0 = streams.get( parts[0], null )

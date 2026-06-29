@@ -110,12 +110,12 @@ func execute( ctx : FlowData.EvaluationContext ):
 			MakeRotationNodeSettings.eOperation.From_Z_And_Y:
 				var inB : PackedVector3Array = sB.container
 				for i in num_elems:
-					outC[i] = Basis.looking_at( inA[i], inB[i] ).get_euler() * 180.0 / PI
+					outC[i] = Basis.looking_at( inA[i], inB[i] ).get_euler() * rad_to_deg( 1.0 )
 				
 			MakeRotationNodeSettings.eOperation.From_Axis_And_Angle:
 				var inB : PackedFloat32Array = sB.container
 				for i in num_elems:
-					outC[i] = Quaternion( inA[i].normalized(), inB[i] ).get_euler() * 180.0 / PI
+					outC[i] = Quaternion( inA[i].normalized(), deg_to_rad( inB[i] ) ).get_euler() * rad_to_deg( 1.0 )
 	
 	var err = out_data.registerStream( settings.out_name, outC )
 	if err:

@@ -3,7 +3,7 @@ extends FlowNodeBase
 
 func _init():
 	meta_node = {
-		"title" : "Transform",
+		"title" : "Transform Points",
 		"settings" : TransformNodeSettings,
 		"category" : "Math",
 		"ins" : [{ "label": "In" }], 
