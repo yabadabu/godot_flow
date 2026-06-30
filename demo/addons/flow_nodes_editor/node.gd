@@ -271,18 +271,25 @@ func getExposedParams():
 	if meta.get( "hide_inputs", false ):
 		return []
 	var trace = meta.get( "trace", false )
-	var my_title : String = meta.title
-	var props = settings.get_property_list()
+	
+	# transform_settings.gd
+	var settings_script_name = meta.settings.get_path().get_file()
+	
+	#print( "Starting exposed params for %s -> myscr:%s" % [ str(meta), my_script ])
+	#print( "get_global_name:%s" % [ self.get_script().get_global_name() ])
+	
+	var props := settings.get_property_list()
 	var inside_my_vars := false
 	var params = []
-	for prop in props:
+	for prop : Dictionary in props:
+		var pname : String = prop.name
 		if trace:
-			print( "Input.", prop.name)
-		if prop.name == "node_settings.gd":
+			print( "Input. %s - %s Type:%d:%d:%s Usage:%d" % [ prop.name, prop.class_name, prop.type, prop.hint, prop.hint_string, prop.usage ] )
+		if pname == "node_settings.gd":
 			break
-		if prop.name == "HiddenFromThisPoint":
+		if pname == "HiddenFromThisPoint":
 			break
-		if prop.name == my_title:
+		if pname == settings_script_name:
 			inside_my_vars = true
 		if !(prop.usage & PROPERTY_USAGE_STORAGE) || !(prop.usage & PROPERTY_USAGE_EDITOR):
 			continue
