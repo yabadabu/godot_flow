@@ -10,6 +10,8 @@ func _init():
 		"category" : "Sampler",
 		"ins" : [{ "label": "Splines", "data_type": FlowData.DataType.NodePath }],
 		"outs" : [{ "label" : "Out" }],
+		"tooltip" : "Samples the contour or interior of each input spline.",
+
 	}
 	
 func get_polygon_bounds(polygon: PackedVector2Array) -> Rect2:

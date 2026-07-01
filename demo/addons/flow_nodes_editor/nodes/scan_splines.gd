@@ -9,6 +9,7 @@ func _init():
 		"scans_scene" : true,
 		"ins" : [],
 		"outs" : [{ "label" : "Out", "data_type" : FlowData.DataType.NodePath }],
+		"tooltip" : "Returns all splines found in the scene matching the search criteria.\nThe splines can then be sampled using the Sample Spline node.",
 	}
 	
 func onSceneChanged( ctx : FlowData.EvaluationContext ):

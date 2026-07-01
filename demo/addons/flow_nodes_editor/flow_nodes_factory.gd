@@ -64,6 +64,6 @@ func createNewNode( packed_node : Resource, node_template : String, node_name : 
 		node.settings.title = meta.title
 	node.title = node.settings.title
 	node.size = Vector2(32,32)
-	node.tooltip_text = meta.get( "tooltip", "" )
+	node.tooltip_text = meta.title + " - " + node.name + "\n" + meta.get( "tooltip", "" )
 	node.refreshFromSettings()
 	return node
