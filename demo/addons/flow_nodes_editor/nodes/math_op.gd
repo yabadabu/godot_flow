@@ -37,6 +37,9 @@ func execute( _ctx : FlowData.EvaluationContext ):
 	if not settings.out_name:
 		setError( "Output name can't be empty")
 		return
+	var out_name = settings.out_name
+	if out_name == "@source":
+		out_name = settings.in_nameA
 	
 	# Check A
 	var in_dataA: FlowData.Data = get_input(0)
@@ -344,7 +347,7 @@ func execute( _ctx : FlowData.EvaluationContext ):
 
 	var time_start_end = Time.get_ticks_usec()
 	# This will override the existing stream if exists or update a substream
-	var err = out_data.registerStream( settings.out_name, out_container )
+	var err = out_data.registerStream( out_name, out_container )
 	if err:
 		setError( err )
 		return
