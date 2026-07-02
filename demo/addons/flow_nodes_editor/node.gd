@@ -758,3 +758,14 @@ func registerInstancedNode( new_owner : Node3D, new_parent : Node3D, child : Nod
 	new_parent.add_child( child )
 	child.owner = new_owner
 	child.set_meta("flow_owner", name )
+
+func _make_custom_tooltip(for_text: String) -> Object:
+	var tooltip = preload("res://addons/flow_nodes_editor/resources/tooltip.tscn").instantiate()
+	var meta : Dictionary = getMeta()
+	var new_text := "[b]%s[/b] %s\n\n%s" % [
+		meta.title, 
+		name,
+		for_text
+		]
+	tooltip.set_tooltip_text( new_text )
+	return tooltip

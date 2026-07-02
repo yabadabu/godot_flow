@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://bv4k481i3kt5d"]
+
+[ext_resource type="Script" uid="uid://ceo1rhujxyhs2" path="res://addons/flow_nodes_editor/resources/tooltip.gd" id="1_4yugf"]
+
+[node name="Tooltip" type="Control" unique_id=1219082227]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 3
+anchors_preset = 0
+mouse_filter = 2
+script = ExtResource("1_4yugf")
+
+[node name="Content" type="RichTextLabel" parent="." unique_id=1882041022]
+custom_minimum_size = Vector2(200, 50)
+layout_mode = 0
+offset_right = 298.0
+offset_bottom = 115.0
+mouse_filter = 2
+bbcode_enabled = true
+text = "[b	]Blue Sky[/b]
+
+This node is kind of magic asdjsah
+asdkashdas
+asd"
+fit_content = true
