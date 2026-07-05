@@ -218,8 +218,8 @@ func getCellContentsColorA(cell : DataTableContainer.CellContents ):
 	
 func getCellContentsColor(cell : DataTableContainer.CellContents ):
 	var real_row : int = visible_rows[cell.row]
-	cell
-	cell.color = container[ real_row ]
+	# Pure white does not appear... so little quick hack
+	cell.color = container[ real_row ] if container[ real_row ] != Color.WHITE else Color(0.9991,1,1,1)
 	
 func getCellContentsFloat(cell : DataTableContainer.CellContents ):
 	var real_row : int = visible_rows[cell.row]
