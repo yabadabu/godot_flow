@@ -1,0 +1,101 @@
+[gd_scene format=3 uid="uid://cova6wns11ieo"]
+
+[ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_2syex"]
+[ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="2_hvkhn"]
+[ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="3_yxl66"]
+
+[sub_resource type="Resource" id="Resource_1slyn"]
+script = ExtResource("3_yxl66")
+data = {
+"frames": [],
+"links": [{
+"from_node": &"id_0003_scan_splines",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0004_subdivide_spline",
+"to_port": 0
+}],
+"min_pos": Vector2(-140, 20),
+"nodes": [{
+"args_port": {},
+"name": &"id_0003_scan_splines",
+"position": Vector2(0, 0),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"group_name": "",
+"inspect_enabled": false,
+"random_seed": 1896315695,
+"required_meta_bool": &"",
+"title": "Scan Splines",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "scan_splines"
+}, {
+"args_port": {
+"Splines": {
+"connected": true,
+"port": 0
+},
+"grammar": {
+"connected": false,
+"port": 1
+}
+},
+"name": &"id_0004_subdivide_spline",
+"position": Vector2(160, 0),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": true,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"grammar": "D,A*,D,A*,D",
+"inspect_enabled": false,
+"random_seed": 48807690,
+"title": "Subdivide Spline",
+"trace": false
+},
+"show_disconnected_inputs": true,
+"template": "subdivide_spline"
+}],
+"type": "flow_graph_nodes",
+"version": 1
+}
+graph_name = "demo_grammar"
+view_zoom = 0.9090909
+view_offset = Vector2(-176.94604, -64.825775)
+
+[sub_resource type="Curve3D" id="Curve3D_2syex"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, -2.7150853, 0, -0.7400649, -0.8989744, 0, 0.5175916, 0.8989744, 0, -0.5175916, -1.2985191, 0, -2.2474368, -0.85357237, 0, -0.4540274, 0.85357237, 0, 0.4540274, 1.9250774, 0, -2.2928395, 0.36322212, 0, -1.0533442, -0.36322212, 0, 1.0533442, 3.0147438, 0, 1.0034012, 1.2294213, 0.04412222, -0.56590414, -1.2294213, -0.04412222, 0.56590414, 0.8535719, 0, 2.7105448, 0, 0, 0, 0, 0, 0, -0.21094638, 0, 5.664394),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0)
+}
+point_count = 6
+
+[node name="DemoGrammar" type="Node3D" unique_id=1393663566]
+
+[node name="FlowGraphNode3D" type="Node3D" parent="." unique_id=1033408988]
+script = ExtResource("1_2syex")
+graph = SubResource("Resource_1slyn")
+regenerate = Callable()
+clearInstances = Callable()
+metadata/_custom_type_script = "uid://d1krtmb1urldl"
+
+[node name="Path3D" type="Path3D" parent="." unique_id=457925053]
+curve = SubResource("Curve3D_2syex")
+
+[node name="Path3D2" type="Path3D" parent="." unique_id=1998455374]
+curve = SubResource("Curve3D_2syex")
