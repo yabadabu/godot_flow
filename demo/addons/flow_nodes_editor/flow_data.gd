@@ -302,6 +302,23 @@ class Data:
 			_:
 				push_error( "newContainerOfType(%d) type not supported" % [ data_type ])
 		return null
+		
+	# Infer a DataType from a concrete packed-array container. Returns Invalid
+	# when the container type isn't one of the recognized packed arrays.
+	static func _inferContainerType( container ) -> DataType:
+		if container is PackedFloat32Array:
+			return FlowData.DataType.Float
+		elif container is PackedInt32Array:
+			return FlowData.DataType.Int
+		elif container is PackedVector3Array:
+			return FlowData.DataType.Vector
+		elif container is PackedColorArray:
+			return FlowData.DataType.Color
+		elif container is PackedStringArray:
+			return FlowData.DataType.String
+		elif container is PackedByteArray:
+			return FlowData.DataType.Bool
+		return FlowData.DataType.Invalid
 	
 	func numFields() -> int:
 		return streams.size()
@@ -336,6 +353,12 @@ class Data:
 			return stream.container
 		return null
 		
+	func isTRSStream( name : String ):
+		var parts = name.split(".")
+		if parts.size() == 1:
+			return false
+		return parts[1] == AttrPosition or parts[1] == AttrRotation or parts[1] == AttrSize
+		
 	# converts 'Yaw' into "Rotation.Y" 
 	func translateStreamName( name : String ):
 		name = name.to_lower()
@@ -344,16 +367,17 @@ class Data:
 				push_error( "@last is not valid" )
 			return last_added_stream_name
 		# as described in the doc X = Pitch, Y = Yaw, Z = Roll
-		if name == "yaw":
-			return "%s.Y" % FlowData.AttrRotation
-		if name == "pitch":
-			return "%s.X" % FlowData.AttrRotation
-		if name == "roll":
-			return "%s.Z" % FlowData.AttrRotation
+		if name == "yaw" or name.ends_with(".yaw"):
+			return name.trim_suffix( "yaw" ) + ( "%s.y" % FlowData.AttrRotation )
+		if name == "pitch" or name.ends_with(".pitch"):
+			return name.trim_suffix( "pitch" ) + ( "%s.x" % FlowData.AttrRotation )
+		if name == "roll" or name.ends_with(".roll"):
+			return name.trim_suffix( "roll" ) + ( "%s.z" % FlowData.AttrRotation )
 		return name
 		
-	func getSubStreamIndex(  sub_comp : String ):
+	func getSubStreamIndex( sub_comp : String ):
 		var sc_up = sub_comp.to_lower()
+		# as described in the doc X = Pitch, Y = Yaw, Z = Roll
 		if sc_up == "x" or sc_up == "r" or sc_up == "pitch":
 			return 0
 		elif sc_up == "y" or sc_up == "g" or sc_up == "yaw":
@@ -406,8 +430,54 @@ class Data:
 			big_container[idx][ subcomp_idx ] = sub_container[idx]
 		stream.container = big_container
 		
+	# rotation.front
+	# front
+	# my_rot
+	# my_rot.front
+	# my_rot.yaw
+	# my_trans
+	# my_trans.front
+	# my_trans.rotation.front
+	# my_trans.rotation.yaw
+	# my_trans.position
+	# my_trans.position.y
 	func findStream( name : String ):
+		
 		name = translateStreamName( name )
+		
+		# Special case, index is always generated on the fly
+		if name == "index":
+			var new_container = PackedInt32Array()
+			new_container.resize( size() )
+			for idx in range( new_container.size() ):
+				new_container[idx] = idx
+			return {
+				"data_type" : DataType.Int,
+				"container" : new_container,
+				"name" : "Index"
+			}
+			
+		# Check if they want .x/.y/.z of a vector3/4 stream
+		var last_dot_idx := name.rfind(".")
+		print( "name.rfind( %s ) = %d" % [ name, last_dot_idx ] )
+		if last_dot_idx >= 0:
+			var ss_name : String = name.substr(last_dot_idx + 1)     # .x
+			if getSubStreamIndex( ss_name ) != -1:
+				print( "It's a valid substream at %d %s" % [last_dot_idx, ss_name] )
+				var s0_name : String = name.substr(0, last_dot_idx)  # tx.pos
+				var s0 = findStream( s0_name )
+				if s0 == null:
+					push_error( "Failed to find stream root %s" % s0_name )
+					return null
+				print( "searching (%s) in %s" % [ ss_name, s0.name])
+				return getSubStream( s0, ss_name )
+			# mtx.rotation 
+		
+		print( "findStream-%s-" % name)
+		if isTRSStream( name ):
+			print( "findStream-%s- is TRS" % name)
+			return streams.get( name, null )
+		
 		if name == "front" or name == "up" or name == "right":
 			var rot_stream = streams.get(AttrRotation, null)
 			if rot_stream != null:
@@ -429,30 +499,21 @@ class Data:
 					"name": name
 				}
 			return null
-		
-		if name == "index":
-			var new_container = PackedInt32Array()
-			new_container.resize( size() )
-			for idx in range( new_container.size() ):
-				new_container[idx] = idx
-			return {
-				"data_type" : DataType.Int,
-				"container" : new_container,
-				"name" : "Index"
-			}
 			
-		var parts = name.split( "." )
-		if parts.size() == 2:
-			#print( "findStream(%s) => %s (Streams:%s)" % [ name, parts, streams])
-			var s0 = findStream( parts[0] )
-			if s0 == null:
-				push_error( "Failed to find stream root %s" % parts[0] )
-				return null
-			#print( "searching (%s) in %s" % [ parts[1], s0])
-			return getSubStream( s0, parts[1] )
-		elif parts.size() > 2:
-			return null
 		return streams.get( name, null )
+	
+	func _registerResolvedNameStream( in_name : String, container, data_type : DataType ):
+		if data_type == FlowData.DataType.Invalid:
+			data_type = _inferContainerType( container )
+			if data_type == FlowData.DataType.Invalid:
+				print( "Invalid data type ", in_name, " Container:", container)
+				return "Invalid container type"
+		streams[ in_name ] = { 
+			"container" : container,
+			"name" : in_name,
+			"data_type" : data_type
+			}
+		last_added_stream_name = in_name		
 	
 	func registerStream( in_name : String, container, data_type : DataType = FlowData.DataType.Invalid ):
 		if not in_name:
@@ -461,40 +522,39 @@ class Data:
 			return null
 		if container == null:
 			push_error("registerStream. Can't register a null container with name %s" % in_name )
-			return null			
-		var name : String = translateStreamName( in_name )
-		var parts = name.split( "." )
-		if parts.size() == 2:
-			var s0 = streams.get( parts[0], null )
-			if s0 == null:
-				return "Failed to find stream %s" % parts[0] 
-			return setSubStream( s0, parts[1], container )
-		elif parts.size() > 2:
-			return "Too many '.' in stream name"
-		else:
-			if container is PackedFloat32Array:
-				data_type = FlowData.DataType.Float
-			elif container is PackedInt32Array:
-				data_type = FlowData.DataType.Int
-			elif container is PackedVector3Array:
-				data_type = FlowData.DataType.Vector
-			elif container is PackedColorArray:
-				data_type = FlowData.DataType.Color
-			elif container is PackedStringArray:
-				data_type = FlowData.DataType.String
-			elif container is PackedByteArray:
-				data_type = FlowData.DataType.Bool
+			return null	
 			
-			if data_type == FlowData.DataType.Invalid:
-				print( "Invalid data type ", name, " Container:", container)
-				return "Invalid container type"
-				
-			streams[ name ] = { 
-				"container" : container,
-				"name" : name,
-				"data_type" : data_type
-			}
-		last_added_stream_name = name
+		var last_dot_idx := in_name.rfind(".")
+		#print( "registerStream.rfind( %s ) = %d" % [ in_name, last_dot_idx ] )
+		if last_dot_idx >= 0:
+			var ss_name : String = in_name.substr(last_dot_idx + 1)     # .x
+			if getSubStreamIndex( ss_name ) != -1:
+				#print( "It's a valid substream at %d %s" % [last_dot_idx, ss_name] )
+				var s0_name : String = in_name.substr(0, last_dot_idx)  # tx.pos
+				var s0 = streams.get( s0_name, null )
+				if s0 == null:
+					push_error( "Failed to find stream root %s" % s0_name )
+					return null
+				#print( "searching (%s) in %s" % [ ss_name, s0.name])
+				return setSubStream( s0, ss_name, container )
+			
+		if isTRSStream(in_name):
+			_registerResolvedNameStream( in_name, container, data_type )
+
+		else:
+			var name : String = translateStreamName( in_name )
+			var parts = name.split( "." )
+			if parts.size() == 2:
+				var s0 = streams.get( parts[0], null )
+				if s0 == null:
+					return "Failed to find stream %s" % parts[0] 
+				return setSubStream( s0, parts[1], container )
+			elif parts.size() > 2:
+				print( "in_name:%s -> name:%s -> %s" % [ in_name, name, parts ] )
+				return "Too many '.' in stream name"
+			else:
+				_registerResolvedNameStream( name, container, data_type )
+
 		#print( "Registered stream %s : %s " % [ name, streams[ name ] ])
 		return null
 	
@@ -662,35 +722,46 @@ class Data:
 			for data in stream.container:
 				print( "  %s" % str(data ))
 
-	func addCommonStreams( num_points : int ):
-		
+	func addTRSStreams( num_points : int, optional_prefix : StringName = "" ):
+		var attr_pos : StringName = AttrPosition if optional_prefix.is_empty() else "%s.%s" % [ optional_prefix, AttrPosition ]
+		var attr_rot : StringName = AttrRotation if optional_prefix.is_empty() else "%s.%s" % [ optional_prefix, AttrRotation ]
+		var attr_size : StringName = AttrSize if optional_prefix.is_empty() else "%s.%s" % [ optional_prefix, AttrSize]
+
 		# Initialize with zeros
-		var spos = addStream( FlowData.AttrPosition, FlowData.DataType.Vector )
+		var spos = addStream( attr_pos, FlowData.DataType.Vector )
 		spos.resize( num_points )
-		var srot = addStream( FlowData.AttrRotation, FlowData.DataType.Vector )
-		markStreamAsRotation( FlowData.AttrRotation )
+		var srot = addStream( attr_rot, FlowData.DataType.Vector )
+		markStreamAsRotation( attr_rot )
 		srot.resize( num_points )
 		
 		# Initialize with ones
-		var ssizes : PackedVector3Array = addStream( FlowData.AttrSize, FlowData.DataType.Vector )
+		var ssizes : PackedVector3Array = addStream( attr_size, FlowData.DataType.Vector )
 		ssizes.resize( num_points )
 		var init_value := Vector3.ONE
 		for idx : int in range( num_points ):
 			ssizes[idx] = init_value
-
+			
+	func addCommonStreams( num_points : int ):
+		addTRSStreams( num_points )
+		
 	func getVector3Container( stream_name : StringName ) -> PackedVector3Array:
 		var container = getContainerChecked( stream_name, DataType.Vector )
 		if container == null:
 			container = PackedVector3Array()
 		return container
 
-	func getTransformsStream() -> TransformsStream:
-		if not (streams.has(AttrPosition) and streams.has(AttrRotation) and streams.has(AttrSize)):
+	func getTransformsStream( optional_prefix : String = "") -> TransformsStream:
+		optional_prefix = translateStreamName( optional_prefix )
+		var attr_pos : StringName = AttrPosition if optional_prefix.is_empty() else "%s.%s" % [ optional_prefix, AttrPosition ]
+		var attr_rot : StringName = AttrRotation if optional_prefix.is_empty() else "%s.%s" % [ optional_prefix, AttrRotation ]
+		var attr_size : StringName = AttrSize if optional_prefix.is_empty() else "%s.%s" % [ optional_prefix, AttrSize]
+		if not (streams.has(attr_pos) and streams.has(attr_rot) and streams.has(attr_size)):
+			print( "streams not found %s/%s/%s" % [ attr_pos, attr_rot, attr_size ])
 			return null
 		var trs := TransformsStream.new()
-		trs.positions = getVector3Container( AttrPosition )
-		trs.eulers = getVector3Container( AttrRotation )
-		trs.sizes = getVector3Container( AttrSize )
+		trs.positions = getVector3Container( attr_pos )
+		trs.eulers = getVector3Container( attr_rot )
+		trs.sizes = getVector3Container( attr_size )
 		if trs.sizes.size() == trs.positions.size() and trs.sizes.size() == trs.eulers.size() and trs.sizes.size() > 0:
 			return trs
 		return null
