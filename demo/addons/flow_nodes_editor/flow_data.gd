@@ -459,7 +459,7 @@ class Data:
 			
 		# Check if they want .x/.y/.z of a vector3/4 stream
 		var last_dot_idx := name.rfind(".")
-		print( "name.rfind( %s ) = %d" % [ name, last_dot_idx ] )
+		#print( "name.rfind( %s ) = %d" % [ name, last_dot_idx ] )
 		if last_dot_idx >= 0:
 			var ss_name : String = name.substr(last_dot_idx + 1)     # .x
 			if getSubStreamIndex( ss_name ) != -1:
@@ -473,7 +473,7 @@ class Data:
 				return getSubStream( s0, ss_name )
 			# mtx.rotation 
 		
-		print( "findStream-%s-" % name)
+		#print( "findStream-%s-" % name)
 		if isTRSStream( name ):
 			print( "findStream-%s- is TRS" % name)
 			return streams.get( name, null )

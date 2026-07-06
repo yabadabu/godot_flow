@@ -2,7 +2,48 @@
 
 [ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_2syex"]
 [ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="2_hvkhn"]
+[ext_resource type="Script" uid="uid://7g705n2fjnlr" path="res://addons/flow_nodes_editor/user_resource.gd" id="2_yxl66"]
+[ext_resource type="Script" uid="uid://c0ql72e1bbdqo" path="res://my_meshes.gd" id="3_1slyn"]
 [ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="3_yxl66"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_tgvby"]
+
+[sub_resource type="Resource" id="Resource_cfawf"]
+script = ExtResource("3_1slyn")
+type = "A"
+asset = SubResource("BoxMesh_tgvby")
+color = Color(0.47058824, 0.5568628, 0, 1)
+metadata/_custom_type_script = "uid://c0ql72e1bbdqo"
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_cf3pn"]
+top_radius = 0.25
+bottom_radius = 0.25
+
+[sub_resource type="Resource" id="Resource_u40dt"]
+script = ExtResource("3_1slyn")
+type = "B"
+asset = SubResource("CylinderMesh_cf3pn")
+color = Color(1, 0, 0.5137255, 1)
+metadata/_custom_type_script = "uid://c0ql72e1bbdqo"
+
+[sub_resource type="PrismMesh" id="PrismMesh_8l28r"]
+size = Vector3(0.5, 1, 0.5)
+
+[sub_resource type="Resource" id="Resource_0qeiw"]
+script = ExtResource("3_1slyn")
+type = "C"
+asset = SubResource("PrismMesh_8l28r")
+color = Color(0, 0, 1, 1)
+metadata/_custom_type_script = "uid://c0ql72e1bbdqo"
+
+[sub_resource type="SphereMesh" id="SphereMesh_10ycx"]
+
+[sub_resource type="Resource" id="Resource_82fc0"]
+script = ExtResource("3_1slyn")
+type = "D"
+asset = SubResource("SphereMesh_10ycx")
+color = Color(1, 1, 0, 1)
+metadata/_custom_type_script = "uid://c0ql72e1bbdqo"
 
 [sub_resource type="Resource" id="Resource_1slyn"]
 script = ExtResource("3_yxl66")
@@ -14,9 +55,101 @@ data = {
 "keep_alive": false,
 "to_node": &"id_0004_subdivide_spline",
 "to_port": 0
+}, {
+"from_node": &"id_0003_scan_splines",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0002_get_bounds",
+"to_port": 0
+}, {
+"from_node": &"id_0001_assets",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0002_get_bounds",
+"to_port": 0
 }],
-"min_pos": Vector2(-140, 20),
+"min_pos": Vector2(60, 0),
 "nodes": [{
+"args_port": {},
+"name": &"id_0001_assets",
+"position": Vector2(0, 180),
+"settings": {
+"assets": Array[ExtResource("2_yxl66")]([SubResource("Resource_cfawf"), SubResource("Resource_u40dt"), SubResource("Resource_0qeiw"), SubResource("Resource_82fc0")]),
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"random_seed": 2931716519,
+"title": "Assets",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "assets"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0002_get_bounds",
+"position": Vector2(200, 180),
+"settings": {
+"attribute_name": "@auto",
+"debug_bulk": 1,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": true,
+"random_seed": 3108320255,
+"title": "Get Bounds",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "get_bounds"
+}, {
+"args_port": {
+"Splines": {
+"connected": true,
+"port": 0
+},
+"grammar": {
+"connected": false,
+"port": 1
+}
+},
+"name": &"id_0004_subdivide_spline",
+"position": Vector2(320, 0),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": true,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"grammar": "D,A*,D,A*,D",
+"inspect_enabled": false,
+"random_seed": 48807690,
+"title": "Subdivide Spline",
+"trace": false
+},
+"show_disconnected_inputs": true,
+"template": "subdivide_spline"
+}, {
 "args_port": {},
 "name": &"id_0003_scan_splines",
 "position": Vector2(0, 0),
@@ -39,44 +172,13 @@ data = {
 },
 "show_disconnected_inputs": false,
 "template": "scan_splines"
-}, {
-"args_port": {
-"Splines": {
-"connected": true,
-"port": 0
-},
-"grammar": {
-"connected": false,
-"port": 1
-}
-},
-"name": &"id_0004_subdivide_spline",
-"position": Vector2(160, 0),
-"settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": true,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"grammar": "D,A*,D,A*,D",
-"inspect_enabled": false,
-"random_seed": 48807690,
-"title": "Subdivide Spline",
-"trace": false
-},
-"show_disconnected_inputs": true,
-"template": "subdivide_spline"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
 graph_name = "demo_grammar"
 view_zoom = 0.9090909
-view_offset = Vector2(-176.94604, -64.825775)
+view_offset = Vector2(7.053955, -100.825775)
 
 [sub_resource type="Curve3D" id="Curve3D_2syex"]
 _data = {
@@ -95,7 +197,4 @@ clearInstances = Callable()
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
 
 [node name="Path3D" type="Path3D" parent="." unique_id=457925053]
-curve = SubResource("Curve3D_2syex")
-
-[node name="Path3D2" type="Path3D" parent="." unique_id=1998455374]
 curve = SubResource("Curve3D_2syex")
