@@ -65,7 +65,7 @@ func execute( _ctx : FlowData.EvaluationContext ):
 				var container : PackedByteArray = output.addStream( prop_name, prop_type )
 				container.resize( count )
 				for idx in range(count):
-					container[idx] = settings.assets[idx].get( prop_name )
+					container[idx] = 1 if settings.assets[idx].get( prop_name ) else 0
 					
 			FlowData.DataType.Int:
 				var container : PackedInt32Array = output.addStream( prop_name, prop_type )
