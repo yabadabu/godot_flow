@@ -409,6 +409,8 @@ func initFromScript():
 				var color = getColorForFlowDataType( data_type )	
 				set_slot_color_left( idx, color )
 				set_slot_type_left( idx, data_type )
+			else:
+				set_slot_type_left( idx,  FlowData.DataType.Any )
 				
 			in_data.port = idx
 			ctrl.setData( in_data )

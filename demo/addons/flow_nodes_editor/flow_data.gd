@@ -18,6 +18,7 @@ enum DataType {
 	NodeMesh,
 	NodePath,
 	Color,
+	Any,
 	Invalid = 999
 }
 

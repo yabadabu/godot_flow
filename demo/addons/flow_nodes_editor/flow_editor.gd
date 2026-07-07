@@ -378,8 +378,8 @@ func canConnect( src : FlowNodeBase, src_port : int, dst : FlowNodeBase, dst_por
 	var src_type = src.get_output_port_type( src_port )
 	var dst_type = dst.get_input_port_type( dst_port )
 	if (src_type and dst_type) or (src_type == FlowData.DataType.NodePath) or (src_type == FlowData.DataType.NodeMesh):
-		if src_type != dst_type:
-			push_warning( "Node types do not match %d vs %d" % [ src_type, dst_type ])
+		if src_type != dst_type and dst_type != FlowData.DataType.Any:
+			push_warning( "Node types do not match %d(%s) vs %d(%s)" % [ src_type, FlowData.DataType.keys()[ src_type ], dst_type, FlowData.DataType.keys()[ dst_type ] ])
 			return false
 		
 	#print( "canConnect OK %s:%d (%d)-> %s:%d (%d)" % [ src.name, src_port, src_type, dst.name, dst_port, dst_type ] )
