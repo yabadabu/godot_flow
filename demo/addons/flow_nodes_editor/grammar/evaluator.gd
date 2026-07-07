@@ -30,10 +30,10 @@ class GNBase:
 		pass
 	func requiredLength(ctx: EvaluationContext) -> float:
 		return 0.0
-	func emitBase(ctx: EvaluationContext) -> float:
-		return 0.0
-	func grow(ctx: EvaluationContext) -> float:
-		return 0.0
+	func emitBase(ctx: EvaluationContext) -> Array[String]:
+		return []
+	func grow(ctx: EvaluationContext) -> Array[String]:
+		return []
 	func emitted() -> Array[String]:
 		return []
 	func dumpStr( level : int, msg : String ):
@@ -55,15 +55,15 @@ class GNSymbol  extends GNBase:
 		_emitted.clear()
 	func requiredLength(ctx: EvaluationContext) -> float:
 		return ctx.lengthOf(symbol)
-	func emitBase(ctx: EvaluationContext) -> float:
+	func emitBase(ctx: EvaluationContext) -> Array[String]:
 		var length := requiredLength(ctx)
-		#print( "Symbol.emitBase.%s %f vs %f" % [ symbol, length, ctx.available ])
+		#print( "Symbol.emitBase.%s %f vs %f	" % [ symbol, length, ctx.available ])
 		if not ctx.consume(length):
-			return 0.0
+			return []
 		_emitted.append( symbol )
-		return length
-	func grow(ctx: EvaluationContext) -> float:
-		return 0.0		
+		return [symbol]
+	func grow(ctx: EvaluationContext) -> Array[String]:
+		return []
 	func emitted( ) -> Array[ String ]:
 		return _emitted
 	func dump(level : int):
@@ -71,11 +71,13 @@ class GNSymbol  extends GNBase:
 
 class GNSequence  extends GNBase:
 	var children: Array[GNBase]
+	var _emitted : Array[String] = []
 	
 	func _init( in_children : Array[GNBase] ):
 		children = in_children
 		
 	func reset():
+		_emitted.clear()
 		for child in children:
 			child.reset()
 
@@ -85,26 +87,27 @@ class GNSequence  extends GNBase:
 			acc += child.requiredLength(ctx)
 		return acc
 		
-	func emitBase( ctx : EvaluationContext ) -> float:
-		var used := 0.0
+	func emitBase( ctx : EvaluationContext ) -> Array[String]:
+		var emitted_now: Array[String] = []
 		for child in children:
-			var consumed_by_child = child.emitBase(ctx)
-			#print( "At Sequence. Child consumed %f for a total of %f" % [consumed_by_child, used ] )
-			used += consumed_by_child
-		return used
+			var child_emitted := child.emitBase(ctx)
+			emitted_now.append_array(child_emitted)
+		_emitted.append_array(emitted_now)
+		return emitted_now
 		
-	func grow(ctx: EvaluationContext) -> float:
-		var used := 0.0
+	func grow(ctx: EvaluationContext) -> Array[String]:
+		var emitted_now: Array[String] = []
 		for child in children:
-			var consumed_by_child = child.grow(ctx)
-			used += consumed_by_child
-		return used
+			var child_emitted := child.grow(ctx)
+			emitted_now.append_array(child_emitted)
+		if not emitted_now.is_empty():
+			_emitted.clear()
+			for child in children:
+				_emitted.append_array(child.emitted())
+		return emitted_now
 			
 	func emitted() -> Array[ String ]:
-		var all_emitted : Array[ String ] = []
-		for child in children:
-			all_emitted.append_array( child.emitted() )
-		return all_emitted
+		return _emitted
 		
 	func dump( level : int ):
 		dumpStr( level, "GNSequence.Start (%d children)" % children.size() )
@@ -117,48 +120,69 @@ class GNRepeat extends GNBase:
 	var min_count : int
 	var max_count : int
 	var _count: int = 0
+	var _emitted : Array[String] = []
 	func _init( in_child : GNBase, in_min_count : int, in_max_count : int ):
 		child = in_child
 		min_count = in_min_count
 		max_count = in_max_count
 	func reset():
 		_count = 0
-		child.reset()		
+		_emitted.clear()
+		child.reset()
 	func requiredLength(ctx: EvaluationContext) -> float:
 		return float(min_count) * child.requiredLength(ctx)
-	func emitBase(ctx: EvaluationContext) -> float:
-		var used := 0.0
+	func emitBase(ctx: EvaluationContext) -> Array[String]:
+		var emitted_now: Array[String] = []
 		for i in range(min_count):
 			var child_length := child.requiredLength(ctx)
 			if not ctx.canConsume(child_length):
-				return used
-			used += child.emitBase(ctx)
+				return emitted_now
+			var child_emitted := child.emitBase(ctx)
+			emitted_now.append_array(child_emitted)
+			_emitted.append_array(child_emitted)
 			_count += 1
-		return used
+		return emitted_now
 		
-	func grow(ctx: EvaluationContext) -> float:
+	func grow(ctx: EvaluationContext) -> Array[String]:
 		if max_count >= 0 and _count >= max_count:
-			return 0.0
+			return []
 		var child_length := child.requiredLength(ctx)
 		if child_length == 0.0:
-			return 0.0
+			return []
 		if not ctx.canConsume(child_length):
-			return 0.0
-		var used := child.emitBase(ctx)
-		if used <= 0.0:
-			return 0.0
+			return []
+		var emitted_now := child.emitBase(ctx)
+		if emitted_now.is_empty():
+			return []
 		_count += 1
-		return used		
+		_emitted.append_array(emitted_now)
+		return emitted_now
 	func emitted() -> Array[ String ]:
-		return child.emitted()
+		return _emitted
 	func dump(level : int):
 		dumpStr( level, "GNRepeat %d..%d" % [ min_count, max_count ] )
 		child.dump(level + 1)
 
 class GNGroup  extends GNBase:
 	var inner : GNBase
+	var _emitted : Array[String] = []
 	func _init( in_inner : GNBase ):
 		inner = in_inner
+	func reset():
+		_emitted.clear()
+		inner.reset()
+	func requiredLength(ctx: EvaluationContext) -> float:
+		return inner.requiredLength(ctx)
+	func emitBase(ctx: EvaluationContext) -> Array[String]:
+		var emitted_now := inner.emitBase(ctx)
+		_emitted.append_array(emitted_now)
+		return emitted_now
+	func grow(ctx: EvaluationContext) -> Array[String]:
+		var emitted_now := inner.grow(ctx)
+		_emitted.append_array(emitted_now)
+		return emitted_now
+	func emitted() -> Array[ String ]:
+		return _emitted
 	func dump(level : int):
 		dumpStr( level, "GNGroup Start" )
 		inner.dump(level + 1)
@@ -212,14 +236,14 @@ func sample(total_length: float) -> PackedStringArray:
 		print("Grammar does not fit. Required %f, available %f" % [required, ctx.available])
 		return []
 
-	var consumed := _ast.emitBase(ctx)
+	_ast.emitBase(ctx)
 	#print("Base emit. Required %f, available %f -> Consumed: %f" % [required, total_length, consumed ])
 
 	ctx.iteration = 0
 	while ctx.iteration < 1024:
-		var used := _ast.grow(ctx)
+		var emitted_now := _ast.grow(ctx)
 		#print("Growth iteration %d, available %f, used %f" % [ctx.iteration,ctx.available,used])
-		if used <= 0.0001:
+		if emitted_now.is_empty():
 			break
 		ctx.iteration += 1
 	return PackedStringArray(_ast.emitted())

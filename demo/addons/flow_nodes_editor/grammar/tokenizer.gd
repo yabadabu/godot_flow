@@ -135,6 +135,6 @@ func tokenize( in_grammar : String ) -> bool:
 	while not isAtEnd():
 		scanToken()
 	addToken(eToken.EOF, "")
-	return true
+	return _errors.size() == 0
 	
 	
