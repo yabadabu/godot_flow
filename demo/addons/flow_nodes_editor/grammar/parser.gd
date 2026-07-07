@@ -56,7 +56,7 @@ func parsePrimary() -> GrammarEvaluator.GNBase:
 	
 	if matches(GrammarTokenizer.eToken.Symbol):
 		var token = previous()
-		return GrammarEvaluator.GNSymbol.new(token.value)
+		return GrammarEvaluator.GNSymbol.new(StringName(token.value))
 
 	if matches(GrammarTokenizer.eToken.LeftBracket):
 		var start_token = previous()

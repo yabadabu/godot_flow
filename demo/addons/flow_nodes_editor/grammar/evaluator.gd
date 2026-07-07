@@ -10,7 +10,7 @@ class EvaluationContext:
 	var _pieces : Dictionary
 	var available : float
 	var iteration : int = 0
-	func lengthOf( symbol : String ) -> float:
+	func lengthOf( symbol : StringName ) -> float:
 		if _pieces.has( symbol ):
 			return _pieces[ symbol ]
 		return 0.0
@@ -30,11 +30,11 @@ class GNBase:
 		pass
 	func requiredLength(ctx: EvaluationContext) -> float:
 		return 0.0
-	func emitBase(ctx: EvaluationContext) -> Array[String]:
+	func emitBase(ctx: EvaluationContext) -> Array[StringName]:
 		return []
-	func grow(ctx: EvaluationContext) -> Array[String]:
+	func grow(ctx: EvaluationContext) -> Array[StringName]:
 		return []
-	func emitted() -> Array[String]:
+	func emitted() -> Array[StringName]:
 		return []
 	func dumpStr( level : int, msg : String ):
 		var pad = "  "
@@ -47,31 +47,31 @@ class GNBase:
 		print( "Missing GrammarNode.dump!" )
 
 class GNSymbol  extends GNBase:
-	var symbol : String
-	var _emitted : Array[ String ] = []
-	func _init( in_symbol : String ):
+	var symbol : StringName
+	var _emitted : Array[ StringName ] = []
+	func _init( in_symbol : StringName ):
 		symbol = in_symbol
 	func reset():
 		_emitted.clear()
 	func requiredLength(ctx: EvaluationContext) -> float:
 		return ctx.lengthOf(symbol)
-	func emitBase(ctx: EvaluationContext) -> Array[String]:
+	func emitBase(ctx: EvaluationContext) -> Array[StringName]:
 		var length := requiredLength(ctx)
 		#print( "Symbol.emitBase.%s %f vs %f	" % [ symbol, length, ctx.available ])
 		if not ctx.consume(length):
 			return []
 		_emitted.append( symbol )
 		return [symbol]
-	func grow(ctx: EvaluationContext) -> Array[String]:
+	func grow(ctx: EvaluationContext) -> Array[StringName]:
 		return []
-	func emitted( ) -> Array[ String ]:
+	func emitted( ) -> Array[ StringName ]:
 		return _emitted
 	func dump(level : int):
 		dumpStr( level, "GNSymbol %s" % symbol )
 
 class GNSequence  extends GNBase:
 	var children: Array[GNBase]
-	var _emitted : Array[String] = []
+	var _emitted : Array[StringName] = []
 	
 	func _init( in_children : Array[GNBase] ):
 		children = in_children
@@ -87,16 +87,16 @@ class GNSequence  extends GNBase:
 			acc += child.requiredLength(ctx)
 		return acc
 		
-	func emitBase( ctx : EvaluationContext ) -> Array[String]:
-		var emitted_now: Array[String] = []
+	func emitBase( ctx : EvaluationContext ) -> Array[StringName]:
+		var emitted_now: Array[StringName] = []
 		for child in children:
 			var child_emitted := child.emitBase(ctx)
 			emitted_now.append_array(child_emitted)
 		_emitted.append_array(emitted_now)
 		return emitted_now
 		
-	func grow(ctx: EvaluationContext) -> Array[String]:
-		var emitted_now: Array[String] = []
+	func grow(ctx: EvaluationContext) -> Array[StringName]:
+		var emitted_now: Array[StringName] = []
 		for child in children:
 			var child_emitted := child.grow(ctx)
 			emitted_now.append_array(child_emitted)
@@ -106,7 +106,7 @@ class GNSequence  extends GNBase:
 				_emitted.append_array(child.emitted())
 		return emitted_now
 			
-	func emitted() -> Array[ String ]:
+	func emitted() -> Array[ StringName ]:
 		return _emitted
 		
 	func dump( level : int ):
@@ -120,7 +120,7 @@ class GNRepeat extends GNBase:
 	var min_count : int
 	var max_count : int
 	var _count: int = 0
-	var _emitted : Array[String] = []
+	var _emitted : Array[StringName] = []
 	func _init( in_child : GNBase, in_min_count : int, in_max_count : int ):
 		child = in_child
 		min_count = in_min_count
@@ -131,8 +131,8 @@ class GNRepeat extends GNBase:
 		child.reset()
 	func requiredLength(ctx: EvaluationContext) -> float:
 		return float(min_count) * child.requiredLength(ctx)
-	func emitBase(ctx: EvaluationContext) -> Array[String]:
-		var emitted_now: Array[String] = []
+	func emitBase(ctx: EvaluationContext) -> Array[StringName]:
+		var emitted_now: Array[StringName] = []
 		for i in range(min_count):
 			var child_length := child.requiredLength(ctx)
 			if not ctx.canConsume(child_length):
@@ -143,7 +143,7 @@ class GNRepeat extends GNBase:
 			_count += 1
 		return emitted_now
 		
-	func grow(ctx: EvaluationContext) -> Array[String]:
+	func grow(ctx: EvaluationContext) -> Array[StringName]:
 		if max_count >= 0 and _count >= max_count:
 			return []
 		var child_length := child.requiredLength(ctx)
@@ -157,7 +157,7 @@ class GNRepeat extends GNBase:
 		_count += 1
 		_emitted.append_array(emitted_now)
 		return emitted_now
-	func emitted() -> Array[ String ]:
+	func emitted() -> Array[ StringName ]:
 		return _emitted
 	func dump(level : int):
 		dumpStr( level, "GNRepeat %d..%d" % [ min_count, max_count ] )
@@ -165,7 +165,7 @@ class GNRepeat extends GNBase:
 
 class GNGroup  extends GNBase:
 	var inner : GNBase
-	var _emitted : Array[String] = []
+	var _emitted : Array[StringName] = []
 	func _init( in_inner : GNBase ):
 		inner = in_inner
 	func reset():
@@ -173,15 +173,15 @@ class GNGroup  extends GNBase:
 		inner.reset()
 	func requiredLength(ctx: EvaluationContext) -> float:
 		return inner.requiredLength(ctx)
-	func emitBase(ctx: EvaluationContext) -> Array[String]:
+	func emitBase(ctx: EvaluationContext) -> Array[StringName]:
 		var emitted_now := inner.emitBase(ctx)
 		_emitted.append_array(emitted_now)
 		return emitted_now
-	func grow(ctx: EvaluationContext) -> Array[String]:
+	func grow(ctx: EvaluationContext) -> Array[StringName]:
 		var emitted_now := inner.grow(ctx)
 		_emitted.append_array(emitted_now)
 		return emitted_now
-	func emitted() -> Array[ String ]:
+	func emitted() -> Array[ StringName ]:
 		return _emitted
 	func dump(level : int):
 		dumpStr( level, "GNGroup Start" )
@@ -225,7 +225,7 @@ func parseString( grammar : String ) -> bool:
 	#_ast.dump(0)
 	return true
 
-func sample(total_length: float) -> PackedStringArray:
+func sample(total_length: float) -> Array[StringName]:
 	var ctx := EvaluationContext.new()
 	ctx._pieces = _pieces
 	ctx.available = total_length
@@ -246,7 +246,7 @@ func sample(total_length: float) -> PackedStringArray:
 		if emitted_now.is_empty():
 			break
 		ctx.iteration += 1
-	return PackedStringArray(_ast.emitted())
+	return _ast.emitted()
 
 func setPieces( new_pieces : Dictionary ):
 	_pieces = new_pieces

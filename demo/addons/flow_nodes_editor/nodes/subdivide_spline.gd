@@ -46,7 +46,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 	var index_by_piece = {}
 	var scalables = {}
 	for idx : int in range( symbols.size() ):
-		var symbol : String = symbols[idx] 
+		var symbol := StringName(symbols[idx])
 		pieces[ symbol ] = lengths[idx]
 		index_by_piece[ symbol ] = idx
 		if stream_scalables[idx]:
@@ -112,7 +112,10 @@ func execute( ctx : FlowData.EvaluationContext ):
 			srot[ idx ] = FlowData.basisToEuler( b )
 			offset += length
 
-		output.registerStream( "symbol", generated_symbols, FlowData.DataType.String )
+		var generated_symbol_strings := PackedStringArray()
+		for symbol in generated_symbols:
+			generated_symbol_strings.append(String(symbol))
+		output.registerStream( "symbol", generated_symbol_strings, FlowData.DataType.String )
 		output.registerStream( "offset", offsets_stream, FlowData.DataType.Float )
 
 		# For fast copy of all the streams... create a list of indices to copy based on the symbol
