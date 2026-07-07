@@ -213,7 +213,7 @@ func sample(total_length: float) -> PackedStringArray:
 		return []
 
 	var consumed := _ast.emitBase(ctx)
-	print("Base emit. Required %f, available %f -> Consumed: %f" % [required, total_length, consumed ])
+	#print("Base emit. Required %f, available %f -> Consumed: %f" % [required, total_length, consumed ])
 
 	ctx.iteration = 0
 	while ctx.iteration < 1024:
