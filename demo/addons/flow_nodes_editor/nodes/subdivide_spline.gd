@@ -6,7 +6,9 @@ func _init():
 		"title" : "Subdivide Spline",
 		"settings" : SubdivideSplineNodeSettings,
 		"category" : "Spatial",
-		"ins" : [{ "label": "Splines", "data_type": FlowData.DataType.NodePath }],
+		"ins" : [
+			  { "label": "Splines", "data_type": FlowData.DataType.NodePath }
+			, { "label": "Pieces" } ],
 		"outs" : [{ "label" : "Out" }],
 		"tooltip" : "Subdivides a spline based on a grammar definition.\n" 
 		+ "A, B, C           sequence\n" 
@@ -22,19 +24,29 @@ func _init():
 func execute( ctx : FlowData.EvaluationContext ):
 	
 	var in_data = get_input(0)
-	var path3d_nodes = in_data.getContainerChecked( "node", FlowData.DataType.NodePath )
+	var path3d_nodes = in_data.getContainerChecked( "node", FlowData.DataType.NodePath, self )
 	if path3d_nodes == null:
-		setError( "Input are not splines")
-		return null	
-	
+		return
+		
+	var in_pieces = get_input(1)
+	if in_pieces == null:
+		setError( "Input pieces is not connected")
+		return
+	var symbols = in_pieces.getContainerChecked( settings.attribute_symbol, FlowData.DataType.String, self )
+	var lengths = in_pieces.getContainerChecked( settings.attribute_length, FlowData.DataType.Float, self )
+	if symbols == null or lengths == null:
+		return
+		
 	var grammar = settings.grammar
 	var evaluator = GrammarEvaluator.new()
-	var pieces = {
-		"A" : { "length" : 0.5 },
-		"B" : { "length" : 1.0 },
-		"C" : { "length" : 1.5 },
-		"D" : { "length" : 1.0 },
-	}
+	
+	# Mix the two streams in a single dictionary symbol -> length
+	var pieces = {}
+	var index_by_piece = {}
+	for idx : int in range( symbols.size() ):
+		pieces[ symbols[idx] ] = lengths[idx]
+		index_by_piece[ symbols[idx] ] = idx
+	
 	if not evaluator.parseString( grammar ):
 		for err in evaluator.getErrors():
 			print( "  Error: %s" % err )
@@ -58,16 +70,21 @@ func execute( ctx : FlowData.EvaluationContext ):
 		var srot := output.getVector3Container( FlowData.AttrRotation )
 		var ssize := output.getVector3Container( FlowData.AttrSize )
 		
+		# Get the total length covered
 		var distances : PackedFloat32Array
 		var acc : float = 0.0
 		for symbol in generated_symbols:
-			var length : float = pieces.get( symbol ).length
+			var length : float = pieces.get( symbol )
 			distances.append( length )
 			acc += length
 		
 		if settings.trace:
 			print( "Total distance covered %f / %f using %d symbols" % [ acc, total_length, generated_symbols.size() ])
 		
+		# If we can scale some pieces to fully cover the requested length, now it's the moment
+		# ...
+
+		# Places each piece along the path
 		var offset := 0.0
 		var offsets_stream : PackedFloat32Array
 		for idx in range( generated_symbols.size() ):
@@ -76,12 +93,24 @@ func execute( ctx : FlowData.EvaluationContext ):
 			spos[ idx ] = path_3d.transform * t.origin
 			var b : Basis = path_3d.transform.basis * t.basis
 			srot[ idx ] = FlowData.basisToEuler( b )
-			ssize[ idx ] = Vector3.ONE * length
+			#ssize[ idx ] = Vector3.ONE * length
 			offsets_stream.append( offset )
 			offset += length
 
 		output.registerStream( "symbol", generated_symbols, FlowData.DataType.String )
 		output.registerStream( "offset", offsets_stream, FlowData.DataType.Float )
+
+		# For fast copy of all the streams... create a list of indices to copy based on the symbol
+		var indices : PackedInt32Array
+		for symbol in generated_symbols:
+			indices.append( index_by_piece[ symbol ] )
+			
+		for key in in_pieces.streams.keys():
+			if key == settings.attribute_symbol:
+				continue
+			var in_stream = in_pieces.streams[ key ]
+			var new_container = output.filteredStream( in_stream, indices )
+			output.registerStream( key, new_container, in_stream.data_type )
 
 		set_output( 0, output )
 	

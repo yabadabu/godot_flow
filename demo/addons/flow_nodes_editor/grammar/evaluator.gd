@@ -12,7 +12,7 @@ class EvaluationContext:
 	var iteration : int = 0
 	func lengthOf( symbol : String ) -> float:
 		if _pieces.has( symbol ):
-			return _pieces[ symbol ].length
+			return _pieces[ symbol ]
 		return 0.0
 	func consume( length : float ):
 		if not canConsume(length):

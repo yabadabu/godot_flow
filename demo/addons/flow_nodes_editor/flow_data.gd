@@ -347,10 +347,15 @@ class Data:
 	func equals( other : FlowData.Data ) -> bool:
 		return size() == other.size() and tags == other.tags && streams == other.streams
 	
-	func getContainerChecked( name : String, data_type : DataType ):
-		var stream = streams.get( name, null )
+	func getContainerChecked( name : String, data_type : DataType, node : FlowNodeBase = null ):
+		var stream = findStream( name )
 		if stream and stream.data_type == data_type:
 			return stream.container
+		if node:
+			if stream:
+				node.setError( "Attribute %s should be of type %s" % [ name, DataType.keys()[ data_type ] ] )
+			else:
+				node.setError( "Attribute %s not found" % name)
 		return null
 		
 	func isTRSStream( name : String ):
@@ -463,13 +468,13 @@ class Data:
 		if last_dot_idx >= 0:
 			var ss_name : String = name.substr(last_dot_idx + 1)     # .x
 			if getSubStreamIndex( ss_name ) != -1:
-				print( "It's a valid substream at %d %s" % [last_dot_idx, ss_name] )
+				#print( "It's a valid substream at %d %s" % [last_dot_idx, ss_name] )
 				var s0_name : String = name.substr(0, last_dot_idx)  # tx.pos
 				var s0 = findStream( s0_name )
 				if s0 == null:
 					push_error( "Failed to find stream root %s" % s0_name )
 					return null
-				print( "searching (%s) in %s" % [ ss_name, s0.name])
+				#print( "searching (%s) in %s" % [ ss_name, s0.name])
 				return getSubStream( s0, ss_name )
 			# mtx.rotation 
 		
