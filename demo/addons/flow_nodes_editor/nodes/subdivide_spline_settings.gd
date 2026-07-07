@@ -8,6 +8,7 @@ extends NodeSettings
 @export var grammar : String
 @export var attribute_symbol : String = "symbol"
 @export var attribute_length : String = "bounds.x"
+@export var attribute_scalable : String = "scalable"
 #@export var attribute_grammar : String
 
 func _init():

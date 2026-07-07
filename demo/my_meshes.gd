@@ -6,3 +6,4 @@ extends FlowUserResourceData
 @export var type: String
 @export var asset: Mesh
 @export var color : Color = Color.WHITE
+@export var scalable : bool = false
