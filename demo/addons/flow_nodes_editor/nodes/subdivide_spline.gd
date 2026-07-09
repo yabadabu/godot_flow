@@ -32,14 +32,27 @@ func execute( ctx : FlowData.EvaluationContext ):
 	if in_pieces == null:
 		setError( "Input pieces is not connected")
 		return
+		
+	var evaluator = GrammarEvaluator.new()
+	
+	var grammars = null
+	if settings.grammar_as_attribute:
+		grammars = in_data.getContainerChecked( settings.attribute_grammar, FlowData.DataType.String, self )
+		if grammars == null:
+			return
+	else:
+		var grammar = settings.grammar
+		if not evaluator.parseString( grammar ):
+			for err in evaluator.getErrors():
+				print( "  Error: %s" % err )
+			return
+			
 	var symbols = in_pieces.getContainerChecked( settings.attribute_symbol, FlowData.DataType.String, self )
 	var lengths = in_pieces.getContainerChecked( settings.attribute_length, FlowData.DataType.Float, self )
 	var stream_scalables = in_pieces.getContainerChecked( settings.attribute_scalable, FlowData.DataType.Bool, self )
 	if symbols == null or lengths == null or stream_scalables == null:
 		return
 		
-	var grammar = settings.grammar
-	var evaluator = GrammarEvaluator.new()
 	
 	# Mix the two streams in a single dictionary symbol -> length
 	var pieces = {}
@@ -51,18 +64,24 @@ func execute( ctx : FlowData.EvaluationContext ):
 		index_by_piece[ symbol ] = idx
 		if stream_scalables[idx]:
 			scalables[ symbol ] = true
-	
-	if not evaluator.parseString( grammar ):
-		for err in evaluator.getErrors():
-			print( "  Error: %s" % err )
-		return
-		
-	if settings.trace:
-		evaluator._ast.dump(0)
 
 	evaluator.setPieces( pieces )
 	
-	for path_3d in path3d_nodes:
+		
+	if settings.trace:
+		evaluator._ast.dump(0)
+	
+	
+	for path_idx in range( path3d_nodes.size() ):
+		if grammars != null:
+			var grammar = grammars[path_idx]
+			print( "Using grammar %s" % grammar)
+			if not evaluator.parseString( grammar ):
+				for err in evaluator.getErrors():
+					print( "  Error: %s" % err )
+				continue
+			
+		var path_3d = path3d_nodes[path_idx]
 		var curve : Curve3D = path_3d.curve	
 		var total_length : float = curve.get_baked_length()
 		total_length -= settings.curve_offset_start + settings.curve_offset_end
