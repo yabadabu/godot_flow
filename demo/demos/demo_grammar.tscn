@@ -59,18 +59,6 @@ data = {
 "to_node": &"id_0002_get_bounds",
 "to_port": 0
 }, {
-"from_node": &"id_0003_scan_splines",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0001_subdivide_spline",
-"to_port": 0
-}, {
-"from_node": &"id_0002_get_bounds",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0001_subdivide_spline",
-"to_port": 1
-}, {
 "from_node": &"id_0001_subdivide_spline",
 "from_port": 0,
 "keep_alive": false,
@@ -82,6 +70,18 @@ data = {
 "keep_alive": false,
 "to_node": &"id_0002_attribute_rename",
 "to_port": 0
+}, {
+"from_node": &"id_0003_scan_splines",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0001_subdivide_spline",
+"to_port": 0
+}, {
+"from_node": &"id_0002_get_bounds",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0001_subdivide_spline",
+"to_port": 1
 }],
 "min_pos": Vector2(0, 0),
 "nodes": [{
@@ -91,8 +91,37 @@ data = {
 "port": 0
 }
 },
+"name": &"id_0002_attribute_rename",
+"position": Vector2(160, 100),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"from_name": "type",
+"inspect_enabled": false,
+"overwrite_existing": false,
+"random_seed": 4110419113,
+"title": "Attribute Rename",
+"to_name": "symbol",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "attribute_rename"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
 "name": &"id_0002_get_bounds",
-"position": Vector2(340, 120),
+"position": Vector2(340, 100),
 "settings": {
 "attribute_name": "@auto",
 "debug_bulk": 0,
@@ -112,29 +141,6 @@ data = {
 "show_disconnected_inputs": false,
 "template": "get_bounds"
 }, {
-"args_port": {},
-"name": &"id_0003_scan_splines",
-"position": Vector2(220, 0),
-"settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"group_name": "",
-"inspect_enabled": false,
-"random_seed": 1896315695,
-"required_meta_bool": &"",
-"title": "Scan Splines",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "scan_splines"
-}, {
 "args_port": {
 "Pieces": {
 "connected": true,
@@ -146,11 +152,13 @@ data = {
 }
 },
 "name": &"id_0001_subdivide_spline",
-"position": Vector2(540, 0),
+"position": Vector2(520, 0),
 "settings": {
 "attribute_length": "bounds.z",
 "attribute_scalable": "scalable",
 "attribute_symbol": "symbol",
+"curve_offset_end": 0.0,
+"curve_offset_start": 0.0,
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
@@ -160,9 +168,10 @@ data = {
 "debug_port_combined_index": 0,
 "debug_scale": 1.0,
 "disabled": false,
-"grammar": "D,A*,C,B+,D",
-"inspect_enabled": true,
-"random_seed": 1403083271,
+"fit_behaviour": 2,
+"grammar": "D,[A,B]3,C,A1,D",
+"inspect_enabled": false,
+"random_seed": 1403083847,
 "title": "Subdivide Spline",
 "trace": false
 },
@@ -176,7 +185,7 @@ data = {
 }
 },
 "name": &"id_0003_spawn_meshes",
-"position": Vector2(740, 0),
+"position": Vector2(760, 0),
 "settings": {
 "color_attribute": "color",
 "debug_bulk": 0,
@@ -205,7 +214,7 @@ data = {
 }, {
 "args_port": {},
 "name": &"id_0001_assets",
-"position": Vector2(0, 120),
+"position": Vector2(0, 100),
 "settings": {
 "assets": Array[ExtResource("2_yxl66")]([SubResource("Resource_cfawf"), SubResource("Resource_u40dt"), SubResource("Resource_0qeiw"), SubResource("Resource_82fc0")]),
 "debug_bulk": 0,
@@ -225,14 +234,9 @@ data = {
 "show_disconnected_inputs": false,
 "template": "assets"
 }, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0002_attribute_rename",
-"position": Vector2(160, 120),
+"args_port": {},
+"name": &"id_0003_scan_splines",
+"position": Vector2(180, 0),
 "settings": {
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
@@ -243,22 +247,21 @@ data = {
 "debug_port_combined_index": 0,
 "debug_scale": 1.0,
 "disabled": false,
-"from_name": "type",
+"group_name": "",
 "inspect_enabled": false,
-"overwrite_existing": false,
-"random_seed": 4110419113,
-"title": "Attribute Rename",
-"to_name": "symbol",
+"random_seed": 1896315695,
+"required_meta_bool": &"",
+"title": "Scan Splines",
 "trace": false
 },
 "show_disconnected_inputs": false,
-"template": "attribute_rename"
+"template": "scan_splines"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
 graph_name = "demo_grammar"
-view_offset = Vector2(-55, -200.46274)
+view_offset = Vector2(310, -116.400024)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1slyn"]
 vertex_color_use_as_albedo = true
@@ -269,7 +272,7 @@ transform_format = 1
 use_colors = true
 instance_count = 2
 mesh = SubResource("SphereMesh_10ycx")
-buffer = PackedFloat32Array(0.8121666, 0, -0.5834256, -2.4469254, 0, 1, 0, 0, 0.5834256, 0, 0.8121666, -1.1610558, 1, 1, 0, 1, -0.9991847, -0.021295324, 0.03429753, -0.21389048, -0.021786772, 0.9996643, -0.014019516, -0.007866943, -0.033987466, -0.014755318, -0.9993133, 5.16521, 1, 1, 0, 1)
+buffer = PackedFloat32Array(0.8121666, 0, -0.5834256, -2.4469254, 0, 1, 0, 0, 0.5834256, 0, 0.8121666, -1.1610558, 1, 1, 0, 1, -0.9994171, -0.02206695, 0.026047178, -0.21569258, -0.022415837, 0.99966186, -0.013179267, -0.007336448, -0.025747545, -0.013755455, -0.9995738, 5.3745065, 1, 1, 0, 1)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cfawf"]
 vertex_color_use_as_albedo = true
@@ -278,9 +281,9 @@ roughness = 0.3
 [sub_resource type="MultiMesh" id="MultiMesh_cf3pn"]
 transform_format = 1
 use_colors = true
-instance_count = 11
+instance_count = 10
 mesh = SubResource("BoxMesh_tgvby")
-buffer = PackedFloat32Array(0.6937728, 0, -0.8171168, -1.7519605, 0, 1.0719144, 0, 0, 0.8171168, 0, 0.6937728, -1.9251275, 0.47058824, 0.3529412, 1, 1, 0.3375778, 0, -1.0173701, -0.8281516, 0, 1.0719144, 0, 0, 1.0173701, 0, 0.3375778, -2.4548824, 0.47058824, 0.3529412, 1, 1, 0.032759473, 0, -1.0714138, 0.2252184, 0, 1.0719144, 0, 0, 1.0714138, 0, 0.032759473, -2.632524, 0.47058824, 0.3529412, 1, 1, -0.2525113, 0, -1.0417479, 1.2888057, 0, 1.0719144, 0, 0, 1.0417479, 0, -0.2525113, -2.5271592, 0.47058824, 0.3529412, 1, 1, -0.74980336, 0, -0.7660258, 2.2378657, 0, 1.0719144, 0, 0, 0.7660258, 0, -0.74980336, -2.0578928, 0.47058824, 0.3529412, 1, 1, -1.0719056, 0, 0.0043662107, 3.1222672, 0, 1.0719144, 0, 0, -0.0043662107, 0, -1.0719056, 0.29541963, 0.47058824, 0.3529412, 1, 1, -0.96238005, 0.0036153214, 0.4720297, 2.8803039, -0.00061806355, 1.0718724, -0.009469691, 0.0015958614, -0.47204313, -0.008774195, -0.9623403, 1.3291736, 0.47058824, 0.3529412, 1, 1, -0.548395, 0.0042123725, 0.9210026, 2.1605535, -0.010235575, 1.0718092, -0.010996709, 0.017859822, -0.9209554, -0.01442049, -0.54830086, 2.1001172, 0.47058824, 0.3529412, 1, 1, -0.43179092, -0.027209753, 0.98072255, 1.1923985, -0.010571465, 1.071569, 0.025075858, 0.01043641, -0.98104304, 0.00042900364, -0.4319201, 2.558363, 0.47058824, 0.3529412, 1, 1, -0.86527246, -0.027294729, 0.63210696, 0.32512215, -0.023738863, 1.071563, 0.013775258, -0.015798915, -0.6322505, -0.0028790997, -0.8655932, 3.1579983, 0.47058824, 0.3529412, 1, 1, -1.0445131, -0.02340278, 0.23967722, -0.088049755, -0.025360601, 1.0715983, -0.00588752, -0.018362436, -0.23947798, -0.011407581, -1.0447587, 4.139151, 0.47058824, 0.3529412, 1, 1)
+buffer = PackedFloat32Array(0.68162936, 0, -0.7973135, -1.7608768, 0, 1.048965, 0, 0, 0.7973135, 0, 0.68162936, -1.9179044, 0.47058824, 0.3529412, 1, 1, 0.1895468, 0, -1.0316974, -0.37719914, 0, 1.048965, 0, 0, 1.0316974, 0, 0.1895468, -2.5690734, 0.47058824, 0.3529412, 1, 1, -0.20964728, 0, -1.0278013, 1.1625619, 0, 1.048965, 0, 0, 1.0278013, 0, -0.20964728, -2.5550096, 0.47058824, 0.3529412, 1, 1, -1.0269487, 0, -0.21378489, 3.0459661, 0, 1.048965, 0, 0, 0.21378489, 0, -1.0269487, -0.423321, 0.47058824, 0.3529412, 1, 1, -1.0402844, 0, 0.13466977, 3.1016119, 0, 1.048965, 0, 0, -0.13466977, 0, -1.0402844, 0.6193121, 0.47058824, 0.3529412, 1, 1, -0.8594829, 0.0072451225, 0.6013021, 2.727762, -0.0026472404, 1.0488331, -0.016421331, 0.0053597395, -0.60134, -0.014972515, -0.85935646, 1.5891528, 0.47058824, 0.3529412, 1, 1, -0.4667762, -0.0034293497, 0.9393805, 1.9151042, -0.010528267, 1.0489112, -0.001402266, 0.019459061, -0.9393278, -0.010052379, -0.46678668, 2.2323313, 0.47058824, 0.3529412, 1, 1, -0.43233946, -0.0329518, 0.9551566, 0.9587149, -0.0106346095, 1.0484422, 0.031356424, 0.0036013457, -0.95566577, 0.0032402417, -0.43245807, 2.662585, 0.47058824, 0.3529412, 1, 1, -0.9235421, -0.025690887, 0.49672684, 0.21038757, -0.024926597, 1.048639, 0.007891074, -0.017979639, -0.4967658, -0.004856188, -0.9238657, 3.3636932, 0.47058824, 0.3529412, 1, 1, -1.0312386, -0.023496233, 0.19058439, -0.11443587, -0.025121396, 1.048643, -0.0066479193, -0.01758245, -0.190377, -0.011099833, -1.0314848, 4.3566937, 0.47058824, 0.3529412, 1, 1)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_u40dt"]
 vertex_color_use_as_albedo = true
@@ -289,13 +292,24 @@ roughness = 0.3
 [sub_resource type="MultiMesh" id="MultiMesh_8l28r"]
 transform_format = 1
 use_colors = true
+instance_count = 3
+mesh = SubResource("CylinderMesh_cf3pn")
+buffer = PackedFloat32Array(0.4199582, 0, -0.9075434, -1.1154459, 0, 1, 0, 0, 0.9075434, 0, 0.4199582, -2.3418198, 1, 0, 0.5137255, 1, -0.009008568, 0, -0.9999594, 0.39334214, 0, 1, 0, 0, 0.9999594, 0, -0.009008568, -2.634047, 1, 0, 0.5137255, 1, -0.4560935, 0, -0.88993186, 1.8939844, 0, 1, 0, 0, 0.88993186, 0, -0.4560935, -2.307735, 1, 0, 0.5137255, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0qeiw"]
+vertex_color_use_as_albedo = true
+roughness = 0.3
+
+[sub_resource type="MultiMesh" id="MultiMesh_10ycx"]
+transform_format = 1
+use_colors = true
 instance_count = 1
 mesh = SubResource("PrismMesh_8l28r")
-buffer = PackedFloat32Array(-0.940827, 0, -0.33888716, 2.8933296, 0, 1, 0, 0, 0.33888716, 0, -0.940827, -0.96348953, 0, 0, 1, 1)
+buffer = PackedFloat32Array(-0.8532647, 0, -0.521478, 2.5888023, 0, 1, 0, 0, 0.521478, 0, -0.8532647, -1.6064451, 0, 0, 1, 1)
 
 [sub_resource type="Curve3D" id="Curve3D_2syex"]
 _data = {
-"points": PackedVector3Array(0, 0, 0, 0, 0, 0, -2.7150853, 0, -0.7400649, -0.8989744, 0, 0.5175916, 0.8989744, 0, -0.5175916, -1.2985191, 0, -2.2474368, -0.85357237, 0, -0.4540274, 0.85357237, 0, 0.4540274, 1.9250774, 0, -2.2928395, 0.36322212, 0, -1.0533442, -0.36322212, 0, 1.0533442, 3.0147438, 0, 1.0034012, 1.2294213, 0.04412222, -0.56590414, -1.2294213, -0.04412222, 0.56590414, 0.8535719, 0, 2.7105448, 0, 0, 0, 0, 0, 0, -0.21094638, 0, 5.664394),
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, -2.7150853, 0, -0.7400649, -0.8989744, 0, 0.5175916, 0.8989744, 0, -0.5175916, -1.2985191, 0, -2.2474368, -0.85357237, 0, -0.4540274, 0.85357237, 0, 0.4540274, 1.9250774, 0, -2.2928395, 0.36322212, 0, -1.0533442, -0.36322212, 0, 1.0533442, 3.0147438, 0, 1.0034012, 1.2294213, 0.04412222, -0.56590414, -1.2294213, -0.04412222, 0.56590414, 0.8535719, 0, 2.7105448, 0, 0, 0, 0, 0, 0, -0.21094638, 0, 5.8737464),
 "tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0)
 }
 point_count = 6
@@ -309,19 +323,24 @@ regenerate = Callable()
 clearInstances = Callable()
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
 
-[node name="Spawn Meshes_0000" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=1452468250]
+[node name="Spawn Meshes_0000" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=1725023844]
 material_override = SubResource("StandardMaterial3D_1slyn")
 multimesh = SubResource("MultiMesh_tgvby")
 metadata/flow_owner = &"id_0003_spawn_meshes"
 
-[node name="Spawn Meshes_0001" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=821801134]
+[node name="Spawn Meshes_0001" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=1846377259]
 material_override = SubResource("StandardMaterial3D_cfawf")
 multimesh = SubResource("MultiMesh_cf3pn")
 metadata/flow_owner = &"id_0003_spawn_meshes"
 
-[node name="Spawn Meshes_0002" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=178604619]
+[node name="Spawn Meshes_0002" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=480293228]
 material_override = SubResource("StandardMaterial3D_u40dt")
 multimesh = SubResource("MultiMesh_8l28r")
+metadata/flow_owner = &"id_0003_spawn_meshes"
+
+[node name="Spawn Meshes_0003" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=39553684]
+material_override = SubResource("StandardMaterial3D_0qeiw")
+multimesh = SubResource("MultiMesh_10ycx")
 metadata/flow_owner = &"id_0003_spawn_meshes"
 
 [node name="Path3D" type="Path3D" parent="." unique_id=457925053]

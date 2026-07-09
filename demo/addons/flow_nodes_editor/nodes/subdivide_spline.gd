@@ -65,6 +65,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 	for path_3d in path3d_nodes:
 		var curve : Curve3D = path_3d.curve	
 		var total_length : float = curve.get_baked_length()
+		total_length -= settings.curve_offset_start + settings.curve_offset_end
 	
 		var generated_symbols := evaluator.sample( total_length )
 		
@@ -92,11 +93,21 @@ func execute( ctx : FlowData.EvaluationContext ):
 		
 		# If we can scale some pieces to fully cover the requested length, now it's the moment
 		var scale_factor : float = 1.0
-		if acc_scalable > 0.0 and acc < total_length:
-			scale_factor = 1.0 + ( total_length - acc ) / acc_scalable
+		if settings.fit_behaviour == SubdivideSplineNodeSettings.eFitBehaviour.Autoscale:
+			if acc_scalable > 0.0 and acc < total_length:
+				scale_factor = 1.0 + ( total_length - acc ) / acc_scalable
 
 		# Places each piece along the path
-		var offset := 0.0
+		var error_length := total_length - acc
+		var offset : float = settings.curve_offset_start
+		var interpiece_padding : float = 0.0
+		if settings.fit_behaviour == SubdivideSplineNodeSettings.eFitBehaviour.AlignRight:
+			offset += error_length
+		elif settings.fit_behaviour == SubdivideSplineNodeSettings.eFitBehaviour.Centered:
+			offset += ( error_length ) * 0.5
+		elif settings.fit_behaviour == SubdivideSplineNodeSettings.eFitBehaviour.Interspace:
+			interpiece_padding = error_length / float( generated_symbols.size() - 1 ) 
+		
 		var offsets_stream : PackedFloat32Array
 		for idx in range( generated_symbols.size() ):
 			var length := distances[idx]
@@ -110,7 +121,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 			spos[ idx ] = path_3d.transform * t.origin
 			var b : Basis = path_3d.transform.basis * t.basis
 			srot[ idx ] = FlowData.basisToEuler( b )
-			offset += length
+			offset += length + interpiece_padding
 
 		var generated_symbol_strings := PackedStringArray()
 		for symbol in generated_symbols:
