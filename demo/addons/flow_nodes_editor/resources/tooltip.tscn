@@ -2,6 +2,10 @@
 
 [ext_resource type="Script" uid="uid://ceo1rhujxyhs2" path="res://addons/flow_nodes_editor/resources/tooltip.gd" id="1_4yugf"]
 
+[sub_resource type="SystemFont" id="SystemFont_4yugf"]
+font_names = PackedStringArray("Consolas")
+subpixel_positioning = 0
+
 [node name="Tooltip" type="Control" unique_id=1219082227]
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 3
@@ -12,13 +16,14 @@ script = ExtResource("1_4yugf")
 [node name="Content" type="RichTextLabel" parent="." unique_id=1882041022]
 custom_minimum_size = Vector2(200, 50)
 layout_mode = 0
-offset_right = 298.0
+offset_right = 497.0
 offset_bottom = 115.0
 mouse_filter = 2
+theme_override_fonts/mono_font = SubResource("SystemFont_4yugf")
 bbcode_enabled = true
 text = "[b	]Blue Sky[/b]
 
-This node is kind of magic asdjsah
+This node [code]is kind of magic[/code] asdjsah
 asdkashdas
 asd"
 fit_content = true

@@ -11,14 +11,14 @@ func _init():
 			, { "label": "Pieces" } ],
 		"outs" : [{ "label" : "Out" }],
 		"tooltip" : "Subdivides a spline based on a grammar definition.\n" 
-		+ "A, B, C           sequence\n" 
+		+ "[code]A, B, C           sequence\n" 
 		+ "[A, B]            all-or-none group\n" 
 		+ "A+                one or more\n" 
 		+ "A*                zero or more, fill as much as possible\n" 
 		+ "A3                exactly three times\n" 
 		+ "[A, B]3           exact group repeat count\n" 
 		+ "<A, B, C>         fallback: try A, else B, else C\n" 
-		+ "{A:2, B:1, C:1}   weighted random choice"
+		+ "{A:2, B:1, C:1}   weighted random choice[/code]"
 	}
 
 func execute( ctx : FlowData.EvaluationContext ):
