@@ -86,7 +86,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 		var total_length : float = curve.get_baked_length()
 		total_length -= settings.curve_offset_start + settings.curve_offset_end
 	
-		var generated_symbols := evaluator.sample( total_length )
+		var generated_symbols := evaluator.sample( total_length, rng )
 		
 		var num_points : int = generated_symbols.size()
 		var output := FlowData.Data.new()

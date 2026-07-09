@@ -10,6 +10,7 @@ class EvaluationContext:
 	var _pieces : Dictionary
 	var available : float
 	var iteration : int = 0
+	var rng : RandomNumberGenerator
 	func lengthOf( symbol : StringName ) -> float:
 		if _pieces.has( symbol ):
 			return _pieces[ symbol ]
@@ -201,9 +202,61 @@ class GNFallback  extends GNBase:
 class GNWeighted extends GNBase:
 	var children: Array[GNBase]
 	var weights: Array[int]
+	var _emitted : Array[StringName] = []
+	var _selected_child_idx := -1
 	func _init( in_children : Array[GNBase], in_weights: Array[int] ):
 		children = in_children
 		weights = in_weights
+	func reset():
+		_emitted.clear()
+		_selected_child_idx = -1
+		for child in children:
+			child.reset()
+	func requiredLength(ctx: EvaluationContext) -> float:
+		var best := INF
+		for child in children:
+			var child_length := child.requiredLength(ctx)
+			if child_length > 0.0:
+				best = min(best, child_length)
+		if best == INF:
+			return 0.0
+		return best
+	func emitBase(ctx: EvaluationContext) -> Array[StringName]:
+		var selected_idx := _pickCandidate(ctx)
+		if selected_idx < 0:
+			return []
+		_selected_child_idx = selected_idx
+		var emitted_now := children[selected_idx].emitBase(ctx)
+		_emitted.append_array(emitted_now)
+		return emitted_now
+	func grow(ctx: EvaluationContext) -> Array[StringName]:
+		if _selected_child_idx < 0:
+			return []
+		var emitted_now := children[_selected_child_idx].grow(ctx)
+		_emitted.append_array(emitted_now)
+		return emitted_now
+	func emitted() -> Array[StringName]:
+		return _emitted
+	func _pickCandidate(ctx: EvaluationContext) -> int:
+		var candidate_indices : Array[int] = []
+		var total_weight := 0
+		for idx in range(children.size()):
+			var child_length := children[idx].requiredLength(ctx)
+			if child_length <= 0.0:
+				continue
+			if not ctx.canConsume(child_length):
+				continue
+			candidate_indices.append(idx)
+			total_weight += weights[idx]
+		if candidate_indices.is_empty() or total_weight <= 0:
+			return -1
+		var roll := ctx.rng.randi_range(1, total_weight)
+		var accumulated_weight := 0
+		for idx in candidate_indices:
+			accumulated_weight += weights[idx]
+			if roll <= accumulated_weight:
+				return idx
+		return candidate_indices.back()
 	func dump( level : int ):
 		dumpStr( level, "GNWeighted.Start (%d options)" % children.size() )
 		var idx := 0
@@ -225,10 +278,13 @@ func parseString( grammar : String ) -> bool:
 	#_ast.dump(0)
 	return true
 
-func sample(total_length: float) -> Array[StringName]:
+func sample(total_length: float, rng : RandomNumberGenerator) -> Array[StringName]:
 	var ctx := EvaluationContext.new()
 	ctx._pieces = _pieces
 	ctx.available = total_length
+	ctx.rng = rng
+	if ctx.rng == null:
+		ctx.rng = RandomNumberGenerator.new()
 
 	_ast.reset()
 	var required := _ast.requiredLength(ctx)
