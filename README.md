@@ -52,6 +52,7 @@ In a scene 3D:
     - Change point distribution using godot Curve editors
     - Scene scanning to gather metadata/attributes into the flow
     - Subgraph with loopbacks parameters
+    - Grammar based generation across a spline
 * **Grid-based Data Inspector** with selection highlighting
 * **3D Debug** overlays with color cues
 * **Graphs as resource** with optional **typed inputs**
@@ -73,6 +74,9 @@ And the Associated graph
 
 ### Demo Village With in a forest
 ![demo_forest](demo/addons/flow_nodes_editor/doc/demo_forest.gif)
+
+### Demo Grammars
+![demo_grammar](demo/addons/flow_nodes_editor/doc/demo_grammar.png)
 
 ### Demo Non Uniform Sampling
 ![demo_non_uniform_sampling](demo/addons/flow_nodes_editor/doc/demo_non_uniform_sampling.png)

@@ -1,5 +1,5 @@
 @tool
-extends FlowNodeBase
+extends FlowBaseScanNode
 
 func _init():
 	meta_node = {
@@ -21,4 +21,5 @@ func execute( ctx : FlowData.EvaluationContext ):
 	output.registerStream( "node", nodes, FlowData.DataType.NodePath )
 	var curves = nodes.map( func( obj ): return obj.curve )
 	output.registerStream( "curve", curves, FlowData.DataType.Resource )
+	importCommon( ctx, output, nodes )
 	set_output( 0, output )

@@ -15,7 +15,7 @@
 - [ ] Import node: texture sampler
 - [ ] Import node: sample spline
 
-- [ ] Expand the scan_* to a base folder
+- [X] Expand the scan_* to a base folder
 - [ ] subgraph overrides
 - [ ] named redirectors/acc
 - [ ] debug/session
