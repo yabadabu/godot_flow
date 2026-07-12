@@ -31,6 +31,8 @@ enum eDebugMode {
 @export var disabled: bool = false
 @export var trace: bool = false
 
+var node : FlowNodeBase
+
 func _init():
 	# Set default values when resource is created
 	resource_name = "Node Settings"
@@ -38,3 +40,9 @@ func _init():
 
 func exposeParam( name : String ) -> bool:
 	return true
+	
+# Show the setting entries as 'disabled' when they are connected to other nodes
+# controlling the values
+func _validate_property(property: Dictionary) -> void:
+	if node and node.is_input_connected( property.name ):
+		property.usage |= PROPERTY_USAGE_READ_ONLY

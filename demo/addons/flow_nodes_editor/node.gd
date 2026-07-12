@@ -771,3 +771,6 @@ func _make_custom_tooltip(for_text: String) -> Object:
 		]
 	tooltip.set_tooltip_text( new_text )
 	return tooltip
+
+func is_input_connected( what : StringName ) -> bool:
+	return args_ports_by_name.has( what ) and args_ports_by_name.get( what ).connected

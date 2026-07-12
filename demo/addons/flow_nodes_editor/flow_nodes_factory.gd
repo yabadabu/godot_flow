@@ -57,6 +57,7 @@ func createNewNode( packed_node : Resource, node_template : String, node_name : 
 	node.node_template = node_template
 	node.name = node_name
 	node.settings = meta.settings.new()
+	node.settings.node = node
 	if in_settings: 
 		print( "Reading settings from json")
 		FlowNodeIO.dict_to_resource( in_settings, node.settings )

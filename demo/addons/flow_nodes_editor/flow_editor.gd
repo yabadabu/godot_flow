@@ -152,6 +152,7 @@ func onConnCreated( conn : Dictionary ):
 	if not input_sources.has(key):
 		input_sources.set( key, [])
 	input_sources[key].append([conn.from_node, conn.from_port])
+	refreshNodeSettingsPropertiesChanged( conn.to_node )
 	
 func onFrameCreated( frame_data : Dictionary ) -> GraphFrame:
 	var frame := GraphFrame.new()
@@ -166,6 +167,12 @@ func onFrameCreated( frame_data : Dictionary ) -> GraphFrame:
 	for name in frame_data.attached:
 		gedit.attach_graph_element_to_frame( name, frame.name )
 	return frame	
+	
+func refreshNodeSettingsPropertiesChanged( node_name : StringName ):
+	# Refresh the state of the settings, to disable just recently connected setting
+	var node = current_resource.nodes_by_name.get( node_name, null )
+	if node:
+		node.settings.notify_property_list_changed()	
 	
 func saveResource():
 	FlowNodeIO.saveEditorStateToResource( self )
@@ -680,11 +687,13 @@ func remove_input_source_target_connection( from_node: StringName, from_port: in
 		input_sources[key].erase([from_node, from_port])
 		if input_sources[key].is_empty():
 			input_sources.erase(key)
+	refreshNodeSettingsPropertiesChanged( to_node )
 	
 func remove_all_inputs_to_target_connection( to_node : StringName, to_port : int ):
 	var key = [to_node, to_port]
 	if key in input_sources:
 		input_sources.erase(key)
+	refreshNodeSettingsPropertiesChanged( to_node )
 	
 func remove_all_inputs_to_source_connection( from_node : StringName, from_port : int ):
 	var conns_to_delete = []
