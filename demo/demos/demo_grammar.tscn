@@ -123,7 +123,7 @@ data = {
 "settings": {
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
-"debug_enabled": true,
+"debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "",
 "debug_output": 0,
@@ -249,7 +249,7 @@ data = {
 "debug_port_combined_index": 0,
 "debug_scale": 1.0,
 "disabled": false,
-"fit_behaviour": 2,
+"fit_behaviour": 4,
 "grammar": "D,{A,B,C}*,D",
 "grammar_as_attribute": true,
 "inspect_enabled": false,
@@ -299,7 +299,7 @@ data = {
 }
 graph_name = "demo_grammar"
 view_zoom = 0.6830134
-view_offset = Vector2(-32.662994, -101.59404)
+view_offset = Vector2(158.337, -55.59404)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1slyn"]
 vertex_color_use_as_albedo = true
@@ -368,22 +368,22 @@ regenerate = Callable()
 clearInstances = Callable()
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
 
-[node name="Spawn Meshes_0000" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=504628410]
+[node name="Spawn Meshes_0000" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=548212234]
 material_override = SubResource("StandardMaterial3D_1slyn")
 multimesh = SubResource("MultiMesh_tgvby")
 metadata/flow_owner = &"id_0003_spawn_meshes"
 
-[node name="Spawn Meshes_0001" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=529296884]
+[node name="Spawn Meshes_0001" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=431850831]
 material_override = SubResource("StandardMaterial3D_cfawf")
 multimesh = SubResource("MultiMesh_cf3pn")
 metadata/flow_owner = &"id_0003_spawn_meshes"
 
-[node name="Spawn Meshes_0002" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=227941392]
+[node name="Spawn Meshes_0002" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=1243791414]
 material_override = SubResource("StandardMaterial3D_u40dt")
 multimesh = SubResource("MultiMesh_8l28r")
 metadata/flow_owner = &"id_0003_spawn_meshes"
 
-[node name="Spawn Meshes_0003" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=1738782181]
+[node name="Spawn Meshes_0003" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=1796122479]
 material_override = SubResource("StandardMaterial3D_0qeiw")
 multimesh = SubResource("MultiMesh_10ycx")
 metadata/flow_owner = &"id_0003_spawn_meshes"
@@ -424,6 +424,7 @@ pixel_size = 0.02
 text = "D,C*,D,[A,B]*,D
 Blue and the block
 Box+Cylinder repeat
+Another Sphere in the middle
 "
 
 [node name="Path3D4" type="Path3D" parent="." unique_id=1313608865]
@@ -435,6 +436,6 @@ metadata/grammar = "A,B,C,D"
 transform = Transform3D(1, 0, 0, 0, 0.18750133, 0.98226416, 0, -0.98226416, 0.18750133, 3.0702915, 0, -2.8618088)
 pixel_size = 0.02
 text = "In this demo, grammars are defined in the metadata of each node
-the merged to render instanced
+then merged to be rendered as instanced meshes
 A          B           C           D
 "
