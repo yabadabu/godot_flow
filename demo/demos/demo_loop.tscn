@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="2_4lgao"]
 [ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="3_amu1w"]
 [ext_resource type="Script" uid="uid://dhpu3ptt872as" path="res://addons/flow_nodes_editor/flow_graph_param_override.gd" id="4_4lgao"]
+[ext_resource type="BoxMesh" uid="uid://7flu82pqtc5d" path="res://addons/flow_nodes_editor/resources/unit_cube.tres" id="4_amu1w"]
 
 [sub_resource type="Resource" id="Resource_4lgao"]
 script = ExtResource("2_4lgao")
@@ -348,91 +349,54 @@ data = {
 "keep_alive": false,
 "to_node": &"id_0007_transform",
 "to_port": 0
+}, {
+"from_node": &"id_0006_transform",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0004_random_color",
+"to_port": 0
+}, {
+"from_node": &"id_0004_random_color",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0001_spawn_meshes",
+"to_port": 0
+}, {
+"from_node": &"id_0005_transform",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0005_random_color",
+"to_port": 0
+}, {
+"from_node": &"id_0005_random_color",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0001_spawn_meshes",
+"to_port": 0
+}, {
+"from_node": &"id_0007_transform",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0006_random_color",
+"to_port": 0
+}, {
+"from_node": &"id_0006_random_color",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0001_spawn_meshes",
+"to_port": 0
+}, {
+"from_node": &"id_0001_compose_vector",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0001_spawn_meshes",
+"to_port": 0
 }],
-"min_pos": Vector2(0, -120),
+"min_pos": Vector2(0, -100),
 "nodes": [{
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0005_transform",
-"position": Vector2(781.5172, 81.88803),
-"settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": true,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"offset_local_space": true,
-"offset_max": Vector3(0, 0, -10),
-"offset_min": Vector3(0, 0, -10),
-"random_seed": 1687507641,
-"rotation_local_space": false,
-"rotation_max": Vector3(0, 0, 0),
-"rotation_min": Vector3(0, 0, 0),
-"scale_max": Vector3(1, 1, 1),
-"scale_min": Vector3(1, 1, 1),
-"title": "Transform",
-"trace": false,
-"uniform_scale": true
-},
-"show_disconnected_inputs": false,
-"template": "transform"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0.0
-}
-},
-"name": &"id_0007_transform",
-"position": Vector2(1480, 280),
-"settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": true,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"offset_local_space": true,
-"offset_max": Vector3(0, 0, -10),
-"offset_min": Vector3(0, 0, -10),
-"random_seed": 1687507641,
-"rotation_local_space": false,
-"rotation_max": Vector3(0, 0, 0),
-"rotation_min": Vector3(0, 0, 0),
-"scale_max": Vector3(1, 1, 1),
-"scale_min": Vector3(1, 1, 1),
-"title": "Transform",
-"trace": false,
-"uniform_scale": true
-},
-"show_disconnected_inputs": false,
-"template": "transform"
-}, {
-"args_port": {
-"CurrentY": {
-"connected": true,
-"port": 1
-},
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0003_subgraph",
-"position": Vector2(980, 420),
+"args_port": {},
+"name": &"id_0024_comment",
+"position": Vector2(180, 220),
 "settings": {
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
@@ -440,56 +404,22 @@ data = {
 "debug_mode": 0,
 "debug_modulate_by": "",
 "debug_output": 0,
-"debug_port_combined_index": 3,
-"debug_scale": 1.0,
-"disabled": false,
-"graph": SubResource("Resource_a44us"),
-"inspect_enabled": false,
-"random_seed": 2779718557,
-"title": "Subgraph",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "subgraph"
-}, {
-"args_port": {
-"In": {
-"connected": false,
-"port": 0
-}
-},
-"name": &"id_0050_add_attribute",
-"position": Vector2(780, 520),
-"settings": {
-"cte_bool": false,
-"cte_color": Color(1, 1, 1, 1),
-"cte_float": 0.0,
-"cte_int": 0,
-"cte_resource": null,
-"cte_string": "",
-"cte_vector": Vector3(0, 0, 0),
-"data_type": 2,
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
 "debug_port_combined_index": 0,
 "debug_scale": 1.0,
 "disabled": false,
+"hue": 0.15000000000000002,
 "inspect_enabled": false,
-"name": "Initial Height",
-"random_seed": 1767661471,
-"title": "Add Attribute",
+"random_seed": 3962488378,
+"text": "Randomize Width and Heigh, then sort by Heights",
+"title": "Comments",
 "trace": false
 },
 "show_disconnected_inputs": false,
-"template": "add_attribute"
+"template": "comment"
 }, {
 "args_port": {},
 "name": &"id_0027_comment",
-"position": Vector2(780, 240),
+"position": Vector2(780, 340),
 "settings": {
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
@@ -500,7 +430,7 @@ data = {
 "debug_port_combined_index": 0,
 "debug_scale": 1.0,
 "disabled": false,
-"hue": 0.45,
+"hue": 0.30000000000000004,
 "inspect_enabled": false,
 "random_seed": 2136273546,
 "text": "Process one point at a time, and keep track of the accumulated height.
@@ -511,41 +441,14 @@ Then collect all the points again in a single batch",
 "show_disconnected_inputs": false,
 "template": "comment"
 }, {
-"args_port": {},
-"name": &"id_0024_comment",
-"position": Vector2(180, 120),
-"settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"hue": 0.05,
-"inspect_enabled": false,
-"random_seed": 3962488378,
-"text": "Randomize Width and Heigh, then sort by Heights",
-"title": "Comments",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "comment"
-}, {
 "args_port": {
-"In A": {
+"In": {
 "connected": true,
 "port": 0
-},
-"In B": {
-"connected": true,
-"port": 1
 }
 },
-"name": &"id_0025_math_op",
-"position": Vector2(360, 220),
+"name": &"id_0007_transform",
+"position": Vector2(1500, 380),
 "settings": {
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
@@ -556,17 +459,205 @@ Then collect all the points again in a single batch",
 "debug_port_combined_index": 0,
 "debug_scale": 1.0,
 "disabled": false,
-"in_nameA": "size.x",
-"in_nameB": "size.x",
 "inspect_enabled": false,
-"operation": 19,
-"out_name": "size.z",
-"random_seed": 2826320829,
-"title": "Math",
+"offset_local_space": true,
+"offset_max": Vector3(0, 0, -5),
+"offset_min": Vector3(0, 0, -5),
+"random_seed": 1687507641,
+"rotation_local_space": false,
+"rotation_max": Vector3(0, 0, 0),
+"rotation_min": Vector3(0, 0, 0),
+"scale_max": Vector3(1, 1, 1),
+"scale_min": Vector3(1, 1, 1),
+"title": "Transform",
+"trace": false,
+"uniform_scale": true
+},
+"show_disconnected_inputs": false,
+"template": "transform"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0006_transform",
+"position": Vector2(180, 0),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"offset_local_space": true,
+"offset_max": Vector3(0, 0, -15),
+"offset_min": Vector3(0, 0, -15),
+"random_seed": 1687507641,
+"rotation_local_space": false,
+"rotation_max": Vector3(0, 0, 0),
+"rotation_min": Vector3(0, 0, 0),
+"scale_max": Vector3(1, 1, 1),
+"scale_min": Vector3(1, 1, 1),
+"title": "Transform",
+"trace": false,
+"uniform_scale": true
+},
+"show_disconnected_inputs": false,
+"template": "transform"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0005_transform",
+"position": Vector2(780, 180),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"offset_local_space": true,
+"offset_max": Vector3(0, 0, -10),
+"offset_min": Vector3(0, 0, -10),
+"random_seed": 1687507641,
+"rotation_local_space": false,
+"rotation_max": Vector3(0, 0, 0),
+"rotation_min": Vector3(0, 0, 0),
+"scale_max": Vector3(1, 1, 1),
+"scale_min": Vector3(1, 1, 1),
+"title": "Transform",
+"trace": false,
+"uniform_scale": true
+},
+"show_disconnected_inputs": false,
+"template": "transform"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0002_partition",
+"position": Vector2(780, 520),
+"settings": {
+"attribute_name": "Index",
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"out_partition_attribute": "Id",
+"random_seed": 3707290272,
+"title": "Partition",
 "trace": false
 },
 "show_disconnected_inputs": false,
-"template": "math_op"
+"template": "partition"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0018_sort",
+"position": Vector2(540, 320),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"random_seed": 4148900739,
+"sort_by": "size.x",
+"sort_descending": true,
+"title": "Sort",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "sort"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0020_merge",
+"position": Vector2(1260, 520),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"random_seed": 1425879892,
+"title": "Merge",
+"trace": false
+},
+"show_disconnected_inputs": false,
+"template": "merge"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0001_compose_vector",
+"position": Vector2(1500, 520),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": true,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"default_value": Vector3(0, 1, 0),
+"disabled": false,
+"inspect_enabled": false,
+"out_attribute": "position",
+"random_seed": 1891385275,
+"title": "Compose Vector",
+"trace": false,
+"x_attribute": "",
+"y_attribute": "position.y",
+"z_attribute": ""
+},
+"show_disconnected_inputs": false,
+"template": "compose_vector"
 }, {
 "args_port": {
 "In": {
@@ -575,7 +666,7 @@ Then collect all the points again in a single batch",
 }
 },
 "name": &"id_0025_transform",
-"position": Vector2(180, 220),
+"position": Vector2(180, 320),
 "settings": {
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
@@ -604,39 +695,17 @@ Then collect all the points again in a single batch",
 "template": "transform"
 }, {
 "args_port": {
-"In": {
+"In A": {
 "connected": true,
 "port": 0
-}
 },
-"name": &"id_0020_merge",
-"position": Vector2(1260, 420),
-"settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": true,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"random_seed": 1425879892,
-"title": "Merge",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "merge"
-}, {
-"args_port": {
-"In": {
+"In B": {
 "connected": true,
-"port": 0
+"port": 1
 }
 },
-"name": &"id_0018_sort",
-"position": Vector2(540, 220),
+"name": &"id_0025_math_op",
+"position": Vector2(360, 320),
 "settings": {
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
@@ -647,47 +716,52 @@ Then collect all the points again in a single batch",
 "debug_port_combined_index": 0,
 "debug_scale": 1.0,
 "disabled": false,
+"in_nameA": "size.x",
+"in_nameB": "size.x",
 "inspect_enabled": false,
-"random_seed": 4148900739,
-"sort_by": "size.x",
-"sort_descending": true,
-"title": "Sort",
+"operation": 19,
+"out_name": "size.z",
+"random_seed": 2826320829,
+"title": "Math",
 "trace": false
 },
 "show_disconnected_inputs": false,
-"template": "sort"
+"template": "math_op"
 }, {
 "args_port": {
+"CurrentY": {
+"connected": true,
+"port": 1
+},
 "In": {
 "connected": true,
 "port": 0
 }
 },
-"name": &"id_0002_partition",
-"position": Vector2(780, 420),
+"name": &"id_0003_subgraph",
+"position": Vector2(980, 520),
 "settings": {
-"attribute_name": "Index",
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
 "debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "",
 "debug_output": 0,
-"debug_port_combined_index": 0,
+"debug_port_combined_index": 3,
 "debug_scale": 1.0,
 "disabled": false,
+"graph": SubResource("Resource_a44us"),
 "inspect_enabled": false,
-"out_partition_attribute": "Id",
-"random_seed": 3707290272,
-"title": "Partition",
+"random_seed": 2779718557,
+"title": "Subgraph",
 "trace": false
 },
 "show_disconnected_inputs": false,
-"template": "partition"
+"template": "subgraph"
 }, {
 "args_port": {},
 "name": &"id_0001_grid",
-"position": Vector2(0, 220),
+"position": Vector2(0, 320),
 "settings": {
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
@@ -715,34 +789,38 @@ Then collect all the points again in a single batch",
 }, {
 "args_port": {
 "In": {
-"connected": true,
+"connected": false,
 "port": 0
 }
 },
-"name": &"id_0001_compose_vector",
-"position": Vector2(1500, 420),
+"name": &"id_0050_add_attribute",
+"position": Vector2(780, 620),
 "settings": {
+"cte_bool": false,
+"cte_color": Color(1, 1, 1, 1),
+"cte_float": 0.0,
+"cte_int": 0,
+"cte_resource": null,
+"cte_string": "",
+"cte_vector": Vector3(0, 0, 0),
+"data_type": 2,
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
-"debug_enabled": true,
+"debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "",
 "debug_output": 0,
 "debug_port_combined_index": 0,
 "debug_scale": 1.0,
-"default_value": Vector3(0, 1, 0),
 "disabled": false,
 "inspect_enabled": false,
-"out_attribute": "position",
-"random_seed": 1891385275,
-"title": "Compose Vector",
-"trace": false,
-"x_attribute": "",
-"y_attribute": "position.y",
-"z_attribute": ""
+"name": "Initial Height",
+"random_seed": 1767661471,
+"title": "Add Attribute",
+"trace": false
 },
 "show_disconnected_inputs": false,
-"template": "compose_vector"
+"template": "add_attribute"
 }, {
 "args_port": {
 "In": {
@@ -750,12 +828,48 @@ Then collect all the points again in a single batch",
 "port": 0.0
 }
 },
-"name": &"id_0006_transform",
-"position": Vector2(180, 0),
+"name": &"id_0006_random_color",
+"position": Vector2(1660, 380),
 "settings": {
 "debug_bulk": 0,
 "debug_color": Color(1, 1, 1, 1),
-"debug_enabled": true,
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"hue_center": 0.0,
+"hue_width": 1.0,
+"inspect_enabled": false,
+"out_name": "color",
+"palette": Array[Color]([Color(0.13333334, 1, 1, 1)]),
+"random_seed": 307612305,
+"sat_max": 1.0,
+"sat_min": 0.6,
+"title": "Random Color",
+"trace": false,
+"use_palette": true,
+"val_max": 1.0,
+"val_min": 0.6
+},
+"show_disconnected_inputs": false,
+"template": "random_color"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0001_spawn_meshes",
+"position": Vector2(1980, 40),
+"settings": {
+"color_attribute": "color",
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
 "debug_mode": 0,
 "debug_modulate_by": "",
 "debug_output": 0,
@@ -763,28 +877,96 @@ Then collect all the points again in a single batch",
 "debug_scale": 1.0,
 "disabled": false,
 "inspect_enabled": false,
-"offset_local_space": true,
-"offset_max": Vector3(0, 0, -15),
-"offset_min": Vector3(0, 0, -15),
-"random_seed": 1687507641,
-"rotation_local_space": false,
-"rotation_max": Vector3(0, 0, 0),
-"rotation_min": Vector3(0, 0, 0),
-"scale_max": Vector3(1, 1, 1),
-"scale_min": Vector3(1, 1, 1),
-"title": "Transform",
+"mesh_attribute": "",
+"mesh_selector_attribute": "",
+"mesh_variant_weights": Array[float]([]),
+"mesh_variants": Array[Mesh]([ExtResource("4_amu1w")]),
+"random_seed": 3807666338,
+"randomize_mesh_variants": false,
+"spawn_parent_path": "",
+"title": "Spawn Meshes",
 "trace": false,
-"uniform_scale": true
+"use_vertex_colors": true
 },
 "show_disconnected_inputs": false,
-"template": "transform"
+"template": "spawn_meshes"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0004_random_color",
+"position": Vector2(360, 20),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"hue_center": 0.0,
+"hue_width": 1.0,
+"inspect_enabled": false,
+"out_name": "color",
+"palette": Array[Color]([Color(1, 1, 0.26666668, 1)]),
+"random_seed": 307612305,
+"sat_max": 1.0,
+"sat_min": 0.6,
+"title": "Random Color",
+"trace": false,
+"use_palette": true,
+"val_max": 1.0,
+"val_min": 0.6
+},
+"show_disconnected_inputs": false,
+"template": "random_color"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0.0
+}
+},
+"name": &"id_0005_random_color",
+"position": Vector2(960, 180),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"hue_center": 0.0,
+"hue_width": 1.0,
+"inspect_enabled": false,
+"out_name": "color",
+"palette": Array[Color]([Color(0.8980392, 0.25490198, 0.7647059, 1)]),
+"random_seed": 307612305,
+"sat_max": 1.0,
+"sat_min": 0.6,
+"title": "Random Color",
+"trace": false,
+"use_palette": true,
+"val_max": 1.0,
+"val_min": 0.6
+},
+"show_disconnected_inputs": false,
+"template": "random_color"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
 graph_name = "graph demo loop"
-view_zoom = 0.799462
-view_offset = Vector2(1077.8306, -112.53284)
+view_zoom = 0.60064757
+view_offset = Vector2(899.80444, -81.22829)
 in_params = Array[ExtResource("2_4lgao")]([SubResource("Resource_rijiu")])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 
@@ -793,6 +975,45 @@ script = ExtResource("4_4lgao")
 param_id = &"arg_name"
 enabled = true
 value = 0.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_amu1w"]
+vertex_color_use_as_albedo = true
+roughness = 0.3
+
+[sub_resource type="MultiMesh" id="MultiMesh_a44us"]
+transform_format = 1
+use_colors = true
+instance_count = 5
+mesh = ExtResource("4_amu1w")
+buffer = PackedFloat32Array(0.82, 0, 0, 0, 0, 0.82, 0, 0, 0, 0, 0.82, -15, 1, 1, 0.26666668, 1, 0.82, 0, 0, 2, 0, 0.82, 0, 0, 0, 0, 0.82, -15, 1, 1, 0.26666668, 1, 0.82, 0, 0, 4, 0, 0.82, 0, 0, 0, 0, 0.82, -15, 1, 1, 0.26666668, 1, 0.82, 0, 0, 6, 0, 0.82, 0, 0, 0, 0, 0.82, -15, 1, 1, 0.26666668, 1, 0.82, 0, 0, 8, 0, 0.82, 0, 0, 0, 0, 0.82, -15, 1, 1, 0.26666668, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ohf2o"]
+vertex_color_use_as_albedo = true
+roughness = 0.3
+
+[sub_resource type="MultiMesh" id="MultiMesh_5dgyh"]
+transform_format = 1
+use_colors = true
+instance_count = 5
+mesh = ExtResource("4_amu1w")
+buffer = PackedFloat32Array(3.2073183, 0, 0, 4, 0, 1.2403601, 0, 0, 0, 0, 3.2073183, -10, 0.8980392, 0.25490198, 0.7647059, 1, 2.6719182, 0, 0, 0, 0, 1.4002911, 0, 0, 0, 0, 2.6719182, -10, 0.8980392, 0.25490198, 0.7647059, 1, 1.7818785, 0, 0, 6, 0, 1.3430669, 0, 0, 0, 0, 1.7818785, -10, 0.8980392, 0.25490198, 0.7647059, 1, 1.3706504, 0, 0, 2, 0, 2.8408926, 0, 0, 0, 0, 1.3706504, -10, 0.8980392, 0.25490198, 0.7647059, 1, 0.90639895, 0, 0, 8, 0, 1.2059962, 0, 0, 0, 0, 0.90639895, -10, 0.8980392, 0.25490198, 0.7647059, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rijiu"]
+vertex_color_use_as_albedo = true
+roughness = 0.3
+
+[sub_resource type="MultiMesh" id="MultiMesh_78vc5"]
+transform_format = 1
+use_colors = true
+instance_count = 5
+mesh = ExtResource("4_amu1w")
+buffer = PackedFloat32Array(3.2073183, 0, 0, 4, 0, 1.2403601, 0, 0.6201801, 0, 0, 3.2073183, -5, 0.13333334, 1, 1, 1, 2.6719182, 0, 0, 0, 0, 1.4002911, 0, 1.9405057, 0, 0, 2.6719182, -5, 0.13333334, 1, 1, 1, 1.7818785, 0, 0, 6, 0, 1.3430669, 0, 3.3121848, 0, 0, 1.7818785, -5, 0.13333334, 1, 1, 1, 1.3706504, 0, 0, 2, 0, 2.8408926, 0, 5.4041643, 0, 0, 1.3706504, -5, 0.13333334, 1, 1, 1, 0.90639895, 0, 0, 8, 0, 1.2059962, 0, 7.427609, 0, 0, 0.90639895, -5, 0.13333334, 1, 1, 1)
+
+[sub_resource type="MultiMesh" id="MultiMesh_cgc1p"]
+transform_format = 1
+instance_count = 5
+mesh = ExtResource("4_amu1w")
+buffer = PackedFloat32Array(3.2073183, 0, 0, 0, 0, 1.2403601, 0, 0.6201801, 0, 0, 3.2073183, 0, 2.6719182, 0, 0, 0, 0, 1.4002911, 0, 1.9405057, 0, 0, 2.6719182, 0, 1.7818785, 0, 0, 0, 0, 1.3430669, 0, 3.3121848, 0, 0, 1.7818785, 0, 1.3706504, 0, 0, 0, 0, 2.8408926, 0, 5.4041643, 0, 0, 1.3706504, 0, 0.90639895, 0, 0, 0, 0, 1.2059962, 0, 7.427609, 0, 0, 0.90639895, 0)
 
 [node name="DemoLoop" type="Node3D" unique_id=658281225]
 
@@ -805,6 +1026,25 @@ clearInstances = Callable()
 flow_override/arg_name/enabled = true
 flow_override/arg_name/value = 0.0
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
+
+[node name="Spawn Meshes_0000" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=2098399524]
+material_override = SubResource("StandardMaterial3D_amu1w")
+multimesh = SubResource("MultiMesh_a44us")
+metadata/flow_owner = &"id_0001_spawn_meshes"
+
+[node name="Spawn Meshes_0001" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=1675951590]
+material_override = SubResource("StandardMaterial3D_ohf2o")
+multimesh = SubResource("MultiMesh_5dgyh")
+metadata/flow_owner = &"id_0001_spawn_meshes"
+
+[node name="Spawn Meshes_0002" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=1687139986]
+material_override = SubResource("StandardMaterial3D_rijiu")
+multimesh = SubResource("MultiMesh_78vc5")
+metadata/flow_owner = &"id_0001_spawn_meshes"
+
+[node name="Spawn Meshes_0003" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=489064950]
+multimesh = SubResource("MultiMesh_cgc1p")
+metadata/flow_owner = &"id_0001_spawn_meshes"
 
 [node name="Hint" type="Label3D" parent="." unique_id=1097408059]
 transform = Transform3D(3.466592e-05, -0.99998033, 0.006265551, 0.0055325613, 0.00626567, 0.9999651, -0.9999847, 0, 0.00553267, 4.376411, -0.07534159, 3.451079)
