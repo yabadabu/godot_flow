@@ -234,7 +234,7 @@ data = {
 "debug_port_combined_index": 0,
 "debug_scale": 1.0,
 "disabled": false,
-"hue": 0.9,
+"hue": 0.6000000000000001,
 "inspect_enabled": false,
 "random_seed": 2313414386,
 "text": "Each scene Node3D in the demo scene provides it's own custom input arguments 
@@ -266,6 +266,34 @@ for the height, so the grid is elevated a different height",
 },
 "show_disconnected_inputs": false,
 "template": "input_Height"
+}, {
+"args_port": {},
+"name": &"id_0006_grid",
+"position": Vector2(60, 200),
+"settings": {
+"debug_bulk": 0,
+"debug_color": Color(1, 1, 1, 1),
+"debug_enabled": false,
+"debug_mode": 0,
+"debug_modulate_by": "",
+"debug_output": 0,
+"debug_port_combined_index": 0,
+"debug_scale": 1.0,
+"disabled": false,
+"inspect_enabled": false,
+"origin": Vector3(0, 0, 0),
+"random_seed": 1565012789,
+"rotation": Vector3(0, 0, 0),
+"size": 0.87,
+"step": Vector3(1, 1, 1),
+"title": "Grid",
+"trace": false,
+"x": 3,
+"y": 1,
+"z": 3
+},
+"show_disconnected_inputs": false,
+"template": "grid"
 }, {
 "args_port": {
 "In": {
@@ -331,41 +359,13 @@ for the height, so the grid is elevated a different height",
 },
 "show_disconnected_inputs": false,
 "template": "subgraph"
-}, {
-"args_port": {},
-"name": &"id_0006_grid",
-"position": Vector2(60, 200),
-"settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"origin": Vector3(0, 0, 0),
-"random_seed": 1565012789,
-"rotation": Vector3(0, 0, 0),
-"size": 0.87,
-"step": Vector3(1, 1, 1),
-"title": "Grid",
-"trace": false,
-"x": 3,
-"y": 1,
-"z": 3
-},
-"show_disconnected_inputs": false,
-"template": "grid"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
 graph_name = "demo subgraph"
-view_zoom = 0.6006477
-view_offset = Vector2(0, -268.93317)
+view_zoom = 0.6006476
+view_offset = Vector2(49.02118, -248.0934)
 new_name_counter = 1
 in_params = Array[ExtResource("2_mmqr1")]([SubResource("Resource_x3i3k")])
 
@@ -405,7 +405,7 @@ flow_override/Height/enabled = true
 flow_override/Height/value = 3.525
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
 
-[node name="Spawn Meshes_0000" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=925547133]
+[node name="Spawn Meshes_0000" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=104611622]
 multimesh = SubResource("MultiMesh_c03w7")
 metadata/flow_owner = &"id_0014_spawn_meshes"
 
@@ -420,6 +420,6 @@ flow_override/Height/enabled = true
 flow_override/Height/value = 1.7
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
 
-[node name="Spawn Meshes_0000" type="MultiMeshInstance3D" parent="FlowGraphNode3D2" unique_id=136548588]
+[node name="Spawn Meshes_0000" type="MultiMeshInstance3D" parent="FlowGraphNode3D2" unique_id=923568204]
 multimesh = SubResource("MultiMesh_x3i3k")
 metadata/flow_owner = &"id_0014_spawn_meshes"
