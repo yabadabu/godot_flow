@@ -33,19 +33,21 @@ func execute( ctx : FlowData.EvaluationContext ):
 	
 	match settings.mode:
 		BoundsModifierNodeSettings.eMode.Set:
+			var final_size := size_val * uniform_scale
 			for i in ssizes.size():
 				var basis := FlowData.eulerToBasis(eulers[i]).inverse()
-				ssizes[i] = size_val
+				ssizes[i] = final_size
 				spos[i] += center * basis
 		
 		BoundsModifierNodeSettings.eMode.Add:
+			var final_size := size_val * uniform_scale
 			for i in ssizes.size():
 				var basis := FlowData.eulerToBasis(eulers[i]).inverse()
-				ssizes[i] += size_val
+				ssizes[i] += final_size
 				spos[i] += center * basis
 		
 		BoundsModifierNodeSettings.eMode.Multiply:
-			size_val *= 0.5
+			size_val *= 0.5 * uniform_scale
 			for i in ssizes.size():
 				var basis := FlowData.eulerToBasis(eulers[i]).inverse()
 				var offset_center : Vector3 = ssizes[i] * size_val
