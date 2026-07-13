@@ -13,6 +13,24 @@ func _init():
 		#"trace" : true
 	}
 	
+static func sampleMeshSurfaceAtVertices( mi : MeshInstance3D ) -> Dictionary:
+	var mesh := mi.mesh
+	var out_pts : PackedVector3Array
+	var out_nrm : PackedVector3Array
+	var gt := mi.global_transform
+	var gn := gt.basis.inverse().transposed()
+	for s in mesh.get_surface_count():
+		var arrs := mesh.surface_get_arrays(s)
+		var vtxs : PackedVector3Array
+		var nrms : PackedVector3Array
+		for v in arrs[Mesh.ARRAY_VERTEX]:
+			vtxs.append( gt * v )
+		for n in arrs[Mesh.ARRAY_NORMAL]:
+			nrms.append( ( gn * n ).normalized() )
+		out_pts.append_array( vtxs )
+		out_nrm.append_array( nrms )
+	return { "points": out_pts, "normals": out_nrm }
+	
 ## Uniform surface sampling on a MeshInstance3D
 ## - If `n` > 0, returns exactly n points.
 ## - Else if `density` > 0, returns round(total_area * density) points.
@@ -182,7 +200,11 @@ func execute( ctx : FlowData.EvaluationContext ):
 		var mesh : Mesh = node.mesh
 		if mesh == null:
 			continue
-		var ans = sampleMeshSurface( node, num_samples, density, settings.random_seed )
+		var ans
+		if settings.mode == SampleMeshNodeSettings.eMode.OnePerVertex:
+			ans = sampleMeshSurfaceAtVertices( node )
+		else:
+			ans = sampleMeshSurface( node, num_samples, density, settings.random_seed )
 		var points : PackedVector3Array = ans.points
 		var normals : PackedVector3Array = ans.normals
 		var num_points := points.size()
