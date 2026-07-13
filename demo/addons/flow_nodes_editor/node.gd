@@ -5,6 +5,8 @@ extends GraphNode
 # This represent the base class for all nodes in the flow graph
 # The actual nodes are implemented in the nodes subfolder
 
+const enable_development_info := false 
+
 @export var settings: NodeSettings
 var rng : RandomNumberGenerator = RandomNumberGenerator.new()
 
@@ -764,10 +766,11 @@ func registerInstancedNode( new_owner : Node3D, new_parent : Node3D, child : Nod
 func _make_custom_tooltip(for_text: String) -> Object:
 	var tooltip = preload("res://addons/flow_nodes_editor/resources/tooltip.tscn").instantiate()
 	var meta : Dictionary = getMeta()
+	var extras : String = "\n\n" + str(args_ports_by_name) if enable_development_info else ""
 	var new_text := "[b]%s[/b] %s\n\n%s" % [
 		meta.title, 
 		name,
-		for_text
+		for_text + extras
 		]
 	tooltip.set_tooltip_text( new_text )
 	return tooltip
