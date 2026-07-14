@@ -39,21 +39,20 @@ func setNode( new_node : FlowNodeBase ):
 	# If there was already one active... disabled it
 	if node:
 		%LabelTitle.text = "..."
-		if node.settings:
-			node.settings.debug_bulk = current_bulk_index
-			node.settings.debug_port_combined_index = current_port_combined_index
-			node.settings.inspect_enabled = false
-			print( "Saving %s.settings Bulk:%d Index:%d" % [node.name, current_bulk_index, current_port_combined_index ])
-			node.refreshFromSettings()
+		node.debug_bulk = current_bulk_index
+		node.debug_port_combined_index = current_port_combined_index
+		node.inspect_enabled = false
+		print( "Saving %s Bulk:%d Index:%d" % [node.name, current_bulk_index, current_port_combined_index ])
+		#node.refreshFromSettings()
 		
 	if node != new_node and new_node:
 		node = new_node
-		%LabelTitle.text = node.get_title()
-		node.settings.inspect_enabled = true
-		current_port_combined_index = node.settings.debug_port_combined_index
-		print( "Reading %s.settings Bulk:%d Index:%d" % [node.name, current_bulk_index, current_port_combined_index ])
+		%LabelTitle.text = node.getTitle()
+		node.inspect_enabled = true
+		current_port_combined_index = node.debug_port_combined_index
+		print( "Reading %s Bulk:%d Index:%d" % [node.name, current_bulk_index, current_port_combined_index ])
 		_on_slot_selector_item_selected( current_port_combined_index )
-		current_bulk_index = node.settings.debug_bulk
+		current_bulk_index = node.debug_bulk
 		node.setupDrawDebug()
 	else:
 		node = null
@@ -267,9 +266,9 @@ func refresh():
 			if current_bulk_index >= node.generated_bulks.size():
 				current_bulk_index = 0
 
-			if node.settings.debug_bulk != current_bulk_index:
-				print( "Updating node.settings.debug_bulk to %d" % [ current_bulk_index ])
-				node.settings.debug_bulk = current_bulk_index
+			if node.debug_bulk != current_bulk_index:
+				print( "Updating node.debug_bulk to %d" % [ current_bulk_index ])
+				node.debug_bulk = current_bulk_index
 				node.setupDrawDebug()				
 				
 			data = node.get_bulk_output( current_bulk_index, current_port_index )

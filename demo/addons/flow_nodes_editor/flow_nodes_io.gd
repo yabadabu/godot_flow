@@ -212,7 +212,7 @@ static func create_nodes_from_dict( dict, graph : FlowGraphResource, paste_offse
 		if not in_node:
 			return null
 		var in_name = in_node.name
-		#print( "Parsing node %s  Template:%s Settings:%s" % [ in_name, in_node.template, in_node.settings ] )
+		print( "Parsing node %s  Template:%s Settings:%s" % [ in_name, in_node.template, in_node.settings ] )
 		
 		# Apply saved settings...
 		#dict_to_resource( in_node.settings, settings )

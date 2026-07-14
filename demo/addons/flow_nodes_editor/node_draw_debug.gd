@@ -88,11 +88,11 @@ func create_multimesh_direct():
 
 func setupColors( out_data : FlowData.Data ):
 	var instance_count = out_data.size()
-	var color : Color = node.settings.debug_color
-	if node.settings.debug_modulate_by:
-		var stream = out_data.findStream( node.settings.debug_modulate_by )
+	var color : Color = node.debug_color
+	if node.debug_modulate_by:
+		var stream = out_data.findStream( node.debug_modulate_by )
 		if not stream:
-			node.setError( "Attribute %s of type Float not found" %node. settings.debug_modulate_by )
+			node.setError( "Attribute %s of type Float not found" %node. debug_modulate_by )
 			return
 		if stream.data_type == FlowData.DataType.Float:
 			var smod : PackedFloat32Array = stream.container
@@ -111,13 +111,13 @@ func setupColors( out_data : FlowData.Data ):
 				RenderingServer.multimesh_instance_set_color( multimesh_rid, idx, color * smod[idx] )
 			return
 		else:
-			node.setError( "Attribute %s must be of type float or vector to modulate" % node.settings.debug_modulate_by )
+			node.setError( "Attribute %s must be of type float or vector to modulate" % node.debug_modulate_by )
 			
 	for idx in range( instance_count ):
 		RenderingServer.multimesh_instance_set_color( multimesh_rid, idx, color )
 
 func setupDraw():
-	var s = node.settings
+	var s = node
 	if !s.debug_enabled or s.disabled:
 		return
 		
@@ -155,7 +155,7 @@ func setupDraw():
 		RenderingServer.multimesh_allocate_data(multimesh_rid, allocated_count, RenderingServer.MultimeshTransformFormat.MULTIMESH_TRANSFORM_3D, true )
 	
 	var time_start_loop = Time.get_ticks_usec()
-	if node.settings.debug_mode == NodeSettings.eDebugMode.EXTENDS:
+	if node.debug_mode == FlowNodeBase.eDebugMode.EXTENDS:
 		var positions := transforms.positions
 		var eulers := transforms.eulers
 		var sizes := transforms.sizes
@@ -163,7 +163,7 @@ func setupDraw():
 			var t := Transform3D( Basis.from_euler( eulers[idx] * PI / 180.0 ), positions[idx] ).scaled_local( sizes[idx] )
 			RenderingServer.multimesh_instance_set_transform( multimesh_rid, idx, t)
 
-	elif node.settings.debug_mode == NodeSettings.eDebugMode.ABSOLUTE:
+	elif node.debug_mode == FlowNodeBase.eDebugMode.ABSOLUTE:
 		var abs_scale := Vector3.ONE * node.debug_scale
 		var positions := transforms.positions
 		var eulers := transforms.eulers
@@ -171,7 +171,7 @@ func setupDraw():
 			# Inlining the calls reduced from 40ms to 16ms
 			var t := Transform3D( Basis.from_euler( eulers[idx] * PI / 180.0 ).scaled( abs_scale ), positions[idx] )
 			RenderingServer.multimesh_instance_set_transform( multimesh_rid, idx, t)
-	if node.settings.trace: print( "Debug.Loop: %f (%d)" % [ Time.get_ticks_usec() - time_start_loop, instance_count ] )
+	if node.trace: print( "Debug.Loop: %f (%d)" % [ Time.get_ticks_usec() - time_start_loop, instance_count ] )
 	setupColors( out_data )
 
 	# Copy the transform and color at Nth and paste it at the end

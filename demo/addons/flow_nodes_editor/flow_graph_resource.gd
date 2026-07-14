@@ -88,7 +88,7 @@ func findInParamByName( requested_name : String ) -> GraphInputParameter:
 # Compile callbacks
 func addNodeFromTemplate( node_template, node_name : String, node_settings = null ):
 	
-	print( "addNodeFromTemplate %s %s" % [ node_template, node_name ])
+	print( "addNodeFromTemplate %s %s. NodesByName:%d" % [ node_template, node_name, nodes_by_name.size() ])
 	var factory := FlowPlugin.get_instance().nodes_factory
 	if node_name and nodes_by_name.has( node_name ):
 		node_name = factory.getNewName(node_template)

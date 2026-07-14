@@ -56,10 +56,10 @@ func createNewNode( node_template : String, node_name : String, in_settings = nu
 	print( "createNewNode.node_template: ", node_template )
 	print( "node_name:", node_name )
 	print( "flow_node:", flow_node )
-	flow_node.name = node_name
 	flow_node.template_name = node_template
 	if in_settings: 
 		FlowNodeIO.dict_to_resource( in_settings, flow_node )
+	flow_node.name = node_name
 	if not flow_node.title:
 		flow_node.title = meta.get( "title", node_template )
 	#flow_node.size = Vector2(32,32)

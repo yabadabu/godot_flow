@@ -27,20 +27,22 @@ func setFlowNode( new_node : FlowNodeBase ):
 	if flow_node == new_node or ( flow_node == null and new_node != null ):
 		flow_node = new_node 
 		position_offset = flow_node.ui_position_offset
-		flow_node.settings_changed.connect( regenerate )
+		flow_node.settings_changed.connect( regenerateFromFlowNode )
 		position_offset_changed.connect( on_moved )
-		regenerate( StringName() )
+		regenerateFromFlowNode( StringName() )
 
 func on_moved():
 	if flow_node:
 		flow_node.ui_position_offset = position_offset
 
-func regenerate( PropName : StringName ):
+func regenerateFromFlowNode( PropName : StringName = StringName() ):
 	print( "node_ui.regenerate")
 	if flow_node:
 		var meta : Dictionary = flow_node.getMeta()
 		self.tooltip_text = meta.get( "tooltip" )
 		self.title = flow_node.getTitle()
+		modulate = Color( 0.7, 0.7, 0.7, 0.5 ) if flow_node.disabled else Color.WHITE
+		queue_redraw()
 
 func updateStyle():
 	var sb = get_theme_stylebox("titlebar", "GraphNode").duplicate(true)

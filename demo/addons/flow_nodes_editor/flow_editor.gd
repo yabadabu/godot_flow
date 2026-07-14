@@ -304,15 +304,15 @@ func getAllFrames() -> Array[GraphFrame]:
 	return nodes
 	
 # ------------------------------------------------
-func getSelectedNodes() -> Array[GraphNode]:
-	var nodes : Array[GraphNode] = []
+func getSelectedGraphNodes() -> Array[GraphNode]:
+	var graph_nodes : Array[GraphNode] = []
 	for child in gedit.get_children():
-		var node = child as GraphNode
-		if node and node.selected:
-			nodes.push_back(node)
-	return nodes
+		var graph_node = child as GraphNode
+		if graph_node and graph_node.selected:
+			graph_nodes.push_back(graph_node)
+	return graph_nodes
 
-func deleteNodes( graph_nodes : Array[GraphNode] ):
+func deleteGraphNodes( graph_nodes : Array[GraphNode] ):
 	if current_resource == null:
 		return
 	for graph_node in graph_nodes:
@@ -328,7 +328,7 @@ func deleteNodes( graph_nodes : Array[GraphNode] ):
 
 func deleteGraphElementsAndRefresh( nodes : Array[GraphNode], frames : Array[GraphFrame] ):
 	deleteFrames( frames )
-	deleteNodes( nodes )
+	deleteGraphNodes( nodes )
 	queueSave()
 	inspected_node = null
 	inspector.edit(null)
@@ -337,8 +337,8 @@ func deleteGraphElementsAndRefresh( nodes : Array[GraphNode], frames : Array[Gra
 	
 func deleteSelectedNodes():
 	var frames := getSelectedFrames()
-	var nodes := getSelectedNodes()
-	deleteGraphElementsAndRefresh( nodes, frames )
+	var graph_nodes := getSelectedGraphNodes()
+	deleteGraphElementsAndRefresh( graph_nodes, frames )
 	
 func queueSave():
 	save_pending = true
@@ -430,7 +430,7 @@ func addNode( node_template, settings = null ):
 		if canConnect( node, 0, target_node, auto_connect_to_port ):
 			current_resource.connect_nodes(node.name, 0, auto_connect_to_node, auto_connect_to_port )
 	
-	for prev_node in getSelectedNodes():
+	for prev_node in getSelectedGraphNodes():
 		prev_node.selected = false
 	graph_node.selected = true
 	graph_node.visible = true
@@ -465,39 +465,41 @@ func _on_graph_edit_gui_input(event):
 				evalGraph()
 		elif key == KEY_R:
 			if no_modifiers:
-				for node in getSelectedNodes():
+				for node in getSelectedGraphNodes():
 					node.flow_node.dirty = true
 					print( "node %s dirty" % node.name)
 				evalGraph()
 
 func toggleDebug():
-	var nodes = getSelectedNodes()
-	for node in nodes:
-		node.dirty = true
-		node.settings.debug_enabled = !node.settings.debug_enabled
-		node.refreshFromSettings()
+	var graph_nodes := getSelectedGraphNodes()
+	for graph_node in graph_nodes:
+		var flow_node = graph_node.flow_node
+		flow_node.dirty = true
+		flow_node.debug_enabled = !flow_node.debug_enabled
+		graph_node.regenerateFromFlowNode()
 
 func toggleDisabled():
-	var nodes = getSelectedNodes()
-	for node in nodes:
-		node.dirty = true
-		node.settings.disabled = !node.settings.disabled
-		node.refreshFromSettings()
+	var graph_nodes = getSelectedGraphNodes()
+	for graph_node in graph_nodes:
+		var flow_node = graph_node.flow_node
+		flow_node.dirty = true
+		flow_node.disabled = !flow_node.disabled
+		graph_node.regenerateFromFlowNode()
 
 func toggleInspection():
 	if not data_inspector:
 		return
-	var nodes := getSelectedNodes()
-	if nodes.size() != 1:
+	var graph_nodes := getSelectedGraphNodes()
+	if graph_nodes.size() != 1:
 		data_inspector.setNode( null )
 		return
-	var node := nodes[0]
-	data_inspector.setNode( node )
-	node.dirty = true
-	node.refreshFromSettings()
+	var graph_node := graph_nodes[0]
+	data_inspector.setNode( graph_node.flow_node )
+	graph_node.flow_node.dirty = true
+	graph_node.regenerateFromFlowNode()
 
 func addComment():
-	var nodes = getSelectedNodes()
+	var nodes = getSelectedGraphNodes()
 	var rect = getRectOfNodes( nodes )
 	rect.position -= comment_padding
 	rect.size += comment_padding * 2
@@ -645,7 +647,7 @@ func _on_popup_menu_id_pressed(id: int) -> void:
 		addNode( key )
 	else:
 		# Highlight the connection...
-		var nodes = getSelectedNodes()
+		var nodes = getSelectedGraphNodes()
 		if nodes.size() > 1:
 			var node = nodes[0]
 			var target = nodes[1]
@@ -850,7 +852,7 @@ func _on_button_regenerate_pressed() -> void:
 	dump_performance = true
 	markAllNodesDirty()
 	queueRegen()
-	#for n : FlowNodeBase in getSelectedNodes():
+	#for n : FlowNodeBase in getSelectedGraphNodes():
 		#print( "Node: %s  Ins:%d  Outs:%d" % [ n.name, n.num_in_ports, n.num_out_ports ])
 		#for idx in range( n.num_in_ports ):
 			#var type = n.get_slot_type_left( idx )
