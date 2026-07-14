@@ -3,15 +3,28 @@ class_name FlowNodeIO
 
 # Here are all functions related to read/write the resources, including 
 # serialization to/from json for the clipboard
+const discardted_props = {
+	"resource_local_to_scene" : 1,
+	"resource_name" : 1,
+	"metadata/_custom_type_script" : 1,
+	"script" : 1,
+	"data" : 1,
+}
 
 static func resource_to_dict(resource: Resource) -> Dictionary:
 	var dict := {}
-	for prop in resource.get_property_list():
-		if prop.name in FlowNodeAssets.discardted_props:
+	var script := resource.get_script() as Script
+	for prop : Dictionary in resource.get_property_list():
+		var prop_name = prop.name
+		if prop_name in discardted_props:
 			continue
-		if prop.usage & PROPERTY_USAGE_STORAGE != 0:
-			var name = prop.name
-			dict[name] = resource.get(name)
+		if prop.usage & PROPERTY_USAGE_STORAGE == 0:
+			continue
+		var current_value: Variant = resource.get(prop_name)
+		var default_value: Variant = script.get_property_default_value(prop_name)
+		if current_value == default_value:
+			continue
+		dict[prop_name] = resource.get(prop_name)
 	return dict
 	
 static func split_floats(in_str : String) -> Array:
@@ -56,12 +69,13 @@ static  func _parse_vector3(value) -> Vector3:
 static func dict_to_resource(data: Dictionary, resource: Resource) -> void:
 	for prop in resource.get_property_list():
 		var name = prop.name
-		if name in FlowNodeAssets.discardted_props:
+		if name in discardted_props:
 			continue
 		if not data.has(name):
 			continue
 		var value = data[name]
 		var type = prop.type
+		print( "Updating res.%s to %s" % [ name, value ])
 		match type:
 			TYPE_COLOR:
 				resource.set(name, _parse_color(value))
@@ -120,17 +134,19 @@ static func nodes_as_dict( nodes, frames, editor : FlowGraphEditor ):
 			min_pos.x = minf( min_pos.x, pos.x )
 			min_pos.y = minf( min_pos.y, pos.y )
 	
-	var nodes_clean = nodes.map( func( node ):
+	var nodes_clean = nodes.map( func( ui_node : FlowGraphNodeUI ):
+		var node = ui_node.flow_node
 		exported_node_names[ node.name ] = 1
 		node.refreshConnectionFlags()
-		
+		var template_name = node.template_name
+		print( "Name", template_name, " Meta:", node.getMeta() )
 		return {
-			"position" : ( node.position_offset - min_pos ) / editor.ui_scale,
+			"position" : ( ui_node.position_offset - min_pos ) / editor.ui_scale,
 			"name" : node.name,
-			"template" : node.node_template,
+			"template" : template_name,
 			"show_disconnected_inputs" : node.show_disconnected_inputs,
 			"args_port" : node.args_ports_by_name,
-			"settings" : resource_to_dict( node.settings ),
+			"settings" : resource_to_dict( node ),
 		}
 	)
 	
@@ -142,7 +158,7 @@ static func nodes_as_dict( nodes, frames, editor : FlowGraphEditor ):
 	var frames_clean = frames.map( func( node ):
 		var attached : Array[StringName] = editor.gedit.get_attached_nodes_of_frame(node.name)
 		return {
-			"position" : ( node.position_offset - min_pos ) / editor.ui_scale,
+			"position" : ( node.ui_position_offset - min_pos ) / editor.ui_scale,
 			"size" : node.size,
 			"name" : node.name,
 			"tint_color" : node.tint_color,
@@ -178,7 +194,8 @@ static func _paste_nodes_from_dict( dict, editor : FlowGraphEditor, at_graph_coo
 		
 	if new_nodes:
 		for node in new_nodes:
-			node.selected = true
+			var graph_node = editor.onNodeCreated( node )
+			graph_node.selected = true
 
 static func create_nodes_from_dict( dict, graph : FlowGraphResource, paste_offset = null):
 	print( "at create_nodes_from_dict")
@@ -208,8 +225,8 @@ static func create_nodes_from_dict( dict, graph : FlowGraphResource, paste_offse
 		if not node:
 			return null
 		var in_pos = _parse_vector2( in_node.position )
-		node.position_offset = ( in_pos + paste_offset ) * ui_scale
-		#print( "New node pos %s will be %s" % [ in_name, node.position_offset ] )
+		node.ui_position_offset = ( in_pos + paste_offset ) * ui_scale
+		#print( "New node pos %s will be %s" % [ in_name, node.ui_position_offset ] )
 		node.show_disconnected_inputs = in_node.get("show_disconnected_inputs", false)
 		node.args_ports_by_name = in_node.get("args_port", {})
 		
@@ -263,9 +280,10 @@ static func saveEditorStateToResource( editor : FlowGraphEditor ):
 	var res = editor.current_resource
 	if not res:
 		return
-	var all_nodes := editor.getAllNodes()
+	var all_nodes := editor.getAllGraphNodes()
 	#for node in all_nodes:
-		#print( "Node %s is at %s" % [ node.name, node.position_offset ])
+		#node.flow_node.ui_position_offset = node.position_offset
+		#print( "Node %s is at %s" % [ node.name, node.ui_position_offset ])
 	var all_frames = editor.gedit.get_children().filter( func( n ):
 		return n is GraphFrame
 	)

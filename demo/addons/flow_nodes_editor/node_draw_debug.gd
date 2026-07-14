@@ -164,7 +164,7 @@ func setupDraw():
 			RenderingServer.multimesh_instance_set_transform( multimesh_rid, idx, t)
 
 	elif node.settings.debug_mode == NodeSettings.eDebugMode.ABSOLUTE:
-		var abs_scale := Vector3.ONE * node.settings.debug_scale
+		var abs_scale := Vector3.ONE * node.debug_scale
 		var positions := transforms.positions
 		var eulers := transforms.eulers
 		for idx in range( instance_count ):

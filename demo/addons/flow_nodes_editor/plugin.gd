@@ -115,7 +115,7 @@ func _selection_changed():
 	var scene_nodes = selection.get_selected_nodes()
 	if not scene_nodes.is_empty():
 		var scene_node = scene_nodes[0]
-		if scene_node is FlowGraphNode3D:
+		if scene_node is FlowGraphNodeUI:
 			setWatchedNode( scene_node )
 			graph_dock.setResourceToEdit( scene_node.graph, scene_node )
 			return

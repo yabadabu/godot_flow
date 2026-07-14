@@ -65,9 +65,8 @@ func unbindResourceFromEditor(res : FlowGraphResource):
 	FlowNodeIO.saveEditorStateToResource( self )
 	res.editor = null
 	res.in_params_changed.disconnect(_on_inputs_changed)
-	for node in getAllNodes():
+	for node in getAllGraphNodes():
 		#print( "unbindResourceFromEditor. kicking out %s" % node.name)
-		node.runtime_only = true
 		node.draw.disconnect( node._on_draw )
 		gedit.remove_child( node )
 	deleteFrames( getAllFrames() )
@@ -106,6 +105,7 @@ func bindResourceToEditor(res : FlowGraphResource):
 	
 func setResourceToEdit( new_resource : FlowGraphResource, new_resource_owner : FlowGraphNode3D ):
 	if new_resource and new_resource.loading:
+		print( "setResourceToEdit resource is loading" % [ new_resource] )
 		return
 	print( "setResourceToEdit:%s Owner:%s" % [ new_resource, new_resource_owner ] )
 	
@@ -137,13 +137,17 @@ func setResourceToEdit( new_resource : FlowGraphResource, new_resource_owner : F
 	if resource_owner:
 		queueRegen()
 	
-func onNodeCreated( node : FlowNodeBase ):
-	node.ui_scale = ui_scale
-	node.initFromScript()
-	refreshSignalsInputArgs( node )
-	gedit.add_child(node)
-	#print( "gedit.addChild %s" % [ node.name ])
-	node.draw.connect( node._on_draw )
+func onNodeCreated( node : FlowNodeBase ) -> FlowGraphNodeUI:
+	print( "onNodeCreated called ", node)
+	var ui_node := FlowGraphNodeUI.new()
+	#ui_node.ui_scale = ui_scale
+	ui_node.setFlowNode( node )
+	ui_node.initFromScript()
+	refreshSignalsInputArgs( ui_node )
+	gedit.add_child(ui_node)
+	print( "gedit.addChild %s" % [ node.name ])
+	ui_node.draw.connect( ui_node._on_draw )
+	return ui_node
 	
 func onConnCreated( conn : Dictionary ):
 	gedit.connect_node(conn.from_node, conn.from_port, conn.to_node, conn.to_port)
@@ -169,10 +173,12 @@ func onFrameCreated( frame_data : Dictionary ) -> GraphFrame:
 	return frame	
 	
 func refreshNodeSettingsPropertiesChanged( node_name : StringName ):
+	if current_resource == null:
+		return
 	# Refresh the state of the settings, to disable just recently connected setting
 	var node = current_resource.nodes_by_name.get( node_name, null )
 	if node:
-		node.settings.notify_property_list_changed()	
+		node.notify_property_list_changed()	
 	
 func saveResource():
 	FlowNodeIO.saveEditorStateToResource( self )
@@ -266,11 +272,13 @@ func _ready():
 	%AutoRegen.button_pressed = auto_regen
 	
 func onNodePropertyChanged( prop_name : String ):
-	if inspected_node and inspected_node is FlowNodeBase:
-		#print( "Node %s.%s has changed" % [ inspected_node.name, prop_name ])
-		inspected_node.onPropChanged( prop_name )
-		inspected_node.refreshFromSettings()
-		queueRegen()
+	if inspected_node and inspected_node is FlowGraphNodeUI:
+		var flow_node : FlowNodeBase = inspected_node.flow_node
+		if flow_node:
+			#print( "Node %s.%s has changed" % [ inspected_node.name, prop_name ])
+			flow_node.onPropChanged( prop_name )
+			flow_node.refreshFromSettings()
+			queueRegen()
 		
 # ------------------------------------------------
 func getSelectedFrames() -> Array[GraphFrame]:
@@ -304,14 +312,19 @@ func getSelectedNodes() -> Array[GraphNode]:
 			nodes.push_back(node)
 	return nodes
 
-func deleteNodes( nodes : Array[GraphNode] ):
-	for node in nodes:
-		for n in range( node.num_ports ):
-			remove_all_inputs_to_target_connection( node.name, n )
-		for n in range( node.getMeta().outs.size() ):
-			remove_all_inputs_to_source_connection( node.name, n )
-		gedit.remove_child( node )
-		current_resource.delete_node( node )
+func deleteNodes( graph_nodes : Array[GraphNode] ):
+	if current_resource == null:
+		return
+	for graph_node in graph_nodes:
+		var node = graph_node.flow_node
+		if node:
+			print( "Deleteing flow_node:", node)
+			for n in range( node.num_ports ):
+				remove_all_inputs_to_target_connection( node.name, n )
+			for n in range( node.getMeta().outs.size() ):
+				remove_all_inputs_to_source_connection( node.name, n )
+			current_resource.delete_node( node )
+		gedit.remove_child( graph_node )
 
 func deleteGraphElementsAndRefresh( nodes : Array[GraphNode], frames : Array[GraphFrame] ):
 	deleteFrames( frames )
@@ -393,15 +406,19 @@ func canConnect( src : FlowNodeBase, src_port : int, dst : FlowNodeBase, dst_por
 	return true
 	
 func addNode( node_template, settings = null ):
+	print( "addNode ", node_template, settings, current_resource )
 	if current_resource == null:
+		push_error( "Failed to spawn node from template %s. current resource is null" % node_template )
 		return
 	var node_name = getFactory().getNewName( node_template )
 	
 	var node = current_resource.addNodeFromTemplate( node_template, node_name, settings )
 	if not node:
+		push_error( "Failed to spawn node from template %s" % node_template )
 		return null
 	
-	node.position_offset = localToGraphCoords(local_drop_position)
+	var graph_node := onNodeCreated( node )
+	graph_node.position_offset = localToGraphCoords(local_drop_position)
 	
 	if auto_connect_from_node:
 		var source_node = current_resource.nodes_by_name.get( auto_connect_from_node )
@@ -415,8 +432,8 @@ func addNode( node_template, settings = null ):
 	
 	for prev_node in getSelectedNodes():
 		prev_node.selected = false
-	node.selected = true
-	node.visible = true
+	graph_node.selected = true
+	graph_node.visible = true
 	queueSave()
 	queueRegen()
 	return node
@@ -449,7 +466,7 @@ func _on_graph_edit_gui_input(event):
 		elif key == KEY_R:
 			if no_modifiers:
 				for node in getSelectedNodes():
-					node.dirty = true
+					node.flow_node.dirty = true
 					print( "node %s dirty" % node.name)
 				evalGraph()
 
@@ -505,8 +522,8 @@ func _on_graph_edit_node_selected(node):
 	
 	inspected_node = node
 	if inspected_node:
-		if inspected_node is FlowNodeBase:
-			inspector.edit( node.settings )
+		if inspected_node is FlowGraphNodeUI:
+			inspector.edit( node.flow_node )
 		elif inspected_node is GraphFrame:
 			inspector.edit( inspected_node )
 		
@@ -552,7 +569,6 @@ func _on_graph_edit_delete_nodes_request(node_names : Array):
 
 func _on_graph_edit_popup_request(at_position):
 	local_drop_position = at_position
-	
 	if popup_on_over_input:
 		var node = popup_on_over_input.getNode()
 		var pm := PopupMenu.new()
@@ -612,10 +628,10 @@ func _on_search_add_node_popup_input_selected(id : int):
 	var input = current_resource.in_params[id]
 	var node_type = "input_%s" % input.name
 	print( "Creating an input node: %s (%d) -> %s" % [ input.name, input.data_type, node_type] )
-	var settings := InputNodeSettings.new()
-	settings.name = input.name
-	#settings.data_type = input.data_type
-	return addNode( node_type, settings )
+	#var settings := InputNodeSettings.new()
+	#settings.name = input.name
+	##settings.data_type = input.data_type
+	#return addNode( node_type, settings )
 
 func _on_search_add_node_popup_action_selected(action_id : int):
 	if action_id == SearchAddNodePopup.ACTION_ADD_NEW_INPUT:
@@ -723,10 +739,10 @@ func _on_graph_edit_connection_from_empty(to_node: StringName, to_port: int, rel
 	local_drop_position = release_position
 	_on_graph_edit_popup_request( local_drop_position )
 
-func getAllNodes() -> Array[ FlowNodeBase ]:
-	var nodes : Array[ FlowNodeBase ] = []
+func getAllGraphNodes() -> Array[ FlowGraphNodeUI ]:
+	var nodes : Array[ FlowGraphNodeUI ] = []
 	for child in gedit.get_children():
-		var node = child as FlowNodeBase
+		var node = child as FlowGraphNodeUI
 		if not node:
 			continue
 		nodes.append( node )
@@ -749,10 +765,11 @@ func removeGeneratedNodes( flow_owner ):
 func cacheConnections():
 	
 	# Clear all the arrays
-	var nodes := getAllNodes()
-	for node in nodes:
-		node.deps.clear()
-		node.dependants.clear()
+	var graph_nodes := getAllGraphNodes()
+	for graph_node in graph_nodes:
+		var flow_node := graph_node.flow_node
+		flow_node.deps.clear()
+		flow_node.dependants.clear()
 			
 	# Add each connection to left and right sides
 	for conn in gedit.connections:
@@ -778,7 +795,7 @@ func evalGraph():
 		#print( active_nodes )
 		
 		for node in active_nodes:
-			if node.settings.inspect_enabled:
+			if node.inspect_enabled:
 				data_inspector.refresh()
 			node.setupDrawDebug()
 			if dump_performance:
@@ -867,9 +884,10 @@ func onEditorSceneChanged():
 	# This also triggers as dirty all scan_* nodes when we change
 	# anything in another of our nodes. Not very good
 	if current_resource and resource_owner:
-		for node in getAllNodes():
-			if node.getMeta().get( "scans_scene", false ):
-				node.onSceneChanged( resource_owner.ctx )
+		for graph_node in getAllGraphNodes():
+			var flow_node := graph_node.flow_node
+			if flow_node.getMeta().get( "scans_scene", false ):
+				flow_node.onSceneChanged( resource_owner.ctx )
 	queueRegen()
 
 # new_resource = res://graph02_curves.tres

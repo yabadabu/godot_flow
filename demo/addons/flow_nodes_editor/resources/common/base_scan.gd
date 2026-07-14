@@ -2,6 +2,13 @@
 class_name FlowBaseScanNode
 extends FlowNodeBase
 
+@export_group("Scan Nodes")
+@export var group_name : String
+@export var filter_by_name : String
+@export var import_metadata : bool = false
+@export var import_properties : Array[ StringName ]
+@export var required_meta_bool : StringName
+
 func importMetaData( output, nodes ):
 	var nsamples = nodes.size()
 	for idx in range( nsamples ):
@@ -33,7 +40,7 @@ func get_property_path( current, path_parts ):
 		if not current.has_method("get"): #" or not current.has_property(key):
 			print( "obj %s" % [ current ])
 			return null
-		if settings.trace:
+		if trace:
 			print( "current is %s. (%s)" % [ current, key ] )
 		
 		# Custom hand-made solution
@@ -46,7 +53,7 @@ func get_property_path( current, path_parts ):
 		if typeof( current ) == TYPE_CALLABLE:
 			current = current.call()
 			
-	if settings.trace:
+	if trace:
 		print( "Final %s returned value is %s Type:%d" % [ path_parts, current, typeof( current ) ] )
 	return current
 	
@@ -127,6 +134,38 @@ func importCommon( ctx : FlowData.EvaluationContext, output : FlowData.Data, nod
 	if getSettingValue( ctx, "import_metadata" ) as bool:
 		importMetaData( output, nodes )
 	
-	for prop_name in settings.import_properties:
+	for prop_name in import_properties:
 		if prop_name:
 			importProperty( output, nodes, prop_name )
+
+func findNodesMatchingFilters( ctx : FlowData.EvaluationContext, filter_by_class_name : String ) -> Array[ Node3D ]:
+
+	var group_name = getSettingValue( ctx, "group_name" )
+	var required_meta : StringName = required_meta_bool
+
+	var all_nodes : Array[Node] = []
+	if group_name:
+		all_nodes = ctx.owner.get_tree().get_nodes_in_group( group_name )
+	elif ctx.owner:
+		var root = getSceneRootNode3d( ctx.owner )
+		all_nodes = root.get_children()
+	
+	if trace:
+		print( "all_nodes", all_nodes )
+	
+	# Filter to only include nodes in the current scene
+	var scene_nodes : Array[ Node3D ] = []
+	for node in all_nodes:
+		var node3d := node as Node3D
+		if node3d:
+			if filter_by_class_name and not node3d.is_class( filter_by_class_name ):
+				if trace:
+					print( "%s.%s discarted by class_name %s" % [ node3d.name, node3d.get_class(), filter_by_class_name ])
+				continue
+
+			if not required_meta.is_empty():
+				if not node3d.has_meta( required_meta ) or not bool( node3d.get_meta( required_meta ) ):
+					continue
+	
+			scene_nodes.append(node3d)
+	return scene_nodes

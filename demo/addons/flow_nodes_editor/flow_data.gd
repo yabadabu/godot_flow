@@ -95,7 +95,7 @@ class EvaluationContext:
 	func getEvalOrder( all_nodes : Array[ FlowNodeBase ] ):
 		# Find targets, like spawn meshes
 		var finals := all_nodes.filter( func ( node : FlowNodeBase ) -> bool:
-			return ( not node.settings.disabled ) and ( node.settings.inspect_enabled or node.settings.debug_enabled or node.getMeta().get( "is_final", false ) )
+			return ( not node.disabled ) and ( node.inspect_enabled or node.debug_enabled or node.getMeta().get( "is_final", false ) )
 		)
 		#print( "Finals nodes are ", finals)
 		
@@ -180,7 +180,7 @@ class EvaluationContext:
 		eval_id += 1
 		active_nodes.clear()
 		for node in nodes_to_eval:
-			var trace_node := trace or node.settings.trace
+			var trace_node := trace or node.trace
 			if trace_node:
 				print( "  Eval: %s (%d) Dirty:%s" % [ node.name, node.eval_id, node.dirty ] )
 				
@@ -196,7 +196,7 @@ class EvaluationContext:
 			node.preExecute( self )
 			
 			#print( "Evaluating %s" % node.name )
-			if node.settings.disabled:
+			if node.disabled:
 				if trace_node:
 					print( "  %s is disabled. Skipping" % [ node.name ])
 				node.executedDisabled( self )

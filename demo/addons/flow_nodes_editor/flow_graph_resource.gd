@@ -94,21 +94,20 @@ func addNodeFromTemplate( node_template, node_name : String, node_settings = nul
 		node_name = factory.getNewName(node_template)
 		print( "will use new name %s" % [ node_name ])
 	
-	var node = factory.createNewNode( null, node_template, node_name, node_settings )
+	var node = factory.createNewNode( node_template, node_name, node_settings )
 	if node:
 		nodes_by_name[ node.name ] = node
 		all_nodes.append( node )
 		node.dirty = true
-		node.runtime_only = editor == null
 		node.flow_graph = self
-		if not node.settings.title:
-			node.settings.title = node.getTitle()
+		if not node.title:
+			node.title = node.getTitle()
 		
-		if node and node.settings and node.settings is InputNodeSettings:
-			input_nodes.append( node )
+		#if node and node.settings and node.settings is InputNodeSettings:
+			#input_nodes.append( node )
 		
-		if editor:
-			editor.onNodeCreated(node)
+		#if editor:
+			#editor.onNodeCreated(node)
 		
 		return node
 	
@@ -171,7 +170,7 @@ func delete_node( node : FlowNodeBase ):
 	nodes_by_name.erase( node_name )
 	all_nodes.erase( node )
 	input_nodes.erase( node )
-	node.queue_free()
+	#node.queue_free()
 
 func delete_frame( frame_name ):
 	var idx = all_frames.find_custom( func( c ) : return c.name == frame_name )

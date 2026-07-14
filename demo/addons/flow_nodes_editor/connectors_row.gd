@@ -14,8 +14,8 @@ func getInLabel() -> Label:
 func getOutLabel() -> Label:
 	return $LabelOut
 	
-func getNode() -> FlowNodeBase:
-	return get_parent() as FlowNodeBase
+func getNode() -> FlowGraphNodeUI:
+	return get_parent() as FlowGraphNodeUI
 
 func _on_label_in_mouse_entered():	
 	in_popup.emit()

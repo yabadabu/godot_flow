@@ -1,13 +1,36 @@
 @tool
 class_name FlowNodeBase
-extends GraphNode
+extends Resource
 
 # This represent the base class for all nodes in the flow graph
 # The actual nodes are implemented in the nodes subfolder
 
-const enable_development_info := false 
+enum eDebugMode {
+	EXTENDS,
+	ABSOLUTE,
+}
 
-@export var settings: NodeSettings
+@export_group("Common Settings")
+@export var name : StringName
+@export var title : String
+@export var random_seed: int = 12345
+
+@export var inspect_enabled: bool = false
+
+@export var debug_enabled: bool = false
+@export var debug_mode : eDebugMode = eDebugMode.EXTENDS
+@export var debug_scale : float = 1.0
+@export var debug_output: int = 0
+@export var debug_bulk: int = 0
+@export var debug_port_combined_index: int = 0
+
+@export var debug_color : Color = Color.WHITE
+@export var debug_modulate_by : String
+
+# Add any other common properties here
+@export var disabled: bool = false
+@export var trace: bool = false
+
 var rng : RandomNumberGenerator = RandomNumberGenerator.new()
 
 # Common attributes ------------------------------
@@ -25,14 +48,8 @@ var meta_node: Dictionary = {}
 
 var node_template : String
 var show_disconnected_inputs : bool = false
-var runtime_only : bool = false
 
 var dirty : bool = false
-var draw_node_name : bool = false
-
-# Helper to create the UI
-const connectors_row_prefab = preload( "res://addons/flow_nodes_editor/connectors_row.tscn" )
-const connectors_options_prefab = preload( "res://addons/flow_nodes_editor/connectors_options.tscn" )
 
 # Filled during runtime
 var deps : Array[ Dictionary ]			# Array of graphEdit connections where I'm the target
@@ -42,24 +59,27 @@ var err : String
 
 # Render
 var draw_debug : NodeDrawDebug
-var ui_scale = 1.0
-var marker_radius : float = 9
+var ui_scale : float = 1.0
+var ui_position_offset := Vector2.ZERO 
 
 var debug_row : int = -1
 var flow_graph : FlowGraphResource = null
+# Populated by the factor
+var template_name : String 
+
+signal settings_changed( prop_name : StringName )
 
 func _ready():
-	ignore_invalid_connection_type = true
 	checkDrawDebug()
-	updateStyle()
-	refreshInspectMark()
-	refreshDebugMark()
+	#updateStyle()
+	#refreshInspectMark()
+	#refreshDebugMark()
 	
 func checkDrawDebug():
 	if not is_instance_valid(draw_debug) or draw_debug.get_parent() != self:
 		draw_debug = NodeDrawDebug.new()
 		draw_debug.node = self
-		add_child(draw_debug)
+		#add_child(draw_debug)
 		# if the helper gets freed, clear our reference
 		draw_debug.tree_exited.connect(func(): draw_debug = null)
 		
@@ -70,7 +90,7 @@ func setupDrawDebug():
 func preExecute( ctx : FlowData.EvaluationContext ):
 	eval_id = ctx.eval_id
 	setError("")
-	rng.seed = settings.random_seed
+	rng.seed = random_seed
 	num_generated_bulks = 0
 	num_connected_bulks = 0
 	input_bulks = []
@@ -86,111 +106,52 @@ func preExecute( ctx : FlowData.EvaluationContext ):
 	if num_connected_bulks == 0:
 		num_connected_bulks = 1
 		
-func redrawUI():
-	queue_redraw()
-
-func refreshDebugMark():
-	redrawUI()
-
-func refreshInspectMark():
-	redrawUI()
-	
-func onPropChanged( prop_name : String ):
+func onPropChanged( prop_name : StringName ):
 	dirty = true
+	settings_changed.emit( prop_name )
 	
 func getCategory() -> String:
 	var meta := getMeta()
 	return meta.get( "category", "Others...")
 	
-func updateStyle():
-	var sb = get_theme_stylebox("titlebar", "GraphNode").duplicate(true)
-	var main_title_color = FlowNodeStyle.getCategoryColor( getCategory() )
-	sb.bg_color = main_title_color
-	sb.set_content_margin_all(0)
-	sb.content_margin_left = 8
-	sb.content_margin_right = 8
-	add_theme_stylebox_override("titlebar", sb)
-	sb = get_theme_stylebox("titlebar_selected", "GraphNode").duplicate(true)
-	sb.bg_color = main_title_color
-	sb.set_content_margin_all(0)
-	sb.content_margin_left = 8
-	sb.content_margin_right = 8
-	add_theme_stylebox_override("titlebar_selected", sb)
-	
 func refreshFromSettings():
-	refreshDebugMark()
-	refreshInspectMark()
-	title = getTitle()
-	modulate = Color( 0.7, 0.7, 0.7, 0.5 ) if settings.disabled else Color.WHITE
-	
-	if draw_debug and ( not settings.debug_enabled or settings.disabled ):
-		draw_debug.cleanup_multimesh_direct()
+	#refreshDebugMark()
+	#refreshInspectMark()
+	#title = getTitle()
+	#modulate = Color( 0.7, 0.7, 0.7, 0.5 ) if settings.disabled else Color.WHITE
+	#
+	#if draw_debug and ( not settings.debug_enabled or settings.disabled ):
+		#draw_debug.cleanup_multimesh_direct()
+	pass
 	
 func setError( new_err : String ):
-	if new_err:
-		push_error( "Node.Err %s : %s" % [ name, new_err ])
-		editor_state_changed.emit()
-	err = new_err
-	redrawUI()
-		
+	#if new_err:
+		#push_error( "Node.Err %s : %s" % [ name, new_err ])
+		#editor_state_changed.emit()
+	#err = new_err
+	#redrawUI()
+	pass
+
 func setActivity( amount : float ):
-	if settings.disabled:
+	if disabled:
 		return
-	if not err:
-		modulate = Color.WHITE + Color( amount, amount, amount, 0.0 )
-	else:
-		modulate = Color(1.0, 0.5, 0.5)
+	#if not err:
+		#modulate = Color.WHITE + Color( amount, amount, amount, 0.0 )
+	#else:
+		#modulate = Color(1.0, 0.5, 0.5)
+	pass
 
 func setExecTime(usec: int):
 	set_meta("exec_time_usec", usec)
-	if is_inside_tree():
-		queue_redraw()
-		
-func _on_draw() -> void:
-	
-	if not settings:
-		return
-
-	if err:
-		var sz = 16 * ui_scale
-		draw_string( ThemeDB.fallback_font, Vector2(0,size.y + sz), err, HORIZONTAL_ALIGNMENT_LEFT, -1, sz )
-		
-	if settings.inspect_enabled:
-		var clr : Color = Color.YELLOW / self_modulate
-		draw_circle( Vector2(0,0), marker_radius * ui_scale, clr )
-	if settings.debug_enabled:
-		var clr : Color = Color.CYAN / self_modulate
-		draw_circle( Vector2(size.x,0), marker_radius * ui_scale, clr )
-	
-	# Draw execution time badge (top-right, near titlebar)
-	var exec_time_usec = get_meta("exec_time_usec", 0)
-	if exec_time_usec > 100:
-		var time_font = ThemeDB.fallback_font
-		var time_font_size := int(11 * ui_scale)
-		var time_text: String
-		var time_color: Color
-		if exec_time_usec >= 10000:  # > 10ms — warning
-			time_text = "%.1f ms" % (exec_time_usec / 1000.0)
-			time_color = Color(1.0, 0.6, 0.2, 0.9)  # Warm orange
-		elif exec_time_usec >= 1000:  # 1-10ms
-			time_text = "%.1f ms" % (exec_time_usec / 1000.0)
-			time_color = Color(1, 1, 1, 0.4)
-		else:
-			time_text = "%d µs" % exec_time_usec
-			time_color = Color(1, 1, 1, 0.25)
-		var tw = time_font.get_string_size(time_text, HORIZONTAL_ALIGNMENT_LEFT, -1, time_font_size).x
-		var tx = size.x - tw - 8 * ui_scale
-		var ty = size.y - 9.0 * ui_scale
-		draw_string(time_font, Vector2(tx, ty), time_text, HORIZONTAL_ALIGNMENT_LEFT, -1, time_font_size, time_color)
-
-	if draw_node_name:
-		draw_string(ThemeDB.fallback_font, Vector2(2, -5), name, HORIZONTAL_ALIGNMENT_LEFT, -1, 12 * ui_scale)
+	#if is_inside_tree():
+		#queue_redraw()
+	pass
 
 func getMeta() -> Dictionary:
 	return meta_node
 	
 func getTitle() -> String:
-	return settings.title
+	return title
 
 func shuffleArray(arr: Array) -> void:
 	for i in range(arr.size() - 1, 0, -1):
@@ -205,25 +166,6 @@ static func editorDisplayName(property_name: String) -> String:
 		parts[i] = parts[i].capitalize()
 	return " ".join(parts)
 
-static func getColorForFlowDataType( data_type : FlowData.DataType ) -> Color:
-	match( data_type ):
-		FlowData.DataType.Bool:
-			return Color.RED
-		FlowData.DataType.Int:
-			return Color.CYAN
-		FlowData.DataType.Float:
-			return Color.WEB_GREEN
-		FlowData.DataType.Vector:
-			return Color.BLUE_VIOLET
-		FlowData.DataType.Color:
-			return Color("eab308")
-		FlowData.DataType.String:
-			return Color.YELLOW
-		FlowData.DataType.NodePath:
-			return Color.SKY_BLUE
-		FlowData.DataType.NodeMesh:
-			return Color.MAGENTA
-	return Color.WHEAT
 
 static func getGdScriptTypeForFlowDataType( data_type : FlowData.DataType ) -> int:
 	match( data_type ):
@@ -275,12 +217,12 @@ func getExposedParams():
 	var trace = meta.get( "trace", false )
 	
 	# transform_settings.gd
-	var settings_script_name = meta.settings.get_path().get_file()
+	var settings_script_name = get_path().get_file()
 	
 	#print( "Starting exposed params for %s -> myscr:%s" % [ str(meta), my_script ])
 	#print( "get_global_name:%s" % [ self.get_script().get_global_name() ])
 	
-	var props := settings.get_property_list()
+	var props := get_property_list()
 	var inside_my_vars := false
 	var params = []
 	for prop : Dictionary in props:
@@ -314,163 +256,8 @@ func getExposedParams():
 	return params
 
 func getEditor():
-	return flow_graph.editor if flow_graph else null
+	return flow_graph.editor if flow_graph != null else null
 
-func initFromScript():
-	
-	var flow_editor = getEditor()
-	if flow_editor == null:
-		return
-	
-	var meta := getMeta()
-	var trace = meta.get( "trace", false )
-	
-	if trace:
-		print( "initFromScript: %s" % getTitle())
-	
-	var ins = meta.get( "ins", [] )
-	var outs = meta.get( "outs", [] )
-	var num_ins = ins.size()
-	var num_outs = outs.size()
-	
-	var exposed_params = getExposedParams()
-	if trace:
-		print( "initFromScript.exposed_params: %s" % exposed_params.size())
-	var has_exposed_params = exposed_params.size() > 0
-	
-	# Access to my parent container editor
-	# We need to remember which nodes were connected as we might be expanded/contracting the list and want to 
-	# maintain the same connected entries
-	var connected_inputs_by_name = {}
-	for arg_name in args_ports_by_name:
-		var arg_port = args_ports_by_name[ arg_name ].port
-		var curr_connections = flow_editor.get_connected_sources( name, arg_port )
-		#print( "Checking if %s is connected at port %d -> %d conns" % [ arg_name, arg_port, curr_connections.size() ] )
-		if not curr_connections.is_empty():
-			connected_inputs_by_name[ arg_name ] = { "port" : arg_port, "conns" : curr_connections.duplicate() }
-			for old_conn in curr_connections:
-				var from_node = old_conn[0]
-				var from_port = old_conn[1]
-				flow_editor.disconnect_nodes( from_node, from_port, name, arg_port )
-	
-	if not show_disconnected_inputs:
-		exposed_params = exposed_params.filter( func( data ):
-			return args_ports_by_name.has( data.name ) and args_ports_by_name[ data.name ].connected
-		)
-		
-	if trace:
-		print( "initFromScript: %s" % getTitle())
-		print( "  flow_editor: %s" % flow_editor)
-		print( "  show_disconnected_inputs: %s" % show_disconnected_inputs)
-		print( "  all_exposed_params: %s" % exposed_params.size())
-		print( "  exposed_params: %s" % exposed_params.size())
-		print( "  args_ports_by_name: %s" % args_ports_by_name)
-		print( "  num_ins: %d num_outs: %d" % [num_ins, num_outs])
-		
-	# Total inputs are flow in streams + exposed parameters of the node
-	var num_inputs = num_ins + exposed_params.size()
-	num_ports = max( num_inputs, num_outs )
-	num_in_ports = num_inputs
-	num_out_ports = num_outs
-	
-	# Delete current children
-	clear_all_slots()
-	for child in get_children():
-		if child == draw_debug:
-			continue
-		child.queue_free()
-		remove_child( child )
-	
-	args_ports_by_name = {}
-	for idx in range( 0, num_ports ):
-		var ctrl = connectors_row_prefab.instantiate() as FlowConnectorRow
-		add_child( ctrl )
-		var lbl_in = ctrl.getInLabel()
-		var lbl_out = ctrl.getOutLabel()
-		
-		# Is there an input active
-		if idx < num_inputs:
-			var in_data
-			
-			# Decide if it's a flow input, or just a param input
-			if idx < num_ins:
-				in_data = ins[idx]
-			else:
-				in_data = exposed_params[ idx - num_ins ]
-			lbl_in.text = in_data.label
-			
-			var in_name = in_data.get( "name", in_data.label )
-			
-			set_slot_enabled_left( idx, true )
-			
-			# Change color
-			var data_type = in_data.get( "data_type", FlowData.DataType.Invalid )
-			if data_type == FlowData.DataType.Invalid and in_data.has( "type"):
-				data_type = getFlowDataTypeFromGdScriptType( in_data.type )
-			if data_type != FlowData.DataType.Invalid:
-				var color = getColorForFlowDataType( data_type )	
-				set_slot_color_left( idx, color )
-				set_slot_type_left( idx, data_type )
-			else:
-				set_slot_type_left( idx,  FlowData.DataType.Any )
-				
-			in_data.port = idx
-			ctrl.setData( in_data )
-			
-			args_ports_by_name[ in_name ] = { "port" : idx, "connected" : connected_inputs_by_name.has( in_name ) }
-			if trace:
-				print( "%s : Assigning slot %d for input %s" % [ name, idx, in_name ])
-		else:
-			lbl_in.text = ""
-			
-		if idx < num_outs:
-			var out_data = outs[idx]
-			if out_data:
-				lbl_out.text = out_data.label
-				set_slot_enabled_right( idx, true )
-					
-				# Change color
-				var data_type = out_data.get( "data_type", FlowData.DataType.Invalid )
-				if data_type == FlowData.DataType.Invalid and out_data.has( "type"):
-					data_type = getFlowDataTypeFromGdScriptType( out_data.type )
-				if data_type != FlowData.DataType.Invalid:
-					var color = getColorForFlowDataType( data_type )	
-					set_slot_color_right( idx, color )
-					set_slot_type_right( idx, data_type )					
-					
-		else:
-			lbl_out.text = ""
-	
-	# Add a button to show/hide all props and maybe more options in the future
-	if has_exposed_params:
-		var ctrl = connectors_options_prefab.instantiate() as FlowConnectorOptions
-		ctrl.setShowDisconnectedInputs( show_disconnected_inputs )
-		ctrl.expand_toggled.connect( nodeOptionsChanged )
-		add_child( ctrl )
-
-	# Force a readjust of the node in the flow editor
-	size = get_combined_minimum_size()
-	
-	if trace:
-		for arg_name in args_ports_by_name.keys():
-			print( "  %s : %s" % [ arg_name, args_ports_by_name[ arg_name ] ] )
-	
-	# Reconnect nodes
-	for arg_name in connected_inputs_by_name.keys():
-		var old_data = connected_inputs_by_name[ arg_name ]
-		var old_port = old_data.port
-		
-		# new_data might become invalid if the ins has changed
-		var new_data = args_ports_by_name.get( arg_name )
-		if new_data:
-			var new_port = new_data.port 
-			for old_conn in old_data.conns:
-				var from_node = old_conn[0]
-				var from_port = old_conn[1]
-				flow_editor.connect_nodes( from_node, from_port, name, new_port )
-		flow_editor.queueSave()
-	flow_editor.refreshSignalsInputArgs( self )
-	
 func refreshConnectionFlags( ):	
 	var editor = getEditor()
 	if editor:
@@ -480,15 +267,15 @@ func refreshConnectionFlags( ):
 func nodeOptionsChanged( expanded : bool ):
 	show_disconnected_inputs = expanded
 	refreshConnectionFlags( )
-	initFromScript()
+	#initFromScript()
 	#setupDrawDebug()
 	
 # This returns the current value of the input configuration taking into account potencial connections and overrides of the inputs
 func getSettingValue( ctx : FlowData.EvaluationContext, in_name : String, default_value = null):
 	var meta = getMeta()
-	var trace = meta.get( "trace", false ) or settings.trace
+	var trace = meta.get( "trace", false ) or trace
 	
-	var value = settings.get( in_name )
+	var value = get( in_name )
 	if value == null:
 		value = default_value
 	if trace:
@@ -577,38 +364,6 @@ func getSceneRootNode3d( current : Node3D ) -> Node3D:
 		current = current.get_parent_node_3d()
 	return current
 
-func findNodesMatchingFilters( ctx : FlowData.EvaluationContext, filter_by_class_name : String ) -> Array[ Node3D ]:
-
-	var group_name = getSettingValue( ctx, "group_name" )
-	var required_meta : StringName = settings.required_meta_bool
-
-	var all_nodes : Array[Node] = []
-	if group_name:
-		all_nodes = ctx.owner.get_tree().get_nodes_in_group( group_name )
-	elif ctx.owner:
-		var root = getSceneRootNode3d( ctx.owner )
-		all_nodes = root.get_children()
-	
-	if settings.trace:
-		print( "all_nodes", all_nodes )
-	
-	# Filter to only include nodes in the current scene
-	var scene_nodes : Array[ Node3D ] = []
-	for node in all_nodes:
-		var node3d := node as Node3D
-		if node3d:
-			if filter_by_class_name and not node3d.is_class( filter_by_class_name ):
-				if settings.trace:
-					print( "%s.%s discarted by class_name %s" % [ node3d.name, node3d.get_class(), filter_by_class_name ])
-				continue
-
-			if not required_meta.is_empty():
-				if not node3d.has_meta( required_meta ) or not bool( node3d.get_meta( required_meta ) ):
-					continue
-	
-			scene_nodes.append(node3d)
-	return scene_nodes
-
 # --------------------------------------------------------------------------
 func set_output( port_idx : int, data : FlowData.Data ):
 	if port_idx == 0:
@@ -618,7 +373,7 @@ func set_output( port_idx : int, data : FlowData.Data ):
 	if port_idx >= bulk.size():
 		bulk.resize( port_idx + 1 )
 	bulk[ port_idx ] = data
-	if settings.trace:
+	if trace:
 		if data:
 			print( "%s Saving bulk %d, port %d with %s (%d entries)" % [ name, num_generated_bulks - 1, port_idx, data.streams.keys(), data.size() ] )
 		else:
@@ -675,7 +430,7 @@ func readAllInputsForBulk( ctx : FlowData.EvaluationContext, bulk_idx : int ):
 	var num_inputs : int = getMeta().ins.size()
 	for port_idx in range( num_inputs ):
 		var input =  _getInputForBulkInContext( ctx, bulk_idx, port_idx )
-		if settings.trace:
+		if trace:
 			print( "%s Input for bulk %d port %d is %s" % [ name, bulk_idx, port_idx, input ])
 		inputs.append(input)
 		
@@ -733,15 +488,15 @@ func onSceneChanged( ctx : FlowData.EvaluationContext ):
 
 func run( ctx : FlowData.EvaluationContext ):
 	for bulk_index in range( num_connected_bulks ):
-		if settings.trace:
+		if trace:
 			print( "%s Preparing inputs for bulk %d/%d" % [ name, bulk_index, num_connected_bulks ])
 		readAllInputsForBulk( ctx, bulk_index )
-		if settings.trace:
+		if trace:
 			print( "%s Inputs for bulk %d/%d are %s (%d)" % [ name, bulk_index, num_connected_bulks, inputs, inputs.size() ])
 		execute( ctx )
 
 func removeRegisteredInstancedNodes( spawn_parent : Node3D ):
-	if settings.trace:
+	if trace:
 		print( "%s.removeRegisteredInstancedNodes( %s )" % [ name, spawn_parent.name ] )
 	var nodes : Array[Node] = []
 	if spawn_parent:
@@ -751,29 +506,17 @@ func removeRegisteredInstancedNodes( spawn_parent : Node3D ):
 			if child.get_meta( "flow_owner" ) == name:
 				nodes.append( child )
 	for node in nodes:
-		if settings.trace:
+		if trace:
 			print( "  Removing %s" % [ node.name ] )
 		node.name += "_removed"
 		node.queue_free()
 
 func registerInstancedNode( new_owner : Node3D, new_parent : Node3D, child : Node3D ):
-	if settings.trace:
+	if trace:
 		print( "%s.registerInstancedNode( Owner:%s, Parent:%s, Child:%s )" % [ name, new_owner.name, new_parent.name, child.name ] )
 	new_parent.add_child( child )
 	child.owner = new_owner
 	child.set_meta("flow_owner", name )
-
-func _make_custom_tooltip(for_text: String) -> Object:
-	var tooltip = preload("res://addons/flow_nodes_editor/resources/tooltip.tscn").instantiate()
-	var meta : Dictionary = getMeta()
-	var extras : String = "\n\n" + str(args_ports_by_name) if enable_development_info else ""
-	var new_text := "[b]%s[/b] %s\n\n%s" % [
-		meta.title, 
-		name,
-		for_text + extras
-		]
-	tooltip.set_tooltip_text( new_text )
-	return tooltip
 
 func is_input_connected( what : StringName ) -> bool:
 	return args_ports_by_name.has( what ) and args_ports_by_name.get( what ).connected
