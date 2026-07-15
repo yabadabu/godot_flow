@@ -225,7 +225,8 @@ func _process(delta: float) -> void:
 		if active_intensity < 0:
 			active_intensity = 0.0
 		for node in active_nodes:
-			node.setActivity( active_intensity )
+			if node.ui_node:
+				node.ui_node.setActivity( active_intensity )
 			
 		if active_intensity == 0:
 			active_nodes.clear()
@@ -813,12 +814,12 @@ func evalGraph():
 		var performance = []
 		resource_owner.ctx.computeDirtyNodesAndRun()
 		active_nodes = resource_owner.ctx.active_nodes
-		#print( active_nodes )
+		#print( "ctx.Active_nodes: ", active_nodes )
 		
 		for node in active_nodes:
 			if node.inspect_enabled:
 				data_inspector.refresh()
-			node.notifyChange()
+			node.contents_changed.emit()
 			if dump_performance:
 				performance.append( { "name": node.name, "time": node.get_meta("exec_time_usec", 0) })
 

@@ -41,7 +41,7 @@ class EvaluationContext:
 	
 	# Filled by the user of the context
 	var nodes_to_eval : Array[ FlowNodeBase ]
-	var active_nodes = []
+	var active_nodes : Array[ FlowNodeBase ]
 	
 	# Priority:
 	#   ctx.inputs
@@ -179,7 +179,7 @@ class EvaluationContext:
 		
 		eval_id += 1
 		active_nodes.clear()
-		for node in nodes_to_eval:
+		for node : FlowNodeBase in nodes_to_eval:
 			var trace_node := trace or node.trace
 			if trace_node:
 				print( "  Eval: %s (%d) Dirty:%s" % [ node.name, node.eval_id, node.dirty ] )

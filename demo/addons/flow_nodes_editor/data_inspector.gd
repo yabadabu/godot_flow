@@ -43,7 +43,7 @@ func setNode( new_node : FlowNodeBase ):
 		node.debug_port_combined_index = current_port_combined_index
 		node.inspect_enabled = false
 		print( "Saving %s Bulk:%d Index:%d" % [node.name, current_bulk_index, current_port_combined_index ])
-		#node.refreshFromSettings()
+		node.notifyChange()
 		
 	if node != new_node and new_node:
 		node = new_node
@@ -303,7 +303,7 @@ func onCellClicked( row : int, col : int ):
 	if node:
 		if row < visible_rows.size():
 			node.debug_row = visible_rows[row]
-			node.setupDrawDebug()
+			node.contents_changed.emit()
 
 func _ready():
 	tv.cell_clicked.connect( onCellClicked )

@@ -60,6 +60,7 @@ var err : String
 # Render
 var ui_scale : float = 1.0
 var ui_position_offset := Vector2.ZERO 
+var ui_node : FlowGraphNodeUI = null
 
 var debug_row : int = -1
 var flow_graph : FlowGraphResource = null
@@ -68,6 +69,7 @@ var flow_graph : FlowGraphResource = null
 var template_name : String 
 
 signal settings_changed( prop_name : StringName )
+signal contents_changed
 
 func exposeParam( name : String ) -> bool:
 	return true
@@ -122,15 +124,6 @@ func setError( new_err : String ):
 		#editor_state_changed.emit()
 	#err = new_err
 	#redrawUI()
-	pass
-
-func setActivity( amount : float ):
-	if disabled:
-		return
-	#if not err:
-		#modulate = Color.WHITE + Color( amount, amount, amount, 0.0 )
-	#else:
-		#modulate = Color(1.0, 0.5, 0.5)
 	pass
 
 func setExecTime(usec: int):

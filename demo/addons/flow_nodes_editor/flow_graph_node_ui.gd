@@ -16,9 +16,21 @@ func _ready():
 	ignore_invalid_connection_type = true
 	updateStyle()
 	
+func _exit_tree():
+	if flow_node and flow_node.ui_node == self:
+		flow_node.ui_node = null
+	
 func redrawUI():
 	queue_redraw()
 
+func setActivity( amount : float ):
+	if flow_node.disabled:
+		return
+	if not flow_node.err:
+		modulate = Color.WHITE + Color( amount, amount, amount, 0.0 )
+	else:
+		modulate = Color(1.0, 0.5, 0.5)
+	
 func checkDrawDebug():
 	if flow_node and not is_instance_valid(draw_debug) or draw_debug.get_parent() != self:
 		draw_debug = NodeDrawDebug.new()
@@ -29,9 +41,11 @@ func checkDrawDebug():
 
 func setFlowNode( new_node : FlowNodeBase ):
 	if flow_node == new_node or ( flow_node == null and new_node != null ):
-		flow_node = new_node 
+		flow_node = new_node
+		flow_node.ui_node = self
 		position_offset = flow_node.ui_position_offset
 		flow_node.settings_changed.connect( regenerateFromFlowNode )
+		flow_node.contents_changed.connect( refreshDebug )
 		position_offset_changed.connect( on_moved )
 		regenerateFromFlowNode( StringName() )
 
@@ -47,6 +61,9 @@ func regenerateFromFlowNode( PropName : StringName = StringName() ):
 	self.title = flow_node.getTitle()
 	self.name = flow_node.name
 	modulate = Color( 0.7, 0.7, 0.7, 0.5 ) if flow_node.disabled else Color.WHITE
+	refreshDebug()
+
+func refreshDebug():
 	queue_redraw()
 	if flow_node.debug_enabled:
 		checkDrawDebug()
@@ -102,7 +119,6 @@ func _make_custom_tooltip(for_text: String) -> Object:
 	return tooltip	
 	
 func _on_draw() -> void:
-	
 	if not flow_node:
 		return
 
@@ -121,8 +137,8 @@ func _on_draw() -> void:
 		draw_circle( Vector2(size.x,0), marker_radius * ui_scale, clr )
 	
 	# Draw execution time badge (top-right, near titlebar)
-	var exec_time_usec = get_meta("exec_time_usec", 0)
-	if exec_time_usec > 100:
+	var exec_time_usec = flow_node.get_meta("exec_time_usec", 0)
+	if exec_time_usec > 10:
 		var time_font = ThemeDB.fallback_font
 		var time_font_size := int(11 * ui_scale)
 		var time_text: String
