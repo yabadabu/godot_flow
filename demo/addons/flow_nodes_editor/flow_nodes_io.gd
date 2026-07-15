@@ -7,6 +7,7 @@ const discardted_props = {
 	"resource_local_to_scene" : 1,
 	"resource_name" : 1,
 	"metadata/_custom_type_script" : 1,
+	"metadata/exec_time_usec" : 1,
 	"script" : 1,
 	"data" : 1,
 }
@@ -137,7 +138,7 @@ static func nodes_as_dict( nodes, frames, editor : FlowGraphEditor ):
 	var nodes_clean = nodes.map( func( ui_node : FlowGraphNodeUI ):
 		var node = ui_node.flow_node
 		exported_node_names[ node.name ] = 1
-		node.refreshConnectionFlags()
+		node.refreshConnectionFlags( editor )
 		var template_name = node.template_name
 		print( "Name", template_name, " Meta:", node.getMeta() )
 		return {
@@ -189,8 +190,8 @@ static func _paste_nodes_from_dict( dict, editor : FlowGraphEditor, at_graph_coo
 	var new_nodes = create_nodes_from_dict( dict, editor.current_resource, graph_coords )
 	
 	# Update selection
-	for node in editor.getSelectedNodes():
-		node.selected = false
+	for graph_node in editor.getSelectedGraphNodes():
+		graph_node.selected = false
 		
 	if new_nodes:
 		for node in new_nodes:
@@ -260,9 +261,9 @@ static func create_nodes_from_dict( dict, graph : FlowGraphResource, paste_offse
 	return new_nodes
 
 static func copySelectionToClipboard( editor : FlowGraphEditor ):
-	var nodes = editor.getSelectedNodes()
+	var graph_nodes = editor.getSelectedGraphNodes()
 	var frames = editor.getSelectedFrames()
-	var json_str = JSON.stringify( nodes_as_dict( nodes, frames, editor ), "\t")
+	var json_str = JSON.stringify( nodes_as_dict( graph_nodes, frames, editor ), "\t")
 	DisplayServer.clipboard_set( json_str )
 
 static func pasteNodeFromClipboard( editor : FlowGraphEditor ):
@@ -271,9 +272,9 @@ static func pasteNodeFromClipboard( editor : FlowGraphEditor ):
 	_paste_nodes_from_dict( dict, editor )
 
 static func duplicateSelecteddNodes( editor : FlowGraphEditor ):
-	var nodes = editor.getSelectedNodes()
+	var graph_nodes = editor.getSelectedGraphNodes()
 	var frames = editor.getSelectedFrames()
-	var dict = nodes_as_dict(nodes, frames, editor )
+	var dict = nodes_as_dict(graph_nodes, frames, editor )
 	_paste_nodes_from_dict( dict, editor )
 
 static func saveEditorStateToResource( editor : FlowGraphEditor ):

@@ -142,7 +142,7 @@ func onNodeCreated( node : FlowNodeBase ) -> FlowGraphNodeUI:
 	var ui_node := FlowGraphNodeUI.new()
 	#ui_node.ui_scale = ui_scale
 	ui_node.setFlowNode( node )
-	ui_node.initFromScript()
+	ui_node.initFromScript( self )
 	refreshSignalsInputArgs( ui_node )
 	gedit.add_child(ui_node)
 	print( "gedit.addChild %s" % [ node.name ])
@@ -381,18 +381,25 @@ func refreshSignalsInputArgs( node ):
 		if row.out_popup.get_connections().is_empty():
 			row.out_popup.connect( setOnOverInParam.bind( null ) )	
 	
-func canConnect( src : FlowNodeBase, src_port : int, dst : FlowNodeBase, dst_port : int ):
+func findNodeByName( node_name : StringName ) -> FlowGraphNodeUI:
+	for child in gedit.get_children():
+		var graph_node = child as GraphNode
+		if graph_node and graph_node.flow_node and graph_node.flow_node.name == node_name:
+			return graph_node
+	return null
+	
+func canConnect( src : FlowGraphNodeUI, src_port : int, dst : FlowGraphNodeUI, dst_port : int ):
 	# Discard self connections and null values
 	if dst == src or src == null or dst == null:
 		push_warning( "canConnect. Invalid inputs: ", src, " <-> ", dst )
 		return false
 		
 	# Check Slot numbers
-	if dst_port >= dst.num_in_ports:
-		push_warning( "canConnect. dst_port(%d) >= num_in_ports(%d) dst:%s" % [ dst_port, dst.num_in_ports, dst.name ])
+	if dst_port >= dst.flow_node.num_in_ports:
+		push_warning( "canConnect. dst_port(%d) >= num_in_ports(%d) dst:%s" % [ dst_port, dst.flow_node.num_in_ports, dst.name ])
 		return false
-	if src_port >= src.num_out_ports:
-		push_warning( "canConnect. src_port(%d) >= num_out_ports(%d) src:%s" % [ src_port, src.num_out_ports, src.name ])
+	if src_port >= src.flow_node.num_out_ports:
+		push_warning( "canConnect. src_port(%d) >= num_out_ports(%d) src:%s" % [ src_port, src.flow_node.num_out_ports, src.name ])
 		return false
 		
 	var src_type = src.get_output_port_type( src_port )
@@ -421,12 +428,12 @@ func addNode( node_template, settings = null ):
 	graph_node.position_offset = localToGraphCoords(local_drop_position)
 	
 	if auto_connect_from_node:
-		var source_node = current_resource.nodes_by_name.get( auto_connect_from_node )
+		var source_node = findNodeByName( auto_connect_from_node )
 		if canConnect( source_node, auto_connect_from_port, node, 0 ):
 			current_resource.connect_nodes(auto_connect_from_node, auto_connect_from_port, node.name, 0)
 		
 	if auto_connect_to_node:
-		var target_node = current_resource.nodes_by_name.get( auto_connect_to_node )
+		var target_node = findNodeByName( auto_connect_to_node )
 		if canConnect( node, 0, target_node, auto_connect_to_port ):
 			current_resource.connect_nodes(node.name, 0, auto_connect_to_node, auto_connect_to_port )
 	
@@ -674,13 +681,24 @@ func findConnectionToNodeAndPort( node : FlowNodeBase, in_port : int ):
 	return null
 
 func _on_graph_edit_connection_request(from_node: StringName, from_port: int, to_node: StringName, to_port: int) -> void:
-	var src_node = current_resource.nodes_by_name.get( from_node )
-	var dst_node = current_resource.nodes_by_name.get( to_node )
-	if not canConnect( src_node, from_port, dst_node, to_port ):
+	print( "current_resource: %s [%s:%d]<->[%s:%d]" % [ current_resource, from_node, from_port, to_node, to_port ] )
+	print( "  .nodes_by_name: %s" % current_resource.nodes_by_name )
+	var src_graph_node = findNodeByName( from_node )
+	var dst_graph_node = findNodeByName( to_node )
+	if src_graph_node == null:
+		print( "Failed to find source node")
 		return
-	#print( "Conn request")
-	#print( "  from %s" % src_node )
-	#print( "    to %s" % dst_node )
+	if dst_graph_node == null:
+		print( "Failed to find dst_flow_node node")
+		return
+	if not canConnect( src_graph_node, from_port, dst_graph_node, to_port ):
+		print( "Failed to connect %s to %s" % [ from_node, to_node ])
+		return
+	var src_node = src_graph_node.flow_node
+	var dst_node = dst_graph_node.flow_node
+	print( "Conn request")
+	print( "  from %s" % src_node )
+	print( "    to %s" % dst_node )
 	
 	# Check if the input does not allow multiple connections
 	var to_port_meta = dst_node.getMeta().ins[ to_port ] if to_port < dst_node.getMeta().ins.size() else {}
@@ -799,7 +817,7 @@ func evalGraph():
 		for node in active_nodes:
 			if node.inspect_enabled:
 				data_inspector.refresh()
-			node.setupDrawDebug()
+			node.notifyChange()
 			if dump_performance:
 				performance.append( { "name": node.name, "time": node.get_meta("exec_time_usec", 0) })
 

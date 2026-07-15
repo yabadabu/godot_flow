@@ -53,7 +53,7 @@ func setNode( new_node : FlowNodeBase ):
 		print( "Reading %s Bulk:%d Index:%d" % [node.name, current_bulk_index, current_port_combined_index ])
 		_on_slot_selector_item_selected( current_port_combined_index )
 		current_bulk_index = node.debug_bulk
-		node.setupDrawDebug()
+		node.notifyChange()
 	else:
 		node = null
 		refresh()
@@ -269,7 +269,7 @@ func refresh():
 			if node.debug_bulk != current_bulk_index:
 				print( "Updating node.debug_bulk to %d" % [ current_bulk_index ])
 				node.debug_bulk = current_bulk_index
-				node.setupDrawDebug()				
+				node.notifyChange()				
 				
 			data = node.get_bulk_output( current_bulk_index, current_port_index )
 			#print( "Requesting out bulk %d:%d -> %s" % [ current_bulk_index, current_port_index, data ])

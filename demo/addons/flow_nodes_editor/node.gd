@@ -58,7 +58,6 @@ var eval_id : int = 0
 var err : String
 
 # Render
-var draw_debug : NodeDrawDebug
 var ui_scale : float = 1.0
 var ui_position_offset := Vector2.ZERO 
 
@@ -68,24 +67,11 @@ var flow_graph : FlowGraphResource = null
 var template_name : String 
 
 signal settings_changed( prop_name : StringName )
-
-func _ready():
-	checkDrawDebug()
-	#updateStyle()
-	#refreshInspectMark()
-	#refreshDebugMark()
-	
-func checkDrawDebug():
-	if not is_instance_valid(draw_debug) or draw_debug.get_parent() != self:
-		draw_debug = NodeDrawDebug.new()
-		draw_debug.node = self
-		#add_child(draw_debug)
-		# if the helper gets freed, clear our reference
-		draw_debug.tree_exited.connect(func(): draw_debug = null)
 		
 func setupDrawDebug():
-	checkDrawDebug()
-	draw_debug.setupDraw()
+	#checkDrawDebug()
+	#draw_debug.setupDraw()
+	pass
 
 func preExecute( ctx : FlowData.EvaluationContext ):
 	eval_id = ctx.eval_id
@@ -105,23 +91,19 @@ func preExecute( ctx : FlowData.EvaluationContext ):
 	)
 	if num_connected_bulks == 0:
 		num_connected_bulks = 1
-		
+
 func onPropChanged( prop_name : StringName ):
 	dirty = true
 	settings_changed.emit( prop_name )
+	
+func notifyChange():
+	settings_changed.emit( StringName() )
 	
 func getCategory() -> String:
 	var meta := getMeta()
 	return meta.get( "category", "Others...")
 	
 func refreshFromSettings():
-	#refreshDebugMark()
-	#refreshInspectMark()
-	#title = getTitle()
-	#modulate = Color( 0.7, 0.7, 0.7, 0.5 ) if settings.disabled else Color.WHITE
-	#
-	#if draw_debug and ( not settings.debug_enabled or settings.disabled ):
-		#draw_debug.cleanup_multimesh_direct()
 	pass
 	
 func setError( new_err : String ):
@@ -255,20 +237,14 @@ func getExposedParams():
 		params.append( data )
 	return params
 
-func getEditor():
-	return flow_graph.editor if flow_graph != null else null
-
-func refreshConnectionFlags( ):	
-	var editor = getEditor()
-	if editor:
-		for arg_name in args_ports_by_name:
-			args_ports_by_name[ arg_name ].connected = editor.is_node_port_connected( name, args_ports_by_name[ arg_name ].port )
-		
+func refreshConnectionFlags( editor : FlowGraphEditor ):	
+	for arg_name in args_ports_by_name:
+		args_ports_by_name[ arg_name ].connected = editor.is_node_port_connected( name, args_ports_by_name[ arg_name ].port )
+	
 func nodeOptionsChanged( expanded : bool ):
 	show_disconnected_inputs = expanded
-	refreshConnectionFlags( )
+	#refreshConnectionFlags( )
 	#initFromScript()
-	#setupDrawDebug()
 	
 # This returns the current value of the input configuration taking into account potencial connections and overrides of the inputs
 func getSettingValue( ctx : FlowData.EvaluationContext, in_name : String, default_value = null):

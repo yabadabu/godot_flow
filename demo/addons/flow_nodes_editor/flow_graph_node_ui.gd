@@ -2,6 +2,7 @@ extends GraphNode
 class_name FlowGraphNodeUI
 
 var flow_node : FlowNodeBase
+var draw_debug : NodeDrawDebug
 
 const enable_development_info := false 
 const marker_radius : float = 9
@@ -23,6 +24,14 @@ func refreshDebugMark():
 func refreshInspectMark():
 	redrawUI()
 
+func checkDrawDebug():
+	if flow_node and not is_instance_valid(draw_debug) or draw_debug.get_parent() != self:
+		draw_debug = NodeDrawDebug.new()
+		draw_debug.node = flow_node
+		add_child(draw_debug)
+		# if the helper gets freed, clear our reference
+		draw_debug.tree_exited.connect(func(): draw_debug = null)
+
 func setFlowNode( new_node : FlowNodeBase ):
 	if flow_node == new_node or ( flow_node == null and new_node != null ):
 		flow_node = new_node 
@@ -36,13 +45,19 @@ func on_moved():
 		flow_node.ui_position_offset = position_offset
 
 func regenerateFromFlowNode( PropName : StringName = StringName() ):
-	print( "node_ui.regenerate")
-	if flow_node:
-		var meta : Dictionary = flow_node.getMeta()
-		self.tooltip_text = meta.get( "tooltip" )
-		self.title = flow_node.getTitle()
-		modulate = Color( 0.7, 0.7, 0.7, 0.5 ) if flow_node.disabled else Color.WHITE
-		queue_redraw()
+	if flow_node == null:
+		return
+	var meta : Dictionary = flow_node.getMeta()
+	self.tooltip_text = meta.get( "tooltip" )
+	self.title = flow_node.getTitle()
+	self.name = flow_node.name
+	modulate = Color( 0.7, 0.7, 0.7, 0.5 ) if flow_node.disabled else Color.WHITE
+	queue_redraw()
+	if flow_node.debug_enabled:
+		checkDrawDebug()
+		draw_debug.setupDraw()
+	if draw_debug and ( not flow_node.debug_enabled or flow_node.disabled ):
+		draw_debug.cleanup_multimesh_direct()
 
 func updateStyle():
 	var sb = get_theme_stylebox("titlebar", "GraphNode").duplicate(true)
@@ -135,12 +150,11 @@ func _on_draw() -> void:
 		draw_string(ThemeDB.fallback_font, Vector2(2, -5), name, HORIZONTAL_ALIGNMENT_LEFT, -1, 12 * ui_scale)
 
 
-func initFromScript():
+func initFromScript( flow_editor : FlowGraphEditor ):
 	
 	if not flow_node:
 		return
 	
-	var flow_editor = flow_node.getEditor()
 	if flow_editor == null:
 		return
 	
@@ -198,7 +212,7 @@ func initFromScript():
 	# Delete current children
 	clear_all_slots()
 	for child in get_children():
-		if child == flow_node.draw_debug:
+		if child == draw_debug:
 			continue
 		child.queue_free()
 		remove_child( child )
