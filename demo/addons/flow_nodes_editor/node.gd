@@ -63,11 +63,21 @@ var ui_position_offset := Vector2.ZERO
 
 var debug_row : int = -1
 var flow_graph : FlowGraphResource = null
+#var node_ui : FlowGraphNodeUI = null
 # Populated by the factor
 var template_name : String 
 
 signal settings_changed( prop_name : StringName )
-		
+
+func exposeParam( name : String ) -> bool:
+	return true
+
+# Show the setting entries as 'disabled' when they are connected to other nodes
+# controlling the values
+func _validate_property(property: Dictionary) -> void:
+	if is_input_connected( property.name ):
+		property.usage |= PROPERTY_USAGE_READ_ONLY
+
 func setupDrawDebug():
 	#checkDrawDebug()
 	#draw_debug.setupDraw()
@@ -197,12 +207,11 @@ func getExposedParams():
 	if meta.get( "hide_inputs", false ):
 		return []
 	var trace = meta.get( "trace", false )
-	
-	# transform_settings.gd
-	var settings_script_name = get_path().get_file()
-	
+	trace = true
+	# transform.gd
+	var settings_script_name = template_name + ".gd" #get_path().get_file()
 	#print( "Starting exposed params for %s -> myscr:%s" % [ str(meta), my_script ])
-	#print( "get_global_name:%s" % [ self.get_script().get_global_name() ])
+	print( "settings_script_name:%s" % [ settings_script_name])
 	
 	var props := get_property_list()
 	var inside_my_vars := false
@@ -211,7 +220,7 @@ func getExposedParams():
 		var pname : String = prop.name
 		if trace:
 			print( "Input. %s - %s Type:%d:%d:%s Usage:%d" % [ prop.name, prop.class_name, prop.type, prop.hint, prop.hint_string, prop.usage ] )
-		if pname == "node_settings.gd":
+		if pname == "Common Settings":
 			break
 		if pname == "HiddenFromThisPoint":
 			break
@@ -240,11 +249,7 @@ func getExposedParams():
 func refreshConnectionFlags( editor : FlowGraphEditor ):	
 	for arg_name in args_ports_by_name:
 		args_ports_by_name[ arg_name ].connected = editor.is_node_port_connected( name, args_ports_by_name[ arg_name ].port )
-	
-func nodeOptionsChanged( expanded : bool ):
-	show_disconnected_inputs = expanded
-	#refreshConnectionFlags( )
-	#initFromScript()
+
 	
 # This returns the current value of the input configuration taking into account potencial connections and overrides of the inputs
 func getSettingValue( ctx : FlowData.EvaluationContext, in_name : String, default_value = null):

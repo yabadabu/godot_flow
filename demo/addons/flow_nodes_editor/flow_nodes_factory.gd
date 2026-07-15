@@ -57,6 +57,7 @@ func createNewNode( node_template : String, node_name : String, in_settings = nu
 	print( "node_name:", node_name )
 	print( "flow_node:", flow_node )
 	flow_node.template_name = node_template
+	flow_node.random_seed = randi()
 	if in_settings: 
 		FlowNodeIO.dict_to_resource( in_settings, flow_node )
 	flow_node.name = node_name

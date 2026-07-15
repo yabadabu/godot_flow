@@ -1,8 +1,6 @@
 @tool
 extends FlowNodeBase
 
-@export_group("Transform")
-
 @export var offset_min := Vector3(0,0,0)
 @export var offset_max := Vector3(0,0,0)
 @export var offset_local_space := true

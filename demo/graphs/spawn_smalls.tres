@@ -3,118 +3,75 @@
 [ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="1_7eoxu"]
 [ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="2_j4j53"]
 
-[sub_resource type="Resource" id="Resource_7eoxu"]
-script = ExtResource("1_7eoxu")
-name = "In"
-is_constant = false
-metadata/_custom_type_script = "uid://co0f3ugd2wj1y"
-
 [resource]
 script = ExtResource("2_j4j53")
 data = {
 "frames": [],
 "links": [{
-"from_node": &"id_0022_make_vector",
+"from_node": &"id_0002_grid",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0006_make_bounds",
+"to_node": &"id_0001_select_points",
 "to_port": 0
 }, {
-"from_node": &"id_0005_make_float",
+"from_node": &"id_0001_make_float",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0022_make_vector",
-"to_port": 0
+"to_node": &"id_0001_select_points",
+"to_port": 1
 }],
-"min_pos": Vector2(-40, 0),
+"min_pos": Vector2(-200, 0),
 "nodes": [{
 "args_port": {
-"center": {
+"In": {
 "connected": true,
 "port": 0
-}
 },
-"name": &"id_0006_make_bounds",
-"position": Vector2(340, 0),
-"settings": {
-"center": Vector3(0, 0, 0),
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"random_seed": 3460347628,
-"size": Vector3(48, 1, 48),
-"title": "Make Bounds",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "make_bounds"
-}, {
-"args_port": {
-"y": {
+"ratio": {
 "connected": true,
-"port": 0
+"port": 1
 }
 },
-"name": &"id_0022_make_vector",
+"name": &"id_0001_select_points",
 "position": Vector2(180, 0),
 "settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"out_name": "Vector",
-"random_seed": 2880357212,
-"title": "Make Vector",
-"trace": false,
-"x": 0.0,
-"y": 1.0,
-"z": 0.0
+"debug_enabled": true,
+"name": &"id_0001_select_points",
+"random_seed": 3281634826,
+"ratio": 0.269,
+"title": "Select Points"
 },
 "show_disconnected_inputs": false,
-"template": "make_vector"
+"template": "select_points"
 }, {
 "args_port": {},
-"name": &"id_0005_make_float",
-"position": Vector2(0, 40),
+"name": &"id_0001_make_float",
+"position": Vector2(0, 80),
 "settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"out_name": "Float",
-"random_seed": 3691922267,
+"name": &"id_0001_make_float",
+"random_seed": 1015930654,
 "title": "Make Float",
-"trace": false,
-"value": 1.0
+"value": 0.595
 },
 "show_disconnected_inputs": false,
 "template": "make_float"
+}, {
+"args_port": {},
+"name": &"id_0002_grid",
+"position": Vector2(0, 0),
+"settings": {
+"name": &"id_0002_grid",
+"random_seed": 681398344,
+"title": "Grid"
+},
+"show_disconnected_inputs": false,
+"template": "grid"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
 graph_name = "spawn_smalls"
-view_zoom = 0.9999999
-view_offset = Vector2(0, -162.26672)
+view_zoom = 0.9090906
+view_offset = Vector2(-181.74078, -296.16235)
 new_name_counter = 29
-in_params = Array[ExtResource("1_7eoxu")]([SubResource("Resource_7eoxu")])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"

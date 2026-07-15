@@ -3,6 +3,7 @@ class_name FlowGraphNodeUI
 
 var flow_node : FlowNodeBase
 var draw_debug : NodeDrawDebug
+var editor : FlowGraphEditor
 
 const enable_development_info := false 
 const marker_radius : float = 9
@@ -14,15 +15,9 @@ const connectors_options_prefab = preload( "res://addons/flow_nodes_editor/conne
 func _ready():
 	ignore_invalid_connection_type = true
 	updateStyle()
-
+	
 func redrawUI():
 	queue_redraw()
-
-func refreshDebugMark():
-	redrawUI()
-
-func refreshInspectMark():
-	redrawUI()
 
 func checkDrawDebug():
 	if flow_node and not is_instance_valid(draw_debug) or draw_debug.get_parent() != self:
@@ -149,17 +144,15 @@ func _on_draw() -> void:
 	if draw_node_name:
 		draw_string(ThemeDB.fallback_font, Vector2(2, -5), name, HORIZONTAL_ALIGNMENT_LEFT, -1, 12 * ui_scale)
 
-
+		
 func initFromScript( flow_editor : FlowGraphEditor ):
-	
-	if not flow_node:
-		return
-	
-	if flow_editor == null:
-		return
+	assert( flow_node != null )
+	assert( flow_editor != null )
+	editor = flow_editor
 	
 	var meta : Dictionary = flow_node.getMeta()
 	var trace = meta.get( "trace", false )
+	trace = true
 	
 	if trace:
 		print( "initFromScript: %s" % flow_node.getTitle())
@@ -198,8 +191,7 @@ func initFromScript( flow_editor : FlowGraphEditor ):
 		print( "initFromScript: %s" % flow_node.getTitle())
 		print( "  flow_editor: %s" % flow_editor)
 		print( "  show_disconnected_inputs: %s" % flow_node.show_disconnected_inputs)
-		print( "  all_exposed_params: %s" % exposed_params.size())
-		print( "  exposed_params: %s" % exposed_params.size())
+		print( "  #exposed_params: %d" % exposed_params.size())
 		print( "  args_ports_by_name: %s" % flow_node.args_ports_by_name)
 		print( "  num_ins: %d num_outs: %d" % [num_ins, num_outs])
 		
@@ -244,7 +236,7 @@ func initFromScript( flow_editor : FlowGraphEditor ):
 			if data_type == FlowData.DataType.Invalid and in_data.has( "type"):
 				data_type = flow_node.getFlowDataTypeFromGdScriptType( in_data.type )
 			if data_type != FlowData.DataType.Invalid:
-				var color = getColorForFlowDataType( flow_node.data_type )	
+				var color = getColorForFlowDataType( data_type )	
 				set_slot_color_left( idx, color )
 				set_slot_type_left( idx, data_type )
 			else:
@@ -281,7 +273,7 @@ func initFromScript( flow_editor : FlowGraphEditor ):
 	if has_exposed_params:
 		var ctrl = connectors_options_prefab.instantiate() as FlowConnectorOptions
 		ctrl.setShowDisconnectedInputs( flow_node.show_disconnected_inputs )
-		ctrl.expand_toggled.connect( flow_node.nodeOptionsChanged )
+		ctrl.expand_toggled.connect( setParamsExpanded )
 		add_child( ctrl )
 
 	# Force a readjust of the node in the flow editor
@@ -307,3 +299,8 @@ func initFromScript( flow_editor : FlowGraphEditor ):
 		flow_editor.queueSave()
 	flow_editor.refreshSignalsInputArgs( self )
 	
+func setParamsExpanded( expanded : bool ):
+	print( "setParamsExpanded: %s" % expanded)
+	flow_node.show_disconnected_inputs = expanded
+	#refreshConnectionFlags( )
+	initFromScript(editor)

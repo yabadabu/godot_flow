@@ -137,6 +137,7 @@ func setResourceToEdit( new_resource : FlowGraphResource, new_resource_owner : F
 	if resource_owner:
 		queueRegen()
 	
+# creates a new FlowGraphNodeUI from a FlowNodeBase
 func onNodeCreated( node : FlowNodeBase ) -> FlowGraphNodeUI:
 	print( "onNodeCreated called ", node)
 	var ui_node := FlowGraphNodeUI.new()
