@@ -10,6 +10,7 @@ const discardted_props = {
 	"metadata/exec_time_usec" : 1,
 	"script" : 1,
 	"data" : 1,
+	"name" : 1,  # This is from node.gd
 }
 
 static func resource_to_dict(resource: Resource) -> Dictionary:
