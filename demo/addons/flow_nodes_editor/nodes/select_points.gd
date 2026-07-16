@@ -1,10 +1,12 @@
 @tool
 extends FlowNodeBase
 
+@export_range(0.0, 1.0) var ratio : float = 0.2
+@export var weight_name : String
+
 func _init():
 	meta_node = {
 		"title" : "Select Points",
-		"settings" : SelectPointsNodeSettings,
 		"category" : "Control Flow",
 		"ins" : [{ "label": "In" }], 
 		"outs" : [{ "label" : "Out" }],

@@ -1,13 +1,46 @@
 @tool
 extends FlowNodeBase
 
+enum eOperation {
+	Add,
+	Substract,
+	Multiply,
+	Divide,
+	Negate,			# 4
+	Absolute,
+	Saturate,
+	Floor,
+	FloorAsInt,
+	Modulo,
+	ModuloInt,
+	Frac,
+	Max,
+	Min,
+	OneMinus,
+	Pow,
+	Round,
+	Sign,
+	Sqrt,
+	Set,
+}
+
+@export var operation : eOperation = eOperation.Add:
+	set(value):
+		if operation != value:
+			operation = value
+			# This triggers the refresh of the property list in the property editor
+			notify_property_list_changed()
+			
+@export var in_nameA : String = "@last"
+@export var in_nameB : String = "@last"
+@export var out_name : String = "@source"
+
 var inA = { "label": "In A", "multiple_connections" : false }
 var inB = { "label": "In B", "multiple_connections" : false }
 
 func _init():
 	meta_node = {
 		"title" : "Math",
-		"settings" : MathOpNodeSettings,
 		"category" : "Math",
 		"ins" : [inA, inB], 
 		"outs" : [{ "label" : "Out" }],
@@ -15,40 +48,55 @@ func _init():
 		"keywords" : [ "multiply", "add" ],
 	}
 	
+func isSingleArgument( ) -> bool:
+	return operation == eOperation.Absolute or \
+	   operation == eOperation.Floor or \
+	   operation == eOperation.FloorAsInt or \
+	   operation == eOperation.Negate or \
+	   operation == eOperation.Saturate or \
+	   operation == eOperation.OneMinus or \
+	   operation == eOperation.Sign or \
+	   operation == eOperation.Sqrt or \
+	   false
+
+func exposeParam( name : String ) -> bool:
+	if name == "in_nameB":
+		return not isSingleArgument()
+	return true	
+	
 func getMeta() -> Dictionary:
-	if settings:
-		var curr_num_args = meta_node.ins.size()
-		var required_num_args = 1 if settings.isSingleArgument() else 2
-		if curr_num_args != required_num_args:
-			match required_num_args:
-				1: meta_node.ins = [inA]
-				2: meta_node.ins = [inA, inB]
-			initFromScript()
+	var curr_num_args = meta_node.ins.size()
+	var required_num_args = 1 if isSingleArgument() else 2
+	if curr_num_args != required_num_args:
+		match required_num_args:
+			1: meta_node.ins = [inA]
+			2: meta_node.ins = [inA, inB]
+		connections_changed.emit()
 	return meta_node
 		
 func getTitle() -> String:
-	return MathOpNodeSettings.eOperation.keys()[settings.operation]	
+	return eOperation.keys()[operation]	
 
 func execute( _ctx : FlowData.EvaluationContext ):
 	var time_start_init = Time.get_ticks_usec()	
 	
-	var is_single_arg = settings.isSingleArgument()
+	var is_single_arg = isSingleArgument()
 		
-	if not settings.out_name:
+	if not out_name:
 		setError( "Output name can't be empty")
 		return
-	var out_name = settings.out_name
-	if out_name == "@source":
-		out_name = settings.in_nameA
+	var final_out_name = out_name
+	if final_out_name == "@source":
+		final_out_name = in_nameA
 	
 	# Check A
 	var in_dataA: FlowData.Data = get_input(0)
 	if not in_dataA:
 		setError( "Input A has no data" )
 		return
-	var sA = in_dataA.findStream( settings.in_nameA )
+	var sA = in_dataA.findStream( in_nameA )
 	if sA == null:
-		setError( "Input A %s not found" % [settings.in_nameA])
+		setError( "Input A %s not found" % [in_nameA])
 		return
 	var num_elemsA := in_dataA.size()
 	
@@ -58,17 +106,17 @@ func execute( _ctx : FlowData.EvaluationContext ):
 	var sB = null
 	if in_dataB:
 		num_elemsB = in_dataB.size()
-		sB = in_dataB.findStream( settings.in_nameB )
+		sB = in_dataB.findStream( in_nameB )
 		
 	# if B is not connected, we might have a constant
 	if sB == null:
 		# Check if the name looks like a float
-		if settings.in_nameB.is_valid_float():
-			var v = settings.in_nameB.to_float()
-			sB = newFloatStream( in_dataA.size(), "Constant %s" % settings.in_nameB, v )
+		if in_nameB.is_valid_float():
+			var v = in_nameB.to_float()
+			sB = newFloatStream( in_dataA.size(), "Constant %s" % in_nameB, v )
 		else:
 			if not is_single_arg:
-				setError( "Input B %s not found, and can't be interpreted as a constant number. #Inputs:%d" % [settings.in_nameB, inputs.size()])
+				setError( "Input B %s not found, and can't be interpreted as a constant number. #Inputs:%d" % [in_nameB, inputs.size()])
 				return
 
 	# The number of elements should match, unless the B channel has just 1 element
@@ -93,7 +141,7 @@ func execute( _ctx : FlowData.EvaluationContext ):
 	var out_container
 	var out_data : FlowData.Data = in_dataA.duplicate()
 	
-	if settings.trace: print( "Math.init: %f (%d)" % [ Time.get_ticks_usec() - time_start_init, num_elems ] )
+	if trace: print( "Math.init: %f (%d)" % [ Time.get_ticks_usec() - time_start_init, num_elems ] )
 	
 	if sA.data_type == FlowData.DataType.Int and (is_single_arg or sB.data_type == FlowData.DataType.Float):
 		sA = newFloatStream( num_elemsA, sA.name + " as float", func( idx : int ) -> float: return sA.container[idx] )
@@ -103,7 +151,7 @@ func execute( _ctx : FlowData.EvaluationContext ):
 		if sA.data_type == FlowData.DataType.Float:
 			var inA : PackedFloat32Array = sA.container
 			
-			if settings.operation == MathOpNodeSettings.eOperation.FloorAsInt:
+			if operation == eOperation.FloorAsInt:
 				var outI := PackedInt32Array()
 				outI.resize( num_elems )
 				for i in num_elems:
@@ -113,33 +161,33 @@ func execute( _ctx : FlowData.EvaluationContext ):
 			else:
 				var outC := PackedFloat32Array()
 				outC.resize( num_elems )
-				match settings.operation:
-					MathOpNodeSettings.eOperation.Negate:
+				match operation:
+					eOperation.Negate:
 						for i in num_elems:
 							outC[i] = -inA[i]
-					MathOpNodeSettings.eOperation.Absolute:
+					eOperation.Absolute:
 						for i in num_elems:
 							outC[i] = absf(inA[i])
-					MathOpNodeSettings.eOperation.Saturate:
+					eOperation.Saturate:
 						for i in num_elems:
 							outC[i] = clampf(inA[i], 0.0, 1.0)
-					MathOpNodeSettings.eOperation.Floor:
+					eOperation.Floor:
 						for i in num_elems:
 							outC[i] = floorf(inA[i])
-					MathOpNodeSettings.eOperation.Round:
+					eOperation.Round:
 						for i in num_elems:
 							outC[i] = roundf(inA[i])
-					MathOpNodeSettings.eOperation.OneMinus:
+					eOperation.OneMinus:
 						for i in num_elems:
 							outC[i] = 1.0 - inA[i]
-					MathOpNodeSettings.eOperation.Sign:
+					eOperation.Sign:
 						for i in num_elems:
 							outC[i] = -1 if inA[i] < 0 else ( 1.0 if inA[i] > 0 else 0)
-					MathOpNodeSettings.eOperation.Sqrt:
+					eOperation.Sqrt:
 						for i in num_elems:
 							outC[i] = sqrt( max( 0.0, inA[i] ) )
 					_:
-						setError( "Scalar single arg op %s not yet supported" % MathOpNodeSettings.eOperation.keys()[ settings.operation ]  )
+						setError( "Scalar single arg op %s not yet supported" % eOperation.keys()[ operation ]  )
 				out_container = outC
 		
 		elif sA.data_type == FlowData.DataType.Vector:
@@ -147,22 +195,22 @@ func execute( _ctx : FlowData.EvaluationContext ):
 			var outC := PackedVector3Array()
 			outC.resize( num_elems )
 			
-			match settings.operation:
-				MathOpNodeSettings.eOperation.Negate:
+			match operation:
+				eOperation.Negate:
 					for i in num_elems:
 						outC[i] = -inA[i]
-				MathOpNodeSettings.eOperation.Absolute:
+				eOperation.Absolute:
 					for i in num_elems:
 						outC[i].x = absf(inA[i].x)
 						outC[i].y = absf(inA[i].y)
 						outC[i].z = absf(inA[i].z)
-				MathOpNodeSettings.eOperation.Saturate:
+				eOperation.Saturate:
 					for i in num_elems:
 						outC[i].x = clampf(inA[i].x, 0.0, 1.0)
 						outC[i].y = clampf(inA[i].y, 0.0, 1.0)
 						outC[i].z = clampf(inA[i].z, 0.0, 1.0)
 				_:
-					setError( "Vector single arg op %s not yet supported" % MathOpNodeSettings.eOperation.keys()[ settings.operation ]  )
+					setError( "Vector single arg op %s not yet supported" % eOperation.keys()[ operation ]  )
 			out_container = outC
 			
 		else:
@@ -180,32 +228,32 @@ func execute( _ctx : FlowData.EvaluationContext ):
 			outC.resize( num_elems )
 			out_container = outC
 			
-			match settings.operation:
-				MathOpNodeSettings.eOperation.Multiply:
+			match operation:
+				eOperation.Multiply:
 					for i in num_elems:
 						outC[i] = inA[i] * inB[i]
-				MathOpNodeSettings.eOperation.Add:
+				eOperation.Add:
 					for i in num_elems:
 						outC[i] = inA[i] + inB[i]
-				MathOpNodeSettings.eOperation.Substract:
+				eOperation.Substract:
 					for i in num_elems:
 						outC[i] = inA[i] - inB[i]
-				MathOpNodeSettings.eOperation.Divide:
+				eOperation.Divide:
 					for i in num_elems:
 						outC[i] = inA[i] / inB[i]
-				MathOpNodeSettings.eOperation.Modulo:
+				eOperation.Modulo:
 					for i in num_elems:
 						outC[i] = fmod(inA[i], inB[i])
-				MathOpNodeSettings.eOperation.Frac:
+				eOperation.Frac:
 					for i in num_elems:
 						outC[i] = fmod(inA[i], inB[i])
-				MathOpNodeSettings.eOperation.Min:
+				eOperation.Min:
 					for i in num_elems:
 						outC[i] = minf(inA[i], inB[i])
-				MathOpNodeSettings.eOperation.Max:
+				eOperation.Max:
 					for i in num_elems:
 						outC[i] = maxf(inA[i], inB[i])
-				MathOpNodeSettings.eOperation.ModuloInt:
+				eOperation.ModuloInt:
 					var outI := PackedInt32Array()
 					outI.resize( num_elems )
 					out_container = outI
@@ -213,15 +261,15 @@ func execute( _ctx : FlowData.EvaluationContext ):
 						var iA := int( inA[i] + 1e-6 )
 						var iB := int( inB[i] + 1e-6 )
 						outI[i] = iA % iB
-				MathOpNodeSettings.eOperation.Pow:
+				eOperation.Pow:
 					for i in num_elems:
 						outC[i] = pow( inA[i], inB[i] )
-				MathOpNodeSettings.eOperation.Set:
+				eOperation.Set:
 					for i in num_elems:
 						outC[i] = inB[i]
 				_:
-					setError( "Float vs Float operation %s not supported yet" % MathOpNodeSettings.eOperation.keys()[ settings.operation ]  )
-			if settings.trace: print( "Math.Loop: %f (%d)" % [ Time.get_ticks_usec() - time_start, num_elems ] )
+					setError( "Float vs Float operation %s not supported yet" % eOperation.keys()[ operation ]  )
+			if trace: print( "Math.Loop: %f (%d)" % [ Time.get_ticks_usec() - time_start, num_elems ] )
 			
 		elif sA.data_type == FlowData.DataType.Vector && sB.data_type == FlowData.DataType.Vector:
 			var inA : PackedVector3Array = sA.container
@@ -229,20 +277,20 @@ func execute( _ctx : FlowData.EvaluationContext ):
 			var outC := PackedVector3Array()
 			outC.resize( num_elems )
 			
-			match settings.operation:
-				MathOpNodeSettings.eOperation.Multiply:
+			match operation:
+				eOperation.Multiply:
 					for i in num_elems:
 						outC[i] = inA[i] * inB[i]
-				MathOpNodeSettings.eOperation.Add:
+				eOperation.Add:
 					for i in num_elems:
 						outC[i] = inA[i] + inB[i]
-				MathOpNodeSettings.eOperation.Substract:
+				eOperation.Substract:
 					for i in num_elems:
 						outC[i] = inA[i] - inB[i]
-				MathOpNodeSettings.eOperation.Divide:
+				eOperation.Divide:
 					for i in num_elems:
 						outC[i] = inA[i] / inB[i]
-				MathOpNodeSettings.eOperation.Set:
+				eOperation.Set:
 					for i in num_elems:
 						outC[i] = inB[i]
 				_:
@@ -254,11 +302,11 @@ func execute( _ctx : FlowData.EvaluationContext ):
 			var inB : PackedFloat32Array = sB.container
 			var outC := PackedVector3Array()
 			outC.resize( num_elems )
-			match settings.operation:
-				MathOpNodeSettings.eOperation.Multiply:
+			match operation:
+				eOperation.Multiply:
 					for i in num_elems:
 						outC[i] = inA[i] * inB[i]
-				MathOpNodeSettings.eOperation.Divide:
+				eOperation.Divide:
 					for i in num_elems:
 						outC[i] = inA[i] / inB[i]
 				_:
@@ -271,17 +319,17 @@ func execute( _ctx : FlowData.EvaluationContext ):
 			var outC := PackedColorArray()
 			outC.resize( num_elems )
 			
-			match settings.operation:
-				MathOpNodeSettings.eOperation.Multiply:
+			match operation:
+				eOperation.Multiply:
 					for i in num_elems:
 						outC[i] = Color(inA[i].r * inB[i].r, inA[i].g * inB[i].g, inA[i].b * inB[i].b, inA[i].a * inB[i].a)
-				MathOpNodeSettings.eOperation.Add:
+				eOperation.Add:
 					for i in num_elems:
 						outC[i] = Color(inA[i].r + inB[i].r, inA[i].g + inB[i].g, inA[i].b + inB[i].b, inA[i].a + inB[i].a)
-				MathOpNodeSettings.eOperation.Substract:
+				eOperation.Substract:
 					for i in num_elems:
 						outC[i] = Color(inA[i].r - inB[i].r, inA[i].g - inB[i].g, inA[i].b - inB[i].b, inA[i].a - inB[i].a)
-				MathOpNodeSettings.eOperation.Divide:
+				eOperation.Divide:
 					for i in num_elems:
 						outC[i] = Color(inA[i].r / inB[i].r, inA[i].g / inB[i].g, inA[i].b / inB[i].b, inA[i].a / inB[i].a)
 				_:
@@ -293,17 +341,17 @@ func execute( _ctx : FlowData.EvaluationContext ):
 			var inB : PackedFloat32Array = sB.container
 			var outC := PackedColorArray()
 			outC.resize( num_elems )
-			match settings.operation:
-				MathOpNodeSettings.eOperation.Multiply:
+			match operation:
+				eOperation.Multiply:
 					for i in num_elems:
 						outC[i] = Color(inA[i].r * inB[i], inA[i].g * inB[i], inA[i].b * inB[i], inA[i].a * inB[i])
-				MathOpNodeSettings.eOperation.Divide:
+				eOperation.Divide:
 					for i in num_elems:
 						outC[i] = Color(inA[i].r / inB[i], inA[i].g / inB[i], inA[i].b / inB[i], inA[i].a / inB[i])
-				MathOpNodeSettings.eOperation.Add:
+				eOperation.Add:
 					for i in num_elems:
 						outC[i] = Color(inA[i].r + inB[i], inA[i].g + inB[i], inA[i].b + inB[i], inA[i].a + inB[i])
-				MathOpNodeSettings.eOperation.Substract:
+				eOperation.Substract:
 					for i in num_elems:
 						outC[i] = Color(inA[i].r - inB[i], inA[i].g - inB[i], inA[i].b - inB[i], inA[i].a - inB[i])
 				_:
@@ -315,26 +363,26 @@ func execute( _ctx : FlowData.EvaluationContext ):
 			var inB : PackedInt32Array = sB.container
 			var outC := PackedInt32Array()
 			outC.resize( num_elems )
-			match settings.operation:
-				MathOpNodeSettings.eOperation.Multiply:
+			match operation:
+				eOperation.Multiply:
 					for i in num_elems:
 						outC[i] = inA[i] * inB[i]
-				MathOpNodeSettings.eOperation.Add:
+				eOperation.Add:
 					for i in num_elems:
 						outC[i] = inA[i] + inB[i]
-				MathOpNodeSettings.eOperation.Substract:
+				eOperation.Substract:
 					for i in num_elems:
 						outC[i] = inA[i] - inB[i]
-				MathOpNodeSettings.eOperation.Divide:
+				eOperation.Divide:
 					for i in num_elems:
 						outC[i] = inA[i] / inB[i]
-				MathOpNodeSettings.eOperation.ModuloInt:
+				eOperation.ModuloInt:
 					for i in num_elems:
 						outC[i] = inA[i] % inB[i]
-				MathOpNodeSettings.eOperation.Min:
+				eOperation.Min:
 					for i in num_elems:
 						outC[i] = mini( inA[i], inB[i] )
-				MathOpNodeSettings.eOperation.Max:
+				eOperation.Max:
 					for i in num_elems:
 						outC[i] = maxi( inA[i], inB[i] )
 				_:
@@ -347,10 +395,10 @@ func execute( _ctx : FlowData.EvaluationContext ):
 
 	var time_start_end = Time.get_ticks_usec()
 	# This will override the existing stream if exists or update a substream
-	var err = out_data.registerStream( out_name, out_container )
+	var err = out_data.registerStream( final_out_name, out_container )
 	if err:
 		setError( err )
 		return
 		
 	set_output( 0, out_data )
-	if settings.trace: print( "Math.end:  %f (%d)" % [ Time.get_ticks_usec() - time_start_end, num_elems ] )
+	if trace: print( "Math.end:  %f (%d)" % [ Time.get_ticks_usec() - time_start_end, num_elems ] )
