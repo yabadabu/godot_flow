@@ -4,7 +4,6 @@ extends FlowBaseScanNode
 func _init():
 	meta_node = {
 		"title" : "Scan Splines",
-		"settings" : ScanSplinesNodeSettings,
 		"category" : "Spatial",
 		"scans_scene" : true,
 		"ins" : [],

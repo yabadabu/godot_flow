@@ -1,18 +1,32 @@
 @tool
 extends FlowNodeBase
 
+@export var uniform_interval : float = 0.2
+@export var fill_curve : bool = false:
+	set( new_value ):
+		fill_curve = new_value
+		notify_property_list_changed()
+		
+@export var adjust_to_borders : bool = true
+@export var sample_segments_centers : bool = false
+@export var distance_attribute : String = "distance"
+
 const min_interval := 0.1
 
 func _init():
 	meta_node = {
 		"title" : "Sample Spline",
-		"settings" : SampleSplineNodeSettings,
 		"category" : "Sampler",
 		"ins" : [{ "label": "Splines", "data_type": FlowData.DataType.NodePath }],
 		"outs" : [{ "label" : "Out" }],
 		"tooltip" : "Samples the contour or interior of each input spline.",
 
 	}
+	
+func exposeParam( name : String ) -> bool:
+	if name == "sample_segments_centers":
+		return not fill_curve
+	return true
 	
 func get_polygon_bounds(polygon: PackedVector2Array) -> Rect2:
 	if polygon.size() == 0:
@@ -47,14 +61,14 @@ func addDistanceAttribute( output : FlowData.Data, target_points : PackedVector3
 	var time_start_kdtree := Time.get_ticks_usec()
 	var kdtree := GDKdTree.new()
 	kdtree.set_points( target_points )
-	if settings.trace: print( "spline.kdtree: %f (%d)" % [ Time.get_ticks_usec() - time_start_kdtree, target_points.size() ])
+	if trace: print( "spline.kdtree: %f (%d)" % [ Time.get_ticks_usec() - time_start_kdtree, target_points.size() ])
 	
 	var time_start_distance := Time.get_ticks_usec()
 	var nearest_indices := kdtree.find_nearest_indices( spos )
 	for src_idx in range( nearest_indices.size() ):
 		var nearest_idx = nearest_indices[src_idx]
 		sdists[src_idx] = ( spos[src_idx] - target_points[nearest_idx] ).length()
-	if settings.trace: print( "spline.dist: %f" % [ Time.get_ticks_usec() - time_start_distance ])	
+	if trace: print( "spline.dist: %f" % [ Time.get_ticks_usec() - time_start_distance ])	
 
 func rasterizeCurveInXZ( curve : Curve3D, uniform_interval : float, base : int ) -> PackedVector2Array:
 	var points := curve.tessellate(2, 5)
@@ -104,12 +118,12 @@ func rasterizeCurveInXZ( curve : Curve3D, uniform_interval : float, base : int )
 					px0 += dx 
 				new_points.append( Vector2( px0, py ) )
 		py += dy
-	if settings.trace: print( "spline.grid: %f" % [ Time.get_ticks_usec() - time_start_grid ])	
+	if trace: print( "spline.grid: %f" % [ Time.get_ticks_usec() - time_start_grid ])	
 	return new_points
 
 func execute( ctx : FlowData.EvaluationContext ):
 		
-	var trace := settings.trace
+	var trace := trace
 		
 	var in_data = get_input(0)
 	var path3d_nodes = in_data.getContainerChecked( "node", FlowData.DataType.NodePath )
@@ -127,7 +141,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 	var uniform_interval = getSettingValue( ctx, "uniform_interval" )
 	if uniform_interval < min_interval:
 		uniform_interval = min_interval
-		settings.uniform_interval = uniform_interval
+		uniform_interval = uniform_interval
 		
 	var adjust_to_borders : bool = getSettingValue( ctx, "adjust_to_borders" )
 	
@@ -143,7 +157,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 				spos.append( hit3d )
 				srot.append( Vector3.ZERO )
 				
-			if settings.distance_attribute:
+			if distance_attribute:
 				curve.bake_interval = uniform_interval * 2.0
 				var border_points = curve.get_baked_points()
 				

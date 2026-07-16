@@ -1,12 +1,19 @@
 @tool
 extends FlowNodeBase
 
-const TagsMutateSettings = preload("res://addons/flow_nodes_editor/nodes/tags_mutate_settings.gd")
+enum eOperation {
+	Add,
+	Remove,
+	Replace,
+}
+
+@export var operation : eOperation = eOperation.Add
+@export var tags_csv : String = ""
+@export var case_sensitive : bool = false
 
 func _init():
 	meta_node = {
 		"title" : "Tags",
-		"settings" : TagsMutateSettings,
 		"category" : "Metadata",
 		"ins" : [{ "label": "In" }],
 		"outs" : [{ "label" : "Out" }],
@@ -16,11 +23,11 @@ func _init():
 func _parse_tags() -> PackedStringArray:
 	var out := PackedStringArray()
 	var seen := {}
-	for part in settings.tags_csv.split(","):
+	for part in tags_csv.split(","):
 		var t = part.strip_edges()
 		if t == "":
 			continue
-		var key = t if settings.case_sensitive else t.to_lower()
+		var key = t if case_sensitive else t.to_lower()
 		if seen.has(key):
 			continue
 		seen[key] = true
@@ -29,7 +36,7 @@ func _parse_tags() -> PackedStringArray:
 
 func _has_tag(tags : PackedStringArray, query : String) -> bool:
 	for t in tags:
-		if settings.case_sensitive:
+		if case_sensitive:
 			if t == query:
 				return true
 		else:
@@ -47,18 +54,18 @@ func execute(_ctx : FlowData.EvaluationContext):
 	var out_data = in_data.duplicate()
 	var curr = out_data.tags.duplicate()
 
-	match settings.operation:
-		TagsMutateSettings.eOperation.Add:
+	match operation:
+		eOperation.Add:
 			for t in tags_to_apply:
 				if not _has_tag(curr, t):
 					curr.append(t)
-		TagsMutateSettings.eOperation.Remove:
+		eOperation.Remove:
 			var filtered := PackedStringArray()
 			for t in curr:
 				if not _has_tag(tags_to_apply, t):
 					filtered.append(t)
 			curr = filtered
-		TagsMutateSettings.eOperation.Replace:
+		eOperation.Replace:
 			curr = tags_to_apply
 
 	out_data.tags = curr
