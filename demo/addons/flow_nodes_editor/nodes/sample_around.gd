@@ -1,10 +1,12 @@
 @tool
 extends FlowNodeBase
 
+@export var radius : float = 1.0
+@export var max_points : int = 100
+
 func _init():
 	meta_node = {
 		"title" : "Sample Around",
-		"settings" : SampleAroundNodeSettings,
 		"category" : "Spatial",
 		"ins" : [{ "label": "In" }],
 		"outs" : [{ "label" : "Out" }],
@@ -89,7 +91,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 	var bridson = Bridson.new()
 	bridson.spatial = GDRTree.new()
 	bridson.radius = radius
-	bridson.rng.seed = settings.random_seed
+	bridson.rng.seed = random_seed
 	bridson.addSources( in_trs )
 
 	for i in range( max_points ):

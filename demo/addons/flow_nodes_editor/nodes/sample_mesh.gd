@@ -1,12 +1,23 @@
 @tool
 extends FlowNodeBase
 
+enum eMode {
+	UseDensity,
+	UseNumSamples,
+	OnePerVertex,
+	FaceCenters,
+}
+
+@export var mode : eMode = eMode.UseDensity
+@export var density : float = 0.5
+@export var num_samples : int = 100
+@export var point_size : float = 1.0
+
 const min_interval := 0.1
 
 func _init():
 	meta_node = {
 		"title" : "Sample Mesh",
-		"settings" : SampleMeshNodeSettings,
 		"category" : "Sampler",
 		"ins" : [{ "label": "Meshes", "data_type": FlowData.DataType.NodeMesh }],
 		"outs" : [{ "label" : "Out" }],
@@ -185,15 +196,15 @@ func execute( ctx : FlowData.EvaluationContext ):
 	#var uniform_interval = getSettingValue( ctx, "uniform_interval" )
 	#if uniform_interval < min_interval:
 		#uniform_interval = min_interval
-		#settings.uniform_interval = uniform_interval
+		#uniform_interval = uniform_interval
 
 	var num_samples = getSettingValue(ctx, "num_samples" )
 	var density = getSettingValue(ctx, "density")
 	var point_size = getSettingValue(ctx, "point_size")
 
-	if settings.mode == SampleMeshNodeSettings.eMode.UseDensity:
+	if mode == eMode.UseDensity:
 		num_samples = -1
-	elif settings.mode == SampleMeshNodeSettings.eMode.UseNumSamples:
+	elif mode == eMode.UseNumSamples:
 		density = -1.0
 
 	for node in nodes:
@@ -201,10 +212,10 @@ func execute( ctx : FlowData.EvaluationContext ):
 		if mesh == null:
 			continue
 		var ans
-		if settings.mode == SampleMeshNodeSettings.eMode.OnePerVertex:
+		if mode == eMode.OnePerVertex:
 			ans = sampleMeshSurfaceAtVertices( node )
 		else:
-			ans = sampleMeshSurface( node, num_samples, density, settings.random_seed )
+			ans = sampleMeshSurface( node, num_samples, density, random_seed )
 		var points : PackedVector3Array = ans.points
 		var normals : PackedVector3Array = ans.normals
 		var num_points := points.size()
