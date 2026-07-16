@@ -1,10 +1,25 @@
 @tool
 extends FlowNodeBase
 
+@export var attr_name : String = "new_attr"
+@export var data_type : FlowData.DataType = FlowData.DataType.Float:
+	set(new_value):
+		if new_value != FlowData.DataType.Any and new_value != FlowData.DataType.Invalid:
+			data_type = new_value
+			connections_changed.emit()
+			notify_property_list_changed()
+		
+@export var cte_bool: bool = false
+@export var cte_int : int = 0
+@export var cte_float : float = 0.0
+@export var cte_vector : Vector3 = Vector3.ZERO
+@export var cte_color : Color = Color.WHITE
+@export var cte_resource : Resource
+@export var cte_string : String = ""
+
 func _init():
 	meta_node = {
 		"title" : "Add Attribute",
-		"settings" : AddAttributeNodeSettings,
 		"category" : "Metadata",
 		"ins" : [{ "label": "In" }], 
 		"outs" : [{ "label" : "Out" }],
@@ -12,18 +27,19 @@ func _init():
 	}
 	
 func getTitle() -> String:
-	return "%s - %s" % [ settings.name, FlowData.DataType.keys()[settings.data_type] ]
+	return "%s - %s" % [ attr_name, FlowData.DataType.keys()[data_type] ]
 
 func exposedAsInputNode( prop ):
 	if prop.name.begins_with( "cte_" ):
-		var name_lc = FlowData.DataType.keys()[ settings.data_type ].to_lower()
+		var name_lc = FlowData.DataType.keys()[ data_type ].to_lower()
 		return prop.name == "cte_" + name_lc
 	return false
 
-func onPropChanged( prop_name : String ):
-	super.onPropChanged( prop_name )
-	if prop_name == "data_type":
-		initFromScript()
+func exposeParam( name : String ):
+	var name_lc = FlowData.DataType.keys()[ data_type ].to_lower()
+	if name.begins_with( "cte_" ):
+		return name == "cte_" + name_lc
+	return true
 
 func execute( ctx : FlowData.EvaluationContext ):
 	var in_data : FlowData.Data = get_optional_input(0)
@@ -36,7 +52,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 		out_data = FlowData.Data.new()
 	
 	var new_val
-	match settings.data_type:
+	match data_type:
 		FlowData.DataType.Bool:
 			new_val = 1 if getSettingValue( ctx, "cte_bool") else 0
 		FlowData.DataType.Int:
@@ -52,9 +68,9 @@ func execute( ctx : FlowData.EvaluationContext ):
 		FlowData.DataType.Resource:
 			new_val = getSettingValue( ctx, "cte_resource" )
 
-	var container = out_data.newContainerOfType( settings.data_type )
+	var container = out_data.newContainerOfType( data_type )
 	container.resize( out_size )
 	container.fill( new_val )
 
-	out_data.registerStream( settings.name, container, settings.data_type )
+	out_data.registerStream( attr_name, container, data_type )
 	set_output( 0, out_data )
