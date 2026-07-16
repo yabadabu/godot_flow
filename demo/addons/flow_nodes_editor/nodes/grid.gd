@@ -1,10 +1,17 @@
 @tool
 extends FlowNodeBase
 
+@export_range( 0, 50 ) var x : int = 3
+@export_range( 0, 50 ) var y : int = 1
+@export_range( 0, 50 ) var z : int = 3
+@export var step : Vector3 = Vector3( 1.0, 1.0, 1.0 )
+@export var origin : Vector3 = Vector3.ZERO
+@export var rotation : Vector3 = Vector3.ZERO
+@export var size : float = 1.0
+
 func _init():
 	meta_node = {
 		"title" : "Grid",
-		"settings" : GridNodeSettings,
 		"category" : "Spatial",
 		"ins" : [],
 		"outs" : [{ "label" : "Out" }],
@@ -22,7 +29,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 	var srot := output.getVector3Container( FlowData.AttrRotation )
 	var ssize := output.getVector3Container( FlowData.AttrSize )
 	assert( spos != null )
-	if settings.trace:
+	if trace:
 		print( "Grid.size %d x %d x %d" % [ nx, ny, nz ])
 	var idx := 0
 	var origin : Vector3 = getSettingValue( ctx, "origin" )
