@@ -1,10 +1,12 @@
 @tool
 extends FlowNodeBase
 
+@export var sort_by : String
+@export var sort_descending : bool = false
+
 func _init():
 	meta_node = {
 		"title" : "Sort",
-		"settings" : SortNodeSettings,
 		"category" : "Point Ops",
 		"ins" : [{"label": "In" }], 
 		"outs" : [{ "label" : "Out" }],
@@ -14,9 +16,9 @@ func _init():
 
 func execute( ctx : FlowData.EvaluationContext ):
 	var in_data : FlowData.Data = get_input(0)
-	var sA = in_data.findStream( settings.sort_by )
+	var sA = in_data.findStream( sort_by )
 	if sA == null:
-		setError( "Input %s not found" % [settings.sort_by])
+		setError( "Input %s not found" % [sort_by])
 		return
 	var indices : PackedInt32Array
 	if sA.data_type == FlowData.DataType.Float:
@@ -26,7 +28,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 	elif sA.data_type == FlowData.DataType.String:
 		indices = GDStreamUtils.get_sorted_indices_string( sA.container )
 
-	if settings.sort_descending:
+	if sort_descending:
 		indices.reverse()
 		
 	var out_data = in_data.filter( indices )
