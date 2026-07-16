@@ -383,7 +383,7 @@ func refreshSignalsInputArgs( node ):
 		if row.out_popup.get_connections().is_empty():
 			row.out_popup.connect( setOnOverInParam.bind( null ) )	
 	
-func findNodeByName( node_name : StringName ) -> FlowGraphNodeUI:
+func findGraphNodeByName( node_name : StringName ) -> FlowGraphNodeUI:
 	for child in gedit.get_children():
 		var graph_node = child as GraphNode
 		if graph_node and graph_node.flow_node and graph_node.flow_node.name == node_name:
@@ -430,14 +430,16 @@ func addNode( node_template, settings = null ):
 	graph_node.position_offset = localToGraphCoords(local_drop_position)
 	
 	if auto_connect_from_node:
-		var source_node = findNodeByName( auto_connect_from_node )
-		if canConnect( source_node, auto_connect_from_port, node, 0 ):
-			current_resource.connect_nodes(auto_connect_from_node, auto_connect_from_port, node.name, 0)
+		var source_node = findGraphNodeByName( auto_connect_from_node )
+		print( "Auto connecting to source %s" % source_node )
+		if canConnect( source_node, auto_connect_from_port, graph_node, 0 ):
+			connect_nodes(auto_connect_from_node, auto_connect_from_port, node.name, 0)
 		
 	if auto_connect_to_node:
-		var target_node = findNodeByName( auto_connect_to_node )
-		if canConnect( node, 0, target_node, auto_connect_to_port ):
-			current_resource.connect_nodes(node.name, 0, auto_connect_to_node, auto_connect_to_port )
+		var target_node = findGraphNodeByName( auto_connect_to_node )
+		print( "Auto connecting to target %s" % target_node )
+		if canConnect( graph_node, 0, target_node, auto_connect_to_port ):
+			connect_nodes(node.name, 0, auto_connect_to_node, auto_connect_to_port )
 	
 	for prev_node in getSelectedGraphNodes():
 		prev_node.selected = false
@@ -671,7 +673,8 @@ func disconnect_nodes(from_node: StringName, from_port: int, to_node: StringName
 		dst_node.dirty = true
 	
 func connect_nodes(from_node: StringName, from_port: int, to_node: StringName, to_port: int) -> void:
-	current_resource.connect_nodes( from_node, from_port, to_node, to_port )
+	var new_conn = current_resource.connect_nodes( from_node, from_port, to_node, to_port )
+	onConnCreated( new_conn )
 	var dst_node : FlowNodeBase = current_resource.nodes_by_name.get( to_node )
 	if dst_node != null:
 		dst_node.dirty = true
@@ -685,8 +688,8 @@ func findConnectionToNodeAndPort( node : FlowNodeBase, in_port : int ):
 func _on_graph_edit_connection_request(from_node: StringName, from_port: int, to_node: StringName, to_port: int) -> void:
 	print( "current_resource: %s [%s:%d]<->[%s:%d]" % [ current_resource, from_node, from_port, to_node, to_port ] )
 	print( "  .nodes_by_name: %s" % current_resource.nodes_by_name )
-	var src_graph_node = findNodeByName( from_node )
-	var dst_graph_node = findNodeByName( to_node )
+	var src_graph_node = findGraphNodeByName( from_node )
+	var dst_graph_node = findGraphNodeByName( to_node )
 	if src_graph_node == null:
 		print( "Failed to find source node")
 		return

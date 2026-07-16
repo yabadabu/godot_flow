@@ -188,31 +188,37 @@ static func _paste_nodes_from_dict( dict, editor : FlowGraphEditor, at_graph_coo
 	if at_graph_coords:
 		graph_coords = at_graph_coords
 		
-	var new_nodes = create_nodes_from_dict( dict, editor.current_resource, graph_coords )
+	var new_data = create_nodes_from_dict( dict, editor.current_resource, graph_coords )
 	
 	# Update selection
 	for graph_node in editor.getSelectedGraphNodes():
 		graph_node.selected = false
 		
-	if new_nodes:
-		for node in new_nodes:
-			var graph_node = editor.onNodeCreated( node )
-			graph_node.selected = true
+	var new_nodes = new_data.get( "nodes", [] )
+	for node in new_nodes:
+		var graph_node = editor.onNodeCreated( node )
+		graph_node.selected = true
+		
+	var new_conns = new_data.get( "conns", [] )
+	for conn in new_conns:
+		editor.onConnCreated( conn )
 
-static func create_nodes_from_dict( dict, graph : FlowGraphResource, paste_offset = null):
+static func create_nodes_from_dict( dict, graph : FlowGraphResource, paste_offset = null) -> Dictionary:
 	print( "at create_nodes_from_dict")
 	if dict.get( "type", null) != "flow_graph_nodes":
 		push_error( "Invalid dict to paste nodes from" )
-		return []
+		return {}
 	graph.loading = true
 	var new_nodes = []
+	var new_conns = []
+	var new_frames = []
 	var old_to_new_names = {}
 	
 	var ui_scale = 1.0			# container.ui_scale
 	
 	for in_node in dict.nodes:
 		if not in_node:
-			return null
+			return {}
 		var in_name = in_node.name
 		print( "Parsing node %s  Template:%s Settings:%s" % [ in_name, in_node.template, in_node.settings ] )
 		
@@ -225,7 +231,7 @@ static func create_nodes_from_dict( dict, graph : FlowGraphResource, paste_offse
 		#print( "Creating node %s" % in_name )
 		var node = graph.addNodeFromTemplate( in_node.template, in_name, in_node.settings )
 		if not node:
-			return null
+			return {}
 		var in_pos = _parse_vector2( in_node.position )
 		node.ui_position_offset = ( in_pos + paste_offset ) * ui_scale
 		#print( "New node pos %s will be %s" % [ in_name, node.ui_position_offset ] )
@@ -245,7 +251,8 @@ static func create_nodes_from_dict( dict, graph : FlowGraphResource, paste_offse
 		if new_from == null or new_to == null:
 			push_error( "Failed to identify params links", link)
 			continue
-		graph.connect_nodes(new_from, link.from_port, new_to, link.to_port )
+		var new_conn = graph.connect_nodes(new_from, link.from_port, new_to, link.to_port )
+		new_conns.append( new_conn )
 
 	for frame_data in dict.get( "frames", [] ):
 		print( "Parsing frames %s" % frame_data )
@@ -259,7 +266,7 @@ static func create_nodes_from_dict( dict, graph : FlowGraphResource, paste_offse
 		graph.addFrame(frame_data)
 
 	graph.loading = false
-	return new_nodes
+	return { "nodes" : new_nodes, "conns" : new_conns }
 
 static func copySelectionToClipboard( editor : FlowGraphEditor ):
 	var graph_nodes = editor.getSelectedGraphNodes()

@@ -106,9 +106,6 @@ func addNodeFromTemplate( node_template, node_name : String, node_settings = nul
 		#if node and node.settings and node.settings is InputNodeSettings:
 			#input_nodes.append( node )
 		
-		#if editor:
-			#editor.onNodeCreated(node)
-		
 		return node
 	
 func disconnect_nodes( from_node: StringName, from_port: int, to_node: StringName, to_port: int) -> void:
@@ -127,7 +124,7 @@ func disconnect_nodes( from_node: StringName, from_port: int, to_node: StringNam
 			
 		all_connections.remove_at( idx )
 	
-func connect_nodes( from_node: StringName, from_port: int, to_node: StringName, to_port: int) -> void:
+func connect_nodes( from_node: StringName, from_port: int, to_node: StringName, to_port: int) -> Dictionary:
 	var conn = { "from_node": from_node, "from_port" : from_port, "to_node" : to_node, "to_port" : to_port }
 	all_connections.append( conn )
 	var src_node : FlowNodeBase = nodes_by_name.get(from_node)
@@ -142,9 +139,7 @@ func connect_nodes( from_node: StringName, from_port: int, to_node: StringName, 
 			print( "  from_node is %s" % [ from_node ])
 		if not dst_node:
 			print( "  to_node is %s" % [ to_node ])
-			
-	if editor:
-		editor.onConnCreated( conn )
+	return conn
 		
 func _delete_connections_involving_node( conns : Array[ Dictionary ], node_name : StringName ):
 	for i in range(conns.size() - 1, -1, -1):
@@ -180,8 +175,6 @@ func delete_frame( frame_name ):
 		
 func addFrame( frame_data : Dictionary ):
 	all_frames.append( frame_data )
-	if editor:
-		editor.onFrameCreated( frame_data )
 		
 func markAllNodesDirty():
 	for node in all_nodes:
