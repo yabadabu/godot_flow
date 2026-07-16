@@ -70,6 +70,7 @@ var template_name : String
 
 signal settings_changed( prop_name : StringName )
 signal contents_changed
+signal connections_changed
 
 func exposeParam( name : String ) -> bool:
 	return true
@@ -79,11 +80,6 @@ func exposeParam( name : String ) -> bool:
 func _validate_property(property: Dictionary) -> void:
 	if is_input_connected( property.name ):
 		property.usage |= PROPERTY_USAGE_READ_ONLY
-
-func setupDrawDebug():
-	#checkDrawDebug()
-	#draw_debug.setupDraw()
-	pass
 
 func preExecute( ctx : FlowData.EvaluationContext ):
 	eval_id = ctx.eval_id

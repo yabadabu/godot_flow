@@ -148,6 +148,8 @@ func onNodeCreated( node : FlowNodeBase ) -> FlowGraphNodeUI:
 	gedit.add_child(ui_node)
 	print( "gedit.addChild %s" % [ node.name ])
 	ui_node.draw.connect( ui_node._on_draw )
+	node.connections_changed.connect( func():
+		ui_node.initFromScript( self ))
 	return ui_node
 	
 func onConnCreated( conn : Dictionary ):
