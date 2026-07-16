@@ -1,10 +1,11 @@
 @tool
 extends FlowNodeBase
 
+@export var out_name : String = "count"
+
 func _init():
 	meta_node = {
 		"title" : "Size",
-		"settings" : SizeNodeSettings,
 		"category" : "Metadata",
 		"ins" : [{ "label" : "In"}],
 		"outs" : [{ "label" : "Size", "data_type" : FlowData.DataType.Int }],
@@ -16,5 +17,5 @@ func execute( ctx : FlowData.EvaluationContext ):
 	var output := FlowData.Data.new()
 	var container = PackedInt32Array()
 	container.append( input.size() )
-	output.registerStream( settings.out_name, container )
+	output.registerStream( out_name, container )
 	set_output( 0, output )
