@@ -1,10 +1,14 @@
 @tool
 extends FlowNodeBase
 
+var HiddenFromThisPoint := true
+
+@export var in_name : String
+@export var out_prefix : String
+
 func _init():
 	meta_node = {
 		"title" : "Reduce",
-		"settings" : ReduceNodeSettings,
 		"category" : "Metadata",
 		"ins" : [{ "label": "In" }], 
 		"outs" : [{ "label" : "Out" }],
@@ -23,9 +27,9 @@ func addSingleValue( out_data : FlowData.Data, stream_name : String, value ):
 	out_data.registerStream( stream_name, container )
 	
 func addReducedValues( out_data : FlowData.Data, vmin, vmax, vavg ):
-	var out_prefix = settings.out_prefix
+	var out_prefix = out_prefix
 	if !out_prefix:
-		out_prefix = settings.in_name.replace( ".", "_")
+		out_prefix = in_name.replace( ".", "_")
 	var cmin_name = out_prefix + "_min"
 	var cmax_name = out_prefix + "_max"
 	var cavg_name = out_prefix + "_avg"
@@ -35,17 +39,17 @@ func addReducedValues( out_data : FlowData.Data, vmin, vmax, vavg ):
 	
 func execute( ctx : FlowData.EvaluationContext ):
 
-	if !settings.in_name:
+	if !in_name:
 		setError( "Input attribute not set")
 		return
 	
 	var in_data : FlowData.Data = get_input(0)
-	var sA = in_data.findStream( settings.in_name )
+	var sA = in_data.findStream( in_name )
 	if sA == null:
-		setError( "Input %s not found" % [settings.in_name])
+		setError( "Input %s not found" % [in_name])
 		return
 	if sA.data_type != FlowData.DataType.Float && sA.data_type != FlowData.DataType.Vector && sA.data_type != FlowData.DataType.Int:
-		setError( "Input %s must be Float, Int or Vector. (Found %s)" % [settings.in_name, FlowData.DataType.keys()[ sA.data_type ] ])
+		setError( "Input %s must be Float, Int or Vector. (Found %s)" % [in_name, FlowData.DataType.keys()[ sA.data_type ] ])
 		return
 
 	var num_elems := in_data.size()

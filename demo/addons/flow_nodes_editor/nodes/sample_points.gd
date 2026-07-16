@@ -1,6 +1,36 @@
 @tool
 extends FlowNodeBase
 
+
+enum eDistribution {
+	UniformGrid,
+	QuasiRandom2D,
+	QuasiRandom3D,
+	BlueNoise2D,
+}
+
+@export var distribution : eDistribution = eDistribution.QuasiRandom2D:
+	set(value):
+		if distribution != value:
+			distribution = value
+			# This triggers the refresh of the property list in the property editor
+			notify_property_list_changed()
+			
+# Uniform sampling
+@export var sampling_distance : float = 0.2
+@export var max_x : int = 32
+@export var max_y : int = 32
+@export var max_z : int = 32
+@export var new_size_factor : float = 1.0
+
+# Non-Uniform sampling
+@export var phase : float = 0.0
+@export var size : float = 1.0
+@export var out_group_id : String
+@export var groups : Array[int] = [ 32 ]
+
+@export var num_samples : int = 64
+
 var blue_noise_image : Image = preload("res://addons/flow_nodes_editor/resources/bluenoise256.png" )
 
 class BNSample:
@@ -13,25 +43,42 @@ static var blue_noise_samples : Array[BNSample] = []
 func _init():
 	meta_node = {
 		"title" : "Sample Points",
-		"settings" : SamplePointsNodeSettings,
 		"category" : "Sampler",
 		"ins" : [{ "label" : "In" }],
 		"outs" : [{ "label" : "Out" }],
 		"tooltip" : "Subdivides each int point into a subgrid of regular points with the specified sampling distance",
 	}
-	
-func isUniformGridParam( prop ) -> bool:
+
+func isUniformGridParam( name : String ) -> bool:
+	return name.begins_with( "max_" ) or name == "sampling_distance" or name == "new_size_factor"
+
+func isQuasiRandomParam( name : String ) -> bool:
+	return name == "phase" or name == "size" or name == "out_group_id" or name == "groups"
+
+func isBlueNoiseParam( name : String ) -> bool:
+	return name == "num_samples" or name == "size"
+
+# This control if the param is visible in the property inspector
+func exposeParam( name : String ) -> bool:
+	# This must return true except for the specific parameters that depend on the enum
+	if distribution == eDistribution.UniformGrid:
+		return not isQuasiRandomParam( name )
+	if distribution == eDistribution.BlueNoise2D:
+		return isBlueNoiseParam( name ) or (not isQuasiRandomParam( name ) and not isUniformGridParam( name ))
+	return not isUniformGridParam( name )	
+
+func isUniformGridProp( prop ) -> bool:
 	return (prop.name as String).begins_with("max") or prop.name == "sampling_distance" or prop.name == "new_size_factor"
 	
 func exposedAsInputNode( prop ):
-	if settings.distribution == SamplePointsNodeSettings.eDistribution.UniformGrid:
+	if distribution == eDistribution.UniformGrid:
 		return isUniformGridParam( prop )
 	return prop.name == "phase"
 
-func onPropChanged( prop_name : String ):
+func onPropChanged( prop_name : StringName ):
 	super.onPropChanged( prop_name )
 	if prop_name == "distribution":
-		initFromScript()
+		connections_changed.emit()
 
 func uniformSampling( ctx : FlowData.EvaluationContext, in_trs : FlowData.TransformsStream, output : FlowData.Data ):
 		
@@ -110,7 +157,7 @@ func uniformDistributedSample3D( n : int, base : float) -> Vector3:
 
 func quasiRandomSampling( ctx : FlowData.EvaluationContext, in_trs : FlowData.TransformsStream, output : FlowData.Data ):
 	
-	var samplerFn : Callable= uniformDistributedSample2Das3D if settings.distribution == SamplePointsNodeSettings.eDistribution.QuasiRandom2D else uniformDistributedSample3D
+	var samplerFn : Callable = uniformDistributedSample2Das3D if distribution == eDistribution.QuasiRandom2D else uniformDistributedSample3D
 		
 	var spos := output.getVector3Container( FlowData.AttrPosition )
 	var srot := output.getVector3Container( FlowData.AttrRotation )
@@ -118,17 +165,17 @@ func quasiRandomSampling( ctx : FlowData.EvaluationContext, in_trs : FlowData.Tr
 	var phase : float = getSettingValue( ctx, "phase" )
 	var point_size : Vector3 = Vector3.ONE * getSettingValue( ctx, "size")
 	
-	if settings.groups.size() < 1:
+	if groups.size() < 1:
 		setError( "Define number of points in the group array")
 		return
 		
-	var save_group_id : bool = true if settings.out_group_id else false
+	var save_group_id : bool = true if out_group_id else false
 	var out_group_container := PackedInt32Array()
 	if save_group_id:
-		out_group_container = output.addStream( settings.out_group_id, FlowData.DataType.Int )
+		out_group_container = output.addStream( out_group_id, FlowData.DataType.Int )
 
 	var qs_num_samples := 0
-	for val : int in settings.groups:
+	for val : int in groups:
 		qs_num_samples += val
 		
 	if qs_num_samples < 0:
@@ -151,11 +198,11 @@ func quasiRandomSampling( ctx : FlowData.EvaluationContext, in_trs : FlowData.Tr
 		var transform = Transform3D( FlowData.eulerToBasis(rotation), origin )
 		
 		var offset := -size * 0.5
-		if settings.distribution == SamplePointsNodeSettings.eDistribution.QuasiRandom2D:
+		if distribution == eDistribution.QuasiRandom2D:
 			offset.y = 0.0
 			
 		var color_idx := 0
-		var max_j : int = settings.groups[color_idx]
+		var max_j : int = groups[color_idx]
 	
 		#print( "num_samples is %d. Max_j starts at %d " % [ qs_num_samples, max_j ] )
 		for j : int in qs_num_samples:
@@ -166,9 +213,9 @@ func quasiRandomSampling( ctx : FlowData.EvaluationContext, in_trs : FlowData.Tr
 			if save_group_id:
 				if j >= max_j:
 					color_idx += 1 
-					#print( "  At idx %d New limit %d : %d + %d is %d" % [ idx, color_idx, max_j, settings.groups[ color_idx ], max_j + settings.groups[ color_idx ] ])
-					#if color_idx < settings.groups.size():
-					max_j += settings.groups[ color_idx ]
+					#print( "  At idx %d New limit %d : %d + %d is %d" % [ idx, color_idx, max_j, groups[ color_idx ], max_j + groups[ color_idx ] ])
+					#if color_idx < groups.size():
+					max_j += groups[ color_idx ]
 				out_group_container[idx] = color_idx
 			idx += 1
 
@@ -227,7 +274,7 @@ func blueNoiseSampling( ctx : FlowData.EvaluationContext, in_trs : FlowData.Tran
 		var cell_size : Vector3 = Vector3( max_size, 1.0, max_size )
 		
 		# Add i + 256 so each point has a potentially different distribution
-		var base_j : int = (settings.random_seed + i * 256) & 0xffff
+		var base_j : int = (random_seed + i * 256) & 0xffff
 		var max_x = min( size.x, max_size ) * 0.5
 		var max_z = min( size.z, max_size ) * 0.5
 		for j in range( num_samples ):
@@ -255,10 +302,10 @@ func execute( ctx : FlowData.EvaluationContext ):
 	var out_data := FlowData.Data.new()
 	out_data.addCommonStreams( 0 )
 
-	if settings.distribution == SamplePointsNodeSettings.eDistribution.BlueNoise2D:
+	if distribution == eDistribution.BlueNoise2D:
 		blueNoiseSampling( ctx, in_trs, out_data )
 	else:
-		if settings.distribution == SamplePointsNodeSettings.eDistribution.UniformGrid:
+		if distribution == eDistribution.UniformGrid:
 			uniformSampling( ctx, in_trs, out_data )
 		else:
 			quasiRandomSampling( ctx, in_trs, out_data )

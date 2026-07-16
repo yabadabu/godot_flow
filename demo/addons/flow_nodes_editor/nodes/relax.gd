@@ -1,10 +1,13 @@
 @tool
 extends FlowNodeBase
 
+@export var num_iterations := 10
+@export var strength := 0.5
+@export var padding := 0.0
+
 func _init():
 	meta_node = {
 		"title" : "Relax",
-		"settings" : RelaxNodeSettings,
 		"category" : "Spatial",
 		"ins" : [{"label": "In" }], 
 		"outs" : [{ "label" : "Out" }],
