@@ -115,9 +115,6 @@ func getCategory() -> String:
 	var meta := getMeta()
 	return meta.get( "category", "Others...")
 	
-func refreshFromSettings():
-	pass
-	
 func setError( new_err : String ):
 	#if new_err:
 		#push_error( "Node.Err %s : %s" % [ name, new_err ])

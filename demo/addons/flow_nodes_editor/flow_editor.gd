@@ -201,7 +201,6 @@ func _on_inputs_changed():
 				if node.change_id != curr_input.change_id:
 					node.change_id = curr_input.change_id
 					node.dirty = true
-					node.refreshFromSettings()
 					print( "InputNode %s becomes dirty" % [ node.name ] )
 					queueRegen()
 					num_changes += 1
@@ -279,7 +278,6 @@ func onNodePropertyChanged( prop_name : String ):
 		if flow_node:
 			#print( "Node %s.%s has changed" % [ inspected_node.name, prop_name ])
 			flow_node.onPropChanged( prop_name )
-			flow_node.refreshFromSettings()
 			queueRegen()
 		
 # ------------------------------------------------
