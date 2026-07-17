@@ -1,10 +1,11 @@
 @tool
 extends FlowNodeBase
 
+@export var tags: String = ""
+
 func _init():
 	meta_node = {
 		"title" : "Filter Data By Tag",
-		"settings" : FilterDataByTagNodeSettings,
 		"category" : "Filter",
 		"ins" : [{ "label": "In" }], 
 		"outs" : [{ "label" : "Inside" }, { "label" : "Outside" }],
@@ -18,7 +19,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 		return
 	
 	var filter_tags := []
-	var raw_tags = settings.tags.split(",")
+	var raw_tags = tags.split(",")
 	for raw in raw_tags:
 		var clean = raw.strip_edges()
 		if clean != "":

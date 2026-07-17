@@ -1,10 +1,18 @@
 @tool
 extends FlowNodeBase
 
+@export var attribute_name: String
+
+enum eCondition {
+	ExactMatch,
+	StartsWith,
+	AnyWhere
+	}
+@export var condition : eCondition = eCondition.ExactMatch
+
 func _init():
 	meta_node = {
 		"title" : "Filter Data By Attribute",
-		"settings" : FilterDataByAttributeNodeSettings,
 		"category" : "Filter",
 		"ins" : [{ "label": "In" }], 
 		"outs" : [{ "label" : "Inside" }, { "label" : "Outside" }],
@@ -17,16 +25,16 @@ func execute( ctx : FlowData.EvaluationContext ):
 		setError("Input 'In' is not connected")
 		return
 		
-	var attr_name : String = settings.attribute_name
+	var attr_name : String = attribute_name
 	var match_found := false
 	
-	match settings.condition:
-		FilterDataByAttributeNodeSettings.eCondition.ExactMatch:
+	match condition:
+		eCondition.ExactMatch:
 			match_found = in_data.hasStream(attr_name)
-		FilterDataByAttributeNodeSettings.eCondition.StartsWith:
+		eCondition.StartsWith:
 			var names = in_data.streams.keys()
 			match_found = names.any(func(c): return c.begins_with(attr_name))
-		FilterDataByAttributeNodeSettings.eCondition.AnyWhere:
+		eCondition.AnyWhere:
 			var names = in_data.streams.keys()
 			match_found = names.any(func(c): return c.contains(attr_name))
 

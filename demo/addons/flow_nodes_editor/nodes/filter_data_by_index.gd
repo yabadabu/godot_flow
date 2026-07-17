@@ -1,10 +1,11 @@
 @tool
 extends FlowNodeBase
 
+@export var indices: String = ""
+
 func _init():
 	meta_node = {
 		"title" : "Filter Data By Index",
-		"settings" : FilterDataByIndexNodeSettings,
 		"category" : "Filter",
 		"ins" : [{ "label": "In" }], 
 		"outs" : [{ "label" : "Out" }],
@@ -65,10 +66,10 @@ func execute( ctx : FlowData.EvaluationContext ):
 	# This will store the indices that pass the test
 	var indices_true = PackedInt32Array( )
 	
-	var raw_groups : PackedStringArray = settings.indices.split(",")
+	var raw_groups : PackedStringArray = indices.split(",")
 	for exp in raw_groups:
 		var clean_exp = exp.strip_edges()
-		if settings.trace:
+		if trace:
 			print( "Parsing exp %s" % [ clean_exp ])
 		if clean_exp.is_empty():
 			continue
