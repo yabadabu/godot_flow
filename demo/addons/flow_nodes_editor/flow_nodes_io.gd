@@ -157,14 +157,14 @@ static func nodes_as_dict( nodes, frames, editor : FlowGraphEditor ):
 		if connection.from_node in exported_node_names and connection.to_node in exported_node_names:
 			links.append( connection )
 			
-	var frames_clean = frames.map( func( node ):
-		var attached : Array[StringName] = editor.gedit.get_attached_nodes_of_frame(node.name)
+	var frames_clean = frames.map( func( graph_frame ):
+		var attached : Array[StringName] = editor.gedit.get_attached_nodes_of_frame(graph_frame.name)
 		return {
-			"position" : ( node.ui_position_offset - min_pos ) / editor.ui_scale,
-			"size" : node.size,
-			"name" : node.name,
-			"tint_color" : node.tint_color,
-			"title" : node.title,
+			"position" : ( graph_frame.position_offset - min_pos ) / editor.ui_scale,
+			"size" : graph_frame.size,
+			"name" : graph_frame.name,
+			"tint_color" : graph_frame.tint_color,
+			"title" : graph_frame.title,
 			"attached" : attached,
 		}
 	)		
