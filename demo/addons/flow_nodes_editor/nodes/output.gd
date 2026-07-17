@@ -1,10 +1,12 @@
 @tool
 extends FlowNodeBase
 
+@export var out_name : String = "Out"
+@export var data_type : FlowData.DataType = FlowData.DataType.Invalid
+
 func _init():
 	meta_node = {
 		"title" : "Output",
-		"settings" : OutputNodeSettings,
 		"category" : "Control Flow",
 		"ins" : [{ "label" : "Out" }],
 		"outs" : [],
@@ -15,4 +17,4 @@ func _init():
 	}
 	
 func getTitle() -> String:
-	return settings.name
+	return out_name

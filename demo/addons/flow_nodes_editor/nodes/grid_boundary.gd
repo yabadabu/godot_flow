@@ -1,12 +1,16 @@
 @tool
 extends FlowNodeBase
 
-const GridBoundaryNodeSettings = preload("res://addons/flow_nodes_editor/nodes/grid_boundary_settings.gd")
+@export var cell_size : Vector3 = Vector3.ONE
+@export var wall_thickness : float = 0.2
+@export var wall_height : float = 1.0
+@export var include_corners : bool = true
+@export var type_attribute : String = "boundary_type"
+@export var normal_attribute : String = "boundary_normal"
 
 func _init():
 	meta_node = {
 		"title" : "Grid Boundary",
-		"settings" : GridBoundaryNodeSettings,
 		"category" : "Spatial",
 		"ins" : [{ "label": "Filled Cells" }],
 		"outs" : [{ "label" : "Edges" }, { "label" : "Corners" }, { "label" : "All" }],
@@ -15,9 +19,9 @@ func _init():
 
 func _safe_cell_size() -> Vector3:
 	return Vector3(
-		maxf(absf(settings.cell_size.x), 0.0001),
-		maxf(absf(settings.cell_size.y), 0.0001),
-		maxf(absf(settings.cell_size.z), 0.0001)
+		maxf(absf(cell_size.x), 0.0001),
+		maxf(absf(cell_size.y), 0.0001),
+		maxf(absf(cell_size.z), 0.0001)
 	)
 
 func _key(cell : Vector3i) -> String:
@@ -75,10 +79,10 @@ func _records_to_data(records : Array) -> FlowData.Data:
 		sizes[idx] = record.size
 		normals[idx] = record.normal
 		types[idx] = record.type
-	if settings.normal_attribute != "":
-		out_data.registerStream(settings.normal_attribute, normals, FlowData.DataType.Vector)
-	if settings.type_attribute != "":
-		out_data.registerStream(settings.type_attribute, types, FlowData.DataType.String)
+	if normal_attribute != "":
+		out_data.registerStream(normal_attribute, normals, FlowData.DataType.Vector)
+	if type_attribute != "":
+		out_data.registerStream(type_attribute, types, FlowData.DataType.String)
 	return out_data
 
 func execute(_ctx : FlowData.EvaluationContext):
@@ -120,7 +124,7 @@ func execute(_ctx : FlowData.EvaluationContext):
 			if occupied.has(_key(neighbor)):
 				continue
 			var edge_pos := center + dir * 0.5 * cell_size
-			var edge_size := Vector3(cell_size.x, settings.wall_height, settings.wall_thickness)
+			var edge_size := Vector3(cell_size.x, wall_height, wall_thickness)
 			var edge_rot := Vector3.ZERO
 			if dir.x == -1.0:
 				edge_rot.y = 90.0
@@ -130,7 +134,7 @@ func execute(_ctx : FlowData.EvaluationContext):
 				edge_rot.y = 180.0
 			_append_record(edge_records, edge_pos, edge_rot, edge_size, dir, "edge")
 
-		if settings.include_corners:
+		if include_corners:
 			for sx : int in [-1, 1]:
 				for sz : int in [-1, 1]:
 					var corner_key := "%d,%d,%d" % [cell.x * 2 + sx, cell.y, cell.z * 2 + sz]
@@ -144,7 +148,7 @@ func execute(_ctx : FlowData.EvaluationContext):
 						0.0,
 						float(sz) * cell_size.z * 0.5
 					)
-					var corner_size := Vector3(settings.wall_thickness, settings.wall_height, settings.wall_thickness)
+					var corner_size := Vector3(wall_thickness, wall_height, wall_thickness)
 					var corner_normal := Vector3(float(sx), 0.0, float(sz)).normalized()
 					_append_record(corner_records, corner_pos, Vector3.ZERO, corner_size, corner_normal, "corner")
 

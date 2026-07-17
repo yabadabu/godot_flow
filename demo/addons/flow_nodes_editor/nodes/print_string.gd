@@ -1,10 +1,12 @@
 @tool
 extends FlowNodeBase
 
+@export var prefix_message: String = "Log:"
+@export var attribute_to_print: String = ""
+
 func _init():
 	meta_node = {
 		"title" : "Print String",
-		"settings" : PrintStringNodeSettings,
 		"category" : "Debug",
 		"ins" : [{ "label": "In" }], 
 		"outs" : [{ "label" : "Out" }],
@@ -17,8 +19,8 @@ func execute( ctx : FlowData.EvaluationContext ):
 		setError("Input 'In' is not connected")
 		return
 	
-	var prefix = settings.prefix_message
-	var attr_name = settings.attribute_to_print
+	var prefix = prefix_message
+	var attr_name = attribute_to_print
 	if attr_name != "":
 		var stream = in_data.findStream(attr_name)
 		if stream:

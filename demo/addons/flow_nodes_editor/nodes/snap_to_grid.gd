@@ -1,12 +1,14 @@
 @tool
 extends FlowNodeBase
 
-const SnapToGridNodeSettings = preload("res://addons/flow_nodes_editor/nodes/snap_to_grid_settings.gd")
+@export var grid_size: Vector3 = Vector3.ONE * 2.0
+@export var snap_position: bool = true
+@export var snap_rotation: bool = false
+@export var snap_scale: bool = false
 
 func _init():
 	meta_node = {
 		"title" : "Snap to Grid",
-		"settings" : SnapToGridNodeSettings,
 		"category" : "Spatial",
 		"ins" : [{ "label": "In" }], 
 		"outs" : [{ "label" : "Out" }],
@@ -24,7 +26,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 	
 	var grid_sz = getSettingValue(ctx, "grid_size", Vector3.ONE * 2.0)
 	
-	if settings.snap_position:
+	if snap_position:
 		var pos = out_data.cloneStream(FlowData.AttrPosition)
 		for i in range(size):
 			if grid_sz.x != 0.0: pos[i].x = round(pos[i].x / grid_sz.x) * grid_sz.x
@@ -32,7 +34,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 			if grid_sz.z != 0.0: pos[i].z = round(pos[i].z / grid_sz.z) * grid_sz.z
 		out_data.registerStream(FlowData.AttrPosition, pos, FlowData.DataType.Vector)
 		
-	if settings.snap_rotation:
+	if snap_rotation:
 		var rot = out_data.cloneStream(FlowData.AttrRotation)
 		for i in range(size):
 			if grid_sz.x != 0.0: rot[i].x = round(rot[i].x / grid_sz.x) * grid_sz.x
@@ -40,7 +42,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 			if grid_sz.z != 0.0: rot[i].z = round(rot[i].z / grid_sz.z) * grid_sz.z
 		out_data.registerStream(FlowData.AttrRotation, rot, FlowData.DataType.Vector)
 		
-	if settings.snap_scale:
+	if snap_scale:
 		var ssize = out_data.cloneStream(FlowData.AttrSize)
 		for i in range(size):
 			if grid_sz.x != 0.0: ssize[i].x = round(ssize[i].x / grid_sz.x) * grid_sz.x

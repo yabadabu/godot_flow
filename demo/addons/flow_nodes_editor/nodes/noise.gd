@@ -1,44 +1,109 @@
 @tool
 extends FlowNodeBase
+@export var out_name : String = "density"
+@export var in_scale : float = 1.0
+@export var noise_bias : float = 0.0
+@export var noise_amplitude : float = 1.0
+@export var sample_attribute : String = "position"
+
+enum eOutputType {
+	Float = 0,
+	Vector3 = 1,
+}
+enum eOutputRange {
+	ZeroToOne = 0,
+	MinusOneToOne = 1,
+}
+
+enum eMode {
+	Override = 0,
+	Add = 1,
+}
+
+enum eSampleSpace {
+	World3D = 0,
+	XZ2D = 1,
+}
+
+enum eNoiseType {
+	Value = 0,
+	ValueCubic = 1,
+	Perlin = 2,
+	Cellular = 3,
+	Simplex = 4,
+	SimplexSmooth = 5,
+}
+
+enum eFractalType {
+	None = 0,
+	FBM = 1,
+	Ridged = 2,
+	PingPong = 3,
+}
+@export var output_range : eOutputRange = eOutputRange.MinusOneToOne
+@export var output_type : eOutputType = eOutputType.Float
+@export var mode : eMode = eMode.Override
+@export var sample_space : eSampleSpace = eSampleSpace.World3D
+@export var noise_type : eNoiseType = eNoiseType.Value
+@export var fractal_type : eFractalType = eFractalType.None:
+	set(value):
+		value = clampi(value, 0, eFractalType.size() - 1)
+		if fractal_type != value:
+			fractal_type = value
+			notify_property_list_changed()
+@export var fractal_octaves : int = 4
+@export var fractal_lacunarity : float = 2.0
+@export var fractal_gain : float = 0.5
+@export var fractal_ping_pong_strength : float = 2.0
+
 
 func _init():
 	meta_node = {
 		"title" : "Noise",
-		"settings" : NoiseNodeSettings,
 		"category" : "Spatial",
 		"ins" : [{ "label" : "In" }],
 		"outs" : [{ "label" : "Out" }],
 		"tooltip" : "Outputs an attribute with Noise values",
 	}
 
+func exposeParam(name : String) -> bool:
+	if name == "fractal_octaves" or name == "fractal_lacunarity" or name == "fractal_gain" or name == "fractal_ping_pong_strength":
+		return fractal_type != eFractalType.None
+	return true
+
+func _get_attribute_selector_props() -> Array[Dictionary]:
+	return [
+		{ "prop": "sample_attribute", "port": 0 },
+	]
+
 func _map_noise_type() -> int:
-	match settings.noise_type:
-		NoiseNodeSettings.eNoiseType.ValueCubic:
+	match noise_type:
+		eNoiseType.ValueCubic:
 			return FastNoiseLite.NoiseType.TYPE_VALUE
-		NoiseNodeSettings.eNoiseType.Perlin:
+		eNoiseType.Perlin:
 			return FastNoiseLite.NoiseType.TYPE_PERLIN
-		NoiseNodeSettings.eNoiseType.Cellular:
+		eNoiseType.Cellular:
 			return FastNoiseLite.NoiseType.TYPE_CELLULAR
-		NoiseNodeSettings.eNoiseType.Simplex:
+		eNoiseType.Simplex:
 			return FastNoiseLite.NoiseType.TYPE_SIMPLEX
-		NoiseNodeSettings.eNoiseType.SimplexSmooth:
+		eNoiseType.SimplexSmooth:
 			return FastNoiseLite.NoiseType.TYPE_SIMPLEX
 		_:
 			return FastNoiseLite.NoiseType.TYPE_VALUE
 
 func _map_fractal_type() -> int:
-	match settings.fractal_type:
-		NoiseNodeSettings.eFractalType.FBM:
+	match fractal_type:
+		eFractalType.FBM:
 			return FastNoiseLite.FractalType.FRACTAL_FBM
-		NoiseNodeSettings.eFractalType.Ridged:
+		eFractalType.Ridged:
 			return FastNoiseLite.FractalType.FRACTAL_RIDGED
-		NoiseNodeSettings.eFractalType.PingPong:
+		eFractalType.PingPong:
 			return FastNoiseLite.FractalType.FRACTAL_PING_PONG
 		_:
 			return FastNoiseLite.FractalType.FRACTAL_NONE
 
 func _resolve_sample_positions(in_data : FlowData.Data) -> PackedVector3Array:
-	var sample_name = settings.sample_attribute.strip_edges()
+	var sample_name = sample_attribute.strip_edges()
 	if sample_name == "":
 		sample_name = FlowData.AttrPosition
 	var sample_stream = in_data.findStream(sample_name)
@@ -57,9 +122,9 @@ func _resolve_sample_positions(in_data : FlowData.Data) -> PackedVector3Array:
 	return in_data.getVector3Container(FlowData.AttrPosition)
 
 func _sample_noise(noise : FastNoiseLite, p : Vector3) -> float:
-	var nval : float = noise.get_noise_2d(p.x, p.z) if settings.sample_space == NoiseNodeSettings.eSampleSpace.XZ2D else noise.get_noise_3d(p.x, p.y, p.z)
+	var nval : float = noise.get_noise_2d(p.x, p.z) if sample_space == eSampleSpace.XZ2D else noise.get_noise_3d(p.x, p.y, p.z)
 	nval = clampf(nval,-1.0,1.0)
-	if settings.output_range == NoiseNodeSettings.eOutputRange.ZeroToOne:
+	if output_range == eOutputRange.ZeroToOne:
 		return ( nval + 1.0 ) * 0.5
 	return nval
 	
@@ -73,32 +138,32 @@ func execute( _ctx : FlowData.EvaluationContext ):
 
 	var ipos : PackedVector3Array = _resolve_sample_positions(in_data)
 	if ipos.size() != in_data.size():
-		setError("Noise source attribute '%s' must be a Vector stream with %d values (or 1 for broadcast)" % [settings.sample_attribute, in_data.size()])
+		setError("Noise source attribute '%s' must be a Vector stream with %d values (or 1 for broadcast)" % [sample_attribute, in_data.size()])
 		return
 		
 	var noise := FastNoiseLite.new()
-	noise.seed = settings.random_seed
+	noise.seed = random_seed
 	noise.noise_type = _map_noise_type()
 	noise.fractal_type = _map_fractal_type()
-	noise.fractal_octaves = maxi(1, settings.fractal_octaves)
-	noise.fractal_lacunarity = settings.fractal_lacunarity
-	noise.fractal_gain = settings.fractal_gain
-	noise.fractal_ping_pong_strength = settings.fractal_ping_pong_strength
+	noise.fractal_octaves = maxi(1, fractal_octaves)
+	noise.fractal_lacunarity = fractal_lacunarity
+	noise.fractal_gain = fractal_gain
+	noise.fractal_ping_pong_strength = fractal_ping_pong_strength
 	
-	var in_scale : float = settings.in_scale
-	var noise_bias : float = settings.noise_bias
-	var noise_amplitude : float = settings.noise_amplitude
+	var in_scale : float = in_scale
+	var noise_bias : float = noise_bias
+	var noise_amplitude : float = noise_amplitude
 	
 	var in_size := in_data.size()
 	
 	var target_exists := false
-	var existing_stream = out_data.findStream(settings.out_name)
-	if existing_stream != null and settings.mode == NoiseNodeSettings.eMode.Add:
+	var existing_stream = out_data.findStream(out_name)
+	if existing_stream != null and mode == eMode.Add:
 		target_exists = true
 
 	var out_container
 	
-	if settings.output_type == NoiseNodeSettings.eOutputType.Vector3:
+	if output_type == eOutputType.Vector3:
 		var sout_generated := PackedVector3Array()
 		sout_generated.resize(in_size)
 		for i in range(in_size):
@@ -158,7 +223,7 @@ func execute( _ctx : FlowData.EvaluationContext ):
 		else:
 			out_container = sout_generated
 			
-	var err = out_data.registerStream(settings.out_name, out_container)
+	var err = out_data.registerStream(out_name, out_container)
 	if err:
 		setError(err)
 		return

@@ -1,10 +1,11 @@
 @tool
 extends FlowNodeBase
 
+@export var input_name : String = "in_val"
+
 func _init():
 	meta_node = {
 		"title" : "Input",
-		"settings" : InputNodeSettings,
 		"category" : "Control Flow",
 		"ins" : [],
 		"outs" : [{ "label" : "Data" }],
@@ -13,34 +14,32 @@ func _init():
 		"hide_inputs" : true
 	}
 	
-var change_id : int = -1
-	
 func getTitle() -> String:
-	return settings.name
+	return input_name
 
-func refreshFromSettings():
-	var editor = getEditor()
-	if editor and editor.current_resource:
-		var input = editor.current_resource.findInParamByName( settings.name )
+#func refreshFromSettings():
+	#var editor = getEditor()
+	#if editor and editor.current_resource:
+		#var input = editor.current_resource.findInParamByName( input_name )
+#
+		#var data_type : FlowData.DataType = input.getDataType() if input else FlowData.DataType.Invalid
+		#meta_node.outs[0].data_type = data_type
+			#
+		## Update the color
+		#if data_type == FlowData.DataType.Invalid:
+			#set_slot_color_right( 0, Color.WHITE )
+		#else:
+			#var color := getColorForFlowDataType( data_type )
+			#set_slot_color_right( 0, color )
+	#super.refreshFromSettings()
 
-		var data_type : FlowData.DataType = input.getDataType() if input else FlowData.DataType.Invalid
-		meta_node.outs[0].data_type = data_type
-			
-		# Update the color
-		if data_type == FlowData.DataType.Invalid:
-			set_slot_color_right( 0, Color.WHITE )
-		else:
-			var color := getColorForFlowDataType( data_type )
-			set_slot_color_right( 0, color )
-	super.refreshFromSettings()
-
-func onPropChanged( prop_name : String ):
-	super.onPropChanged( prop_name )
-	refreshFromSettings()
+#func onPropChanged( prop_name : StringName ):
+	#super.onPropChanged( prop_name )
+	#refreshFromSettings()
 
 func execute( ctx : FlowData.EvaluationContext ):
-	var output = ctx.resolveInput( settings.name )
-	if settings.trace:
-		print( "%s Output %s resolved to: %s" % [name, settings.name, output])
+	var output = ctx.resolveInput( input_name )
+	if trace:
+		print( "%s Output %s resolved to: %s" % [name, input_name, output])
 	set_output( 0, output )
 	
