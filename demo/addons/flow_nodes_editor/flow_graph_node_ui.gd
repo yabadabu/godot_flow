@@ -18,6 +18,8 @@ func _ready():
 	
 func _exit_tree():
 	if flow_node and flow_node.ui_node == self:
+		flow_node.settings_changed.disconnect( regenerateFromFlowNode )
+		flow_node.contents_changed.disconnect( refreshDebug )
 		flow_node.ui_node = null
 	
 func redrawUI():
@@ -32,22 +34,28 @@ func setActivity( amount : float ):
 		modulate = Color(1.0, 0.5, 0.5)
 	
 func checkDrawDebug():
-	if flow_node and not is_instance_valid(draw_debug) or draw_debug.get_parent() != self:
+	if flow_node == null:
+		return
+	if not is_instance_valid(draw_debug) or draw_debug.get_parent() != self:
 		draw_debug = NodeDrawDebug.new()
 		draw_debug.node = flow_node
 		add_child(draw_debug)
 		# if the helper gets freed, clear our reference
 		draw_debug.tree_exited.connect(func(): draw_debug = null)
 
-func setFlowNode( new_node : FlowNodeBase ):
-	if flow_node == new_node or ( flow_node == null and new_node != null ):
-		flow_node = new_node
-		flow_node.ui_node = self
-		position_offset = flow_node.ui_position_offset
-		flow_node.settings_changed.connect( regenerateFromFlowNode )
-		flow_node.contents_changed.connect( refreshDebug )
-		position_offset_changed.connect( on_moved )
-		regenerateFromFlowNode( StringName() )
+func bindFlowNode(new_node: FlowNodeBase, flow_editor: FlowGraphEditor):
+	flow_node = new_node
+	editor = flow_editor
+	flow_node.ui_node = self
+	flow_node.settings_changed.connect(regenerateFromFlowNode)
+	flow_node.contents_changed.connect(refreshDebug)
+	position_offset_changed.connect(on_moved)
+
+func initializeView():
+	assert(is_inside_tree())
+	position_offset = flow_node.ui_position_offset
+	initFromScript(editor)
+	regenerateFromFlowNode()
 
 func on_moved():
 	if flow_node:
@@ -61,15 +69,19 @@ func regenerateFromFlowNode( PropName : StringName = StringName() ):
 	self.title = flow_node.getTitle()
 	self.name = flow_node.name
 	modulate = Color( 0.7, 0.7, 0.7, 0.5 ) if flow_node.disabled else Color.WHITE
+	#print( "%s regenerateFromFlowNode" % [ flow_node.name ])
 	refreshDebug()
 
 func refreshDebug():
-	queue_redraw()
+	if not is_inside_tree() or not flow_node:
+		return
+	#print( "%s refresh Debug. Enabled:%s ShouldClear:%s" % [ flow_node.name, flow_node.debug_enabled, draw_debug and ( not flow_node.debug_enabled or flow_node.disabled ) ])
 	if flow_node.debug_enabled:
 		checkDrawDebug()
 		draw_debug.setupDraw()
 	if draw_debug and ( not flow_node.debug_enabled or flow_node.disabled ):
 		draw_debug.cleanup_multimesh_direct()
+	queue_redraw()
 
 func updateStyle():
 	var sb = get_theme_stylebox("titlebar", "GraphNode").duplicate(true)

@@ -44,7 +44,7 @@ data = {
 "to_node": &"id_0004_transform",
 "to_port": 0
 }],
-"min_pos": Vector2(0, -29.68685),
+"min_pos": Vector2(0, 0),
 "nodes": [{
 "args_port": {
 "In": {
@@ -55,31 +55,56 @@ data = {
 "name": &"id_0004_transform",
 "position": Vector2(384.18356, 0),
 "settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"offset_local_space": true,
-"offset_max": Vector3(0, 0, 0),
-"offset_min": Vector3(0, 0, 0),
 "random_seed": 344616237,
-"rotation_local_space": false,
-"rotation_max": Vector3(0, 0, 0),
-"rotation_min": Vector3(0, 0, 0),
-"scale_max": Vector3(1, 1, 1),
-"scale_min": Vector3(1, 1, 1),
-"title": "Transform",
-"trace": false,
-"uniform_scale": true
+"title": "Transform"
 },
 "show_disconnected_inputs": false,
 "template": "transform"
+}, {
+"args_port": {},
+"name": &"id_0003_scan_nodes",
+"position": Vector2(0, 149.68684),
+"settings": {
+"group_name": "RefPoints",
+"random_seed": 393844403,
+"title": "Scan Nodes"
+},
+"show_disconnected_inputs": false,
+"template": "scan_nodes"
+}, {
+"args_port": {},
+"name": &"id_0001_grid",
+"position": Vector2(0, 29.68685),
+"settings": {
+"origin": Vector3(0.05, 0, 0.05),
+"random_seed": 2710621526,
+"size": 0.07,
+"step": Vector3(0.1, 1, 0.1),
+"title": "Grid",
+"x": 40,
+"z": 40
+},
+"show_disconnected_inputs": false,
+"template": "grid"
+}, {
+"args_port": {
+"In A": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0006_math_op",
+"position": Vector2(580, 169.68684),
+"settings": {
+"debug_enabled": true,
+"debug_modulate_by": "distance",
+"operation": 14,
+"out_name": "@last",
+"random_seed": 2509549124,
+"title": "Math"
+},
+"show_disconnected_inputs": false,
+"template": "math_op"
 }, {
 "args_port": {
 "In": {
@@ -90,22 +115,11 @@ data = {
 "name": &"id_0004_remap",
 "position": Vector2(400, 169.68684),
 "settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
 "debug_modulate_by": "distance",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
 "in_name": "distance",
-"inspect_enabled": false,
-"out_name": "@source",
 "random_seed": 2803866490,
 "remap_curve": SubResource("Curve_8ag8x"),
-"title": "Remap",
-"trace": false
+"title": "Remap"
 },
 "show_disconnected_inputs": false,
 "template": "remap"
@@ -123,119 +137,19 @@ data = {
 "name": &"id_0002_distance",
 "position": Vector2(180, 29.68685),
 "settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
 "debug_modulate_by": "distance",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"in_nameA": "position",
-"in_nameB": "position",
-"inspect_enabled": false,
-"max_distance": 0.0,
-"out_name": "distance",
 "random_seed": 2100802008,
-"title": "Distance",
-"trace": false
+"title": "Distance"
 },
 "show_disconnected_inputs": false,
 "template": "distance"
-}, {
-"args_port": {},
-"name": &"id_0001_grid",
-"position": Vector2(0, 29.68685),
-"settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"origin": Vector3(0.05, 0, 0.05),
-"random_seed": 2710621526,
-"rotation": Vector3(0, 0, 0),
-"size": 0.07,
-"step": Vector3(0.1, 1, 0.1),
-"title": "Grid",
-"trace": false,
-"x": 40,
-"y": 1,
-"z": 40
-},
-"show_disconnected_inputs": false,
-"template": "grid"
-}, {
-"args_port": {
-"In A": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0006_math_op",
-"position": Vector2(580, 169.68684),
-"settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": true,
-"debug_mode": 0,
-"debug_modulate_by": "distance",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"in_nameA": "@last",
-"in_nameB": "@last",
-"inspect_enabled": false,
-"operation": 14,
-"out_name": "@last",
-"random_seed": 2509549124,
-"title": "Math",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "math_op"
-}, {
-"args_port": {},
-"name": &"id_0003_scan_nodes",
-"position": Vector2(0, 149.68684),
-"settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"filter_by_class_name": "",
-"filter_by_name": "",
-"group_name": "RefPoints",
-"import_metadata": false,
-"import_properties": Array[StringName]([]),
-"inspect_enabled": false,
-"random_seed": 393844403,
-"required_meta_bool": &"",
-"size_to_bounds": false,
-"title": "Scan Nodes",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "scan_nodes"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
 graph_name = "demo_remap"
-view_zoom = 0.75131476
-view_offset = Vector2(155.64279, -293.30417)
+view_zoom = 0.62092125
+view_offset = Vector2(-37.021423, -252.86792)
 new_name_counter = 7
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 

@@ -97,11 +97,6 @@ func bindResourceToEditor(res : FlowGraphResource):
 	gedit.zoom = res.view_zoom
 	gedit.scroll_offset = res.view_offset
 	data_inspector.setNode( null )
-		
-	#for node in res.all_nodes:
-		##print( "  Node %s show_disconnected_inputs = %s" % [node.name, node.show_disconnected_inputs ])
-		#if node.show_disconnected_inputs:
-			#node.nodeOptionsChanged( false )
 	
 func setResourceToEdit( new_resource : FlowGraphResource, new_resource_owner : FlowGraphNode3D ):
 	if new_resource and new_resource.loading:
@@ -123,8 +118,9 @@ func setResourceToEdit( new_resource : FlowGraphResource, new_resource_owner : F
 			tab_bar.current_tab = tab_idx
 	
 	if current_resource != new_resource:
-		print( "unbinding old, bindning new" )
-		unbindResourceFromEditor( current_resource )
+		if current_resource:
+			print( "unbinding old, bindning new" )
+			unbindResourceFromEditor( current_resource )
 		current_resource = new_resource
 		bindResourceToEditor( current_resource )
 	#else:
@@ -142,10 +138,10 @@ func onNodeCreated( node : FlowNodeBase ) -> FlowGraphNodeUI:
 	#print( "onNodeCreated called ", node)
 	var ui_node := FlowGraphNodeUI.new()
 	#ui_node.ui_scale = ui_scale
-	ui_node.setFlowNode( node )
-	ui_node.initFromScript( self )
-	refreshSignalsInputArgs( ui_node )
+	ui_node.bindFlowNode( node, self )
 	gedit.add_child(ui_node)
+	ui_node.initializeView( )
+	refreshSignalsInputArgs( ui_node )
 	#print( "gedit.addChild %s" % [ node.name ])
 	ui_node.draw.connect( ui_node._on_draw )
 	node.connections_changed.connect( func():
@@ -815,9 +811,10 @@ func evalGraph():
 		active_nodes.clear()
 		
 		var performance = []
+		print( "ctx.Run Starts " )
 		resource_owner.ctx.computeDirtyNodesAndRun()
 		active_nodes = resource_owner.ctx.active_nodes
-		#print( "ctx.Active_nodes: ", active_nodes )
+		print( "ctx.Active_nodes: ", active_nodes.size() )
 		
 		for node in active_nodes:
 			if node.inspect_enabled:
@@ -826,6 +823,7 @@ func evalGraph():
 			if dump_performance:
 				performance.append( { "name": node.name, "time": node.get_meta("exec_time_usec", 0) })
 
+		print( "ctx.Active_nodes refreshed" )
 		#print( "regen_pending is now false")
 		
 		var elapsed_usec = Time.get_ticks_usec() - time_start

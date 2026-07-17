@@ -20,8 +20,29 @@ data = {
 "to_node": &"id_0001_select_points",
 "to_port": 1
 }],
-"min_pos": Vector2(-200, 0),
+"min_pos": Vector2(0, 0),
 "nodes": [{
+"args_port": {},
+"name": &"id_0002_grid",
+"position": Vector2(0, 0),
+"settings": {
+"random_seed": 681398344,
+"title": "Grid"
+},
+"show_disconnected_inputs": false,
+"template": "grid"
+}, {
+"args_port": {},
+"name": &"id_0001_make_float",
+"position": Vector2(0, 80),
+"settings": {
+"random_seed": 1015930654,
+"title": "Make Float",
+"value": 0.595
+},
+"show_disconnected_inputs": false,
+"template": "make_float"
+}, {
 "args_port": {
 "In": {
 "connected": true,
@@ -36,36 +57,12 @@ data = {
 "position": Vector2(180, 0),
 "settings": {
 "debug_enabled": true,
-"name": &"id_0001_select_points",
 "random_seed": 3281634826,
 "ratio": 0.269,
 "title": "Select Points"
 },
 "show_disconnected_inputs": false,
 "template": "select_points"
-}, {
-"args_port": {},
-"name": &"id_0001_make_float",
-"position": Vector2(0, 80),
-"settings": {
-"name": &"id_0001_make_float",
-"random_seed": 1015930654,
-"title": "Make Float",
-"value": 0.595
-},
-"show_disconnected_inputs": false,
-"template": "make_float"
-}, {
-"args_port": {},
-"name": &"id_0002_grid",
-"position": Vector2(0, 0),
-"settings": {
-"name": &"id_0002_grid",
-"random_seed": 681398344,
-"title": "Grid"
-},
-"show_disconnected_inputs": false,
-"template": "grid"
 }],
 "type": "flow_graph_nodes",
 "version": 1

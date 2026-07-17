@@ -117,6 +117,19 @@ func setupColors( out_data : FlowData.Data ):
 		RenderingServer.multimesh_instance_set_color( multimesh_rid, idx, color )
 
 func setupDraw():
+	if not is_inside_tree():
+		return
+
+	var world := get_viewport().get_world_3d()
+	if not world:
+		return
+		
+	var current_scenario := world.scenario
+	if scenario_rid != current_scenario:
+		scenario_rid = current_scenario
+		if instance_rid.is_valid():
+			RenderingServer.instance_set_scenario(instance_rid, scenario_rid)		
+		
 	var s = node
 	if !s.debug_enabled or s.disabled:
 		return
