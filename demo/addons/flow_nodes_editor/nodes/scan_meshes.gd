@@ -1,14 +1,14 @@
 @tool
-extends FlowNodeBase
+extends FlowBaseScanNode
 
 func _init():
 	meta_node = {
 		"title" : "Scan Meshes",
-		"settings" : ScanMeshesNodeSettings,
 		"category" : "Spatial",
 		"scans_scene" : true,
 		"ins" : [],
 		"outs" : [{ "label" : "Out", "data_type" : FlowData.DataType.NodeMesh }],
+		"tooltip" : "Returns all MeshInstance3D nodes found in the scene matching the search criteria.",
 	}
 	
 func execute( ctx : FlowData.EvaluationContext ):
@@ -17,4 +17,5 @@ func execute( ctx : FlowData.EvaluationContext ):
 	output.registerStream( "node", nodes, FlowData.DataType.NodeMesh )
 	var resources = nodes.map( func( obj ): return obj.mesh )
 	output.registerStream( "mesh", resources, FlowData.DataType.Resource )
+	importCommon( ctx, output, nodes )
 	set_output( 0, output )

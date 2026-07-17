@@ -1,12 +1,20 @@
 @tool
 extends FlowNodeBase
 
+@export var scene_attribute : String
+@export var scene_variants : Array[PackedScene] = []
+@export var scene_variant_weights : Array[float] = []
+@export var scene_selector_attribute : String = ""
+@export var randomize_scene_variants : bool = false
+@export var spawn_parent_path : String = ""
+@export var assign_target_path : String = ""
+@export var assign_attributes: Dictionary
+
 var spawn_id : int = 0
 
 func _init():
 	meta_node = {
 		"title" : "Spawn Scenes",
-		"settings" : SpawnScenesNodeSettings,
 		"category" : "Spawner",
 		"ins" : [{ "label" : "In" }],
 		"outs" : [{ "label" : "Out" }],
@@ -14,20 +22,27 @@ func _init():
 		"tooltip" : "Similar to spawn meshes but a full scene is instantiated on each node.\nA set of properties can be transfered from the nodes to each instanced scene.",
 	}
 
+func exposeParam(name : String) -> bool:
+	if name == "scene_variant_weights":
+		return scene_variants.size() > 0
+	if name == "scene_selector_attribute":
+		return scene_variants.size() > 0 and not randomize_scene_variants
+	return true
+
 func _exit_tree():
 	#removeInstancedComponents();
 	pass
 
 func _build_variant_weights() -> Array[float]:
-	var variants = settings.scene_variants
+	var variants = scene_variants
 	if variants.is_empty():
 		return []
 	var weights : Array[float] = []
 	weights.resize(variants.size())
 	for i in range(variants.size()):
 		var w = 1.0
-		if i < settings.scene_variant_weights.size():
-			w = maxf(0.0, float(settings.scene_variant_weights[i]))
+		if i < scene_variant_weights.size():
+			w = maxf(0.0, float(scene_variant_weights[i]))
 		weights[i] = w
 	var total = 0.0
 	for w in weights:
@@ -63,7 +78,7 @@ func _resolve_scene_for_point(idx : int, scenes_stream, variants : Array[PackedS
 	if variants.is_empty():
 		return null
 	
-	if settings.randomize_scene_variants:
+	if randomize_scene_variants:
 		var ridx = _pick_weighted_variant(variant_weights, rng.randf())
 		return variants[ridx]
 		
@@ -121,26 +136,26 @@ func execute( ctx : FlowData.EvaluationContext ):
 
 	# The scenes is going to be defined in an attribute?
 	var scenes = null
-	if settings.scene_attribute:
-		var stream_scenes = in_data.findStream( settings.scene_attribute )
+	if scene_attribute:
+		var stream_scenes = in_data.findStream( scene_attribute )
 		if stream_scenes == null:
-			setError( "Input does not have attribute '%s'" % settings.scene_attribute)
+			setError( "Input does not have attribute '%s'" % scene_attribute)
 			return
 		if stream_scenes.data_type != FlowData.DataType.Resource:
-			setError( "Attribute '%s' should be of type Resource Packed Scene" % settings.scene_attribute)
+			setError( "Attribute '%s' should be of type Resource Packed Scene" % scene_attribute)
 			return
 		scenes = stream_scenes.container
 
 	var selector_stream = null
-	if settings.scene_selector_attribute.strip_edges() != "":
-		selector_stream = in_data.findStream(settings.scene_selector_attribute)
+	if scene_selector_attribute.strip_edges() != "":
+		selector_stream = in_data.findStream(scene_selector_attribute)
 		if selector_stream != null and selector_stream.data_type != FlowData.DataType.Int and selector_stream.data_type != FlowData.DataType.Float:
-			setError("Scene selector attribute '%s' must be Int or Float" % settings.scene_selector_attribute)
+			setError("Scene selector attribute '%s' must be Int or Float" % scene_selector_attribute)
 			return
 		if selector_stream != null:
 			var sel_size = selector_stream.container.size()
 			if sel_size != in_data.size() and sel_size != 1:
-				setError("Scene selector attribute '%s' must have %d values or 1 value (got %d)" % [settings.scene_selector_attribute, in_data.size(), sel_size])
+				setError("Scene selector attribute '%s' must have %d values or 1 value (got %d)" % [scene_selector_attribute, in_data.size(), sel_size])
 				return
 
 	var transforms = in_data.getTransformsStream()
@@ -153,7 +168,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 	var spawn_parent = ctx.resolveSpawnParent(self)
 
 	var variants : Array[PackedScene] = []
-	for v in settings.scene_variants:
+	for v in scene_variants:
 		if v != null:
 			variants.append(v)
 	var variant_weights = _build_variant_weights()
@@ -163,8 +178,8 @@ func execute( ctx : FlowData.EvaluationContext ):
 
 	# Save which data is needed for customization
 	var streams_to_assign = []
-	for node_property in settings.assign_attributes:
-		var stream_name = settings.assign_attributes[ node_property ]
+	for node_property in assign_attributes:
+		var stream_name = assign_attributes[ node_property ]
 		var stream = in_data.findStream( stream_name )
 		if stream:
 			streams_to_assign.append( { "node_property" : node_property, "container" : stream.container } )
@@ -188,7 +203,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 		
 		# Identify which node will need customization
 		var assign_target : Node = node
-		var assign_target_path = settings.assign_target_path.strip_edges()
+		var assign_target_path = assign_target_path.strip_edges()
 		if assign_target_path != "":
 			var target_node = node.get_node_or_null(assign_target_path)
 			if target_node:

@@ -1,17 +1,34 @@
 @tool
 extends FlowNodeBase
 
+@export var mesh_attribute : String
+@export var mesh_variants : Array[Mesh] = [
+	preload( "res://addons/flow_nodes_editor/resources/unit_cube.tres" )
+]
+@export var mesh_variant_weights : Array[float] = []
+@export var mesh_selector_attribute : String = ""
+@export var randomize_mesh_variants : bool = false
+@export var color_attribute : String = "color"
+@export var use_vertex_colors : bool = true
+@export var spawn_parent_path : String = ""
+
 func _init():
 	meta_node = {
 		"title" : "Spawn Meshes",
-		"settings" : SpawnMeshesNodeSettings,
 		"category" : "Spawner",
 		"ins" : [{ "label" : "In" }],
 		"outs" : [{ "label" : "Out" }],
 		"is_final" : true,
 		"tooltip" : "Spawns a Mesh Instance on each point, applying the translation, rotation and scale.\nThe instanced mesh can be specified by point if a stream contains the mesh resource to be spawned.\nThe generates meshes are MultiMeshInstance3D.",
 	}
-	
+
+func exposeParam(name : String) -> bool:
+	if name == "mesh_variant_weights":
+		return mesh_variants.size() > 0
+	if name == "mesh_selector_attribute":
+		return mesh_variants.size() > 0 and not randomize_mesh_variants
+	return true
+
 var spawn_id : int = 0
 
 func _exit_tree():
@@ -39,8 +56,8 @@ func _build_variant_weights( num_variants : int ) -> Array[float]:
 	weights.resize(num_variants)
 	for i in range(num_variants):
 		var w = 1.0
-		if i < settings.mesh_variant_weights.size():
-			w = maxf(0.0, float(settings.mesh_variant_weights[i]))
+		if i < mesh_variant_weights.size():
+			w = maxf(0.0, float(mesh_variant_weights[i]))
 		weights[i] = w
 	var total = 0.0
 	for w in weights:
@@ -71,7 +88,7 @@ func _resolve_mesh_for_point(idx : int, meshes_stream, variants : Array[Mesh], v
 		if m != null:
 			return m
 
-	if settings.randomize_mesh_variants:
+	if randomize_mesh_variants:
 		var ridx = _pick_weighted_variant(variant_weights, rng.randf())
 		return variants[ridx]
 
@@ -97,31 +114,31 @@ func execute( ctx : FlowData.EvaluationContext ):
 		return
 
 	var meshes = null
-	if settings.mesh_attribute:
-		var stream_meshes = in_data.findStream( settings.mesh_attribute )
+	if mesh_attribute:
+		var stream_meshes = in_data.findStream( mesh_attribute )
 		if stream_meshes == null:
-			setError( "Input does not have attribute '%s'" % settings.mesh_attribute)
+			setError( "Input does not have attribute '%s'" % mesh_attribute)
 			return
 		if stream_meshes.data_type != FlowData.DataType.Resource:
-			setError( "Attribute '%s' should be of type Resource" % settings.mesh_attribute)
+			setError( "Attribute '%s' should be of type Resource" % mesh_attribute)
 			return
 		meshes = stream_meshes.container
 		
 	var selector_stream = null
-	if settings.mesh_selector_attribute.strip_edges() != "":
-		selector_stream = in_data.findStream(settings.mesh_selector_attribute)
+	if mesh_selector_attribute.strip_edges() != "":
+		selector_stream = in_data.findStream(mesh_selector_attribute)
 		if selector_stream != null and selector_stream.data_type != FlowData.DataType.Int and selector_stream.data_type != FlowData.DataType.Float:
-			setError("Mesh selector attribute '%s' must be Int or Float" % settings.mesh_selector_attribute)
+			setError("Mesh selector attribute '%s' must be Int or Float" % mesh_selector_attribute)
 			return
 		if selector_stream != null:
 			var sel_size = selector_stream.container.size()
 			if sel_size != in_data.size() and sel_size != 1:
-				setError("Mesh selector attribute '%s' must have %d values or 1 value (got %d)" % [settings.mesh_selector_attribute, in_data.size(), sel_size])
+				setError("Mesh selector attribute '%s' must have %d values or 1 value (got %d)" % [mesh_selector_attribute, in_data.size(), sel_size])
 				return
 
 	# Discard non-valid meshes
 	var variants : Array[Mesh] = []
-	for v in settings.mesh_variants:
+	for v in mesh_variants:
 		if v != null:
 			variants.append(v)
 	var variant_weights = _build_variant_weights( variants.size() )
@@ -178,12 +195,12 @@ func execute( ctx : FlowData.EvaluationContext ):
 			mmis[ key ] = []
 		mmis[ key ].append( idx )
 	
-	var color_stream = in_data.findStream(settings.color_attribute)
-	var has_colors = settings.use_vertex_colors and color_stream != null and color_stream.data_type == FlowData.DataType.Color
+	var color_stream = in_data.findStream(color_attribute)
+	var has_colors = use_vertex_colors and color_stream != null and color_stream.data_type == FlowData.DataType.Color
 	if has_colors:
 		var color_size = color_stream.container.size()
 		if color_size != in_size and color_size != 1:
-			setError("Color attribute '%s' must have %d values or 1 value (got %d)" % [settings.color_attribute, in_size, color_size])
+			setError("Color attribute '%s' must have %d values or 1 value (got %d)" % [color_attribute, in_size, color_size])
 			return
 
 	var prefix = title

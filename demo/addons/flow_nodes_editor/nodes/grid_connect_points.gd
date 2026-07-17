@@ -1,12 +1,20 @@
 @tool
 extends FlowNodeBase
 
-const GridConnectPointsNodeSettings = preload("res://addons/flow_nodes_editor/nodes/grid_connect_points_settings.gd")
+enum eAxisOrder {
+	XThenZ,
+	ZThenX,
+}
 
+@export var cell_size : Vector3 = Vector3.ONE
+@export var axis_order : eAxisOrder = eAxisOrder.XThenZ
+@export var include_input_points : bool = true
+@export var deduplicate_cells : bool = true
+@export var path_index_attribute : String = "path_index"
+		
 func _init():
 	meta_node = {
 		"title" : "Grid Connect Points",
-		"settings" : GridConnectPointsNodeSettings,
 		"category" : "Spatial",
 		"ins" : [{ "label": "In" }],
 		"outs" : [{ "label" : "Cells" }],
@@ -15,9 +23,9 @@ func _init():
 
 func _safe_cell_size() -> Vector3:
 	return Vector3(
-		maxf(absf(settings.cell_size.x), 0.0001),
-		maxf(absf(settings.cell_size.y), 0.0001),
-		maxf(absf(settings.cell_size.z), 0.0001)
+		maxf(absf(cell_size.x), 0.0001),
+		maxf(absf(cell_size.y), 0.0001),
+		maxf(absf(cell_size.z), 0.0001)
 	)
 
 func _to_cell(pos : Vector3, cell_size : Vector3) -> Vector3i:
@@ -28,7 +36,7 @@ func _to_pos(cell : Vector3i, cell_size : Vector3) -> Vector3:
 
 func _append_cell(cell : Vector3i, path_idx : int, positions : PackedVector3Array, path_ids : PackedInt32Array, seen : Dictionary, cell_size : Vector3) -> void:
 	var key := "%d,%d,%d" % [cell.x, cell.y, cell.z]
-	if settings.deduplicate_cells and seen.has(key):
+	if deduplicate_cells and seen.has(key):
 		return
 	seen[key] = true
 	positions.append(_to_pos(cell, cell_size))
@@ -59,22 +67,22 @@ func execute(_ctx : FlowData.EvaluationContext):
 	var positions := PackedVector3Array()
 	var path_ids := PackedInt32Array()
 	var seen := {}
-	if in_positions.size() == 1 and settings.include_input_points:
+	if in_positions.size() == 1 and include_input_points:
 		_append_cell(_to_cell(in_positions[0], cell_size), 0, positions, path_ids, seen, cell_size)
 
 	for idx : int in range(maxi(0, in_positions.size() - 1)):
 		var start_cell := _to_cell(in_positions[idx], cell_size)
 		var end_cell := _to_cell(in_positions[idx + 1], cell_size)
-		if settings.include_input_points:
+		if include_input_points:
 			_append_cell(start_cell, idx, positions, path_ids, seen, cell_size)
 		var current := start_cell
-		if settings.axis_order == GridConnectPointsNodeSettings.eAxisOrder.XThenZ:
+		if axis_order == eAxisOrder.XThenZ:
 			current = _walk_axis(current, end_cell, "x", idx, positions, path_ids, seen, cell_size)
 			current = _walk_axis(current, end_cell, "z", idx, positions, path_ids, seen, cell_size)
 		else:
 			current = _walk_axis(current, end_cell, "z", idx, positions, path_ids, seen, cell_size)
 			current = _walk_axis(current, end_cell, "x", idx, positions, path_ids, seen, cell_size)
-		if settings.include_input_points:
+		if include_input_points:
 			_append_cell(end_cell, idx, positions, path_ids, seen, cell_size)
 
 	var out_data := FlowData.Data.new()
@@ -84,6 +92,6 @@ func execute(_ctx : FlowData.EvaluationContext):
 	for idx : int in range(positions.size()):
 		out_positions[idx] = positions[idx]
 		out_sizes[idx] = cell_size
-	if settings.path_index_attribute != "":
-		out_data.registerStream(settings.path_index_attribute, path_ids, FlowData.DataType.Int)
+	if path_index_attribute != "":
+		out_data.registerStream(path_index_attribute, path_ids, FlowData.DataType.Int)
 	set_output(0, out_data)
