@@ -1,10 +1,23 @@
 @tool
 extends FlowNodeBase
 
+enum eOperation {
+	Transform_Location,
+	Transform_Direction,
+}
+
+@export var attribute_transform : String = "@last"
+
+@export var operation : eOperation = eOperation.Transform_Location:
+	set(value):
+		if operation != value:
+			operation = value
+			# This triggers the refresh of the property list in the property editor
+			notify_property_list_changed()
+			
 func _init():
 	meta_node = {
 		"title" : "Transform Op",
-		"settings" : MathTrasformOpNodeSettings,
 		"category" : "Math",
 		"ins" : [{ "label": "In" }, {"label": "Transform"}], 
 		"outs" : [{ "label" : "Out" }],
@@ -24,7 +37,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 		return
 		
 	# Input data TRS
-	var in_trs := trs_to_apply.getTransformsStream( settings.attribute_transform )
+	var in_trs := trs_to_apply.getTransformsStream( attribute_transform )
 	if not in_trs:
 		set_output( 0, FlowData.Data.new() )
 		return
@@ -34,7 +47,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 	
 	# Generate a new spos stream only if we are going to move the points
 	var spos : PackedVector3Array
-	if settings.operation == MathTrasformOpNodeSettings.eOperation.Transform_Location:
+	if operation == eOperation.Transform_Location:
 		spos = out_data.cloneStream( FlowData.AttrPosition )
 	var srot : PackedVector3Array = out_data.cloneStream( FlowData.AttrRotation )
 

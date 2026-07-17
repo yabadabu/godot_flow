@@ -1,10 +1,27 @@
 @tool
 extends FlowNodeBase
 
+enum eOperation {
+	FromTranslationRotationScale
+}
+			
+# This is a signal to stop presenting the rest of the output as inputs of the box
+var HiddenFromThisPoint := true
+
+@export var operation : eOperation = eOperation.FromTranslationRotationScale:
+	set(value):
+		if operation != value:
+			operation = value
+			notify_property_list_changed()
+
+@export var attribute_position : String = "@last"
+@export var attribute_rotation : String = "@last"
+@export var attribute_scale : String = "@last"
+@export var out_name : String = "@source"
+
 func _init():
 	meta_node = {
 		"title" : "Make Transform",
-		"settings" : MakeTransformNodeSettings,
 		"category" : "Math",
 		"ins" : [ { "label" : "Translation" }, { "label" : "Rotation" },  { "label" : "Scale" } ], 
 		"outs" : [{ "label" : "Out" }],
@@ -32,15 +49,15 @@ func execute( ctx : FlowData.EvaluationContext ):
 	var in_data : FlowData.Data
 	if num_elems == 1:
 		if sz_T == 1:
-			var stream_T = in_dataT.findStream( settings.attribute_position )
+			var stream_T = in_dataT.findStream( attribute_position )
 			cte_T = stream_T.container[0]
 			in_data = in_dataT
 		if sz_R == 1:
-			var stream_R = in_dataR.findStream( settings.attribute_rotation )
+			var stream_R = in_dataR.findStream( attribute_rotation )
 			cte_R = stream_R.container[0]
 			in_data = in_dataR
 		if sz_S == 1:
-			var stream_S = in_dataS.findStream( settings.attribute_scale )
+			var stream_S = in_dataS.findStream( attribute_scale )
 			cte_S = stream_S.container[0]
 			in_data = in_dataS
 
@@ -61,7 +78,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 		outR[i] = cte_R
 		outS[i] = cte_S
 	
-	var out_stem_name : String = settings.out_name
+	var out_stem_name : String = out_name
 	var prefix : String = out_stem_name
 	if prefix:
 		#var err = out_data.registerStream( out_stem_name, PackedByteArray() )

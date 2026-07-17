@@ -21,6 +21,7 @@ func _init():
 		"category" : "Sampler",
 		"ins" : [{ "label": "Meshes", "data_type": FlowData.DataType.NodeMesh }],
 		"outs" : [{ "label" : "Out" }],
+		"tooltip" : "Generates new points over the surface of the input mesh",
 		#"trace" : true
 	}
 	

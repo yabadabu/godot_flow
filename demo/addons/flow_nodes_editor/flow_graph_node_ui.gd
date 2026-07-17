@@ -57,7 +57,7 @@ func regenerateFromFlowNode( PropName : StringName = StringName() ):
 	if flow_node == null:
 		return
 	var meta : Dictionary = flow_node.getMeta()
-	self.tooltip_text = meta.get( "tooltip" )
+	self.tooltip_text = meta.get( "tooltip", "" )
 	self.title = flow_node.getTitle()
 	self.name = flow_node.name
 	modulate = Color( 0.7, 0.7, 0.7, 0.5 ) if flow_node.disabled else Color.WHITE

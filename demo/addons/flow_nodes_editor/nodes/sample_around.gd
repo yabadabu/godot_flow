@@ -10,6 +10,7 @@ func _init():
 		"category" : "Spatial",
 		"ins" : [{ "label": "In" }],
 		"outs" : [{ "label" : "Out" }],
+		"tooltip" : "Generates new points randomly around the input positions in the plane XZ",
 	}
 
 class Bridson:

@@ -1,10 +1,12 @@
 @tool
 extends FlowNodeBase
 
+@export var attribute_name : String = "@last"
+@export var out_partition_attribute : String
+
 func _init():
 	meta_node = {
 		"title" : "Partition",
-		"settings" : PartitionNodeSettings,
 		"category" : "Metadata",
 		"ins" : [{ "label": "In" }], 
 		"outs" : [{ "label" : "Out" }],
@@ -12,7 +14,7 @@ func _init():
 	}
 	
 func getTitle() -> String:
-	return "Partition %s" % [ settings.attribute_name ]
+	return "Partition %s" % [ attribute_name ]
 
 func execute( ctx : FlowData.EvaluationContext ):
 	var in_data : FlowData.Data = get_input( 0 )
@@ -22,25 +24,25 @@ func execute( ctx : FlowData.EvaluationContext ):
 		
 	# Special case, when partition by a Index, which is not a registered official stream name,
 	# but means we want each data to send as a individual bulk
-	if settings.attribute_name.to_lower() == "index":
+	if attribute_name.to_lower() == "index":
 		var ids = PackedInt32Array()
 		ids.resize(1)
 		for partition_id in range(in_data.size()):
 			ids[0] = partition_id
 			var out_data : FlowData.Data = in_data.filter( ids )
-			if settings.out_partition_attribute:
-				var p = newStream( out_data.size(), settings.out_partition_attribute, partition_id, FlowData.DataType.Int )
+			if out_partition_attribute:
+				var p = newStream( out_data.size(), out_partition_attribute, partition_id, FlowData.DataType.Int )
 				out_data.registerStream( p.name, p.container )
 			set_output( 0, out_data )
 			
 	else:
-		var stream = in_data.findStream( settings.attribute_name )
+		var stream = in_data.findStream( attribute_name )
 		if stream == null:
-			setError( "Attribute %s not found in input" % settings.attribute_name )
+			setError( "Attribute %s not found in input" % attribute_name )
 			return
 		var container = stream.container
 		
-		if settings.trace:
+		if trace:
 			print( "Partitioning by attribute %s" % container )
 		
 		# Do a quick and dirty partition by string representation of the value
@@ -52,14 +54,14 @@ func execute( ctx : FlowData.EvaluationContext ):
 				parts[ val ] = PackedInt32Array()
 			parts[ val ].append( idx )
 			
-		if settings.trace:
+		if trace:
 			print( parts )
 			
 		var partition_id := 0
 		for key in parts.keys():
 			var out_data : FlowData.Data = in_data.filter( parts[key] )
-			if settings.out_partition_attribute:
-				var p = newStream( out_data.size(), settings.out_partition_attribute, partition_id, FlowData.DataType.Int )
+			if out_partition_attribute:
+				var p = newStream( out_data.size(), out_partition_attribute, partition_id, FlowData.DataType.Int )
 				out_data.registerStream( p.name, p.container )
 			set_output( 0, out_data )
 			partition_id += 1

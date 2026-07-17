@@ -1,10 +1,11 @@
 @tool
 extends FlowNodeBase
 
+#@export var merge_all_attributes := true
+
 func _init():
 	meta_node = {
 		"title" : "Merge",
-		"settings" : MergeNodeSettings,
 		"category" : "Point Ops",
 		"ins" : [{ "label": "In" }], 
 		"outs" : [{ "label" : "Out" }],		
@@ -13,7 +14,7 @@ func _init():
 
 func run( ctx : FlowData.EvaluationContext ):
 	
-	var merge_all = getSettingValue( ctx, "merge_all_attributes" )
+	#var merge_all = getSettingValue( ctx, "merge_all_attributes" )
 	var out_data := FlowData.Data.new()
 	var offset = 0
 	
@@ -24,7 +25,7 @@ func run( ctx : FlowData.EvaluationContext ):
 		if in_data == null:
 			continue
 			
-		if settings.trace:
+		if trace:
 			print( "Processing input data with size %d: (Offset:%d)" % [ in_data.size(), offset ] )
 
 		# For each stream

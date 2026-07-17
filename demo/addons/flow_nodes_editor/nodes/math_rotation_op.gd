@@ -1,6 +1,24 @@
 @tool
 extends FlowNodeBase
 
+enum eOperation {
+	Combine,
+	Invert,
+	Lerp,
+}
+
+@export var operation : eOperation = eOperation.Lerp:
+	set(value):
+		if operation != value:
+			operation = value
+			# This triggers the refresh of the property list in the property editor
+			notify_property_list_changed()
+			
+@export var in_nameA : String = "@last"
+@export var in_nameB : String = "@last"
+@export var in_nameC : String = "@last"
+@export var out_name : String = "@Source"
+
 var inA = { "label": "In A", "multiple_connections" : false }
 var inB = { "label": "In B", "multiple_connections" : false }
 var inC = { "label": "Weights", "multiple_connections" : false }
@@ -8,35 +26,46 @@ var inC = { "label": "Weights", "multiple_connections" : false }
 func _init():
 	meta_node = {
 		"title" : "Rotation",
-		"settings" : MathRotationOpNodeSettings,
 		"category" : "Math",
 		"ins" : [inA, inB, inC], 
 		"outs" : [{ "label" : "Out" }],
 		"tooltip" : "Applies a rotation operation between two streams, storing the result in a new stream or overriding another.\nEach involved stream will be presented in Euler Angles",
 		"keywords" : [ "lerp", "invert", "compose" ],
 	}
+
+func isSingleArgument( ) -> bool:
+	return operation == eOperation.Invert or \
+	   false
+
+func isTriArgument( ) -> bool:
+	return operation == eOperation.Lerp or \
+	   false
+
+func exposeParam( name : String ) -> bool:
+	if name == "in_nameB":
+		return not isSingleArgument()
+	return true
 	
 func getMeta() -> Dictionary:
-	if settings:
-		var curr_num_args = meta_node.ins.size()
-		var required_num_args = 2
-		if settings.isSingleArgument():
-			required_num_args = 1
-		elif settings.isTriArgument():
-			required_num_args = 3
-		if curr_num_args != required_num_args:
-			match required_num_args:
-				1: meta_node.ins = [inA]
-				2: meta_node.ins = [inA, inB]
-				3: meta_node.ins = [inA, inB, inC]
-			initFromScript()
+	var curr_num_args = meta_node.ins.size()
+	var required_num_args = 2
+	if isSingleArgument():
+		required_num_args = 1
+	elif isTriArgument():
+		required_num_args = 3
+	if curr_num_args != required_num_args:
+		match required_num_args:
+			1: meta_node.ins = [inA]
+			2: meta_node.ins = [inA, inB]
+			3: meta_node.ins = [inA, inB, inC]
+		connections_changed.emit()
 	return meta_node
 		
 func getTitle() -> String:
-	return MathRotationOpNodeSettings.eOperation.keys()[settings.operation]	
+	return eOperation.keys()[operation]	
 
 func execute( _ctx : FlowData.EvaluationContext ):
-	if not settings.out_name:
+	if not out_name:
 		setError( "Output name can't be empty")
 		return
 		
@@ -47,12 +76,12 @@ func execute( _ctx : FlowData.EvaluationContext ):
 	if not in_dataA:
 		setError( "Input A has no data" )
 		return
-	var sA = in_dataA.findStream( settings.in_nameA )
+	var sA = in_dataA.findStream( in_nameA )
 	if sA == null:
-		setError( "Input A %s not found" % [settings.in_nameA])
+		setError( "Input A %s not found" % [in_nameA])
 		return
 	if sA.data_type != FlowData.DataType.Vector:
-		setError( "Input A %s must be of type Vector" % [settings.in_nameA])
+		setError( "Input A %s must be of type Vector" % [in_nameA])
 		return
 	var num_elemsA := in_dataA.size()
 	
@@ -62,15 +91,15 @@ func execute( _ctx : FlowData.EvaluationContext ):
 	var sB = null
 	if in_dataB:
 		num_elemsB = in_dataB.size()
-		sB = in_dataB.findStream( settings.in_nameB )
+		sB = in_dataB.findStream( in_nameB )
 		if sB and sB.data_type != FlowData.DataType.Vector:
-			setError( "Input B %s must be of type Vector" % [settings.in_nameB])
+			setError( "Input B %s must be of type Vector" % [in_nameB])
 			return
 		
 	# if B is not connected, we might have a constant
 	if sB == null:
 		if required_num_args > 1:
-			setError( "Input B %s not found" % [settings.in_nameB, inputs.size()])
+			setError( "Input B %s not found" % [in_nameB, inputs.size()])
 			return
 
 	# C is optional, can be replaced by a cte
@@ -79,19 +108,19 @@ func execute( _ctx : FlowData.EvaluationContext ):
 	var sC = null
 	if in_dataC:
 		num_elemsC = in_dataC.size()
-		sC = in_dataC.findStream( settings.in_nameC )
+		sC = in_dataC.findStream( in_nameC )
 		if sC and sC.data_type != FlowData.DataType.Float:
-			setError( "Input %s must be of type Float not %s" % [settings.in_nameC, FlowData.DataType.keys()[ sC.data_type ]])
+			setError( "Input %s must be of type Float not %s" % [in_nameC, FlowData.DataType.keys()[ sC.data_type ]])
 			return
 		
 	# if C is not connected, we might have a constant
 	if sC == null:
 		# Check if the name looks like a float
-		if settings.in_nameC.is_valid_float():
-			var v = settings.in_nameC.to_float()
-			sC = newFloatStream( num_elemsA, "Constant %s" % settings.in_nameC, v )
+		if in_nameC.is_valid_float():
+			var v = in_nameC.to_float()
+			sC = newFloatStream( num_elemsA, "Constant %s" % in_nameC, v )
 		elif required_num_args > 2:
-			setError( "Input C %s not found" % [settings.in_nameC])
+			setError( "Input C %s not found" % [in_nameC])
 			return
 
 	# The number of elements should match, unless the B channel has just 1 element
@@ -108,7 +137,7 @@ func execute( _ctx : FlowData.EvaluationContext ):
 	if num_elemsA != num_elemsC:
 		if num_elemsC == 1 and num_elemsA > 0:
 			# Convert the single value to an array
-			sC = newFloatStream( num_elemsA, "Constant %s" % settings.in_nameC, sC.container[0] )
+			sC = newFloatStream( num_elemsA, "Constant %s" % in_nameC, sC.container[0] )
 		else:
 			setError( "Num elements from A and C do not match (%d vs %d)" % [num_elemsA, num_elemsC])
 			return
@@ -122,20 +151,20 @@ func execute( _ctx : FlowData.EvaluationContext ):
 	if required_num_args == 1:
 		var inA : PackedVector3Array = sA.container
 		outC.resize( num_elems )
-		match settings.operation:
-			MathRotationOpNodeSettings.eOperation.Invert:
+		match operation:
+			eOperation.Invert:
 				for i in num_elems:
 					outC[i] = -inA[i]
 			_:
-				setError( "Rotation single arg op %s not yet supported" % MathRotationOpNodeSettings.eOperation.keys()[ settings.operation ]  )
+				setError( "Rotation single arg op %s not yet supported" % eOperation.keys()[ operation ]  )
 			
 	elif required_num_args == 2:
 		var inA : PackedVector3Array = sA.container
 		var inB : PackedVector3Array = sB.container
 		outC.resize( num_elems )
 		
-		match settings.operation:
-			MathRotationOpNodeSettings.eOperation.Combine:
+		match operation:
+			eOperation.Combine:
 				for i in num_elems:
 					var qA := Quaternion.from_euler( inA[i] * PI / 180.0 )
 					var qB := Quaternion.from_euler( inB[i] * PI / 180.0 )
@@ -150,8 +179,8 @@ func execute( _ctx : FlowData.EvaluationContext ):
 		var inC : PackedFloat32Array = sC.container
 		outC.resize( num_elems )
 		
-		match settings.operation:
-			MathRotationOpNodeSettings.eOperation.Lerp:
+		match operation:
+			eOperation.Lerp:
 				for i in num_elems:
 					
 					var qA := Quaternion.from_euler( inA[i] * PI / 180.0 )
@@ -162,9 +191,9 @@ func execute( _ctx : FlowData.EvaluationContext ):
 				setError( "Rotation with 3 args not supported yet")
 
 	# This will override the existing stream if exists or update a substream
-	var out_name = settings.out_name
+	var out_name = out_name
 	if out_name == "@source":
-		out_name = settings.in_nameA
+		out_name = in_nameA
 	var err = out_data.registerStream( out_name, outC )
 	if err:
 		setError( err )

@@ -1,10 +1,12 @@
 @tool
 extends FlowNodeBase
 
+@export var match_attr : String
+@export var weight_attr : String
+
 func _init():
 	meta_node = {
 		"title" : "Match And Set",
-		"settings" : MatchAndSetNodeSettings,
 		"category" : "Metadata",
 		"ins" : [{ "label" : "In" }, { "label" : "Attributes" }],
 		"outs" : [{ "label" : "Out" }],

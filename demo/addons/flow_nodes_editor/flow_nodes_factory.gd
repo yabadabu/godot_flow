@@ -45,7 +45,7 @@ func createNewNode( node_template : String, node_name : String, in_settings = nu
 			meta = node_types.get( node_template, null )
 		else:
 			push_error("node_type %s is not registered" % node_template)
-			print( node_types.keys() )
+			print( ", ".join( node_types.keys() ) )
 			return null
 			
 	var flow_node := meta.factory.new() as FlowNodeBase
