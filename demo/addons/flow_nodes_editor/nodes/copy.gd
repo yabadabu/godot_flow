@@ -1,10 +1,14 @@
 @tool
 extends FlowNodeBase
 
+@export var num_copies := 1
+@export var translation : Vector3 = Vector3.ZERO
+@export var rotation : Vector3 = Vector3.ZERO
+@export var generate_copy_id : String
+
 func _init():
 	meta_node = {
 		"title" : "Copy",
-		"settings" : CopyNodeSettings,
 		"category" : "Sampler",
 		"ins" : [{ "label": "In" }], 
 		"outs" : [{ "label" : "Out" }],
@@ -14,7 +18,7 @@ func _init():
 func execute( ctx : FlowData.EvaluationContext ):
 	var in_data : FlowData.Data = get_input(0)
 	var out_data := FlowData.Data.new()
-	var trace := settings.trace
+	var trace := trace
 	
 	var num_copies : int = getSettingValue( ctx, "num_copies" )
 	if trace: print( "Copy.num_copies %d" % [ num_copies ] )
@@ -69,7 +73,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 				srot[ base + j ] = otrans.basis.get_euler() * 180.0 / PI	# FlowData.basisToEuler( otrans.basis )
 		if trace: print( "Copy.Transform: %f" % [ Time.get_ticks_usec() - time_start_trs ] )
 			
-	if settings.generate_copy_id:
+	if generate_copy_id:
 		var time_start_id = Time.get_ticks_usec()
 		var container = PackedInt32Array()
 		container.resize( num_copies * isize )
@@ -77,7 +81,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 			var base := n * isize
 			for j in range( isize ):
 				container[base+j] = n
-		out_data.registerStream( settings.generate_copy_id, container )
+		out_data.registerStream( generate_copy_id, container )
 		if trace: print( "Copy.GenerateId: %f" % [ Time.get_ticks_usec() - time_start_id ] )
 
 	set_output( 0, out_data )

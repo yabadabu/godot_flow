@@ -1,11 +1,21 @@
 @tool
 extends FlowNodeBase
 
+@export var offsets : Array[Vector3] = [Vector3.ZERO]
+@export var rotations : Array[Vector3] = [Vector3.ZERO]
+@export var sizes : Array[Vector3] = [Vector3.ONE]
+@export var local_space : bool = true
+@export var combine_rotation : bool = true
+@export var scale_offsets_by_anchor_size : bool = false
+@export var inherit_anchor_size : bool = false
+@export var parent_index_attribute : String = "parent_index"
+@export var offset_index_attribute : String = "offset_index"
+@export var label_attribute : String = "offset_label"
+@export var labels : Array[String] = []
+
 func _init():
-	var settings_script = ResourceLoader.load("res://addons/flow_nodes_editor/nodes/point_offsets_settings.gd", "Script", ResourceLoader.CACHE_MODE_REPLACE)
 	meta_node = {
 		"title" : "Point Offsets",
-		"settings" : settings_script,
 		"category" : "Spatial",
 		"ins" : [{ "label": "Anchors" }],
 		"outs" : [{ "label" : "Points" }],
@@ -17,7 +27,7 @@ func _copy_streams(in_data : FlowData.Data, out_count : int, offsets_count : int
 	var out_data := FlowData.Data.new()
 	for stream_name in in_data.streams:
 		var stream = in_data.streams[stream_name]
-		var out_container = FlowData.Data.newContainerOfType(stream.data_type)
+		var out_container : Array = FlowData.Data.newContainerOfType(stream.data_type)
 		if out_container:
 			out_container.resize(out_count)
 			for src_idx : int in range(in_data.size()):
@@ -49,7 +59,7 @@ func execute(_ctx : FlowData.EvaluationContext):
 		setError("Anchors must provide position, rotation, and size streams")
 		return
 
-	var offsets_count : int = settings.offsets.size()
+	var offsets_count : int = offsets.size()
 	if offsets_count == 0:
 		set_output(0, FlowData.Data.new())
 		return
@@ -63,11 +73,11 @@ func execute(_ctx : FlowData.EvaluationContext):
 	var parent_indices := PackedInt32Array()
 	var offset_indices := PackedInt32Array()
 	var offset_labels := PackedStringArray()
-	if settings.parent_index_attribute.strip_edges() != "":
+	if parent_index_attribute.strip_edges() != "":
 		parent_indices.resize(out_count)
-	if settings.offset_index_attribute.strip_edges() != "":
+	if offset_index_attribute.strip_edges() != "":
 		offset_indices.resize(out_count)
-	if settings.label_attribute.strip_edges() != "":
+	if label_attribute.strip_edges() != "":
 		offset_labels.resize(out_count)
 
 	for src_idx : int in range(in_data.size()):
@@ -76,32 +86,32 @@ func execute(_ctx : FlowData.EvaluationContext):
 		var anchor_size := transforms.sizes[src_idx]
 		for offset_idx : int in range(offsets_count):
 			var dst_idx : int = src_idx * offsets_count + offset_idx
-			var offset := _setting_vec(settings.offsets, offset_idx, Vector3.ZERO)
-			if settings.scale_offsets_by_anchor_size:
+			var offset := _setting_vec(offsets, offset_idx, Vector3.ZERO)
+			if scale_offsets_by_anchor_size:
 				offset *= anchor_size
-			out_positions[dst_idx] = anchor_pos + (anchor_basis * offset if settings.local_space else offset)
+			out_positions[dst_idx] = anchor_pos + (anchor_basis * offset if local_space else offset)
 
-			var local_rot := _setting_vec(settings.rotations, offset_idx, Vector3.ZERO)
-			if settings.combine_rotation:
+			var local_rot := _setting_vec(rotations, offset_idx, Vector3.ZERO)
+			if combine_rotation:
 				out_rotations[dst_idx] = FlowData.basisToEuler(anchor_basis * FlowData.eulerToBasis(local_rot))
 			else:
 				out_rotations[dst_idx] = transforms.eulers[src_idx] + local_rot
 
-			var local_size := _setting_vec(settings.sizes, offset_idx, Vector3.ONE)
-			out_sizes[dst_idx] = anchor_size * local_size if settings.inherit_anchor_size else local_size
+			var local_size := _setting_vec(sizes, offset_idx, Vector3.ONE)
+			out_sizes[dst_idx] = anchor_size * local_size if inherit_anchor_size else local_size
 
 			if parent_indices.size() > 0:
 				parent_indices[dst_idx] = src_idx
 			if offset_indices.size() > 0:
 				offset_indices[dst_idx] = offset_idx
 			if offset_labels.size() > 0:
-				offset_labels[dst_idx] = settings.labels[offset_idx] if offset_idx < settings.labels.size() else str(offset_idx)
+				offset_labels[dst_idx] = labels[offset_idx] if offset_idx < labels.size() else str(offset_idx)
 
 	if parent_indices.size() > 0:
-		out_data.registerStream(settings.parent_index_attribute, parent_indices, FlowData.DataType.Int)
+		out_data.registerStream(parent_index_attribute, parent_indices, FlowData.DataType.Int)
 	if offset_indices.size() > 0:
-		out_data.registerStream(settings.offset_index_attribute, offset_indices, FlowData.DataType.Int)
+		out_data.registerStream(offset_index_attribute, offset_indices, FlowData.DataType.Int)
 	if offset_labels.size() > 0:
-		out_data.registerStream(settings.label_attribute, offset_labels, FlowData.DataType.String)
+		out_data.registerStream(label_attribute, offset_labels, FlowData.DataType.String)
 
 	set_output(0, out_data)

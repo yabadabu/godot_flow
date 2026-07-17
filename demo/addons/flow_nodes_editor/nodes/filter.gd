@@ -1,10 +1,40 @@
 @tool
 extends FlowNodeBase
 
+enum eCondition {
+	Equal,
+	NotEqual,
+	Greater,
+	GreaterOrEqual,
+	Less,
+	LessOrEqual,
+	AlmostEqual,
+	LogicalAND,
+	LogicalOR,
+	LogicalXOR,
+	IsNull,
+	BetweenExcludingMinMax,
+	BetweenIncludingMinMax,
+	BetweenIncludingMin,
+	BetweenIncludingMax,
+}
+
+@export var in_nameA : String = "@last"
+@export var condition : eCondition = eCondition.Equal:
+	set(value):
+		if condition != value:
+			condition = value
+			# This triggers the refresh of the property list in the property editor
+			notify_property_list_changed()
+			checkInputsConfiguration()
+			
+@export var in_nameB : String = "@last"
+@export var threshold : float = 0.1
+@export var in_nameC : String = "@last"
+
 func _init():
 	meta_node = {
 		"title" : "Filter",
-		"settings" : FilterNodeSettings,
 		"category" : "Filter",
 		"ins" : [{ "label": "In A" }, { "label": "In B" }, { "label": "In C" }], 
 		"outs" : [{ "label" : "True" }, { "label" : "False" }],
@@ -12,10 +42,25 @@ func _init():
 		"tooltip" : "Filter inputs based on some condition.\nThis node returns splits the input stream in two substreams.",
 	}
 
+func isLogicalOp() -> bool:
+	return condition == eCondition.LogicalAND \
+		|| condition == eCondition.LogicalOR  \
+		|| condition == eCondition.LogicalXOR
+
+func isBetweenCondition() -> bool:
+	return condition >= eCondition.BetweenExcludingMinMax and condition <= eCondition.BetweenIncludingMax
+
+func exposeParam(name : String) -> bool:
+	if name == "in_nameC":
+		return isBetweenCondition()
+	if name == "threshold":
+		return condition == eCondition.AlmostEqual
+	return true
+
 func getNumArgsRequired():
-	if settings.condition == FilterNodeSettings.eCondition.IsNull:
+	if condition == eCondition.IsNull:
 		return 1
-	if settings.isBetweenCondition():
+	if isBetweenCondition():
 		return 3
 	return 2
 	
@@ -25,9 +70,9 @@ func camel_to_words(text: String) -> String:
 	return regex.sub(text, " $1", true)
 	
 func getTitle() -> String:
-	return camel_to_words(FilterNodeSettings.eCondition.keys()[settings.condition])	
+	return camel_to_words(eCondition.keys()[condition])	
 	
-func refreshFromSettings():
+func checkInputsConfiguration():
 	var curr_num_args = meta_node.ins.size()
 	var required_num_args = getNumArgsRequired()
 	if curr_num_args != required_num_args:
@@ -35,15 +80,14 @@ func refreshFromSettings():
 			1: meta_node.ins = [{ "label": "In A" }]
 			2: meta_node.ins = [{ "label": "In A" }, { "label": "In B" }]
 			3: meta_node.ins = [{ "label": "In A" }, { "label": "In B" }, { "label": "In C" }]
-		initFromScript()
-	super.refreshFromSettings()
+		connections_changed.emit()
 	
 func getOptionalStream( input_index : int, stream_name : String, expected_size : int ):
 	# B is optional, can be replaced by a cte
 	var in_data = get_optional_input(input_index)
 	var read_stream = in_data.findStream( stream_name ) if in_data else null
 
-	if settings.trace:
+	if trace:
 		if in_data:
 			print( "getOptionalStream(%d,%s,%d) is connected" % [input_index, stream_name, expected_size ])
 		else:
@@ -54,13 +98,13 @@ func getOptionalStream( input_index : int, stream_name : String, expected_size :
 		# Check if the name looks like a float
 		if stream_name.is_valid_float():
 			var v = stream_name.to_float()
-			if settings.trace:
+			if trace:
 				print( "  Using cte with value %s. Creating a stream of %d" % [v, expected_size])
 			read_stream = newFloatStream( expected_size, "Constant %s" % stream_name, v )
 		elif stream_name.to_lower() == "true":
 			read_stream = newFloatStream( expected_size, "Constant %s" % stream_name, 1.0 )
 		else:
-			setError( "Input %s not found, and can't be interpreted as a constant number (Op:%d)" % [stream_name, settings.condition])
+			setError( "Input %s not found, and can't be interpreted as a constant number (Op:%d)" % [stream_name, condition])
 			return	null
 			
 	if read_stream:
@@ -68,11 +112,11 @@ func getOptionalStream( input_index : int, stream_name : String, expected_size :
 		# in which case we will expand it. Wwe might need in the future A to be just one 
 		# element and B having lots of elements, or the type not to be float...
 		var num_elems : int = read_stream.container.size()
-		if settings.trace:
+		if trace:
 			print( "  instream[%d] has size %d, (vs expected %d)" % [ input_index, num_elems, expected_size ])
 		if num_elems != expected_size:
 			if num_elems == 1 and expected_size > 0 and (read_stream.data_type == FlowData.DataType.Float or read_stream.data_type == FlowData.DataType.Int):
-				if settings.trace:
+				if trace:
 					print( "  Converting cte to stream with value %f" % read_stream.container[0] )
 				read_stream = newFloatStream( expected_size, stream_name + " as float", read_stream.container[0])
 			else:
@@ -84,11 +128,11 @@ func execute( ctx : FlowData.EvaluationContext ):
 	#print( "filter.input: ", inputs )
 	var in_dataA : FlowData.Data = get_input(0)
 	if in_dataA == null:
-		setError( "Input A %s not found" % [settings.in_nameA])
+		setError( "Input A %s not found" % [in_nameA])
 		return
-	var sA = in_dataA.findStream( settings.in_nameA )
+	var sA = in_dataA.findStream( in_nameA )
 	if sA == null:
-		setError( "Input A stream %s not found" % [settings.in_nameA])
+		setError( "Input A stream %s not found" % [in_nameA])
 		return
 		
 	var num_elemsA := in_dataA.size()
@@ -97,8 +141,8 @@ func execute( ctx : FlowData.EvaluationContext ):
 	var requires_two_operands = required_num_args > 1
 	var requires_three_operands = required_num_args > 2
 	
-	var sB = getOptionalStream( 1, settings.in_nameB, num_elemsA ) if requires_two_operands else null
-	var sC = getOptionalStream( 2, settings.in_nameC, num_elemsA ) if requires_three_operands else null
+	var sB = getOptionalStream( 1, in_nameB, num_elemsA ) if requires_two_operands else null
+	var sC = getOptionalStream( 2, in_nameC, num_elemsA ) if requires_three_operands else null
 
 	if err:
 		return
@@ -122,51 +166,51 @@ func execute( ctx : FlowData.EvaluationContext ):
 	if requires_two_operands and sA.data_type == FlowData.DataType.Float and sB.data_type == FlowData.DataType.Float and not requires_three_operands:
 		var inA : PackedFloat32Array = sA.container
 		var inB : PackedFloat32Array = sB.container
-		match settings.condition:
+		match condition:
 
-			FilterNodeSettings.eCondition.Equal:
+			eCondition.Equal:
 				for i in range(num_elems):
 					if inA[i] == inB[i]:
 						indices_true.append(i)
 					else:
 						indices_false.append(i)
 
-			FilterNodeSettings.eCondition.NotEqual:
+			eCondition.NotEqual:
 				for i in num_elems:
 					if inA[i] != inB[i]:
 						indices_true.append(i)
 					else:
 						indices_false.append(i)
 
-			FilterNodeSettings.eCondition.Greater:
+			eCondition.Greater:
 				for i in num_elems:
 					if inA[i] > inB[i]:
 						indices_true.append(i)
 					else:
 						indices_false.append(i)
 
-			FilterNodeSettings.eCondition.GreaterOrEqual:
+			eCondition.GreaterOrEqual:
 				for i in num_elems:
 					if inA[i] >= inB[i]:
 						indices_true.append(i)
 					else:
 						indices_false.append(i)
 
-			FilterNodeSettings.eCondition.Less:
+			eCondition.Less:
 				for i in num_elems:
 					if inA[i] < inB[i]:
 						indices_true.append(i)
 					else:
 						indices_false.append(i)
 
-			FilterNodeSettings.eCondition.LessOrEqual:
+			eCondition.LessOrEqual:
 				for i in num_elems:
 					if inA[i] <= inB[i]:
 						indices_true.append(i)
 					else:
 						indices_false.append(i)
 
-			FilterNodeSettings.eCondition.AlmostEqual:
+			eCondition.AlmostEqual:
 				var threshold : float = getSettingValue( ctx, "threshold" )
 				for i in num_elems:
 					if abs(inA[i] - inB[i]) < threshold:
@@ -174,28 +218,28 @@ func execute( ctx : FlowData.EvaluationContext ):
 					else:
 						indices_false.append(i)
 
-			FilterNodeSettings.eCondition.LogicalAND:
+			eCondition.LogicalAND:
 				for i in num_elems:
 					if inA[i] && inB[i]:
 						indices_true.append(i)
 					else:
 						indices_false.append(i)
 
-			FilterNodeSettings.eCondition.LogicalOR:
+			eCondition.LogicalOR:
 				for i in num_elems:
 					if inA[i] || inB[i]:
 						indices_true.append(i)
 					else:
 						indices_false.append(i)
 
-			FilterNodeSettings.eCondition.LogicalXOR:
+			eCondition.LogicalXOR:
 				for i in num_elems:
 					if bool(inA[i]) != bool(inB[i]):
 						indices_true.append(i)
 					else:
 						indices_false.append(i)
 
-			FilterNodeSettings.eCondition.IsNull:
+			eCondition.IsNull:
 				for i in num_elems:
 					if !inA[i]:
 						indices_true.append(i)
@@ -206,26 +250,26 @@ func execute( ctx : FlowData.EvaluationContext ):
 		var inA : PackedFloat32Array = sA.container
 		var inB : PackedFloat32Array = sB.container
 		var inC : PackedFloat32Array = sC.container 
-		match settings.condition:
-			FilterNodeSettings.eCondition.BetweenExcludingMinMax:
+		match condition:
+			eCondition.BetweenExcludingMinMax:
 				for i in num_elems:
 					if inA[i] > inB[i] && inA[i] < inC[i]:
 						indices_true.append(i)
 					else:
 						indices_false.append(i)
-			FilterNodeSettings.eCondition.BetweenIncludingMinMax:
+			eCondition.BetweenIncludingMinMax:
 				for i in num_elems:
 					if inA[i] >= inB[i] && inA[i] <= inC[i]:
 						indices_true.append(i)
 					else:
 						indices_false.append(i)
-			FilterNodeSettings.eCondition.BetweenIncludingMin:
+			eCondition.BetweenIncludingMin:
 				for i in num_elems:
 					if inA[i] >= inB[i] && inA[i] < inC[i]:
 						indices_true.append(i)
 					else:
 						indices_false.append(i)
-			FilterNodeSettings.eCondition.BetweenIncludingMax:
+			eCondition.BetweenIncludingMax:
 				for i in num_elems:
 					if inA[i] > inB[i] && inA[i] <= inC[i]:
 						indices_true.append(i)
@@ -234,8 +278,8 @@ func execute( ctx : FlowData.EvaluationContext ):
 						
 	elif not requires_two_operands and not requires_three_operands:
 		var inA = sA.container
-		match settings.condition:
-			FilterNodeSettings.eCondition.IsNull:
+		match condition:
+			eCondition.IsNull:
 				for i in num_elems:
 					if !inA[i]:
 						indices_true.append(i)
