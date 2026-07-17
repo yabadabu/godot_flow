@@ -1,10 +1,11 @@
 @tool
 extends FlowNodeBase
 
+@export var attribute_name : String = "@auto"
+
 func _init():
 	meta_node = {
 		"title" : "Get Bounds",
-		"settings" : GetBoundsNodeSettings,
 		"category" : "Uncategorized",
 		"ins" : [{ "label": "In" }], 
 		"outs" : [{ "label" : "Out" }],
@@ -29,14 +30,14 @@ func get_bounds_of_resource( res : Resource ):
 	return null
 
 func find_attribute( in_data : FlowData.Data ):
-	if settings.attribute_name == "@auto":
+	if attribute_name == "@auto":
 		var streams := in_data.streams.values().filter( func( candidate ) -> bool:
 			return candidate.data_type == FlowData.DataType.Resource
 			)
 		if streams.size() == 1:
 			return streams[0]
 		return null
-	return in_data.findStream( settings.attribute_name )
+	return in_data.findStream( attribute_name )
 
 func execute( ctx : FlowData.EvaluationContext ):
 	var in_data : FlowData.Data = get_input(0)

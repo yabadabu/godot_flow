@@ -1,10 +1,13 @@
 @tool
 extends FlowNodeBase
 
+@export var attribute_name: String = "density"
+@export var min_value: float = 0.0
+@export var max_value: float = 1.0
+
 func _init():
 	meta_node = {
 		"title" : "Sanity Check Point Data",
-		"settings" : SanityCheckNodeSettings,
 		"category" : "Debug",
 		"ins" : [{ "label": "In" }], 
 		"outs" : [{ "label" : "Out" }],
@@ -17,7 +20,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 		setError("Input 'In' is not connected")
 		return
 		
-	var attr_name = settings.attribute_name
+	var attr_name = attribute_name
 	if attr_name != "":
 		var stream = in_data.findStream(attr_name)
 		if stream == null:
@@ -25,8 +28,8 @@ func execute( ctx : FlowData.EvaluationContext ):
 			return
 		
 		var container = stream.container
-		var min_val = settings.min_value
-		var max_val = settings.max_value
+		var min_val = min_value
+		var max_val = max_value
 		for i in container.size():
 			var val = container[i]
 			if val is int or val is float:

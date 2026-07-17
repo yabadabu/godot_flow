@@ -1,10 +1,33 @@
 @tool
 extends FlowNodeBase
 
+enum eFitBehaviour {
+	AlignLeft,
+	Autoscale,
+	Centered,
+	AlignRight,
+	Interspace
+}
+
+@export var grammar_as_attribute : bool = false:
+	set(value):
+		grammar_as_attribute = value
+		notify_property_list_changed()
+		
+@export var grammar : String
+@export var fit_behaviour : eFitBehaviour = eFitBehaviour.Autoscale
+@export_subgroup("Input Attributes", "attribute_")
+@export var attribute_symbol : String = "symbol"
+@export var attribute_length : String = "bounds.z"
+@export var attribute_scalable : String = "scalable"
+@export var attribute_grammar : String = "grammar"
+
+@export_range(0.0, 10.0, 0.01, "or_greater")var curve_offset_start : float = 0.0
+@export_range(0.0, 10.0, 0.01, "or_greater")var curve_offset_end : float = 0.0
+
 func _init():
 	meta_node = {
 		"title" : "Subdivide Spline",
-		"settings" : SubdivideSplineNodeSettings,
 		"category" : "Spatial",
 		"ins" : [
 			  { "label": "Splines", "data_type": FlowData.DataType.NodePath }
@@ -21,6 +44,11 @@ func _init():
 		+ "{A:2, B:1, C:1}   weighted random choice[/code]"
 	}
 
+func exposeParam( name : String ) -> bool:
+	if name == "grammar" or name == "attribute_grammar":
+		return grammar_as_attribute == ( name == "attribute_grammar" )
+	return true
+
 func execute( ctx : FlowData.EvaluationContext ):
 	
 	var in_data = get_input(0)
@@ -36,20 +64,20 @@ func execute( ctx : FlowData.EvaluationContext ):
 	var evaluator = GrammarEvaluator.new()
 	
 	var grammars = null
-	if settings.grammar_as_attribute:
-		grammars = in_data.getContainerChecked( settings.attribute_grammar, FlowData.DataType.String, self )
+	if grammar_as_attribute:
+		grammars = in_data.getContainerChecked( attribute_grammar, FlowData.DataType.String, self )
 		if grammars == null:
 			return
 	else:
-		var grammar = settings.grammar
+		var grammar = grammar
 		if not evaluator.parseString( grammar ):
 			for err in evaluator.getErrors():
 				print( "  Error: %s" % err )
 			return
 			
-	var symbols = in_pieces.getContainerChecked( settings.attribute_symbol, FlowData.DataType.String, self )
-	var lengths = in_pieces.getContainerChecked( settings.attribute_length, FlowData.DataType.Float, self )
-	var stream_scalables = in_pieces.getContainerChecked( settings.attribute_scalable, FlowData.DataType.Bool, self )
+	var symbols = in_pieces.getContainerChecked( attribute_symbol, FlowData.DataType.String, self )
+	var lengths = in_pieces.getContainerChecked( attribute_length, FlowData.DataType.Float, self )
+	var stream_scalables = in_pieces.getContainerChecked( attribute_scalable, FlowData.DataType.Bool, self )
 	if symbols == null or lengths == null or stream_scalables == null:
 		return
 		
@@ -68,7 +96,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 	evaluator.setPieces( pieces )
 	
 		
-	if settings.trace:
+	if trace:
 		evaluator._ast.dump(0)
 	
 	
@@ -84,7 +112,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 		var path_3d = path3d_nodes[path_idx]
 		var curve : Curve3D = path_3d.curve	
 		var total_length : float = curve.get_baked_length()
-		total_length -= settings.curve_offset_start + settings.curve_offset_end
+		total_length -= curve_offset_start + curve_offset_end
 	
 		var generated_symbols := evaluator.sample( total_length, rng )
 		
@@ -107,24 +135,24 @@ func execute( ctx : FlowData.EvaluationContext ):
 			if scalables.has( symbol ):
 				acc_scalable += length
 		
-		if settings.trace:
+		if trace:
 			print( "Total distance covered %f / %f using %d symbols. AccScalable: %f" % [ acc, total_length, generated_symbols.size(), acc_scalable ])
 		
 		# If we can scale some pieces to fully cover the requested length, now it's the moment
 		var scale_factor : float = 1.0
-		if settings.fit_behaviour == SubdivideSplineNodeSettings.eFitBehaviour.Autoscale:
+		if fit_behaviour == eFitBehaviour.Autoscale:
 			if acc_scalable > 0.0 and acc < total_length:
 				scale_factor = 1.0 + ( total_length - acc ) / acc_scalable
 
 		# Places each piece along the path
 		var error_length := total_length - acc
-		var offset : float = settings.curve_offset_start
+		var offset : float = curve_offset_start
 		var interpiece_padding : float = 0.0
-		if settings.fit_behaviour == SubdivideSplineNodeSettings.eFitBehaviour.AlignRight:
+		if fit_behaviour == eFitBehaviour.AlignRight:
 			offset += error_length
-		elif settings.fit_behaviour == SubdivideSplineNodeSettings.eFitBehaviour.Centered:
+		elif fit_behaviour == eFitBehaviour.Centered:
 			offset += ( error_length ) * 0.5
-		elif settings.fit_behaviour == SubdivideSplineNodeSettings.eFitBehaviour.Interspace:
+		elif fit_behaviour == eFitBehaviour.Interspace:
 			interpiece_padding = error_length / float( generated_symbols.size() - 1 ) 
 		
 		var offsets_stream : PackedFloat32Array
@@ -154,7 +182,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 			indices.append( index_by_piece[ symbol ] )
 			
 		for key in in_pieces.streams.keys():
-			if key == settings.attribute_symbol:
+			if key == attribute_symbol:
 				continue
 			var in_stream = in_pieces.streams[ key ]
 			var new_container = output.filteredStream( in_stream, indices )

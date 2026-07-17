@@ -1,11 +1,11 @@
 @tool
 extends FlowNodeBase
-class_name FlowNodeAssets
+
+@export var assets : Array[ FlowUserResourceData ] = []
 
 func _init():
 	meta_node = {
 		"title" : "Assets",
-		"settings" : AssetsNodeSettings,
 		"category" : "Metadata",
 		"ins" : [],
 		"outs" : [{ "label" : "Out" }],
@@ -26,16 +26,16 @@ func execute( _ctx : FlowData.EvaluationContext ):
 	
 	var new_streams = {}
 	
-	var count = settings.assets.size()
+	var count = assets.size()
 	for idx in range(count):
-		var asset = settings.assets[idx]
+		var asset = assets[idx]
 		# print( "=== %s (x %d)" % [ asset, count ] )
 		for prop in asset.get_property_list():
 			if !(prop.usage & PROPERTY_USAGE_EDITOR) || !(prop.usage & PROPERTY_USAGE_STORAGE):
 				continue
 			if discardted_props.has( prop.name ):
 				continue
-			if settings.trace:
+			if trace:
 				print( "Prop: %d Name:%s" % [ prop.type, prop.name ])				
 			match prop.type:
 				TYPE_BOOL:
@@ -57,7 +57,7 @@ func execute( _ctx : FlowData.EvaluationContext ):
 
 	for prop_name in new_streams.keys():
 		var prop_type = new_streams[ prop_name ]
-		if settings.trace:
+		if trace:
 			print( "Stream: Type:%d Name:%s" % [ prop_type, prop_name ])
 		match prop_type:
 			
@@ -65,37 +65,37 @@ func execute( _ctx : FlowData.EvaluationContext ):
 				var container : PackedByteArray = output.addStream( prop_name, prop_type )
 				container.resize( count )
 				for idx in range(count):
-					container[idx] = 1 if settings.assets[idx].get( prop_name ) else 0
+					container[idx] = 1 if assets[idx].get( prop_name ) else 0
 					
 			FlowData.DataType.Int:
 				var container : PackedInt32Array = output.addStream( prop_name, prop_type )
 				container.resize( count )
 				for idx in range(count):
-					container[idx] = settings.assets[idx].get( prop_name )
+					container[idx] = assets[idx].get( prop_name )
 					
 			FlowData.DataType.Float:
 				var container : PackedFloat32Array = output.addStream( prop_name, prop_type )
 				container.resize( count )
 				for idx in range(count):
-					container[idx] = settings.assets[idx].get( prop_name )
+					container[idx] = assets[idx].get( prop_name )
 					
 			FlowData.DataType.String:
 				var container : PackedStringArray = output.addStream( prop_name, prop_type )
 				container.resize( count )
 				for idx in range(count):
-					container[idx] = settings.assets[idx].get( prop_name )
+					container[idx] = assets[idx].get( prop_name )
 					
 			FlowData.DataType.Color:
 				var container : PackedColorArray = output.addStream( prop_name, prop_type )
 				container.resize( count )
 				for idx in range(count):
-					container[idx] = settings.assets[idx].get( prop_name )
+					container[idx] = assets[idx].get( prop_name )
 					
 			FlowData.DataType.Vector:
 				var container : PackedVector3Array = output.addStream( prop_name, prop_type )
 				container.resize( count )
 				for idx in range(count):
-					var value = settings.assets[idx].get( prop_name )
+					var value = assets[idx].get( prop_name )
 					if typeof( value ) == TYPE_COLOR:
 						container[idx] = Vector3( value.r, value.g, value.b )
 					else:
@@ -105,6 +105,6 @@ func execute( _ctx : FlowData.EvaluationContext ):
 				var container : Array = output.addStream( prop_name, prop_type )
 				container.resize( count )
 				for idx in range(count):
-					container[idx] = settings.assets[idx].get( prop_name )
+					container[idx] = assets[idx].get( prop_name )
 					#print( "%s[%d] = %s" % [ prop_name, idx, container[idx]])
 	set_output( 0, output )

@@ -1,16 +1,35 @@
 @tool
 extends FlowNodeBase
 
+enum eMode { Set, Add, Multiply, AddPadding }
+			
+@export var mode: eMode = eMode.Set:
+	set(value):
+		if mode != value:
+			mode = value
+			notify_property_list_changed()
+			
+@export var bounds_min: Vector3 = -Vector3.ONE * 0.5
+@export var bounds_max: Vector3 = Vector3.ONE * 0.5
+@export var padding: Vector3 = Vector3.ONE
+@export var uniform_scale : float = 1.0
+
 func _init():
 	meta_node = {
 		"title" : "Bounds Modifier",
-		"settings" : BoundsModifierNodeSettings,
 		"category" : "Point Ops",
 		"ins" : [{ "label": "In" }], 
 		"outs" : [{ "label" : "Out" }],
 		"tooltip" : "Modifies the size/bounds property on points in the provided point data.",
 	}
 
+func exposeParam( name : String ) -> bool:
+	if name == "padding":
+		return mode == eMode.AddPadding
+	if name == "bounds_min" or name == "bounds_max":
+		return mode != eMode.AddPadding
+	return true
+	
 func execute( ctx : FlowData.EvaluationContext ):
 	var in_data : FlowData.Data = get_input(0)
 	if in_data == null:
@@ -26,27 +45,27 @@ func execute( ctx : FlowData.EvaluationContext ):
 	var eulers = srot.container
 	var uniform_scale : float = getSettingValue( ctx, "uniform_scale", 1.0 )
 	
-	var b_min : Vector3 = settings.bounds_min
-	var b_max : Vector3 = settings.bounds_max
+	var b_min : Vector3 = bounds_min
+	var b_max : Vector3 = bounds_max
 	var size_val := ( b_max - b_min ) * 0.5
 	var center := ( b_max + b_min ) * 0.25
 	
-	match settings.mode:
-		BoundsModifierNodeSettings.eMode.Set:
+	match mode:
+		eMode.Set:
 			var final_size := size_val * uniform_scale
 			for i in ssizes.size():
 				var basis := FlowData.eulerToBasis(eulers[i]).inverse()
 				ssizes[i] = final_size
 				spos[i] += center * basis
 		
-		BoundsModifierNodeSettings.eMode.Add:
+		eMode.Add:
 			var final_size := size_val * uniform_scale
 			for i in ssizes.size():
 				var basis := FlowData.eulerToBasis(eulers[i]).inverse()
 				ssizes[i] += final_size
 				spos[i] += center * basis
 		
-		BoundsModifierNodeSettings.eMode.Multiply:
+		eMode.Multiply:
 			size_val *= 0.5 * uniform_scale
 			for i in ssizes.size():
 				var basis := FlowData.eulerToBasis(eulers[i]).inverse()
@@ -54,8 +73,8 @@ func execute( ctx : FlowData.EvaluationContext ):
 				spos[i] += offset_center * basis
 				ssizes[i] *= ( b_max + b_min ) * 0.5
 		
-		BoundsModifierNodeSettings.eMode.AddPadding:
-			size_val = ( settings.padding ) * uniform_scale
+		eMode.AddPadding:
+			size_val = ( padding ) * uniform_scale
 			for i in ssizes.size():
 				ssizes[i] += size_val 
 			

@@ -1,10 +1,17 @@
 @tool
 extends FlowNodeBase
 
+enum eOperation {
+	A_Minus_B,
+	A_Intersection_B,
+	#A_Union_B,
+}
+
+@export var operation : eOperation = eOperation.A_Minus_B
+
 func _init():
 	meta_node = {
 		"title" : "Substract",
-		"settings" : SubstractSettings,
 		"category" : "Spatial",
 		"ins" : [{ "label": "In A" }, { "label": "In B" }], 
 		"outs" : [{ "label" : "Out" }],
@@ -13,7 +20,7 @@ func _init():
 	}
 
 func getTitle() -> String:
-	return "Substract" if settings.operation == SubstractSettings.eOperation.A_Minus_B else "Intersection"
+	return "Substract" if operation == eOperation.A_Minus_B else "Intersection"
 
 func getMergedB(ctx : FlowData.EvaluationContext ) -> FlowData.Data :
 	var all_Bs : FlowData.Data
@@ -67,7 +74,7 @@ func execute( _ctx : FlowData.EvaluationContext ):
 	var posB = in_dataB.getVector3Container( FlowData.AttrPosition )
 	var szB = in_dataB.getVector3Container( FlowData.AttrSize )
 	
-	var inverse_result = settings.operation == SubstractSettings.eOperation.A_Intersection_B
+	var inverse_result = operation == eOperation.A_Intersection_B
 	var result = tA.overlaps( posB, szB, inverse_result )
 	
 	var out_data : FlowData.Data = in_dataA.filter( result.idxs_overlapped )

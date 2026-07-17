@@ -1,12 +1,13 @@
 @tool
 extends FlowNodeBase
 
-const SurfaceSamplerNodeSettings = preload("res://addons/flow_nodes_editor/nodes/surface_sampler_settings.gd")
+@export var num_points: int = 40
+@export var point_size: Vector3 = Vector3.ONE
+
 
 func _init():
 	meta_node = {
 		"title" : "Surface Sampler",
-		"settings" : SurfaceSamplerNodeSettings,
 		"category" : "Sampler",
 		"ins" : [{ "label": "In" }], 
 		"outs" : [{ "label" : "Out" }],

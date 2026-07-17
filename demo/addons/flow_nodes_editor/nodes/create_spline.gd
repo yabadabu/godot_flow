@@ -4,7 +4,6 @@ extends FlowNodeBase
 func _init():
 	meta_node = {
 		"title" : "Create Spline",
-		"settings" : CreateSplineNodeSettings,
 		"category" : "Spatial",
 		"ins" : [{ "label": "In" }],
 		"outs" : [{ "label" : "Splines", "data_type": FlowData.DataType.NodePath }],
