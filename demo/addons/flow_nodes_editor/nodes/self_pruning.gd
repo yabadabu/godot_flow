@@ -1,10 +1,11 @@
 @tool
 extends FlowNodeBase
 
+@export var keep_self_intersections : bool = false
+
 func _init():
 	meta_node = {
 		"title" : "Self Pruning",
-		"settings" : SelfPruningSettings,
 		"category" : "Filter",
 		"ins" : [{ "label": "In" }], 
 		"outs" : [{ "label" : "Out" }],
@@ -21,7 +22,7 @@ func execute( _ctx : FlowData.EvaluationContext ):
 	var tA := GDRTree.new()
 	var posA = in_dataA.getVector3Container( FlowData.AttrPosition )
 	var szA = in_dataA.getVector3Container( FlowData.AttrSize )
-	var result = tA.self_prune( posA, szA, settings.keep_self_intersections )
+	var result = tA.self_prune( posA, szA, keep_self_intersections )
 	
 	var out_data : FlowData.Data = in_dataA.filter( result.idxs_overlapped )
 		

@@ -1,10 +1,13 @@
 @tool
 extends FlowNodeBase
 
+@export var start : int = 0
+@export var count : int = 0
+@export var step : int = 1
+
 func _init():
 	meta_node = {
 		"title" : "Sequence Sample",
-		"settings" : SequenceSampleNodeSettings,
 		"category" : "Filter",
 		"ins" : [{ "label": "In" }], 
 		"outs" : [{ "label" : "Out" }],
