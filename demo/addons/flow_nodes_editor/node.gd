@@ -193,11 +193,10 @@ func getExposedParams():
 	if meta.get( "hide_inputs", false ):
 		return []
 	var trace = meta.get( "trace", false )
-	trace = true
 	# transform.gd
 	var settings_script_name = template_name + ".gd" #get_path().get_file()
 	#print( "Starting exposed params for %s -> myscr:%s" % [ str(meta), my_script ])
-	print( "settings_script_name:%s" % [ settings_script_name])
+	#print( "settings_script_name:%s" % [ settings_script_name])
 	
 	var props := get_property_list()
 	var inside_my_vars := false
@@ -241,7 +240,7 @@ func refreshConnectionFlags( editor : FlowGraphEditor ):
 func getSettingValue( ctx : FlowData.EvaluationContext, in_name : String, default_value = null):
 	var meta = getMeta()
 	var trace = meta.get( "trace", false ) or trace
-	
+	trace = false
 	var value = get( in_name )
 	if value == null:
 		value = default_value

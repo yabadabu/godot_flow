@@ -141,7 +141,7 @@ static func nodes_as_dict( nodes, frames, editor : FlowGraphEditor ):
 		exported_node_names[ node.name ] = 1
 		node.refreshConnectionFlags( editor )
 		var template_name = node.template_name
-		print( "Name", template_name, " Meta:", node.getMeta() )
+		# print( "Name: ", template_name, " Meta:", node.getMeta() )
 		return {
 			"position" : ( ui_node.position_offset - min_pos ) / editor.ui_scale,
 			"name" : node.name,

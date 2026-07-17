@@ -168,7 +168,6 @@ func initFromScript( flow_editor : FlowGraphEditor ):
 	
 	var meta : Dictionary = flow_node.getMeta()
 	var trace = meta.get( "trace", false )
-	trace = true
 	
 	if trace:
 		print( "initFromScript: %s" % flow_node.getTitle())

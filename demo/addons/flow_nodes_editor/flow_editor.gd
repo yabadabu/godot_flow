@@ -139,14 +139,14 @@ func setResourceToEdit( new_resource : FlowGraphResource, new_resource_owner : F
 	
 # creates a new FlowGraphNodeUI from a FlowNodeBase
 func onNodeCreated( node : FlowNodeBase ) -> FlowGraphNodeUI:
-	print( "onNodeCreated called ", node)
+	#print( "onNodeCreated called ", node)
 	var ui_node := FlowGraphNodeUI.new()
 	#ui_node.ui_scale = ui_scale
 	ui_node.setFlowNode( node )
 	ui_node.initFromScript( self )
 	refreshSignalsInputArgs( ui_node )
 	gedit.add_child(ui_node)
-	print( "gedit.addChild %s" % [ node.name ])
+	#print( "gedit.addChild %s" % [ node.name ])
 	ui_node.draw.connect( ui_node._on_draw )
 	node.connections_changed.connect( func():
 		ui_node.initFromScript( self ))
