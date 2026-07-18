@@ -120,8 +120,17 @@ func setupDraw():
 	if not is_inside_tree():
 		return
 
+	# The resource can be open in a tab even when none of its FlowGraphNode3D
+	# instances belongs to the currently edited scene. Never keep or create a
+	# RenderingServer instance unless this graph has a valid active executor.
+	var ui_node := get_parent() as FlowGraphNodeUI
+	if not ui_node or not ui_node.editor or not ui_node.editor.canExecuteCurrentOwner():
+		cleanup_multimesh_direct()
+		return
+
 	var world := get_viewport().get_world_3d()
 	if not world:
+		cleanup_multimesh_direct()
 		return
 		
 	var current_scenario := world.scenario
@@ -132,6 +141,7 @@ func setupDraw():
 		
 	var s = node
 	if !s.debug_enabled or s.disabled:
+		cleanup_multimesh_direct()
 		return
 		
 	var num_bulks = node.generated_bulks.size()

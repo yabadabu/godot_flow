@@ -4,6 +4,8 @@ class_name FlowNodesFactory
 var node_types = { }
 var new_name_counter : int = 0
 
+const trace := false
+
 const directory_path := "res://addons/flow_nodes_editor/nodes"
 
 func getNewName( suffix : String ):
@@ -19,12 +21,12 @@ func registerNodeType( node_type_name, file ):
 	if not loaded_class.can_instantiate():
 		push_error("Script cannot be instantiated: %s" % full_res_path)
 		return
-	print( "Loading class %s" % full_res_path )
+	if trace: print( "Loading class %s" % full_res_path )
 	
 	var instance = loaded_class.new() as FlowNodeBase
 	var meta = instance.getMeta()
 	meta.factory = loaded_class
-	print( "Registering node type %s" % node_type_name )
+	if trace: print( "Registering node type %s" % node_type_name )
 	node_types[ node_type_name ] = meta
 
 func scanAvailableNodes():
@@ -37,7 +39,7 @@ func scanAvailableNodes():
 	print( "Registered %d node types" % node_types.size() )
 
 func createNewNode( node_template : String, node_name : String, in_settings = null ):
-	print( "createNewNode.node_template:", node_template )
+	if trace: print( "createNewNode.node_template:", node_template )
 	var meta = node_types.get( node_template, null )
 	if not meta:
 		if node_template.begins_with("input_"):
@@ -52,10 +54,11 @@ func createNewNode( node_template : String, node_name : String, in_settings = nu
 	if not flow_node is FlowNodeBase:
 		push_error("Loaded script produced %s, expected FlowNodeBase: %s" % [flow_node.get_class(), meta.factory] )
 		return
-	print( "createNewNode.Meta:", str(meta) )
-	print( "createNewNode.node_template: ", node_template )
-	print( "node_name:", node_name )
-	print( "flow_node:", flow_node )
+	if trace:
+		print( "createNewNode.Meta:", str(meta) )
+		print( "createNewNode.node_template: ", node_template )
+		print( "node_name:", node_name )
+		print( "flow_node:", flow_node )
 	flow_node.template_name = node_template
 	flow_node.random_seed = randi()
 	if in_settings: 

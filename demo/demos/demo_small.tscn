@@ -11,7 +11,7 @@ value = null
 
 [node name="DemoSubgraph" type="Node3D" unique_id=1826795326]
 
-[node name="FlowGraphNode3D" type="Node3D" parent="." unique_id=85644735]
+[node name="FlowGraphSmall" type="Node3D" parent="." unique_id=85644735]
 script = ExtResource("1_auw31")
 graph = ExtResource("2_d4ldi")
 overrides = Array[ExtResource("3_tt2rr")]([SubResource("Resource_tt2rr")])

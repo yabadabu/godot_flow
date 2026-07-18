@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_3rj1w"]
 [ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="2_qq08u"]
 [ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="3_x770j"]
+[ext_resource type="BoxMesh" uid="uid://7flu82pqtc5d" path="res://addons/flow_nodes_editor/resources/unit_cube.tres" id="4_qq08u"]
 
 [sub_resource type="Resource" id="Resource_huh3s"]
 script = ExtResource("3_x770j")
@@ -38,125 +39,21 @@ data = {
 "keep_alive": false,
 "to_node": &"id_0029_random_color",
 "to_port": 0
+}, {
+"from_node": &"id_0025_sample_around",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0005_spawn_meshes",
+"to_port": 0
+}, {
+"from_node": &"id_0028_transform",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0005_spawn_meshes",
+"to_port": 0
 }],
-"min_pos": Vector2(80, 180),
+"min_pos": Vector2(0, 0),
 "nodes": [{
-"args_port": {},
-"name": &"id_0001_scan_splines",
-"position": Vector2(0, 0),
-"settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"group_name": "",
-"inspect_enabled": false,
-"random_seed": 2053119505,
-"required_meta_bool": &"",
-"title": "Scan Splines",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "scan_splines"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0025_sample_around",
-"position": Vector2(820, 0),
-"settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": true,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": true,
-"max_points": 139,
-"radius": 0.45,
-"random_seed": 2789012003,
-"title": "Sample Around",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "sample_around"
-}, {
-"args_port": {
-"Splines": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0003_sample_spline",
-"position": Vector2(140, 0),
-"settings": {
-"adjust_to_borders": false,
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"distance_attribute": "distance",
-"fill_curve": false,
-"inspect_enabled": false,
-"random_seed": 2020946630,
-"sample_segments_centers": true,
-"title": "Sample Spline",
-"trace": false,
-"uniform_interval": 1.0
-},
-"show_disconnected_inputs": false,
-"template": "sample_spline"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0028_transform",
-"position": Vector2(820, 120),
-"settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": true,
-"debug_mode": 0,
-"debug_modulate_by": "color",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"offset_max": Vector3(0, 0, 0),
-"offset_min": Vector3(0, 0, 0),
-"random_seed": 3946766092,
-"rotation_local_space": false,
-"rotation_max": Vector3(0, 0, 0),
-"rotation_min": Vector3(0, 0, 0),
-"scale_max": Vector3(0.25, 5, 0.25),
-"scale_min": Vector3(0.25, 5, 0.25),
-"title": "Transform",
-"trace": false,
-"uniform_scale": false
-},
-"show_disconnected_inputs": false,
-"template": "transform"
-}, {
 "args_port": {
 "In A": {
 "connected": true,
@@ -170,26 +67,43 @@ data = {
 "name": &"id_0018_math_op",
 "position": Vector2(600, 0),
 "settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
 "in_nameA": "position.Y",
 "in_nameB": "0.0",
-"inspect_enabled": false,
 "operation": 2,
 "out_name": "position.Y",
 "random_seed": 820617526,
-"title": "Math",
-"trace": false
+"title": "Math"
 },
 "show_disconnected_inputs": false,
 "template": "math_op"
+}, {
+"args_port": {
+"Splines": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0003_sample_spline",
+"position": Vector2(140, 0),
+"settings": {
+"adjust_to_borders": false,
+"random_seed": 2020946630,
+"sample_segments_centers": true,
+"title": "Sample Spline",
+"uniform_interval": 1.0
+},
+"show_disconnected_inputs": false,
+"template": "sample_spline"
+}, {
+"args_port": {},
+"name": &"id_0001_scan_splines",
+"position": Vector2(0, 0),
+"settings": {
+"random_seed": 2053119505,
+"title": "Scan Splines"
+},
+"show_disconnected_inputs": false,
+"template": "scan_splines"
 }, {
 "args_port": {
 "In": {
@@ -200,43 +114,96 @@ data = {
 "name": &"id_0029_random_color",
 "position": Vector2(380, 0),
 "settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
 "debug_modulate_by": "color",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"hue_center": 0.0,
-"hue_width": 1.0,
-"inspect_enabled": false,
-"out_name": "color",
-"palette": Array[Color]([Color(1, 0.078, 0.576, 1), Color(0, 0.749, 1, 1), Color(1, 0.843, 0, 1)]),
 "random_seed": 437912405,
-"sat_max": 1.0,
 "sat_min": 1.0,
 "title": "Random Color",
-"trace": false,
 "use_palette": false,
-"val_max": 1.0,
 "val_min": 1.0
 },
 "show_disconnected_inputs": false,
 "template": "random_color"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0005_spawn_meshes",
+"position": Vector2(1080, 0),
+"settings": {
+"random_seed": 1643224570,
+"title": "Spawn Meshes"
+},
+"show_disconnected_inputs": false,
+"template": "spawn_meshes"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0028_transform",
+"position": Vector2(820, 120),
+"settings": {
+"debug_modulate_by": "color",
+"random_seed": 3946766092,
+"scale_max": Vector3(0.25, 5, 0.25),
+"scale_min": Vector3(0.25, 5, 0.25),
+"title": "Transform",
+"uniform_scale": false
+},
+"show_disconnected_inputs": false,
+"template": "transform"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0025_sample_around",
+"position": Vector2(820, 0),
+"settings": {
+"max_points": 139,
+"radius": 0.45,
+"random_seed": 2789012003,
+"title": "Sample Around"
+},
+"show_disconnected_inputs": false,
+"template": "sample_around"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
+graph_name = "demo_sample_around"
 view_zoom = 0.8794085
-view_offset = Vector2(422.57465, 39.920563)
+view_offset = Vector2(527.57465, -236.07944)
 new_name_counter = 29
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_lfecj"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_wobnc"]
 size = Vector3(2, 0.001, 2)
+
+[sub_resource type="MultiMesh" id="MultiMesh_qq08u"]
+transform_format = 1
+instance_count = 54
+mesh = ExtResource("4_qq08u")
+buffer = PackedFloat32Array(0.45, 0, 0, -0.098923385, 0, 0.45, 0, 0, 0, 0, 0.45, 4.312782, 0.45, 0, 0, -1.6413497, 0, 0.45, 0, 0, 0, 0, 0.45, 4.4597983, 0.45, 0, 0, -0.4617105, 0, 0.45, 0, 0, 0, 0, 0.45, 5.2914925, 0.45, 0, 0, 2.6691532, 0, 0.45, 0, 0, 0, 0, 0.45, 1.9521837, 0.45, 0, 0, -1.7488832, 0, 0.45, 0, 0, 0, 0, 0.45, 3.0564423, 0.45, 0, 0, -1.7175354, 0, 0.45, 0, 0, 0, 0, 0.45, 1.9414136, 0.45, 0, 0, 5.4904284, 0, 0.45, 0, 0, 0, 0, 0.45, 2.3410923, 0.45, 0, 0, -0.7584911, 0, 0.45, 0, 0, 0, 0, 0.45, 2.2787125, 0.45, 0, 0, 0.9909854, 0, 0.45, 0, 0, 0, 0, 0.45, 5.545145, 0.45, 0, 0, 4.841899, 0, 0.45, 0, 0, 0, 0, 0.45, 2.5443356, 0.45, 0, 0, 3.957819, 0, 0.45, 0, 0, 0, 0, 0.45, 2.097222, 0.45, 0, 0, -0.8262861, 0, 0.45, 0, 0, 0, 0, 0.45, 0.66179824, 0.45, 0, 0, -2.4277794, 0, 0.45, 0, 0, 0, 0, 0.45, -0.059772372, 0.45, 0, 0, 2.3858755, 0, 0.45, 0, 0, 0, 0, 0.45, 3.5495028, 0.45, 0, 0, -3.0325584, 0, 0.45, 0, 0, 0, 0, 0.45, 0.8196435, 0.45, 0, 0, 1.4228932, 0, 0.45, 0, 0, 0, 0, 0.45, 3.5711806, 0.45, 0, 0, 0.07920319, 0, 0.45, 0, 0, 0, 0, 0.45, 3.5076783, 0.45, 0, 0, -1.5970374, 0, 0.45, 0, 0, 0, 0, 0.45, 0.03939855, 0.45, 0, 0, 3.1044955, 0, 0.45, 0, 0, 0, 0, 0.45, 2.6678998, 0.45, 0, 0, 4.061034, 0, 0.45, 0, 0, 0, 0, 0.45, 1.1878443, 0.45, 0, 0, 5.2492647, 0, 0.45, 0, 0, 0, 0, 0.45, 0.49655467, 0.45, 0, 0, 2.8577242, 0, 0.45, 0, 0, 0, 0, 0.45, 3.8655415, 0.45, 0, 0, -0.60004103, 0, 0.45, 0, 0, 0, 0, 0.45, 3.3491666, 0.45, 0, 0, 4.1563516, 0, 0.45, 0, 0, 0, 0, 0.45, 3.2912588, 0.45, 0, 0, 3.4489384, 0, 0.45, 0, 0, 0, 0, 0.45, 1.1924785, 0.45, 0, 0, 5.682717, 0, 0.45, 0, 0, 0, 0, 0.45, 1.7809744, 0.45, 0, 0, 2.5463257, 0, 0.45, 0, 0, 0, 0, 0.45, 4.5168824, 0.45, 0, 0, -2.4212508, 0, 0.45, 0, 0, 0, 0, 0.45, 3.467586, 0.45, 0, 0, -2.622195, 0, 0.45, 0, 0, 0, 0, 0.45, 2.9034538, 0.45, 0, 0, 4.9287305, 0, 0.45, 0, 0, 0, 0, 0.45, 1.6226585, 0.45, 0, 0, -0.9472615, 0, 0.45, 0, 0, 0, 0, 0.45, 4.838976, 0.45, 0, 0, -0.9510361, 0, 0.45, 0, 0, 0, 0, 0.45, 1.2482525, 0.45, 0, 0, 1.7975608, 0, 0.45, 0, 0, 0, 0, 0.45, 5.0027957, 0.45, 0, 0, -2.8019493, 0, 0.45, 0, 0, 0, 0, 0.45, 2.1440141, 0.45, 0, 0, 4.6825438, 0, 0.45, 0, 0, 0, 0, 0.45, 1.149339, 0.45, 0, 0, -1.2849054, 0, 0.45, 0, 0, 0, 0, 0.45, 2.8880258, 0.45, 0, 0, 0.32315993, 0, 0.45, 0, 0, 0, 0, 0.45, 5.1198416, 0.45, 0, 0, -2.7101383, 0, 0.45, 0, 0, 0, 0, 0.45, 1.5368226, 0.45, 0, 0, 3.555256, 0, 0.45, 0, 0, 0, 0, 0.45, 3.1470072, 0.45, 0, 0, 0.80234504, 0, 0.45, 0, 0, 0, 0, 0.45, 3.902225, 0.45, 0, 0, 0.79643387, 0, 0.45, 0, 0, 0, 0, 0.45, 4.7534175, 0.45, 0, 0, 4.3885713, 0, 0.45, 0, 0, 0, 0, 0.45, 2.6267369, 0.45, 0, 0, 4.5921054, 0, 0.45, 0, 0, 0, 0, 0.45, 0.39170945, 0.45, 0, 0, 3.1273198, 0, 0.45, 0, 0, 0, 0, 0.45, 1.7965736, 0.45, 0, 0, 1.6376646, 0, 0.45, 0, 0, 0, 0, 0.45, 3.0215592, 0.45, 0, 0, -1.837214, 0, 0.45, 0, 0, 0, 0, 0.45, 0.8799205, 0.45, 0, 0, 5.647644, 0, 0.45, 0, 0, 0, 0, 0.45, 1.0135305, 0.45, 0, 0, 2.2768097, 0, 0.45, 0, 0, 0, 0, 0.45, 3.011513, 0.45, 0, 0, 3.3098927, 0, 0.45, 0, 0, 0, 0, 0.45, 4.223109, 0.45, 0, 0, 1.8078785, 0, 0.45, 0, 0, 0, 0, 0.45, 2.5625033, 0.45, 0, 0, -0.7514699, 0, 0.45, 0, 0, 0, 0, 0.45, 1.7904855, 0.45, 0, 0, -1.6633513, 0, 0.45, 0, 0, 0, 0, 0.45, 3.9291024, 0.45, 0, 0, -2.278464, 0, 0.45, 0, 0, 0, 0, 0.45, 2.2477236, 0.45, 0, 0, -2.4364493, 0, 0.45, 0, 0, 0, 0, 0.45, 1.0756056)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_x770j"]
+vertex_color_use_as_albedo = true
+roughness = 0.3
+
+[sub_resource type="MultiMesh" id="MultiMesh_cwls8"]
+transform_format = 1
+use_colors = true
+instance_count = 11
+mesh = ExtResource("4_qq08u")
+buffer = PackedFloat32Array(-0.23843634, -7.559803e-05, -0.075153865, -1.9251205, 0, 4.9999976, -0.0050295475, 0, 0.07611461, -0.00024291137, -0.2414842, 1.0054238, 1, 0, 0.06257534, 1, -0.24909018, -0.00042816502, -0.021304853, -1.7303121, 0, 4.9989905, -0.10046504, 0, 0.02129392, -0.005001392, -0.24886182, 1.9861159, 0.75216734, 1, 0, 1, -0.23627755, -0.0001911627, -0.081687726, -1.5273335, 0, 4.999986, -0.01170079, 0, 0.08019984, -0.00054285413, -0.23197265, 2.947785, 0, 1, 0.7406745, 1, -0.16020137, 0.0037125163, -0.19188991, -0.981031, 0, 4.9990644, 0.09671748, 0, 0.19298777, 0.003116001, -0.16105765, 3.7338452, 0, 0.9141879, 1, 1, -0.11262321, -0.0035861316, -0.2231662, -0.14393945, 0, 4.9993544, -0.08033629, 0, 0.22562326, -0.001829233, -0.11383379, 4.2836285, 0.064347744, 1, 0, 1, 0.046466615, -0.0020921587, -0.24563484, 0.7885525, 0, 4.9998183, -0.042585216, 0, 0.24066058, 0.00038772976, 0.045522332, 4.420251, 0, 0.043421745, 1, 1, 0.13757242, 0.0070455484, -0.20862451, 1.6916413, 0, 4.9971514, 0.16876094, 0, 0.2110128, -0.0046938504, 0.1389888, 4.051229, 0, 0.4426546, 1, 1, 0.15443109, 0.0017810123, -0.19659062, 2.511919, 0, 4.999795, 0.045295633, 0, 0.19925447, -0.0014179095, 0.15651083, 3.4602296, 1, 0.6559582, 0, 1, 0.1595276, -0.0010137479, -0.19248354, 3.3005815, 0, 4.9999304, -0.026332999, 0, 0.19508761, 0.0008515227, 0.16168132, 2.8238454, 0.66304684, 1, 0, 1, 0.16859587, -0.002681854, -0.18457583, 4.0648375, 0, 4.999472, -0.07264144, 0, 0.18706274, 0.0024821497, 0.17083141, 2.1588197, 1, 0, 0.0728178, 1, 0.19334583, -0.0025181482, -0.15846466, 4.759434, 0, 4.9993687, -0.079444535, 0, 0.16027565, 0.00310677, 0.19550608, 1.4261447, 1, 0, 0.687047, 1)
 
 [sub_resource type="Curve3D" id="Curve3D_ioxdu"]
 bake_interval = 1.0
@@ -251,7 +218,8 @@ point_count = 5
 [node name="FlowGraphNode3D" type="Node3D" parent="." unique_id=768904491]
 script = ExtResource("1_3rj1w")
 graph = SubResource("Resource_huh3s")
-refresh_inputs = Callable()
+regenerate = Callable()
+clearInstances = Callable()
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
 
 [node name="Ground" type="MeshInstance3D" parent="FlowGraphNode3D" unique_id=1146039181]
@@ -262,6 +230,15 @@ skeleton = NodePath("../..")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="FlowGraphNode3D/Ground" unique_id=801069733]
 shape = SubResource("BoxShape3D_wobnc")
+
+[node name="Spawn Meshes_0000" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=1232187411]
+multimesh = SubResource("MultiMesh_qq08u")
+metadata/flow_owner = &"id_0005_spawn_meshes"
+
+[node name="Spawn Meshes_0001" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=1070489569]
+material_override = SubResource("StandardMaterial3D_x770j")
+multimesh = SubResource("MultiMesh_cwls8")
+metadata/flow_owner = &"id_0005_spawn_meshes"
 
 [node name="Path3D" type="Path3D" parent="." unique_id=1196535396]
 transform = Transform3D(0.9999837, -0.0055746622, 0.0011857857, 0.005575491, 0.9999842, -0.0006958283, -0.0011818821, 0.0007024381, 0.99999905, 0, 0, 0)

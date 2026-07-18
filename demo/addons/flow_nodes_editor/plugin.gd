@@ -80,24 +80,26 @@ func _ready():
 	_selection_changed()
 	nodes_factory.scanAvailableNodes()
 
-# This is called after the a new scene is loaded, but the 'selection' event of the new
-# scene is called first.
-func on_scene_changed(scene_root: Node) -> void:
-	print( "Scene Changed detected %s : %s -> %s" % [graph_dock.current_resource, is_instance_valid(graph_dock.resource_owner), scene_root.name ] )
-	if graph_dock.resource_owner:
-		var node = graph_dock.resource_owner
-		print( "Close current dock?" )
-		if scene_root and (node.get_owner() != scene_root and not scene_root.is_ancestor_of(node)):
-			graph_dock.setResourceToEdit( null, null )
-	else:
-		graph_dock.setResourceToEdit( null, null )
-			
+func findFirstFlowNode(scene_root : Node) -> FlowGraphNode3D:
 	# Auto activate the first flow node graph found in the scene
 	for node in scene_root.get_children():
 		var flow_node = node as FlowGraphNode3D
 		if flow_node:
-			graph_dock.setResourceToEdit( flow_node.graph, flow_node )
-			break
+			return flow_node
+	return null
+	
+# This is called after the a new scene is loaded, but the 'selection' event of the new
+# scene is called first.
+func on_scene_changed(scene_root: Node) -> void:
+	print( "Scene Changed detected %s : %s -> %s" % [graph_dock.current_resource, is_instance_valid(graph_dock.resource_owner), scene_root.name if scene_root else "<none>" ] )
+	graph_dock.clear_active_executor()
+	if scene_root == null:
+		return
+
+	var flow_node := findFirstFlowNode(scene_root)
+	if flow_node:
+		graph_dock.openResource(flow_node.graph)
+		graph_dock.select_executor(flow_node)
 
 func _handles(object: Object) -> bool:
 	return object is FlowGraphResource
@@ -108,7 +110,7 @@ func _edit(object: Object) -> void:
 	return
 	var res := object as FlowGraphResource
 	print("Editor requested edit/open for: ", res.resource_path)
-	graph_dock.setResourceToEdit( res, null )
+	graph_dock.setResourceToEdit( res )
 
 func _selection_changed():
 	
@@ -117,7 +119,7 @@ func _selection_changed():
 		var scene_node = scene_nodes[0]
 		if scene_node is FlowGraphNodeUI:
 			setWatchedNode( scene_node )
-			graph_dock.setResourceToEdit( scene_node.graph, scene_node )
+			graph_dock.setResourceToEdit( scene_node.graph )
 			return
 	setWatchedNode( null )
 
@@ -134,7 +136,7 @@ func onSelectedGraphNodeChanged( node : FlowGraphNode3D, prop_name: String ):
 	print( "onSelectedGraphNodeChanged %s.%s" % [node.name, prop_name] )
 	if prop_name == "graph_resource":
 		print( "  -> %s" % [node.graph] )
-		graph_dock.setResourceToEdit( node.graph, node )
+		graph_dock.setResourceToEdit( node.graph )
 	else:
 		if graph_dock.resource_owner == node:
 			print( "Input %s changed" % [prop_name] )

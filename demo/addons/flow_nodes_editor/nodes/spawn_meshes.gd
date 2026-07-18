@@ -235,7 +235,8 @@ func execute( ctx : FlowData.EvaluationContext ):
 			mmi.material_override = mat
 		
 		registerInstancedNode(owner_of_mmis, spawn_parent, mmi)
-	
+		print( "Spawned:%s Parent:%s Owner:%s EditedRoot:%s" % [ mmi, mmi.get_parent(), mmi.owner, EditorInterface.get_edited_scene_root() ] )
+
 	EditorInterface.mark_scene_as_unsaved()
 
 	set_output(0, in_data)

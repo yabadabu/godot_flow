@@ -105,7 +105,7 @@ func resetSubgraph( graph : FlowGraphResource ):
 			##print( "graph.resource_path", graph.resource_path )
 			#if not graph.data:
 				#resetSubgraph( graph )
-			#editor.setResourceToEdit(graph, owner)
+			#editor.setResourceToEdit(graph)
 			#accept_event()	
 
 # This ctx is the context evaluating the subgraph node, not the subgraph itself

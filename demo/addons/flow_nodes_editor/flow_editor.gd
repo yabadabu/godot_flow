@@ -98,41 +98,97 @@ func bindResourceToEditor(res : FlowGraphResource):
 	gedit.scroll_offset = res.view_offset
 	data_inspector.setNode( null )
 	
-func setResourceToEdit( new_resource : FlowGraphResource, new_resource_owner : FlowGraphNode3D ):
+func setResourceToEdit( new_resource : FlowGraphResource ):
 	if new_resource and new_resource.loading:
 		print( "setResourceToEdit resource is loading" % [ new_resource] )
 		return
-	print( "setResourceToEdit:%s Owner:%s" % [ new_resource, new_resource_owner ] )
+	print( "setResourceToEdit:%s" % [ new_resource ] )
 	
 	# Ensure we have a tab for this resource
-	if new_resource:
-		#print( "Activating tab" )
-		var tab_idx = findIndexInTabs( new_resource )
-		if tab_idx < 0:
-			print( "Adding new tab and leaving. addTabs has already trigger the activation of the resource")
-			tab_idx = addToTabs( new_resource, new_resource_owner )
-			return
-		#print( "tab idx is %d vs current tab %d" % [ tab_idx, tab_bar.current_tab ] )
-		tab_bar.ensure_tab_visible( tab_idx )
-		if tab_bar.current_tab != tab_idx:
-			tab_bar.current_tab = tab_idx
+	#if new_resource:
+		##print( "Activating tab" )
+		#var tab_idx = findIndexInTabs( new_resource )
+		#if tab_idx < 0:
+			#print( "Adding new tab and leaving. addTabs has already trigger the activation of the resource")
+			#tab_idx = addToTabs( new_resource )
+			#return
+		##print( "tab idx is %d vs current tab %d" % [ tab_idx, tab_bar.current_tab ] )
+		#tab_bar.ensure_tab_visible( tab_idx )
+		#if tab_bar.current_tab != tab_idx:
+			#tab_bar.current_tab = tab_idx
 	
 	if current_resource != new_resource:
 		if current_resource:
 			print( "unbinding old, bindning new" )
 			unbindResourceFromEditor( current_resource )
 		current_resource = new_resource
-		bindResourceToEditor( current_resource )
+		resource_owner = null
+		if current_resource:
+			bindResourceToEditor( current_resource )
 	#else:
 		#print( "The resource has not changed, no need to rebind the graph")
 	
-	resource_owner = new_resource_owner
 	refresh_executors()
-	
-	markAllNodesDirty()
-	if resource_owner:
-		queueRegen()
-	
+
+func openResource(resource: FlowGraphResource) -> void:
+	if resource == null:
+		return
+	if resource.loading:
+		print("openResource: resource is still loading %s" % resource)
+		return
+
+	var tab_idx := findIndexInTabs(resource)
+	if tab_idx < 0:
+		tab_idx = addToTabs(resource)
+	if tab_idx < 0:
+		return
+
+	tab_bar.ensure_tab_visible(tab_idx)
+	if tab_bar.current_tab != tab_idx:
+		tab_bar.current_tab = tab_idx
+
+	# Setting current_tab normally emits tab_changed. Handle the already-active
+	# tab (and the first tab, depending on TabBar state) explicitly.
+	if current_resource != resource:
+		setResourceToEdit(resource)
+
+func select_executor(node: FlowGraphNode3D) -> bool:
+	clear_active_executor()
+
+	if not is_instance_valid(node) or not node.is_inside_tree():
+		refresh_executors()
+		return false
+	if current_resource == null or node.graph != current_resource:
+		refresh_executors()
+		return false
+	if not isNodeInCurrentScene(node):
+		refresh_executors()
+		return false
+
+	resource_owner = node
+	refresh_executors()
+	for graph_node in getAllGraphNodes():
+		graph_node.refreshDebug()
+	return true
+
+func select_first_executor() -> bool:
+	# executor_candidates is refreshed whenever the current resource changes.
+	# Prefer the first live executor that belongs to the currently edited scene;
+	# executors from other open scenes remain registered but must not draw/run.
+	for candidate in executor_candidates:
+		var node := candidate.node_ref.get_ref() as FlowGraphNode3D
+		if (
+			is_instance_valid(node)
+			and node.is_inside_tree()
+			and node.graph == current_resource
+			and isNodeInCurrentScene(node)
+		):
+			return select_executor(node)
+
+	clear_active_executor()
+	refresh_executors()
+	return false
+
 # creates a new FlowGraphNodeUI from a FlowNodeBase
 func onNodeCreated( node : FlowNodeBase ) -> FlowGraphNodeUI:
 	#print( "onNodeCreated called ", node)
@@ -915,12 +971,12 @@ func onEditorSceneChanged():
 
 # new_resource = res://graph02_curves.tres
 # title = graph02_curves
-func addToTabs(  new_resource : FlowGraphResource, new_resource_owner : FlowGraphNode3D ):
+func addToTabs(  new_resource : FlowGraphResource ):
 	if not new_resource: return -1
 	var title = new_resource.graph_name
 	var dtab : Dictionary = {
 		resource = new_resource,
-		owner = new_resource_owner,
+		#owner = new_resource_owner,
 	}
 	open_tabs.append( dtab )
 	tab_bar.add_tab( title )
@@ -942,10 +998,11 @@ func _on_tab_bar_tab_changed(tab_idx):
 	print( "On tab index %d / %d" % [ tab_idx, open_tabs.size() ])
 	if dtab:
 		print( "Tab is %s" % dtab)
-	if dtab and is_instance_valid(dtab.resource) and is_instance_valid(dtab.owner):
-		setResourceToEdit( dtab.resource, dtab.owner )
+	if dtab and is_instance_valid(dtab.resource):
+		setResourceToEdit( dtab.resource )
+		select_first_executor()
 	else:
-		setResourceToEdit( null, null )
+		setResourceToEdit( null )
 
 func _on_button_dump_pressed():
 	var res := current_resource
@@ -972,11 +1029,52 @@ func refresh_executors():
 			if node == resource_owner:
 				combo.select( combo.get_item_count() - 1 )
 	
+func clearAllDebug():
+	for graph_node in getAllGraphNodes():
+		if is_instance_valid(graph_node.draw_debug):
+			graph_node.draw_debug.cleanup_multimesh_direct()
+		graph_node.queue_redraw()
+
+func clear_active_executor():
+	# Changing scene/tab must not leave a pending evaluation associated with
+	# the executor that was previously active.
+	regen_pending = false
+	clearAllDebug()
+	resource_owner = null
+	active_nodes.clear()
+	executor_candidates.clear()
+
+	var combo := %CBExecutors
+	if combo:
+		combo.select(-1)
+
+func isNodeInCurrentScene(node: Node) -> bool:
+	if not is_instance_valid(node) or not node.is_inside_tree():
+		return false
+
+	var scene_root := EditorInterface.get_edited_scene_root()
+	if not scene_root:
+		return false
+	return node == scene_root or scene_root.is_ancestor_of(node)
+
+func canExecuteCurrentOwner() -> bool:
+	return (
+		current_resource != null
+		and is_instance_valid(resource_owner)
+		and resource_owner.is_inside_tree()
+		and resource_owner.graph == current_resource
+		and isNodeInCurrentScene(resource_owner)
+	)
+
 func _on_cb_executors_item_selected(index):
-	if index >= 0 and index < executor_candidates.size():
-		var node := executor_candidates[index].node_ref.get_ref() as FlowGraphNode3D
-		if node:
-			print( "Changed node to executor %d %s" % [ index, node.name ] )
-			resource_owner = node
-			markAllNodesDirty()
-			evalGraph()
+	resource_owner = null
+	clearAllDebug()
+	print( "Activating executor at index %d" % index)
+	if index < 0 or index >= executor_candidates.size():
+		return
+		
+	var candidate = executor_candidates[index]
+	var node := candidate.node_ref.get_ref() as FlowGraphNode3D
+	if is_instance_valid(node):
+		print( "Changed node to executor %d %s" % [ index, node.name ] )
+		select_executor(node)

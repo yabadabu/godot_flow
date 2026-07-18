@@ -117,7 +117,7 @@ data = {
 "new_size_factor": 0.655,
 "num_samples": 2,
 "random_seed": 1950616807,
-"size": 0.43,
+"size": 0.515,
 "title": "Sample Points"
 },
 "show_disconnected_inputs": false,
@@ -154,7 +154,7 @@ data = {
 }
 graph_name = "demo_relax"
 view_zoom = 0.72678393
-view_offset = Vector2(387.00076, -218.6323)
+view_offset = Vector2(-59.999237, -299)
 new_name_counter = 19
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_lfecj"]
@@ -172,20 +172,20 @@ point_count = 5
 
 [node name="DemoPackedDistributions" type="Node3D" unique_id=182733429]
 
-[node name="FlowGraphNode3D" type="Node3D" parent="." unique_id=768904491]
+[node name="FlowGraphRelax" type="Node3D" parent="." unique_id=768904491]
 script = ExtResource("1_wobnc")
 graph = SubResource("Resource_huh3s")
 regenerate = Callable()
 clearInstances = Callable()
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
 
-[node name="Ground" type="MeshInstance3D" parent="FlowGraphNode3D" unique_id=1146039181]
+[node name="Ground" type="MeshInstance3D" parent="FlowGraphRelax" unique_id=1146039181]
 transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0)
 visible = false
 mesh = SubResource("PlaneMesh_lfecj")
 skeleton = NodePath("../..")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="FlowGraphNode3D/Ground" unique_id=801069733]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="FlowGraphRelax/Ground" unique_id=801069733]
 shape = SubResource("BoxShape3D_wobnc")
 
 [node name="Path3D" type="Path3D" parent="." unique_id=1196535396]

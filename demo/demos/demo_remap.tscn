@@ -149,13 +149,13 @@ data = {
 }
 graph_name = "demo_remap"
 view_zoom = 0.62092125
-view_offset = Vector2(-37.021423, -252.86792)
+view_offset = Vector2(0, -200)
 new_name_counter = 7
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 
 [node name="DemoRemap" type="Node3D" unique_id=1772731809]
 
-[node name="FlowGraphNode3D" type="Node3D" parent="." unique_id=1090447753]
+[node name="FlowGraphRemap" type="Node3D" parent="." unique_id=1090447753]
 script = ExtResource("1_8ag8x")
 graph = SubResource("Resource_b8voe")
 regenerate = Callable()

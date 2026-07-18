@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://cplq7g1wnpcbk"]
+[gd_scene format=3 uid="uid://cplq7g1wnpcbk"]
 
 [ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_gpa26"]
 [ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="2_abtjl"]
@@ -51,56 +51,23 @@ data = {
 "to_node": &"id_0007_create_spline",
 "to_port": 0
 }],
-"min_pos": Vector2(40, 160),
+"min_pos": Vector2(0, 0),
 "nodes": [{
-"args_port": {},
-"name": &"id_0001_scan_splines",
-"position": Vector2(0, 0),
-"settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"group_name": "",
-"inspect_enabled": false,
-"random_seed": 277831965,
-"required_meta_bool": &"",
-"title": "Scan Splines",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "scan_splines"
-}, {
 "args_port": {
 "Splines": {
 "connected": true,
 "port": 0
 }
 },
-"name": &"id_0002_sample_spline",
-"position": Vector2(140, 0),
+"name": &"id_0008_sample_spline",
+"position": Vector2(1100, 0),
 "settings": {
-"adjust_to_borders": true,
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
+"debug_color": Color(1, 0, 0, 1),
 "debug_mode": 1,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_scale": 0.285,
-"disabled": false,
-"distance_attribute": "distance",
-"fill_curve": false,
-"inspect_enabled": false,
-"random_seed": 865757577,
-"sample_segments_centers": false,
+"debug_scale": 0.125,
+"random_seed": 1995640507,
 "title": "Sample Spline",
-"trace": false,
-"uniform_interval": 0.77
+"uniform_interval": 0.51
 },
 "show_disconnected_inputs": false,
 "template": "sample_spline"
@@ -114,83 +81,16 @@ data = {
 "name": &"id_0003_transform",
 "position": Vector2(320, 0),
 "settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"offset_max": Vector3(0, 0, 0),
-"offset_min": Vector3(0, 0, 0),
 "random_seed": 2943887412,
-"rotation_local_space": false,
 "rotation_max": Vector3(30, 360, 10),
 "rotation_min": Vector3(0, 0, -10),
 "scale_max": Vector3(0.64, 0.895, 0.4),
 "scale_min": Vector3(0.12, 0.2, 0.4),
 "title": "Transform",
-"trace": false,
 "uniform_scale": false
 },
 "show_disconnected_inputs": false,
 "template": "transform"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0005_expression",
-"position": Vector2(480, 0),
-"settings": {
-"args": {},
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": true,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"expose_arrays": false,
-"expression": "position.y + size.y * 0.5",
-"inspect_enabled": false,
-"out_name": "position.Y",
-"random_seed": 258211304,
-"title": "Expression",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "expression"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0007_create_spline",
-"position": Vector2(920, 0),
-"settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"random_seed": 1220668871,
-"title": "Create Spline",
-"trace": false
-},
-"show_disconnected_inputs": false,
-"template": "create_spline"
 }, {
 "args_port": {
 "In": {
@@ -201,22 +101,38 @@ data = {
 "name": &"id_0011_expression",
 "position": Vector2(700, 0),
 "settings": {
-"args": {},
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"expose_arrays": false,
 "expression": "position.y + size.y * 0.5",
-"inspect_enabled": false,
 "out_name": "position.Y",
 "random_seed": 258211304,
-"title": "Expression",
-"trace": false
+"title": "Expression"
+},
+"show_disconnected_inputs": false,
+"template": "expression"
+}, {
+"args_port": {},
+"name": &"id_0001_scan_splines",
+"position": Vector2(0, 0),
+"settings": {
+"random_seed": 277831965,
+"title": "Scan Splines"
+},
+"show_disconnected_inputs": false,
+"template": "scan_splines"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0005_expression",
+"position": Vector2(480, 0),
+"settings": {
+"debug_enabled": true,
+"expression": "position.y + size.y * 0.5",
+"out_name": "position.Y",
+"random_seed": 258211304,
+"title": "Expression"
 },
 "show_disconnected_inputs": false,
 "template": "expression"
@@ -227,26 +143,14 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0008_sample_spline",
-"position": Vector2(1100, 0),
+"name": &"id_0002_sample_spline",
+"position": Vector2(140, 0),
 "settings": {
-"adjust_to_borders": true,
-"debug_bulk": 0,
-"debug_color": Color(1, 0, 0, 1),
-"debug_enabled": false,
 "debug_mode": 1,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_scale": 0.125,
-"disabled": false,
-"distance_attribute": "distance",
-"fill_curve": false,
-"inspect_enabled": false,
-"random_seed": 1995640507,
-"sample_segments_centers": false,
+"debug_scale": 0.285,
+"random_seed": 865757577,
 "title": "Sample Spline",
-"trace": false,
-"uniform_interval": 0.51
+"uniform_interval": 0.77
 },
 "show_disconnected_inputs": false,
 "template": "sample_spline"
@@ -257,28 +161,32 @@ data = {
 "port": 0
 }
 },
+"name": &"id_0007_create_spline",
+"position": Vector2(920, 0),
+"settings": {
+"random_seed": 1220668871,
+"title": "Create Spline"
+},
+"show_disconnected_inputs": false,
+"template": "create_spline"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
 "name": &"id_0009_transform",
 "position": Vector2(1300, 0),
 "settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
 "debug_enabled": true,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
 "offset_max": Vector3(0, 0.165, 0),
-"offset_min": Vector3(0, 0, 0),
 "random_seed": 902764379,
-"rotation_local_space": false,
 "rotation_max": Vector3(180, 180, 0),
 "rotation_min": Vector3(0, -180, 0),
 "scale_max": Vector3(0.4, 0.3, 0.2),
 "scale_min": Vector3(0.2, 0.2, 0.2),
 "title": "Transform",
-"trace": false,
 "uniform_scale": false
 },
 "show_disconnected_inputs": false,
@@ -287,10 +195,10 @@ data = {
 "type": "flow_graph_nodes",
 "version": 1
 }
+graph_name = "demo_rock_walls"
 view_zoom = 0.751315
 view_offset = Vector2(490.505, -292.986)
 new_name_counter = 12
-in_params = Array[ExtResource("2_abtjl")]([])
 
 [sub_resource type="Curve3D" id="Curve3D_gpa26"]
 bake_interval = 0.77
@@ -300,13 +208,14 @@ _data = {
 }
 point_count = 5
 
-[node name="DemoRockWalls" type="Node3D"]
+[node name="DemoRockWalls" type="Node3D" unique_id=1537372601]
 
-[node name="FlowGraphNode3D" type="Node3D" parent="."]
+[node name="FlowGraphNode3D" type="Node3D" parent="." unique_id=1452953016]
 script = ExtResource("1_gpa26")
 graph = SubResource("Resource_0ps2h")
-refresh_inputs = Callable()
+regenerate = Callable()
+clearInstances = Callable()
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
 
-[node name="Path3D" type="Path3D" parent="."]
+[node name="Path3D" type="Path3D" parent="." unique_id=1263566933]
 curve = SubResource("Curve3D_gpa26")
