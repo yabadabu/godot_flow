@@ -14,7 +14,6 @@ const connectors_options_prefab = preload( "res://addons/flow_nodes_editor/conne
 
 func _ready():
 	ignore_invalid_connection_type = true
-	updateStyle()
 	
 func _exit_tree():
 	if flow_node and flow_node.ui_node == self:
@@ -50,12 +49,16 @@ func bindFlowNode(new_node: FlowNodeBase, flow_editor: FlowGraphEditor):
 	flow_node.settings_changed.connect(regenerateFromFlowNode)
 	flow_node.contents_changed.connect(refreshDebug)
 	position_offset_changed.connect(on_moved)
+	updateStyle()
 
 func initializeView():
 	assert(is_inside_tree())
 	position_offset = flow_node.ui_position_offset
-	initFromScript(editor)
+	initFromScript()
 	regenerateFromFlowNode()
+
+func shouldAutoSize() -> bool:
+	return true
 
 func on_moved():
 	if flow_node:
@@ -122,6 +125,7 @@ func _make_custom_tooltip(for_text: String) -> Object:
 	var tooltip = preload("res://addons/flow_nodes_editor/resources/tooltip.tscn").instantiate()
 	var meta : Dictionary = flow_node.getMeta()
 	var extras : String = "\n\n" + str(flow_node.args_ports_by_name) if enable_development_info else ""
+	extras += "\nSize %s" % size
 	var new_text := "[b]%s[/b] %s\n\n%s" % [
 		meta.title, 
 		flow_node.name,
@@ -173,10 +177,9 @@ func _on_draw() -> void:
 		draw_string(ThemeDB.fallback_font, Vector2(2, -5), name, HORIZONTAL_ALIGNMENT_LEFT, -1, 12 * ui_scale)
 
 		
-func initFromScript( flow_editor : FlowGraphEditor ):
+func initFromScript( ):
 	assert( flow_node != null )
-	assert( flow_editor != null )
-	editor = flow_editor
+	assert( editor != null )
 	
 	var meta : Dictionary = flow_node.getMeta()
 	var trace = meta.get( "trace", false )
@@ -200,14 +203,14 @@ func initFromScript( flow_editor : FlowGraphEditor ):
 	var connected_inputs_by_name = {}
 	for arg_name in flow_node.args_ports_by_name:
 		var arg_port = flow_node.args_ports_by_name[ arg_name ].port
-		var curr_connections = flow_editor.get_connected_sources( name, arg_port )
+		var curr_connections = editor.get_connected_sources( name, arg_port )
 		#print( "Checking if %s is connected at port %d -> %d conns" % [ arg_name, arg_port, curr_connections.size() ] )
 		if not curr_connections.is_empty():
 			connected_inputs_by_name[ arg_name ] = { "port" : arg_port, "conns" : curr_connections.duplicate() }
 			for old_conn in curr_connections:
 				var from_node = old_conn[0]
 				var from_port = old_conn[1]
-				flow_editor.disconnect_nodes( from_node, from_port, name, arg_port )
+				editor.disconnect_nodes( from_node, from_port, name, arg_port )
 	
 	if not flow_node.show_disconnected_inputs:
 		exposed_params = exposed_params.filter( func( data ):
@@ -216,7 +219,7 @@ func initFromScript( flow_editor : FlowGraphEditor ):
 		
 	if trace:
 		print( "initFromScript: %s" % flow_node.getTitle())
-		print( "  flow_editor: %s" % flow_editor)
+		print( "  flow_editor: %s" % editor)
 		print( "  show_disconnected_inputs: %s" % flow_node.show_disconnected_inputs)
 		print( "  #exposed_params: %d" % exposed_params.size())
 		print( "  args_ports_by_name: %s" % flow_node.args_ports_by_name)
@@ -231,15 +234,15 @@ func initFromScript( flow_editor : FlowGraphEditor ):
 	# Delete current children
 	clear_all_slots()
 	for child in get_children():
-		if child == draw_debug:
-			continue
-		child.queue_free()
-		remove_child( child )
+		if child.has_meta(&"Generated"):
+			child.queue_free()
+			remove_child( child )
 	
 	flow_node.args_ports_by_name = {}
 	for idx in range( 0, flow_node.num_ports ):
 		var ctrl = connectors_row_prefab.instantiate() as FlowConnectorRow
 		add_child( ctrl )
+		ctrl.set_meta(&"Generated", true)
 		var lbl_in = ctrl.getInLabel()
 		var lbl_out = ctrl.getOutLabel()
 		
@@ -302,9 +305,12 @@ func initFromScript( flow_editor : FlowGraphEditor ):
 		ctrl.setShowDisconnectedInputs( flow_node.show_disconnected_inputs )
 		ctrl.expand_toggled.connect( setParamsExpanded )
 		add_child( ctrl )
+		ctrl.set_meta(&"Generated", true)
 
-	# Force a readjust of the node in the flow editor
-	size = get_combined_minimum_size()
+	# Ordinary nodes follow their generated rows. Specialized, resizable nodes
+	# can preserve an explicit editor size instead.
+	if shouldAutoSize():
+		size = get_combined_minimum_size()
 	
 	if trace:
 		for arg_name in flow_node.args_ports_by_name.keys():
@@ -322,12 +328,12 @@ func initFromScript( flow_editor : FlowGraphEditor ):
 			for old_conn in old_data.conns:
 				var from_node = old_conn[0]
 				var from_port = old_conn[1]
-				flow_editor.connect_nodes( from_node, from_port, name, new_port )
-		flow_editor.queueSave()
-	flow_editor.refreshSignalsInputArgs( self )
+				editor.connect_nodes( from_node, from_port, name, new_port )
+		editor.queueSave()
+	editor.refreshSignalsInputArgs( self )
 	
 func setParamsExpanded( expanded : bool ):
 	print( "setParamsExpanded: %s" % expanded)
 	flow_node.show_disconnected_inputs = expanded
 	#refreshConnectionFlags( )
-	initFromScript(editor)
+	initFromScript()

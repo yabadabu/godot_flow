@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://dipwrx27kp8o1"]
+
+[ext_resource type="Script" uid="uid://civ04t4g6fkih" path="res://addons/flow_nodes_editor/flow_graph_node_ui_comment.gd" id="1_121kj"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_comment"]
+
+[node name="FlowGraphNodeUiCommon" type="GraphNode" unique_id=377651937]
+offset_right = 506.0
+offset_bottom = 160.0
+ignore_invalid_connection_type = true
+slot/0/left_enabled = false
+slot/0/left_type = 0
+slot/0/left_color = Color(1, 1, 1, 1)
+slot/0/left_icon = null
+slot/0/right_enabled = false
+slot/0/right_type = 0
+slot/0/right_color = Color(1, 1, 1, 1)
+slot/0/right_icon = null
+slot/0/draw_stylebox = true
+script = ExtResource("1_121kj")
+metadata/_custom_type_script = "uid://civ04t4g6fkih"
+
+[node name="RichTextLabel" type="RichTextLabel" parent="." unique_id=622270729]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+bbcode_enabled = true
+text = "This is amazing"
+theme_override_styles/normal = SubResource("StyleBoxEmpty_comment")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_comment")

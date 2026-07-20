@@ -144,6 +144,7 @@ static func nodes_as_dict( nodes, frames, editor : FlowGraphEditor ):
 		# print( "Name: ", template_name, " Meta:", node.getMeta() )
 		return {
 			"position" : ( ui_node.position_offset - min_pos ) / editor.ui_scale,
+			"size" : ui_node.size,
 			"name" : node.name,
 			"template" : template_name,
 			"show_disconnected_inputs" : node.show_disconnected_inputs,
@@ -234,6 +235,8 @@ static func create_nodes_from_dict( dict, graph : FlowGraphResource, paste_offse
 			return {}
 		var in_pos = _parse_vector2( in_node.position )
 		node.ui_position_offset = ( in_pos + paste_offset ) * ui_scale
+		var in_size = _parse_vector2( in_node.get("size", "(0,0)" ) )
+		node.ui_size = in_size
 		#print( "New node pos %s will be %s" % [ in_name, node.ui_position_offset ] )
 		node.show_disconnected_inputs = in_node.get("show_disconnected_inputs", false)
 		node.args_ports_by_name = in_node.get("args_port", {})
@@ -296,7 +299,7 @@ static func saveEditorStateToResource( editor : FlowGraphEditor ):
 	var all_frames = editor.gedit.get_children().filter( func( n ):
 		return n is GraphFrame
 	)
-	print( "unbindResourceFromEditor %d nodes, %d conns and %d frames (%s) (%d:%d)" % [ all_nodes.size(), editor.gedit.connections.size(), all_frames.size(), res.resource_path, res.all_nodes.size(), res.all_connections.size() ] )
+	print( "saveEditorStateToResource %d nodes, %d conns and %d frames (%s) (%d:%d)" % [ all_nodes.size(), editor.gedit.connections.size(), all_frames.size(), res.resource_path, res.all_nodes.size(), res.all_connections.size() ] )
 	res.data = FlowNodeIO.nodes_as_dict( all_nodes, all_frames, editor )
 	res.view_zoom = editor.gedit.zoom
 	res.view_offset = editor.gedit.scroll_offset

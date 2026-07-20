@@ -60,6 +60,7 @@ var err : String
 # Render
 var ui_scale : float = 1.0
 var ui_position_offset := Vector2.ZERO 
+var ui_size := Vector2.ZERO
 var ui_node : FlowGraphNodeUI = null
 
 var debug_row : int = -1

@@ -189,19 +189,30 @@ func select_first_executor() -> bool:
 	refresh_executors()
 	return false
 
+func createNodeUI(flow_node: FlowNodeBase) -> FlowGraphNodeUI:
+	var custom_ui := flow_node.getMeta().get( "widget", null )
+	if custom_ui is PackedScene:
+		return custom_ui.instantiate() as FlowGraphNodeUI
+	elif custom_ui is Script:
+		return custom_ui.new() as FlowGraphNodeUI
+	return FlowGraphNodeUI.new()
+
 # creates a new FlowGraphNodeUI from a FlowNodeBase
-func onNodeCreated( node : FlowNodeBase ) -> FlowGraphNodeUI:
+func onNodeCreated( flow_node : FlowNodeBase ) -> FlowGraphNodeUI:
 	#print( "onNodeCreated called ", node)
-	var ui_node := FlowGraphNodeUI.new()
+	var ui_node := createNodeUI( flow_node )
+	if ui_node == null:
+		push_error( "onNodeCreated failed")
+		return
 	#ui_node.ui_scale = ui_scale
-	ui_node.bindFlowNode( node, self )
+	ui_node.bindFlowNode( flow_node, self )
 	gedit.add_child(ui_node)
 	ui_node.initializeView( )
 	refreshSignalsInputArgs( ui_node )
 	#print( "gedit.addChild %s" % [ node.name ])
 	ui_node.draw.connect( ui_node._on_draw )
-	node.connections_changed.connect( func():
-		ui_node.initFromScript( self ))
+	flow_node.connections_changed.connect( func():
+		ui_node.initFromScript( ))
 	return ui_node
 	
 func onConnCreated( conn : Dictionary ):
@@ -331,8 +342,10 @@ func onNodePropertyChanged( prop_name : String ):
 		var flow_node : FlowNodeBase = inspected_node.flow_node
 		if flow_node:
 			#print( "Node %s.%s has changed" % [ inspected_node.name, prop_name ])
-			flow_node.onPropChanged( prop_name )
-			queueRegen()
+			flow_node.onPropChanged(prop_name)
+			if flow_node.shouldReevaluateOnPropChanged( prop_name ):
+				print( "Editor.shouldReevaluateOnPropChanged %s" % prop_name)
+				queueRegen()
 		
 # ------------------------------------------------
 func getSelectedFrames() -> Array[GraphFrame]:
@@ -967,6 +980,7 @@ func onEditorSceneChanged():
 			var flow_node := graph_node.flow_node
 			if flow_node.getMeta().get( "scans_scene", false ):
 				flow_node.onSceneChanged( resource_owner.ctx )
+	print( "Editor scene changed!")
 	queueRegen()
 
 # new_resource = res://graph02_curves.tres
