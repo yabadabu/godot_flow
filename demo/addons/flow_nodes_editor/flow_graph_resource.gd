@@ -86,7 +86,7 @@ func findInParamByName( requested_name : String ) -> GraphInputParameter:
 	return null
 	
 # Compile callbacks
-func addNodeFromTemplate( node_template, node_name : String, node_settings = null ):
+func addNodeFromTemplate( node_template : String, node_name : String, node_settings = null ):
 	
 	print( "addNodeFromTemplate %s %s. NodesByName:%d" % [ node_template, node_name, nodes_by_name.size() ])
 	var factory := FlowPlugin.get_instance().nodes_factory
@@ -103,8 +103,8 @@ func addNodeFromTemplate( node_template, node_name : String, node_settings = nul
 		if not node.title:
 			node.title = node.getTitle()
 		
-		#if node and node.settings and node.settings is InputNodeSettings:
-			#input_nodes.append( node )
+		if node_template.begins_with("input_"):
+			input_nodes.append( node )
 		
 		return node
 	
@@ -195,7 +195,7 @@ func dump():
 			print( "      Dependant me:%d to %s:%d" % [dependant.from_port, dependant.to_node, dependant.to_port])
 	print( "  %d Input Nodes" % input_nodes.size() )
 	for node in input_nodes:
-		print( "    %s %s" % [ node.name, node.settings.name ])
+		print( "    %s %s" % [ node.name, node.template_name ])
 	print( "  %d Connections" % all_connections.size() )
 	for conn in all_connections:
 		print( "    %s:%d <-> %s:%d" % [ conn.from_node, conn.from_port, conn.to_node, conn.to_port ])

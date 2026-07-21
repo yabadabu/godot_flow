@@ -1,7 +1,9 @@
 @tool
 extends FlowNodeBase
+class_name FlowNodeInput
 
 @export var input_name : String = "in_val"
+var change_id : int = 0
 
 func _init():
 	meta_node = {

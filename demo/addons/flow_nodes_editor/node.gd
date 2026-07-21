@@ -105,6 +105,9 @@ func onPropChanged( prop_name : StringName ):
 	dirty = true
 	settings_changed.emit( prop_name )
 	
+func shouldReevaluateOnPropChanged( prop_name : StringName ) -> bool:
+	return true
+	
 func notifyChange():
 	settings_changed.emit( StringName() )
 	
@@ -241,7 +244,6 @@ func refreshConnectionFlags( editor : FlowGraphEditor ):
 func getSettingValue( ctx : FlowData.EvaluationContext, in_name : String, default_value = null):
 	var meta = getMeta()
 	var trace = meta.get( "trace", false ) or trace
-	trace = false
 	var value = get( in_name )
 	if value == null:
 		value = default_value

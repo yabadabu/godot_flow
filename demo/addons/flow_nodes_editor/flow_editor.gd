@@ -251,24 +251,37 @@ func saveResource():
 	save_pending = false
 	
 func asInputNode( in_node : Node ):
-	var node := in_node as GraphNode
-	return node if node and node.node_template.begins_with("input") else null
+	var node := in_node as FlowGraphNodeUI
+	return node if node and node.flow_node.node_template.begins_with("input") else null
 
 func _on_inputs_changed():
 	print( "Editor._on_inputs_changed" )
 	var num_changes := 0
-	for child in gedit.get_children():
-		var node = asInputNode( child )
-		if node:
-			var in_name = node.settings.name
-			var curr_input = current_resource.findInParamByName(in_name)
-			if curr_input and curr_input.is_constant:
-				if node.change_id != curr_input.change_id:
-					node.change_id = curr_input.change_id
-					node.dirty = true
-					print( "InputNode %s becomes dirty" % [ node.name ] )
-					queueRegen()
-					num_changes += 1
+	for in_node : FlowNodeBase in current_resource.input_nodes:
+		var in_param : GraphInputParameter = current_resource.findInParamByName(in_node.input_name)
+		if in_param:
+			if in_node.change_id != in_param.change_id:
+				in_node.change_id = in_param.change_id
+				in_node.dirty = true
+				print( "InputNode %s becomes dirty" % [ in_node.name ] )
+				queueRegen()
+				num_changes += 1
+			else:
+				print( "InputNode %s has not changed %d vs %d" % [ in_node.input_name, in_node.change_id, in_param.change_id ] )
+		else:
+			print( "No graph input with name %s" % [ in_node.input_name ] )
+	#for child in gedit.get_children():
+		#var node = asInputNode( child )
+		#if node:
+			#var in_name = node.settings.name
+			#var curr_input = current_resource.findInParamByName(in_name)
+			#if curr_input and curr_input.is_constant:
+				#if node.change_id != curr_input.change_id:
+					#node.change_id = curr_input.change_id
+					#node.dirty = true
+					#print( "InputNode %s becomes dirty" % [ node.name ] )
+					#queueRegen()
+					#num_changes += 1
 	print( "Editor._on_inputs_changed changed %d nodes" % [ num_changes ] )
 	
 func _process(delta: float) -> void:
@@ -880,10 +893,10 @@ func evalGraph():
 		active_nodes.clear()
 		
 		var performance = []
-		print( "ctx.Run Starts " )
+		#print( "ctx.Run Starts " )
 		resource_owner.ctx.computeDirtyNodesAndRun()
 		active_nodes = resource_owner.ctx.active_nodes
-		print( "ctx.Active_nodes: ", active_nodes.size() )
+		print( "ctx.Regenerated.Active_nodes: ", active_nodes.size() )
 		
 		for node in active_nodes:
 			if node.inspect_enabled:
@@ -892,7 +905,6 @@ func evalGraph():
 			if dump_performance:
 				performance.append( { "name": node.name, "time": node.get_meta("exec_time_usec", 0) })
 
-		print( "ctx.Active_nodes refreshed" )
 		#print( "regen_pending is now false")
 		
 		var elapsed_usec = Time.get_ticks_usec() - time_start
