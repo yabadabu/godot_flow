@@ -730,10 +730,8 @@ func _on_search_add_node_popup_input_selected(id : int):
 	var input = current_resource.in_params[id]
 	var node_type = "input_%s" % input.name
 	print( "Creating an input node: %s (%d) -> %s" % [ input.name, input.data_type, node_type] )
-	#var settings := InputNodeSettings.new()
-	#settings.name = input.name
-	##settings.data_type = input.data_type
-	#return addNode( node_type, settings )
+	var params := { "input_name" : input.name }
+	return addNode( "input", params )
 
 func _on_search_add_node_popup_action_selected(action_id : int):
 	if action_id == SearchAddNodePopup.ACTION_ADD_NEW_INPUT:
