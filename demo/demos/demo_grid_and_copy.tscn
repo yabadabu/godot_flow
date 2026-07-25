@@ -1,88 +1,71 @@
-[gd_scene load_steps=6 format=3 uid="uid://bjgti3qpwaiwe"]
+[gd_scene format=3 uid="uid://bjgti3qpwaiwe"]
 
 [ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_dc4sx"]
 [ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="2_ldm7r"]
 [ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="3_pkajt"]
+[ext_resource type="Script" uid="uid://dhpu3ptt872as" path="res://addons/flow_nodes_editor/flow_graph_param_override.gd" id="4_itnsq"]
+[ext_resource type="BoxMesh" uid="uid://7flu82pqtc5d" path="res://addons/flow_nodes_editor/resources/unit_cube.tres" id="5_mq7ey"]
 
 [sub_resource type="Resource" id="Resource_pkajt"]
 script = ExtResource("2_ldm7r")
 name = "Grid - Origin"
 data_type = 3
-cte_bool = false
-cte_int = 0
-cte_float = 0.0
-cte_vector = Vector3(0, 0, 0)
-cte_string = ""
 
 [sub_resource type="Resource" id="Resource_1h62y"]
 script = ExtResource("3_pkajt")
 data = {
 "frames": [],
 "links": [{
-"from_node": &"id_0009_grid",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0010_copy",
-"to_port": 0
-}, {
 "from_node": &"id_0008_make_vector",
 "from_port": 0,
 "keep_alive": false,
 "to_node": &"id_0010_copy",
 "to_port": 1
+}, {
+"from_node": &"id_0009_grid",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0003_random_color",
+"to_port": 0
+}, {
+"from_node": &"id_0003_random_color",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0010_copy",
+"to_port": 0
+}, {
+"from_node": &"id_0010_copy",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0004_spawn_meshes",
+"to_port": 0
 }],
-"min_pos": Vector2(0, -40),
+"min_pos": Vector2(-220, 0),
 "nodes": [{
+"args_port": {},
+"name": &"id_0008_make_vector",
+"position": Vector2(220, 100),
+"settings": {
+"random_seed": 754367497,
+"title": "Make Vector",
+"x": 3.0,
+"y": 1.0
+},
+"show_disconnected_inputs": false,
+"size": Vector2(125, 71.00003),
+"template": "make_vector"
+}, {
 "args_port": {},
 "name": &"id_0009_grid",
 "position": Vector2(0, 0),
 "settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
 "origin": Vector3(0.145, 0.225, 0),
 "random_seed": 2455859592,
-"rotation": Vector3(0, 0, 0),
-"size": 1.0,
-"step": Vector3(1, 1, 1),
-"title": "Grid",
-"trace": false,
-"x": 3,
-"y": 1,
-"z": 3
+"title": "Grid"
 },
 "show_disconnected_inputs": false,
+"size": Vector2(125, 71),
 "template": "grid"
-}, {
-"args_port": {},
-"name": &"id_0008_make_vector",
-"position": Vector2(0, 100),
-"settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"out_name": "Vector",
-"random_seed": 754367497,
-"title": "Make Vector",
-"trace": false,
-"x": 2.98,
-"y": 1.0,
-"z": 0.0
-},
-"show_disconnected_inputs": false,
-"template": "make_vector"
 }, {
 "args_port": {
 "In": {
@@ -95,44 +78,87 @@ data = {
 }
 },
 "name": &"id_0010_copy",
-"position": Vector2(240, 0),
+"position": Vector2(460, 0),
 "settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": true,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"generate_copy_id": "",
-"inspect_enabled": false,
 "num_copies": 3,
 "random_seed": 1253838636,
-"rotation": Vector3(0, 0, 0),
-"title": "Copy",
-"trace": false,
-"translation": Vector3(0, 0, 0)
+"title": "Copy"
 },
 "show_disconnected_inputs": false,
+"size": Vector2(175.00002, 101),
 "template": "copy"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0004_spawn_meshes",
+"position": Vector2(692.3909, 43.34909),
+"settings": {
+"random_seed": 3502813068,
+"title": "Spawn Meshes"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139, 71),
+"template": "spawn_meshes"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0003_random_color",
+"position": Vector2(160, 0),
+"settings": {
+"random_seed": 4028716519,
+"title": "Random Color"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139, 71),
+"template": "random_color"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
-view_zoom = 1.1
-view_offset = Vector2(-143.12, -351.446)
+graph_name = "demo_grid_and_copy"
+view_zoom = 0.9090909
+view_offset = Vector2(28.44629, -228.59174)
 new_name_counter = 288
 in_params = Array[ExtResource("2_ldm7r")]([SubResource("Resource_pkajt")])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 
-[node name="DemoGrid" type="Node3D"]
+[sub_resource type="Resource" id="Resource_doe2k"]
+script = ExtResource("4_itnsq")
+param_id = &"Grid - Origin"
+value = Vector3(0, 0, 0)
 
-[node name="FlowGraphNode3D" type="Node3D" parent="."]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_55m7i"]
+vertex_color_use_as_albedo = true
+roughness = 0.3
+
+[sub_resource type="MultiMesh" id="MultiMesh_usrr5"]
+transform_format = 1
+use_colors = true
+instance_count = 27
+mesh = ExtResource("5_mq7ey")
+buffer = PackedFloat32Array(1, 0, 0, 0.145, 0, 1, 0, 0.225, 0, 0, 1, 0, 1, 0.843, 0, 1, 1, 0, 0, 1.145, 0, 1, 0, 0.225, 0, 0, 1, 0, 1, 0.843, 0, 1, 1, 0, 0, 2.145, 0, 1, 0, 0.225, 0, 0, 1, 0, 1, 0.078, 0.576, 1, 1, 0, 0, 0.145, 0, 1, 0, 0.225, 0, 0, 1, 1, 1, 0.843, 0, 1, 1, 0, 0, 1.145, 0, 1, 0, 0.225, 0, 0, 1, 1, 0, 0.749, 1, 1, 1, 0, 0, 2.145, 0, 1, 0, 0.225, 0, 0, 1, 1, 1, 0.843, 0, 1, 1, 0, 0, 0.145, 0, 1, 0, 0.225, 0, 0, 1, 2, 1, 0.843, 0, 1, 1, 0, 0, 1.145, 0, 1, 0, 0.225, 0, 0, 1, 2, 1, 0.078, 0.576, 1, 1, 0, 0, 2.145, 0, 1, 0, 0.225, 0, 0, 1, 2, 1, 0.843, 0, 1, 1, 0, 0, 3.145, 0, 1, 0, 1.225, 0, 0, 1, 0, 1, 0.843, 0, 1, 1, 0, 0, 4.145, 0, 1, 0, 1.225, 0, 0, 1, 0, 1, 0.843, 0, 1, 1, 0, 0, 5.145, 0, 1, 0, 1.225, 0, 0, 1, 0, 1, 0.078, 0.576, 1, 1, 0, 0, 3.145, 0, 1, 0, 1.225, 0, 0, 1, 1, 1, 0.843, 0, 1, 1, 0, 0, 4.145, 0, 1, 0, 1.225, 0, 0, 1, 1, 0, 0.749, 1, 1, 1, 0, 0, 5.145, 0, 1, 0, 1.225, 0, 0, 1, 1, 1, 0.843, 0, 1, 1, 0, 0, 3.145, 0, 1, 0, 1.225, 0, 0, 1, 2, 1, 0.843, 0, 1, 1, 0, 0, 4.145, 0, 1, 0, 1.225, 0, 0, 1, 2, 1, 0.078, 0.576, 1, 1, 0, 0, 5.145, 0, 1, 0, 1.225, 0, 0, 1, 2, 1, 0.843, 0, 1, 1, 0, 0, 6.145, 0, 1, 0, 2.225, 0, 0, 1, 0, 1, 0.843, 0, 1, 1, 0, 0, 7.145, 0, 1, 0, 2.225, 0, 0, 1, 0, 1, 0.843, 0, 1, 1, 0, 0, 8.145, 0, 1, 0, 2.225, 0, 0, 1, 0, 1, 0.078, 0.576, 1, 1, 0, 0, 6.145, 0, 1, 0, 2.225, 0, 0, 1, 1, 1, 0.843, 0, 1, 1, 0, 0, 7.145, 0, 1, 0, 2.225, 0, 0, 1, 1, 0, 0.749, 1, 1, 1, 0, 0, 8.145, 0, 1, 0, 2.225, 0, 0, 1, 1, 1, 0.843, 0, 1, 1, 0, 0, 6.145, 0, 1, 0, 2.225, 0, 0, 1, 2, 1, 0.843, 0, 1, 1, 0, 0, 7.145, 0, 1, 0, 2.225, 0, 0, 1, 2, 1, 0.078, 0.576, 1, 1, 0, 0, 8.145, 0, 1, 0, 2.225, 0, 0, 1, 2, 1, 0.843, 0, 1)
+
+[node name="DemoGrid" type="Node3D" unique_id=2005084937]
+
+[node name="FlowGraphNode3D" type="Node3D" parent="." unique_id=1117820621]
 script = ExtResource("1_dc4sx")
 graph = SubResource("Resource_1h62y")
-args = {
-"Grid - Origin": Vector3(0.66, -0.685, 0)
-}
-refresh_inputs = Callable()
+overrides = Array[ExtResource("4_itnsq")]([SubResource("Resource_doe2k")])
+regenerate = Callable()
+clearInstances = Callable()
+"flow_override/Grid - Origin/enabled" = false
+"flow_override/Grid - Origin/value" = Vector3(0, 0, 0)
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
+
+[node name="Spawn Meshes_0000" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=1419260034]
+material_override = SubResource("StandardMaterial3D_55m7i")
+multimesh = SubResource("MultiMesh_usrr5")
+metadata/flow_owner = &"id_0004_spawn_meshes"
