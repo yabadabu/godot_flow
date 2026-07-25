@@ -10,6 +10,7 @@ var regen_pending := false
 var save_pending := false
 var auto_regen := true
 var dump_performance := false
+var next_scene_change_is_local := false
 
 @onready var tab_bar: TabBar = %TabBar
 var open_tabs: Array[Dictionary] = []
@@ -359,6 +360,8 @@ func onNodePropertyChanged( prop_name : String ):
 			if flow_node.shouldReevaluateOnPropChanged( prop_name ):
 				print( "Editor.shouldReevaluateOnPropChanged %s" % prop_name)
 				queueRegen()
+			else:
+				next_scene_change_is_local = true
 		
 # ------------------------------------------------
 func getSelectedFrames() -> Array[GraphFrame]:
@@ -991,6 +994,10 @@ func _on_graph_edit_duplicate_nodes_request():
 	FlowNodeIO.duplicateSelecteddNodes( self )
 	
 func onEditorSceneChanged():
+	print( "onEditorSceneChanged %s" % next_scene_change_is_local )
+	if next_scene_change_is_local:
+		next_scene_change_is_local = false
+		return
 	# When a node in the scene changes, just mark dirty all nodes
 	# which can potentially become dirty
 	# This also triggers as dirty all scan_* nodes when we change

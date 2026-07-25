@@ -106,7 +106,7 @@ func onPropChanged( prop_name : StringName ):
 	settings_changed.emit( prop_name )
 	
 func shouldReevaluateOnPropChanged( prop_name : StringName ) -> bool:
-	return true
+	return prop_name != "title"
 	
 func notifyChange():
 	settings_changed.emit( StringName() )
