@@ -1,9 +1,12 @@
 @tool
 extends FlowNodeBase
+class_name FlowNodeSubGraph
 
 @export var graph : FlowGraphResource :
 	set(value):
+		print( "New graph assigned!" )
 		_graph = value
+		setupFromGraph()
 		emit_changed()
 	get():
 		return _graph
@@ -20,6 +23,7 @@ func _init():
 		"outs" : [],
 		"is_final" : true,
 		"tooltip" : "Evaluates a nested graph inside this node",
+		"widget" : preload( "res://addons/flow_nodes_editor/flow_graph_node_ui_subgraph.gd" ),
 		"trace" : true
 	}
 	subctx.name = name + "_ctx"
@@ -29,7 +33,7 @@ func getTitle() -> String:
 		return graph.graph_name
 	return "Subgraph"
 
-func refreshFromSettings():
+func setupFromGraph():
 	var ins = []
 	var outs = []
 	if graph:
@@ -47,9 +51,10 @@ func refreshFromSettings():
 		if graph.data and graph.data.has("nodes"):
 			for n_data in graph.data["nodes"]:
 				if n_data.get("template") == "output":
-					var node_settings = n_data.get("settings", {})
-					var out_name = node_settings.get("name", "out_val")
-					var out_type = node_settings.get("data_type", FlowData.DataType.Float)
+					var settings = n_data.get( "settings", {})
+					print( "Output node is: %s" % n_data )
+					var out_name = settings.get("out_name", "Output" )
+					var out_type = settings.get("data_type", FlowData.DataType.Float)
 					outs.append({
 						"label": out_name,
 						"data_type": out_type, 
@@ -90,23 +95,6 @@ func resetSubgraph( graph : FlowGraphResource ):
 	in_p.data_type = FlowData.DataType.Invalid
 	graph.in_params.append( in_p )
 	FlowNodeIO.create_nodes_from_dict( graph.data, graph, Vector2(0,0))
-
-# Double click to trigger openning the subgraph
-#func _gui_input(event: InputEvent):
-	#if event is InputEventMouseButton and event.double_click and event.button_index == MOUSE_BUTTON_LEFT:
-		#var editor = getEditor()
-		#if editor and settings:
-			#if not graph:
-				#graph = FlowGraphResource.new()
-			#var graph : FlowGraphResource = graph
-			#var owner = editor.resource_owner
-			##print( "graph.data", graph.data)
-			##print( "graph.resource_name", graph.resource_name )
-			##print( "graph.resource_path", graph.resource_path )
-			#if not graph.data:
-				#resetSubgraph( graph )
-			#editor.setResourceToEdit(graph)
-			#accept_event()	
 
 # This ctx is the context evaluating the subgraph node, not the subgraph itself
 func preExecute( ctx : FlowData.EvaluationContext ):
