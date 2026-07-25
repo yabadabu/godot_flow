@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_5ex6f"]
 [ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="2_50g47"]
+[ext_resource type="BoxMesh" uid="uid://7flu82pqtc5d" path="res://addons/flow_nodes_editor/resources/unit_cube.tres" id="4_2axoj"]
 [ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="4_jn5vr"]
 
 [sub_resource type="Resource" id="Resource_gj6dq"]
@@ -32,36 +33,31 @@ data = {
 "keep_alive": false,
 "to_node": &"id_0012_reduce",
 "to_port": 0
+}, {
+"from_node": &"id_0009_substract",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0005_spawn_meshes",
+"to_port": 0
 }],
-"min_pos": Vector2(0, 20),
+"min_pos": Vector2(0, -20),
 "nodes": [{
-"args_port": {},
-"name": &"id_0010_grid",
-"position": Vector2(0, 200),
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0005_spawn_meshes",
+"position": Vector2(680, 200),
 "settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"origin": Vector3(0, 0, 0),
-"random_seed": 2464084680,
-"rotation": Vector3(0, 0, 0),
-"size": 1.0,
-"step": Vector3(1, 1, 1),
-"title": "Grid",
-"trace": false,
-"x": 1,
-"y": 1,
-"z": 1
+"inspect_enabled": true,
+"random_seed": 894493553,
+"title": "Spawn Meshes"
 },
 "show_disconnected_inputs": false,
-"template": "grid"
+"size": Vector2(139, 71),
+"template": "spawn_meshes"
 }, {
 "args_port": {
 "In": {
@@ -70,113 +66,15 @@ data = {
 }
 },
 "name": &"id_0012_reduce",
-"position": Vector2(820, 100),
+"position": Vector2(680, 120),
 "settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": true,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
 "in_name": "position",
-"inspect_enabled": false,
-"out_prefix": "",
 "random_seed": 1519025600,
-"title": "Reduce",
-"trace": false
+"title": "Reduce"
 },
 "show_disconnected_inputs": false,
+"size": Vector2(139, 54.000015),
 "template": "reduce"
-}, {
-"args_port": {},
-"name": &"id_0115_comment",
-"position": Vector2(400, 0),
-"settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"hue": 0.2,
-"inspect_enabled": false,
-"random_seed": 2922347474,
-"text": "Try to change the operation mode
-of the substract node",
-"title": "Comments",
-"trace": false
-},
-"show_disconnected_inputs": true,
-"template": "comment"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0013_transform",
-"position": Vector2(180, 200),
-"settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"offset_local_space": true,
-"offset_max": Vector3(4, 0, 1),
-"offset_min": Vector3(4, 0, 1),
-"random_seed": 2729993948,
-"rotation_local_space": false,
-"rotation_max": Vector3(0, 0, 0),
-"rotation_min": Vector3(0, 0, 0),
-"scale_max": Vector3(2, 2, 4),
-"scale_min": Vector3(2, 2, 4),
-"title": "Transform",
-"trace": false,
-"uniform_scale": false
-},
-"show_disconnected_inputs": false,
-"template": "transform"
-}, {
-"args_port": {},
-"name": &"id_0011_grid",
-"position": Vector2(180, 20),
-"settings": {
-"debug_bulk": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": false,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"origin": Vector3(0, 0, 0),
-"random_seed": 2166388212,
-"rotation": Vector3(0, 0, 0),
-"size": 1.0,
-"step": Vector3(2, 2, 2),
-"title": "Grid",
-"trace": false,
-"x": 3,
-"y": 1,
-"z": 3
-},
-"show_disconnected_inputs": false,
-"template": "grid"
 }, {
 "args_port": {
 "In A": {
@@ -189,34 +87,90 @@ of the substract node",
 }
 },
 "name": &"id_0009_substract",
-"position": Vector2(460, 100),
+"position": Vector2(460, 120),
 "settings": {
-"debug_bulk": 0,
 "debug_color": Color(0.239216, 1, 1, 1),
-"debug_enabled": true,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_output": 0,
-"debug_port_combined_index": 0,
-"debug_scale": 1.0,
-"disabled": false,
-"inspect_enabled": false,
-"operation": 0,
 "random_seed": 3590355377,
-"title": "Substract",
-"trace": false
+"title": "Substract"
 },
 "show_disconnected_inputs": false,
+"size": Vector2(152, 84.000015),
 "template": "substract"
+}, {
+"args_port": {},
+"name": &"id_0115_comment",
+"position": Vector2(380, 0),
+"settings": {
+"hue": 0.2,
+"random_seed": 2922347474,
+"text": "Try to change the operation mode
+of the substract node",
+"title": "Comments"
+},
+"show_disconnected_inputs": true,
+"size": Vector2(286, 85.900024),
+"template": "comment"
+}, {
+"args_port": {},
+"name": &"id_0010_grid",
+"position": Vector2(0, 220),
+"settings": {
+"random_seed": 2464084680,
+"title": "Grid",
+"x": 1,
+"z": 1
+},
+"show_disconnected_inputs": false,
+"size": Vector2(125, 71),
+"template": "grid"
+}, {
+"args_port": {},
+"name": &"id_0011_grid",
+"position": Vector2(180, 40),
+"settings": {
+"random_seed": 2166388212,
+"step": Vector3(2, 2, 2),
+"title": "Grid"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(125, 71),
+"template": "grid"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0013_transform",
+"position": Vector2(180, 220),
+"settings": {
+"offset_max": Vector3(4, 0, 1),
+"offset_min": Vector3(4, 0, 1),
+"random_seed": 2729993948,
+"scale_max": Vector3(2, 2, 4),
+"scale_min": Vector3(2, 2, 4),
+"title": "Transform",
+"uniform_scale": false
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139, 71),
+"template": "transform"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
 graph_name = "demo_intersect"
 view_zoom = 0.909091
-view_offset = Vector2(136.909, -138.27301)
+view_offset = Vector2(-8.091003, -132.27301)
 new_name_counter = 7
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
+
+[sub_resource type="MultiMesh" id="MultiMesh_2axoj"]
+transform_format = 1
+instance_count = 7
+mesh = ExtResource("4_2axoj")
+buffer = PackedFloat32Array(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 2, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 2, 1, 0, 0, 2, 0, 1, 0, 0, 0, 0, 1, 2, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 4, 1, 0, 0, 2, 0, 1, 0, 0, 0, 0, 1, 4, 1, 0, 0, 4, 0, 1, 0, 0, 0, 0, 1, 4)
 
 [node name="DemoIntersect" type="Node3D" unique_id=1124230953]
 
@@ -226,3 +180,7 @@ graph = SubResource("Resource_gj6dq")
 regenerate = Callable()
 clearInstances = Callable()
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
+
+[node name="Spawn Meshes_0000" type="MultiMeshInstance3D" parent="PCG_Intersect" unique_id=181731434]
+multimesh = SubResource("MultiMesh_2axoj")
+metadata/flow_owner = &"id_0005_spawn_meshes"
