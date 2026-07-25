@@ -8,6 +8,7 @@ class_name FlowNodeSubGraph
 		_graph = value
 		setupFromGraph()
 		emit_changed()
+		connections_changed.emit()
 	get():
 		return _graph
 		
@@ -60,6 +61,12 @@ func setupFromGraph():
 						"data_type": out_type, 
 						"provider_node" : n_data.name
 					})
+					
+		graph.in_params_changed.connect( func():
+			print( "Graph inputs changed. Emitting changes")
+			connections_changed.emit()
+			)
+					
 	meta_node.ins = ins
 	meta_node.outs = outs
 
@@ -80,13 +87,13 @@ func resetSubgraph( graph : FlowGraphResource ):
 			"name": "id_0001_input_In",
 			"position": "(80.0, 80.0)",
 			"template": "input_In",
-			"settings": { "name": "In", }
+			"settings": { "input_name": "In", }
 		}, 
 		{
 			"name": "id_0002_output",
 			"position": "(400.0, 80.0)",
 			"template": "output",
-			"settings": { "name": "Out", }
+			"settings": { "input_name": "Out", }
 		}]
 	}
 	var in_p = GraphInputParameter.new()

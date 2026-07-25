@@ -43,5 +43,6 @@ func execute( ctx : FlowData.EvaluationContext ):
 	var output = ctx.resolveInput( input_name )
 	if trace:
 		print( "%s Output %s resolved to: %s" % [name, input_name, output])
+		output.dump("At input %s" % name )
 	set_output( 0, output )
 	
