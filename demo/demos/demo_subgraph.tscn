@@ -6,6 +6,114 @@
 [ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="3_5ifn7"]
 [ext_resource type="Script" uid="uid://dhpu3ptt872as" path="res://addons/flow_nodes_editor/flow_graph_param_override.gd" id="4_mmqr1"]
 
+[sub_resource type="Resource" id="Resource_5ifn7"]
+script = ExtResource("2_mmqr1")
+name = "In"
+is_constant = false
+data_type = 999
+
+[sub_resource type="Resource" id="Resource_se51d"]
+script = ExtResource("2_mmqr1")
+name = "Height"
+
+[sub_resource type="Resource" id="Resource_kxdvx"]
+script = ExtResource("3_5ifn7")
+data = {
+"frames": [],
+"links": [{
+"from_node": &"id_0001_input_In",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0010_math_op",
+"to_port": 0
+}, {
+"from_node": &"id_0008_input",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0010_math_op",
+"to_port": 1
+}, {
+"from_node": &"id_0010_math_op",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0002_output",
+"to_port": 0
+}],
+"min_pos": Vector2(80, 80),
+"nodes": [{
+"args_port": {
+"Out": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0002_output",
+"position": Vector2(380, 0),
+"settings": {
+&"inspect_enabled": false,
+"random_seed": 1282865290,
+"title": "Output"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(125, 54),
+"template": "output"
+}, {
+"args_port": {},
+"name": &"id_0001_input_In",
+"position": Vector2(0, 0),
+"settings": {
+"input_name": "In",
+&"inspect_enabled": false,
+"random_seed": 2284636140,
+"title": "Input"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(132, 54),
+"template": "input_In"
+}, {
+"args_port": {},
+"name": &"id_0008_input",
+"position": Vector2(0, 80),
+"settings": {
+"input_name": "Height",
+&"inspect_enabled": false,
+"random_seed": 2499985437,
+"title": "Input"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(132, 54),
+"template": "input"
+}, {
+"args_port": {
+"In A": {
+"connected": true,
+"port": 0
+},
+"In B": {
+"connected": true,
+"port": 1
+}
+},
+"name": &"id_0010_math_op",
+"position": Vector2(180, 20),
+"settings": {
+"in_nameA": "position.y",
+&"inspect_enabled": false,
+"random_seed": 926903946,
+"title": "Math"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(152, 101),
+"template": "math_op"
+}],
+"type": "flow_graph_nodes",
+"version": 1
+}
+graph_name = "demo_subgraph"
+view_zoom = 0.75131476
+view_offset = Vector2(-95.01398, -143.86084)
+in_params = Array[ExtResource("2_mmqr1")]([SubResource("Resource_5ifn7"), SubResource("Resource_se51d")])
+
 [sub_resource type="Resource" id="Resource_x3i3k"]
 script = ExtResource("2_mmqr1")
 name = "Height"
@@ -16,7 +124,19 @@ script = ExtResource("3_5ifn7")
 data = {
 "frames": [],
 "links": [{
+"from_node": &"id_0004_input_Height",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0006_subgraph",
+"to_port": 1
+}, {
 "from_node": &"id_0006_grid",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0006_subgraph",
+"to_port": 0
+}, {
+"from_node": &"id_0006_subgraph",
 "from_port": 0,
 "keep_alive": false,
 "to_node": &"id_0014_spawn_meshes",
@@ -24,9 +144,46 @@ data = {
 }],
 "min_pos": Vector2(0, 0),
 "nodes": [{
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0014_spawn_meshes",
+"position": Vector2(620, 200),
+"settings": {
+"random_seed": 3974262691,
+"title": "Spawn Meshes"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139, 71),
+"template": "spawn_meshes"
+}, {
+"args_port": {
+"Height": {
+"connected": true,
+"port": 1
+},
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0006_subgraph",
+"position": Vector2(260, 200),
+"settings": {
+"graph": SubResource("Resource_kxdvx"),
+"random_seed": 313842948,
+"title": "Subgraph"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(160, 101),
+"template": "subgraph"
+}, {
 "args_port": {},
 "name": &"id_0001_comment",
-"position": Vector2(0, 0),
+"position": Vector2(140, 0),
 "settings": {
 "hue": 0.6000000000000001,
 "random_seed": 2313414386,
@@ -35,16 +192,17 @@ for the height, so the grid is elevated a different height",
 "title": "Comments"
 },
 "show_disconnected_inputs": false,
-"size": Vector2(492.91077, 151.01259),
+"size": Vector2(492.91074, 151.01259),
 "template": "comment"
 }, {
 "args_port": {},
 "name": &"id_0004_input_Height",
-"position": Vector2(60, 300),
+"position": Vector2(0, 300),
 "settings": {
 "input_name": "Height",
 "random_seed": 939309640,
-"title": "Input"
+"title": "Input",
+"trace": true
 },
 "show_disconnected_inputs": false,
 "size": Vector2(132, 54),
@@ -52,7 +210,7 @@ for the height, so the grid is elevated a different height",
 }, {
 "args_port": {},
 "name": &"id_0006_grid",
-"position": Vector2(60, 200),
+"position": Vector2(0, 200),
 "settings": {
 "random_seed": 1565012789,
 "size": 0.87,
@@ -61,129 +219,53 @@ for the height, so the grid is elevated a different height",
 "show_disconnected_inputs": false,
 "size": Vector2(125, 71),
 "template": "grid"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0014_spawn_meshes",
-"position": Vector2(480, 200),
-"settings": {
-"random_seed": 3974262691,
-"title": "Spawn Meshes"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(139.00003, 71),
-"template": "spawn_meshes"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
 graph_name = "demo subgraph"
-view_zoom = 0.9673492
-view_offset = Vector2(142.86255, -215.91554)
+view_zoom = 0.8794083
+view_offset = Vector2(-79.034485, -86.873276)
 new_name_counter = 1
 in_params = Array[ExtResource("2_mmqr1")]([SubResource("Resource_x3i3k")])
 
-[sub_resource type="Resource" id="Resource_5ifn7"]
+[sub_resource type="Resource" id="Resource_c03w7"]
 script = ExtResource("4_mmqr1")
 param_id = &"Height"
 enabled = true
-value = 3.525
-
-[sub_resource type="Resource" id="Resource_se51d"]
-script = ExtResource("4_mmqr1")
-param_id = &"in_val"
-value = null
-
-[sub_resource type="Resource" id="Resource_kxdvx"]
-script = ExtResource("4_mmqr1")
-param_id = &"h"
-value = null
-
-[sub_resource type="Resource" id="Resource_c03w7"]
-script = ExtResource("4_mmqr1")
-param_id = &"he"
-value = null
-
-[sub_resource type="Resource" id="Resource_s1eqc"]
-script = ExtResource("4_mmqr1")
-param_id = &"hei"
-value = null
-
-[sub_resource type="Resource" id="Resource_opyov"]
-script = ExtResource("4_mmqr1")
-param_id = &"heig"
-value = null
-
-[sub_resource type="Resource" id="Resource_pp86h"]
-script = ExtResource("4_mmqr1")
-param_id = &"heigh"
-value = null
-
-[sub_resource type="Resource" id="Resource_6qf3l"]
-script = ExtResource("4_mmqr1")
-param_id = &"height"
-value = null
-
-[sub_resource type="Resource" id="Resource_rkdq7"]
-script = ExtResource("4_mmqr1")
-param_id = &"H"
-value = null
-
-[sub_resource type="Resource" id="Resource_rwrg6"]
-script = ExtResource("4_mmqr1")
-param_id = &"He"
-value = null
-
-[sub_resource type="Resource" id="Resource_k3oj6"]
-script = ExtResource("4_mmqr1")
-param_id = &"Hei"
-value = null
-
-[sub_resource type="Resource" id="Resource_tdfph"]
-script = ExtResource("4_mmqr1")
-param_id = &"Heig"
-value = null
-
-[sub_resource type="Resource" id="Resource_lmp2x"]
-script = ExtResource("4_mmqr1")
-param_id = &"Heigh"
-value = null
+value = 3.7199999999999998
 
 [sub_resource type="MultiMesh" id="MultiMesh_5ifn7"]
 transform_format = 1
-instance_count = 18
+instance_count = 9
 mesh = ExtResource("2_5ifn7")
-buffer = PackedFloat32Array(0.87, 0, 0, 0, 0, 0.87, 0, 0, 0, 0, 0.87, 0, 0.87, 0, 0, 1, 0, 0.87, 0, 0, 0, 0, 0.87, 0, 0.87, 0, 0, 2, 0, 0.87, 0, 0, 0, 0, 0.87, 0, 0.87, 0, 0, 0, 0, 0.87, 0, 1, 0, 0, 0.87, 0, 0.87, 0, 0, 1, 0, 0.87, 0, 1, 0, 0, 0.87, 0, 0.87, 0, 0, 2, 0, 0.87, 0, 1, 0, 0, 0.87, 0, 0.87, 0, 0, 0, 0, 0.87, 0, 0, 0, 0, 0.87, 1, 0.87, 0, 0, 1, 0, 0.87, 0, 0, 0, 0, 0.87, 1, 0.87, 0, 0, 2, 0, 0.87, 0, 0, 0, 0, 0.87, 1, 0.87, 0, 0, 0, 0, 0.87, 0, 1, 0, 0, 0.87, 1, 0.87, 0, 0, 1, 0, 0.87, 0, 1, 0, 0, 0.87, 1, 0.87, 0, 0, 2, 0, 0.87, 0, 1, 0, 0, 0.87, 1, 0.87, 0, 0, 0, 0, 0.87, 0, 0, 0, 0, 0.87, 2, 0.87, 0, 0, 1, 0, 0.87, 0, 0, 0, 0, 0.87, 2, 0.87, 0, 0, 2, 0, 0.87, 0, 0, 0, 0, 0.87, 2, 0.87, 0, 0, 0, 0, 0.87, 0, 1, 0, 0, 0.87, 2, 0.87, 0, 0, 1, 0, 0.87, 0, 1, 0, 0, 0.87, 2, 0.87, 0, 0, 2, 0, 0.87, 0, 1, 0, 0, 0.87, 2)
+buffer = PackedFloat32Array(0.87, 0, 0, 0, 0, 0.87, 0, 3.72, 0, 0, 0.87, 0, 0.87, 0, 0, 1, 0, 0.87, 0, 3.72, 0, 0, 0.87, 0, 0.87, 0, 0, 2, 0, 0.87, 0, 3.72, 0, 0, 0.87, 0, 0.87, 0, 0, 0, 0, 0.87, 0, 3.72, 0, 0, 0.87, 1, 0.87, 0, 0, 1, 0, 0.87, 0, 3.72, 0, 0, 0.87, 1, 0.87, 0, 0, 2, 0, 0.87, 0, 3.72, 0, 0, 0.87, 1, 0.87, 0, 0, 0, 0, 0.87, 0, 3.72, 0, 0, 0.87, 2, 0.87, 0, 0, 1, 0, 0.87, 0, 3.72, 0, 0, 0.87, 2, 0.87, 0, 0, 2, 0, 0.87, 0, 3.72, 0, 0, 0.87, 2)
 
-[sub_resource type="Resource" id="Resource_b2p1g"]
+[sub_resource type="Resource" id="Resource_opyov"]
 script = ExtResource("4_mmqr1")
 param_id = &"Height"
 enabled = true
-value = 1.7
+value = 4.0
 
-[sub_resource type="MultiMesh" id="MultiMesh_x3i3k"]
+[sub_resource type="MultiMesh" id="MultiMesh_pp86h"]
 transform_format = 1
 instance_count = 9
 mesh = ExtResource("2_5ifn7")
-buffer = PackedFloat32Array(0.87, 0, 0, 0, 0, 0.87, 0, 1.7, 0, 0, 0.87, 0, 0.87, 0, 0, 1, 0, 0.87, 0, 1.7, 0, 0, 0.87, 0, 0.87, 0, 0, 2, 0, 0.87, 0, 1.7, 0, 0, 0.87, 0, 0.87, 0, 0, 0, 0, 0.87, 0, 1.7, 0, 0, 0.87, 1, 0.87, 0, 0, 1, 0, 0.87, 0, 1.7, 0, 0, 0.87, 1, 0.87, 0, 0, 2, 0, 0.87, 0, 1.7, 0, 0, 0.87, 1, 0.87, 0, 0, 0, 0, 0.87, 0, 1.7, 0, 0, 0.87, 2, 0.87, 0, 0, 1, 0, 0.87, 0, 1.7, 0, 0, 0.87, 2, 0.87, 0, 0, 2, 0, 0.87, 0, 1.7, 0, 0, 0.87, 2)
+buffer = PackedFloat32Array(0.87, 0, 0, 0, 0, 0.87, 0, 2.84, 0, 0, 0.87, 0, 0.87, 0, 0, 1, 0, 0.87, 0, 2.84, 0, 0, 0.87, 0, 0.87, 0, 0, 2, 0, 0.87, 0, 2.84, 0, 0, 0.87, 0, 0.87, 0, 0, 0, 0, 0.87, 0, 2.84, 0, 0, 0.87, 1, 0.87, 0, 0, 1, 0, 0.87, 0, 2.84, 0, 0, 0.87, 1, 0.87, 0, 0, 2, 0, 0.87, 0, 2.84, 0, 0, 0.87, 1, 0.87, 0, 0, 0, 0, 0.87, 0, 2.84, 0, 0, 0.87, 2, 0.87, 0, 0, 1, 0, 0.87, 0, 2.84, 0, 0, 0.87, 2, 0.87, 0, 0, 2, 0, 0.87, 0, 2.84, 0, 0, 0.87, 2)
 
 [node name="DemoSubgraph" type="Node3D" unique_id=1826795326]
 
 [node name="FlowGraphNode3D" type="Node3D" parent="." unique_id=85644735]
 script = ExtResource("1_dx0d7")
 graph = SubResource("Resource_nyqj1")
-overrides = Array[ExtResource("4_mmqr1")]([SubResource("Resource_5ifn7"), SubResource("Resource_se51d"), SubResource("Resource_kxdvx"), SubResource("Resource_c03w7"), SubResource("Resource_s1eqc"), SubResource("Resource_opyov"), SubResource("Resource_pp86h"), SubResource("Resource_6qf3l"), SubResource("Resource_rkdq7"), SubResource("Resource_rwrg6"), SubResource("Resource_k3oj6"), SubResource("Resource_tdfph"), SubResource("Resource_lmp2x")])
+overrides = Array[ExtResource("4_mmqr1")]([SubResource("Resource_c03w7")])
 regenerate = Callable()
 clearInstances = Callable()
 flow_override/Height/enabled = true
-flow_override/Height/value = 3.525
+flow_override/Height/value = 3.7199999999999998
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
 
-[node name="Spawn Meshes_0000" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=495939599]
+[node name="Spawn Meshes_0000" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=2069218622]
 multimesh = SubResource("MultiMesh_5ifn7")
 metadata/flow_owner = &"id_0014_spawn_meshes"
 
@@ -191,13 +273,13 @@ metadata/flow_owner = &"id_0014_spawn_meshes"
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.699516, 0, 0)
 script = ExtResource("1_dx0d7")
 graph = SubResource("Resource_nyqj1")
-overrides = Array[ExtResource("4_mmqr1")]([SubResource("Resource_b2p1g")])
+overrides = Array[ExtResource("4_mmqr1")]([SubResource("Resource_opyov")])
 regenerate = Callable()
 clearInstances = Callable()
 flow_override/Height/enabled = true
-flow_override/Height/value = 1.7
+flow_override/Height/value = 4.0
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
 
-[node name="Spawn Meshes_0000" type="MultiMeshInstance3D" parent="FlowGraphNode3D2" unique_id=923568204]
-multimesh = SubResource("MultiMesh_x3i3k")
+[node name="Spawn Meshes_0000" type="MultiMeshInstance3D" parent="FlowGraphNode3D2" unique_id=1727768782]
+multimesh = SubResource("MultiMesh_pp86h")
 metadata/flow_owner = &"id_0014_spawn_meshes"
