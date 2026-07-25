@@ -603,6 +603,14 @@ func addComment():
 	print( "addComment -> %s" % frame_data)
 	current_resource.addFrame( frame_data )
 	
+	# Create the ui node
+	var new_frame = onFrameCreated( frame_data )
+	
+	# deselect child node, select the frame
+	for node in nodes:
+		node.selected = false
+	new_frame.selected = true
+	
 func _on_graph_edit_node_selected(node):
 	
 	#var current_main_screen = EditorInterface.get_editor_main_screen()
