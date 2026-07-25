@@ -95,7 +95,7 @@ class EvaluationContext:
 	func getEvalOrder( all_nodes : Array[ FlowNodeBase ] ):
 		# Find targets, like spawn meshes
 		var finals := all_nodes.filter( func ( node : FlowNodeBase ) -> bool:
-			return ( not node.disabled ) and ( node.inspect_enabled or node.debug_enabled or node.getMeta().get( "is_final", false ) )
+			return ( node.inspect_enabled or node.debug_enabled or node.getMeta().get( "is_final", false ) )
 		)
 		#print( "Finals nodes are ", finals)
 		
