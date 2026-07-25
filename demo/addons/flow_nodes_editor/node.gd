@@ -423,6 +423,7 @@ func executedDisabled( ctx : FlowData.EvaluationContext ):
 		readAllInputsForBulk( ctx, bulk_index )
 		if inputs.size() > 0:
 			set_output( 0, inputs[0] )
+	ctx.removeRegisteredInstancedNodes( self )
 
 func getPreferredSpawnPath():
 	return null
