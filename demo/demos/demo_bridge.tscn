@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_gywrk"]
 [ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="2_wdrda"]
 [ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="3_3ovwk"]
+[ext_resource type="BoxMesh" uid="uid://7flu82pqtc5d" path="res://addons/flow_nodes_editor/resources/unit_cube.tres" id="4_wdrda"]
 
 [sub_resource type="Resource" id="Resource_akmbg"]
 script = ExtResource("3_3ovwk")
@@ -116,9 +117,247 @@ data = {
 "keep_alive": false,
 "to_node": &"id_0006_transform",
 "to_port": 2
+}, {
+"from_node": &"id_0002_merge",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0001_spawn_meshes",
+"to_port": 0
+}, {
+"from_node": &"id_0006_transform",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0002_merge",
+"to_port": 0
+}, {
+"from_node": &"id_0008_transform",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0002_merge",
+"to_port": 0
+}, {
+"from_node": &"id_0019_transform",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0002_merge",
+"to_port": 0
 }],
 "min_pos": Vector2(0, 0),
 "nodes": [{
+"args_port": {
+"In": {
+"connected": false,
+"port": 0
+}
+},
+"name": &"id_0009_add_attribute",
+"position": Vector2(20, 380),
+"settings": {
+"cte_float": 0.9,
+"random_seed": 2852739486,
+"title": "Add Attribute"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139, 71.000015),
+"template": "add_attribute"
+}, {
+"args_port": {
+"In A": {
+"connected": true,
+"port": 0
+},
+"In B": {
+"connected": false,
+"port": 1
+}
+},
+"name": &"id_0015_math_op",
+"position": Vector2(400, 120),
+"settings": {
+"in_nameB": "2.0",
+"operation": 2,
+"out_name": "@last",
+"random_seed": 3800701952,
+"title": "Math"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(152, 101),
+"template": "math_op"
+}, {
+"args_port": {
+"In A": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0020_math_op",
+"position": Vector2(760, 700),
+"settings": {
+"operation": 4,
+"out_name": "@last",
+"random_seed": 4100516540,
+"title": "Math"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(152, 71),
+"template": "math_op"
+}, {
+"args_port": {
+"In A": {
+"connected": true,
+"port": 0
+},
+"In B": {
+"connected": false,
+"port": 1
+}
+},
+"name": &"id_0022_math_op",
+"position": Vector2(340, 500),
+"settings": {
+"in_nameB": "0.9",
+"operation": 2,
+"out_name": "@last",
+"random_seed": 1729307999,
+"title": "Math"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(152, 101),
+"template": "math_op"
+}, {
+"args_port": {
+"Splines": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0005_sample_spline",
+"position": Vector2(560, 0),
+"settings": {
+"distance_attribute": "",
+"random_seed": 3234846665,
+"sample_segments_centers": true,
+"title": "Sample Spline",
+"uniform_interval": 2.0
+},
+"show_disconnected_inputs": false,
+"size": Vector2(173, 71),
+"template": "sample_spline"
+}, {
+"args_port": {
+"x": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0013_make_vector",
+"position": Vector2(560, 120),
+"settings": {
+"random_seed": 3863997430,
+"title": "Make Vector",
+"x": 1.475,
+"y": 0.1,
+"z": 0.89
+},
+"show_disconnected_inputs": false,
+"size": Vector2(134, 71),
+"template": "make_vector"
+}, {
+"args_port": {},
+"name": &"id_0024_scan_splines",
+"position": Vector2(0, 180),
+"settings": {
+"random_seed": 465727607,
+"title": "Scan Splines"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(125, 71),
+"template": "scan_splines"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+},
+"offset_max": {
+"connected": true,
+"port": 2
+},
+"offset_min": {
+"connected": true,
+"port": 1
+}
+},
+"name": &"id_0019_transform",
+"position": Vector2(1020, 700),
+"settings": {
+"offset_max": Vector3(1, 0, 0),
+"offset_min": Vector3(1, 0, 0),
+"random_seed": 1326272442,
+"title": "Transform",
+"uniform_scale": false
+},
+"show_disconnected_inputs": false,
+"size": Vector2(174, 131),
+"template": "transform"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0023_transform",
+"position": Vector2(700, 340),
+"settings": {
+"offset_max": Vector3(0, 0.5, 0),
+"offset_min": Vector3(0, 0.5, 0),
+"random_seed": 1974044517,
+"title": "Transform"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139, 71),
+"template": "transform"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0018_add_attribute",
+"position": Vector2(500, 340),
+"settings": {
+"attr_name": "size",
+"cte_float": 1.68,
+"cte_vector": Vector3(0.1, 0.905, 0.1),
+"data_type": 3,
+"random_seed": 4280451769,
+"title": "Add Attribute"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139, 71),
+"template": "add_attribute"
+}, {
+"args_port": {
+"Splines": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0011_sample_spline",
+"position": Vector2(320, 340),
+"settings": {
+"distance_attribute": "",
+"random_seed": 3234846665,
+"sample_segments_centers": true,
+"title": "Sample Spline",
+"uniform_interval": 0.795
+},
+"show_disconnected_inputs": false,
+"size": Vector2(173, 71),
+"template": "sample_spline"
+}, {
 "args_port": {
 "x": {
 "connected": true,
@@ -141,70 +380,8 @@ data = {
 "y": 0.025
 },
 "show_disconnected_inputs": true,
+"size": Vector2(134, 131),
 "template": "make_vector"
-}, {
-"args_port": {
-"In A": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0020_math_op",
-"position": Vector2(760, 700),
-"settings": {
-"operation": 4,
-"out_name": "@last",
-"random_seed": 4100516540,
-"title": "Math"
-},
-"show_disconnected_inputs": false,
-"template": "math_op"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0018_add_attribute",
-"position": Vector2(500, 340),
-"settings": {
-"attr_name": "size",
-"cte_float": 1.68,
-"cte_vector": Vector3(0.1, 0.905, 0.1),
-"data_type": 3,
-"random_seed": 4280451769,
-"title": "Add Attribute"
-},
-"show_disconnected_inputs": false,
-"template": "add_attribute"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-},
-"offset_max": {
-"connected": true,
-"port": 2
-},
-"offset_min": {
-"connected": true,
-"port": 1
-}
-},
-"name": &"id_0019_transform",
-"position": Vector2(1020, 700),
-"settings": {
-"debug_enabled": true,
-"offset_max": Vector3(1, 0, 0),
-"offset_min": Vector3(1, 0, 0),
-"random_seed": 1326272442,
-"title": "Transform",
-"uniform_scale": false
-},
-"show_disconnected_inputs": false,
-"template": "transform"
 }, {
 "args_port": {
 "In": {
@@ -223,7 +400,6 @@ data = {
 "name": &"id_0006_transform",
 "position": Vector2(800, 0),
 "settings": {
-"debug_enabled": true,
 "random_seed": 1326272442,
 "rotation_max": Vector3(0, -3.485, 0),
 "rotation_min": Vector3(0, 4.005, 0),
@@ -233,6 +409,7 @@ data = {
 "uniform_scale": false
 },
 "show_disconnected_inputs": false,
+"size": Vector2(170, 131),
 "template": "transform"
 }, {
 "args_port": {
@@ -250,9 +427,8 @@ data = {
 }
 },
 "name": &"id_0008_transform",
-"position": Vector2(1020, 340),
+"position": Vector2(1000, 360),
 "settings": {
-"debug_enabled": true,
 "offset_max": Vector3(1, 0, 0),
 "offset_min": Vector3(1, 0, 0),
 "random_seed": 1326272442,
@@ -260,53 +436,8 @@ data = {
 "uniform_scale": false
 },
 "show_disconnected_inputs": false,
+"size": Vector2(174, 131),
 "template": "transform"
-}, {
-"args_port": {
-"Splines": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0005_sample_spline",
-"position": Vector2(560, 0),
-"settings": {
-"distance_attribute": "",
-"random_seed": 3234846665,
-"sample_segments_centers": true,
-"title": "Sample Spline",
-"uniform_interval": 2.0
-},
-"show_disconnected_inputs": false,
-"template": "sample_spline"
-}, {
-"args_port": {
-"x": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0013_make_vector",
-"position": Vector2(560, 120),
-"settings": {
-"random_seed": 3863997430,
-"title": "Make Vector",
-"x": 1.475,
-"y": 0.1,
-"z": 0.89
-},
-"show_disconnected_inputs": false,
-"template": "make_vector"
-}, {
-"args_port": {},
-"name": &"id_0024_scan_splines",
-"position": Vector2(0, 180),
-"settings": {
-"random_seed": 465727607,
-"title": "Scan Splines"
-},
-"show_disconnected_inputs": false,
-"template": "scan_splines"
 }, {
 "args_port": {
 "In": {
@@ -314,101 +445,44 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0023_transform",
-"position": Vector2(700, 340),
+"name": &"id_0002_merge",
+"position": Vector2(1360, 360),
 "settings": {
-"offset_max": Vector3(0, 0.5, 0),
-"offset_min": Vector3(0, 0.5, 0),
-"random_seed": 1974044517,
-"title": "Transform"
+"random_seed": 66167784,
+"title": "Merge"
 },
 "show_disconnected_inputs": false,
-"template": "transform"
-}, {
-"args_port": {
-"In A": {
-"connected": true,
-"port": 0
-},
-"In B": {
-"connected": false,
-"port": 1
-}
-},
-"name": &"id_0022_math_op",
-"position": Vector2(340, 500),
-"settings": {
-"in_nameB": "0.9",
-"operation": 2,
-"out_name": "@last",
-"random_seed": 1729307999,
-"title": "Math"
-},
-"show_disconnected_inputs": false,
-"template": "math_op"
-}, {
-"args_port": {
-"In A": {
-"connected": true,
-"port": 0
-},
-"In B": {
-"connected": false,
-"port": 1
-}
-},
-"name": &"id_0015_math_op",
-"position": Vector2(400, 120),
-"settings": {
-"in_nameB": "2.0",
-"operation": 2,
-"out_name": "@last",
-"random_seed": 3800701952,
-"title": "Math"
-},
-"show_disconnected_inputs": false,
-"template": "math_op"
-}, {
-"args_port": {
-"Splines": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0011_sample_spline",
-"position": Vector2(320, 340),
-"settings": {
-"distance_attribute": "",
-"random_seed": 3234846665,
-"sample_segments_centers": true,
-"title": "Sample Spline",
-"uniform_interval": 0.795
-},
-"show_disconnected_inputs": false,
-"template": "sample_spline"
+"size": Vector2(139, 54),
+"template": "merge"
 }, {
 "args_port": {
 "In": {
-"connected": false,
+"connected": true,
 "port": 0
 }
 },
-"name": &"id_0009_add_attribute",
-"position": Vector2(20, 380),
+"name": &"id_0001_spawn_meshes",
+"position": Vector2(1540, 360),
 "settings": {
-"cte_float": 0.9,
-"random_seed": 2852739486,
-"title": "Add Attribute"
+"random_seed": 1065513523,
+"title": "Spawn Meshes"
 },
 "show_disconnected_inputs": false,
-"template": "add_attribute"
+"size": Vector2(139, 71),
+"template": "spawn_meshes"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
 graph_name = "demo_bridge"
-view_zoom = 0.75131446
-view_offset = Vector2(337.20905, 12.822205)
+view_zoom = 0.5644736
+view_offset = Vector2(384.74084, -25.982178)
+
+[sub_resource type="MultiMesh" id="MultiMesh_wdrda"]
+transform_format = 1
+instance_count = 62
+mesh = ExtResource("4_wdrda")
+buffer = PackedFloat32Array(-0.10251718, 0.023270173, -1.1229156, 0.62336904, 0, 0.09724575, 0.26957968, 1.4125209, 1.7970781, 0.001327484, -0.064058505, 0.009018908, -0.108763024, 0.010570702, -1.1506586, 1.9028137, 0, 0.09943768, 0.12276877, 1.1921003, 1.7967111, 0.0006398923, -0.069654554, 0.020351468, 0.024996232, 0.0041474104, -1.1583444, 3.2012315, 0, 0.09991395, 0.048091955, 1.0961112, 1.7998264, -5.75998e-05, 0.016087245, 0.027636748, -0.08969954, 0.0021379713, -1.1575947, 4.5031805, 0, 0.09997709, 0.024816342, 1.0551515, 1.7977636, 0.00010667423, -0.057758268, 0.03315481, 0.0912981, -0.00065453484, -1.1579067, 5.8056636, 0, 0.099997856, -0.007598615, 1.0454786, 1.7976831, 3.3241562e-05, 0.058806077, 0.037698578, -0.014519898, -0.003012865, -1.1588644, 7.108075, 0, 0.0999546, -0.03493315, 1.0693729, 1.7999414, -2.43044e-05, -0.009348412, 0.041226413, 0.023913149, -0.0054859496, -1.157497, 8.409477, 0, 0.09984938, -0.063606724, 1.1247323, 1.799841, 7.2887735e-05, 0.015378802, 0.04385197, -0.05222523, -0.007184926, -1.1559675, 9.709507, 0, 0.09974133, -0.08334096, 1.2072872, 1.7992421, -0.00020855134, -0.033553384, 0.045727506, -0.026193392, -0.012076079, -1.1507367, 11.005749, 0, 0.09926801, -0.14001821, 1.3327699, 1.7998095, -0.00017574831, -0.01674716, 0.046484947, -0.06710391, -0.021213321, -1.1307553, 12.287994, 0, 0.09772088, -0.24580681, 1.5495255, 1.7987487, -0.0007913816, -0.042183824, 0.0449576, -0.0014704099, 0.29728925, -0.09443908, 0.38842914, 0, 0.854766, 0.032853197, 1.9776088, 0.09998919, 0.0043718433, -0.0013887917, 0.8179311, -0.0010263545, 0.19015221, -0.097762324, 0.81122416, 0, 0.8847956, 0.021012401, 1.8601501, 0.099994734, 0.0019517384, -0.0010034408, 0.82256246, -0.0007685748, 0.12313817, -0.099067025, 1.2677255, 0, 0.896583, 0.0136068305, 1.780227, 0.09999704, 0.0009464369, -0.0007614267, 0.8264211, -0.000691079, 0.10237511, -0.09935571, 1.7535639, 0, 0.8991906, 0.011312438, 1.7192904, 0.09999761, 0.00070750975, -0.00068664283, 0.829916, -0.0005886803, 0.07458675, -0.099658065, 2.2370026, 0, 0.90192103, 0.008241774, 1.6718719, 0.099998266, 0.00043908512, -0.0005866775, 0.8329565, -0.00052045786, 0.055772763, -0.099808566, 2.7265449, 0, 0.9032797, 0.00616282, 1.6365592, 0.099998645, 0.00029027765, -0.00051946857, 0.83564556, -0.00046962764, 0.041572306, -0.09989333, 3.2192175, 0, 0.9040446, 0.004593676, 1.6100447, 0.0999989, 0.0001952372, -0.00046913192, 0.8380701, -0.00042839357, 0.029911187, -0.09994445, 3.7136264, 0, 0.90450555, 0.003305134, 1.590516, 0.099999085, 0.00012813878, -0.00042815955, 0.8402815, -0.00039278605, 0.019722182, -0.09997549, 4.2090507, 0, 0.90478504, 0.0021792636, 1.5769328, 0.099999234, 7.746658e-05, -0.00039269277, 0.84231067, -0.00036133887, 0.010606974, -0.09999248, 4.705185, 0, 0.9049378, 0.0011720492, 1.5686224, 0.099999346, 3.8327373e-05, -0.00036131404, 0.84417856, -0.00033294337, 0.002269168, -0.09999913, 5.2018056, 0, 0.9049971, 0.0002507382, 1.5650909, 0.09999945, 7.555086e-06, -0.00033294232, 0.8459015, -0.00030677707, -0.005520857, -0.09999767, 5.69874, 0, 0.90498316, -0.00061004236, 1.5659832, 0.09999953, -1.6936805e-05, -0.00030677137, 0.8474912, -0.00028201743, -0.013004147, -0.09998928, 6.195818, 0, 0.9049066, -0.0014369282, 1.5710691, 0.0999996, -3.6674108e-05, -0.00028198832, 0.8489559, -0.00025722198, -0.020623945, -0.0999737, 6.6927567, 0, 0.90476495, -0.0022788967, 1.5802999, 0.099999666, -5.3049494e-05, -0.0002571552, 0.85029817, -0.00023436964, -0.027767263, -0.099952646, 7.189864, 0, 0.90457386, -0.0030682143, 1.59359, 0.099999726, -6.507821e-05, -0.00023425929, 0.8515233, -0.00021166031, -0.034989152, -0.099925004, 7.686802, 0, 0.90432334, -0.0038662136, 1.6108241, 0.09999978, -7.405832e-05, -0.00021150206, 0.85263556, -0.00018859336, -0.042446893, -0.09988977, 8.183448, 0, 0.904004, -0.004690273, 1.6320835, 0.09999982, -8.005217e-05, -0.0001883858, 0.8536347, -0.00016464425, -0.050321274, -0.099845156, 8.679659, 0, 0.90359986, -0.0055603697, 1.6575398, 0.09999987, -8.285119e-05, -0.00016438954, 0.8545175, -0.00013922887, -0.058833964, -0.09978837, 9.175255, 0, 0.9030856, -0.0065009966, 1.6874702, 0.099999905, -8.191393e-05, -0.00013893434, 0.8552787, -0.00011150079, -0.068272784, -0.09971498, 9.670007, 0, 0.90242106, -0.0075439587, 1.7222847, 0.09999994, -7.612474e-05, -0.00011118306, 0.8559092, -7.9969956e-05, -0.079183646, -0.09961646, 10.163506, 0, 0.9015292, -0.008749577, 1.7626027, 0.09999997, -6.332314e-05, -7.966326e-05, 0.8563952, -3.860434e-05, -0.093721256, -0.09946232, 10.654344, 0, 0.900134, -0.010355941, 1.8096762, 0.099999994, -3.6180474e-05, -3.8396774e-05, 0.856707, 1.8401543e-05, -0.114075564, -0.09920239, 11.140876, 0, 0.89778155, -0.012605036, 1.8658543, 0.1, 2.0991663e-05, 1.825477e-05, 0.8567907, 6.2580504e-05, -0.12988637, -0.09896471, 11.628697, 0, 0.8956308, -0.01435209, 1.9321651, 0.09999999, 8.1283564e-05, 6.1932624e-05, 0.8566246, 0.0001944497, -0.17714088, -0.09806548, 12.096144, 0, 0.8874942, -0.019573616, 2.0124683, 0.09999981, 0.00034445056, 0.0001906884, 0.85614276, 0.00041747728, -0.25467357, -0.095957935, 12.539035, 0, 0.86842686, -0.028140971, 2.1209316, 0.09999913, 0.0010632135, 0.00040060605, 0.8550731, -0.0014704099, 0.29728925, -0.09443908, 0.39582494, 0, 0.854766, 0.032853197, 1.930384, 0.09998919, 0.0043718433, -0.0013887917, -0.80213517, -0.0010263545, 0.19015221, -0.097762324, 0.81734544, 0, 0.8847956, 0.021012401, 1.8112664, 0.099994734, 0.0019517384, -0.0010034408, -0.79745996, -0.0007685748, 0.12313817, -0.099067025, 1.2733731, 0, 0.896583, 0.0136068305, 1.7306919, 0.09999704, 0.0009464369, -0.0007614267, -0.7935832, -0.000691079, 0.10237511, -0.09935571, 1.7591033, 0, 0.8991906, 0.011312438, 1.6696113, 0.09999761, 0.00070750975, -0.00068664283, -0.79008424, -0.0005886803, 0.07458675, -0.099658065, 2.2424185, 0, 0.90192103, 0.008241774, 1.622042, 0.099998266, 0.00043908512, -0.0005866775, -0.78703946, -0.00052045786, 0.055772763, -0.099808566, 2.731895, 0, 0.9032797, 0.00616282, 1.5866542, 0.099998645, 0.00029027765, -0.00051946857, -0.7843485, -0.00046962764, 0.041572306, -0.09989333, 3.2245286, 0, 0.9040446, 0.004593676, 1.5600975, 0.0999989, 0.0001952372, -0.00046913192, -0.78192264, -0.00042839357, 0.029911187, -0.09994445, 3.718914, 0, 0.90450555, 0.003305134, 1.5405432, 0.099999085, 0.00012813878, -0.00042815955, -0.77971053, -0.00039278605, 0.019722182, -0.09997549, 4.2143245, 0, 0.90478504, 0.0021792636, 1.5269448, 0.099999234, 7.746658e-05, -0.00039269277, -0.7776811, -0.00036133887, 0.010606974, -0.09999248, 4.710453, 0, 0.9049378, 0.0011720492, 1.5186257, 0.099999346, 3.8327373e-05, -0.00036131404, -0.77581286, -0.00033294337, 0.002269168, -0.09999913, 5.2070737, 0, 0.9049971, 0.0002507382, 1.515091, 0.09999945, 7.555086e-06, -0.00033294232, -0.77408993, -0.00030677707, -0.005520857, -0.09999767, 5.704015, 0, 0.90498316, -0.00061004236, 1.5159842, 0.09999953, -1.6936805e-05, -0.00030677137, -0.7725001, -0.00028201743, -0.013004147, -0.09998928, 6.201105, 0, 0.9049066, -0.0014369282, 1.5210742, 0.0999996, -3.6674108e-05, -0.00028198832, -0.7710355, -0.00025722198, -0.020623945, -0.0999737, 6.698063, 0, 0.90476495, -0.0022788967, 1.5303128, 0.099999666, -5.3049494e-05, -0.0002571552, -0.7696934, -0.00023436964, -0.027767263, -0.099952646, 7.195195, 0, 0.90457386, -0.0030682143, 1.5436137, 0.099999726, -6.507821e-05, -0.00023425929, -0.7684686, -0.00021166031, -0.034989152, -0.099925004, 7.6921635, 0, 0.90432334, -0.0038662136, 1.5608616, 0.09999978, -7.405832e-05, -0.00021150206, -0.7673566, -0.00018859336, -0.042446893, -0.09988977, 8.188848, 0, 0.904004, -0.004690273, 1.5821387, 0.09999982, -8.005217e-05, -0.0001883858, -0.7663579, -0.00016464425, -0.050321274, -0.099845156, 8.685106, 0, 0.90359986, -0.0055603697, 1.6076171, 0.09999987, -8.285119e-05, -0.00016438954, -0.7654756, -0.00013922887, -0.058833964, -0.09978837, 9.180761, 0, 0.9030856, -0.0065009966, 1.6375759, 0.099999905, -8.191393e-05, -0.00013893434, -0.76471514, -0.00011150079, -0.068272784, -0.09971498, 9.675586, 0, 0.90242106, -0.0075439587, 1.672427, 0.09999994, -7.612474e-05, -0.00011118306, -0.76408553, -7.9969956e-05, -0.079183646, -0.09961646, 10.169176, 0, 0.9015292, -0.008749577, 1.7127944, 0.09999997, -6.332314e-05, -7.966326e-05, -0.76360077, -3.860434e-05, -0.093721256, -0.09946232, 10.660148, 0, 0.900134, -0.010355941, 1.7599449, 0.099999994, -3.6180474e-05, -3.8396774e-05, -0.76329076, 1.8401543e-05, -0.114075564, -0.09920239, 11.14688, 0, 0.89778155, -0.012605036, 1.8162532, 0.1, 2.0991663e-05, 1.825477e-05, -0.76321036, 6.2580504e-05, -0.12988637, -0.09896471, 11.63486, 0, 0.8956308, -0.01435209, 1.8826828, 0.09999999, 8.1283564e-05, 6.1932624e-05, -0.7633796, 0.0001944497, -0.17714088, -0.09806548, 12.102781, 0, 0.8874942, -0.019573616, 1.9634355, 0.09999981, 0.00034445056, 0.0001906884, -0.7638731, 0.00041747728, -0.25467357, -0.095957935, 12.546342, 0, 0.86842686, -0.028140971, 2.0729523, 0.09999913, 0.0010632135, 0.00040060605, -0.7649715)
 
 [sub_resource type="Curve3D" id="Curve3D_gywrk"]
 bake_interval = 0.795
@@ -426,6 +500,10 @@ graph = SubResource("Resource_akmbg")
 regenerate = Callable()
 clearInstances = Callable()
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
+
+[node name="Spawn Meshes_0000" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=1318029596]
+multimesh = SubResource("MultiMesh_wdrda")
+metadata/flow_owner = &"id_0001_spawn_meshes"
 
 [node name="Path3D" type="Path3D" parent="." unique_id=1471292669]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.68727, 0)

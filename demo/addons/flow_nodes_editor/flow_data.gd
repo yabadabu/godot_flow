@@ -265,7 +265,7 @@ class TransformsStream:
 	var sizes : PackedVector3Array
 	func atIndex( id: int ) -> Transform3D:
 		var basis := FlowData.eulerToBasis( eulers[id] )
-		return Transform3D( basis.scaled( sizes[id] ), positions[id] )
+		return Transform3D( basis, positions[id] ).scaled_local( sizes[id] )
 	
 	func atIndexAbsScale( id: int, scale: float ) -> Transform3D:
 		var basis := FlowData.eulerToBasis( eulers[id] )
