@@ -251,30 +251,36 @@ func getSettingValue( ctx : FlowData.EvaluationContext, in_name : String, defaul
 		print( "Searching the current value of input %s in %d inputs at node %s. ByName:%s vs %s.   Meta:%s" % [ in_name, inputs.size(), name, args_ports_by_name, inputs, meta ] )
 	if args_ports_by_name.has( in_name ):
 		var port = args_ports_by_name[ in_name ].port
-		if trace:
-			print( "Found at port %d.. Inputs has size %d" % [ port, inputs.size() ] )
+		if trace: print( "Found at port %d.. Inputs has size %d" % [ port, inputs.size() ] )
 		if port >= 0 and port < inputs.size():
 			var input = inputs[ port ] as FlowData.Data
 			if input:
 				var in_streams = input.streams
-				if trace:
-					print( "Got the input for %s : %s" % [ in_name, in_streams.keys() ] )
-				if in_streams and in_streams.size() == 1:
-					var stream = in_streams.values()[0]
-					var in_size = in_streams.size()
-					if in_size == 0:
-						setError( "Input %s has no data" % in_name)
-					elif in_size > 1:
-						setError( "Input %s has too many data (%d)" % [ in_name, in_size ])
-					else:
-						#print( "in_size is %d" % [ in_size ] )
-						#print( "  stream is %s" % [ stream ] )
-						var new_value = stream.container[0]
-						if trace:
-							print( "  -> Using %s = %s" % [ in_name, new_value ])
-						if typeof( new_value ) != typeof( value ):
-							push_warning( "  Type of %s (%d) does not match the expected type (%d)" % [ in_name, typeof(new_value), typeof(value) ])
-						return new_value
+				if trace: print( "Got the input for %s : %s" % [ in_name, in_streams.keys() ] )
+				if in_streams:
+					if in_streams.size() == 1:
+						if trace: print( "in_streams is %s" % [ in_streams ] )
+						var stream = in_streams.values()[0]
+						var in_size = in_streams.size()
+						if in_size == 0:
+							setError( "Input %s has no data" % in_name)
+						elif in_size > 1:
+							setError( "Input %s has too many data (%d)" % [ in_name, in_size ])
+						else:
+							var elems_in_container = stream.container.size()
+							if trace: print( "Input %s in_size is %d" % [ in_name, stream.container.size() ] )
+							#print( "  stream is %s" % [ stream ] )
+							if typeof( value ) == TYPE_ARRAY:
+								return stream.container
+							else:
+								var new_value = stream.container[0]
+								if trace:
+									print( "  -> Using %s = %s" % [ in_name, new_value ])
+								if typeof( new_value ) != typeof( value ):
+									push_warning( "  Type of %s (%s) does not match the expected type (%s)" % [ in_name, type_string( typeof(new_value) ), type_string( typeof(value))])
+								return new_value
+						
+						
 	
 	if trace:
 		print( "Input %s using from settings %s" % [ in_name, str(value) ])

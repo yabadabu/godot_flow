@@ -138,9 +138,14 @@ func execute( ctx : FlowData.EvaluationContext ):
 
 	# Discard non-valid meshes
 	var variants : Array[Mesh] = []
-	for v in mesh_variants:
-		if v != null:
-			variants.append(v)
+	var in_variants = getSettingValue( ctx, "mesh_variants", variants )
+	#print( "in_variants: %s : Type:%s vs %s" % [ in_variants, typeof(in_variants), TYPE_ARRAY ])
+	if typeof(in_variants) == TYPE_ARRAY:
+		for v in in_variants:
+			if v as Mesh:
+				variants.append(v)
+	else:
+		variants.append( in_variants )
 	var variant_weights = _build_variant_weights( variants.size() )
 
 	var transforms := in_data.getTransformsStream()
@@ -204,7 +209,6 @@ func execute( ctx : FlowData.EvaluationContext ):
 			return
 
 	var prefix = title
-
 	for res in mmis.keys():
 		var mmi : MultiMeshInstance3D = spawnNode( root, MultiMeshInstance3D )
 		mmi.name = "%s_%04d" % [ prefix, spawn_id ]
