@@ -123,7 +123,7 @@ func addNodeFromTemplate( node_template : String, node_name : String, node_setti
 	
 	print( "addNodeFromTemplate %s %s. NodesByName:%d" % [ node_template, node_name, nodes_by_name.size() ])
 	var factory := FlowPlugin.get_instance().nodes_factory
-	if node_name and nodes_by_name.has( node_name ):
+	while node_name and nodes_by_name.has(node_name):
 		node_name = factory.getNewName(node_template)
 		print( "will use new name %s" % [ node_name ])
 	

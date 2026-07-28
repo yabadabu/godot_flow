@@ -16,12 +16,21 @@ func _init() -> void:
 		"hide_inputs": true,
 	}
 
-# The input is intentionally hidden from the UI, but unlike an ordinary
-# configuration input it must consume the current bulk rather than bulk 0.
-func readAllInputsForBulk(
-	ctx: FlowData.EvaluationContext,
-	bulk_idx: int
-) -> void:
-	ctx.setNodeInputs(self, [
-		_getInputForBulkInContext(ctx, bulk_idx, 0)
-	])
+# Forward every bulk produced by every input endpoint. There is no fallback
+# bulk: if all redirect inputs produce nothing, this endpoint produces nothing.
+func run(ctx: FlowData.EvaluationContext) -> void:
+	for connection in deps:
+		var source_node := ctx.graph.nodes_by_name.get(connection.from_node)
+		if not source_node:
+			continue
+		for bulk_idx in range(ctx.getOutputBulks(source_node).size()):
+			var data := ctx.getOutput(
+				source_node,
+				bulk_idx,
+				connection.from_port
+			)
+			ctx.setNodeInputs(self, [data])
+			setOutput(ctx, 0, data)
+
+func executedDisabled(_ctx: FlowData.EvaluationContext) -> void:
+	pass

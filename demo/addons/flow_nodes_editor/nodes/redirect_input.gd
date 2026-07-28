@@ -16,3 +16,8 @@ func _init() -> void:
 		"auto_register": false,
 		"hide_inputs": true,
 	}
+
+# Unlike ordinary disabled nodes, a disabled redirect input cuts this branch
+# instead of passing its inputs through.
+func executedDisabled(_ctx: FlowData.EvaluationContext) -> void:
+	pass

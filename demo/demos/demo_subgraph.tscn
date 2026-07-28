@@ -56,16 +56,29 @@ data = {
 "from_node": &"id_0006_grid",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0001_redirect_input",
+"to_node": &"id_0002_transform",
+"to_port": 0
+}, {
+"from_node": &"id_0006_grid",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0003_redirect_input",
+"to_port": 0
+}, {
+"from_node": &"id_0002_transform",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0005_redirect_input",
 "to_port": 0
 }],
-"min_pos": Vector2(0, 0),
+"min_pos": Vector2(-100, 0),
 "nodes": [{
 "args_port": {},
 "name": &"id_0001_comment",
-"position": Vector2(140, 0),
+"position": Vector2(240, 0),
 "settings": {
 "hue": 0.6000000000000001,
+&"inspect_enabled": false,
 "random_seed": 2313414386,
 "text": "Each scene Node3D in the demo scene provides it's own custom input arguments 
 for the height, so the grid is elevated a different height",
@@ -76,29 +89,45 @@ for the height, so the grid is elevated a different height",
 "template": "comment"
 }, {
 "args_port": {},
+"name": &"id_0002_redirect_output",
+"position": Vector2(440, 320),
+"settings": {
+&"inspect_enabled": false,
+"random_seed": 323618648,
+"redirect_id": &"lr2rb",
+"redirect_name": "Roads",
+"title": "Redirect Output"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(125, 54),
+"template": "redirect_output"
+}, {
+"args_port": {},
 "name": &"id_0004_input_Height",
-"position": Vector2(20, 300),
+"position": Vector2(120, 300),
 "settings": {
 "input_id": &"52njg",
 "input_name": "Heights",
+&"inspect_enabled": false,
 "random_seed": 939309640,
 "title": "Input",
 "trace": true
 },
 "show_disconnected_inputs": false,
-"size": Vector2(152, 54),
+"size": Vector2(152.00002, 54),
 "template": "input_Height"
 }, {
 "args_port": {},
 "name": &"id_0006_grid",
 "position": Vector2(0, 200),
 "settings": {
+&"inspect_enabled": false,
 "random_seed": 1565012789,
 "size": 0.87,
 "title": "Grid"
 },
 "show_disconnected_inputs": false,
-"size": Vector2(125, 71),
+"size": Vector2(125.00001, 71),
 "template": "grid"
 }, {
 "args_port": {
@@ -108,8 +137,9 @@ for the height, so the grid is elevated a different height",
 }
 },
 "name": &"id_0014_spawn_meshes",
-"position": Vector2(520, 200),
+"position": Vector2(620, 200),
 "settings": {
+&"inspect_enabled": false,
 "random_seed": 3974262691,
 "title": "Spawn Meshes"
 },
@@ -128,11 +158,12 @@ for the height, so the grid is elevated a different height",
 }
 },
 "name": &"id_0006_subgraph",
-"position": Vector2(260, 200),
+"position": Vector2(360, 200),
 "settings": {
 "flow_override/Height/enabled": false,
 "flow_override/Height/value": 0.0,
 "graph": ExtResource("5_nyqj1"),
+&"inspect_enabled": false,
 "overrides": Array[ExtResource("4_mmqr1")]([SubResource("Resource_se51d")]),
 "random_seed": 313842948,
 "title": "Subgraph"
@@ -147,10 +178,49 @@ for the height, so the grid is elevated a different height",
 "port": 0
 }
 },
-"name": &"id_0001_redirect_input",
-"position": Vector2(140, 440),
+"name": &"id_0002_transform",
+"position": Vector2(41.256424, 575.8936),
 "settings": {
-"random_seed": 646223379,
+&"inspect_enabled": false,
+"offset_max": Vector3(0, 0, 4),
+"offset_min": Vector3(0, 0, 4),
+"random_seed": 2118813618,
+"title": "Transform Points"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139, 71.00003),
+"template": "transform"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0003_redirect_input",
+"position": Vector2(280, 480),
+"settings": {
+&"inspect_enabled": false,
+"random_seed": 3975912401,
+"redirect_id": &"lr2rb",
+"redirect_name": "Roads",
+"title": "Redirect Input"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(116.00003, 54),
+"template": "redirect_input"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0005_redirect_input",
+"position": Vector2(321.44482, 715.98785),
+"settings": {
+&"inspect_enabled": false,
+"random_seed": 3975912401,
 "redirect_id": &"lr2rb",
 "redirect_name": "Roads",
 "title": "Redirect Input"
@@ -158,26 +228,13 @@ for the height, so the grid is elevated a different height",
 "show_disconnected_inputs": false,
 "size": Vector2(116, 54),
 "template": "redirect_input"
-}, {
-"args_port": {},
-"name": &"id_0002_redirect_output",
-"position": Vector2(340, 320),
-"settings": {
-"random_seed": 323618648,
-"redirect_id": &"lr2rb",
-"redirect_name": "Roads",
-"title": "Redirect Output"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(125, 54),
-"template": "redirect_output"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
 graph_name = "demo subgraph"
 view_zoom = 0.799462
-view_offset = Vector2(-76.96326, -122.59491)
+view_offset = Vector2(-34.963257, -45.59491)
 new_name_counter = 1
 in_params = Array[ExtResource("2_mmqr1")]([SubResource("Resource_x3i3k")])
 redirectors = Array[ExtResource("5_se51d")]([SubResource("Resource_kxdvx")])
@@ -200,7 +257,13 @@ instance_count = 9
 mesh = ExtResource("6_nyqj1")
 buffer = PackedFloat32Array(0.87, 0, 0, 0, 0, 0.87, 0, 0, 0, 0, 0.87, 0, 0.87, 0, 0, 1, 0, 0.87, 0, 0, 0, 0, 0.87, 0, 0.87, 0, 0, 2, 0, 0.87, 0, 0, 0, 0, 0.87, 0, 0.87, 0, 0, 0, 0, 0.87, 0, 0, 0, 0, 0.87, 1, 0.87, 0, 0, 1, 0, 0.87, 0, 0, 0, 0, 0.87, 1, 0.87, 0, 0, 2, 0, 0.87, 0, 0, 0, 0, 0.87, 1, 0.87, 0, 0, 0, 0, 0.87, 0, 0, 0, 0, 0.87, 2, 0.87, 0, 0, 1, 0, 0.87, 0, 0, 0, 0, 0.87, 2, 0.87, 0, 0, 2, 0, 0.87, 0, 0, 0, 0, 0.87, 2)
 
-[sub_resource type="Resource" id="Resource_pp86h"]
+[sub_resource type="MultiMesh" id="MultiMesh_pp86h"]
+transform_format = 1
+instance_count = 9
+mesh = ExtResource("6_nyqj1")
+buffer = PackedFloat32Array(0.87, 0, 0, 0, 0, 0.87, 0, 0, 0, 0, 0.87, 4, 0.87, 0, 0, 1, 0, 0.87, 0, 0, 0, 0, 0.87, 4, 0.87, 0, 0, 2, 0, 0.87, 0, 0, 0, 0, 0.87, 4, 0.87, 0, 0, 0, 0, 0.87, 0, 0, 0, 0, 0.87, 5, 0.87, 0, 0, 1, 0, 0.87, 0, 0, 0, 0, 0.87, 5, 0.87, 0, 0, 2, 0, 0.87, 0, 0, 0, 0, 0.87, 5, 0.87, 0, 0, 0, 0, 0.87, 0, 0, 0, 0, 0.87, 6, 0.87, 0, 0, 1, 0, 0.87, 0, 0, 0, 0, 0.87, 6, 0.87, 0, 0, 2, 0, 0.87, 0, 0, 0, 0, 0.87, 6)
+
+[sub_resource type="Resource" id="Resource_6qf3l"]
 script = ExtResource("4_mmqr1")
 param_id = &"Heights"
 enabled = true
@@ -224,19 +287,23 @@ flow_override/Heights/enabled = true
 flow_override/Heights/value = 1.536
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
 
-[node name="Spawn Meshes_0000" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=846702457]
+[node name="Spawn Meshes_0000" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=1050131006]
 multimesh = SubResource("MultiMesh_s1eqc")
 metadata/flow_owner = &"id_0014_spawn_meshes"
 
-[node name="Spawn Meshes_0001" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=453258460]
+[node name="Spawn Meshes_0001" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=1788491380]
 multimesh = SubResource("MultiMesh_opyov")
+metadata/flow_owner = &"id_0014_spawn_meshes"
+
+[node name="Spawn Meshes_0002" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=743185514]
+multimesh = SubResource("MultiMesh_pp86h")
 metadata/flow_owner = &"id_0014_spawn_meshes"
 
 [node name="FlowGraphNode3D2" type="Node3D" parent="." unique_id=357897790]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.699516, 0, 0)
 script = ExtResource("1_dx0d7")
 graph = SubResource("Resource_nyqj1")
-overrides = Array[ExtResource("4_mmqr1")]([SubResource("Resource_pp86h")])
+overrides = Array[ExtResource("4_mmqr1")]([SubResource("Resource_6qf3l")])
 regenerate = Callable()
 clearInstances = Callable()
 flow_override/Heights/enabled = true
