@@ -13,6 +13,6 @@ func _init() -> void:
 		}],
 		"outs": [],
 		"tooltip": "Sends all connected bulks to the outputs of this named redirector.",
-		"auto_register": true,
+		"auto_register": false,
 		"hide_inputs": true,
 	}

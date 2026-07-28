@@ -6,6 +6,7 @@ signal node_selected(template_name: String)
 signal action_selected(action_id: int)
 signal input_selected(input_idx: int)
 signal output_selected(output_idx: int)
+signal redirect_selected(redirect_id: StringName)
 signal on_closed()
 
 var recently_used: Array[String] = [] # Ordered list of recently used template names (most recent first)
@@ -19,6 +20,7 @@ const MAX_RECENT : int = 8
 var current_node_types: Dictionary = {}
 var current_inputs: Array = []
 var current_actions: Array = []
+var current_redirectors: Array = []
 var nodes_by_category: Dictionary = {}
 var category_buttons: Dictionary = {}
 var compatible_template_names: Array = []
@@ -28,8 +30,10 @@ var show_inputs_category := false
 const RECENTS_CATEGORY := "Recents"
 const INPUTS_CATEGORY := "Inputs"
 const ACTIONS_CATEGORY := "Actions"
+const REDIRECTORS_CATEGORY := "Redirectors"
 const ACTION_ADD_NEW_INPUT := 1
 const ACTION_COLLAPSE_TO_SUBGRAPH := 2
+const ACTION_CREATE_REDIRECTOR := 3
 const MIN_POPUP_SIZE := Vector2i(360, 240)
 const CATEGORY_ROW_HEIGHT := 30
 const POPUP_VERTICAL_PADDING := 58
@@ -47,11 +51,12 @@ func appearAt( new_screen_position : Vector2 ):
 	show()
 	move_to_front()
 	
-func setup( node_types : Dictionary, p_inputs: Array, _p_outputs: Array, required_input_type : FlowData.DataType, required_output_type : FlowData.DataType, actions: Array = [] ):
+func setup( node_types : Dictionary, p_inputs: Array, _p_outputs: Array, required_input_type : FlowData.DataType, required_output_type : FlowData.DataType, actions: Array = [], redirectors: Array = [] ):
 	print( "invoking menu popup setup... %d %d" % [ required_input_type, required_output_type ])
 	current_node_types = node_types
 	current_inputs = p_inputs
 	current_actions = actions
+	current_redirectors = redirectors
 	if not search_text.text_changed.is_connected(_on_search_text_changed):
 		search_text.text_changed.connect(_on_search_text_changed)
 	search_text.text = ""
@@ -139,6 +144,8 @@ func _get_visible_category_names() -> Array:
 		category_names.push_front(INPUTS_CATEGORY)
 	if not current_actions.is_empty():
 		category_names.push_front(ACTIONS_CATEGORY)
+	if not current_redirectors.is_empty():
+		category_names.push_front(REDIRECTORS_CATEGORY)
 	return category_names
 
 func _get_recent_template_names() -> Array[String]:
@@ -189,6 +196,9 @@ func _show_category(category_name : String):
 		return
 	if category_name == ACTIONS_CATEGORY:
 		_show_actions()
+		return
+	if category_name == REDIRECTORS_CATEGORY:
+		_show_redirectors()
 		return
 
 	var template_names : Array = nodes_by_category.get(category_name, [])
@@ -241,6 +251,20 @@ func _show_actions():
 		if action.has("tooltip"):
 			action_button.tooltip_text = action.tooltip
 		search_results.add_child(action_button)
+
+func _show_redirectors():
+	for definition: FlowGraphRedirect in current_redirectors:
+		if not definition:
+			continue
+		var redirect_button := Button.new()
+		redirect_button.text = definition.name
+		redirect_button.alignment = HORIZONTAL_ALIGNMENT_LEFT
+		redirect_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		_apply_category_button_style(redirect_button, REDIRECTORS_CATEGORY)
+		redirect_button.pressed.connect(
+			_select_redirect.bind(definition.ensureId())
+		)
+		search_results.add_child(redirect_button)
 
 func _show_search_results(query : String):
 	_clear_results()
@@ -297,6 +321,22 @@ func _show_search_results(query : String):
 		action_button.pressed.connect(_select_action.bind(action.id))
 		search_results.add_child(action_button)
 
+	for definition: FlowGraphRedirect in current_redirectors:
+		if not definition or not definition.name.to_lower().contains(query.to_lower()):
+			continue
+		var redirect_button := Button.new()
+		redirect_button.text = "%s / %s" % [
+			REDIRECTORS_CATEGORY,
+			definition.name,
+		]
+		redirect_button.alignment = HORIZONTAL_ALIGNMENT_LEFT
+		redirect_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		_apply_category_button_style(redirect_button, REDIRECTORS_CATEGORY)
+		redirect_button.pressed.connect(
+			_select_redirect.bind(definition.ensureId())
+		)
+		search_results.add_child(redirect_button)
+
 func _apply_category_button_style(button : Button, category_name : String):
 	var base_color := _get_display_category_color(category_name)
 	var normal_color := Color(base_color.r, base_color.g, base_color.b, 1.0)
@@ -329,6 +369,8 @@ func _get_display_category_color(category_name : String) -> Color:
 		return Color(0.32, 0.52, 0.85)
 	if category_name == ACTIONS_CATEGORY:
 		return Color(0.45, 0.45, 0.48)
+	if category_name == REDIRECTORS_CATEGORY:
+		return Color(0.55, 0.36, 0.68)
 	return FlowNodeStyle.getCategoryColor(category_name)
 
 func _get_text_color_for_bg(bg_color : Color) -> Color:
@@ -392,5 +434,10 @@ func _select_input(input_idx : int):
 
 func _select_action(action_id : int):
 	action_selected.emit(action_id)
+	hide()
+	on_closed.emit()
+
+func _select_redirect(redirect_id: StringName) -> void:
+	redirect_selected.emit(redirect_id)
 	hide()
 	on_closed.emit()

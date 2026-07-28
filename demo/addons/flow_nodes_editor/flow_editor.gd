@@ -29,6 +29,11 @@ var inspector: EditorInspector
 var inspected_node : Node
 var make_inspector_visible : Callable
 var search_add_node_popup: SearchAddNodePopup
+var redirect_name_dialog: ConfirmationDialog
+var redirect_name_edit: LineEdit
+var pending_redirect_source_node: StringName
+var pending_redirect_source_port := 0
+var pending_redirect_drop_position := Vector2.ZERO
 
 # This is the default graph-node instantiated, the script contains the logic
 var packed_node = preload("res://addons/flow_nodes_editor/node.tscn")
@@ -428,10 +433,12 @@ func _ready():
 	search_add_node_popup.node_selected.connect(_on_search_add_node_popup_node_selected)
 	search_add_node_popup.input_selected.connect(_on_search_add_node_popup_input_selected)
 	search_add_node_popup.action_selected.connect(_on_search_add_node_popup_action_selected)
+	search_add_node_popup.redirect_selected.connect(_on_redirect_selected)
 	search_add_node_popup.on_closed.connect( func():
 		auto_connect_from_node = ""
 		auto_connect_to_node = ""
 		)
+	_createRedirectNameDialog()
 	%AutoRegen.button_pressed = auto_regen
 	
 func onNodePropertyChanged( prop_name : String ):
@@ -796,13 +803,21 @@ func _on_graph_edit_popup_request(at_position):
 	var in_params = []
 	var out_params = []
 	var actions = []
+	var redirectors = []
 	if current_resource:
 		in_params = current_resource.in_params
+		redirectors = current_resource.redirectors
 	if not getSelectedGraphNodes().is_empty():
 		actions.append({
 			"id": SearchAddNodePopup.ACTION_COLLAPSE_TO_SUBGRAPH,
 			"label": "Collapse Selection to Subgraph",
 			"tooltip": "Replace the selected nodes with an embedded Subgraph node.",
+		})
+	if auto_connect_from_node:
+		actions.append({
+			"id": SearchAddNodePopup.ACTION_CREATE_REDIRECTOR,
+			"label": "Create New Redirector...",
+			"tooltip": "Create a named redirector connected to this output.",
 		})
 		
 	search_add_node_popup.setup(
@@ -811,7 +826,8 @@ func _on_graph_edit_popup_request(at_position):
 		out_params,
 		required_input_type,
 		required_output_type,
-		actions
+		actions,
+		redirectors
 	)
 	search_add_node_popup.appearAt(get_screen_position() + at_position)
 	
@@ -843,6 +859,88 @@ func _on_search_add_node_popup_action_selected(action_id : int):
 		var result = SubgraphExtractor.extract(self, getSelectedGraphNodes())
 		if not result.success:
 			push_warning(result.error)
+	elif action_id == SearchAddNodePopup.ACTION_CREATE_REDIRECTOR:
+		_promptCreateRedirector()
+
+func _on_redirect_selected(redirect_id: StringName) -> void:
+	if not current_resource:
+		return
+	var definition := FlowGraphRedirectors.findDefinition(
+		current_resource,
+		redirect_id
+	)
+	if not definition:
+		push_warning("The selected redirector no longer exists.")
+		return
+	var endpoint_template := (
+		"redirect_input" if auto_connect_from_node else "redirect_output"
+	)
+	addNode(endpoint_template, {
+		"redirect_id": definition.ensureId(),
+		"redirect_name": definition.name,
+	})
+
+func _createRedirectNameDialog() -> void:
+	redirect_name_dialog = ConfirmationDialog.new()
+	redirect_name_dialog.title = "Create Named Redirector"
+	redirect_name_dialog.min_size = Vector2i(360, 140)
+	add_child(redirect_name_dialog)
+
+	var content := VBoxContainer.new()
+	content.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	content.offset_left = 12
+	content.offset_top = 12
+	content.offset_right = -12
+	content.offset_bottom = -52
+	redirect_name_dialog.add_child(content)
+
+	var label := Label.new()
+	label.text = "Redirector name:"
+	content.add_child(label)
+	redirect_name_edit = LineEdit.new()
+	redirect_name_edit.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	content.add_child(redirect_name_edit)
+	redirect_name_dialog.register_text_enter(redirect_name_edit)
+	redirect_name_dialog.confirmed.connect(_confirmCreateRedirector)
+
+func _promptCreateRedirector() -> void:
+	if not current_resource or not auto_connect_from_node:
+		return
+	pending_redirect_source_node = StringName(auto_connect_from_node)
+	pending_redirect_source_port = auto_connect_from_port
+	pending_redirect_drop_position = local_drop_position
+	redirect_name_edit.text = FlowGraphRedirectors.makeUniqueName(
+		current_resource
+	)
+	redirect_name_dialog.popup_centered(Vector2i(360, 140))
+	redirect_name_edit.call_deferred("grab_focus")
+	redirect_name_edit.call_deferred("select_all")
+
+func _confirmCreateRedirector() -> void:
+	if not current_resource or pending_redirect_source_node.is_empty():
+		return
+	var unique_name := FlowGraphRedirectors.makeUniqueName(
+		current_resource,
+		redirect_name_edit.text
+	)
+	var definition := FlowGraphRedirectors.createDefinition(
+		current_resource,
+		unique_name
+	)
+	if not definition:
+		push_warning("Could not create redirector '%s'." % unique_name)
+		return
+
+	auto_connect_from_node = String(pending_redirect_source_node)
+	auto_connect_from_port = pending_redirect_source_port
+	auto_connect_to_node = ""
+	local_drop_position = pending_redirect_drop_position
+	addNode("redirect_input", {
+		"redirect_id": definition.ensureId(),
+		"redirect_name": definition.name,
+	})
+	auto_connect_from_node = ""
+	pending_redirect_source_node = StringName()
 
 func _on_popup_menu_id_pressed(id: int) -> void:
 	if menu_ids.has( id ):

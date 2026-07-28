@@ -12,6 +12,6 @@ func _init() -> void:
 			"data_type": FlowData.DataType.Any,
 		}],
 		"tooltip": "Retrieves all bulks sent to this named redirector.",
-		"auto_register": true,
+		"auto_register": false,
 		"hide_inputs": true,
 	}

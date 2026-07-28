@@ -43,6 +43,35 @@ static func ensureDefinition(
 	graph.redirectors.append(definition)
 	return definition
 
+static func createDefinition(
+	graph: FlowGraphResource,
+	redirect_name: String
+) -> FlowGraphRedirect:
+	if not graph:
+		return null
+	var clean_name := redirect_name.strip_edges()
+	if clean_name.is_empty() or findDefinitionByName(graph, clean_name):
+		return null
+	var definition := FlowGraphRedirect.new()
+	definition.name = clean_name
+	definition.ensureId()
+	graph.redirectors.append(definition)
+	return definition
+
+static func makeUniqueName(
+	graph: FlowGraphResource,
+	base_name: String = "Redirect"
+) -> String:
+	var clean_name := base_name.strip_edges()
+	if clean_name.is_empty():
+		clean_name = "Redirect"
+	var candidate := clean_name
+	var suffix := 2
+	while findDefinitionByName(graph, candidate):
+		candidate = "%s %d" % [clean_name, suffix]
+		suffix += 1
+	return candidate
+
 static func rebuildSyntheticConnections(graph: FlowGraphResource) -> void:
 	if not graph:
 		return
