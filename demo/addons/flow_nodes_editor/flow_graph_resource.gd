@@ -56,6 +56,7 @@ var editor : FlowGraphEditor
 
 signal in_params_changed
 signal input_params_removed(param_ids: Array[StringName])
+signal regeneration_requested(source_owner)
 
 var _known_input_ids: Array[StringName] = []
 
@@ -243,6 +244,9 @@ func addFrame( frame_data : Dictionary ):
 func markAllNodesDirty():
 	for node in all_nodes:
 		node.invalidate()
+
+func requestRegeneration(source_owner = null) -> void:
+	regeneration_requested.emit(source_owner)
 	
 func dump():
 	print( ">>>> FlowGraph %s.. %s Compiled:%s" % [resource_name, graph_name, compiled] )

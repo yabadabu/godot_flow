@@ -1121,6 +1121,7 @@ func evalGraph():
 					"name": node.name,
 					"time": active_context.getNodeExecTime(node)
 				})
+		current_resource.requestRegeneration(resource_owner)
 
 		#print( "regen_pending is now false")
 		

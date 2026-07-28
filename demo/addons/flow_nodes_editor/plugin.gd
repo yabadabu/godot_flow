@@ -163,6 +163,9 @@ func register_executor(
 ) -> void:
 	if graph == null:
 		return
+	var regeneration_callback := _on_graph_regeneration_requested.bind(graph)
+	if not graph.regeneration_requested.is_connected(regeneration_callback):
+		graph.regeneration_requested.connect(regeneration_callback)
 	var id := node.get_instance_id()
 	if not executors.has( graph ):
 		executors[graph] = { }
@@ -174,6 +177,39 @@ func register_executor(
 		context = node.ctx
 	var run_id: Variant = context.name if context and context.parent_ctx else run_idx
 	executors[graph][id].runs[run_id] = context
+
+func _on_graph_regeneration_requested(
+	source_owner,
+	graph: FlowGraphResource
+) -> void:
+	var scheduled_owners := {}
+	for executor in get_live_executors(graph):
+		var node := executor.node_ref.get_ref() as FlowGraphNode3D
+		if node == null:
+			continue
+		for context in executor.runs.values():
+			_mark_parent_contexts_dirty(context)
+		# The editor has already evaluated a root context directly. A nested
+		# context still needs its owner to regenerate so changes propagate
+		# through the parent subgraph node.
+		if node == source_owner and node.graph == graph:
+			continue
+		var node_id := node.get_instance_id()
+		if scheduled_owners.has(node_id):
+			continue
+		scheduled_owners[node_id] = true
+		node.regenerate.call_deferred()
+
+func _mark_parent_contexts_dirty(context: FlowData.EvaluationContext) -> void:
+	var child_ctx := context
+	while child_ctx and child_ctx.parent_ctx:
+		var parent_ctx := child_ctx.parent_ctx
+		for parent_node in parent_ctx.graph.all_nodes:
+			var invocations: Dictionary = parent_ctx.child_contexts.get(parent_node.name, {})
+			if invocations.values().has(child_ctx):
+				parent_ctx.markNodeDirty(parent_node)
+				break
+		child_ctx = parent_ctx
 
 func unregister_executor(node: FlowGraphNode3D) -> void:
 	var graph : FlowGraphResource = node.graph
