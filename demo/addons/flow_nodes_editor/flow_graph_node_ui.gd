@@ -232,7 +232,7 @@ func initFromScript( ):
 		)
 		
 	if trace:
-		print( "initFromScript: %s" % flow_node.getTitle())
+		print( "initFromScript Collected Info: %s" % flow_node.getTitle())
 		print( "  flow_editor: %s" % editor)
 		print( "  show_disconnected_inputs: %s" % flow_node.show_disconnected_inputs)
 		print( "  #exposed_params: %d" % exposed_params.size())

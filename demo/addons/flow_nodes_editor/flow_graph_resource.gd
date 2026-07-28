@@ -35,6 +35,8 @@ class_name FlowGraphResource
 	get:
 		return in_params
 
+@export_storage var redirectors: Array[FlowGraphRedirect] = []
+
 # The compilated version of the resource, which is shared between all the instances using this resource
 var loading : bool = false:
 	set(value):
@@ -133,11 +135,16 @@ func addNodeFromTemplate( node_template : String, node_name : String, node_setti
 		node.flow_graph = self
 		if node is FlowNodeInput:
 			node.bindInputParameter(self)
+		elif node is FlowNodeRedirectEndpoint:
+			node.bindRedirectDefinition(self)
 		if not node.title:
 			node.title = node.getTitle()
 		
 		if node is FlowNodeInput:
 			input_nodes.append( node )
+
+		if node is FlowNodeRedirectEndpoint and not loading:
+			FlowGraphRedirectors.rebuildSyntheticConnections(self)
 		
 		return node
 	
@@ -198,6 +205,9 @@ func delete_node( node : FlowNodeBase ):
 	nodes_by_name.erase( node_name )
 	all_nodes.erase( node )
 	input_nodes.erase( node )
+	if node is FlowNodeRedirectEndpoint:
+		FlowGraphRedirectors.removeUnusedDefinitions(self)
+		FlowGraphRedirectors.rebuildSyntheticConnections(self)
 	#node.queue_free()
 
 func delete_frame( frame_name ):
@@ -247,6 +257,8 @@ func compile():
 	var time_node_start := Time.get_ticks_usec()
 	if data and not data.is_empty():
 		FlowNodeIO.create_nodes_from_dict( data, self, Vector2(0,0) )
+	FlowGraphRedirectors.removeUnusedDefinitions(self)
+	FlowGraphRedirectors.rebuildSyntheticConnections(self)
 	var time_node_end := Time.get_ticks_usec()
 	print( "FlowGraph.Compilation.Ends in %s (%s)" % [ time_node_end - time_node_start, resource_path ])
 	compiled = true
