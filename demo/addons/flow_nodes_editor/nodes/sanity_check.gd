@@ -16,9 +16,6 @@ func _init():
 
 func execute( ctx : FlowData.EvaluationContext ):
 	var in_data : FlowData.Data = getInput(ctx, 0)
-	if in_data == null:
-		setError(ctx, "Input 'In' is not connected")
-		return
 		
 	var attr_name = attribute_name
 	if attr_name != "":

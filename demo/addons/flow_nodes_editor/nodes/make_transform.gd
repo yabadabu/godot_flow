@@ -23,7 +23,11 @@ func _init():
 	meta_node = {
 		"title" : "Make Transform",
 		"category" : "Math",
-		"ins" : [ { "label" : "Translation" }, { "label" : "Rotation" },  { "label" : "Scale" } ], 
+		"ins" : [
+			{ "label" : "Translation", "optional": true },
+			{ "label" : "Rotation", "optional": true },
+			{ "label" : "Scale", "optional": true },
+		], 
 		"outs" : [{ "label" : "Out" }],
 		"tooltip" : "Creates a Transform value",
 	}

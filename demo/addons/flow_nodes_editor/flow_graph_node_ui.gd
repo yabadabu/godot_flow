@@ -4,6 +4,7 @@ class_name FlowGraphNodeUI
 var flow_node : FlowNodeBase
 var draw_debug : NodeDrawDebug
 var editor : FlowGraphEditor
+var activity_amount: float = 0.0
 
 const enable_development_info := false 
 const marker_radius : float = 9
@@ -19,20 +20,31 @@ func _exit_tree():
 	if flow_node and flow_node.ui_node == self:
 		flow_node.settings_changed.disconnect( regenerateFromFlowNode )
 		flow_node.contents_changed.disconnect( refreshDebug )
+		flow_node.operational_state_changed.disconnect(refreshOperationalState)
 		flow_node.ui_node = null
 	
 func redrawUI():
 	queue_redraw()
 
 func setActivity( amount : float ):
-	if flow_node.disabled:
+	activity_amount = amount
+	refreshModulate()
+
+func refreshModulate() -> void:
+	if not flow_node:
 		return
 	var ctx := getEvaluationContext()
 	var error := ctx.getNodeError(flow_node) if ctx else ""
-	if error.is_empty():
-		modulate = Color.WHITE + Color( amount, amount, amount, 0.0 )
-	else:
+	if not error.is_empty():
 		modulate = Color(1.0, 0.5, 0.5)
+		return
+	var visible_activity := activity_amount if flow_node.is_operational and not flow_node.disabled else 0.0
+	var base_color := Color.WHITE + Color(visible_activity, visible_activity, visible_activity, 0.0)
+	if flow_node.disabled:
+		base_color *= Color(0.7, 0.7, 0.7, 0.5)
+	elif not flow_node.is_operational:
+		base_color *= Color(0.8, 0.8, 0.8, 0.55)
+	modulate = base_color
 
 func getEvaluationContext() -> FlowData.EvaluationContext:
 	if (
@@ -59,7 +71,9 @@ func bindFlowNode(new_node: FlowNodeBase, flow_editor: FlowGraphEditor):
 	flow_node.ui_node = self
 	flow_node.settings_changed.connect(regenerateFromFlowNode)
 	flow_node.contents_changed.connect(refreshDebug)
+	flow_node.operational_state_changed.connect(refreshOperationalState)
 	position_offset_changed.connect(on_moved)
+	flow_node.refreshOperationalState()
 	updateStyle()
 
 func initializeView():
@@ -79,10 +93,10 @@ func regenerateFromFlowNode( PropName : StringName = StringName() ):
 	if flow_node == null:
 		return
 	var meta : Dictionary = flow_node.getMeta()
-	self.tooltip_text = meta.get( "tooltip", "" )
+	refreshTooltip()
 	self.title = flow_node.getTitle()
 	self.name = flow_node.name
-	modulate = Color( 0.7, 0.7, 0.7, 0.5 ) if flow_node.disabled else Color.WHITE
+	refreshModulate()
 	#print( "%s regenerateFromFlowNode" % [ flow_node.name ])
 	refreshDebug()
 
@@ -95,7 +109,26 @@ func refreshDebug():
 		draw_debug.setupDraw()
 	if draw_debug and ( not flow_node.debug_enabled or flow_node.disabled ):
 		draw_debug.cleanup_multimesh_direct()
+	refreshModulate()
 	queue_redraw()
+
+func refreshOperationalState() -> void:
+	refreshTooltip()
+	refreshModulate()
+	queue_redraw()
+
+func refreshTooltip() -> void:
+	if not flow_node:
+		return
+	var text: String = flow_node.getMeta().get("tooltip", "")
+	if not flow_node.is_operational:
+		var labels: PackedStringArray = []
+		var declared_inputs: Array = flow_node.getMeta().get("ins", [])
+		for port_idx in flow_node.missing_required_inputs:
+			if port_idx < declared_inputs.size():
+				labels.append(str(declared_inputs[port_idx].get("label", "Input %d" % port_idx)))
+		text += "\n\n[color=#e98585]Missing required input: %s[/color]" % ", ".join(labels)
+	tooltip_text = text
 
 func updateStyle():
 	var sb = get_theme_stylebox("titlebar", "GraphNode").duplicate(true)
@@ -158,6 +191,25 @@ func _on_draw() -> void:
 	if err:
 		var sz = 16 * ui_scale
 		draw_string( ThemeDB.fallback_font, Vector2(0,size.y + sz), err, HORIZONTAL_ALIGNMENT_LEFT, -1, sz )
+
+	if not flow_node.disabled and not flow_node.is_operational:
+		var warning_center := Vector2(size.x - 12.0, 12.0) * ui_scale
+		var warning_size := 8.0 * ui_scale
+		var warning_points := PackedVector2Array([
+			warning_center + Vector2(0.0, -warning_size),
+			warning_center + Vector2(warning_size, warning_size),
+			warning_center + Vector2(-warning_size, warning_size),
+		])
+		draw_colored_polygon(warning_points, Color(1.0, 0.72, 0.1))
+		draw_string(
+			ThemeDB.fallback_font,
+			warning_center + Vector2(-2.0, 5.0) * ui_scale,
+			"!",
+			HORIZONTAL_ALIGNMENT_LEFT,
+			-1,
+			int(11 * ui_scale),
+			Color(0.15, 0.12, 0.05)
+		)
 		
 	if flow_node.inspect_enabled:
 		var clr : Color = Color.YELLOW / self_modulate

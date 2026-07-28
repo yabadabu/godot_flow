@@ -36,7 +36,11 @@ func _init():
 	meta_node = {
 		"title" : "Filter",
 		"category" : "Filter",
-		"ins" : [{ "label": "In A" }, { "label": "In B" }, { "label": "In C" }], 
+		"ins" : [
+			{ "label": "In A" },
+			{ "label": "In B", "optional": true },
+			{ "label": "In C", "optional": true },
+		], 
 		"outs" : [{ "label" : "True" }, { "label" : "False" }],
 		"hide_inputs" : true,
 		"tooltip" : "Filter inputs based on some condition.\nThis node returns splits the input stream in two substreams.",
@@ -78,8 +82,15 @@ func checkInputsConfiguration():
 	if curr_num_args != required_num_args:
 		match required_num_args:
 			1: meta_node.ins = [{ "label": "In A" }]
-			2: meta_node.ins = [{ "label": "In A" }, { "label": "In B" }]
-			3: meta_node.ins = [{ "label": "In A" }, { "label": "In B" }, { "label": "In C" }]
+			2: meta_node.ins = [
+				{ "label": "In A" },
+				{ "label": "In B", "optional": true },
+			]
+			3: meta_node.ins = [
+				{ "label": "In A" },
+				{ "label": "In B", "optional": true },
+				{ "label": "In C", "optional": true },
+			]
 		connections_changed.emit()
 	
 func getOptionalStream(ctx: FlowData.EvaluationContext, input_index: int, stream_name: String, expected_size: int):
@@ -127,9 +138,6 @@ func getOptionalStream(ctx: FlowData.EvaluationContext, input_index: int, stream
 func execute( ctx : FlowData.EvaluationContext ):
 	#print( "filter.input: ", inputs )
 	var in_dataA : FlowData.Data = getInput(ctx, 0)
-	if in_dataA == null:
-		setError(ctx,  "Input A %s not found" % [in_nameA])
-		return
 	var sA = in_dataA.findStream( in_nameA )
 	if sA == null:
 		setError(ctx,  "Input A stream %s not found" % [in_nameA])

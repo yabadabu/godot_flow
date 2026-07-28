@@ -18,9 +18,6 @@ func getTitle() -> String:
 
 func execute( ctx : FlowData.EvaluationContext ):
 	var in_data : FlowData.Data = getInput(ctx,  0 )
-	if in_data == null:
-		setError(ctx,  "partition.Missing input 0" )
-		return
 		
 	# Special case, when partition by a Index, which is not a registered official stream name,
 	# but means we want each data to send as a individual bulk

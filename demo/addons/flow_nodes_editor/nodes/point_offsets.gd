@@ -46,9 +46,6 @@ func _setting_vec(values : Array[Vector3], idx : int, fallback : Vector3) -> Vec
 
 func execute(ctx : FlowData.EvaluationContext):
 	var in_data : FlowData.Data = getInput(ctx, 0)
-	if in_data == null:
-		setError(ctx, "Anchors input is missing")
-		return
 
 	if in_data.size() == 0:
 		setOutput(ctx, 0, FlowData.Data.new())

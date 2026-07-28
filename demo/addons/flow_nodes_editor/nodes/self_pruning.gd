@@ -15,10 +15,6 @@ func _init():
 func execute( ctx : FlowData.EvaluationContext ):
 	var in_dataA: FlowData.Data = getInput(ctx, 0)
 	
-	if in_dataA == null:
-		setError(ctx,  "Input not found")
-		return
-		
 	var tA := GDRTree.new()
 	var posA = in_dataA.getVector3Container( FlowData.AttrPosition )
 	var szA = in_dataA.getVector3Container( FlowData.AttrSize )

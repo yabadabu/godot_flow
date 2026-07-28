@@ -89,7 +89,8 @@ func setupFromGraph():
 			if param:
 				ins.append({
 					"label": param.name,
-					"data_type": param.getDataType()
+					"data_type": param.getDataType(),
+					"optional": true,
 				})
 		if graph.data and graph.data.has("nodes"):
 			for n_data in graph.data["nodes"]:

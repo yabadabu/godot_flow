@@ -157,10 +157,11 @@ func disconnect_nodes( from_node: StringName, from_port: int, to_node: StringNam
 		# Remove the cached connections
 		var from_node_ptr = nodes_by_name.get( from_node )
 		if from_node_ptr:
-			_delete_connections_involving_node( from_node_ptr.dependants, to_node )
+			_delete_cached_connection(from_node_ptr.dependants, from_node, from_port, to_node, to_port)
 		var to_node_ptr = nodes_by_name.get( to_node )
 		if to_node_ptr:
-			_delete_connections_involving_node( to_node_ptr.deps, from_node )
+			_delete_cached_connection(to_node_ptr.deps, from_node, from_port, to_node, to_port)
+			to_node_ptr.refreshOperationalState()
 			
 		all_connections.remove_at( idx )
 	
@@ -172,6 +173,7 @@ func connect_nodes( from_node: StringName, from_port: int, to_node: StringName, 
 	if src_node and dst_node:
 		src_node.dependants.append(conn)
 		dst_node.deps.append(conn)
+		dst_node.refreshOperationalState()
 	else:
 		print( "graph.conn FAILED From:%s:%d To:%s:%d" % [ from_node, from_port, to_node, to_port ])
 		print( "nodes_by_name: %s" % [ nodes_by_name ])
@@ -186,6 +188,24 @@ func _delete_connections_involving_node( conns : Array[ Dictionary ], node_name 
 		var conn := conns[i]
 		if conn.from_node == node_name or conn.to_node == node_name:
 			conns.remove_at(i)
+
+func _delete_cached_connection(
+	conns: Array[Dictionary],
+	from_node: StringName,
+	from_port: int,
+	to_node: StringName,
+	to_port: int
+) -> void:
+	var idx := conns.find_custom(func(conn: Dictionary) -> bool:
+		return (
+			conn.from_node == from_node
+			and conn.from_port == from_port
+			and conn.to_node == to_node
+			and conn.to_port == to_port
+		)
+	)
+	if idx >= 0:
+		conns.remove_at(idx)
 		
 func delete_node( node : FlowNodeBase ):
 	var node_name : StringName = node.name
@@ -201,6 +221,7 @@ func delete_node( node : FlowNodeBase ):
 		var other_node = nodes_by_name.get( conn_dependant.to_node )
 		if other_node:
 			_delete_connections_involving_node( other_node.deps, node_name )
+			other_node.refreshOperationalState()
 			
 	nodes_by_name.erase( node_name )
 	all_nodes.erase( node )

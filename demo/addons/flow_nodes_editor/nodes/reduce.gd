@@ -44,9 +44,6 @@ func execute( ctx : FlowData.EvaluationContext ):
 		return
 	
 	var in_data : FlowData.Data = getInput(ctx, 0)
-	if in_data == null:
-		setError(ctx,  "Invalid input 0")
-		return
 		
 	var sA = in_data.findStream( in_name )
 	if sA == null:

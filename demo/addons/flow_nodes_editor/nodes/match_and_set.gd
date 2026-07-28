@@ -46,9 +46,6 @@ class WeightsRandomSampler:
 func execute( ctx : FlowData.EvaluationContext ):
 	var in_data : FlowData.Data = getInput(ctx, 0)
 	var attrs_data : FlowData.Data = getInput(ctx, 1)
-	if attrs_data == null || in_data == null:
-		setError(ctx,  "Attributes input is required" )
-		return
 		
 	var using_lut := false
 	var lut := {}

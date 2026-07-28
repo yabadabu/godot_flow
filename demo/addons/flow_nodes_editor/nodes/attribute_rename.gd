@@ -19,9 +19,6 @@ func getTitle() -> String:
 
 func execute(ctx : FlowData.EvaluationContext):
 	var in_data : FlowData.Data = getInput(ctx, 0)
-	if in_data == null:
-		setError(ctx, "Input not found")
-		return
 	var out_data : FlowData.Data = in_data.duplicate()
 	var err_msg = out_data.renameStream( from_name, to_name, overwrite_existing )
 	if err_msg:

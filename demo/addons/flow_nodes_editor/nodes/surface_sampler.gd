@@ -16,7 +16,7 @@ func _init():
 
 func execute( ctx : FlowData.EvaluationContext ):
 	var in_data : FlowData.Data = getInput(ctx, 0)
-	if in_data == null or in_data.size() == 0:
+	if in_data.size() == 0:
 		setOutput(ctx, 0, FlowData.Data.new())
 		return
 		

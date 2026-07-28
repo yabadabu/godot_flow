@@ -19,7 +19,7 @@ func _init():
 	meta_node = {
 		"title" : "Grid Fill Bounds",
 		"category" : "Spatial",
-		"ins" : [{ "label": "Bounds" }],
+		"ins" : [{ "label": "Bounds", "optional": true }],
 		"outs" : [{ "label" : "Cells" }],
 		"tooltip" : "Creates one point per grid cell inside input bounds, or inside configured bounds when no input is connected.",
 	}

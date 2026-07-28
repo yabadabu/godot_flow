@@ -21,7 +21,7 @@ func _init():
 	meta_node = {
 		"title" : "Add Attribute",
 		"category" : "Metadata",
-		"ins" : [{ "label": "In" }], 
+		"ins" : [{ "label": "In", "optional": true }], 
 		"outs" : [{ "label" : "Out" }],
 		"tooltip" : "Add a new constant stream to the input set\nIf the input is not given a single entry with the constant value is created.",
 	}

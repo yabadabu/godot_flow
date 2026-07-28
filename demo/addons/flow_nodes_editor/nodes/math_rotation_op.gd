@@ -21,7 +21,11 @@ enum eOperation {
 
 var inA = { "label": "In A", "multiple_connections" : false }
 var inB = { "label": "In B", "multiple_connections" : false }
-var inC = { "label": "Weights", "multiple_connections" : false }
+var inC = {
+	"label": "Weights",
+	"multiple_connections": false,
+	"optional": true,
+}
 
 func _init():
 	meta_node = {
@@ -73,9 +77,6 @@ func execute( ctx : FlowData.EvaluationContext ):
 	
 	# Check A
 	var in_dataA: FlowData.Data = getInput(ctx, 0)
-	if not in_dataA:
-		setError(ctx,  "Input A has no data" )
-		return
 	var sA = in_dataA.findStream( in_nameA )
 	if sA == null:
 		setError(ctx,  "Input A %s not found" % [in_nameA])

@@ -13,7 +13,10 @@ func _init():
 	meta_node = {
 		"title" : "Substract",
 		"category" : "Spatial",
-		"ins" : [{ "label": "In A" }, { "label": "In B" }], 
+		"ins" : [
+			{ "label": "In A" },
+			{ "label": "In B", "optional": true },
+		], 
 		"outs" : [{ "label" : "Out" }],
 		"hide_inputs" : true,
 		"tooltip" : "Applies the boolean logic 'substract', where the points of A that overlap points any of the connected points in B are removed.\nThe same node can be changed to return only the points A intersecting the points of B",
@@ -52,16 +55,13 @@ func run( ctx : FlowData.EvaluationContext ):
 	for bulk_index in range(getConnectedBulkCount(ctx)):
 		var input_a: FlowData.Data = _getInputForBulkInContext(ctx, bulk_index, 0)
 		ctx.setNodeInputs(self, [input_a, all_Bs])
-		execute(ctx)
+		if hasRequiredInputData(ctx):
+			execute(ctx)
 	
 func execute( ctx : FlowData.EvaluationContext ):
 	var in_dataA: FlowData.Data = getInput(ctx, 0)
 	var in_dataB : FlowData.Data = getInput(ctx, 1)
 	
-	if in_dataA == null:
-		setError(ctx,  "Input A not found")
-		return
-		
 	if in_dataB == null:
 		in_dataB = FlowData.Data.new()
 

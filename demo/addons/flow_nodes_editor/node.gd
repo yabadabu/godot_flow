@@ -43,6 +43,8 @@ var node_template : String
 var show_disconnected_inputs : bool = false
 
 var runtime_revision: int = 0
+var is_operational: bool = true
+var missing_required_inputs: PackedInt32Array = PackedInt32Array()
 
 # Filled during runtime
 var deps : Array[ Dictionary ]			# Array of graphEdit connections where I'm the target
@@ -63,6 +65,7 @@ var template_name : String
 signal settings_changed( prop_name : StringName )
 signal contents_changed
 signal connections_changed
+signal operational_state_changed
 
 func exposeParam( name : String ) -> bool:
 	return true
@@ -91,6 +94,36 @@ func markDirty(ctx: FlowData.EvaluationContext) -> void:
 	
 func shouldReevaluateOnPropChanged( prop_name : StringName ) -> bool:
 	return prop_name != "title"
+
+func refreshOperationalState() -> void:
+	var declared_inputs: Array = getMeta().get("ins", [])
+	var missing := PackedInt32Array()
+	for port_idx in range(declared_inputs.size()):
+		if declared_inputs[port_idx].get("optional", false):
+			continue
+		var is_connected := deps.any(func(connection: Dictionary) -> bool:
+			return connection.to_port == port_idx
+		)
+		if not is_connected:
+			missing.append(port_idx)
+	var new_is_operational := missing.is_empty()
+	if is_operational == new_is_operational and missing_required_inputs == missing:
+		return
+	is_operational = new_is_operational
+	missing_required_inputs = missing
+	operational_state_changed.emit()
+
+func hasRequiredInputsConnected() -> bool:
+	return is_operational
+
+func hasRequiredInputData(ctx: FlowData.EvaluationContext) -> bool:
+	var declared_inputs: Array = getMeta().get("ins", [])
+	for port_idx in range(declared_inputs.size()):
+		if declared_inputs[port_idx].get("optional", false):
+			continue
+		if ctx.getInput(self, port_idx) == null:
+			return false
+	return true
 	
 func notifyChange():
 	settings_changed.emit( StringName() )
@@ -430,7 +463,8 @@ func run( ctx : FlowData.EvaluationContext ):
 		readAllInputsForBulk( ctx, bulk_index )
 		if trace:
 			print( "%s Inputs for bulk %d/%d (%d)" % [ name, bulk_index, bulk_count, getInputCount(ctx) ])
-		execute( ctx )
+		if hasRequiredInputData(ctx):
+			execute( ctx )
 
 func removeRegisteredInstancedNodes( spawn_parent : Node3D ):
 	if trace:

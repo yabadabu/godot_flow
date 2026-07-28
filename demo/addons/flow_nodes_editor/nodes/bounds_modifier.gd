@@ -32,9 +32,6 @@ func exposeParam( name : String ) -> bool:
 	
 func execute( ctx : FlowData.EvaluationContext ):
 	var in_data : FlowData.Data = getInput(ctx, 0)
-	if in_data == null:
-		setError(ctx, "Input 'In' is not connected")
-		return
 		
 	var out_data : FlowData.Data = in_data.duplicate()
 	var ssizes = out_data.cloneStream(FlowData.AttrSize)

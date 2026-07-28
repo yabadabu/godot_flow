@@ -357,10 +357,12 @@ class EvaluationContext:
 				if trace_node:
 					print( "  %s is disabled. Skipping" % [ node.name ])
 				node.executedDisabled( self )
-			else:
+			elif node.is_operational:
 				if trace_node:
 					print( "  %s.run.starts. %d bulks to process" % [ node.name, getConnectedBulkCount(node) ])
 				node.run( self )
+			elif trace_node:
+				print("  %s has disconnected required inputs. Skipping" % node.name)
 			
 			var time_node_ends := Time.get_ticks_usec()
 			var exec_usec := time_node_ends - time_node_start

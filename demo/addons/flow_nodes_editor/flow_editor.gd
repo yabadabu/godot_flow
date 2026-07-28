@@ -293,7 +293,8 @@ func onNodeCreated( flow_node : FlowNodeBase ) -> FlowGraphNodeUI:
 	ui_node.draw.connect( ui_node._on_draw )
 	flow_node.connections_changed.connect( func():
 		ui_node.initFromScript()
-		removeInvalidConnectionsForNode(flow_node))
+		removeInvalidConnectionsForNode(flow_node)
+		flow_node.refreshOperationalState())
 	return ui_node
 
 func removeInvalidConnectionsForNode(flow_node: FlowNodeBase) -> void:
@@ -1101,6 +1102,8 @@ func cacheConnections():
 		current_resource,
 		false
 	)
+	for graph_node in graph_nodes:
+		graph_node.flow_node.refreshOperationalState()
 
 func evalGraph():
 	

@@ -26,15 +26,7 @@ func _init():
 
 func execute( ctx : FlowData.EvaluationContext ):
 	var in_data : FlowData.Data = getInput(ctx, 0)
-	# Check if we have something to transform
-	if not in_data:
-		setOutput(ctx, 0, FlowData.Data.new() )
-		return
-		
 	var trs_to_apply : FlowData.Data = getInput(ctx, 1)
-	if not trs_to_apply:
-		setOutput(ctx, 0, FlowData.Data.new() )
-		return
 		
 	# Input data TRS
 	var in_trs := trs_to_apply.getTransformsStream( attribute_transform )

@@ -57,9 +57,6 @@ func execute( ctx : FlowData.EvaluationContext ):
 		return
 		
 	var in_pieces = getInput(ctx, 1)
-	if in_pieces == null:
-		setError(ctx,  "Input pieces is not connected")
-		return
 		
 	var evaluator = GrammarEvaluator.new()
 	

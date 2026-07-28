@@ -43,9 +43,6 @@ func exposeParam( name : String ) -> bool:
 
 func execute( ctx : FlowData.EvaluationContext ):
 	var in_data : FlowData.Data = getInput(ctx, 0)
-	if not in_data:
-		setError(ctx, "Input is invalid")
-		return
 	var out_data : FlowData.Data = in_data.duplicate()
 	var in_size = in_data.size()
 	

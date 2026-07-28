@@ -9,7 +9,10 @@ func _init():
 	meta_node = {
 		"title" : "Select",
 		"category" : "Control Flow",
-		"ins" : [{ "label": "In A" }, { "label": "In B" }], 
+		"ins" : [
+			{ "label": "In A", "optional": true },
+			{ "label": "In B", "optional": true },
+		], 
 		"outs" : [{ "label" : "Out" }],
 		"tooltip" : "Selects one of two inputs to be forwarded to a single output based on a Boolean attribute or value.",
 	}

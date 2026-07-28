@@ -46,9 +46,6 @@ func _has_tag(tags : PackedStringArray, query : String) -> bool:
 
 func execute(ctx : FlowData.EvaluationContext):
 	var in_data : FlowData.Data = getInput(ctx, 0)
-	if in_data == null:
-		setError(ctx, "Input not found")
-		return
 
 	var tags_to_apply = _parse_tags()
 	var out_data = in_data.duplicate()

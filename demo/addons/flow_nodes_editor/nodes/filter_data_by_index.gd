@@ -58,9 +58,6 @@ func parseSlice(expr: String, size: int, out_indices : PackedInt32Array ):
 
 func execute( ctx : FlowData.EvaluationContext ):
 	var in_data : FlowData.Data = getInput(ctx, 0)
-	if in_data == null:
-		setError(ctx, "Input 'In' is not connected")
-		return
 	var in_size : int = in_data.size()
 	
 	# This will store the indices that pass the test
