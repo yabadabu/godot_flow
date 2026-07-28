@@ -5,6 +5,7 @@
 [ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="3_5ifn7"]
 [ext_resource type="Script" uid="uid://dhpu3ptt872as" path="res://addons/flow_nodes_editor/flow_graph_param_override.gd" id="4_mmqr1"]
 [ext_resource type="Resource" uid="uid://cu060ahbyiuv0" path="res://graphs/subgraph_move_up.tres" id="5_nyqj1"]
+[ext_resource type="Script" uid="uid://b77sf57bysigx" path="res://addons/flow_nodes_editor/flow_graph_redirect.gd" id="5_se51d"]
 [ext_resource type="BoxMesh" uid="uid://7flu82pqtc5d" path="res://addons/flow_nodes_editor/resources/unit_cube.tres" id="6_nyqj1"]
 
 [sub_resource type="Resource" id="Resource_se51d"]
@@ -44,37 +45,10 @@ data = {
 "min_pos": Vector2(0, 0),
 "nodes": [{
 "args_port": {},
-"name": &"id_0001_comment",
-"position": Vector2(140, 0),
-"settings": {
-"hue": 0.6000000000000001,
-"random_seed": 2313414386,
-"text": "Each scene Node3D in the demo scene provides it's own custom input arguments 
-for the height, so the grid is elevated a different height",
-"title": "Comments"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(492.9108, 151.01257),
-"template": "comment"
-}, {
-"args_port": {},
-"name": &"id_0004_input_Height",
-"position": Vector2(20, 300),
-"settings": {
-"input_id": &"52njg",
-"input_name": "Heights",
-"random_seed": 939309640,
-"title": "Input",
-"trace": true
-},
-"show_disconnected_inputs": false,
-"size": Vector2(152, 54.000015),
-"template": "input_Height"
-}, {
-"args_port": {},
 "name": &"id_0006_grid",
 "position": Vector2(0, 200),
 "settings": {
+&"inspect_enabled": false,
 "random_seed": 1565012789,
 "size": 0.87,
 "title": "Grid"
@@ -83,6 +57,36 @@ for the height, so the grid is elevated a different height",
 "size": Vector2(125, 71),
 "template": "grid"
 }, {
+"args_port": {},
+"name": &"id_0001_comment",
+"position": Vector2(140, 0),
+"settings": {
+"hue": 0.6000000000000001,
+&"inspect_enabled": false,
+"random_seed": 2313414386,
+"text": "Each scene Node3D in the demo scene provides it's own custom input arguments 
+for the height, so the grid is elevated a different height",
+"title": "Comments"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(492.91074, 151.01257),
+"template": "comment"
+}, {
+"args_port": {},
+"name": &"id_0004_input_Height",
+"position": Vector2(20, 300),
+"settings": {
+"input_id": &"52njg",
+"input_name": "Heights",
+&"inspect_enabled": false,
+"random_seed": 939309640,
+"title": "Input",
+"trace": true
+},
+"show_disconnected_inputs": false,
+"size": Vector2(152, 54),
+"template": "input_Height"
+}, {
 "args_port": {
 "In": {
 "connected": true,
@@ -90,9 +94,9 @@ for the height, so the grid is elevated a different height",
 }
 },
 "name": &"id_0014_spawn_meshes",
-"position": Vector2(620, 200),
+"position": Vector2(520, 200),
 "settings": {
-"debug_enabled": true,
+&"inspect_enabled": false,
 "random_seed": 3974262691,
 "title": "Spawn Meshes"
 },
@@ -116,12 +120,13 @@ for the height, so the grid is elevated a different height",
 "flow_override/Height/enabled": false,
 "flow_override/Height/value": 0.0,
 "graph": ExtResource("5_nyqj1"),
+&"inspect_enabled": false,
 "overrides": Array[ExtResource("4_mmqr1")]([SubResource("Resource_se51d")]),
 "random_seed": 313842948,
 "title": "Subgraph"
 },
 "show_disconnected_inputs": false,
-"size": Vector2(160.00002, 84),
+"size": Vector2(160.00003, 84),
 "template": "subgraph"
 }],
 "type": "flow_graph_nodes",
@@ -129,7 +134,7 @@ for the height, so the grid is elevated a different height",
 }
 graph_name = "demo subgraph"
 view_zoom = 0.799462
-view_offset = Vector2(-22.001556, 15.505127)
+view_offset = Vector2(167.03674, -105.59491)
 new_name_counter = 1
 in_params = Array[ExtResource("2_mmqr1")]([SubResource("Resource_x3i3k")])
 
@@ -137,25 +142,25 @@ in_params = Array[ExtResource("2_mmqr1")]([SubResource("Resource_x3i3k")])
 script = ExtResource("4_mmqr1")
 param_id = &"Heights"
 enabled = true
-value = 1.271
+value = 1.536
+
+[sub_resource type="MultiMesh" id="MultiMesh_c03w7"]
+transform_format = 1
+instance_count = 9
+mesh = ExtResource("6_nyqj1")
+buffer = PackedFloat32Array(0.87, 0, 0, 0, 0, 0.87, 0, 1.536, 0, 0, 0.87, 0, 0.87, 0, 0, 1, 0, 0.87, 0, 1.536, 0, 0, 0.87, 0, 0.87, 0, 0, 2, 0, 0.87, 0, 1.536, 0, 0, 0.87, 0, 0.87, 0, 0, 0, 0, 0.87, 0, 1.536, 0, 0, 0.87, 1, 0.87, 0, 0, 1, 0, 0.87, 0, 1.536, 0, 0, 0.87, 1, 0.87, 0, 0, 2, 0, 0.87, 0, 1.536, 0, 0, 0.87, 1, 0.87, 0, 0, 0, 0, 0.87, 0, 1.536, 0, 0, 0.87, 2, 0.87, 0, 0, 1, 0, 0.87, 0, 1.536, 0, 0, 0.87, 2, 0.87, 0, 0, 2, 0, 0.87, 0, 1.536, 0, 0, 0.87, 2)
 
 [sub_resource type="Resource" id="Resource_c03w7"]
 script = ExtResource("4_mmqr1")
 param_id = &"Heights"
 enabled = true
-value = 1.271
+value = 3.201
 
-[sub_resource type="MultiMesh" id="MultiMesh_k3oj6"]
+[sub_resource type="MultiMesh" id="MultiMesh_x3i3k"]
 transform_format = 1
 instance_count = 9
 mesh = ExtResource("6_nyqj1")
-buffer = PackedFloat32Array(0.87, 0, 0, 0, 0, 0.87, 0, 1.271, 0, 0, 0.87, 0, 0.87, 0, 0, 1, 0, 0.87, 0, 1.271, 0, 0, 0.87, 0, 0.87, 0, 0, 2, 0, 0.87, 0, 1.271, 0, 0, 0.87, 0, 0.87, 0, 0, 0, 0, 0.87, 0, 1.271, 0, 0, 0.87, 1, 0.87, 0, 0, 1, 0, 0.87, 0, 1.271, 0, 0, 0.87, 1, 0.87, 0, 0, 2, 0, 0.87, 0, 1.271, 0, 0, 0.87, 1, 0.87, 0, 0, 0, 0, 0.87, 0, 1.271, 0, 0, 0.87, 2, 0.87, 0, 0, 1, 0, 0.87, 0, 1.271, 0, 0, 0.87, 2, 0.87, 0, 0, 2, 0, 0.87, 0, 1.271, 0, 0, 0.87, 2)
-
-[sub_resource type="MultiMesh" id="MultiMesh_tdfph"]
-transform_format = 1
-instance_count = 9
-mesh = ExtResource("6_nyqj1")
-buffer = PackedFloat32Array(0.87, 0, 0, 0, 0, 0.87, 0, 0, 0, 0, 0.87, 0, 0.87, 0, 0, 1, 0, 0.87, 0, 0, 0, 0, 0.87, 0, 0.87, 0, 0, 2, 0, 0.87, 0, 0, 0, 0, 0.87, 0, 0.87, 0, 0, 0, 0, 0.87, 0, 0, 0, 0, 0.87, 1, 0.87, 0, 0, 1, 0, 0.87, 0, 0, 0, 0, 0.87, 1, 0.87, 0, 0, 2, 0, 0.87, 0, 0, 0, 0, 0.87, 1, 0.87, 0, 0, 0, 0, 0.87, 0, 0, 0, 0, 0.87, 2, 0.87, 0, 0, 1, 0, 0.87, 0, 0, 0, 0, 0.87, 2, 0.87, 0, 0, 2, 0, 0.87, 0, 0, 0, 0, 0.87, 2)
+buffer = PackedFloat32Array(0.87, 0, 0, 0, 0, 0.87, 0, 3.201, 0, 0, 0.87, 0, 0.87, 0, 0, 1, 0, 0.87, 0, 3.201, 0, 0, 0.87, 0, 0.87, 0, 0, 2, 0, 0.87, 0, 3.201, 0, 0, 0.87, 0, 0.87, 0, 0, 0, 0, 0.87, 0, 3.201, 0, 0, 0.87, 1, 0.87, 0, 0, 1, 0, 0.87, 0, 3.201, 0, 0, 0.87, 1, 0.87, 0, 0, 2, 0, 0.87, 0, 3.201, 0, 0, 0.87, 1, 0.87, 0, 0, 0, 0, 0.87, 0, 3.201, 0, 0, 0.87, 2, 0.87, 0, 0, 1, 0, 0.87, 0, 3.201, 0, 0, 0.87, 2, 0.87, 0, 0, 2, 0, 0.87, 0, 3.201, 0, 0, 0.87, 2)
 
 [node name="DemoSubgraph" type="Node3D" unique_id=1826795326]
 
@@ -166,8 +171,12 @@ overrides = Array[ExtResource("4_mmqr1")]([SubResource("Resource_kxdvx")])
 regenerate = Callable()
 clearInstances = Callable()
 flow_override/Heights/enabled = true
-flow_override/Heights/value = 1.271
+flow_override/Heights/value = 1.536
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
+
+[node name="Spawn Meshes_0000" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=1112878021]
+multimesh = SubResource("MultiMesh_c03w7")
+metadata/flow_owner = &"id_0014_spawn_meshes"
 
 [node name="FlowGraphNode3D2" type="Node3D" parent="." unique_id=357897790]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.699516, 0, 0)
@@ -177,13 +186,9 @@ overrides = Array[ExtResource("4_mmqr1")]([SubResource("Resource_c03w7")])
 regenerate = Callable()
 clearInstances = Callable()
 flow_override/Heights/enabled = true
-flow_override/Heights/value = 1.271
+flow_override/Heights/value = 3.201
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
 
-[node name="Spawn Meshes_0000" type="MultiMeshInstance3D" parent="FlowGraphNode3D2" unique_id=889033736]
-multimesh = SubResource("MultiMesh_k3oj6")
-metadata/flow_owner = &"id_0014_spawn_meshes"
-
-[node name="Spawn Meshes_0001" type="MultiMeshInstance3D" parent="FlowGraphNode3D2" unique_id=904529357]
-multimesh = SubResource("MultiMesh_tdfph")
+[node name="Spawn Meshes_0000" type="MultiMeshInstance3D" parent="FlowGraphNode3D2" unique_id=268988697]
+multimesh = SubResource("MultiMesh_x3i3k")
 metadata/flow_owner = &"id_0014_spawn_meshes"

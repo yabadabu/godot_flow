@@ -1094,6 +1094,13 @@ func cacheConnections():
 		if src_node and dst_node:
 			src_node.dependants.append( conn )
 			dst_node.deps.append( conn )
+	
+	# Redirector links are runtime-only and therefore do not exist in GraphEdit.
+	# Restore them after rebuilding the visible connection cache.
+	FlowGraphRedirectors.rebuildSyntheticConnections(
+		current_resource,
+		false
+	)
 
 func evalGraph():
 	

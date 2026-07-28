@@ -72,7 +72,10 @@ static func makeUniqueName(
 		suffix += 1
 	return candidate
 
-static func rebuildSyntheticConnections(graph: FlowGraphResource) -> void:
+static func rebuildSyntheticConnections(
+	graph: FlowGraphResource,
+	invalidate_endpoints: bool = true
+) -> void:
 	if not graph:
 		return
 	_removeSyntheticConnections(graph)
@@ -100,9 +103,10 @@ static func rebuildSyntheticConnections(graph: FlowGraphResource) -> void:
 				input_node.dependants.append(connection)
 				output_node.deps.append(connection)
 
-	for node in graph.all_nodes:
-		if node is FlowNodeRedirectEndpoint:
-			node.invalidate()
+	if invalidate_endpoints:
+		for node in graph.all_nodes:
+			if node is FlowNodeRedirectEndpoint:
+				node.invalidate()
 
 static func removeUnusedDefinitions(graph: FlowGraphResource) -> void:
 	if not graph:

@@ -15,3 +15,13 @@ func _init() -> void:
 		"auto_register": false,
 		"hide_inputs": true,
 	}
+
+# The input is intentionally hidden from the UI, but unlike an ordinary
+# configuration input it must consume the current bulk rather than bulk 0.
+func readAllInputsForBulk(
+	ctx: FlowData.EvaluationContext,
+	bulk_idx: int
+) -> void:
+	ctx.setNodeInputs(self, [
+		_getInputForBulkInContext(ctx, bulk_idx, 0)
+	])
