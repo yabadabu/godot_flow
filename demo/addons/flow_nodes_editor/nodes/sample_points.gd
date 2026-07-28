@@ -66,9 +66,6 @@ func exposeParam( name : String ) -> bool:
 	if distribution == eDistribution.BlueNoise2D:
 		return isBlueNoiseParam( name ) or (not isQuasiRandomParam( name ) and not isUniformGridParam( name ))
 	return not isUniformGridParam( name )	
-
-func isUniformGridProp( prop ) -> bool:
-	return (prop.name as String).begins_with("max") or prop.name == "sampling_distance" or prop.name == "new_size_factor"
 	
 func exposedAsInputNode( prop ):
 	if distribution == eDistribution.UniformGrid:

@@ -45,12 +45,6 @@ func getRedirectDefinition() -> FlowGraphRedirect:
 		)
 	return _redirect_definition
 
-func refreshRedirectDefinition() -> void:
-	var definition := getRedirectDefinition()
-	if definition:
-		redirect_name = definition.name
-	settings_changed.emit(&"redirect_name")
-
 func getTitle() -> String:
 	var definition := getRedirectDefinition()
 	return definition.name if definition else redirect_name

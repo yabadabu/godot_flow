@@ -46,11 +46,6 @@ func _init():
 		"tooltip" : "Filter inputs based on some condition.\nThis node returns splits the input stream in two substreams.",
 	}
 
-func isLogicalOp() -> bool:
-	return condition == eCondition.LogicalAND \
-		|| condition == eCondition.LogicalOR  \
-		|| condition == eCondition.LogicalXOR
-
 func isBetweenCondition() -> bool:
 	return condition >= eCondition.BetweenExcludingMinMax and condition <= eCondition.BetweenIncludingMax
 

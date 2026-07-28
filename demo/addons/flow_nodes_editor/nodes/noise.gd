@@ -71,11 +71,6 @@ func exposeParam(name : String) -> bool:
 		return fractal_type != eFractalType.None
 	return true
 
-func _get_attribute_selector_props() -> Array[Dictionary]:
-	return [
-		{ "prop": "sample_attribute", "port": 0 },
-	]
-
 func _map_noise_type() -> int:
 	match noise_type:
 		eNoiseType.ValueCubic:

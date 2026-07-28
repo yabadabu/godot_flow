@@ -353,10 +353,6 @@ func saveResource():
 	FlowNodeIO.saveEditorStateToResource( self )
 	save_pending = false
 	
-func asInputNode( in_node : Node ):
-	var node := in_node as FlowGraphNodeUI
-	return node if node and node.flow_node.node_template.begins_with("input") else null
-
 func _on_inputs_changed():
 	print( "Editor._on_inputs_changed" )
 	if active_context and active_context.graph == current_resource:
@@ -831,11 +827,6 @@ func _on_graph_edit_popup_request(at_position):
 		redirectors
 	)
 	search_add_node_popup.appearAt(get_screen_position() + at_position)
-	
-	
-func openAddMenu():
-	var pos = get_local_mouse_position()
-	_on_graph_edit_popup_request( pos )
 
 func _on_search_add_node_popup_node_selected(template_name : String):
 	addNode(template_name)

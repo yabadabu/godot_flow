@@ -22,9 +22,6 @@ func _exit_tree():
 		flow_node.contents_changed.disconnect( refreshDebug )
 		flow_node.operational_state_changed.disconnect(refreshOperationalState)
 		flow_node.ui_node = null
-	
-func redrawUI():
-	queue_redraw()
 
 func setActivity( amount : float ):
 	activity_amount = amount

@@ -73,12 +73,7 @@ func setNode(new_node: FlowNodeBase, new_context: FlowData.EvaluationContext = n
 		slot_selector.select(current_port_combined_index)
 	if current_bulk_index < bulk_selector.item_count:
 		bulk_selector.select(current_bulk_index)
-	
-func setLabelNumber( label : Label, value : float ):
-	var new_text = fmt( value )
-	if new_text != label.text:
-		label.text = new_text
-	
+
 func updateNumRowsAndCols():
 	num_rows = data.size()
 	col_titles.clear()

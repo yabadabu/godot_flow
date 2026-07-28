@@ -113,9 +113,6 @@ func refreshOperationalState() -> void:
 	missing_required_inputs = missing
 	operational_state_changed.emit()
 
-func hasRequiredInputsConnected() -> bool:
-	return is_operational
-
 func hasRequiredInputData(ctx: FlowData.EvaluationContext) -> bool:
 	var declared_inputs: Array = getMeta().get("ins", [])
 	for port_idx in range(declared_inputs.size()):
