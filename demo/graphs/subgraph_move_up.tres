@@ -47,6 +47,7 @@ data = {
 "settings": {
 "input_id": &"tevs2",
 "input_name": "In",
+&"inspect_enabled": false,
 "random_seed": 2284636140,
 "title": "Input"
 },
@@ -60,6 +61,7 @@ data = {
 "settings": {
 "input_id": &"kgmfq",
 "input_name": "Height",
+&"inspect_enabled": false,
 "random_seed": 2499985437,
 "title": "Input"
 },
@@ -77,6 +79,7 @@ data = {
 "position": Vector2(400, 0),
 "settings": {
 "data_type": 9,
+&"inspect_enabled": false,
 "random_seed": 1282865290,
 "title": "Output"
 },
@@ -98,6 +101,7 @@ data = {
 "position": Vector2(200, 0),
 "settings": {
 "in_nameA": "position.y",
+&"inspect_enabled": false,
 "random_seed": 926903946,
 "title": "Math"
 },

@@ -120,16 +120,6 @@ static func removeUnusedDefinitions(graph: FlowGraphResource) -> void:
 		if not definition or not used_ids.has(definition.ensureId()):
 			graph.redirectors.remove_at(idx)
 
-static func refreshEndpoints(
-	graph: FlowGraphResource,
-	redirect_id: StringName
-) -> void:
-	if not graph:
-		return
-	for node in graph.all_nodes:
-		if node is FlowNodeRedirectEndpoint and node.redirect_id == redirect_id:
-			node.refreshRedirectDefinition()
-
 static func _appendEndpoint(
 	endpoints_by_id: Dictionary,
 	redirect_id: StringName,

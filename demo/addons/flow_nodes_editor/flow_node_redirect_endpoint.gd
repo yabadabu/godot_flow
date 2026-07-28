@@ -6,13 +6,22 @@ extends FlowNodeBase
 
 @export var redirect_name: String = "Redirect":
 	set(value):
-		if redirect_name == value:
+		var clean_name := value.strip_edges()
+		if redirect_name == clean_name:
 			return
-		redirect_name = value
 		var definition := getRedirectDefinition()
-		if definition and definition.name != value:
-			definition.name = value
-			FlowGraphRedirectors.refreshEndpoints(flow_graph, redirect_id)
+		if clean_name.is_empty():
+			return
+		if definition and flow_graph:
+			var existing := FlowGraphRedirectors.findDefinitionByName(
+				flow_graph,
+				clean_name
+			)
+			if existing and existing != definition:
+				return
+		redirect_name = clean_name
+		if definition and definition.name != clean_name:
+			definition.name = clean_name
 
 var _redirect_definition: FlowGraphRedirect
 
@@ -40,9 +49,7 @@ func refreshRedirectDefinition() -> void:
 	var definition := getRedirectDefinition()
 	if definition:
 		redirect_name = definition.name
-	notify_property_list_changed()
-	connections_changed.emit()
-	emit_changed()
+	settings_changed.emit(&"redirect_name")
 
 func getTitle() -> String:
 	var definition := getRedirectDefinition()
@@ -74,6 +81,4 @@ func _onRedirectDefinitionChanged() -> void:
 	if not _redirect_definition:
 		return
 	redirect_name = _redirect_definition.name
-	notify_property_list_changed()
-	connections_changed.emit()
-	emit_changed()
+	settings_changed.emit(&"redirect_name")
