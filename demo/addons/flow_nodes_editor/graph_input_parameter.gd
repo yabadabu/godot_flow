@@ -4,8 +4,21 @@ extends Resource
 
 # An graph input with has a type and a constant value
 
-@export var name : String = "arg_name"
+@export_storage var param_id: StringName
+
+@export var name: String = "arg_name":
+	set(new_value):
+		if name == new_value:
+			return
+		name = new_value
+		notifyChanged()
+
 var change_id : int = 0
+
+func ensureId() -> StringName:
+	if param_id.is_empty():
+		param_id = StringName(Resource.generate_scene_unique_id())
+	return param_id
 
 @export var is_constant : bool = true:
 	set(new_value):
@@ -81,6 +94,6 @@ func getAsFlowData() -> FlowData.Data:
 	var data = FlowData.Data.new()
 	var container = data.addStream( name, getDataType() )
 	if container != null:
-		container.resize( 1 )
+		container.resize(1)
 		container[0] = getDefaultValue()
 	return data

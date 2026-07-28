@@ -85,15 +85,15 @@ func _records_to_data(records : Array) -> FlowData.Data:
 		out_data.registerStream(type_attribute, types, FlowData.DataType.String)
 	return out_data
 
-func execute(_ctx : FlowData.EvaluationContext):
-	var in_data : FlowData.Data = get_input(0)
+func execute(ctx : FlowData.EvaluationContext):
+	var in_data : FlowData.Data = getInput(ctx, 0)
 	if in_data == null:
-		setError("Input not found")
+		setError(ctx, "Input not found")
 		return
 		
 	var in_positions := in_data.getVector3Container(FlowData.AttrPosition)
 	if in_positions.size() != in_data.size():
-		setError("Input must provide position for each filled cell")
+		setError(ctx, "Input must provide position for each filled cell")
 		return
 
 	var cell_size := _safe_cell_size()
@@ -155,6 +155,6 @@ func execute(_ctx : FlowData.EvaluationContext):
 	var all_records : Array = []
 	all_records.append_array(edge_records)
 	all_records.append_array(corner_records)
-	set_output(0, _records_to_data(edge_records))
-	set_output(1, _records_to_data(corner_records))
-	set_output(2, _records_to_data(all_records))
+	setOutput(ctx, 0, _records_to_data(edge_records))
+	setOutput(ctx, 1, _records_to_data(corner_records))
+	setOutput(ctx, 2, _records_to_data(all_records))

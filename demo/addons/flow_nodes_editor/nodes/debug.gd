@@ -12,6 +12,6 @@ func _init():
 	}
 
 func execute( ctx : FlowData.EvaluationContext ):
-	var in_data = get_input( 0 )
+	var in_data = getInput(ctx,  0 )
 	debug_enabled = true
-	set_output(0, in_data)
+	setOutput(ctx, 0, in_data)

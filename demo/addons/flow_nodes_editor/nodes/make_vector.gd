@@ -29,4 +29,4 @@ func execute( ctx : FlowData.EvaluationContext ):
 	container.resize( 1 )
 	if typeof(ix) == TYPE_FLOAT and typeof(iy) == TYPE_FLOAT and typeof(iz) == TYPE_FLOAT:
 		container[0] = Vector3( ix, iy, iz )
-	set_output( 0, output )
+	setOutput(ctx, 0, output )

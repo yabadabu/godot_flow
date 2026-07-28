@@ -19,9 +19,9 @@ func run( ctx : FlowData.EvaluationContext ):
 	var offset = 0
 	
 	# Each output connected to our input can bring several bulk datas
-	for bulk_index in range( num_connected_bulks ):
+	for bulk_index in range(getConnectedBulkCount(ctx)):
 		readAllInputsForBulk( ctx, bulk_index )
-		var in_data = get_input(0)
+		var in_data = getInput(ctx, 0)
 		if in_data == null:
 			continue
 			
@@ -64,4 +64,4 @@ func run( ctx : FlowData.EvaluationContext ):
 				# print( " Appending %d elems from input container -> %d" % [ stream.container.size(), offset ] )
 				stream.container.resize( offset )
 
-	set_output( 0, out_data )
+	setOutput(ctx, 0, out_data )

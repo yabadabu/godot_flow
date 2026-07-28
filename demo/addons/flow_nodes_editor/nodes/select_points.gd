@@ -78,9 +78,9 @@ func weighted_sampling(weights: PackedFloat32Array, k: int) -> PackedInt32Array:
 
 
 func execute( ctx : FlowData.EvaluationContext ):
-	var in_data : FlowData.Data = get_input(0)
+	var in_data : FlowData.Data = getInput(ctx, 0)
 	if in_data == null:
-		setError("Input 'In' is not connected")
+		setError(ctx, "Input 'In' is not connected")
 		return
 	#in_data.dump( "Select.Input")
 	var in_size := in_data.size()
@@ -96,11 +96,11 @@ func execute( ctx : FlowData.EvaluationContext ):
 	if attr_name:
 		var weight_stream = in_data.findStream( attr_name )
 		if weight_stream == null:
-			setError( "Input Weight Name %s not found" % [attr_name])
+			setError(ctx,  "Input Weight Name %s not found" % [attr_name])
 			return
 		indices = weighted_sampling( weight_stream.container, out_size )
 	else:
 		indices = uniform_sampling( in_data.size(), out_size )
 
 	var out_data = in_data.filter( indices )
-	set_output( 0, out_data )
+	setOutput(ctx, 0, out_data )

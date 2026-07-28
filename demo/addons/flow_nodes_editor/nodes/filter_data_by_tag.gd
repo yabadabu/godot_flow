@@ -13,9 +13,9 @@ func _init():
 	}
 
 func execute( ctx : FlowData.EvaluationContext ):
-	var in_data : FlowData.Data = get_input(0)
+	var in_data : FlowData.Data = getInput(ctx, 0)
 	if in_data == null:
-		setError("Input 'In' is not connected")
+		setError(ctx, "Input 'In' is not connected")
 		return
 	
 	var filter_tags := []
@@ -33,8 +33,8 @@ func execute( ctx : FlowData.EvaluationContext ):
 			
 	var empty_data = FlowData.Data.new()
 	if match_found:
-		set_output(0, in_data)
-		set_output(1, empty_data)
+		setOutput(ctx, 0, in_data)
+		setOutput(ctx, 1, empty_data)
 	else:
-		set_output(0, empty_data)
-		set_output(1, in_data)
+		setOutput(ctx, 0, empty_data)
+		setOutput(ctx, 1, in_data)

@@ -33,13 +33,6 @@ enum eDebugMode {
 
 var rng : RandomNumberGenerator = RandomNumberGenerator.new()
 
-# Common attributes ------------------------------
-var num_connected_bulks : int = 0
-var input_bulks : Array
-var num_generated_bulks : int = 0
-var generated_bulks : Array
-var inputs = []
-
 var args_ports_by_name = {}
 var num_in_ports : int = 0
 var num_out_ports : int = 0
@@ -49,13 +42,11 @@ var meta_node: Dictionary = {}
 var node_template : String
 var show_disconnected_inputs : bool = false
 
-var dirty : bool = false
+var runtime_revision: int = 0
 
 # Filled during runtime
 var deps : Array[ Dictionary ]			# Array of graphEdit connections where I'm the target
 var dependants : Array[ Dictionary ]	# Array of graphEdit connections where I'm the source
-var eval_id : int = 0
-var err : String
 
 # Render
 var ui_scale : float = 1.0
@@ -83,27 +74,20 @@ func _validate_property(property: Dictionary) -> void:
 		property.usage |= PROPERTY_USAGE_READ_ONLY
 
 func preExecute( ctx : FlowData.EvaluationContext ):
-	eval_id = ctx.eval_id
-	setError("")
+	setError(ctx, "")
 	rng.seed = random_seed
-	num_generated_bulks = 0
-	num_connected_bulks = 0
-	input_bulks = []
-	generated_bulks = []
-	
-	deps.map(func( conn : Dictionary ):
-		# The number of bulks in the pin 0 defines how many bulks we are going to generate
-		if conn.to_port == 0:
-			var node = ctx.graph.nodes_by_name.get( conn.from_node )
-			if node:
-				num_connected_bulks += node.num_generated_bulks
-	)
-	if num_connected_bulks == 0:
-		num_connected_bulks = 1
+	ctx.resetNodeForExecution(self)
 
 func onPropChanged( prop_name : StringName ):
-	dirty = true
+	if shouldReevaluateOnPropChanged(prop_name):
+		invalidate()
 	settings_changed.emit( prop_name )
+
+func invalidate() -> void:
+	runtime_revision += 1
+
+func markDirty(ctx: FlowData.EvaluationContext) -> void:
+	ctx.markNodeDirty(self)
 	
 func shouldReevaluateOnPropChanged( prop_name : StringName ) -> bool:
 	return prop_name != "title"
@@ -115,19 +99,8 @@ func getCategory() -> String:
 	var meta := getMeta()
 	return meta.get( "category", "Others...")
 	
-func setError( new_err : String ):
-	#if new_err:
-		#push_error( "Node.Err %s : %s" % [ name, new_err ])
-		#editor_state_changed.emit()
-	#err = new_err
-	#redrawUI()
-	pass
-
-func setExecTime(usec: int):
-	set_meta("exec_time_usec", usec)
-	#if is_inside_tree():
-		#queue_redraw()
-	pass
+func setError(ctx: FlowData.EvaluationContext, new_error: String) -> void:
+	ctx.setNodeError(self, new_error)
 
 func getMeta() -> Dictionary:
 	return meta_node
@@ -245,15 +218,16 @@ func getSettingValue( ctx : FlowData.EvaluationContext, in_name : String, defaul
 	var meta = getMeta()
 	var trace = meta.get( "trace", false ) or trace
 	var value = get( in_name )
+	var input_count := getInputCount(ctx)
 	if value == null:
 		value = default_value
 	if trace:
-		print( "Searching the current value of input %s in %d inputs at node %s. ByName:%s vs %s.   Meta:%s" % [ in_name, inputs.size(), name, args_ports_by_name, inputs, meta ] )
+		print( "Searching the current value of input %s in %d inputs at node %s. ByName:%s. Meta:%s" % [ in_name, input_count, name, args_ports_by_name, meta ] )
 	if args_ports_by_name.has( in_name ):
 		var port = args_ports_by_name[ in_name ].port
-		if trace: print( "Found at port %d.. Inputs has size %d" % [ port, inputs.size() ] )
-		if port >= 0 and port < inputs.size():
-			var input = inputs[ port ] as FlowData.Data
+		if trace: print( "Found at port %d.. Inputs has size %d" % [ port, input_count ] )
+		if port >= 0 and port < input_count:
+			var input = getOptionalInput(ctx, port)
 			if input:
 				var in_streams = input.streams
 				if trace: print( "Got the input for %s : %s" % [ in_name, in_streams.keys() ] )
@@ -263,9 +237,9 @@ func getSettingValue( ctx : FlowData.EvaluationContext, in_name : String, defaul
 						var stream = in_streams.values()[0]
 						var in_size = in_streams.size()
 						if in_size == 0:
-							setError( "Input %s has no data" % in_name)
+							setError(ctx, "Input %s has no data" % in_name)
 						elif in_size > 1:
-							setError( "Input %s has too many data (%d)" % [ in_name, in_size ])
+							setError(ctx, "Input %s has too many data (%d)" % [ in_name, in_size ])
 						else:
 							var elems_in_container = stream.container.size()
 							if trace: print( "Input %s in_size is %d" % [ in_name, stream.container.size() ] )
@@ -340,44 +314,29 @@ func getSceneRootNode3d( current : Node3D ) -> Node3D:
 	return current
 
 # --------------------------------------------------------------------------
-func set_output( port_idx : int, data : FlowData.Data ):
-	if port_idx == 0:
-		num_generated_bulks += 1
-		generated_bulks.append( [] )
-	var bulk : Array = generated_bulks[ num_generated_bulks - 1]
-	if port_idx >= bulk.size():
-		bulk.resize( port_idx + 1 )
-	bulk[ port_idx ] = data
+func setOutput(ctx: FlowData.EvaluationContext, port_idx: int, data: FlowData.Data) -> void:
+	ctx.setOutput(self, port_idx, data)
 	if trace:
+		var bulk_idx := ctx.getOutputBulks(self).size() - 1
 		if data:
-			print( "%s Saving bulk %d, port %d with %s (%d entries)" % [ name, num_generated_bulks - 1, port_idx, data.streams.keys(), data.size() ] )
+			print( "%s Saving bulk %d, port %d with %s (%d entries)" % [ name, bulk_idx, port_idx, data.streams.keys(), data.size() ] )
 		else:
-			print( "%s Saving bulk %d, port %d output is null" % [ name, num_generated_bulks - 1, port_idx ] )
+			print( "%s Saving bulk %d, port %d output is null" % [ name, bulk_idx, port_idx ] )
 	
-func get_input( idx : int ):
-	if idx >= inputs.size():
-		push_error( "Input.%d does not exists in node %s. There are only %d" % [ idx, name, inputs.size() ])
+func getInput(ctx: FlowData.EvaluationContext, idx: int):
+	if idx < 0 or idx >= getInputCount(ctx):
+		push_error( "Input.%d does not exists in node %s. There are only %d" % [ idx, name, getInputCount(ctx) ])
 		return []
-	return inputs[ idx ]
+	return ctx.getInput(self, idx)
 
-func get_optional_input( idx : int ):
-	if idx >= inputs.size():
-		return null
-	return inputs[ idx ]
+func getOptionalInput(ctx: FlowData.EvaluationContext, idx: int):
+	return ctx.getInput(self, idx)
 
-func get_bulk_input( bulk_idx : int, port_idx : int ):
-	if bulk_idx < input_bulks.size() && port_idx < getMeta().ins.size():
-		return input_bulks[ bulk_idx ][ port_idx ]
-	return null
-	
-func get_bulk_output( bulk_idx : int, port_idx : int ):
-	if bulk_idx >= generated_bulks.size():
-		push_error( "Node %s has not generated bulk %d" % [ name, bulk_idx ])
-		return FlowData.Data.new()
-	if port_idx >= generated_bulks[ bulk_idx ].size():
-		push_error( "Node %s bulk %d has not generated output %d" % [ name, bulk_idx, port_idx ])
-		return FlowData.Data.new()
-	return generated_bulks[ bulk_idx ][ port_idx ]
+func getInputCount(ctx: FlowData.EvaluationContext) -> int:
+	return ctx.getInputCount(self)
+
+func getConnectedBulkCount(ctx: FlowData.EvaluationContext) -> int:
+	return ctx.getConnectedBulkCount(self)
 
 func execute( ctx ):
 	pass
@@ -392,22 +351,22 @@ func _getInputForBulkInContext( ctx : FlowData.EvaluationContext, bulk_idx : int
 		var src_node = ctx.graph.nodes_by_name.get( conn.from_node )
 		if not src_node:
 			continue
-		#print( "  Found.src_node is %s. Has generated %d bulks. So far we have explored %d bulks" % [ src_node, src_node.generated_bulks.size(), bulk_counter ] )
+		var src_runtime := ctx.getNodeRuntime(src_node)
 		var from_port = conn.from_port
-		for input_bulk_idx in range( src_node.generated_bulks.size() ):
+		for input_bulk_idx in range(src_runtime.output_bulks.size()):
 			if bulk_counter == bulk_idx:
-				return src_node.get_bulk_output( input_bulk_idx, from_port )
+				return ctx.getOutput(src_node, input_bulk_idx, from_port)
 			bulk_counter += 1
 	return null
 
 func readAllInputsForBulk( ctx : FlowData.EvaluationContext, bulk_idx : int ):
-	inputs = []
+	var bulk_inputs: Array = []
 	var num_inputs : int = getMeta().ins.size()
 	for port_idx in range( num_inputs ):
 		var input =  _getInputForBulkInContext( ctx, bulk_idx, port_idx )
 		if trace:
 			print( "%s Input for bulk %d port %d is %s" % [ name, bulk_idx, port_idx, input ])
-		inputs.append(input)
+		bulk_inputs.append(input)
 		
 	# Read the options inputs, assuming they only generate a single bulk
 	var option_idx = num_inputs
@@ -416,40 +375,41 @@ func readAllInputsForBulk( ctx : FlowData.EvaluationContext, bulk_idx : int ):
 			#print( "Checking conn %s" % conn )
 			var config_input = _getInputForBulkInContext( ctx, 0, conn.to_port )
 			#print( "  -> %s" % config_input.streams  )
-			if conn.to_port >= inputs.size():
-				inputs.resize( conn.to_port + 1 )
-			inputs[ conn.to_port ] = config_input
+			if conn.to_port >= bulk_inputs.size():
+				bulk_inputs.resize( conn.to_port + 1 )
+			bulk_inputs[ conn.to_port ] = config_input
 			option_idx += 1
-	input_bulks.append( inputs )
+	ctx.setNodeInputs(self, bulk_inputs)
 
 # Defines the behaviour of the node in it's disabled status
 # The default behaviour is to pass all inputs as outputs	
 func executedDisabled( ctx : FlowData.EvaluationContext ):
-	for bulk_index in range( num_connected_bulks ):
+	for bulk_index in range(getConnectedBulkCount(ctx)):
 		readAllInputsForBulk( ctx, bulk_index )
-		if inputs.size() > 0:
-			set_output( 0, inputs[0] )
+		if getInputCount(ctx) > 0:
+			setOutput(ctx, 0, getInput(ctx, 0))
 	ctx.removeRegisteredInstancedNodes( self )
 
 func getPreferredSpawnPath():
 	return null
 
 func onSceneChanged( ctx : FlowData.EvaluationContext ):
+	var runtime := ctx.getNodeRuntime(self)
 	
 	# Just supporting nodes without inputs, that have flagged as scans_scene = true
 	# basically looking for all scan_* nodes
-	if num_connected_bulks != 1 or meta_node.ins.size() > 0 or not meta_node.get( "scans_scene", false):
+	if ctx.getConnectedBulkCount(self) != 1 or meta_node.ins.size() > 0 or not meta_node.get( "scans_scene", false):
 		return
 		
 	# Check if we have something generated
-	if generated_bulks.size() == 1 and generated_bulks[0].size() == 1:
-		var last_output = get_bulk_output( 0, 0 )
+	if runtime.output_bulks.size() == 1 and runtime.output_bulks[0].size() == 1:
+		var last_output := ctx.getOutput(self, 0, 0)
 		if last_output:
 			# last_output.dump( "Last output" )
 			# We need to run the preExecute otherwise a second evaluation will appear as a second bulk
 			preExecute( ctx )
 			execute( ctx )
-			var current_output = get_bulk_output( 0, 0 )
+			var current_output := ctx.getOutput(self, 0, 0)
 			if current_output:
 				#current_output.dump( "New output")
 				
@@ -460,15 +420,16 @@ func onSceneChanged( ctx : FlowData.EvaluationContext ):
 
 	# if we reach this point, the node requires is dirty and all dependants will do. We have evaluated the
 	# node twice but potentially saved a lot of nodes in the general case
-	dirty = true
+	markDirty(ctx)
 
 func run( ctx : FlowData.EvaluationContext ):
-	for bulk_index in range( num_connected_bulks ):
+	var bulk_count := getConnectedBulkCount(ctx)
+	for bulk_index in range(bulk_count):
 		if trace:
-			print( "%s Preparing inputs for bulk %d/%d" % [ name, bulk_index, num_connected_bulks ])
+			print( "%s Preparing inputs for bulk %d/%d" % [ name, bulk_index, bulk_count ])
 		readAllInputsForBulk( ctx, bulk_index )
 		if trace:
-			print( "%s Inputs for bulk %d/%d are %s (%d)" % [ name, bulk_index, num_connected_bulks, inputs, inputs.size() ])
+			print( "%s Inputs for bulk %d/%d (%d)" % [ name, bulk_index, bulk_count, getInputCount(ctx) ])
 		execute( ctx )
 
 func removeRegisteredInstancedNodes( spawn_parent : Node3D ):

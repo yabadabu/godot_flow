@@ -20,17 +20,17 @@ func _init():
 		"tooltip" : "Remaps the input values using a curve",
 	}
 
-func execute( _ctx : FlowData.EvaluationContext ):
-	var in_data : FlowData.Data = get_input(0)
+func execute( ctx : FlowData.EvaluationContext ):
+	var in_data : FlowData.Data = getInput(ctx, 0)
 	
 	var sA = in_data.findStream( in_name )
 	if sA == null:
-		setError( "Input %s not found" % [in_name])
+		setError(ctx,  "Input %s not found" % [in_name])
 		return
 		
 	# Confirm it has the correct type (float)
 	if sA.data_type != FlowData.DataType.Float:
-		setError( "Input stream %s should have data type float" % [in_name])
+		setError(ctx,  "Input stream %s should have data type float" % [in_name])
 		return
 		
 	var out_name = out_name
@@ -48,4 +48,4 @@ func execute( _ctx : FlowData.EvaluationContext ):
 		out_container[idx] = c.sample( in_container[idx] )
 	out_data.registerStream( out_name, out_container )
 	
-	set_output( 0, out_data )
+	setOutput(ctx, 0, out_data )

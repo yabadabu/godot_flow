@@ -24,12 +24,14 @@ func getTitle() -> String:
 
 func getMergedB(ctx : FlowData.EvaluationContext ) -> FlowData.Data :
 	var all_Bs : FlowData.Data
-	var args_b = []
-	for bulk_index in range( 256 ):
-		var b = _getInputForBulkInContext( ctx, bulk_index, 1)
+	var args_b: Array[FlowData.Data] = []
+	var bulk_index := 0
+	while true:
+		var b := _getInputForBulkInContext(ctx, bulk_index, 1) as FlowData.Data
 		if not b:
 			break
-		args_b.append( b )
+		args_b.append(b)
+		bulk_index += 1
 	if args_b.size() == 1:
 		all_Bs = args_b[0]
 	else:
@@ -47,20 +49,17 @@ func getMergedB(ctx : FlowData.EvaluationContext ) -> FlowData.Data :
 	
 func run( ctx : FlowData.EvaluationContext ):
 	var all_Bs := getMergedB( ctx )
-	for bulk_index in range( num_connected_bulks ):
-		inputs = []
-		var input =  _getInputForBulkInContext( ctx, bulk_index, 0 )
-		inputs.append(input)
-		inputs.append(all_Bs)
-		input_bulks.append( inputs )
-		execute( ctx )
+	for bulk_index in range(getConnectedBulkCount(ctx)):
+		var input_a: FlowData.Data = _getInputForBulkInContext(ctx, bulk_index, 0)
+		ctx.setNodeInputs(self, [input_a, all_Bs])
+		execute(ctx)
 	
-func execute( _ctx : FlowData.EvaluationContext ):
-	var in_dataA: FlowData.Data = get_input(0)
-	var in_dataB : FlowData.Data = get_input(1)
+func execute( ctx : FlowData.EvaluationContext ):
+	var in_dataA: FlowData.Data = getInput(ctx, 0)
+	var in_dataB : FlowData.Data = getInput(ctx, 1)
 	
 	if in_dataA == null:
-		setError( "Input A not found")
+		setError(ctx,  "Input A not found")
 		return
 		
 	if in_dataB == null:
@@ -79,4 +78,4 @@ func execute( _ctx : FlowData.EvaluationContext ):
 	
 	var out_data : FlowData.Data = in_dataA.filter( result.idxs_overlapped )
 		
-	set_output( 0, out_data )
+	setOutput(ctx, 0, out_data )

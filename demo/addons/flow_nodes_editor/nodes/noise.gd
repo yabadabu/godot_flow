@@ -128,17 +128,17 @@ func _sample_noise(noise : FastNoiseLite, p : Vector3) -> float:
 		return ( nval + 1.0 ) * 0.5
 	return nval
 	
-func execute( _ctx : FlowData.EvaluationContext ):
-	var in_data : FlowData.Data = get_input(0)
+func execute( ctx : FlowData.EvaluationContext ):
+	var in_data : FlowData.Data = getInput(ctx, 0)
 	if in_data == null:
-		setError("Input not found")
+		setError(ctx, "Input not found")
 		return
 
 	var out_data : FlowData.Data = in_data.duplicate()
 
 	var ipos : PackedVector3Array = _resolve_sample_positions(in_data)
 	if ipos.size() != in_data.size():
-		setError("Noise source attribute '%s' must be a Vector stream with %d values (or 1 for broadcast)" % [sample_attribute, in_data.size()])
+		setError(ctx, "Noise source attribute '%s' must be a Vector stream with %d values (or 1 for broadcast)" % [sample_attribute, in_data.size()])
 		return
 		
 	var noise := FastNoiseLite.new()
@@ -225,7 +225,7 @@ func execute( _ctx : FlowData.EvaluationContext ):
 			
 	var err = out_data.registerStream(out_name, out_container)
 	if err:
-		setError(err)
+		setError(ctx, err)
 		return
 		
-	set_output(0, out_data)
+	setOutput(ctx, 0, out_data)

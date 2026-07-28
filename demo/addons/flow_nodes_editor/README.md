@@ -8,21 +8,14 @@
 
 ---- 
 # Bugs
-- [ ] Closing a scene leaves the debug meshes there
 
 # Features
 - [ ] Import node: load csv
 - [ ] Import node: texture sampler
 - [ ] Import node: sample spline
 
-- [X] Expand the scan_* to a base folder
-- [ ] subgraph overrides
 - [ ] named redirectors/acc
-- [ ] debug/session
-	- [/] Register / debug Subgraphs
-- [/] multiple flowgraphs / tabs
 - [ ] use the WeightsRandomSampler from match_and_set in more places (sample mesh/sample scene)
-- [X] optimize scan node always becoming dirty when something changes in the level.
 
 - [ ] Demos
 	- [X] Wall of rocks, picking a random point on the top
@@ -33,11 +26,17 @@
 	- [X] Bridge
 - [ ] Match & Set is not taking into account the weight attr, when matching attr is set
 - [ ] Integrate with HTerrain plugin
-- [X] Subgraphs / Loops?
+- [ ] Spline sampling interior in non grid pattern
 - [ ] Sample spline along N random positions
 - [ ] Discard points too close to hard edges of a mesh
+- [X] optimize scan node always becoming dirty when something changes in the level.
+- [X] Expand the scan_* to a base folder
+- [X] subgraph overrides
+- [X] multiple flowgraphs / tabs
+- [X] Subgraphs / Loops?
+- [X] debug/session
+	- [X] Register / debug Subgraphs
 - [X] Add noise to position <-- Improve noise
-- [ ] Spline sampling interior in non grid pattern
 - [X] Import node: math.color ops
 - [X] Import node: noise
 - [X] Allow to filter rows in the inspector

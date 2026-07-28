@@ -12,11 +12,11 @@ func _init():
 		"tooltip" : "Rejects any point overlaping previous points.",
 	}
 
-func execute( _ctx : FlowData.EvaluationContext ):
-	var in_dataA: FlowData.Data = get_input(0)
+func execute( ctx : FlowData.EvaluationContext ):
+	var in_dataA: FlowData.Data = getInput(ctx, 0)
 	
 	if in_dataA == null:
-		setError( "Input not found")
+		setError(ctx,  "Input not found")
 		return
 		
 	var tA := GDRTree.new()
@@ -26,4 +26,4 @@ func execute( _ctx : FlowData.EvaluationContext ):
 	
 	var out_data : FlowData.Data = in_dataA.filter( result.idxs_overlapped )
 		
-	set_output( 0, out_data )
+	setOutput(ctx, 0, out_data )

@@ -2,10 +2,13 @@
 extends Control
 class_name FlowGraphEditor
 
+const SubgraphExtractor = preload("res://addons/flow_nodes_editor/flow_graph_extract_subgraph.gd")
+
 # This is the main container of the DataFlow Graph Editor
 
 var current_resource: FlowGraphResource
 var resource_owner : FlowGraphNode3D
+var active_context: FlowData.EvaluationContext
 var regen_pending := false
 var save_pending := false
 var auto_regen := true
@@ -13,7 +16,9 @@ var dump_performance := false
 var next_scene_change_is_local := false
 
 @onready var tab_bar: TabBar = %TabBar
+@onready var button_navigate_up: Button = %ButtonNavigateUp
 var open_tabs: Array[Dictionary] = []
+var navigation_stack: Array[Dictionary] = []
 
 @onready var gedit : GraphEdit = %GraphEdit
 @onready var data_inspector : Control
@@ -66,6 +71,8 @@ func unbindResourceFromEditor(res : FlowGraphResource):
 	FlowNodeIO.saveEditorStateToResource( self )
 	res.editor = null
 	res.in_params_changed.disconnect(_on_inputs_changed)
+	if res.input_params_removed.is_connected(_on_input_params_removed):
+		res.input_params_removed.disconnect(_on_input_params_removed)
 	for node in getAllGraphNodes():
 		#print( "unbindResourceFromEditor. kicking out %s" % node.name)
 		node.draw.disconnect( node._on_draw )
@@ -84,6 +91,7 @@ func bindResourceToEditor(res : FlowGraphResource):
 	print( "bindResourceToEditor %d nodes, %d conns (%s)" % [ res.all_nodes.size(), res.all_connections.size(), res.resource_path ])
 
 	res.in_params_changed.connect(_on_inputs_changed)
+	res.input_params_removed.connect(_on_input_params_removed, CONNECT_DEFERRED)
 
 	res.editor = self
 
@@ -101,7 +109,7 @@ func bindResourceToEditor(res : FlowGraphResource):
 	
 func setResourceToEdit( new_resource : FlowGraphResource ):
 	if new_resource and new_resource.loading:
-		print( "setResourceToEdit resource is loading" % [ new_resource] )
+		print( "setResourceToEdit resource is loading: %s" % new_resource )
 		return
 	print( "setResourceToEdit:%s" % [ new_resource ] )
 	
@@ -124,12 +132,14 @@ func setResourceToEdit( new_resource : FlowGraphResource ):
 			unbindResourceFromEditor( current_resource )
 		current_resource = new_resource
 		resource_owner = null
+		active_context = null
 		if current_resource:
 			bindResourceToEditor( current_resource )
 	#else:
 		#print( "The resource has not changed, no need to rebind the graph")
 	
 	refresh_executors()
+	updateNavigationControls()
 
 func openResource(resource: FlowGraphResource) -> void:
 	if resource == null:
@@ -137,6 +147,7 @@ func openResource(resource: FlowGraphResource) -> void:
 	if resource.loading:
 		print("openResource: resource is still loading %s" % resource)
 		return
+	clearNavigationHistory()
 
 	var tab_idx := findIndexInTabs(resource)
 	if tab_idx < 0:
@@ -153,13 +164,72 @@ func openResource(resource: FlowGraphResource) -> void:
 	if current_resource != resource:
 		setResourceToEdit(resource)
 
-func select_executor(node: FlowGraphNode3D) -> bool:
+func openSubgraph(subgraph_node: FlowNodeSubGraph) -> void:
+	if not subgraph_node or not subgraph_node.graph or not current_resource:
+		return
+
+	var parent_owner := resource_owner
+	var parent_context := active_context
+	navigation_stack.append({
+		"resource": current_resource,
+		"owner": parent_owner,
+		"context": parent_context,
+		"subgraph_node": subgraph_node,
+	})
+
+	var child_context: FlowData.EvaluationContext
+	if parent_context:
+		child_context = parent_context.findChildContext(subgraph_node, 0)
+
+	setResourceToEdit(subgraph_node.graph)
+	if child_context and is_instance_valid(parent_owner):
+		select_executor(parent_owner, child_context)
+	else:
+		select_first_executor()
+	updateNavigationControls()
+
+func navigateUp() -> void:
+	if navigation_stack.is_empty():
+		return
+
+	var parent: Dictionary = navigation_stack.pop_back()
+	var parent_resource := parent.get("resource") as FlowGraphResource
+	var parent_owner := parent.get("owner") as FlowGraphNode3D
+	var parent_context := parent.get("context") as FlowData.EvaluationContext
+	var subgraph_node := parent.get("subgraph_node") as FlowNodeSubGraph
+
+	# The parent UI is not bound while the child graph is being edited.
+	# Refresh its dynamic ports before rebuilding that UI.
+	if subgraph_node:
+		subgraph_node.refreshFromGraph()
+
+	setResourceToEdit(parent_resource)
+	if is_instance_valid(parent_owner) and parent_context:
+		select_executor(parent_owner, parent_context)
+	else:
+		select_first_executor()
+	updateNavigationControls()
+
+func clearNavigationHistory() -> void:
+	navigation_stack.clear()
+	updateNavigationControls()
+
+func updateNavigationControls() -> void:
+	if button_navigate_up:
+		button_navigate_up.disabled = navigation_stack.is_empty()
+
+func select_executor(
+	node: FlowGraphNode3D,
+	context: FlowData.EvaluationContext = null
+) -> bool:
 	clear_active_executor()
 
 	if not is_instance_valid(node) or not node.is_inside_tree():
 		refresh_executors()
 		return false
-	if current_resource == null or node.graph != current_resource:
+	if context == null:
+		context = node.ctx
+	if current_resource == null or context == null or context.graph != current_resource:
 		refresh_executors()
 		return false
 	if not isNodeInCurrentScene(node):
@@ -167,6 +237,8 @@ func select_executor(node: FlowGraphNode3D) -> bool:
 		return false
 
 	resource_owner = node
+	active_context = context
+	data_inspector.setContext(active_context)
 	refresh_executors()
 	for graph_node in getAllGraphNodes():
 		graph_node.refreshDebug()
@@ -178,13 +250,15 @@ func select_first_executor() -> bool:
 	# executors from other open scenes remain registered but must not draw/run.
 	for candidate in executor_candidates:
 		var node := candidate.node_ref.get_ref() as FlowGraphNode3D
+		var context := candidate.context as FlowData.EvaluationContext
 		if (
 			is_instance_valid(node)
 			and node.is_inside_tree()
-			and node.graph == current_resource
+			and context
+			and context.graph == current_resource
 			and isNodeInCurrentScene(node)
 		):
-			return select_executor(node)
+			return select_executor(node, context)
 
 	clear_active_executor()
 	refresh_executors()
@@ -213,8 +287,30 @@ func onNodeCreated( flow_node : FlowNodeBase ) -> FlowGraphNodeUI:
 	#print( "gedit.addChild %s" % [ node.name ])
 	ui_node.draw.connect( ui_node._on_draw )
 	flow_node.connections_changed.connect( func():
-		ui_node.initFromScript( ))
+		ui_node.initFromScript()
+		removeInvalidConnectionsForNode(flow_node))
 	return ui_node
+
+func removeInvalidConnectionsForNode(flow_node: FlowNodeBase) -> void:
+	if not current_resource or not flow_node:
+		return
+	for conn in current_resource.all_connections.duplicate():
+		var invalid_output: bool = (
+			conn.from_node == flow_node.name
+			and conn.from_port >= flow_node.num_out_ports
+		)
+		var invalid_input: bool = (
+			conn.to_node == flow_node.name
+			and conn.to_port >= flow_node.num_in_ports
+		)
+		if invalid_output or invalid_input:
+			disconnect_nodes(
+				conn.from_node,
+				conn.from_port,
+				conn.to_node,
+				conn.to_port
+			)
+			queueSave()
 	
 func onConnCreated( conn : Dictionary ):
 	gedit.connect_node(conn.from_node, conn.from_port, conn.to_node, conn.to_port)
@@ -257,33 +353,20 @@ func asInputNode( in_node : Node ):
 
 func _on_inputs_changed():
 	print( "Editor._on_inputs_changed" )
-	var num_changes := 0
-	for in_node : FlowNodeBase in current_resource.input_nodes:
-		var in_param : GraphInputParameter = current_resource.findInParamByName(in_node.input_name)
-		if in_param:
-			if in_node.change_id != in_param.change_id:
-				in_node.change_id = in_param.change_id
-				in_node.dirty = true
-				print( "InputNode %s becomes dirty" % [ in_node.name ] )
-				queueRegen()
-				num_changes += 1
-			else:
-				print( "InputNode %s has not changed %d vs %d" % [ in_node.input_name, in_node.change_id, in_param.change_id ] )
-		else:
-			print( "No graph input with name %s" % [ in_node.input_name ] )
-	#for child in gedit.get_children():
-		#var node = asInputNode( child )
-		#if node:
-			#var in_name = node.settings.name
-			#var curr_input = current_resource.findInParamByName(in_name)
-			#if curr_input and curr_input.is_constant:
-				#if node.change_id != curr_input.change_id:
-					#node.change_id = curr_input.change_id
-					#node.dirty = true
-					#print( "InputNode %s becomes dirty" % [ node.name ] )
-					#queueRegen()
-					#num_changes += 1
-	print( "Editor._on_inputs_changed changed %d nodes" % [ num_changes ] )
+	if active_context and active_context.graph == current_resource:
+		active_context.markInputNodesDirty()
+		queueRegen()
+
+func _on_input_params_removed(param_ids: Array[StringName]) -> void:
+	if not current_resource or param_ids.is_empty():
+		return
+	var nodes_to_delete: Array[GraphNode] = []
+	for graph_node in getAllGraphNodes():
+		var input_node := graph_node.flow_node as FlowNodeInput
+		if input_node and param_ids.has(input_node.input_id):
+			nodes_to_delete.append(graph_node)
+	if not nodes_to_delete.is_empty():
+		deleteGraphElementsAndRefresh(nodes_to_delete, [])
 	
 func _process(delta: float) -> void:
 	if not current_resource:
@@ -372,7 +455,7 @@ func getSelectedFrames() -> Array[GraphFrame]:
 			nodes.push_back(node)
 	return nodes
 
-func deleteFrames( frames : Array[GraphFrame] ):
+func deleteFrames( frames : Array ):
 	for node in frames:
 		current_resource.delete_frame( node.name )
 		gedit.remove_child( node )
@@ -409,7 +492,7 @@ func deleteGraphNodes( graph_nodes : Array[GraphNode] ):
 			current_resource.delete_node( node )
 		gedit.remove_child( graph_node )
 
-func deleteGraphElementsAndRefresh( nodes : Array[GraphNode], frames : Array[GraphFrame] ):
+func deleteGraphElementsAndRefresh( nodes : Array[GraphNode], frames : Array ):
 	deleteFrames( frames )
 	deleteGraphNodes( nodes )
 	queueSave()
@@ -488,18 +571,18 @@ func canConnect( src : FlowGraphNodeUI, src_port : int, dst : FlowGraphNodeUI, d
 	var src_type = src.get_output_port_type( src_port )
 	var dst_type = dst.get_input_port_type( dst_port )
 	if (src_type and dst_type) or (src_type == FlowData.DataType.NodePath) or (src_type == FlowData.DataType.NodeMesh):
-		if src_type != dst_type and dst_type != FlowData.DataType.Any:
+		if src_type != dst_type and src_type != FlowData.DataType.Any and dst_type != FlowData.DataType.Any:
 			push_warning( "Node types do not match %d(%s) vs %d(%s)" % [ src_type, FlowData.DataType.keys()[ src_type ], dst_type, FlowData.DataType.keys()[ dst_type ] ])
 			return false
 		
 	#print( "canConnect OK %s:%d (%d)-> %s:%d (%d)" % [ src.name, src_port, src_type, dst.name, dst_port, dst_type ] )
 	return true
 	
-func addNode( node_template, settings = null ):
+func addNode( node_template, settings = null ) -> FlowGraphNodeUI:
 	print( "addNode ", node_template, settings, current_resource )
 	if current_resource == null:
 		push_error( "Failed to spawn node from template %s. current resource is null" % node_template )
-		return
+		return null
 	var node_name = getFactory().getNewName( node_template )
 	
 	var node = current_resource.addNodeFromTemplate( node_template, node_name, settings )
@@ -528,7 +611,7 @@ func addNode( node_template, settings = null ):
 	graph_node.visible = true
 	queueSave()
 	queueRegen()
-	return node
+	return graph_node
 
 # ------------------------------------------------
 func _on_graph_edit_gui_input(event):
@@ -558,7 +641,7 @@ func _on_graph_edit_gui_input(event):
 		elif key == KEY_R:
 			if no_modifiers:
 				for node in getSelectedGraphNodes():
-					node.flow_node.dirty = true
+					node.flow_node.invalidate()
 					print( "node %s dirty" % node.name)
 				evalGraph()
 
@@ -566,7 +649,7 @@ func toggleDebug():
 	var graph_nodes := getSelectedGraphNodes()
 	for graph_node in graph_nodes:
 		var flow_node = graph_node.flow_node
-		flow_node.dirty = true
+		flow_node.invalidate()
 		flow_node.debug_enabled = !flow_node.debug_enabled
 		graph_node.regenerateFromFlowNode()
 
@@ -574,7 +657,7 @@ func toggleDisabled():
 	var graph_nodes = getSelectedGraphNodes()
 	for graph_node in graph_nodes:
 		var flow_node = graph_node.flow_node
-		flow_node.dirty = true
+		flow_node.invalidate()
 		flow_node.disabled = !flow_node.disabled
 		graph_node.regenerateFromFlowNode()
 
@@ -586,8 +669,8 @@ func toggleInspection():
 		data_inspector.setNode( null )
 		return
 	var graph_node := graph_nodes[0]
-	data_inspector.setNode( graph_node.flow_node )
-	graph_node.flow_node.dirty = true
+	data_inspector.setNode(graph_node.flow_node, active_context)
+	graph_node.flow_node.invalidate()
 	graph_node.regenerateFromFlowNode()
 
 func addComment():
@@ -640,18 +723,18 @@ func registerAsParameter( name : String, data_type : FlowData.DataType ):
 
 func _on_in_popup_menu_pressed( id: int, row : FlowConnectorRow ) -> void:
 	if id == IDM_PROMOTE_TO_PARAMETER and row:
-		var node = row.getNode()
-		print( "Promoting to parameter %s.%s (%s)" % [ node.name, row.getInLabel().text, row.data ] )
-		var in_name = node.getMeta().title + " - " + row.data.label
+		var node_ui = row.getNode()
+		print( "Promoting to parameter %s.%s (%s) node:%s" % [ node_ui.name, row.getInLabel().text, row.data, node_ui ] )
+		var in_name = node_ui.flow_node.title + " - " + row.data.label
 		registerAsParameter( in_name, row.data.data_type )
 		# Instantiate the input
-		var new_input_node = _on_search_add_node_popup_input_selected( current_resource.in_params.size() - 1 )
-		if new_input_node:
+		var new_input_node_ui = _on_search_add_node_popup_input_selected( current_resource.in_params.size() - 1 )
+		if new_input_node_ui:
 			# Adjust the positions, the size is correct, our left is the parent left - size
-			new_input_node.position_offset.x = node.position_offset.x - new_input_node.size.x - 40
-			new_input_node.position_offset.y -= new_input_node.size.y - 15
+			new_input_node_ui.position_offset.x = node_ui.position_offset.x - new_input_node_ui.size.x - 40
+			new_input_node_ui.position_offset.y -= new_input_node_ui.size.y - 15
 			# Connect the input to the node
-			_on_graph_edit_connection_request( new_input_node.name, 0, node.name, row.data.port )
+			_on_graph_edit_connection_request( new_input_node_ui.name, 0, node_ui.name, row.data.port )
 		current_resource.validateAndWatchNewInputs()
 		
 func _on_graph_edit_delete_nodes_request(node_names : Array):
@@ -712,10 +795,24 @@ func _on_graph_edit_popup_request(at_position):
 		
 	var in_params = []
 	var out_params = []
+	var actions = []
 	if current_resource:
 		in_params = current_resource.in_params
+	if not getSelectedGraphNodes().is_empty():
+		actions.append({
+			"id": SearchAddNodePopup.ACTION_COLLAPSE_TO_SUBGRAPH,
+			"label": "Collapse Selection to Subgraph",
+			"tooltip": "Replace the selected nodes with an embedded Subgraph node.",
+		})
 		
-	search_add_node_popup.setup( getFactory().node_types, in_params, out_params, required_input_type, required_output_type )
+	search_add_node_popup.setup(
+		getFactory().node_types,
+		in_params,
+		out_params,
+		required_input_type,
+		required_output_type,
+		actions
+	)
 	search_add_node_popup.appearAt(get_screen_position() + at_position)
 	
 	
@@ -726,18 +823,26 @@ func openAddMenu():
 func _on_search_add_node_popup_node_selected(template_name : String):
 	addNode(template_name)
 
-func _on_search_add_node_popup_input_selected(id : int):
+func _on_search_add_node_popup_input_selected(id : int) -> FlowGraphNodeUI:
 	var input = current_resource.in_params[id]
 	var node_type = "input_%s" % input.name
 	print( "Creating an input node: %s (%d) -> %s" % [ input.name, input.data_type, node_type] )
-	var params := { "input_name" : input.name }
+	var params := {
+		"input_id": input.ensureId(),
+		"input_name": input.name,
+	}
 	return addNode( "input", params )
 
 func _on_search_add_node_popup_action_selected(action_id : int):
 	if action_id == SearchAddNodePopup.ACTION_ADD_NEW_INPUT:
 		current_resource.in_params.append(GraphInputParameter.new())
+		current_resource.validateAndWatchNewInputs()
 		inspector.edit(null)		# To force a refresh
 		_on_button_inputs_pressed()
+	elif action_id == SearchAddNodePopup.ACTION_COLLAPSE_TO_SUBGRAPH:
+		var result = SubgraphExtractor.extract(self, getSelectedGraphNodes())
+		if not result.success:
+			push_warning(result.error)
 
 func _on_popup_menu_id_pressed(id: int) -> void:
 	if menu_ids.has( id ):
@@ -757,14 +862,14 @@ func disconnect_nodes(from_node: StringName, from_port: int, to_node: StringName
 	remove_input_source_target_connection( from_node, from_port, to_node, to_port )
 	var dst_node : FlowNodeBase = current_resource.nodes_by_name.get( to_node )
 	if dst_node != null:
-		dst_node.dirty = true
+		dst_node.invalidate()
 	
 func connect_nodes(from_node: StringName, from_port: int, to_node: StringName, to_port: int) -> void:
 	var new_conn = current_resource.connect_nodes( from_node, from_port, to_node, to_port )
 	onConnCreated( new_conn )
 	var dst_node : FlowNodeBase = current_resource.nodes_by_name.get( to_node )
 	if dst_node != null:
-		dst_node.dirty = true
+		dst_node.invalidate()
 
 func findConnectionToNodeAndPort( node : FlowNodeBase, in_port : int ):
 	for conn in node.deps:
@@ -772,6 +877,7 @@ func findConnectionToNodeAndPort( node : FlowNodeBase, in_port : int ):
 			return conn
 	return null
 
+# from/to node are graph_nodes (ui), not flow_nodes (logic)
 func _on_graph_edit_connection_request(from_node: StringName, from_port: int, to_node: StringName, to_port: int) -> void:
 	print( "current_resource: %s [%s:%d]<->[%s:%d]" % [ current_resource, from_node, from_port, to_node, to_port ] )
 	print( "  .nodes_by_name: %s" % current_resource.nodes_by_name )
@@ -893,7 +999,7 @@ func cacheConnections():
 
 func evalGraph():
 	
-	if resource_owner and current_resource and resource_owner.ctx and resource_owner.ctx.graph == current_resource:
+	if resource_owner and current_resource and active_context and active_context.graph == current_resource:
 		
 		var time_start = Time.get_ticks_usec()
 		cacheConnections()
@@ -903,8 +1009,8 @@ func evalGraph():
 		
 		var performance = []
 		#print( "ctx.Run Starts " )
-		resource_owner.ctx.computeDirtyNodesAndRun()
-		active_nodes = resource_owner.ctx.active_nodes
+		active_context.computeDirtyNodesAndRun()
+		active_nodes = active_context.active_nodes
 		print( "ctx.Regenerated.Active_nodes: ", active_nodes.size() )
 		
 		for node in active_nodes:
@@ -912,12 +1018,15 @@ func evalGraph():
 				data_inspector.refresh()
 			node.contents_changed.emit()
 			if dump_performance:
-				performance.append( { "name": node.name, "time": node.get_meta("exec_time_usec", 0) })
+				performance.append({
+					"name": node.name,
+					"time": active_context.getNodeExecTime(node)
+				})
 
 		#print( "regen_pending is now false")
 		
 		var elapsed_usec = Time.get_ticks_usec() - time_start
-		info.text = "%d evals in %.3f ms (%s)" % [ resource_owner.ctx.eval_id, elapsed_usec / 1000.0, resource_owner.name ]
+		info.text = "%d evals in %.3f ms (%s)" % [ active_context.eval_id, elapsed_usec / 1000.0, resource_owner.name ]
 		if dump_performance:
 			for entry in performance:
 				var formatted := "%8.1s" % String.num(entry.time, 1)
@@ -927,16 +1036,16 @@ func evalGraph():
 	else:
 		if not resource_owner:
 			push_warning( "Inconsistency resource_owner is null")
-		elif not resource_owner.ctx:
-			push_warning( "Inconsistency resource_owner.ctx is null")
-		elif not resource_owner.ctx.graph:
-			push_warning( "Inconsistency resource_owner.ctx.graph is null")
-		elif not resource_owner.ctx.owner:
-			push_warning( "Inconsistency resource_owner.ctx.owner is null")
-		elif not resource_owner.ctx.graph != current_resource:
-			push_warning( "Inconsistency resource_owner.ctx.graph != current_resource %s %s" % [ resource_owner.ctx, current_resource ])
+		elif not active_context:
+			push_warning( "Inconsistency active_context is null")
+		elif not active_context.graph:
+			push_warning( "Inconsistency active_context.graph is null")
+		elif not active_context.owner:
+			push_warning( "Inconsistency active_context.owner is null")
+		elif active_context.graph != current_resource:
+			push_warning( "Inconsistency active_context.graph != current_resource %s %s" % [ active_context, current_resource ])
 		else:
-			push_warning( "Inconsistency resource_owner. Owner: %s  Owner.Ctx:%s CurrentResource:%s resource_owner.ctx.graph:%s" % [ resource_owner.name, resource_owner.ctx.owner.name, current_resource, resource_owner.ctx.graph ])
+			push_warning( "Inconsistency resource owner/context. Owner:%s Context:%s CurrentResource:%s" % [ resource_owner.name, active_context.name, current_resource ])
 		
 	regen_pending = false
 
@@ -1000,11 +1109,11 @@ func onEditorSceneChanged():
 	# which can potentially become dirty
 	# This also triggers as dirty all scan_* nodes when we change
 	# anything in another of our nodes. Not very good
-	if current_resource and resource_owner:
+	if current_resource and resource_owner and active_context:
 		for graph_node in getAllGraphNodes():
 			var flow_node := graph_node.flow_node
 			if flow_node.getMeta().get( "scans_scene", false ):
-				flow_node.onSceneChanged( resource_owner.ctx )
+				flow_node.onSceneChanged(active_context)
 	print( "Editor scene changed!")
 	queueRegen()
 
@@ -1033,6 +1142,7 @@ func _on_tab_bar_tab_close_pressed(tab_idx):
 	tab_bar.remove_tab( tab_idx )
 
 func _on_tab_bar_tab_changed(tab_idx):
+	clearNavigationHistory()
 	var dtab = open_tabs[ tab_idx ] if tab_idx >= 0 and tab_idx < open_tabs.size() else null
 	print( "On tab index %d / %d" % [ tab_idx, open_tabs.size() ])
 	if dtab:
@@ -1054,18 +1164,30 @@ func _on_button_dump_pressed():
 		print( ">>>> %d TABS" % open_tabs.size() )
 		for tab in open_tabs:
 			print( tab )
+
+func _on_button_navigate_up_pressed() -> void:
+	navigateUp()
 	
 func refresh_executors():
 	var combo := %CBExecutors
 	combo.clear()
-	executor_candidates = FlowPlugin.get_instance().get_live_executors( current_resource )
-	for exec in executor_candidates:
+	executor_candidates.clear()
+	var registered_executors := FlowPlugin.get_instance().get_live_executors(current_resource)
+	for exec in registered_executors:
 		for run in exec.runs:
-			#print( "Run %s" % run )
 			var node := exec.node_ref.get_ref() as FlowGraphNode3D
-			var title = "%s - %d" % [ node.name, run ]
+			var context := exec.runs[run] as FlowData.EvaluationContext
+			if context == null or context.graph != current_resource:
+				continue
+			var candidate := {
+				"node_ref": exec.node_ref,
+				"run": run,
+				"context": context,
+			}
+			executor_candidates.append(candidate)
+			var title = "%s - %s" % [ node.name, run ]
 			combo.add_item(title)
-			if node == resource_owner:
+			if node == resource_owner and context == active_context:
 				combo.select( combo.get_item_count() - 1 )
 	
 func clearAllDebug():
@@ -1080,6 +1202,7 @@ func clear_active_executor():
 	regen_pending = false
 	clearAllDebug()
 	resource_owner = null
+	active_context = null
 	active_nodes.clear()
 	executor_candidates.clear()
 
@@ -1101,13 +1224,12 @@ func canExecuteCurrentOwner() -> bool:
 		current_resource != null
 		and is_instance_valid(resource_owner)
 		and resource_owner.is_inside_tree()
-		and resource_owner.graph == current_resource
+		and active_context != null
+		and active_context.graph == current_resource
 		and isNodeInCurrentScene(resource_owner)
 	)
 
 func _on_cb_executors_item_selected(index):
-	resource_owner = null
-	clearAllDebug()
 	print( "Activating executor at index %d" % index)
 	if index < 0 or index >= executor_candidates.size():
 		return
@@ -1115,5 +1237,5 @@ func _on_cb_executors_item_selected(index):
 	var candidate = executor_candidates[index]
 	var node := candidate.node_ref.get_ref() as FlowGraphNode3D
 	if is_instance_valid(node):
-		print( "Changed node to executor %d %s" % [ index, node.name ] )
-		select_executor(node)
+		print( "Changed node to executor %d %s run %s" % [ index, node.name, candidate.run ] )
+		select_executor(node, candidate.context)

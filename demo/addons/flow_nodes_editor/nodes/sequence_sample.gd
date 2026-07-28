@@ -15,7 +15,7 @@ func _init():
 	}
 
 func execute( ctx : FlowData.EvaluationContext ):
-	var in_data : FlowData.Data = get_input(0)
+	var in_data : FlowData.Data = getInput(ctx, 0)
 	
 	var indices := PackedInt32Array( )
 	
@@ -39,4 +39,4 @@ func execute( ctx : FlowData.EvaluationContext ):
 			i += 1
 	
 	var out_data = in_data.filter( indices )
-	set_output( 0, out_data )
+	setOutput(ctx, 0, out_data )

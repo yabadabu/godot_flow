@@ -15,7 +15,7 @@ func _init():
 	}
 
 func execute( ctx : FlowData.EvaluationContext ):
-	var in_data : FlowData.Data = get_input(0)
+	var in_data : FlowData.Data = getInput(ctx, 0)
 	var out_data : FlowData.Data = in_data.duplicate()
 	var spos : PackedVector3Array = out_data.cloneStream( FlowData.AttrPosition )
 	var strength : float = getSettingValue( ctx, "strength" )
@@ -73,4 +73,4 @@ func execute( ctx : FlowData.EvaluationContext ):
 
 		for i in spos.size():
 			spos[i] += acc_deltas[i]
-	set_output( 0, out_data )
+	setOutput(ctx, 0, out_data )

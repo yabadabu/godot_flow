@@ -51,21 +51,21 @@ func exposeParam( name : String ) -> bool:
 
 func execute( ctx : FlowData.EvaluationContext ):
 	
-	var in_data = get_input(0)
-	var path3d_nodes = in_data.getContainerChecked( "node", FlowData.DataType.NodePath, self )
+	var in_data = getInput(ctx, 0)
+	var path3d_nodes = in_data.getContainerChecked("node", FlowData.DataType.NodePath, ctx, self)
 	if path3d_nodes == null:
 		return
 		
-	var in_pieces = get_input(1)
+	var in_pieces = getInput(ctx, 1)
 	if in_pieces == null:
-		setError( "Input pieces is not connected")
+		setError(ctx,  "Input pieces is not connected")
 		return
 		
 	var evaluator = GrammarEvaluator.new()
 	
 	var grammars = null
 	if grammar_as_attribute:
-		grammars = in_data.getContainerChecked( attribute_grammar, FlowData.DataType.String, self )
+		grammars = in_data.getContainerChecked(attribute_grammar, FlowData.DataType.String, ctx, self)
 		if grammars == null:
 			return
 	else:
@@ -75,9 +75,9 @@ func execute( ctx : FlowData.EvaluationContext ):
 				print( "  Error: %s" % err )
 			return
 			
-	var symbols = in_pieces.getContainerChecked( attribute_symbol, FlowData.DataType.String, self )
-	var lengths = in_pieces.getContainerChecked( attribute_length, FlowData.DataType.Float, self )
-	var stream_scalables = in_pieces.getContainerChecked( attribute_scalable, FlowData.DataType.Bool, self )
+	var symbols = in_pieces.getContainerChecked(attribute_symbol, FlowData.DataType.String, ctx, self)
+	var lengths = in_pieces.getContainerChecked(attribute_length, FlowData.DataType.Float, ctx, self)
+	var stream_scalables = in_pieces.getContainerChecked(attribute_scalable, FlowData.DataType.Bool, ctx, self)
 	if symbols == null or lengths == null or stream_scalables == null:
 		return
 		
@@ -188,5 +188,5 @@ func execute( ctx : FlowData.EvaluationContext ):
 			var new_container = output.filteredStream( in_stream, indices )
 			output.registerStream( key, new_container, in_stream.data_type )
 
-		set_output( 0, output )
+		setOutput(ctx, 0, output )
 	

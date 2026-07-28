@@ -45,4 +45,4 @@ func execute( ctx : FlowData.EvaluationContext ):
 				srot[idx] = rotation
 				ssize[idx] = size
 				idx += 1
-	set_output( 0, output )
+	setOutput(ctx, 0, output )

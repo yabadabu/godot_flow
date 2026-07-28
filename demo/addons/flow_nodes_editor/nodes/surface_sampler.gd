@@ -15,14 +15,14 @@ func _init():
 	}
 
 func execute( ctx : FlowData.EvaluationContext ):
-	var in_data : FlowData.Data = get_input(0)
+	var in_data : FlowData.Data = getInput(ctx, 0)
 	if in_data == null or in_data.size() == 0:
-		set_output(0, FlowData.Data.new())
+		setOutput(ctx, 0, FlowData.Data.new())
 		return
 		
 	var in_trs = in_data.getTransformsStream()
 	if in_trs == null:
-		setError("Input does not provide position, rotation, or scale streams")
+		setError(ctx, "Input does not provide position, rotation, or scale streams")
 		return
 		
 	var seed_val = getSettingValue(ctx, "random_seed", 12345)
@@ -66,4 +66,4 @@ func execute( ctx : FlowData.EvaluationContext ):
 			ssize[idx] = pt_size
 			idx += 1
 			
-	set_output(0, out_data)
+	setOutput(ctx, 0, out_data)

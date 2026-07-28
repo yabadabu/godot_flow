@@ -103,6 +103,7 @@ data = {
 "settings": {
 "attr_name": "AttrA",
 "cte_float": 2.3,
+&"inspect_enabled": false,
 "random_seed": 1449361021,
 "title": "Add Attribute"
 },
@@ -119,6 +120,7 @@ data = {
 "name": &"id_0024_spawn_meshes",
 "position": Vector2(1160, 0),
 "settings": {
+&"inspect_enabled": false,
 "mesh_variant_weights": Array[float]([1.0, 1.0]),
 "mesh_variants": Array[Mesh]([SubResource("CylinderMesh_qe5xq")]),
 "random_seed": 3770067884,
@@ -138,6 +140,7 @@ data = {
 "name": &"id_0027_random_color",
 "position": Vector2(140, 0),
 "settings": {
+&"inspect_enabled": false,
 "palette": Array[Color]([Color(1, 0.078, 0.576, 1), Color(0, 0.749, 1, 1), Color(1, 0.843, 0, 1), Color(0.5333, 1, 0, 1)]),
 "random_seed": 3955561587,
 "sat_min": 0.0,
@@ -158,6 +161,7 @@ data = {
 "name": &"id_0006_attribute_rename",
 "position": Vector2(780, 380),
 "settings": {
+&"inspect_enabled": false,
 "overwrite_existing": true,
 "random_seed": 1383552419,
 "title": "Attribute Rename",
@@ -172,6 +176,7 @@ data = {
 "position": Vector2(420, 260),
 "settings": {
 "input_name": "upper",
+&"inspect_enabled": false,
 "random_seed": 47437790,
 "title": "Input"
 },
@@ -188,6 +193,7 @@ data = {
 "name": &"id_0001_attribute_rename",
 "position": Vector2(780, 480),
 "settings": {
+&"inspect_enabled": false,
 "random_seed": 1383552419,
 "title": "Attribute Rename",
 "to_name": "AttrA"
@@ -217,6 +223,7 @@ data = {
 "debug_mode": 1,
 "debug_scale": 0.91,
 "in_nameA": "position.X",
+&"inspect_enabled": false,
 "random_seed": 889352604,
 "title": ".X Between lower and upper"
 },
@@ -229,6 +236,7 @@ data = {
 "position": Vector2(420, 180),
 "settings": {
 "input_name": "lower",
+&"inspect_enabled": false,
 "random_seed": 3436610190,
 "title": "Input"
 },
@@ -245,6 +253,7 @@ data = {
 "name": &"id_0007_transform",
 "position": Vector2(420, 80),
 "settings": {
+&"inspect_enabled": false,
 "offset_max": Vector3(0, 0, -4),
 "offset_min": Vector3(0, 0, -4),
 "random_seed": 3884151268,
@@ -265,6 +274,7 @@ data = {
 "settings": {
 "attr_name": "AttrC",
 "cte_float": 4.0,
+&"inspect_enabled": false,
 "random_seed": 1449361021,
 "title": "Add Attribute"
 },
@@ -276,6 +286,7 @@ data = {
 "name": &"id_0003_grid",
 "position": Vector2(0, 100),
 "settings": {
+&"inspect_enabled": false,
 "random_seed": 618638236,
 "title": "Grid",
 "x": 6,
@@ -294,65 +305,67 @@ view_offset = Vector2(-4.324402, -184.96346)
 new_name_counter = 28
 in_params = Array[ExtResource("2_qe5xq")]([SubResource("Resource_wih4v"), SubResource("Resource_qe5xq")])
 
-[sub_resource type="Resource" id="Resource_1ktil"]
+[sub_resource type="Resource" id="Resource_ol62c"]
 script = ExtResource("4_qe5xq")
 param_id = &"lower"
-value = 0.88
+enabled = true
+value = 1.025
 
 [sub_resource type="Resource" id="Resource_rg22r"]
 script = ExtResource("4_qe5xq")
 param_id = &"upper"
-value = 18
+enabled = true
+value = 4
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qe5xq"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_w51uf"]
 vertex_color_use_as_albedo = true
 roughness = 0.3
 
-[sub_resource type="MultiMesh" id="MultiMesh_ol62c"]
+[sub_resource type="MultiMesh" id="MultiMesh_fdxg3"]
 transform_format = 1
 use_colors = true
 instance_count = 6
 mesh = SubResource("CylinderMesh_qe5xq")
-buffer = PackedFloat32Array(1, 0, 0, 2, 0, 1, 0, 0, 0, 0, 1, -3, 0.696814, 0.5421144, 0.65419793, 1, 1, 0, 0, 3, 0, 1, 0, 0, 0, 0, 1, -3, 0.510606, 0.0092868, 0.5855588, 1, 1, 0, 0, 4, 0, 1, 0, 0, 0, 0, 1, -3, 0.24577841, 0.020825483, 0.6322516, 1, 1, 0, 0, 2, 0, 1, 0, 0, 0, 0, 1, -2, 0.3272827, 0.56514215, 0.60290724, 1, 1, 0, 0, 3, 0, 1, 0, 0, 0, 0, 1, -2, 0.18143907, 0.47616532, 0.21626386, 1, 1, 0, 0, 4, 0, 1, 0, 0, 0, 0, 1, -2, 0.25655344, 0.421348, 0.4092525, 1)
+buffer = PackedFloat32Array(1, 0, 0, 2, 0, 1, 0, 0, 0, 0, 1, -4, 0.696814, 0.5421144, 0.65419793, 1, 1, 0, 0, 3, 0, 1, 0, 0, 0, 0, 1, -4, 0.510606, 0.0092868, 0.5855588, 1, 1, 0, 0, 4, 0, 1, 0, 0, 0, 0, 1, -4, 0.24577841, 0.020825483, 0.6322516, 1, 1, 0, 0, 2, 0, 1, 0, 0, 0, 0, 1, -3, 0.3272827, 0.56514215, 0.60290724, 1, 1, 0, 0, 3, 0, 1, 0, 0, 0, 0, 1, -3, 0.18143907, 0.47616532, 0.21626386, 1, 1, 0, 0, 4, 0, 1, 0, 0, 0, 0, 1, -3, 0.25655344, 0.421348, 0.4092525, 1)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gur2a"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5nug1"]
 vertex_color_use_as_albedo = true
 roughness = 0.3
 
-[sub_resource type="MultiMesh" id="MultiMesh_rg22r"]
+[sub_resource type="MultiMesh" id="MultiMesh_3gr13"]
 transform_format = 1
 use_colors = true
 instance_count = 12
 mesh = SubResource("CylinderMesh_qe5xq")
-buffer = PackedFloat32Array(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 2, 0.8743945, 0.3938839, 0.90539306, 1, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 2, 0.32842076, 0.20186996, 0.56911194, 1, 1, 0, 0, 2, 0, 1, 0, 0, 0, 0, 1, 2, 0.696814, 0.5421144, 0.65419793, 1, 1, 0, 0, 3, 0, 1, 0, 0, 0, 0, 1, 2, 0.510606, 0.0092868, 0.5855588, 1, 1, 0, 0, 4, 0, 1, 0, 0, 0, 0, 1, 2, 0.24577841, 0.020825483, 0.6322516, 1, 1, 0, 0, 5, 0, 1, 0, 0, 0, 0, 1, 2, 0.9305757, 0.48036227, 0.68634903, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 3, 0.21959217, 0.15142691, 0.12592568, 1, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 3, 0.16233858, 0.081329316, 0.11598, 1, 1, 0, 0, 2, 0, 1, 0, 0, 0, 0, 1, 3, 0.3272827, 0.56514215, 0.60290724, 1, 1, 0, 0, 3, 0, 1, 0, 0, 0, 0, 1, 3, 0.18143907, 0.47616532, 0.21626386, 1, 1, 0, 0, 4, 0, 1, 0, 0, 0, 0, 1, 3, 0.25655344, 0.421348, 0.4092525, 1, 1, 0, 0, 5, 0, 1, 0, 0, 0, 0, 1, 3, 0.4216736, 0.56609505, 0.5052091, 1)
+buffer = PackedFloat32Array(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.8743945, 0.3938839, 0.90539306, 1, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0.32842076, 0.20186996, 0.56911194, 1, 1, 0, 0, 2, 0, 1, 0, 0, 0, 0, 1, 0, 0.696814, 0.5421144, 0.65419793, 1, 1, 0, 0, 3, 0, 1, 0, 0, 0, 0, 1, 0, 0.510606, 0.0092868, 0.5855588, 1, 1, 0, 0, 4, 0, 1, 0, 0, 0, 0, 1, 0, 0.24577841, 0.020825483, 0.6322516, 1, 1, 0, 0, 5, 0, 1, 0, 0, 0, 0, 1, 0, 0.9305757, 0.48036227, 0.68634903, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0.21959217, 0.15142691, 0.12592568, 1, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 1, 0.16233858, 0.081329316, 0.11598, 1, 1, 0, 0, 2, 0, 1, 0, 0, 0, 0, 1, 1, 0.3272827, 0.56514215, 0.60290724, 1, 1, 0, 0, 3, 0, 1, 0, 0, 0, 0, 1, 1, 0.18143907, 0.47616532, 0.21626386, 1, 1, 0, 0, 4, 0, 1, 0, 0, 0, 0, 1, 1, 0.25655344, 0.421348, 0.4092525, 1, 1, 0, 0, 5, 0, 1, 0, 0, 0, 0, 1, 1, 0.4216736, 0.56609505, 0.5052091, 1)
 
 [node name="DemoOperators" type="Node3D" unique_id=80587500]
 
 [node name="FlowGraphNode3D" type="Node3D" parent="." unique_id=420276401]
 script = ExtResource("1_wih4v")
 graph = SubResource("Resource_gur2a")
-overrides = Array[ExtResource("4_qe5xq")]([SubResource("Resource_1ktil"), SubResource("Resource_rg22r")])
+overrides = Array[ExtResource("4_qe5xq")]([SubResource("Resource_ol62c"), SubResource("Resource_rg22r")])
 regenerate = Callable()
 clearInstances = Callable()
-flow_override/lower/enabled = false
-flow_override/lower/value = 0.88
-flow_override/upper/enabled = false
-flow_override/upper/value = 18
+flow_override/lower/enabled = true
+flow_override/lower/value = 1.025
+flow_override/upper/enabled = true
+flow_override/upper/value = 4
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
 
-[node name="Spawn Meshes_0000" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=1364240290]
-material_override = SubResource("StandardMaterial3D_qe5xq")
-multimesh = SubResource("MultiMesh_ol62c")
+[node name="Spawn Meshes_0000" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=676128734]
+material_override = SubResource("StandardMaterial3D_w51uf")
+multimesh = SubResource("MultiMesh_fdxg3")
 metadata/flow_owner = &"id_0024_spawn_meshes"
 
-[node name="Spawn Meshes_0001" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=1869685781]
-material_override = SubResource("StandardMaterial3D_gur2a")
-multimesh = SubResource("MultiMesh_rg22r")
+[node name="Spawn Meshes_0001" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=150589181]
+material_override = SubResource("StandardMaterial3D_5nug1")
+multimesh = SubResource("MultiMesh_3gr13")
 metadata/flow_owner = &"id_0024_spawn_meshes"
 
 [node name="Hint" type="Label3D" parent="." unique_id=1523543456]
 transform = Transform3D(3.466592e-05, -0.99998033, 0.006265551, 0.0055325613, 0.00626567, 0.9999651, -0.9999847, 0, 0.00553267, 8.111563, -0.06398476, -1.5343919)
 pixel_size = 0.02
 text = "Filtering points by a range in .X coord
-Where the limtis are defined as inputs parameters
-of the graph"
+Where the limtis are defined as inputs 
+parameters of the graph"

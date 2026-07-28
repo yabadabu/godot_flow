@@ -86,13 +86,13 @@ func create_multimesh_direct():
 	var global_transform : Transform3D = Transform3D.IDENTITY
 	RenderingServer.instance_set_transform(instance_rid, global_transform)
 
-func setupColors( out_data : FlowData.Data ):
+func setupColors(out_data: FlowData.Data, ctx: FlowData.EvaluationContext):
 	var instance_count = out_data.size()
 	var color : Color = node.debug_color
 	if node.debug_modulate_by:
 		var stream = out_data.findStream( node.debug_modulate_by )
 		if not stream:
-			node.setError( "Attribute %s of type Float not found" %node. debug_modulate_by )
+			ctx.setNodeError(node, "Attribute %s of type Float not found" % node.debug_modulate_by)
 			return
 		if stream.data_type == FlowData.DataType.Float:
 			var smod : PackedFloat32Array = stream.container
@@ -111,7 +111,7 @@ func setupColors( out_data : FlowData.Data ):
 				RenderingServer.multimesh_instance_set_color( multimesh_rid, idx, color * smod[idx] )
 			return
 		else:
-			node.setError( "Attribute %s must be of type float or vector to modulate" % node.debug_modulate_by )
+			ctx.setNodeError(node, "Attribute %s must be of type float or vector to modulate" % node.debug_modulate_by)
 			
 	for idx in range( instance_count ):
 		RenderingServer.multimesh_instance_set_color( multimesh_rid, idx, color )
@@ -143,14 +143,16 @@ func setupDraw():
 	if !s.debug_enabled or s.disabled:
 		cleanup_multimesh_direct()
 		return
-		
-	var num_bulks = node.generated_bulks.size()
+
+	var ctx: FlowData.EvaluationContext = ui_node.editor.active_context
+	var output_bulks := ctx.getOutputBulks(node)
+	var num_bulks := output_bulks.size()
 	s.debug_bulk = clampi( s.debug_bulk, 0, maxi( 0, num_bulks - 1) )
 	if s.debug_bulk >= num_bulks :
 		return
-	s.debug_output = clampi( s.debug_output, 0, node.generated_bulks[s.debug_bulk].size() - 1)
+	s.debug_output = clampi(s.debug_output, 0, output_bulks[s.debug_bulk].size() - 1)
 		
-	var out_data : FlowData.Data = node.get_bulk_output(s.debug_bulk, s.debug_output)
+	var out_data := ctx.getOutput(node, s.debug_bulk, s.debug_output)
 	if not out_data || !out_data.hasStream( FlowData.AttrPosition ):
 		print( "setupDebugDraw failed - out_data" )
 		return
@@ -195,7 +197,7 @@ func setupDraw():
 			var t := Transform3D( Basis.from_euler( eulers[idx] * PI / 180.0 ).scaled( abs_scale ), positions[idx] )
 			RenderingServer.multimesh_instance_set_transform( multimesh_rid, idx, t)
 	if node.trace: print( "Debug.Loop: %f (%d)" % [ Time.get_ticks_usec() - time_start_loop, instance_count ] )
-	setupColors( out_data )
+	setupColors(out_data, ctx)
 
 	# Copy the transform and color at Nth and paste it at the end
 	if allocated_count != instance_count:

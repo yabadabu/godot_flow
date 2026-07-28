@@ -16,7 +16,7 @@ func _init():
 	}
 
 func execute( ctx : FlowData.EvaluationContext ):
-	var in_data : FlowData.Data = get_input(0)
+	var in_data : FlowData.Data = getInput(ctx, 0)
 	var out_data := FlowData.Data.new()
 	var trace := trace
 	
@@ -84,4 +84,4 @@ func execute( ctx : FlowData.EvaluationContext ):
 		out_data.registerStream( generate_copy_id, container )
 		if trace: print( "Copy.GenerateId: %f" % [ Time.get_ticks_usec() - time_start_id ] )
 
-	set_output( 0, out_data )
+	setOutput(ctx, 0, out_data )

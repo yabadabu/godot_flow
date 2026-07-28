@@ -183,10 +183,10 @@ func execute( ctx : FlowData.EvaluationContext ):
 	if not root:
 		return null
 		
-	var in_data = get_input(0)
+	var in_data = getInput(ctx, 0)
 	var nodes = in_data.getContainerChecked( "node", FlowData.DataType.NodeMesh )
 	if nodes == null:
-		setError( "Input are not meshes")
+		setError(ctx,  "Input are not meshes")
 		return null		
 		
 	var output := FlowData.Data.new()
@@ -235,4 +235,4 @@ func execute( ctx : FlowData.EvaluationContext ):
 	var sample_size = Vector3.ONE * point_size
 	ssize.fill(sample_size)
 
-	set_output( 0, output )
+	setOutput(ctx, 0, output )

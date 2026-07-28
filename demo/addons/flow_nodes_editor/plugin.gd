@@ -117,9 +117,10 @@ func _selection_changed():
 	var scene_nodes = selection.get_selected_nodes()
 	if not scene_nodes.is_empty():
 		var scene_node = scene_nodes[0]
-		if scene_node is FlowGraphNodeUI:
+		if scene_node is FlowGraphNode3D:
 			setWatchedNode( scene_node )
-			graph_dock.setResourceToEdit( scene_node.graph )
+			graph_dock.openResource(scene_node.graph)
+			graph_dock.select_executor(scene_node, scene_node.ctx)
 			return
 	setWatchedNode( null )
 
@@ -138,9 +139,11 @@ func onSelectedGraphNodeChanged( node : FlowGraphNode3D, prop_name: String ):
 		print( "  -> %s" % [node.graph] )
 		graph_dock.setResourceToEdit( node.graph )
 	else:
-		if graph_dock.resource_owner == node:
+		if graph_dock.resource_owner == node and graph_dock.active_context == node.ctx:
 			print( "Input %s changed" % [prop_name] )
 			graph_dock.queueRegen()
+		elif graph_dock.auto_regen:
+			node.regenerate()
 
 func _on_history_changed( ):
 	#print("Something changed in the editor (undo/redo history updated)")	
@@ -152,7 +155,12 @@ func _process( elapsed : float ):
 		current_scene_root = scene_root
 		on_scene_changed(scene_root)
 
-func register_executor(node: FlowGraphNode3D, graph : FlowGraphResource, run_idx : int ) -> void:
+func register_executor(
+	node: FlowGraphNode3D,
+	graph: FlowGraphResource,
+	run_idx: int,
+	context: FlowData.EvaluationContext = null
+) -> void:
 	if graph == null:
 		return
 	var id := node.get_instance_id()
@@ -162,7 +170,10 @@ func register_executor(node: FlowGraphNode3D, graph : FlowGraphResource, run_idx
 		executors[graph][id] = { "count" : 0, "runs" : {} }
 	executors[graph][id].count += 1
 	executors[graph][id].node_ref = weakref(node)
-	executors[graph][id].runs[ run_idx ] = 1
+	if context == null and node.graph == graph:
+		context = node.ctx
+	var run_id: Variant = context.name if context and context.parent_ctx else run_idx
+	executors[graph][id].runs[run_id] = context
 
 func unregister_executor(node: FlowGraphNode3D) -> void:
 	var graph : FlowGraphResource = node.graph

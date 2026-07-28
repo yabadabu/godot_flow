@@ -17,13 +17,13 @@ func _init():
 func getTitle() -> String:
 	return "%s -> %s" % [ from_name, to_name ] 
 
-func execute(_ctx : FlowData.EvaluationContext):
-	var in_data : FlowData.Data = get_input(0)
+func execute(ctx : FlowData.EvaluationContext):
+	var in_data : FlowData.Data = getInput(ctx, 0)
 	if in_data == null:
-		setError("Input not found")
+		setError(ctx, "Input not found")
 		return
 	var out_data : FlowData.Data = in_data.duplicate()
 	var err_msg = out_data.renameStream( from_name, to_name, overwrite_existing )
 	if err_msg:
-		setError(err_msg)
-	set_output(0, out_data)
+		setError(ctx, err_msg)
+	setOutput(ctx, 0, out_data)

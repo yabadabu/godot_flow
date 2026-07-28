@@ -21,10 +21,10 @@ func _init():
 	}
 
 func execute( ctx : FlowData.EvaluationContext ):
-	var in_data : FlowData.Data = get_input(0)
+	var in_data : FlowData.Data = getInput(ctx, 0)
 	# Check if we have something to transform
 	if not (in_data and in_data.hasStream(FlowData.AttrPosition) and in_data.hasStream(FlowData.AttrRotation) and  in_data.hasStream(FlowData.AttrSize)):
-		set_output( 0, FlowData.Data.new() )
+		setOutput(ctx, 0, FlowData.Data.new() )
 		return
 	var out_data : FlowData.Data = in_data.duplicate()
 	var spos : PackedVector3Array = out_data.cloneStream( FlowData.AttrPosition )
@@ -59,4 +59,4 @@ func execute( ctx : FlowData.EvaluationContext ):
 		else:
 			var amount_scale = Vector3( rng.randf(), rng.randf(), rng.randf() )
 			ssizes[i] *= scale_min + ( scale_max - scale_min ) * amount_scale
-	set_output( 0, out_data )
+	setOutput(ctx, 0, out_data )

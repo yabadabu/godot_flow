@@ -19,9 +19,9 @@ func _init():
 	}
 
 func execute( ctx : FlowData.EvaluationContext ):
-	var in_data : FlowData.Data = get_input(0)
+	var in_data : FlowData.Data = getInput(ctx, 0)
 	if in_data == null:
-		setError("Input 'In' is not connected")
+		setError(ctx, "Input 'In' is not connected")
 		return
 		
 	var out_data : FlowData.Data = in_data.duplicate()
@@ -42,4 +42,4 @@ func execute( ctx : FlowData.EvaluationContext ):
 			container[i] = rng.randf_range(min_value, max_value)
 		out_data.registerStream(attribute_name, container, FlowData.DataType.Float)
 		
-	set_output(0, out_data)
+	setOutput(ctx, 0, out_data)

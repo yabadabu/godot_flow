@@ -93,18 +93,18 @@ func _resolve_scene_for_point(idx : int, scenes_stream, variants : Array[PackedS
 		return variants[ridx]
 	return variants[idx % variants.size()]
 		
-func _find_owner_of_spawned_nodes( root : Node) -> Node:
+func _find_owner_of_spawned_nodes(ctx: FlowData.EvaluationContext, root: Node) -> Node:
 
 	# Find who is going to be the owner of the new nodes
 	# (should be the parent root of the scene, not the parent)
 	var node_tree = root.get_tree()
 	if not node_tree:
-		setError("Invalid current scene")
+		setError(ctx, "Invalid current scene")
 		return null
 		
 	var scene_root = node_tree.current_scene
 	if not root.get_tree():
-		setError("Invalid scene_root scene")
+		setError(ctx, "Invalid scene_root scene")
 		return null
 		
 	var new_owner : Node
@@ -124,14 +124,14 @@ func preExecute( ctx : FlowData.EvaluationContext ):
 		
 func execute( ctx : FlowData.EvaluationContext ):
 
-	var in_data : FlowData.Data = get_input(0)
+	var in_data : FlowData.Data = getInput(ctx, 0)
 	if !in_data:
-		set_output(0, FlowData.Data.new())
+		setOutput(ctx, 0, FlowData.Data.new())
 		return
 
 	var in_size = in_data.size()
 	if in_size == 0:
-		set_output(0, in_data)
+		setOutput(ctx, 0, in_data)
 		return
 
 	# The scenes is going to be defined in an attribute?
@@ -139,10 +139,10 @@ func execute( ctx : FlowData.EvaluationContext ):
 	if scene_attribute:
 		var stream_scenes = in_data.findStream( scene_attribute )
 		if stream_scenes == null:
-			setError( "Input does not have attribute '%s'" % scene_attribute)
+			setError(ctx,  "Input does not have attribute '%s'" % scene_attribute)
 			return
 		if stream_scenes.data_type != FlowData.DataType.Resource:
-			setError( "Attribute '%s' should be of type Resource Packed Scene" % scene_attribute)
+			setError(ctx,  "Attribute '%s' should be of type Resource Packed Scene" % scene_attribute)
 			return
 		scenes = stream_scenes.container
 
@@ -150,21 +150,21 @@ func execute( ctx : FlowData.EvaluationContext ):
 	if scene_selector_attribute.strip_edges() != "":
 		selector_stream = in_data.findStream(scene_selector_attribute)
 		if selector_stream != null and selector_stream.data_type != FlowData.DataType.Int and selector_stream.data_type != FlowData.DataType.Float:
-			setError("Scene selector attribute '%s' must be Int or Float" % scene_selector_attribute)
+			setError(ctx, "Scene selector attribute '%s' must be Int or Float" % scene_selector_attribute)
 			return
 		if selector_stream != null:
 			var sel_size = selector_stream.container.size()
 			if sel_size != in_data.size() and sel_size != 1:
-				setError("Scene selector attribute '%s' must have %d values or 1 value (got %d)" % [scene_selector_attribute, in_data.size(), sel_size])
+				setError(ctx, "Scene selector attribute '%s' must have %d values or 1 value (got %d)" % [scene_selector_attribute, in_data.size(), sel_size])
 				return
 
 	var transforms = in_data.getTransformsStream()
 	if transforms == null:
-		setError("Missing required streams %s/%s" % [ FlowData.AttrPosition, FlowData.AttrRotation ])
-		set_output(0, in_data)
+		setError(ctx, "Missing required streams %s/%s" % [ FlowData.AttrPosition, FlowData.AttrRotation ])
+		setOutput(ctx, 0, in_data)
 		return
 
-	var owner_of_spawned_nodes := _find_owner_of_spawned_nodes( ctx.owner )
+	var owner_of_spawned_nodes := _find_owner_of_spawned_nodes(ctx, ctx.owner)
 	var spawn_parent = ctx.resolveSpawnParent(self)
 
 	var variants : Array[PackedScene] = []
@@ -173,7 +173,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 			variants.append(v)
 	var variant_weights = _build_variant_weights()
 	if variants.is_empty() and scenes == null:
-		setError("No scene source configured. Provide scene, scene_attribute, or scene_variants.")
+		setError(ctx, "No scene source configured. Provide scene, scene_attribute, or scene_variants.")
 		return
 
 	# Save which data is needed for customization
@@ -194,7 +194,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 		if node == null:
 			if created:
 				created.queue_free()
-			setError("Instanced scene is not a Node3D at index %d" % idx)
+			setError(ctx, "Instanced scene is not a Node3D at index %d" % idx)
 			return
 		node.transform = transforms.atIndex( idx )
 		node.name = "%s_%04d" % [ name, spawn_id + idx ]
@@ -216,4 +216,4 @@ func execute( ctx : FlowData.EvaluationContext ):
 	
 	spawn_id += in_size
 	EditorInterface.mark_scene_as_unsaved()
-	set_output(0, in_data)
+	setOutput(ctx, 0, in_data)

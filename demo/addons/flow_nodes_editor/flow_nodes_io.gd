@@ -77,7 +77,7 @@ static func dict_to_resource(data: Dictionary, resource: Resource) -> void:
 			continue
 		var value = data[name]
 		var type = prop.type
-		print( "Updating res.%s to %s" % [ name, value ])
+		#print( "Updating res.%s to %s" % [ name, value ])
 		match type:
 			TYPE_COLOR:
 				resource.set(name, _parse_color(value))

@@ -44,10 +44,10 @@ class WeightsRandomSampler:
 		return lo
 
 func execute( ctx : FlowData.EvaluationContext ):
-	var in_data : FlowData.Data = get_input(0)
-	var attrs_data : FlowData.Data = get_input(1)
+	var in_data : FlowData.Data = getInput(ctx, 0)
+	var attrs_data : FlowData.Data = getInput(ctx, 1)
 	if attrs_data == null || in_data == null:
-		setError( "Attributes input is required" )
+		setError(ctx,  "Attributes input is required" )
 		return
 		
 	var using_lut := false
@@ -57,11 +57,11 @@ func execute( ctx : FlowData.EvaluationContext ):
 	if match_attr:
 		var match_stream = attrs_data.findStream( match_attr )
 		if match_stream == null:
-			setError( "Can't find attribute %s in Attributes input" % match_attr )
+			setError(ctx,  "Can't find attribute %s in Attributes input" % match_attr )
 			return
 		var input_lut_stream = in_data.findStream( match_attr )
 		if input_lut_stream == null:
-			setError( "Can't find attribute %s in In input" % match_attr )
+			setError(ctx,  "Can't find attribute %s in In input" % match_attr )
 			return
 		input_lut_container = input_lut_stream.container
 		var attr_index := 0
@@ -76,10 +76,10 @@ func execute( ctx : FlowData.EvaluationContext ):
 	var weight_attr : String = getSettingValue( ctx, "weight_attr" )
 	var weight_stream = attrs_data.findStream( weight_attr )
 	if weight_attr and not weight_stream:
-		setError( "Can't find weight attribute %s" % weight_attr )
+		setError(ctx,  "Can't find weight attribute %s" % weight_attr )
 		return
 	if weight_attr and weight_stream and weight_stream.data_type != FlowData.DataType.Float:
-		setError( "Weight attribute %s should have type float" % weight_attr )
+		setError(ctx,  "Weight attribute %s should have type float" % weight_attr )
 	
 	# Create the new streams
 	var out_data : FlowData.Data = in_data.duplicate()
@@ -128,4 +128,4 @@ func execute( ctx : FlowData.EvaluationContext ):
 					# print( "Copy all attr of in_attr[%d] into out_data[%d]" % [attr_idx, idx])
 					copyPoint.call( idx, attr_idx )
 			
-	set_output( 0, out_data )
+	setOutput(ctx, 0, out_data )

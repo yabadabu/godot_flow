@@ -27,10 +27,21 @@ func redrawUI():
 func setActivity( amount : float ):
 	if flow_node.disabled:
 		return
-	if not flow_node.err:
+	var ctx := getEvaluationContext()
+	var error := ctx.getNodeError(flow_node) if ctx else ""
+	if error.is_empty():
 		modulate = Color.WHITE + Color( amount, amount, amount, 0.0 )
 	else:
 		modulate = Color(1.0, 0.5, 0.5)
+
+func getEvaluationContext() -> FlowData.EvaluationContext:
+	if (
+		editor
+		and editor.active_context
+		and editor.active_context.graph == flow_node.flow_graph
+	):
+		return editor.active_context
+	return null
 	
 func checkDrawDebug():
 	if flow_node == null:
@@ -119,6 +130,8 @@ static func getColorForFlowDataType( data_type : FlowData.DataType ) -> Color:
 			return Color.SKY_BLUE
 		FlowData.DataType.NodeMesh:
 			return Color.MAGENTA
+		FlowData.DataType.Any:
+			return Color.WHITE
 	return Color.WHEAT
 	
 func _make_custom_tooltip(for_text: String) -> Object:
@@ -139,7 +152,8 @@ func _on_draw() -> void:
 		return
 
 	var ui_scale := 1.0
-	var err = flow_node.err
+	var ctx := getEvaluationContext()
+	var err := ctx.getNodeError(flow_node) if ctx else ""
 	
 	if err:
 		var sz = 16 * ui_scale
@@ -153,7 +167,7 @@ func _on_draw() -> void:
 		draw_circle( Vector2(size.x,0), marker_radius * ui_scale, clr )
 	
 	# Draw execution time badge (top-right, near titlebar)
-	var exec_time_usec = flow_node.get_meta("exec_time_usec", 0)
+	var exec_time_usec := ctx.getNodeExecTime(flow_node) if ctx else 0
 	if exec_time_usec > 10:
 		var time_font = ThemeDB.fallback_font
 		var time_font_size := int(11 * ui_scale)
@@ -291,10 +305,10 @@ func initFromScript( ):
 				var data_type = out_data.get( "data_type", FlowData.DataType.Invalid )
 				if data_type == FlowData.DataType.Invalid and out_data.has( "type"):
 					data_type = flow_node.getFlowDataTypeFromGdScriptType( out_data.type )
-				if data_type != FlowData.DataType.Invalid:
-					var color = getColorForFlowDataType( data_type )	
-					set_slot_color_right( idx, color )
-					set_slot_type_right( idx, data_type )					
+				if data_type == FlowData.DataType.Invalid:
+					data_type = FlowData.DataType.Any
+				set_slot_color_right(idx, getColorForFlowDataType(data_type))
+				set_slot_type_right(idx, data_type)
 					
 		else:
 			lbl_out.text = ""

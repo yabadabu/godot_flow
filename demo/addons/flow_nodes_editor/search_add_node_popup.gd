@@ -18,6 +18,7 @@ const MAX_RECENT : int = 8
 
 var current_node_types: Dictionary = {}
 var current_inputs: Array = []
+var current_actions: Array = []
 var nodes_by_category: Dictionary = {}
 var category_buttons: Dictionary = {}
 var compatible_template_names: Array = []
@@ -26,7 +27,9 @@ var show_inputs_category := false
 
 const RECENTS_CATEGORY := "Recents"
 const INPUTS_CATEGORY := "Inputs"
+const ACTIONS_CATEGORY := "Actions"
 const ACTION_ADD_NEW_INPUT := 1
+const ACTION_COLLAPSE_TO_SUBGRAPH := 2
 const MIN_POPUP_SIZE := Vector2i(360, 240)
 const CATEGORY_ROW_HEIGHT := 30
 const POPUP_VERTICAL_PADDING := 58
@@ -44,10 +47,11 @@ func appearAt( new_screen_position : Vector2 ):
 	show()
 	move_to_front()
 	
-func setup( node_types : Dictionary, p_inputs: Array, _p_outputs: Array, required_input_type : FlowData.DataType, required_output_type : FlowData.DataType ):
+func setup( node_types : Dictionary, p_inputs: Array, _p_outputs: Array, required_input_type : FlowData.DataType, required_output_type : FlowData.DataType, actions: Array = [] ):
 	print( "invoking menu popup setup... %d %d" % [ required_input_type, required_output_type ])
 	current_node_types = node_types
 	current_inputs = p_inputs
+	current_actions = actions
 	if not search_text.text_changed.is_connected(_on_search_text_changed):
 		search_text.text_changed.connect(_on_search_text_changed)
 	search_text.text = ""
@@ -133,6 +137,8 @@ func _get_visible_category_names() -> Array:
 		category_names.push_front(RECENTS_CATEGORY)
 	if show_inputs_category:
 		category_names.push_front(INPUTS_CATEGORY)
+	if not current_actions.is_empty():
+		category_names.push_front(ACTIONS_CATEGORY)
 	return category_names
 
 func _get_recent_template_names() -> Array[String]:
@@ -181,6 +187,9 @@ func _show_category(category_name : String):
 	if category_name == INPUTS_CATEGORY:
 		_show_inputs()
 		return
+	if category_name == ACTIONS_CATEGORY:
+		_show_actions()
+		return
 
 	var template_names : Array = nodes_by_category.get(category_name, [])
 	if category_name != RECENTS_CATEGORY:
@@ -220,6 +229,18 @@ func _show_inputs():
 	_apply_category_button_style(add_button, INPUTS_CATEGORY)
 	add_button.pressed.connect(_select_action.bind(ACTION_ADD_NEW_INPUT))
 	search_results.add_child(add_button)
+
+func _show_actions():
+	for action in current_actions:
+		var action_button := Button.new()
+		action_button.text = action.get("label", "Action")
+		action_button.alignment = HORIZONTAL_ALIGNMENT_LEFT
+		action_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		_apply_category_button_style(action_button, ACTIONS_CATEGORY)
+		action_button.pressed.connect(_select_action.bind(action.id))
+		if action.has("tooltip"):
+			action_button.tooltip_text = action.tooltip
+		search_results.add_child(action_button)
 
 func _show_search_results(query : String):
 	_clear_results()
@@ -264,6 +285,18 @@ func _show_search_results(query : String):
 		input_button.pressed.connect(_select_input.bind(input_idx))
 		search_results.add_child(input_button)
 
+	for action in current_actions:
+		var label := str(action.get("label", "Action"))
+		if not label.to_lower().contains(query.to_lower()):
+			continue
+		var action_button := Button.new()
+		action_button.text = "%s / %s" % [ACTIONS_CATEGORY, label]
+		action_button.alignment = HORIZONTAL_ALIGNMENT_LEFT
+		action_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		_apply_category_button_style(action_button, ACTIONS_CATEGORY)
+		action_button.pressed.connect(_select_action.bind(action.id))
+		search_results.add_child(action_button)
+
 func _apply_category_button_style(button : Button, category_name : String):
 	var base_color := _get_display_category_color(category_name)
 	var normal_color := Color(base_color.r, base_color.g, base_color.b, 1.0)
@@ -294,6 +327,8 @@ func _get_display_category_color(category_name : String) -> Color:
 		return Color(0.55, 0.55, 0.55)
 	if category_name == INPUTS_CATEGORY:
 		return Color(0.32, 0.52, 0.85)
+	if category_name == ACTIONS_CATEGORY:
+		return Color(0.45, 0.45, 0.48)
 	return FlowNodeStyle.getCategoryColor(category_name)
 
 func _get_text_color_for_bg(bg_color : Color) -> Color:

@@ -15,6 +15,7 @@ extends Control
 @onready var bulk_selector : OptionButton = %BulkSelector
 
 var node : FlowNodeBase
+var context: FlowData.EvaluationContext
 var num_rows : int = 0
 var num_cols : int = 0
 var col_titles : Array[String]
@@ -35,7 +36,15 @@ var is_output : bool = true
 
 var container
 
-func setNode( new_node : FlowNodeBase ):
+func setContext(new_context: FlowData.EvaluationContext) -> void:
+	context = new_context
+	if not node:
+		refresh()
+		return
+	populateBulks()
+	refresh()
+
+func setNode(new_node: FlowNodeBase, new_context: FlowData.EvaluationContext = null):
 	# If there was already one active... disabled it
 	if node:
 		%LabelTitle.text = "..."
@@ -47,6 +56,7 @@ func setNode( new_node : FlowNodeBase ):
 		
 	if node != new_node and new_node:
 		node = new_node
+		context = new_context
 		%LabelTitle.text = node.getTitle()
 		node.inspect_enabled = true
 		current_port_combined_index = node.debug_port_combined_index
@@ -56,6 +66,7 @@ func setNode( new_node : FlowNodeBase ):
 		node.notifyChange()
 	else:
 		node = null
+		context = null
 		refresh()
 	populateSlots()
 	if current_port_combined_index < slot_selector.item_count:
@@ -260,10 +271,11 @@ func refresh():
 	
 	data = null
 	
-	if node:
+	if node and context:
 			
 		if is_output:
-			if current_bulk_index >= node.generated_bulks.size():
+			var output_bulks := context.getOutputBulks(node)
+			if current_bulk_index >= output_bulks.size():
 				current_bulk_index = 0
 
 			if node.debug_bulk != current_bulk_index:
@@ -271,11 +283,11 @@ func refresh():
 				node.debug_bulk = current_bulk_index
 				node.notifyChange()				
 				
-			data = node.get_bulk_output( current_bulk_index, current_port_index )
+			data = context.getOutput(node, current_bulk_index, current_port_index)
 			#print( "Requesting out bulk %d:%d -> %s" % [ current_bulk_index, current_port_index, data ])
 			#data.dump( "Data refresh")
 		else:
-			data = node.get_bulk_input( current_bulk_index, current_port_index )
+			data = context.getInputAt(node, current_bulk_index, current_port_index)
 		
 	if data != null:
 
@@ -323,7 +335,7 @@ func _on_slot_selector_item_selected(index: int) -> void:
 	if index < meta.outs.size():
 		is_output = true
 		current_port_index = index
-		if current_bulk_index >= node.generated_bulks.size():
+		if context and current_bulk_index >= context.getOutputBulks(node).size():
 			current_bulk_index = 0
 		#print( "Selected output Bulk:%d Port:%d" % [ current_bulk_index, current_port_index ] )
 	else:
@@ -366,16 +378,18 @@ func tagsAsStr( data : FlowData.Data ) -> String:
 	
 func populateBulks():
 	bulk_selector.clear()
+	if not node or not context:
+		return
 	if is_output:
-		for bulk_idx in range( node.generated_bulks.size() ):
-			var bulk_data = node.get_bulk_output( bulk_idx, current_port_index )
+		for bulk_idx in range(context.getOutputBulks(node).size()):
+			var bulk_data = context.getOutput(node, bulk_idx, current_port_index)
 			var tags_str : String = tagsAsStr( bulk_data )
 			var title = "Out Bulk %d %s" % [ bulk_idx, tags_str ]
 			bulk_selector.add_item( title, bulk_idx )
 				
 	else:
-		for bulk_idx in range( node.input_bulks.size() ):
-			var bulk_data = node.get_bulk_input( bulk_idx, current_port_index )
+		for bulk_idx in range(context.getInputBulks(node).size()):
+			var bulk_data = context.getInputAt(node, bulk_idx, current_port_index)
 			var tags_str : String = tagsAsStr( bulk_data )
 			var title = "In Bulk %d %s" % [ bulk_idx, tags_str ]
 			bulk_selector.add_item( title, bulk_idx )
@@ -383,8 +397,7 @@ func populateBulks():
 	# Ensure the bulk_index is still valid
 	if bulk_selector.get_item_count() > 0:
 		current_bulk_index = clampi(current_bulk_index, 0, bulk_selector.get_item_count() - 1)
-	
-	bulk_selector.select( current_bulk_index )
+		bulk_selector.select(current_bulk_index)
 
 func updateStats():
 	if data:

@@ -14,9 +14,9 @@ func _init():
 	}
 
 func execute( ctx : FlowData.EvaluationContext ):
-	var in_data : FlowData.Data = get_input(0)
+	var in_data : FlowData.Data = getInput(ctx, 0)
 	if in_data == null:
-		setError("Input 'In' is not connected")
+		setError(ctx, "Input 'In' is not connected")
 		return
 	
 	var prefix = prefix_message
@@ -30,4 +30,4 @@ func execute( ctx : FlowData.EvaluationContext ):
 	else:
 		print("%s: Data size = %d" % [prefix, in_data.size()])
 		
-	set_output(0, in_data)
+	setOutput(ctx, 0, in_data)

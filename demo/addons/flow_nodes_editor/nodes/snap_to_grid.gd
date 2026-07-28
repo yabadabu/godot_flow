@@ -16,9 +16,9 @@ func _init():
 	}
 
 func execute( ctx : FlowData.EvaluationContext ):
-	var in_data : FlowData.Data = get_input(0)
+	var in_data : FlowData.Data = getInput(ctx, 0)
 	if in_data == null:
-		setError("Input 'In' is not connected")
+		setError(ctx, "Input 'In' is not connected")
 		return
 		
 	var out_data : FlowData.Data = in_data.duplicate()
@@ -50,4 +50,4 @@ func execute( ctx : FlowData.EvaluationContext ):
 			if grid_sz.z != 0.0: ssize[i].z = round(ssize[i].z / grid_sz.z) * grid_sz.z
 		out_data.registerStream(FlowData.AttrSize, ssize, FlowData.DataType.Vector)
 		
-	set_output(0, out_data)
+	setOutput(ctx, 0, out_data)

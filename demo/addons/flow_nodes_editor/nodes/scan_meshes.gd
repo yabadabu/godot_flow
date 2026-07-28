@@ -18,4 +18,4 @@ func execute( ctx : FlowData.EvaluationContext ):
 	var resources = nodes.map( func( obj ): return obj.mesh )
 	output.registerStream( "mesh", resources, FlowData.DataType.Resource )
 	importCommon( ctx, output, nodes )
-	set_output( 0, output )
+	setOutput(ctx, 0, output )

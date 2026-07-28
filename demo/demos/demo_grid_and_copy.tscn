@@ -40,7 +40,7 @@ data = {
 "to_node": &"id_0004_spawn_meshes",
 "to_port": 0
 }],
-"min_pos": Vector2(-220, 0),
+"min_pos": Vector2(0, 0),
 "nodes": [{
 "args_port": {},
 "name": &"id_0008_make_vector",
@@ -52,41 +52,36 @@ data = {
 "y": 1.0
 },
 "show_disconnected_inputs": false,
-"size": Vector2(125, 71.00003),
+"size": Vector2(125, 71),
 "template": "make_vector"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0003_random_color",
+"position": Vector2(160, 0),
+"settings": {
+"random_seed": 4028716499,
+"title": "Random Color"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139, 71),
+"template": "random_color"
 }, {
 "args_port": {},
 "name": &"id_0009_grid",
 "position": Vector2(0, 0),
 "settings": {
 "origin": Vector3(0.145, 0.225, 0),
-"random_seed": 2455859592,
+"random_seed": 2455859587,
 "title": "Grid"
 },
 "show_disconnected_inputs": false,
 "size": Vector2(125, 71),
 "template": "grid"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-},
-"translation": {
-"connected": true,
-"port": 1
-}
-},
-"name": &"id_0010_copy",
-"position": Vector2(460, 0),
-"settings": {
-"num_copies": 3,
-"random_seed": 1253838636,
-"title": "Copy"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(175.00002, 101),
-"template": "copy"
 }, {
 "args_port": {
 "In": {
@@ -108,17 +103,22 @@ data = {
 "In": {
 "connected": true,
 "port": 0
+},
+"translation": {
+"connected": true,
+"port": 1
 }
 },
-"name": &"id_0003_random_color",
-"position": Vector2(160, 0),
+"name": &"id_0010_copy",
+"position": Vector2(460, 0),
 "settings": {
-"random_seed": 4028716519,
-"title": "Random Color"
+"num_copies": 3,
+"random_seed": 1253838636,
+"title": "Copy"
 },
 "show_disconnected_inputs": false,
-"size": Vector2(139, 71),
-"template": "random_color"
+"size": Vector2(175, 101),
+"template": "copy"
 }],
 "type": "flow_graph_nodes",
 "version": 1
@@ -130,35 +130,36 @@ new_name_counter = 288
 in_params = Array[ExtResource("2_ldm7r")]([SubResource("Resource_pkajt")])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 
-[sub_resource type="Resource" id="Resource_doe2k"]
+[sub_resource type="Resource" id="Resource_itnsq"]
 script = ExtResource("4_itnsq")
 param_id = &"Grid - Origin"
+enabled = true
 value = Vector3(0, 0, 0)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_55m7i"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_itnsq"]
 vertex_color_use_as_albedo = true
 roughness = 0.3
 
-[sub_resource type="MultiMesh" id="MultiMesh_usrr5"]
+[sub_resource type="MultiMesh" id="MultiMesh_mq7ey"]
 transform_format = 1
 use_colors = true
 instance_count = 27
 mesh = ExtResource("5_mq7ey")
-buffer = PackedFloat32Array(1, 0, 0, 0.145, 0, 1, 0, 0.225, 0, 0, 1, 0, 1, 0.843, 0, 1, 1, 0, 0, 1.145, 0, 1, 0, 0.225, 0, 0, 1, 0, 1, 0.843, 0, 1, 1, 0, 0, 2.145, 0, 1, 0, 0.225, 0, 0, 1, 0, 1, 0.078, 0.576, 1, 1, 0, 0, 0.145, 0, 1, 0, 0.225, 0, 0, 1, 1, 1, 0.843, 0, 1, 1, 0, 0, 1.145, 0, 1, 0, 0.225, 0, 0, 1, 1, 0, 0.749, 1, 1, 1, 0, 0, 2.145, 0, 1, 0, 0.225, 0, 0, 1, 1, 1, 0.843, 0, 1, 1, 0, 0, 0.145, 0, 1, 0, 0.225, 0, 0, 1, 2, 1, 0.843, 0, 1, 1, 0, 0, 1.145, 0, 1, 0, 0.225, 0, 0, 1, 2, 1, 0.078, 0.576, 1, 1, 0, 0, 2.145, 0, 1, 0, 0.225, 0, 0, 1, 2, 1, 0.843, 0, 1, 1, 0, 0, 3.145, 0, 1, 0, 1.225, 0, 0, 1, 0, 1, 0.843, 0, 1, 1, 0, 0, 4.145, 0, 1, 0, 1.225, 0, 0, 1, 0, 1, 0.843, 0, 1, 1, 0, 0, 5.145, 0, 1, 0, 1.225, 0, 0, 1, 0, 1, 0.078, 0.576, 1, 1, 0, 0, 3.145, 0, 1, 0, 1.225, 0, 0, 1, 1, 1, 0.843, 0, 1, 1, 0, 0, 4.145, 0, 1, 0, 1.225, 0, 0, 1, 1, 0, 0.749, 1, 1, 1, 0, 0, 5.145, 0, 1, 0, 1.225, 0, 0, 1, 1, 1, 0.843, 0, 1, 1, 0, 0, 3.145, 0, 1, 0, 1.225, 0, 0, 1, 2, 1, 0.843, 0, 1, 1, 0, 0, 4.145, 0, 1, 0, 1.225, 0, 0, 1, 2, 1, 0.078, 0.576, 1, 1, 0, 0, 5.145, 0, 1, 0, 1.225, 0, 0, 1, 2, 1, 0.843, 0, 1, 1, 0, 0, 6.145, 0, 1, 0, 2.225, 0, 0, 1, 0, 1, 0.843, 0, 1, 1, 0, 0, 7.145, 0, 1, 0, 2.225, 0, 0, 1, 0, 1, 0.843, 0, 1, 1, 0, 0, 8.145, 0, 1, 0, 2.225, 0, 0, 1, 0, 1, 0.078, 0.576, 1, 1, 0, 0, 6.145, 0, 1, 0, 2.225, 0, 0, 1, 1, 1, 0.843, 0, 1, 1, 0, 0, 7.145, 0, 1, 0, 2.225, 0, 0, 1, 1, 0, 0.749, 1, 1, 1, 0, 0, 8.145, 0, 1, 0, 2.225, 0, 0, 1, 1, 1, 0.843, 0, 1, 1, 0, 0, 6.145, 0, 1, 0, 2.225, 0, 0, 1, 2, 1, 0.843, 0, 1, 1, 0, 0, 7.145, 0, 1, 0, 2.225, 0, 0, 1, 2, 1, 0.078, 0.576, 1, 1, 0, 0, 8.145, 0, 1, 0, 2.225, 0, 0, 1, 2, 1, 0.843, 0, 1)
+buffer = PackedFloat32Array(1, 0, 0, 0.145, 0, 1, 0, 0.225, 0, 0, 1, 0, 0, 0.749, 1, 1, 1, 0, 0, 1.145, 0, 1, 0, 0.225, 0, 0, 1, 0, 0, 0.749, 1, 1, 1, 0, 0, 2.145, 0, 1, 0, 0.225, 0, 0, 1, 0, 1, 0.078, 0.576, 1, 1, 0, 0, 0.145, 0, 1, 0, 0.225, 0, 0, 1, 1, 1, 0.078, 0.576, 1, 1, 0, 0, 1.145, 0, 1, 0, 0.225, 0, 0, 1, 1, 1, 0.078, 0.576, 1, 1, 0, 0, 2.145, 0, 1, 0, 0.225, 0, 0, 1, 1, 1, 0.078, 0.576, 1, 1, 0, 0, 0.145, 0, 1, 0, 0.225, 0, 0, 1, 2, 0, 0.749, 1, 1, 1, 0, 0, 1.145, 0, 1, 0, 0.225, 0, 0, 1, 2, 1, 0.843, 0, 1, 1, 0, 0, 2.145, 0, 1, 0, 0.225, 0, 0, 1, 2, 0, 0.749, 1, 1, 1, 0, 0, 3.145, 0, 1, 0, 1.225, 0, 0, 1, 0, 0, 0.749, 1, 1, 1, 0, 0, 4.145, 0, 1, 0, 1.225, 0, 0, 1, 0, 0, 0.749, 1, 1, 1, 0, 0, 5.145, 0, 1, 0, 1.225, 0, 0, 1, 0, 1, 0.078, 0.576, 1, 1, 0, 0, 3.145, 0, 1, 0, 1.225, 0, 0, 1, 1, 1, 0.078, 0.576, 1, 1, 0, 0, 4.145, 0, 1, 0, 1.225, 0, 0, 1, 1, 1, 0.078, 0.576, 1, 1, 0, 0, 5.145, 0, 1, 0, 1.225, 0, 0, 1, 1, 1, 0.078, 0.576, 1, 1, 0, 0, 3.145, 0, 1, 0, 1.225, 0, 0, 1, 2, 0, 0.749, 1, 1, 1, 0, 0, 4.145, 0, 1, 0, 1.225, 0, 0, 1, 2, 1, 0.843, 0, 1, 1, 0, 0, 5.145, 0, 1, 0, 1.225, 0, 0, 1, 2, 0, 0.749, 1, 1, 1, 0, 0, 6.145, 0, 1, 0, 2.225, 0, 0, 1, 0, 0, 0.749, 1, 1, 1, 0, 0, 7.145, 0, 1, 0, 2.225, 0, 0, 1, 0, 0, 0.749, 1, 1, 1, 0, 0, 8.145, 0, 1, 0, 2.225, 0, 0, 1, 0, 1, 0.078, 0.576, 1, 1, 0, 0, 6.145, 0, 1, 0, 2.225, 0, 0, 1, 1, 1, 0.078, 0.576, 1, 1, 0, 0, 7.145, 0, 1, 0, 2.225, 0, 0, 1, 1, 1, 0.078, 0.576, 1, 1, 0, 0, 8.145, 0, 1, 0, 2.225, 0, 0, 1, 1, 1, 0.078, 0.576, 1, 1, 0, 0, 6.145, 0, 1, 0, 2.225, 0, 0, 1, 2, 0, 0.749, 1, 1, 1, 0, 0, 7.145, 0, 1, 0, 2.225, 0, 0, 1, 2, 1, 0.843, 0, 1, 1, 0, 0, 8.145, 0, 1, 0, 2.225, 0, 0, 1, 2, 0, 0.749, 1, 1)
 
 [node name="DemoGrid" type="Node3D" unique_id=2005084937]
 
 [node name="FlowGraphNode3D" type="Node3D" parent="." unique_id=1117820621]
 script = ExtResource("1_dc4sx")
 graph = SubResource("Resource_1h62y")
-overrides = Array[ExtResource("4_itnsq")]([SubResource("Resource_doe2k")])
+overrides = Array[ExtResource("4_itnsq")]([SubResource("Resource_itnsq")])
 regenerate = Callable()
 clearInstances = Callable()
-"flow_override/Grid - Origin/enabled" = false
+"flow_override/Grid - Origin/enabled" = true
 "flow_override/Grid - Origin/value" = Vector3(0, 0, 0)
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
 
-[node name="Spawn Meshes_0000" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=1419260034]
-material_override = SubResource("StandardMaterial3D_55m7i")
-multimesh = SubResource("MultiMesh_usrr5")
+[node name="Spawn Meshes_0000" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=1902055614]
+material_override = SubResource("StandardMaterial3D_itnsq")
+multimesh = SubResource("MultiMesh_mq7ey")
 metadata/flow_owner = &"id_0004_spawn_meshes"

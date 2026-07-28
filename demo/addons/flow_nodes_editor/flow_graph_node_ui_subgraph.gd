@@ -16,5 +16,5 @@ func _gui_input(event: InputEvent):
 			#print( "graph.resource_path", graph.resource_path )
 			if not subgraph_node.graph.data:
 				subgraph_node.resetSubgraph( graph )
-			editor.setResourceToEdit(graph)
+			editor.openSubgraph(subgraph_node)
 			accept_event()	

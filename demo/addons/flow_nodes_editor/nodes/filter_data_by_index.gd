@@ -57,9 +57,9 @@ func parseSlice(expr: String, size: int, out_indices : PackedInt32Array ):
 		i += step
 
 func execute( ctx : FlowData.EvaluationContext ):
-	var in_data : FlowData.Data = get_input(0)
+	var in_data : FlowData.Data = getInput(ctx, 0)
 	if in_data == null:
-		setError("Input 'In' is not connected")
+		setError(ctx, "Input 'In' is not connected")
 		return
 	var in_size : int = in_data.size()
 	
@@ -74,4 +74,4 @@ func execute( ctx : FlowData.EvaluationContext ):
 		if clean_exp.is_empty():
 			continue
 		parseSlice( clean_exp, in_size, indices_true )
-	set_output( 0, in_data.filter( indices_true ) )
+	setOutput(ctx, 0, in_data.filter( indices_true ) )

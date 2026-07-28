@@ -25,21 +25,21 @@ func _init():
 	}
 
 func execute( ctx : FlowData.EvaluationContext ):
-	var in_data : FlowData.Data = get_input(0)
+	var in_data : FlowData.Data = getInput(ctx, 0)
 	# Check if we have something to transform
 	if not in_data:
-		set_output( 0, FlowData.Data.new() )
+		setOutput(ctx, 0, FlowData.Data.new() )
 		return
 		
-	var trs_to_apply : FlowData.Data = get_input(1)	
+	var trs_to_apply : FlowData.Data = getInput(ctx, 1)
 	if not trs_to_apply:
-		set_output( 0, FlowData.Data.new() )
+		setOutput(ctx, 0, FlowData.Data.new() )
 		return
 		
 	# Input data TRS
 	var in_trs := trs_to_apply.getTransformsStream( attribute_transform )
 	if not in_trs:
-		set_output( 0, FlowData.Data.new() )
+		setOutput(ctx, 0, FlowData.Data.new() )
 		return
 		
 	var in_size = in_data.size()
@@ -68,4 +68,4 @@ func execute( ctx : FlowData.EvaluationContext ):
 			var basis_i := Basis.from_euler( srot[i] * deg_to_rad(1) )
 			srot[i] = (basis * basis_i).get_euler() * rad_to_deg(1)
 	
-	set_output( 0, out_data )
+	setOutput(ctx, 0, out_data )

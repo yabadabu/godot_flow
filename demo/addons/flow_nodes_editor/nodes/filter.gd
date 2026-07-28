@@ -82,9 +82,9 @@ func checkInputsConfiguration():
 			3: meta_node.ins = [{ "label": "In A" }, { "label": "In B" }, { "label": "In C" }]
 		connections_changed.emit()
 	
-func getOptionalStream( input_index : int, stream_name : String, expected_size : int ):
+func getOptionalStream(ctx: FlowData.EvaluationContext, input_index: int, stream_name: String, expected_size: int):
 	# B is optional, can be replaced by a cte
-	var in_data = get_optional_input(input_index)
+	var in_data = getOptionalInput(ctx, input_index)
 	var read_stream = in_data.findStream( stream_name ) if in_data else null
 
 	if trace:
@@ -104,7 +104,7 @@ func getOptionalStream( input_index : int, stream_name : String, expected_size :
 		elif stream_name.to_lower() == "true":
 			read_stream = newFloatStream( expected_size, "Constant %s" % stream_name, 1.0 )
 		else:
-			setError( "Input %s not found, and can't be interpreted as a constant number (Op:%d)" % [stream_name, condition])
+			setError(ctx,  "Input %s not found, and can't be interpreted as a constant number (Op:%d)" % [stream_name, condition])
 			return	null
 			
 	if read_stream:
@@ -120,19 +120,19 @@ func getOptionalStream( input_index : int, stream_name : String, expected_size :
 					print( "  Converting cte to stream with value %f" % read_stream.container[0] )
 				read_stream = newFloatStream( expected_size, stream_name + " as float", read_stream.container[0])
 			else:
-				setError( "Num elements from A and stream %s do not match (%d vs %d) vs %s" % [stream_name, expected_size, num_elems, read_stream.data_type == FlowData.DataType.Float])
+				setError(ctx,  "Num elements from A and stream %s do not match (%d vs %d) vs %s" % [stream_name, expected_size, num_elems, read_stream.data_type == FlowData.DataType.Float])
 				return	null
 	return read_stream
 	
 func execute( ctx : FlowData.EvaluationContext ):
 	#print( "filter.input: ", inputs )
-	var in_dataA : FlowData.Data = get_input(0)
+	var in_dataA : FlowData.Data = getInput(ctx, 0)
 	if in_dataA == null:
-		setError( "Input A %s not found" % [in_nameA])
+		setError(ctx,  "Input A %s not found" % [in_nameA])
 		return
 	var sA = in_dataA.findStream( in_nameA )
 	if sA == null:
-		setError( "Input A stream %s not found" % [in_nameA])
+		setError(ctx,  "Input A stream %s not found" % [in_nameA])
 		return
 		
 	var num_elemsA := in_dataA.size()
@@ -141,10 +141,10 @@ func execute( ctx : FlowData.EvaluationContext ):
 	var requires_two_operands = required_num_args > 1
 	var requires_three_operands = required_num_args > 2
 	
-	var sB = getOptionalStream( 1, in_nameB, num_elemsA ) if requires_two_operands else null
-	var sC = getOptionalStream( 2, in_nameC, num_elemsA ) if requires_three_operands else null
+	var sB = getOptionalStream(ctx, 1, in_nameB, num_elemsA) if requires_two_operands else null
+	var sC = getOptionalStream(ctx, 2, in_nameC, num_elemsA) if requires_three_operands else null
 
-	if err:
+	if not ctx.getNodeError(self).is_empty():
 		return
 
 	var num_elemsB : int = sB.size() if sB else 0
@@ -286,10 +286,10 @@ func execute( ctx : FlowData.EvaluationContext ):
 					else:
 						indices_false.append(i)
 	else:
-		setError( "Input A and B must have int/float type" )
+		setError(ctx,  "Input A and B must have int/float type" )
 		return
 
 	var out_data_true = in_dataA.filter( indices_true )
 	var out_data_false = in_dataA.filter( indices_false )
-	set_output( 0, out_data_true )
-	set_output( 1, out_data_false )
+	setOutput(ctx, 0, out_data_true )
+	setOutput(ctx,  1, out_data_false )

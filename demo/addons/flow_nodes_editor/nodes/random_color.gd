@@ -34,13 +34,17 @@ func exposeParam( name : String ) -> bool:
 	if name == "out_name" or name == "use_palette":
 		return true
 	if use_palette:
-		return name == "palette"
-	return name != "palette"
+		if name.begins_with("hue_") or name.begins_with("sat_" ) or name.begins_with("val_" ):
+			return false
+	else:
+		if name == "palette":
+			return false
+	return true
 
 func execute( ctx : FlowData.EvaluationContext ):
-	var in_data : FlowData.Data = get_input(0)
+	var in_data : FlowData.Data = getInput(ctx, 0)
 	if not in_data:
-		setError("Input is invalid")
+		setError(ctx, "Input is invalid")
 		return
 	var out_data : FlowData.Data = in_data.duplicate()
 	var in_size = in_data.size()
@@ -70,7 +74,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 		
 	var err = out_data.registerStream(out_name, colors)
 	if err:
-		setError(err)
+		setError(ctx, err)
 		return
 		
-	set_output(0, out_data)
+	setOutput(ctx, 0, out_data)

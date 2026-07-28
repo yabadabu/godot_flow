@@ -44,24 +44,24 @@ func _setting_vec(values : Array[Vector3], idx : int, fallback : Vector3) -> Vec
 		return values[idx]
 	return values[values.size() - 1]
 
-func execute(_ctx : FlowData.EvaluationContext):
-	var in_data : FlowData.Data = get_input(0)
+func execute(ctx : FlowData.EvaluationContext):
+	var in_data : FlowData.Data = getInput(ctx, 0)
 	if in_data == null:
-		setError("Anchors input is missing")
+		setError(ctx, "Anchors input is missing")
 		return
 
 	if in_data.size() == 0:
-		set_output(0, FlowData.Data.new())
+		setOutput(ctx, 0, FlowData.Data.new())
 		return
 
 	var transforms := in_data.getTransformsStream()
 	if transforms == null:
-		setError("Anchors must provide position, rotation, and size streams")
+		setError(ctx, "Anchors must provide position, rotation, and size streams")
 		return
 
 	var offsets_count : int = offsets.size()
 	if offsets_count == 0:
-		set_output(0, FlowData.Data.new())
+		setOutput(ctx, 0, FlowData.Data.new())
 		return
 
 	var out_count : int = in_data.size() * offsets_count
@@ -114,4 +114,4 @@ func execute(_ctx : FlowData.EvaluationContext):
 	if offset_labels.size() > 0:
 		out_data.registerStream(label_attribute, offset_labels, FlowData.DataType.String)
 
-	set_output(0, out_data)
+	setOutput(ctx, 0, out_data)

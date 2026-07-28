@@ -13,9 +13,9 @@ func _init():
 	}
 	
 func execute( ctx : FlowData.EvaluationContext ):
-	var input: FlowData.Data = get_input(0)
+	var input: FlowData.Data = getInput(ctx, 0)
 	var output := FlowData.Data.new()
 	var container = PackedInt32Array()
 	container.append( input.size() )
 	output.registerStream( out_name, container )
-	set_output( 0, output )
+	setOutput(ctx, 0, output )

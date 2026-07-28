@@ -12,7 +12,7 @@ func _init():
 	}
 	
 func onSceneChanged( ctx : FlowData.EvaluationContext ):
-	dirty = true
+	markDirty(ctx)
 	
 func execute( ctx : FlowData.EvaluationContext ):
 	var nodes = findNodesMatchingFilters( ctx, "Path3D")
@@ -21,4 +21,4 @@ func execute( ctx : FlowData.EvaluationContext ):
 	var curves = nodes.map( func( obj ): return obj.curve )
 	output.registerStream( "curve", curves, FlowData.DataType.Resource )
 	importCommon( ctx, output, nodes )
-	set_output( 0, output )
+	setOutput(ctx, 0, output )

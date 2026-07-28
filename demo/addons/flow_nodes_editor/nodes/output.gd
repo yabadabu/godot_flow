@@ -15,6 +15,3 @@ func _init():
 		"hide_inputs" : true,
 		"is_final" : true,
 	}
-	
-func getTitle() -> String:
-	return out_name

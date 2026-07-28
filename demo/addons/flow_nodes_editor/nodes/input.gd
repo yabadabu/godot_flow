@@ -2,8 +2,10 @@
 extends FlowNodeBase
 class_name FlowNodeInput
 
-@export var input_name : String = "in_val"
-var change_id : int = 0
+# Serialized for backwards compatibility and to keep the stable parameter link,
+# but neither value is meant to be edited from an Input node.
+@export_storage var input_name : String = "in_val"
+@export_storage var input_id: StringName
 
 func _init():
 	meta_node = {
@@ -15,9 +17,53 @@ func _init():
 		"auto_register" : true,
 		"hide_inputs" : true
 	}
-	
-func getTitle() -> String:
-	return input_name
+
+func _validate_property(property: Dictionary) -> void:
+	if property.name == "title":
+		property.usage = PROPERTY_USAGE_STORAGE
+		return
+	super._validate_property(property)
+
+func getMeta() -> Dictionary:
+	refreshInputMetadata()
+	return meta_node
+
+func bindInputParameter(graph: FlowGraphResource) -> void:
+	flow_graph = graph
+	var input := getInputParameter()
+	if not input:
+		return
+	input_id = input.ensureId()
+	input_name = input.name
+	refreshInputMetadata()
+
+func getInputParameter() -> GraphInputParameter:
+	if not flow_graph:
+		return null
+	var input := flow_graph.findInParamById(input_id)
+	if not input and not input_name.is_empty():
+		input = flow_graph.findInParamByName(input_name)
+		if input:
+			input_id = input.ensureId()
+	return input
+
+func refreshInputMetadata() -> void:
+	if meta_node.get("outs", []).is_empty():
+		return
+	var input := getInputParameter()
+	if not input:
+		return
+	input_name = input.name
+	var data_type := input.getDataType()
+	if data_type == FlowData.DataType.Invalid:
+		data_type = FlowData.DataType.Any
+	meta_node.outs[0].label = input.name
+	meta_node.outs[0].data_type = data_type
+
+func refreshInputDefinition() -> void:
+	refreshInputMetadata()
+	settings_changed.emit(StringName("input_name"))
+	connections_changed.emit()
 
 #func refreshFromSettings():
 	#var editor = getEditor()
@@ -40,9 +86,11 @@ func getTitle() -> String:
 	#refreshFromSettings()
 
 func execute( ctx : FlowData.EvaluationContext ):
-	var output = ctx.resolveInput( input_name )
+	var input := getInputParameter()
+	var resolved_name := input.name if input else input_name
+	var output = ctx.resolveInput(resolved_name)
 	if trace:
-		print( "%s Output %s resolved to: %s" % [name, input_name, output])
+		print( "%s Output %s resolved to: %s" % [name, resolved_name, output])
 		output.dump("At input %s" % name )
-	set_output( 0, output )
+	setOutput(ctx, 0, output )
 	

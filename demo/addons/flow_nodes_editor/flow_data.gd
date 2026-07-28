@@ -26,11 +26,29 @@ const AttrPosition : StringName = &"position"
 const AttrRotation : StringName = &"rotation"
 const AttrSize     : StringName = &"size"
 
+class NodeRuntime:
+	var inputs: Array = []
+	var input_bulks: Array = []
+	var output_bulks: Array = []
+	var last_eval_id: int = -1
+	var has_evaluated: bool = false
+	var dirty: bool = true
+	var applied_revision: int = -1
+	var error: String = ""
+	var exec_time_usec: int = 0
+
+	func reset_for_execution() -> void:
+		inputs.clear()
+		input_bulks.clear()
+		output_bulks.clear()
+
 class EvaluationContext:
 	var parent_ctx : EvaluationContext
 	var owner : FlowGraphNode3D
 	var eval_id : int = 0
 	var graph : FlowGraphResource
+	var node_runtimes: Dictionary = {}
+	var child_contexts: Dictionary = {}
 	
 	# Used by loops/subgraphs/non_ctes_input_params : string : FlowData
 	var inputs : Dictionary = {}
@@ -42,12 +60,150 @@ class EvaluationContext:
 	# Filled by the user of the context
 	var nodes_to_eval : Array[ FlowNodeBase ]
 	var active_nodes : Array[ FlowNodeBase ]
+
+	func getNodeRuntime(node: FlowNodeBase) -> NodeRuntime:
+		if not node_runtimes.has(node.name):
+			node_runtimes[node.name] = NodeRuntime.new()
+		return node_runtimes[node.name]
+
+	func getChildContext(
+		node: FlowNodeBase,
+		invocation_idx: int,
+		child_graph: FlowGraphResource
+	) -> EvaluationContext:
+		if not child_contexts.has(node.name):
+			child_contexts[node.name] = {}
+
+		var node_contexts: Dictionary = child_contexts[node.name]
+		var child: EvaluationContext = node_contexts.get(invocation_idx)
+		if child == null or child.graph != child_graph:
+			child = EvaluationContext.new()
+			node_contexts[invocation_idx] = child
+
+		child.parent_ctx = self
+		child.owner = owner
+		child.graph = child_graph
+		child.trace = trace or node.trace
+		child.name = "%s/%s[%d]" % [name, node.name, invocation_idx]
+		child.nodes_to_eval = child.getEvalOrder(child_graph.all_nodes)
+		return child
+
+	func findChildContext(node: FlowNodeBase, invocation_idx: int) -> EvaluationContext:
+		var node_contexts: Dictionary = child_contexts.get(node.name, {})
+		return node_contexts.get(invocation_idx)
+
+	func clearChildContexts(node: FlowNodeBase) -> void:
+		child_contexts.erase(node.name)
+
+	func resetNodeForExecution(node: FlowNodeBase) -> void:
+		getNodeRuntime(node).reset_for_execution()
+
+	func getInputBulks(node: FlowNodeBase) -> Array:
+		return getNodeRuntime(node).input_bulks
+
+	func getOutputBulks(node: FlowNodeBase) -> Array:
+		return getNodeRuntime(node).output_bulks
+
+	func setOutput(node: FlowNodeBase, port_idx: int, data: FlowData.Data) -> void:
+		var output_bulks := getNodeRuntime(node).output_bulks
+		if port_idx == 0:
+			output_bulks.append([])
+		var bulk_idx := output_bulks.size() - 1
+		assert(bulk_idx >= 0, "Node %s must write output port 0 before port %d" % [node.name, port_idx])
+		var bulk: Array = output_bulks[bulk_idx]
+		if port_idx >= bulk.size():
+			bulk.resize(port_idx + 1)
+		bulk[port_idx] = data
+
+	func setNodeInputs(node: FlowNodeBase, new_inputs: Array) -> void:
+		var runtime := getNodeRuntime(node)
+		var current_inputs := new_inputs.duplicate()
+		runtime.inputs = new_inputs
+		runtime.input_bulks.append(	current_inputs )
+
+	func getInput(node: FlowNodeBase, port_idx: int) -> FlowData.Data:
+		var current_inputs := getNodeRuntime(node).inputs
+		if port_idx < 0 or port_idx >= current_inputs.size():
+			return null
+		return current_inputs[port_idx]
+
+	func getInputCount(node: FlowNodeBase) -> int:
+		return getNodeRuntime(node).inputs.size()
+
+	func getConnectedBulkCount(node: FlowNodeBase) -> int:
+		var count := 0
+		for conn in node.deps:
+			if conn.to_port != 0:
+				continue
+			var source_node = graph.nodes_by_name.get(conn.from_node)
+			if source_node:
+				count += getOutputBulks(source_node).size()
+		if count == 0:
+			count = 1
+		return count
+
+	func getInputAt(node: FlowNodeBase, bulk_idx: int, port_idx: int) -> FlowData.Data:
+		var bulks := getNodeRuntime(node).input_bulks
+		if bulk_idx < 0 or bulk_idx >= bulks.size():
+			return null
+		var bulk: Array = bulks[bulk_idx]
+		if port_idx < 0 or port_idx >= bulk.size():
+			return null
+		return bulk[port_idx]
+
+	func getOutput(node: FlowNodeBase, bulk_idx: int, port_idx: int) -> FlowData.Data:
+		var bulks := getNodeRuntime(node).output_bulks
+		if bulk_idx < 0 or bulk_idx >= bulks.size():
+			return null
+		var bulk: Array = bulks[bulk_idx]
+		if port_idx < 0 or port_idx >= bulk.size():
+			return null
+		return bulk[port_idx]
+
+	func isNodeDirty(node: FlowNodeBase) -> bool:
+		var runtime := getNodeRuntime(node)
+		return runtime.dirty or runtime.applied_revision < node.runtime_revision
+
+	func markNodeDirty(node: FlowNodeBase) -> void:
+		getNodeRuntime(node).dirty = true
+
+	func markAllNodesDirty() -> void:
+		if not graph:
+			return
+		for node in graph.all_nodes:
+			if node:
+				markNodeDirty(node)
+
+	func markInputNodesDirty(input_name: StringName = StringName()) -> void:
+		if not graph:
+			return
+		for node in graph.input_nodes:
+			if node and (input_name.is_empty() or node.input_name == input_name):
+				markNodeDirty(node)
+
+	func markNodeClean(node: FlowNodeBase) -> void:
+		var runtime := getNodeRuntime(node)
+		runtime.dirty = false
+		runtime.applied_revision = node.runtime_revision
+
+	func getNodeError(node: FlowNodeBase) -> String:
+		return getNodeRuntime(node).error
+
+	func setNodeError(node: FlowNodeBase, error: String) -> void:
+		getNodeRuntime(node).error = error
+
+	func getNodeExecTime(node: FlowNodeBase) -> int:
+		return getNodeRuntime(node).exec_time_usec
+
+	func setNodeExecTime(node: FlowNodeBase, usec: int) -> void:
+		getNodeRuntime(node).exec_time_usec = usec
 	
 	# Priority:
 	#   ctx.inputs
-	#   ctx.owner?.args
 	#   ctx.graph.in_params
 	#   ctx.parent_ctx?.resolveInput
+	# Root contexts additionally resolve FlowGraphNode3D overrides before their
+	# graph defaults. Child contexts must not read the root owner directly.
 	func resolveInput( input_name : String ) -> FlowData.Data:
 		var input = inputs.get( input_name )
 		if input: 
@@ -55,13 +211,13 @@ class EvaluationContext:
 				print( "Input %s requested to ctx %s -> ctx.input -> %s" % [ input_name, name, input ])
 			return input
 		
-		if owner:
+		if parent_ctx == null and owner:
 			input = owner.get_or_create_override( input_name )
 			if input and input.enabled: 
 				if trace:
 					print( "Input %s requested to ctx %s -> ctx.owner.args -> %s" % [ input_name, name, input ])
 				return input.getAsFlowData()
-		else:
+		elif parent_ctx == null:
 			print( "Input %s requested, owner is null," % [ input_name ])
 		
 		input = graph.findInParamByName( input_name )
@@ -132,7 +288,7 @@ class EvaluationContext:
 			var n = owner.get_node_or_null(path)
 			if n is Node3D:
 				return n
-			node.setError("Spawn parent path '%s' is invalid or not a Node3D" % path)
+			setNodeError(node, "Spawn parent path '%s' is invalid or not a Node3D" % path)
 		return owner
 		
 	func removeRegisteredInstancedNodes( node : FlowNodeBase ):
@@ -142,7 +298,7 @@ class EvaluationContext:
 	func getDirtyNodes() -> Array[ FlowNodeBase ]:
 		var dirty_nodes : Array[ FlowNodeBase ]
 		for node in graph.all_nodes:
-			if node and node.dirty:
+			if node and isNodeDirty(node):
 				dirty_nodes.append( node )
 		return dirty_nodes
 		
@@ -152,8 +308,8 @@ class EvaluationContext:
 			#print( "  -> %s" % [ out_conn ])
 			var dst_node = graph.nodes_by_name.get( out_conn.to_node )
 			if dst_node:
-				if not dst_node.dirty:
-					dst_node.dirty = true
+				if not isNodeDirty(dst_node):
+					markNodeDirty(dst_node)
 					expandDirtyFlagToDependants( dst_node )
 				
 	func computeDirtyNodesAndRun():
@@ -169,7 +325,7 @@ class EvaluationContext:
 			print( "computeDirtyNodesAndRun:" )
 			for node in graph.all_nodes:
 				if node:
-					print( "  %s : %s" % [node.name, node.dirty ] )
+					print( "  %s : %s" % [node.name, isNodeDirty(node)] )
 				else:
 					print( "  _null_" )
 		nodes_to_eval = getEvalOrder( graph.all_nodes )
@@ -180,12 +336,13 @@ class EvaluationContext:
 		eval_id += 1
 		active_nodes.clear()
 		for node : FlowNodeBase in nodes_to_eval:
+			var runtime := getNodeRuntime(node)
 			var trace_node := trace or node.trace
 			if trace_node:
-				print( "  Eval: %s (%d) Dirty:%s" % [ node.name, node.eval_id, node.dirty ] )
+				print( "  Eval: %s (%d) Dirty:%s" % [ node.name, runtime.last_eval_id, isNodeDirty(node)] )
 				
 			# The node has already been evaluated or it's not dirty. No need to reevaluate it
-			if node.eval_id == eval_id or not node.dirty:
+			if runtime.last_eval_id == eval_id or not isNodeDirty(node):
 				if trace_node:
 					print( "  %s Already eval or not diry" % [ node.name ])
 				continue
@@ -202,17 +359,19 @@ class EvaluationContext:
 				node.executedDisabled( self )
 			else:
 				if trace_node:
-					print( "  %s.run.starts. %d bulks to process" % [ node.name, node.num_connected_bulks ])
+					print( "  %s.run.starts. %d bulks to process" % [ node.name, getConnectedBulkCount(node) ])
 				node.run( self )
 			
-			node.dirty = false
 			var time_node_ends := Time.get_ticks_usec()
 			var exec_usec := time_node_ends - time_node_start
 			
 			# Always show execution time on the node
-			node.setExecTime(exec_usec)
 			if trace_node:
-				print( "  %s run completed in %f. Generated %d bulks" % [ node.name, exec_usec, node.num_generated_bulks ])
+				print( "  %s run completed in %f. Generated %d bulks" % [ node.name, exec_usec, runtime.output_bulks.size() ])
+			runtime.last_eval_id = eval_id
+			runtime.has_evaluated = true
+			setNodeExecTime(node, exec_usec)
+			markNodeClean(node)
 
 ## Build a stable orthonormal Basis from a surface normal.
 ## - `normal` is the axis you want to align (default aligns to +Z).
@@ -348,15 +507,15 @@ class Data:
 	func equals( other : FlowData.Data ) -> bool:
 		return size() == other.size() and tags == other.tags && streams == other.streams
 	
-	func getContainerChecked( name : String, data_type : DataType, node : FlowNodeBase = null ):
+	func getContainerChecked(name: String, data_type: DataType, ctx: EvaluationContext = null, node: FlowNodeBase = null):
 		var stream = findStream( name )
 		if stream and stream.data_type == data_type:
 			return stream.container
-		if node:
+		if node and ctx:
 			if stream:
-				node.setError( "Attribute %s should be of type %s" % [ name, DataType.keys()[ data_type ] ] )
+				node.setError(ctx, "Attribute %s should be of type %s" % [name, DataType.keys()[data_type]])
 			else:
-				node.setError( "Attribute %s not found" % name)
+				node.setError(ctx, "Attribute %s not found" % name)
 		return null
 		
 	func isTRSStream( name : String ):

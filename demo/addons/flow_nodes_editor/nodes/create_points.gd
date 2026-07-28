@@ -28,4 +28,4 @@ func execute( ctx : FlowData.EvaluationContext ):
 			srot[i] = rotations[i]
 		if i < sizes.size():
 			sszs[i] = sizes[i]
-	set_output( 0, output )	
+	setOutput(ctx, 0, output )

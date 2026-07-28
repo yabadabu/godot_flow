@@ -6,10 +6,16 @@
 [ext_resource type="Script" uid="uid://dhpu3ptt872as" path="res://addons/flow_nodes_editor/flow_graph_param_override.gd" id="3_scy5f"]
 [ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="4_scy5f"]
 
-[sub_resource type="Resource" id="Resource_rs64b"]
+[sub_resource type="Resource" id="Resource_scy5f"]
 script = ExtResource("3_scy5f")
 param_id = &"Make Vector - Y"
+enabled = true
 value = 0.845
+
+[sub_resource type="Resource" id="Resource_rs64b"]
+script = ExtResource("3_scy5f")
+param_id = &"in_val"
+value = null
 
 [sub_resource type="Curve3D" id="Curve3D_pkkv1"]
 bake_interval = 0.295
@@ -142,6 +148,7 @@ metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 [sub_resource type="Resource" id="Resource_hh6fu"]
 script = ExtResource("3_scy5f")
 param_id = &"Grid - Rotation"
+enabled = true
 value = Vector3(0, 0, 0)
 
 [sub_resource type="Curve3D" id="Curve3D_scy5f"]
@@ -161,10 +168,10 @@ size = Vector3(5.07344, 1, 1.17883)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.999684, 0, -3.50492)
 script = ExtResource("1_pkkv1")
 graph = ExtResource("2_66ode")
-overrides = Array[ExtResource("3_scy5f")]([SubResource("Resource_rs64b")])
+overrides = Array[ExtResource("3_scy5f")]([SubResource("Resource_scy5f"), SubResource("Resource_rs64b")])
 regenerate = Callable()
 clearInstances = Callable()
-"flow_override/Make Vector - Y/enabled" = false
+"flow_override/Make Vector - Y/enabled" = true
 "flow_override/Make Vector - Y/value" = 0.845
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
 
@@ -188,7 +195,7 @@ graph = SubResource("Resource_3kbeu")
 overrides = Array[ExtResource("3_scy5f")]([SubResource("Resource_hh6fu")])
 regenerate = Callable()
 clearInstances = Callable()
-"flow_override/Grid - Rotation/enabled" = false
+"flow_override/Grid - Rotation/enabled" = true
 "flow_override/Grid - Rotation/value" = Vector3(0, 0, 0)
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
 

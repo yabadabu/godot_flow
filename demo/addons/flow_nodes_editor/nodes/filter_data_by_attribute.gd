@@ -20,9 +20,9 @@ func _init():
 	}
 
 func execute( ctx : FlowData.EvaluationContext ):
-	var in_data : FlowData.Data = get_input(0)
+	var in_data : FlowData.Data = getInput(ctx, 0)
 	if in_data == null:
-		setError("Input 'In' is not connected")
+		setError(ctx, "Input 'In' is not connected")
 		return
 		
 	var attr_name : String = attribute_name
@@ -39,8 +39,8 @@ func execute( ctx : FlowData.EvaluationContext ):
 			match_found = names.any(func(c): return c.contains(attr_name))
 
 	if match_found:
-		set_output(0, in_data)
-		set_output(1, FlowData.Data.new())
+		setOutput(ctx, 0, in_data)
+		setOutput(ctx, 1, FlowData.Data.new())
 	else:
-		set_output(0, FlowData.Data.new())
-		set_output(1, in_data)
+		setOutput(ctx, 0, FlowData.Data.new())
+		setOutput(ctx, 1, in_data)

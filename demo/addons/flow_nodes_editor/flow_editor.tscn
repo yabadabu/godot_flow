@@ -36,6 +36,13 @@ vertical_scroll_mode = 0
 layout_mode = 2
 size_flags_horizontal = 3
 
+[node name="ButtonNavigateUp" type="Button" parent="VBoxContainer/ScrollContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Return to the parent graph"
+disabled = true
+text = "↑"
+
 [node name="ButtonReload" type="Button" parent="VBoxContainer/ScrollContainer/HBoxContainer" unique_id=1410979393]
 layout_mode = 2
 tooltip_text = "Reload nodes scripts. Used durig development"
@@ -93,6 +100,7 @@ show_grid_buttons = false
 
 [connection signal="tab_changed" from="VBoxContainer/TabBar" to="." method="_on_tab_bar_tab_changed"]
 [connection signal="tab_close_pressed" from="VBoxContainer/TabBar" to="." method="_on_tab_bar_tab_close_pressed"]
+[connection signal="pressed" from="VBoxContainer/ScrollContainer/HBoxContainer/ButtonNavigateUp" to="." method="_on_button_navigate_up_pressed"]
 [connection signal="pressed" from="VBoxContainer/ScrollContainer/HBoxContainer/ButtonReload" to="." method="_on_button_reload_pressed"]
 [connection signal="pressed" from="VBoxContainer/ScrollContainer/HBoxContainer/ButtonInputs" to="." method="_on_button_inputs_pressed"]
 [connection signal="pressed" from="VBoxContainer/ScrollContainer/HBoxContainer/ButtonSave" to="." method="_on_button_save_pressed"]

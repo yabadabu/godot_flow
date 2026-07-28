@@ -55,7 +55,7 @@ func getTitle() -> String:
 		return "Expression"
 	return shorten( expression )
 
-func evaluateAndSaveResult( idx : int, values : Array ):
+func evaluateAndSaveResult(ctx: FlowData.EvaluationContext, idx: int, values: Array):
 
 	var result = _expression.execute(values)
 	if not _expression.has_execute_failed():
@@ -67,22 +67,22 @@ func evaluateAndSaveResult( idx : int, values : Array ):
 					print( "Created container of type %d %s" % [ flow_data_type, stream ])
 				_container = stream.container
 			else:
-				setError( "Failed to identify type of expression result at index %d" % idx )
+				setError(ctx,  "Failed to identify type of expression result at index %d" % idx )
 				return false
 		if trace:
 			print( "Added[%d] = %s" % [ idx, result ])
 		_container[idx] = result
 		return true
-	setError( _expression.get_error_text() )	
+	setError(ctx, _expression.get_error_text())
 	return false
 
 func execute( ctx : FlowData.EvaluationContext ):
-	var in_data : FlowData.Data = get_input(0)
+	var in_data : FlowData.Data = getInput(ctx, 0)
 	_out_data = in_data.duplicate()
 	
 	_in_size = in_data.size()
 	if _in_size == 0:
-		set_output( 0, _out_data )
+		setOutput(ctx, 0, _out_data )
 		return
 	
 	_expression = Expression.new()
@@ -93,7 +93,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 	names.append_array( in_data.streams.keys() )
 	var error := _expression.parse(expression, names)
 	if error != OK:
-		setError("Failed parsing expression: %s" % _expression.get_error_text())
+		setError(ctx, "Failed parsing expression: %s" % _expression.get_error_text())
 		return
 	var values = [0, _in_size]
 	for arg_name in args:
@@ -112,7 +112,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 			
 		for idx in range( _in_size ):
 			values[0] = idx
-			if not evaluateAndSaveResult( idx, values ):
+			if not evaluateAndSaveResult(ctx, idx, values):
 				break
 	else:
 		var k0 = values.size()
@@ -125,12 +125,12 @@ func execute( ctx : FlowData.EvaluationContext ):
 				values[ k0 + k ] = containers[k][ idx ]
 			#if trace:
 				#print( "  For %d : %s" % [ idx, values ])
-			if not evaluateAndSaveResult( idx, values ):
+			if not evaluateAndSaveResult(ctx, idx, values):
 				break
 		if trace:
 			print( "Registering stream %s with %s" % [ out_name, _container ])
 		var err_msg = _out_data.registerStream( out_name, _container )
 		if err_msg:
-			setError( err_msg )
+			setError(ctx,  err_msg )
 			
-	set_output( 0, _out_data )
+	setOutput(ctx, 0, _out_data )

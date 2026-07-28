@@ -70,31 +70,31 @@ func getMeta() -> Dictionary:
 			connections_changed.emit()
 	return meta_node
 
-func get_input_container( in_idx : int ):
-	var in_data: FlowData.Data = get_input( in_idx )
+func getInputContainer(ctx: FlowData.EvaluationContext, in_idx: int):
+	var in_data: FlowData.Data = getInput(ctx,  in_idx )
 	if not in_data:
-		setError( "Input %s has no data" % getMeta().ins[ in_idx ].label )
+		setError(ctx,  "Input %s has no data" % getMeta().ins[ in_idx ].label )
 		return null
 	return in_data
 
 func get_data_type_name( data_type : FlowData.DataType ):
 	return FlowData.DataType.keys()[ data_type ]
 
-func get_typed_stream_container( in_idx : int, stream_name : StringName, data_type : FlowData.DataType, expected_size : int ):
-	var in_data: FlowData.Data = get_input( in_idx )
+func getTypedStreamContainer(ctx: FlowData.EvaluationContext, in_idx: int, stream_name: StringName, data_type: FlowData.DataType, expected_size: int):
+	var in_data: FlowData.Data = getInput(ctx,  in_idx )
 	if not in_data:
 		if stream_name.is_valid_float():
 			var v : float = stream_name.to_float()
 			return newFloatStream( expected_size, "Constant %s" % stream_name, v )
 		else:
-			setError( "Input %s has no data" % getMeta().ins[ in_idx ].label )
+			setError(ctx,  "Input %s has no data" % getMeta().ins[ in_idx ].label )
 		return null
 	var s = in_data.findStream( stream_name )
 	if s == null:
-		setError( "Attribute %s not found" % [stream_name])
+		setError(ctx,  "Attribute %s not found" % [stream_name])
 		return null
 	if s.data_type != data_type:
-		setError( "Attribute %s data type should be %s but it's %s" % [stream_name, get_data_type_name( data_type ), get_data_type_name( s.data_type )])
+		setError(ctx,  "Attribute %s data type should be %s but it's %s" % [stream_name, get_data_type_name( data_type ), get_data_type_name( s.data_type )])
 		return null
 	var s_size = s.container.size()
 	if s_size != expected_size && s_size == 1 && expected_size > 0:
@@ -104,7 +104,7 @@ func get_typed_stream_container( in_idx : int, stream_name : StringName, data_ty
 	return s
 		
 func execute( ctx : FlowData.EvaluationContext ):
-	var in_dataA: FlowData.Data = get_input_container( 0 )
+	var in_dataA: FlowData.Data = getInputContainer(ctx, 0)
 	if not in_dataA:
 		return
 
@@ -124,7 +124,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 		
 	# All 3 require the arg to be an axis
 	var num_elems := in_dataA.size()
-	var sA = get_typed_stream_container( 0, first_arg_name, FlowData.DataType.Vector, num_elems )
+	var sA = getTypedStreamContainer(ctx, 0, first_arg_name, FlowData.DataType.Vector, num_elems)
 	if sA == null:
 		return
 	var inA : PackedVector3Array = sA.container
@@ -139,7 +139,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 			outC[i] = Basis.looking_at( inA[i], axis_y ).get_euler() * 180.0 / PI
 
 	else:
-		var sB = get_typed_stream_container( 1, second_arg_name, second_data_type, num_elems )
+		var sB = getTypedStreamContainer(ctx, 1, second_arg_name, second_data_type, num_elems)
 		if sB == null:
 			return
 		
@@ -156,7 +156,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 	
 	var err = out_data.registerStream( out_name, outC )
 	if err:
-		setError( err )
+		setError(ctx,  err )
 		return
 	out_data.markStreamAsRotation( out_name )
-	set_output( 0, out_data )
+	setOutput(ctx, 0, out_data )

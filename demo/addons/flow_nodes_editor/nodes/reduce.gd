@@ -40,20 +40,20 @@ func addReducedValues( out_data : FlowData.Data, vmin, vmax, vavg ):
 func execute( ctx : FlowData.EvaluationContext ):
 
 	if !in_name:
-		setError( "Input attribute not set")
+		setError(ctx,  "Input attribute not set")
 		return
 	
-	var in_data : FlowData.Data = get_input(0)
+	var in_data : FlowData.Data = getInput(ctx, 0)
 	if in_data == null:
-		setError( "Invalid input 0")
+		setError(ctx,  "Invalid input 0")
 		return
 		
 	var sA = in_data.findStream( in_name )
 	if sA == null:
-		setError( "Input %s not found" % [in_name])
+		setError(ctx,  "Input %s not found" % [in_name])
 		return
 	if sA.data_type != FlowData.DataType.Float && sA.data_type != FlowData.DataType.Vector && sA.data_type != FlowData.DataType.Int:
-		setError( "Input %s must be Float, Int or Vector. (Found %s)" % [in_name, FlowData.DataType.keys()[ sA.data_type ] ])
+		setError(ctx,  "Input %s must be Float, Int or Vector. (Found %s)" % [in_name, FlowData.DataType.keys()[ sA.data_type ] ])
 		return
 
 	var num_elems := in_data.size()
@@ -99,4 +99,4 @@ func execute( ctx : FlowData.EvaluationContext ):
 			vacc /= float(num_elems)
 			addReducedValues( out_data, vmin, vmax, vacc )
 
-	set_output( 0, out_data )
+	setOutput(ctx, 0, out_data )

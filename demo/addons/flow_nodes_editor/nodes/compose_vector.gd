@@ -17,9 +17,9 @@ func _init():
 	}
 
 func execute( ctx : FlowData.EvaluationContext ):
-	var in_data : FlowData.Data = get_input(0)
+	var in_data : FlowData.Data = getInput(ctx, 0)
 	if in_data == null:
-		setError("Input 'In' is not connected")
+		setError(ctx, "Input 'In' is not connected")
 		return
 		
 	var out_data : FlowData.Data = in_data.duplicate()
@@ -40,7 +40,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 		
 	var err = out_data.registerStream(out_attribute, out_vec, FlowData.DataType.Vector)
 	if err:
-		setError(err)
+		setError(ctx, err)
 		return
 		
-	set_output(0, out_data)
+	setOutput(ctx, 0, out_data)

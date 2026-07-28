@@ -58,23 +58,10 @@ func _exit_tree() -> void:
 		
 func _on_graph_inputs_change():
 	print( "_on_graph_inputs_change. Checking existing %d overrides. The graph has %d inputs" % [overrides.size(), graph.in_params.size()] )
-	var existing := {}
-	for o in overrides:
-		print( "  Saving override %s : %s : %s" % [ o.param_id, o.enabled, o.value ])
-		existing[o.param_id] = o
-	var new_overrides : Array[FlowGraphParamOverride] = []
-	for input in graph.in_params:
-		if existing.has(input.name):
-			print( "  Reusing existing override for input named %s" % [ input.name ])
-			new_overrides.append(existing[input.name])
-		else:
-			print( "  Creating new existing override for input named %s" % [ input.name ])
-			var o := FlowGraphParamOverride.new()
-			o.param_id = input.name
-			o.value = input.getDefaultValue()
-			o.enabled = false
-			new_overrides.append(o)
-	overrides = new_overrides
+	overrides = FlowGraphOverrides.syncWithGraph(graph, overrides)
+	ctx.markInputNodesDirty()
+	notify_property_list_changed()
+	graph_node_changed.emit(self, "graph_inputs")
 
 func _get_property_list() -> Array:
 	var props := []
@@ -106,100 +93,28 @@ func _get_property_list() -> Array:
 		#"usage": PROPERTY_USAGE_GROUP
 	#})
 
-	for input : GraphInputParameter in graph.in_params:
-		props.append({
-			"name": "flow_override/%s/enabled" % input.name,
-			"type": TYPE_BOOL,
-			"usage": PROPERTY_USAGE_EDITOR | PROPERTY_USAGE_STORAGE
-		})		
-		
-		props.append({
-			"name": "flow_override/%s/value" % input.name,
-			"type": FlowNodeBase.getGdScriptTypeForFlowDataType(input.getDataType()),
-			"hint_string": input.name,
-			"usage": PROPERTY_USAGE_EDITOR | PROPERTY_USAGE_STORAGE
-		})
+	props.append_array(FlowGraphOverrides.getPropertyList(graph))
 
 	#print( "At FlowGraphNode3D._get_property_list ", props)
 	return props
 	
 func _get(property: StringName) -> Variant:
-	var p := String(property)
-	if p.begins_with("flow_override/"):
-		var parts := p.split("/")
-		var id := StringName(parts[1])
-		var field := parts[2]
-		#print( "Getting override value %s (id:%s field:%s)" % [property, id, field])
-
-		var o := get_or_create_override(id)
-		if o:
-			if field == "enabled":
-				return o.enabled
-			elif field == "value":
-				return o.value
-		elif _graph:
-			if field == "enabled":
-				return false
-			var input = _graph.findInParamByName( id )
-			if input:
-				return input.getDefaultValue()
-	return null
+	return FlowGraphOverrides.getProperty(graph, overrides, property)
 
 func _set(property: StringName, value: Variant) -> bool:
-	var p := String(property)
-	if p.begins_with("flow_override/"):
-		var parts := p.split("/")
-		var id := StringName(parts[1])
-		var field := parts[2]
-		
-		var o := get_or_create_override(id)
-		if not o:
-			return false
-		print( "Setting override value %s (id:%s field:%s) with %s" % [property, id, field, value])
-		
-		var changed := false
-		if field == "enabled":
-			o.enabled = value
-			print( "FlowGraphNode.Inputs.%s.enabled = %s" % [id, value])
-			changed = true
-
-		elif field == "value":
-			o.value = value
-			o.enabled = true
-			print( "FlowGraphNode.Inputs.%s.value = %s" % [id, value])
-			changed = true
-		
-		if changed:	
-			var graph_input = graph.findInParamByName( id )
-			if graph_input:
-				graph_input.notifyChanged()
-			#regenerate()
-				#graph._on_input_changed()
-			# Notify the graph the values are dirty
-			#graph_node_changed.emit( self, id )
-			return true
-			
-	return false
+	if not FlowGraphOverrides.setProperty(graph, overrides, property, value):
+		return false
+	var parts := String(property).split("/")
+	var param_id := StringName(parts[1])
+	ctx.markInputNodesDirty(param_id)
+	graph_node_changed.emit(self, param_id)
+	return true
 
 func get_or_create_override( id : StringName ) -> FlowGraphParamOverride:
-	for o in overrides:
-		if o.param_id == id:
-			return o
-	var o := FlowGraphParamOverride.new()
-	o.param_id = id
-	o.enabled = false
-	if _graph:
-		var input = _graph.findInParamByName(id)
-		if input:
-			o.value = input.getDefaultValue()
-	overrides.append(o)
-	return o
+	return FlowGraphOverrides.getOrCreate(graph, overrides, id)
 
 func duplicateOverrides():
-	var new_overrides: Array[FlowGraphParamOverride] = []
-	for o in overrides:
-		new_overrides.append(o.duplicate(true))
-	overrides = new_overrides
+	overrides = FlowGraphOverrides.duplicateAll(overrides)
 
 func clearInstances():
 	print( "clearInstances.Starts %s" % graph )
@@ -214,7 +129,7 @@ func regenerate():
 	print( "regenerate.Starts %s by %s (%s)" % [ graph, name, graph.compiled ] )
 	graph.compile()
 	for node in graph.input_nodes:
-		node.dirty = true
+		ctx.markNodeDirty(node)
 	ctx.computeDirtyNodesAndRun()
 		
 	FlowPlugin.get_instance().register_executor( self, self.graph, 0 )

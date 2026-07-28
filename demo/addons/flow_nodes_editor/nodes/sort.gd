@@ -15,10 +15,10 @@ func _init():
 	}
 
 func execute( ctx : FlowData.EvaluationContext ):
-	var in_data : FlowData.Data = get_input(0)
+	var in_data : FlowData.Data = getInput(ctx, 0)
 	var sA = in_data.findStream( sort_by )
 	if sA == null:
-		setError( "Input %s not found" % [sort_by])
+		setError(ctx,  "Input %s not found" % [sort_by])
 		return
 	var indices : PackedInt32Array
 	if sA.data_type == FlowData.DataType.Float:
@@ -32,4 +32,4 @@ func execute( ctx : FlowData.EvaluationContext ):
 		indices.reverse()
 		
 	var out_data = in_data.filter( indices )
-	set_output( 0, out_data )
+	setOutput(ctx, 0, out_data )

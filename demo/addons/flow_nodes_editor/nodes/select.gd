@@ -15,8 +15,8 @@ func _init():
 	}
 
 func execute( ctx : FlowData.EvaluationContext ):
-	var in_dataA : FlowData.Data = get_input(0)
-	var in_dataB : FlowData.Data = get_optional_input(1)
+	var in_dataA : FlowData.Data = getInput(ctx, 0)
+	var in_dataB : FlowData.Data = getOptionalInput(ctx, 1)
 	
 	var select_b : bool = select_b
 	if use_attribute and attribute_name != "":
@@ -33,4 +33,4 @@ func execute( ctx : FlowData.EvaluationContext ):
 	var selected_data = in_dataB if select_b else in_dataA
 	if selected_data == null:
 		selected_data = FlowData.Data.new()
-	set_output(0, selected_data)
+	setOutput(ctx, 0, selected_data)

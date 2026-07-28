@@ -28,4 +28,4 @@ func execute( ctx : FlowData.EvaluationContext ):
 	spos[0] = c
 	ssize[0] = sz
 	
-	set_output(0, out_data)
+	setOutput(ctx, 0, out_data)

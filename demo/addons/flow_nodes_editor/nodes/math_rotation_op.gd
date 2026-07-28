@@ -64,53 +64,53 @@ func getMeta() -> Dictionary:
 func getTitle() -> String:
 	return eOperation.keys()[operation]	
 
-func execute( _ctx : FlowData.EvaluationContext ):
+func execute( ctx : FlowData.EvaluationContext ):
 	if not out_name:
-		setError( "Output name can't be empty")
+		setError(ctx,  "Output name can't be empty")
 		return
 		
 	var required_num_args = getMeta().ins.size()
 	
 	# Check A
-	var in_dataA: FlowData.Data = get_input(0)
+	var in_dataA: FlowData.Data = getInput(ctx, 0)
 	if not in_dataA:
-		setError( "Input A has no data" )
+		setError(ctx,  "Input A has no data" )
 		return
 	var sA = in_dataA.findStream( in_nameA )
 	if sA == null:
-		setError( "Input A %s not found" % [in_nameA])
+		setError(ctx,  "Input A %s not found" % [in_nameA])
 		return
 	if sA.data_type != FlowData.DataType.Vector:
-		setError( "Input A %s must be of type Vector" % [in_nameA])
+		setError(ctx,  "Input A %s must be of type Vector" % [in_nameA])
 		return
 	var num_elemsA := in_dataA.size()
 	
 	# B is optional, can be replaced by a cte
-	var in_dataB = get_optional_input(1)
+	var in_dataB = getOptionalInput(ctx, 1)
 	var num_elemsB := num_elemsA
 	var sB = null
 	if in_dataB:
 		num_elemsB = in_dataB.size()
 		sB = in_dataB.findStream( in_nameB )
 		if sB and sB.data_type != FlowData.DataType.Vector:
-			setError( "Input B %s must be of type Vector" % [in_nameB])
+			setError(ctx,  "Input B %s must be of type Vector" % [in_nameB])
 			return
 		
 	# if B is not connected, we might have a constant
 	if sB == null:
 		if required_num_args > 1:
-			setError( "Input B %s not found" % [in_nameB, inputs.size()])
+			setError(ctx,  "Input B %s not found. #Inputs:%d" % [in_nameB, getInputCount(ctx)])
 			return
 
 	# C is optional, can be replaced by a cte
-	var in_dataC = get_optional_input(2)
+	var in_dataC = getOptionalInput(ctx, 2)
 	var num_elemsC := num_elemsA
 	var sC = null
 	if in_dataC:
 		num_elemsC = in_dataC.size()
 		sC = in_dataC.findStream( in_nameC )
 		if sC and sC.data_type != FlowData.DataType.Float:
-			setError( "Input %s must be of type Float not %s" % [in_nameC, FlowData.DataType.keys()[ sC.data_type ]])
+			setError(ctx,  "Input %s must be of type Float not %s" % [in_nameC, FlowData.DataType.keys()[ sC.data_type ]])
 			return
 		
 	# if C is not connected, we might have a constant
@@ -120,7 +120,7 @@ func execute( _ctx : FlowData.EvaluationContext ):
 			var v = in_nameC.to_float()
 			sC = newFloatStream( num_elemsA, "Constant %s" % in_nameC, v )
 		elif required_num_args > 2:
-			setError( "Input C %s not found" % [in_nameC])
+			setError(ctx,  "Input C %s not found" % [in_nameC])
 			return
 
 	# The number of elements should match, unless the B channel has just 1 element
@@ -131,7 +131,7 @@ func execute( _ctx : FlowData.EvaluationContext ):
 			if sB.data_type != FlowData.DataType.Vector:
 				sB = newStream( num_elemsA, sB.name + " as vector3", sB.container[0], FlowData.DataType.Vector )
 		else:
-			setError( "Num elements from A and B do not match (%d vs %d)" % [num_elemsA, num_elemsB])
+			setError(ctx,  "Num elements from A and B do not match (%d vs %d)" % [num_elemsA, num_elemsB])
 			return
 			
 	if num_elemsA != num_elemsC:
@@ -139,7 +139,7 @@ func execute( _ctx : FlowData.EvaluationContext ):
 			# Convert the single value to an array
 			sC = newFloatStream( num_elemsA, "Constant %s" % in_nameC, sC.container[0] )
 		else:
-			setError( "Num elements from A and C do not match (%d vs %d)" % [num_elemsA, num_elemsC])
+			setError(ctx,  "Num elements from A and C do not match (%d vs %d)" % [num_elemsA, num_elemsC])
 			return
 			
 			
@@ -156,7 +156,7 @@ func execute( _ctx : FlowData.EvaluationContext ):
 				for i in num_elems:
 					outC[i] = -inA[i]
 			_:
-				setError( "Rotation single arg op %s not yet supported" % eOperation.keys()[ operation ]  )
+				setError(ctx,  "Rotation single arg op %s not yet supported" % eOperation.keys()[ operation ]  )
 			
 	elif required_num_args == 2:
 		var inA : PackedVector3Array = sA.container
@@ -171,7 +171,7 @@ func execute( _ctx : FlowData.EvaluationContext ):
 					var qC := qB * qA
 					outC[i] = qC.get_euler() * 180 / PI
 			_:
-				setError( "Rotation Vector3 vs Vector3 not supported yet")
+				setError(ctx,  "Rotation Vector3 vs Vector3 not supported yet")
 
 	elif required_num_args == 3:
 		var inA : PackedVector3Array = sA.container
@@ -188,7 +188,7 @@ func execute( _ctx : FlowData.EvaluationContext ):
 					var qC := qA.slerp( qB, inC[i] )
 					outC[i] = qC.get_euler() * 180 / PI
 			_:
-				setError( "Rotation with 3 args not supported yet")
+				setError(ctx,  "Rotation with 3 args not supported yet")
 
 	# This will override the existing stream if exists or update a substream
 	var out_name = out_name
@@ -196,8 +196,8 @@ func execute( _ctx : FlowData.EvaluationContext ):
 		out_name = in_nameA
 	var err = out_data.registerStream( out_name, outC )
 	if err:
-		setError( err )
+		setError(ctx,  err )
 		return
 		
 	out_data.markStreamAsRotation( out_name )
-	set_output( 0, out_data )
+	setOutput(ctx, 0, out_data )

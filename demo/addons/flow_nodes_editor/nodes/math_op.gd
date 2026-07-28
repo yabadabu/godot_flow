@@ -77,31 +77,31 @@ func getMeta() -> Dictionary:
 func getTitle() -> String:
 	return eOperation.keys()[operation]	
 
-func execute( _ctx : FlowData.EvaluationContext ):
+func execute( ctx : FlowData.EvaluationContext ):
 	var time_start_init = Time.get_ticks_usec()	
 	
 	var is_single_arg = isSingleArgument()
 		
 	if not out_name:
-		setError( "Output name can't be empty")
+		setError(ctx,  "Output name can't be empty")
 		return
 	var final_out_name = out_name
 	if final_out_name == "@source":
 		final_out_name = in_nameA
 	
 	# Check A
-	var in_dataA: FlowData.Data = get_input(0)
+	var in_dataA: FlowData.Data = getInput(ctx, 0)
 	if not in_dataA:
-		setError( "Input A has no data" )
+		setError(ctx,  "Input A has no data" )
 		return
 	var sA = in_dataA.findStream( in_nameA )
 	if sA == null:
-		setError( "Input A %s not found" % [in_nameA])
+		setError(ctx,  "Input A %s not found" % [in_nameA])
 		return
 	var num_elemsA := in_dataA.size()
 	
 	# B is optional, can be replaced by a cte
-	var in_dataB = get_optional_input(1)
+	var in_dataB = getOptionalInput(ctx, 1)
 	var num_elemsB := num_elemsA
 	var sB = null
 	if in_dataB:
@@ -116,7 +116,7 @@ func execute( _ctx : FlowData.EvaluationContext ):
 			sB = newFloatStream( in_dataA.size(), "Constant %s" % in_nameB, v )
 		else:
 			if not is_single_arg:
-				setError( "Input B %s not found, and can't be interpreted as a constant number. #Inputs:%d" % [in_nameB, inputs.size()])
+				setError(ctx,  "Input B %s not found, and can't be interpreted as a constant number. #Inputs:%d" % [in_nameB, getInputCount(ctx)])
 				return
 
 	# The number of elements should match, unless the B channel has just 1 element
@@ -131,10 +131,10 @@ func execute( _ctx : FlowData.EvaluationContext ):
 			elif sB.data_type == FlowData.DataType.Color:
 				sB = newStream( num_elemsA, sA.name + " as color", sB.container[0], FlowData.DataType.Color )
 			else:
-				setError( "Num elements from A nd B do not match (%d vs %d). But In B data type must be a float, Vector3, or Color" % [num_elemsA, num_elemsB])
+				setError(ctx,  "Num elements from A nd B do not match (%d vs %d). But In B data type must be a float, Vector3, or Color" % [num_elemsA, num_elemsB])
 				return
 		else:
-			setError( "Num elements from A nd B do not match (%d vs %d)" % [num_elemsA, num_elemsB])
+			setError(ctx,  "Num elements from A nd B do not match (%d vs %d)" % [num_elemsA, num_elemsB])
 			return
 	var num_elems := num_elemsA
 	
@@ -187,7 +187,7 @@ func execute( _ctx : FlowData.EvaluationContext ):
 						for i in num_elems:
 							outC[i] = sqrt( max( 0.0, inA[i] ) )
 					_:
-						setError( "Scalar single arg op %s not yet supported" % eOperation.keys()[ operation ]  )
+						setError(ctx,  "Scalar single arg op %s not yet supported" % eOperation.keys()[ operation ]  )
 				out_container = outC
 		
 		elif sA.data_type == FlowData.DataType.Vector:
@@ -210,11 +210,11 @@ func execute( _ctx : FlowData.EvaluationContext ):
 						outC[i].y = clampf(inA[i].y, 0.0, 1.0)
 						outC[i].z = clampf(inA[i].z, 0.0, 1.0)
 				_:
-					setError( "Vector single arg op %s not yet supported" % eOperation.keys()[ operation ]  )
+					setError(ctx,  "Vector single arg op %s not yet supported" % eOperation.keys()[ operation ]  )
 			out_container = outC
 			
 		else:
-			setError( "Input A has incompatible/unsupported data types (%s vs %s)" % [sA.data_type])
+			setError(ctx,  "Input A has incompatible/unsupported data types (%s vs %s)" % [sA.data_type])
 			return
 			
 	else:
@@ -268,7 +268,7 @@ func execute( _ctx : FlowData.EvaluationContext ):
 					for i in num_elems:
 						outC[i] = inB[i]
 				_:
-					setError( "Float vs Float operation %s not supported yet" % eOperation.keys()[ operation ]  )
+					setError(ctx,  "Float vs Float operation %s not supported yet" % eOperation.keys()[ operation ]  )
 			if trace: print( "Math.Loop: %f (%d)" % [ Time.get_ticks_usec() - time_start, num_elems ] )
 			
 		elif sA.data_type == FlowData.DataType.Vector && sB.data_type == FlowData.DataType.Vector:
@@ -294,7 +294,7 @@ func execute( _ctx : FlowData.EvaluationContext ):
 					for i in num_elems:
 						outC[i] = inB[i]
 				_:
-					setError( "Vector3 vs Vector3 operation not supported yet")
+					setError(ctx,  "Vector3 vs Vector3 operation not supported yet")
 			out_container = outC
 
 		elif sA.data_type == FlowData.DataType.Vector && sB.data_type == FlowData.DataType.Float:
@@ -310,7 +310,7 @@ func execute( _ctx : FlowData.EvaluationContext ):
 					for i in num_elems:
 						outC[i] = inA[i] / inB[i]
 				_:
-					setError( "Vector3 vs Float operation not supported yet")
+					setError(ctx,  "Vector3 vs Float operation not supported yet")
 			out_container = outC
 
 		elif sA.data_type == FlowData.DataType.Color && sB.data_type == FlowData.DataType.Color:
@@ -333,7 +333,7 @@ func execute( _ctx : FlowData.EvaluationContext ):
 					for i in num_elems:
 						outC[i] = Color(inA[i].r / inB[i].r, inA[i].g / inB[i].g, inA[i].b / inB[i].b, inA[i].a / inB[i].a)
 				_:
-					setError( "Color vs Color operation not supported yet")
+					setError(ctx,  "Color vs Color operation not supported yet")
 			out_container = outC
 
 		elif sA.data_type == FlowData.DataType.Color && sB.data_type == FlowData.DataType.Float:
@@ -355,7 +355,7 @@ func execute( _ctx : FlowData.EvaluationContext ):
 					for i in num_elems:
 						outC[i] = Color(inA[i].r - inB[i], inA[i].g - inB[i], inA[i].b - inB[i], inA[i].a - inB[i])
 				_:
-					setError( "Color vs Float operation not supported yet")
+					setError(ctx,  "Color vs Float operation not supported yet")
 			out_container = outC
 
 		elif sA.data_type == FlowData.DataType.Int && sB.data_type == FlowData.DataType.Int:
@@ -386,19 +386,19 @@ func execute( _ctx : FlowData.EvaluationContext ):
 					for i in num_elems:
 						outC[i] = maxi( inA[i], inB[i] )
 				_:
-					setError( "Int vs Int operation not supported yet")
+					setError(ctx,  "Int vs Int operation not supported yet")
 			out_container = outC
 	
 		else:
-			setError( "Input A and B have incompatible/unsupported data types (%s vs %s)" % [sA.data_type, sB.data_type])
+			setError(ctx,  "Input A and B have incompatible/unsupported data types (%s vs %s)" % [sA.data_type, sB.data_type])
 			return
 
 	var time_start_end = Time.get_ticks_usec()
 	# This will override the existing stream if exists or update a substream
 	var err = out_data.registerStream( final_out_name, out_container )
 	if err:
-		setError( err )
+		setError(ctx,  err )
 		return
 		
-	set_output( 0, out_data )
+	setOutput(ctx, 0, out_data )
 	if trace: print( "Math.end:  %f (%d)" % [ Time.get_ticks_usec() - time_start_end, num_elems ] )

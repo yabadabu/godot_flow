@@ -19,24 +19,11 @@ signal value_changed(param_id: StringName, value: Variant)
 
 func getAsFlowData() -> FlowData.Data:
 	var data = FlowData.Data.new()
-	
-	if typeof( value ) == TYPE_FLOAT:
-		var container = data.addStream( param_id, FlowData.DataType.Float )
-		container.resize( 1 )
-		if value == null:
-			container[0] = 0.0
-		else:
-			container[0] = float(value)
-	
-	elif typeof( value ) == TYPE_INT:
-		var container = data.addStream( param_id, FlowData.DataType.Int )
-		container.resize( 1 )
-		if value == null:
-			container[0] = 0.0
-		else:
-			container[0] = int(value)
-			
-	else:
-		push_warning( "Override param %s -> %s" % [ param_id, value ])	
-		
+	var data_type := FlowNodeBase.getFlowDataTypeFromObject(value)
+	if data_type == FlowData.DataType.Invalid:
+		push_warning("Override param %s has unsupported value %s" % [param_id, value])
+		return data
+	var container = data.addStream(param_id, data_type)
+	container.resize(1)
+	container[0] = value
 	return data

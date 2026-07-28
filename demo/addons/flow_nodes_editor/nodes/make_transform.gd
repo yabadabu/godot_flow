@@ -29,9 +29,9 @@ func _init():
 	}
 
 func execute( ctx : FlowData.EvaluationContext ):
-	var in_dataT : FlowData.Data = get_optional_input( 0 )
-	var in_dataR : FlowData.Data = get_optional_input( 1 )
-	var in_dataS : FlowData.Data = get_optional_input( 2 )
+	var in_dataT : FlowData.Data = getOptionalInput(ctx,  0 )
+	var in_dataR : FlowData.Data = getOptionalInput(ctx,  1 )
+	var in_dataS : FlowData.Data = getOptionalInput(ctx,  2 )
 	
 	var sz_T = in_dataT.size() if in_dataT else 0
 	var sz_R = in_dataR.size() if in_dataR else 0
@@ -62,7 +62,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 			in_data = in_dataS
 
 	else:
-		setError( "num_elems > 1 not yet supported ")
+		setError(ctx,  "num_elems > 1 not yet supported ")
 		return
 		
 	var out_data : FlowData.Data = in_data.duplicate()
@@ -89,19 +89,19 @@ func execute( ctx : FlowData.EvaluationContext ):
 	
 	var err = out_data.registerStream( out_name_T, outT )
 	if err:
-		setError( err )
+		setError(ctx,  err )
 		return
 		
 	err = out_data.registerStream( out_name_R, outR )
 	if err:
-		setError( err )
+		setError(ctx,  err )
 		return
 	out_data.markStreamAsRotation( out_name_R )
 	
 	err = out_data.registerStream( out_name_S, outS )
 	if err:
-		setError( err )
+		setError(ctx,  err )
 		return
 	
 	out_data.last_added_stream_name = out_stem_name
-	set_output( 0, out_data )
+	setOutput(ctx, 0, out_data )

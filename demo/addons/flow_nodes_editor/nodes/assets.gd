@@ -21,7 +21,7 @@ const discardted_props = {
 	"data" : 1,
 }
 
-func execute( _ctx : FlowData.EvaluationContext ):
+func execute( ctx : FlowData.EvaluationContext ):
 	var output := FlowData.Data.new()
 	
 	var new_streams = {}
@@ -107,4 +107,4 @@ func execute( _ctx : FlowData.EvaluationContext ):
 				for idx in range(count):
 					container[idx] = assets[idx].get( prop_name )
 					#print( "%s[%d] = %s" % [ prop_name, idx, container[idx]])
-	set_output( 0, output )
+	setOutput(ctx, 0, output )

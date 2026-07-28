@@ -166,7 +166,7 @@ func quasiRandomSampling( ctx : FlowData.EvaluationContext, in_trs : FlowData.Tr
 	var point_size : Vector3 = Vector3.ONE * getSettingValue( ctx, "size")
 	
 	if groups.size() < 1:
-		setError( "Define number of points in the group array")
+		setError(ctx,  "Define number of points in the group array")
 		return
 		
 	var save_group_id : bool = true if out_group_id else false
@@ -293,14 +293,14 @@ func blueNoiseSampling( ctx : FlowData.EvaluationContext, in_trs : FlowData.Tran
 		ssize.resize( idx )
 		
 func execute( ctx : FlowData.EvaluationContext ):
-	var in_data : FlowData.Data = get_input(0)
+	var in_data : FlowData.Data = getInput(ctx, 0)
 	if in_data == null:
-		setError( "Invalid input 0" )
+		setError(ctx,  "Invalid input 0" )
 		return
 
 	var in_trs : FlowData.TransformsStream = in_data.getTransformsStream()
 	if in_trs == null:
-		setError( "Input does not provide position, rotation or scale streams" )
+		setError(ctx,  "Input does not provide position, rotation or scale streams" )
 		return
 
 	var out_data := FlowData.Data.new()
@@ -314,4 +314,4 @@ func execute( ctx : FlowData.EvaluationContext ):
 		else:
 			quasiRandomSampling( ctx, in_trs, out_data )
 		
-	set_output( 0, out_data )
+	setOutput(ctx, 0, out_data )

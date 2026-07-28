@@ -17,10 +17,10 @@ func spawnNode( root : Node, class_to_spawn ):
 	return new_node
 	
 func execute( ctx : FlowData.EvaluationContext ):
-	var in_data : FlowData.Data = get_input(0)
+	var in_data : FlowData.Data = getInput(ctx, 0)
 	var in_trs := in_data.getTransformsStream()
 	if in_trs == null:
-		setError( "Invalid input. Missing required attributes %s/%s/%s" % [ FlowData.AttrPosition, FlowData.AttrRotation, FlowData.AttrSize ])
+		setError(ctx,  "Invalid input. Missing required attributes %s/%s/%s" % [ FlowData.AttrPosition, FlowData.AttrRotation, FlowData.AttrSize ])
 		return
 		
 	var root = ctx.owner
@@ -45,4 +45,4 @@ func execute( ctx : FlowData.EvaluationContext ):
 		#print( "  pos[%d]: = %s" % [idx, pos ] )
 	var output := FlowData.Data.new()
 	output.registerStream( "node", [path], FlowData.DataType.NodePath )
-	set_output( 0, output )	
+	setOutput(ctx, 0, output )

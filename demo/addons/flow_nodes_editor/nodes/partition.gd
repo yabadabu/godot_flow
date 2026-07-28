@@ -17,9 +17,9 @@ func getTitle() -> String:
 	return "Partition %s" % [ attribute_name ]
 
 func execute( ctx : FlowData.EvaluationContext ):
-	var in_data : FlowData.Data = get_input( 0 )
+	var in_data : FlowData.Data = getInput(ctx,  0 )
 	if in_data == null:
-		setError( "partition.Missing input 0" )
+		setError(ctx,  "partition.Missing input 0" )
 		return
 		
 	# Special case, when partition by a Index, which is not a registered official stream name,
@@ -33,12 +33,12 @@ func execute( ctx : FlowData.EvaluationContext ):
 			if out_partition_attribute:
 				var p = newStream( out_data.size(), out_partition_attribute, partition_id, FlowData.DataType.Int )
 				out_data.registerStream( p.name, p.container )
-			set_output( 0, out_data )
+			setOutput(ctx, 0, out_data )
 			
 	else:
 		var stream = in_data.findStream( attribute_name )
 		if stream == null:
-			setError( "Attribute %s not found in input" % attribute_name )
+			setError(ctx,  "Attribute %s not found in input" % attribute_name )
 			return
 		var container = stream.container
 		
@@ -63,6 +63,6 @@ func execute( ctx : FlowData.EvaluationContext ):
 			if out_partition_attribute:
 				var p = newStream( out_data.size(), out_partition_attribute, partition_id, FlowData.DataType.Int )
 				out_data.registerStream( p.name, p.container )
-			set_output( 0, out_data )
+			setOutput(ctx, 0, out_data )
 			partition_id += 1
 	

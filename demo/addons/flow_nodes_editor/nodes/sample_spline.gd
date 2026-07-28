@@ -125,10 +125,10 @@ func execute( ctx : FlowData.EvaluationContext ):
 		
 	var trace := trace
 		
-	var in_data = get_input(0)
+	var in_data = getInput(ctx, 0)
 	var path3d_nodes = in_data.getContainerChecked( "node", FlowData.DataType.NodePath )
 	if path3d_nodes == null:
-		setError( "Input are not splines")
+		setError(ctx,  "Input are not splines")
 		return null
 	#print( "path3d_nodes", path3d_nodes)
 
@@ -223,4 +223,4 @@ func execute( ctx : FlowData.EvaluationContext ):
 		#print( "Generating size sample", sample_size)
 		ssize.fill(sample_size)
 
-	set_output( 0, output )
+	setOutput(ctx, 0, output )

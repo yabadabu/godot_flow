@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://b5t2jiuic1aoh"]
+[gd_scene format=3 uid="uid://b5t2jiuic1aoh"]
 
 [ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_sv1gj"]
 [ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="2_7xpo0"]
+[ext_resource type="BoxMesh" uid="uid://7flu82pqtc5d" path="res://addons/flow_nodes_editor/resources/unit_cube.tres" id="4_7xpo0"]
 [ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="4_om314"]
 
 [sub_resource type="Resource" id="Resource_odxoa"]
@@ -15,39 +16,30 @@ data = {
 "keep_alive": false,
 "to_node": &"id_0037_filter",
 "to_port": 0
+}, {
+"from_node": &"id_0037_filter",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0003_spawn_meshes",
+"to_port": 0
 }],
-"min_pos": Vector2(-20, 200),
+"min_pos": Vector2(0, 0),
 "nodes": [{
 "args_port": {
-"In A": {
+"In": {
 "connected": true,
 "port": 0
-},
-"In B": {
-"connected": false,
-"port": 1
 }
 },
-"name": &"id_0037_filter",
-"position": Vector2(200, 0),
+"name": &"id_0003_spawn_meshes",
+"position": Vector2(502.07956, 103.79995),
 "settings": {
-"condition": 0,
-"debug_color": Color(1, 1, 1, 1),
-"debug_enabled": true,
-"debug_mode": 0,
-"debug_modulate_by": "",
-"debug_scale": 1.0,
-"enabled": true,
-"in_nameA": "position.X",
-"in_nameB": "1.0",
-"inspect_enabled": false,
-"random_seed": 466698300,
-"threshold": 0.1,
-"title": "Filter",
-"trace": false
+"random_seed": 2539590876,
+"title": "Spawn Meshes"
 },
 "show_disconnected_inputs": false,
-"template": "filter"
+"size": Vector2(139, 71),
+"template": "spawn_meshes"
 }, {
 "args_port": {},
 "name": &"id_0038_grid",
@@ -56,36 +48,64 @@ data = {
 "debug_color": Color(0.270588, 1, 1, 1),
 "debug_enabled": true,
 "debug_mode": 1,
-"debug_modulate_by": "",
 "debug_scale": 0.845,
-"enabled": true,
-"inspect_enabled": false,
-"origin": Vector3(0, 0, 0),
 "random_seed": 1520961383,
-"rotation": Vector3(0, 0, 0),
-"step": Vector3(1, 1, 1),
-"title": "Grid",
-"trace": false,
-"x": 3,
-"y": 1,
-"z": 3
+"title": "Grid"
 },
 "show_disconnected_inputs": false,
+"size": Vector2(125, 71),
 "template": "grid"
+}, {
+"args_port": {
+"In A": {
+"connected": true,
+"port": 0
+},
+"In B": {
+"connected": false,
+"port": 1
+},
+"In C": {
+"connected": false,
+"port": 2
+}
+},
+"name": &"id_0037_filter",
+"position": Vector2(200, 0),
+"settings": {
+"in_nameA": "position.X",
+"in_nameB": "1.0",
+"random_seed": 466698300,
+"title": "Filter"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(164, 114),
+"template": "filter"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
+graph_name = "demo_filter"
 view_zoom = 0.909091
-view_offset = Vector2(-118.564, -32.6364)
+view_offset = Vector2(208.436, -111.6364)
 new_name_counter = 8
-in_params = Array[ExtResource("2_7xpo0")]([])
 metadata/_custom_type_script = "uid://j6vjeb5cjjoy"
 
-[node name="DemoFilter" type="Node3D"]
+[sub_resource type="MultiMesh" id="MultiMesh_sx5mj"]
+transform_format = 1
+instance_count = 3
+mesh = ExtResource("4_7xpo0")
+buffer = PackedFloat32Array(1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 2)
 
-[node name="FlowGraphNode3D" type="Node3D" parent="."]
+[node name="DemoFilter" type="Node3D" unique_id=504031358]
+
+[node name="FlowGraphNode3D" type="Node3D" parent="." unique_id=2090185030]
 script = ExtResource("1_sv1gj")
 graph = SubResource("Resource_odxoa")
-refresh_inputs = Callable()
+regenerate = Callable()
+clearInstances = Callable()
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
+
+[node name="Spawn Meshes_0000" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=1173646176]
+multimesh = SubResource("MultiMesh_sx5mj")
+metadata/flow_owner = &"id_0003_spawn_meshes"

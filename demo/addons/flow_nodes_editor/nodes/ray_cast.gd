@@ -21,7 +21,7 @@ func _init():
 					"Use a Filter by hit  with True or 1 to remove the points where the trace failed.\n"
 	}
 
-func execute( _ctx : FlowData.EvaluationContext ):
+func execute( ctx : FlowData.EvaluationContext ):
 	
 	var root = EditorInterface.get_edited_scene_root()
 	if not root:
@@ -32,12 +32,12 @@ func execute( _ctx : FlowData.EvaluationContext ):
 		return null
 	var space_state = world.direct_space_state
 	
-	var in_data : FlowData.Data = get_input(0)
+	var in_data : FlowData.Data = getInput(ctx, 0)
 	var in_size = in_data.size()
 	var out_data : FlowData.Data = in_data.duplicate()
 	var ipos = in_data.getContainerChecked( from_attribute, FlowData.DataType.Vector )
 	if not ipos:
-		setError( "Stream %s of type Vector not found in input data" % from_attribute )
+		setError(ctx,  "Stream %s of type Vector not found in input data" % from_attribute )
 		return null
 	var source_container : PackedVector3Array = ipos
 		
@@ -79,4 +79,4 @@ func execute( _ctx : FlowData.EvaluationContext ):
 		out_data.registerStream( out_rotation_attribute, orot )
 	if out_result_attribute:
 		out_data.registerStream( out_result_attribute, ohit )
-	set_output( 0, out_data )
+	setOutput(ctx, 0, out_data )

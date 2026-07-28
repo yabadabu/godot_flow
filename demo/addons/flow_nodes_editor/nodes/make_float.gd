@@ -22,4 +22,4 @@ func execute( ctx : FlowData.EvaluationContext ):
 	var container : PackedFloat32Array = output.addStream( out_name, FlowData.DataType.Float )
 	container.resize( 1 )
 	container[0] = value
-	set_output( 0, output )
+	setOutput(ctx, 0, output )

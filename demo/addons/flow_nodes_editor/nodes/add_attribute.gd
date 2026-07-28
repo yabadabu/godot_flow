@@ -42,7 +42,7 @@ func exposeParam( name : String ):
 	return true
 
 func execute( ctx : FlowData.EvaluationContext ):
-	var in_data : FlowData.Data = get_optional_input(0)
+	var in_data : FlowData.Data = getOptionalInput(ctx, 0)
 	var out_data : FlowData.Data
 	var out_size := 1
 	if in_data:
@@ -73,4 +73,4 @@ func execute( ctx : FlowData.EvaluationContext ):
 	container.fill( new_val )
 
 	out_data.registerStream( attr_name, container, data_type )
-	set_output( 0, out_data )
+	setOutput(ctx, 0, out_data )

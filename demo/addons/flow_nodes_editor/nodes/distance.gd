@@ -20,17 +20,17 @@ func _init():
 func execute( ctx : FlowData.EvaluationContext ):
 	
 	if not out_name:
-		setError( "Output name can't be empty")
+		setError(ctx,  "Output name can't be empty")
 		return
 		
-	var in_dataA : FlowData.Data = get_input(0)
+	var in_dataA : FlowData.Data = getInput(ctx, 0)
 	if not in_dataA.hasStreamOfType( in_nameA, FlowData.DataType.Vector ):
-		setError( "Input A %s not found" % [in_nameA])
+		setError(ctx,  "Input A %s not found" % [in_nameA])
 		return
 		
-	var in_dataB : FlowData.Data = get_input(1)
+	var in_dataB : FlowData.Data = getInput(ctx, 1)
 	if not  in_dataB.hasStreamOfType( in_nameB, FlowData.DataType.Vector ):
-		setError( "Input B %s not found" % [in_nameB])
+		setError(ctx,  "Input B %s not found" % [in_nameB])
 		return
 		
 	var sA := in_dataA.getVector3Container( in_nameA )
@@ -54,4 +54,4 @@ func execute( ctx : FlowData.EvaluationContext ):
 		out_container[ idx ] = delta.length() * inv_max_distance
 	
 	var err = out_data.registerStream( out_name, out_container )
-	set_output( 0, out_data )
+	setOutput(ctx, 0, out_data )

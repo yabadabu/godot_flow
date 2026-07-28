@@ -53,14 +53,31 @@ var input_nodes : Array[ FlowNodeBase ]
 var editor : FlowGraphEditor
 
 signal in_params_changed
+signal input_params_removed(param_ids: Array[StringName])
+
+var _known_input_ids: Array[StringName] = []
 
 func validateAndWatchNewInputs():
+	var previous_ids := _known_input_ids.duplicate()
 	for idx in range(in_params.size()):
 		if in_params[idx] == null:
 			var param := GraphInputParameter.new()
 			param.name = "input_%d" % idx
 			in_params[idx] = param
+		in_params[idx].ensureId()
+	var current_ids: Array[StringName] = []
+	for param in in_params:
+		if param:
+			current_ids.append(param.ensureId())
+	var removed_ids: Array[StringName] = []
+	for previous_id in previous_ids:
+		if not current_ids.has(previous_id):
+			removed_ids.append(previous_id)
+	_known_input_ids = current_ids
 	_watch_input_changes()
+	_refreshInputNodes()
+	if not removed_ids.is_empty():
+		input_params_removed.emit(removed_ids)
 	in_params_changed.emit()	
 
 func _watch_input_changes():
@@ -77,11 +94,25 @@ func _watch_input_changes():
 
 func _on_input_changed():
 	print("Flow Graph.One of the in_params was modified.")
+	_refreshInputNodes()
 	in_params_changed.emit()
+
+func _refreshInputNodes() -> void:
+	for input_node in input_nodes:
+		if input_node is FlowNodeInput:
+			input_node.refreshInputDefinition()
 
 func findInParamByName( requested_name : String ) -> GraphInputParameter:
 	for candidate in in_params:
 		if candidate and candidate.name == requested_name:
+			return candidate
+	return null
+
+func findInParamById(requested_id: StringName) -> GraphInputParameter:
+	if requested_id.is_empty():
+		return null
+	for candidate in in_params:
+		if candidate and candidate.ensureId() == requested_id:
 			return candidate
 	return null
 	
@@ -98,12 +129,14 @@ func addNodeFromTemplate( node_template : String, node_name : String, node_setti
 	if node:
 		nodes_by_name[ node.name ] = node
 		all_nodes.append( node )
-		node.dirty = true
+		node.invalidate()
 		node.flow_graph = self
+		if node is FlowNodeInput:
+			node.bindInputParameter(self)
 		if not node.title:
 			node.title = node.getTitle()
 		
-		if node_template.begins_with("input_"):
+		if node is FlowNodeInput:
 			input_nodes.append( node )
 		
 		return node
@@ -178,7 +211,7 @@ func addFrame( frame_data : Dictionary ):
 		
 func markAllNodesDirty():
 	for node in all_nodes:
-		node.dirty = true
+		node.invalidate()
 	
 func dump():
 	print( ">>>> FlowGraph %s.. %s Compiled:%s" % [resource_name, graph_name, compiled] )

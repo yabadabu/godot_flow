@@ -43,4 +43,4 @@ func execute( ctx : FlowData.EvaluationContext ):
 			
 	importCommon( ctx, output, nodes )
 
-	set_output( 0, output )
+	setOutput(ctx, 0, output )

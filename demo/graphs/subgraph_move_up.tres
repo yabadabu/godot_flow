@@ -1,0 +1,113 @@
+[gd_resource type="Resource" script_class="FlowGraphResource" format=3 uid="uid://cu060ahbyiuv0"]
+
+[ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="1_ur4bs"]
+[ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="2_k6eyq"]
+
+[sub_resource type="Resource" id="Resource_5ifn7"]
+script = ExtResource("1_ur4bs")
+param_id = &"tevs2"
+name = "In"
+is_constant = false
+data_type = 999
+
+[sub_resource type="Resource" id="Resource_ur4bs"]
+script = ExtResource("1_ur4bs")
+param_id = &"kgmfq"
+name = "Height"
+
+[resource]
+script = ExtResource("2_k6eyq")
+data = {
+"frames": [],
+"links": [{
+"from_node": &"id_0001_input_In",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0010_math_op",
+"to_port": 0
+}, {
+"from_node": &"id_0008_input",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0010_math_op",
+"to_port": 1
+}, {
+"from_node": &"id_0010_math_op",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0002_output",
+"to_port": 0
+}],
+"min_pos": Vector2(0, 0),
+"nodes": [{
+"args_port": {},
+"name": &"id_0001_input_In",
+"position": Vector2(20, 0),
+"settings": {
+"input_id": &"tevs2",
+"input_name": "In",
+"random_seed": 2284636140,
+"title": "Input"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(116, 54),
+"template": "input_In"
+}, {
+"args_port": {},
+"name": &"id_0008_input",
+"position": Vector2(0, 80),
+"settings": {
+"input_id": &"kgmfq",
+"input_name": "Height",
+"random_seed": 2499985437,
+"title": "Input"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(145, 54),
+"template": "input"
+}, {
+"args_port": {
+"Out": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0002_output",
+"position": Vector2(400, 0),
+"settings": {
+"data_type": 9,
+"random_seed": 1282865290,
+"title": "Output"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(125, 54),
+"template": "output"
+}, {
+"args_port": {
+"In A": {
+"connected": true,
+"port": 0
+},
+"In B": {
+"connected": true,
+"port": 1
+}
+},
+"name": &"id_0010_math_op",
+"position": Vector2(200, 0),
+"settings": {
+"in_nameA": "position.y",
+"random_seed": 926903946,
+"title": "Math"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(152, 101),
+"template": "math_op"
+}],
+"type": "flow_graph_nodes",
+"version": 1
+}
+graph_name = "demo_subgraph"
+view_zoom = 1.21
+view_offset = Vector2(5.8236084, -222.19946)
+in_params = Array[ExtResource("1_ur4bs")]([SubResource("Resource_5ifn7"), SubResource("Resource_ur4bs")])

@@ -53,14 +53,14 @@ func _walk_axis(from_cell : Vector3i, to_cell : Vector3i, axis : String, path_id
 		_append_cell(current, path_idx, positions, path_ids, seen, cell_size)
 	return current
 
-func execute(_ctx : FlowData.EvaluationContext):
-	var in_data : FlowData.Data = get_input(0)
+func execute(ctx : FlowData.EvaluationContext):
+	var in_data : FlowData.Data = getInput(ctx, 0)
 	if in_data == null:
-		setError("Input not found")
+		setError(ctx, "Input not found")
 		return
 	var in_positions := in_data.getVector3Container(FlowData.AttrPosition)
 	if in_positions.size() != in_data.size():
-		setError("Input must provide position for each point")
+		setError(ctx, "Input must provide position for each point")
 		return
 
 	var cell_size := _safe_cell_size()
@@ -94,4 +94,4 @@ func execute(_ctx : FlowData.EvaluationContext):
 		out_sizes[idx] = cell_size
 	if path_index_attribute != "":
 		out_data.registerStream(path_index_attribute, path_ids, FlowData.DataType.Int)
-	set_output(0, out_data)
+	setOutput(ctx, 0, out_data)

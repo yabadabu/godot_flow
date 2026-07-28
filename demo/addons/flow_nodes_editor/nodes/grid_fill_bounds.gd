@@ -83,18 +83,18 @@ func _copy_input_streams(in_data : FlowData.Data, source_indices : PackedInt32Ar
 	out_data.tags = in_data.tags.duplicate()
 	return out_data
 
-func execute(_ctx : FlowData.EvaluationContext):
+func execute(ctx : FlowData.EvaluationContext):
 	var cell_size := _safe_cell_size()
 	var positions := PackedVector3Array()
 	var source_indices := PackedInt32Array()
 	var seen := {}
-	var in_data : FlowData.Data = get_optional_input(0)
+	var in_data : FlowData.Data = getOptionalInput(ctx, 0)
 
 	if use_input_bounds and in_data != null and in_data.size() > 0:
 		var in_positions := in_data.getVector3Container(FlowData.AttrPosition)
 		var in_sizes := in_data.getVector3Container(FlowData.AttrSize)
 		if in_positions.size() != in_data.size():
-			setError("Input bounds must provide position for each point")
+			setError(ctx, "Input bounds must provide position for each point")
 			return
 		for idx : int in range(in_data.size()):
 			var size : Vector3 = bounds_size
@@ -106,7 +106,7 @@ func execute(_ctx : FlowData.EvaluationContext):
 			if positions.size() >= max_points:
 				break
 	elif use_input_bounds and in_data != null and in_data.size() == 0:
-		set_output(0, FlowData.Data.new())
+		setOutput(ctx, 0, FlowData.Data.new())
 		return
 	else:
 		positions = _append_bounds(bounds_center, bounds_size, cell_size, positions, source_indices, seen, 0)
@@ -132,4 +132,4 @@ func execute(_ctx : FlowData.EvaluationContext):
 		out_sizes[idx] = cell_size
 	if source_index_attribute != "":
 		out_data.registerStream(source_index_attribute, source_indices, FlowData.DataType.Int)
-	set_output(0, out_data)
+	setOutput(ctx, 0, out_data)

@@ -108,19 +108,19 @@ func preExecute( ctx : FlowData.EvaluationContext ):
 	spawn_id = 0
 		
 func execute( ctx : FlowData.EvaluationContext ):
-	var in_data : FlowData.Data = get_input(0)
+	var in_data : FlowData.Data = getInput(ctx, 0)
 	if !in_data || in_data.size() == 0:
-		set_output(0, in_data)
+		setOutput(ctx, 0, in_data)
 		return
 
 	var meshes = null
 	if mesh_attribute:
 		var stream_meshes = in_data.findStream( mesh_attribute )
 		if stream_meshes == null:
-			setError( "Input does not have attribute '%s'" % mesh_attribute)
+			setError(ctx,  "Input does not have attribute '%s'" % mesh_attribute)
 			return
 		if stream_meshes.data_type != FlowData.DataType.Resource:
-			setError( "Attribute '%s' should be of type Resource" % mesh_attribute)
+			setError(ctx,  "Attribute '%s' should be of type Resource" % mesh_attribute)
 			return
 		meshes = stream_meshes.container
 		
@@ -128,12 +128,12 @@ func execute( ctx : FlowData.EvaluationContext ):
 	if mesh_selector_attribute.strip_edges() != "":
 		selector_stream = in_data.findStream(mesh_selector_attribute)
 		if selector_stream != null and selector_stream.data_type != FlowData.DataType.Int and selector_stream.data_type != FlowData.DataType.Float:
-			setError("Mesh selector attribute '%s' must be Int or Float" % mesh_selector_attribute)
+			setError(ctx, "Mesh selector attribute '%s' must be Int or Float" % mesh_selector_attribute)
 			return
 		if selector_stream != null:
 			var sel_size = selector_stream.container.size()
 			if sel_size != in_data.size() and sel_size != 1:
-				setError("Mesh selector attribute '%s' must have %d values or 1 value (got %d)" % [mesh_selector_attribute, in_data.size(), sel_size])
+				setError(ctx, "Mesh selector attribute '%s' must have %d values or 1 value (got %d)" % [mesh_selector_attribute, in_data.size(), sel_size])
 				return
 
 	# Discard non-valid meshes
@@ -150,13 +150,13 @@ func execute( ctx : FlowData.EvaluationContext ):
 
 	var transforms := in_data.getTransformsStream()
 	if transforms == null:
-		setError("Missing transforms information")
+		setError(ctx, "Missing transforms information")
 		return
 
 	var root = ctx.owner
 	if not root:
-		set_output(0, in_data)
-		setError("Failed to find root. ctx.owner is null")
+		setOutput(ctx, 0, in_data)
+		setError(ctx, "Failed to find root. ctx.owner is null")
 		return
 		
 	var spawn_parent = ctx.resolveSpawnParent(self)
@@ -166,12 +166,12 @@ func execute( ctx : FlowData.EvaluationContext ):
 	# (shoulw be the parent root of the scene, not the parent)
 	var node_tree = root.get_tree()
 	if not node_tree:
-		setError("Invalid current scene")
+		setError(ctx, "Invalid current scene")
 		return
 		
 	var scene_root = node_tree.current_scene
 	if not root.get_tree():
-		setError("Invalid scene_root scene")
+		setError(ctx, "Invalid scene_root scene")
 		return
 		
 	var owner_of_mmis : Node
@@ -184,7 +184,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 			owner_of_mmis = owner_of_mmis.get_parent()
 
 	if variants.is_empty() and meshes == null:
-		setError("Provide mesh_attribute, or mesh_variants.")
+		setError(ctx, "Provide mesh_attribute, or mesh_variants.")
 		return
 
 	# Collect which indices use the same resource.
@@ -205,7 +205,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 	if has_colors:
 		var color_size = color_stream.container.size()
 		if color_size != in_size and color_size != 1:
-			setError("Color attribute '%s' must have %d values or 1 value (got %d)" % [color_attribute, in_size, color_size])
+			setError(ctx, "Color attribute '%s' must have %d values or 1 value (got %d)" % [color_attribute, in_size, color_size])
 			return
 
 	var prefix = title
@@ -243,4 +243,4 @@ func execute( ctx : FlowData.EvaluationContext ):
 
 	EditorInterface.mark_scene_as_unsaved()
 
-	set_output(0, in_data)
+	setOutput(ctx, 0, in_data)

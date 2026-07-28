@@ -15,16 +15,16 @@ func _init():
 	}
 
 func execute( ctx : FlowData.EvaluationContext ):
-	var in_data : FlowData.Data = get_input(0)
+	var in_data : FlowData.Data = getInput(ctx, 0)
 	if in_data == null:
-		setError("Input 'In' is not connected")
+		setError(ctx, "Input 'In' is not connected")
 		return
 		
 	var attr_name = attribute_name
 	if attr_name != "":
 		var stream = in_data.findStream(attr_name)
 		if stream == null:
-			setError("Sanity check failed: Attribute '%s' not found" % attr_name)
+			setError(ctx, "Sanity check failed: Attribute '%s' not found" % attr_name)
 			return
 		
 		var container = stream.container
@@ -35,7 +35,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 			if val is int or val is float:
 				var f_val = float(val)
 				if f_val < min_val or f_val > max_val:
-					setError("Sanity check failed: Element %d has value %f, which is outside range [%f, %f]" % [i, f_val, min_val, max_val])
+					setError(ctx, "Sanity check failed: Element %d has value %f, which is outside range [%f, %f]" % [i, f_val, min_val, max_val])
 					return
 					
-	set_output(0, in_data)
+	setOutput(ctx, 0, in_data)
