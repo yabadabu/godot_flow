@@ -1,4 +1,4 @@
-extends Node
+extends RefCounted
 class_name FlowNodeIO
 
 # Here are all functions related to read/write the resources, including 
