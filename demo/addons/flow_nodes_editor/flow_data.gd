@@ -6,7 +6,8 @@ class_name FlowData
 ##   Container: Continuous typed array of the actual data stored
 ##   data_type
 ##   name
-## The storage is column oriented, not row oriented
+## The storage is column oriented, not row oriented, meaning we work with arrays
+## of homogeneous typed data.
 
 enum DataType {
 	Bool,
