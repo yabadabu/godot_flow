@@ -1,5 +1,6 @@
-# FlowParamOverride.gd
 @tool
+
+## This represents a single parameter that can optionally be overriden by the user of a GraphResource.
 class_name FlowGraphParamOverride
 extends Resource
 

@@ -1,4 +1,7 @@
 @tool
+
+## A specialized version of the FlowGraphNodeUI that detects a double click in the subgraph node to trigger the edition of the associated subgraph resource
+
 extends FlowGraphNodeUI
 class_name FlowGraphNodeUISubgraph
 

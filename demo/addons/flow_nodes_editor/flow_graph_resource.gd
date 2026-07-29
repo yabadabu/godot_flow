@@ -1,8 +1,8 @@
 @tool
+
+## This the resource to store a full flow graph. It has no runtime state.
 extends Resource
 class_name FlowGraphResource
-
-# This the resource to store a full flow graph
 
 @export_category("Flow Graph Resource")
 
@@ -37,7 +37,6 @@ class_name FlowGraphResource
 
 @export_storage var redirectors: Array[FlowGraphRedirect] = []
 
-# The compilated version of the resource, which is shared between all the instances using this resource
 var loading : bool = false:
 	set(value):
 		loading = value
@@ -45,7 +44,8 @@ var loading : bool = false:
 	get:
 		return loading
 var compiled : bool = false
-		
+
+# The compiled version of the resource, which is shared between all the instances using this resource
 var nodes_by_name : Dictionary
 var all_connections : Array[ Dictionary ]
 var all_frames : Array[ Dictionary ]

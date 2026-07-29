@@ -14,7 +14,6 @@
 - [ ] Import node: texture sampler
 - [ ] Import node: sample spline
 
-- [ ] named redirectors/acc
 - [ ] use the WeightsRandomSampler from match_and_set in more places (sample mesh/sample scene)
 
 - [ ] Demos
@@ -29,6 +28,7 @@
 - [ ] Spline sampling interior in non grid pattern
 - [ ] Sample spline along N random positions
 - [ ] Discard points too close to hard edges of a mesh
+- [X] named redirectors/acc
 - [X] optimize scan node always becoming dirty when something changes in the level.
 - [X] Expand the scan_* to a base folder
 - [X] subgraph overrides

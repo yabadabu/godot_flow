@@ -1,4 +1,7 @@
 @tool
+
+## A specialized version of the FlowGraphNodeUI to display a RichTextLabel in the middle of the graph. It has no logic.
+
 extends FlowGraphNodeUI
 class_name FlowGraphNodeUIComment
 

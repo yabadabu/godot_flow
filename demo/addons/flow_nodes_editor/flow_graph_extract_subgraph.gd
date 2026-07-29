@@ -1,8 +1,10 @@
 @tool
-extends RefCounted
 
-# Editor-only transformation which replaces a selection with an embedded
-# subgraph while preserving every connection crossing the selection boundary.
+## Editor-only transformation which replaces a selection with an embedded
+## subgraph while preserving every connection crossing the selection boundary.
+## This class contains all the logic and functions required
+
+extends RefCounted
 
 class ExtractionResult:
 	var success := false

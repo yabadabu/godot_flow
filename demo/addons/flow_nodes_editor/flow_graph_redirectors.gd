@@ -1,4 +1,5 @@
 @tool
+## This is a represent a collection of redirectors and the associated utility functions.
 class_name FlowGraphRedirectors
 extends RefCounted
 

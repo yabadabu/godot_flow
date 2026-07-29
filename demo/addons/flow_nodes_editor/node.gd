@@ -1,9 +1,10 @@
 @tool
+
+## This represent the base class for all nodes in the flow graph
+## The actual nodes are implemented in the nodes subfolder
+
 class_name FlowNodeBase
 extends Resource
-
-# This represent the base class for all nodes in the flow graph
-# The actual nodes are implemented in the nodes subfolder
 
 enum eDebugMode {
 	EXTENDS,

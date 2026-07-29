@@ -53,6 +53,7 @@ In a scene 3D:
     - Scene scanning to gather metadata/attributes into the flow
     - Subgraph with loopbacks parameters
     - Grammar based generation across a spline
+    - Node redirectors
 * **Grid-based Data Inspector** with selection highlighting
 * **3D Debug** overlays with color cues
 * **Graphs as resource** with optional **typed inputs**
@@ -102,7 +103,7 @@ See [CONTRIBUTORS.md](CONTRIBUTORS.md) for everyone who has helped make this pro
 
 ## Platforms
     
-Precompiled versions of the plugin are provided for Windows and OSX platforms. But it should compile without problems in the Linux.
+Precompiled versions of the plugin are provided for Windows and OSX platforms. But it should compile without problems in Linux.
 
 The tool is an editor tool, so it should work where the editor works. Most of the code is currently gdscript, except for wrappers classes to implement KDTrees (from https://github.com/jlblancoc/nanoflann) and RTrees (from https://github.com/nushoin/RTree)
 

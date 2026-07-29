@@ -1,4 +1,6 @@
 @tool
+## This represents all the parameter that can be overriden in a GraphResource. Manages the display, and refreshes the list when the parameters of the graph are updated.
+
 class_name FlowGraphOverrides
 extends RefCounted
 

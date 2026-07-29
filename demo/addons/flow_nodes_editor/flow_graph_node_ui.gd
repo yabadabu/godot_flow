@@ -1,3 +1,6 @@
+## A GraphNode derived class that will take any FlowNodeBase and display it's connections and inputs as pins.
+## It has no logic associated to the PCG flow.
+
 extends GraphNode
 class_name FlowGraphNodeUI
 

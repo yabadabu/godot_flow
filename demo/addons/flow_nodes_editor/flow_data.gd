@@ -1,12 +1,12 @@
 extends Object
 class_name FlowData
 
-# Defines the DataTypes and Data class that is passed between nodes
-# A FlowData.Data is basically a dict of streams, where each stream is:
-#   Container: Continuous typed array of the actual data stored
-#   data_type
-#   name
-# The storage is column oriented, not row oriented
+## Defines the DataTypes and Data class that is passed between nodes
+## A FlowData.Data is basically a dict of streams, where each stream is:
+##   Container: Continuous typed array of the actual data stored
+##   data_type
+##   name
+## The storage is column oriented, not row oriented
 
 enum DataType {
 	Bool,
