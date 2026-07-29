@@ -130,6 +130,11 @@ func refreshTooltip() -> void:
 		text += "\n\n[color=#e98585]Missing required input: %s[/color]" % ", ".join(labels)
 	tooltip_text = text
 
+func toggleDebug():
+	flow_node.invalidate()
+	flow_node.debug_enabled = !flow_node.debug_enabled
+	regenerateFromFlowNode()
+
 func updateStyle():
 	var sb = get_theme_stylebox("titlebar", "GraphNode").duplicate(true)
 	var main_title_color = FlowNodeStyle.getCategoryColor( flow_node.getCategory() )

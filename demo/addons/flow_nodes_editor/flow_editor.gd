@@ -635,9 +635,13 @@ func _on_graph_edit_gui_input(event):
 			if no_modifiers:
 				addComment()
 		elif key == KEY_D:
-			if no_modifiers:
+			if no_modifiers or evt_key.shift_pressed:
+				# Shift+D will disable debug from all other nodes 
+				if evt_key.shift_pressed:
+					disableDebugOnAllNodes()
 				toggleDebug()
 				evalGraph()
+				
 		elif key == KEY_E:
 			if no_modifiers:
 				toggleDisabled()
@@ -652,10 +656,13 @@ func _on_graph_edit_gui_input(event):
 func toggleDebug():
 	var graph_nodes := getSelectedGraphNodes()
 	for graph_node in graph_nodes:
-		var flow_node = graph_node.flow_node
-		flow_node.invalidate()
-		flow_node.debug_enabled = !flow_node.debug_enabled
-		graph_node.regenerateFromFlowNode()
+		graph_node.toggleDebug()
+
+func disableDebugOnAllNodes():
+	for child in gedit.get_children():
+		var graph_node = child as FlowGraphNodeUI
+		if graph_node and graph_node.flow_node.debug_enabled:
+			graph_node.toggleDebug()
 
 func toggleDisabled():
 	var graph_nodes = getSelectedGraphNodes()
