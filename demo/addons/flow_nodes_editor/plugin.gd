@@ -57,6 +57,8 @@ func _enter_tree():
 	undo_redo.history_changed.connect(_on_history_changed)
 	
 	set_process(true)
+	set_input_event_forwarding_always_enabled()
+	set_force_draw_over_forwarding_enabled()
 	
 func _save_external_data():
 	graph_dock.saveResource()
@@ -231,3 +233,110 @@ func get_live_executors( graph : FlowGraphResource ) -> Array:
 					continue
 				result.append(graph_executors[id])
 	return result
+
+
+# ----------------------------------------------
+var _active_camera: Camera3D
+var _debug_lines: Array[Dictionary] = []
+var _debug_labels: Array[Dictionary] = []
+var _redraw_pending := false
+
+func _forward_3d_gui_input( camera: Camera3D, event: InputEvent ) -> int:
+	_active_camera = camera
+	if event is InputEventMouse:
+		if not _redraw_pending:
+			_redraw_pending = true
+			_redraw_overlay.call_deferred()
+	return EditorPlugin.AFTER_GUI_INPUT_PASS
+	
+func _redraw_overlay() -> void:
+	_redraw_pending = false
+	update_overlays()
+	
+func _forward_3d_force_draw_over_viewport(overlay: Control) -> void:
+	#overlay.draw_circle(overlay.get_local_mouse_position(), 64, Color.WHITE)
+	var camera = null
+	# Useful before the mouse has entered the 3D viewport.
+	if not is_instance_valid(camera):
+		var editor_viewport := EditorInterface.get_editor_viewport_3d(0)
+		camera = editor_viewport.get_camera_3d()
+	if camera == null:
+		return
+	_draw_debug_lines(overlay, camera)
+	_draw_debug_labels(overlay, camera)
+	
+func _draw_debug_lines( overlay: Control, camera: Camera3D ) -> void:
+	for entry in _debug_lines:
+		var from: Vector3 = entry["from"]
+		var to: Vector3 = entry["to"]
+		if camera.is_position_behind(from):
+			continue
+		if camera.is_position_behind(to):
+			continue
+		var screen_from := camera.unproject_position(from)
+		var screen_to := camera.unproject_position(to)
+		overlay.draw_line( screen_from, screen_to, entry["color"], entry["width"], true )	
+
+
+func _draw_debug_labels( overlay: Control, camera: Camera3D) -> void:
+	var font := overlay.get_theme_default_font()
+	var default_size := overlay.get_theme_default_font_size()
+
+	for entry in _debug_labels:
+		var world_position: Vector3 = entry["position"]
+		if camera.is_position_behind(world_position):
+			continue
+
+		var screen_position := camera.unproject_position(world_position)
+		screen_position += entry["offset"]
+
+		var font_size: int = entry.get("font_size", default_size)
+		var text: String = entry["text"]
+		var color: Color = entry["color"]
+
+		# Dark outline makes labels readable against most backgrounds.
+		overlay.draw_string_outline(
+			font,
+			screen_position,
+			text,
+			HORIZONTAL_ALIGNMENT_LEFT,
+			-1.0,
+			font_size,
+			2,
+			Color(0.0, 0.0, 0.0, 0.9)
+		)
+
+		overlay.draw_string(
+			font,
+			screen_position,
+			text,
+			HORIZONTAL_ALIGNMENT_LEFT,
+			-1.0,
+			font_size,
+			color
+		)
+
+func clear_debug_draw() -> void:
+	_debug_lines.clear()
+	_debug_labels.clear()
+	update_overlays()
+	
+func debug_line( from: Vector3, to: Vector3, color := Color.WHITE, width := 1.0 ) -> void:
+	_debug_lines.append({
+		"from": from,
+		"to": to,
+		"color": color,
+		"width": width
+	})
+	update_overlays()
+	
+func debug_text( position: Vector3, text: String, color := Color.WHITE, offset := Vector2(6.0, -6.0), font_size := 14 ) -> void:
+	_debug_labels.append({
+		"position": position,
+		"text": text,
+		"color": color,
+		"offset": offset,
+		"font_size": font_size,
+	})
+	update_overlays()
+	update_overlays()

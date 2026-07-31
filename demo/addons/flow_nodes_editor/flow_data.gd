@@ -819,7 +819,7 @@ class Data:
 				return new_container
 				
 			DataType.Resource:
-				var old_container : Array[ Resource ] = old_stream.container
+				var old_container : Array = old_stream.container
 				var new_container : Array[ Resource ] = []
 				new_container.resize( new_size )
 				for idx in range( new_size ):
@@ -932,4 +932,6 @@ class Data:
 		trs.sizes = getVector3Container( attr_size )
 		if trs.sizes.size() == trs.positions.size() and trs.sizes.size() == trs.eulers.size() and trs.sizes.size() > 0:
 			return trs
+			
+		#print( "getTransformsStream sizes do not match: %d %d %d" % [ trs.positions.size(), trs.eulers.size(), trs.sizes.size() ] )
 		return null
