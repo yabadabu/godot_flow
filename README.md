@@ -117,5 +117,5 @@ The plugin is functional, but I have not yet used in any serious project inside 
 ## Build From Sources
 
     $ git submodule update --init
-    $ scons
+    $ scons target=editor
 
