@@ -1,0 +1,310 @@
+[gd_scene format=3 uid="uid://5nnchrxn6n6t"]
+
+[ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_hyqxp"]
+[ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="2_jwd0p"]
+[ext_resource type="Script" uid="uid://b77sf57bysigx" path="res://addons/flow_nodes_editor/flow_graph_redirect.gd" id="3_d231y"]
+[ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="4_sljy6"]
+[ext_resource type="BoxMesh" uid="uid://7flu82pqtc5d" path="res://addons/flow_nodes_editor/resources/unit_cube.tres" id="5_jwd0p"]
+
+[sub_resource type="Resource" id="Resource_o3677"]
+script = ExtResource("4_sljy6")
+data = {
+"frames": [],
+"links": [{
+"from_node": &"id_0001_grid",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0001_filter_data_by_index",
+"to_port": 0
+}, {
+"from_node": &"id_0001_filter_data_by_index",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0002_transform",
+"to_port": 0
+}, {
+"from_node": &"id_0001_grid",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0003_merge",
+"to_port": 0
+}, {
+"from_node": &"id_0002_transform",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0003_merge",
+"to_port": 0
+}, {
+"from_node": &"id_0003_merge",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0002_clusterize",
+"to_port": 0
+}, {
+"from_node": &"id_0006_filter_data_by_index",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0005_transform",
+"to_port": 0
+}, {
+"from_node": &"id_0001_grid",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0006_filter_data_by_index",
+"to_port": 0
+}, {
+"from_node": &"id_0005_transform",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0003_merge",
+"to_port": 0
+}, {
+"from_node": &"id_0008_filter_data_by_index",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0007_transform",
+"to_port": 0
+}, {
+"from_node": &"id_0001_grid",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0008_filter_data_by_index",
+"to_port": 0
+}, {
+"from_node": &"id_0007_transform",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0003_merge",
+"to_port": 0
+}, {
+"from_node": &"id_0002_clusterize",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0002_random_color",
+"to_port": 0
+}, {
+"from_node": &"id_0002_random_color",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0001_spawn_meshes",
+"to_port": 0
+}],
+"min_pos": Vector2(0, 0),
+"nodes": [{
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0007_transform",
+"position": Vector2(360, 0),
+"settings": {
+"offset_max": Vector3(-4, 0, 4),
+"offset_min": Vector3(-4, 0, 4),
+"random_seed": 3251043452,
+"title": "Transform Points"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139, 71),
+"template": "transform"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0008_filter_data_by_index",
+"position": Vector2(180, 0),
+"settings": {
+"indices": "0,1",
+"random_seed": 3332167662,
+"title": "Filter Data By Index"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(147, 71),
+"template": "filter_data_by_index"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0005_transform",
+"position": Vector2(360, 300),
+"settings": {
+"offset_max": Vector3(3, 0, -4),
+"offset_min": Vector3(3, 0, -4),
+"random_seed": 3251043452,
+"title": "Transform Points"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139, 71),
+"template": "transform"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0006_filter_data_by_index",
+"position": Vector2(180, 300),
+"settings": {
+"indices": "2,3",
+"random_seed": 3332167662,
+"title": "Filter Data By Index"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(147, 71),
+"template": "filter_data_by_index"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0002_clusterize",
+"position": Vector2(720, 80),
+"settings": {
+"max_distance": 2.0,
+"num_clusters": 2,
+"operation": 1,
+"random_seed": 797812303,
+"title": "Clusterize"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139, 71),
+"template": "clusterize"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0003_merge",
+"position": Vector2(560, 80),
+"settings": {
+"random_seed": 3032352628,
+"title": "Merge"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139, 54),
+"template": "merge"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0002_transform",
+"position": Vector2(360, 180),
+"settings": {
+"offset_max": Vector3(-4, 0, -4),
+"offset_min": Vector3(-4, 0, -4),
+"random_seed": 3251043452,
+"title": "Transform Points"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139, 71),
+"template": "transform"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0001_filter_data_by_index",
+"position": Vector2(180, 180),
+"settings": {
+"indices": "0,1",
+"random_seed": 3332167662,
+"title": "Filter Data By Index"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(147, 71),
+"template": "filter_data_by_index"
+}, {
+"args_port": {},
+"name": &"id_0001_grid",
+"position": Vector2(0, 80),
+"settings": {
+"random_seed": 316636174,
+"size": 0.39,
+"title": "Grid",
+"x": 2,
+"z": 2
+},
+"show_disconnected_inputs": false,
+"size": Vector2(125, 71),
+"template": "grid"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0002_random_color",
+"position": Vector2(920, 80),
+"settings": {
+"random_seed": 911214291,
+"seed_attribute": null,
+"title": "Random Color"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139, 71),
+"template": "random_color"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0001_spawn_meshes",
+"position": Vector2(1080, 80),
+"settings": {
+"random_seed": 994241923,
+"title": "Spawn Meshes"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139, 71),
+"template": "spawn_meshes"
+}],
+"type": "flow_graph_nodes",
+"version": 1
+}
+graph_name = "demo_cluster"
+view_offset = Vector2(733.718, -205.69266)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jwd0p"]
+vertex_color_use_as_albedo = true
+roughness = 0.3
+
+[sub_resource type="MultiMesh" id="MultiMesh_d231y"]
+transform_format = 1
+use_colors = true
+instance_count = 10
+mesh = ExtResource("5_jwd0p")
+buffer = PackedFloat32Array(0.39, 0, 0, 0, 0, 0.39, 0, 0, 0, 0, 0.39, 0, 1, 0.078, 0.576, 1, 0.39, 0, 0, 1, 0, 0.39, 0, 0, 0, 0, 0.39, 0, 1, 0.078, 0.576, 1, 0.39, 0, 0, 0, 0, 0.39, 0, 0, 0, 0, 0.39, 1, 1, 0.078, 0.576, 1, 0.39, 0, 0, 1, 0, 0.39, 0, 0, 0, 0, 0.39, 1, 1, 0.078, 0.576, 1, 0.39, 0, 0, -4, 0, 0.39, 0, 0, 0, 0, 0.39, -4, 0, 0.99215686, 0, 1, 0.39, 0, 0, -3, 0, 0.39, 0, 0, 0, 0, 0.39, -4, 0, 0.99215686, 0, 1, 0.39, 0, 0, 3, 0, 0.39, 0, 0, 0, 0, 0.39, -3, 0, 0.749, 1, 1, 0.39, 0, 0, 4, 0, 0.39, 0, 0, 0, 0, 0.39, -3, 0, 0.749, 1, 1, 0.39, 0, 0, -4, 0, 0.39, 0, 0, 0, 0, 0.39, 4, 1, 0.843, 0, 1, 0.39, 0, 0, -3, 0, 0.39, 0, 0, 0, 0, 0.39, 4, 1, 0.843, 0, 1)
+
+[node name="DemoCluster" type="Node3D" unique_id=89839259]
+
+[node name="FlowGraphNode3D" type="Node3D" parent="." unique_id=1668951404]
+script = ExtResource("1_hyqxp")
+graph = SubResource("Resource_o3677")
+regenerate = Callable()
+clearInstances = Callable()
+metadata/_custom_type_script = "uid://d1krtmb1urldl"
+
+[node name="Spawn Meshes_0000" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=579728983]
+material_override = SubResource("StandardMaterial3D_jwd0p")
+multimesh = SubResource("MultiMesh_d231y")
+metadata/flow_owner = &"id_0001_spawn_meshes"
