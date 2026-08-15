@@ -21,6 +21,8 @@ extends FlowNodeBase
 @export_range(0.0, 1.0) var val_min : float = 0.6
 @export_range(0.0, 1.0) var val_max : float = 1.0
 
+@export var seed_attribute : String = ""
+
 func _init():
 	meta_node = {
 		"title" : "Random Color",
@@ -49,10 +51,16 @@ func execute( ctx : FlowData.EvaluationContext ):
 	var colors = PackedColorArray()
 	colors.resize(in_size)
 	
+	var seeds
+	if not seed_attribute.is_empty():
+		seeds = in_data.getContainerChecked(seed_attribute, FlowData.DataType.Int)
+	
 	if use_palette:
 		var palette : Array[Color] = palette
 		var palette_size : int = palette.size()
 		for i in range(in_size):
+			if seeds:
+				rng.seed = seeds[ i ]
 			var idx = rng.randi_range(0, palette_size - 1)
 			colors[i] = palette[idx]
 	else:
@@ -63,6 +71,8 @@ func execute( ctx : FlowData.EvaluationContext ):
 		var v_min : float= val_min
 		var v_max : float= val_max
 		for i in range(in_size):
+			if seeds:
+				rng.seed = seeds[ i ]
 			# Hue needs to wrap
 			var h = fposmod( h_center + rng.randf_range(-h_width, h_width), 1.0)
 			var s = rng.randf_range(s_min, s_max)
