@@ -9,6 +9,7 @@ void GDKdTree::_bind_methods() {
   ClassDB::bind_method(D_METHOD("set_points"), &GDKdTree::set_points);
   ClassDB::bind_method(D_METHOD("find_nearest_idx"), &GDKdTree::find_nearest_idx);
   ClassDB::bind_method(D_METHOD("find_nearest_indices"), &GDKdTree::find_nearest_indices);
+  ClassDB::bind_method(D_METHOD("cluster_by_distance"), &GDKdTree::cluster_by_distance);
 }
 
 GDKdTree::GDKdTree( ) {
@@ -21,12 +22,12 @@ GDKdTree::~GDKdTree() {
 
 int GDKdTree::find_nearest_idx( const Vector3& pos ) const {
   if (!tree || all.points.is_empty())
-      return -1;
+    return -1;
   nanoflann::KNNResultSet<float> results(1);
   size_t return_idx = -1;
   float out_distance;
   results.init(&return_idx, &out_distance);
-  tree->findNeighbors(results, &pos.x, nanoflann::SearchParams(3));
+  tree->findNeighbors(results, &pos.x, nanoflann::SearchParameters(3));
   return return_idx;
 }
 
@@ -54,7 +55,7 @@ PackedInt32Array GDKdTree::find_nearest_indices( const PackedVector3Array& in_po
   // This could be executed in parallel
   for( size_t i=0; i<num_elems; ++i, ++pos_addr ) {
     results.init(nearest_indices, out_distances);
-    if( !tree->findNeighbors(results, &pos_addr->x, nanoflann::SearchParams(3)))
+    if( !tree->findNeighbors(results, &pos_addr->x, nanoflann::SearchParameters(3)))
       idxs[ i ] = -1;
     else
       idxs[ i ] = nearest_indices[ index_to_read ];
@@ -72,4 +73,63 @@ void GDKdTree::set_points( const PackedVector3Array& in_pos ) {
   if (in_pos.is_empty())
     return;
   tree = new jTree(3, all, nanoflann::KDTreeSingleIndexAdaptorParams());
+}
+
+PackedInt32Array GDKdTree::cluster_by_distance(float max_distance) const {
+  const size_t num_points = all.points.size();
+
+  if (!tree || !num_points)
+    return PackedInt32Array{};
+
+  PackedInt32Array labels;
+  labels.resize(num_points);
+  labels.fill(-1);
+
+  std::vector<size_t> queue;
+  queue.reserve(num_points);
+
+  // To store the neighbours of each query
+  using ResultItem = nanoflann::ResultItem<size_t, float>;
+  std::vector<ResultItem> matches;
+  matches.reserve(64);
+
+  nanoflann::SearchParameters params;
+  params.sorted = false;
+
+  const float radius_squared = max_distance * max_distance;
+
+  int32_t cluster_index = 0;
+
+  for (size_t start = 0; start < num_points; ++start) {
+    if (labels[start] != -1)
+      continue;
+
+    labels[start] = cluster_index;
+
+    queue.clear();
+    queue.push_back(start);
+
+    size_t queue_index = 0;
+    while (queue_index < queue.size()) {
+      const size_t current = queue[queue_index++];
+
+      matches.clear();
+
+      nanoflann::RadiusResultSet<float, size_t> results( radius_squared, matches );
+
+      tree->findNeighbors( results, &all.points[current].x, params );
+
+      for (const auto& match : matches) {
+        const size_t neighbor = match.first;
+        if (labels[neighbor] == -1) {
+          labels[neighbor] = cluster_index;
+          queue.push_back(neighbor);
+        }
+      }
+    }
+
+    ++cluster_index;
+  }
+
+  return labels;
 }
