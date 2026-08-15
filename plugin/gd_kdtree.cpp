@@ -86,7 +86,7 @@ PackedInt32Array GDKdTree::cluster_by_distance(float max_distance) const {
   labels.fill(-1);
 
   std::vector<size_t> queue;
-  queue.reserve(num_points);
+  queue.reserve(64);
 
   // To store the neighbours of each query
   using ResultItem = nanoflann::ResultItem<size_t, float>;
@@ -99,7 +99,6 @@ PackedInt32Array GDKdTree::cluster_by_distance(float max_distance) const {
   const float radius_squared = max_distance * max_distance;
 
   int32_t cluster_index = 0;
-
   for (size_t start = 0; start < num_points; ++start) {
     if (labels[start] != -1)
       continue;

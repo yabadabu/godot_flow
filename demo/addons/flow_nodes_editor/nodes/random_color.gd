@@ -60,7 +60,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 		var palette_size : int = palette.size()
 		for i in range(in_size):
 			if seeds:
-				rng.seed = seeds[ i ]
+				rng.seed = seeds[ i ] + random_seed
 			var idx = rng.randi_range(0, palette_size - 1)
 			colors[i] = palette[idx]
 	else:
@@ -72,7 +72,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 		var v_max : float= val_max
 		for i in range(in_size):
 			if seeds:
-				rng.seed = seeds[ i ]
+				rng.seed = seeds[ i ] + random_seed
 			# Hue needs to wrap
 			var h = fposmod( h_center + rng.randf_range(-h_width, h_width), 1.0)
 			var s = rng.randf_range(s_min, s_max)

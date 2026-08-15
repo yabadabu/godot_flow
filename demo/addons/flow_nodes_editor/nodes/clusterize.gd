@@ -22,7 +22,7 @@ func _init():
 		"title" : "Clusterize",
 		"category" : "Spatial",
 		"ins" : [{ "label": "In" }], 
-		"outs" : [{ "label" : "Out" }],
+		"outs" : [{ "label" : "Out" }, { "label" : "Centroids" }],
 		"tooltip" :"Creates clusters based of a maximum distance",
 	}
 	
@@ -47,16 +47,44 @@ func execute( ctx : FlowData.EvaluationContext ):
 	var sA := in_dataA.getVector3Container( in_nameA )
 	var size_A = in_dataA.size()
 
-	var out_data : FlowData.Data = in_dataA.duplicate()
+	var indices : PackedInt32Array
+	var centroids : PackedVector3Array
+	var counts : PackedInt32Array
 	
 	if operation == eOperation.ByDistance:
 		var kdtree = GDKdTree.new()
 		kdtree.set_points( sA )
-		var indices : PackedInt32Array = kdtree.cluster_by_distance( max_distance )
-		out_data.registerStream( out_name, indices )
+		indices = kdtree.cluster_by_distance( max_distance )
+		
+		for in_index in range( indices.size() ):
+			var cluster_index = indices[ in_index ]
+			if cluster_index >= counts.size():
+				counts.resize( cluster_index + 1 )
+				centroids.resize( cluster_index + 1 )
+			counts[ cluster_index ] += 1
+			centroids[ cluster_index ] += sA[ in_index ]
+		var num_clusters_found = counts.size()
+		for index in num_clusters_found:
+			centroids[ index ] /= counts[ index ]
+
+
 	else:
 		var ans = GDStreamUtils.KMeans( sA, num_clusters, 25, 0.01, random_seed)
 		if ans.result:
-			out_data.registerStream( out_name, ans.labels )
+			indices = ans.labels
+			centroids = ans.centroids
+			for cluster_index in indices:
+				if cluster_index >= counts.size():
+					counts.resize( cluster_index + 1 )
+				counts[ cluster_index ] += 1
 
+	var out_data : FlowData.Data = in_dataA.duplicate()
+	out_data.registerStream( out_name, indices )
 	setOutput(ctx, 0, out_data )
+
+	var out_centroids := FlowData.Data.new()
+	out_centroids.addCommonStreams( centroids.size() )
+	out_centroids.registerStream( FlowData.AttrPosition, centroids )
+	out_centroids.registerStream( "num_samples", counts )
+	setOutput(ctx, 1, out_centroids )
+	

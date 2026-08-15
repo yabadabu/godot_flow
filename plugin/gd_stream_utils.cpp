@@ -1,5 +1,6 @@
 #include "gd_stream_utils.h"
 #include <godot_cpp/core/class_db.hpp>
+#include <random>
 #include <algorithm>
 
 using namespace godot;
@@ -44,8 +45,6 @@ PackedInt32Array GDStreamUtils::get_sorted_indices_i32(const PackedInt32Array &v
 PackedInt32Array GDStreamUtils::get_sorted_indices_string(const PackedStringArray &values) {
     return get_sorted_container( values ); 
 }
-
-#include <random>
 
 Dictionary GDStreamUtils::KMeans(
     const PackedVector3Array& points,
@@ -170,18 +169,15 @@ Dictionary GDStreamUtils::KMeans(
       float maxCentroidMovementSq = 0.0f;
 
       // Recalculate centroids.
-      for (int32_t c = 0; c < num_clusters; ++c)
-      {
-        if (accumulators[c].count == 0)
-        {
+      for (int32_t c = 0; c < num_clusters; ++c) {
+        if (accumulators[c].count == 0) {
           // Empty cluster:
           // reinitialize it to a random point.
           centroids[c] = points[firstDist(rng)];
           continue;
         }
 
-        const Vector3 newCentroid
-        {
+        const Vector3 newCentroid {
           static_cast<float>(accumulators[c].x / accumulators[c].count),
           static_cast<float>(accumulators[c].y / accumulators[c].count),
           static_cast<float>(accumulators[c].z / accumulators[c].count)
