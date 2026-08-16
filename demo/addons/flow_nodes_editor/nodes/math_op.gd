@@ -49,7 +49,7 @@ func _init():
 		"ins" : [inA, inB], 
 		"outs" : [{ "label" : "Out" }],
 		"tooltip" : "Applies a math operation between two streams, storing the result in a new stream or overriding another.\nYou can read and write substreams like position.X",
-		"keywords" : [ "multiply", "add" ],
+		"keywords" : [ "multiply", "add", "negate" ],
 	}
 	
 func isSingleArgument( ) -> bool:
