@@ -33,7 +33,7 @@ point_count = 2
 [sub_resource type="Curve3D" id="Curve3D_jalyr"]
 bake_interval = 0.1
 _data = {
-"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 98.002, 0, -121.70447, 6.063385, 0, -12.946508, -6.063385, 0, 12.946508, 100.163086, 0, -19.592922, 9.455238, 0, 0.5410018, -9.455238, 0, -0.5410018, 77.080635, 0, 3.3478992, 11.616322, 0, 12.697138, -11.616322, 0, -12.697138, 39.308678, 0, -27.264828, 0, 0, 0, 0, 0, 0, 29.897118, 0, -96.29192),
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 98.002, 0, -121.70447, 6.063385, 0, -12.946508, -6.063385, 0, 12.946508, 100.163086, 0, -19.592922, 9.455238, 0, 0.5410018, -9.455238, 0, -0.5410018, 77.080635, 0, 3.3478992, 11.616322, 0, 12.697138, -11.616322, 0, -12.697138, 39.308678, 0, -27.264828, 0, 0, 0, 0, 0, 0, 29.897118, 0, -96.38456),
 "tilts": PackedFloat32Array(0, 0, 0, 0, 0)
 }
 point_count = 5
@@ -95,96 +95,15 @@ data = {
 "keep_alive": false,
 "to_node": &"id_0007_merge",
 "to_port": 0
+}, {
+"from_node": &"id_0007_merge",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0001_collapse_points",
+"to_port": 0
 }],
 "min_pos": Vector2(0, 0),
 "nodes": [{
-"args_port": {
-"Splines": {
-"connected": true,
-"port": 0
-},
-"uniform_interval": {
-"connected": true,
-"port": 1
-}
-},
-"name": &"id_0002_sample_spline",
-"position": Vector2(420, 0),
-"settings": {
-"random_seed": 755618621,
-"title": "Sample Spline",
-"uniform_interval": 20.85
-},
-"show_disconnected_inputs": false,
-"size": Vector2(210, 101),
-"template": "sample_spline"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0006_partition",
-"position": Vector2(200, 0),
-"settings": {
-"attribute_name": "Index",
-"debug_bulk": 1,
-"random_seed": 4215387404,
-"title": "Partition"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(139, 71),
-"template": "partition"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0007_merge",
-"position": Vector2(1040, 180),
-"settings": {
-"debug_enabled": true,
-"debug_mode": 1,
-"inspect_enabled": true,
-"random_seed": 25825599,
-"title": "Merge"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(139, 54.00003),
-"template": "merge"
-}, {
-"args_port": {},
-"name": &"id_0001_scan_splines",
-"position": Vector2(0, 0),
-"settings": {
-"group_name": "Roads",
-"random_seed": 1043334286,
-"title": "Scan Splines"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(125, 71),
-"template": "scan_splines"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0004_filter_data_by_index",
-"position": Vector2(840, 0),
-"settings": {
-"indices": "0, -1",
-"random_seed": 1128531675,
-"title": "Filter Data By Index"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(147, 71),
-"template": "filter_data_by_index"
-}, {
 "args_port": {
 "In": {
 "connected": true,
@@ -195,6 +114,7 @@ data = {
 "position": Vector2(660, 0),
 "settings": {
 "debug_bulk": 3,
+&"inspect_enabled": false,
 "random_seed": 3867480066,
 "title": "Bounds Modifier",
 "uniform_scale": 2.415
@@ -209,12 +129,68 @@ data = {
 "settings": {
 "input_id": &"kgc8s",
 "input_name": "Sample  Interval",
+&"inspect_enabled": false,
 "random_seed": 792993260,
 "title": "Input"
 },
 "show_disconnected_inputs": false,
-"size": Vector2(211.00002, 54.00006),
+"size": Vector2(211, 54),
 "template": "input"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0004_filter_data_by_index",
+"position": Vector2(840, 0),
+"settings": {
+"indices": "0, -1",
+&"inspect_enabled": false,
+"random_seed": 1128531675,
+"title": "Filter Data By Index"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(147, 71),
+"template": "filter_data_by_index"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0007_merge",
+"position": Vector2(1060, 260),
+"settings": {
+"debug_mode": 1,
+&"inspect_enabled": false,
+"random_seed": 25825599,
+"title": "Merge"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139, 54),
+"template": "merge"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0006_partition",
+"position": Vector2(200, 0),
+"settings": {
+"attribute_name": "Index",
+"debug_bulk": 1,
+&"inspect_enabled": false,
+"random_seed": 4215387404,
+"title": "Partition"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139, 71),
+"template": "partition"
 }, {
 "args_port": {
 "Splines": {
@@ -227,6 +203,7 @@ data = {
 "settings": {
 "debug_mode": 1,
 "debug_scale": 1.215,
+&"inspect_enabled": false,
 "random_seed": 538840830,
 "show_1": false,
 "show_2": false,
@@ -235,15 +212,68 @@ data = {
 "title": "Spline Intersection"
 },
 "show_disconnected_inputs": false,
-"size": Vector2(173.00006, 71),
+"size": Vector2(173, 71),
 "template": "spline_intersection"
+}, {
+"args_port": {},
+"name": &"id_0001_scan_splines",
+"position": Vector2(0, 0),
+"settings": {
+"group_name": "Roads",
+&"inspect_enabled": false,
+"random_seed": 1043334286,
+"title": "Scan Splines"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(125, 71),
+"template": "scan_splines"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0001_collapse_points",
+"position": Vector2(1260, 260),
+"settings": {
+"debug_enabled": true,
+&"inspect_enabled": false,
+"random_seed": 3140828461,
+"title": "Collapse Points"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139, 71),
+"template": "collapse_points"
+}, {
+"args_port": {
+"Splines": {
+"connected": true,
+"port": 0
+},
+"uniform_interval": {
+"connected": true,
+"port": 1
+}
+},
+"name": &"id_0002_sample_spline",
+"position": Vector2(420, 0),
+"settings": {
+&"inspect_enabled": false,
+"random_seed": 755618621,
+"title": "Sample Spline",
+"uniform_interval": 20.85
+},
+"show_disconnected_inputs": false,
+"size": Vector2(210, 101),
+"template": "sample_spline"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
 graph_name = "demo_playground"
-view_zoom = 0.79946244
-view_offset = Vector2(337.61804, -136.19566)
+view_zoom = 0.7994624
+view_offset = Vector2(828.6269, -206.50995)
 in_params = Array[ExtResource("2_84qcw")]([SubResource("Resource_7qs7l")])
 
 [sub_resource type="Resource" id="Resource_c8700"]
