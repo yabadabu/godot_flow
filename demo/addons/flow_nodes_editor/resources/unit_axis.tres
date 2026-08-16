@@ -1,0 +1,18 @@
+[gd_resource type="ArrayMesh" format=4 uid="uid://bkt35midy2qje"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_thg6r"]
+shading_mode = 0
+disable_fog = true
+vertex_color_use_as_albedo = true
+
+[resource]
+_surfaces = [{
+"aabb": AABB(0, 0, -1, 1, 1, 1),
+"attribute_data": PackedByteArray("/wAA//8AAP8A/wD/AP8A/wAA//8AAP//"),
+"format": 34359738377,
+"material": SubResource("StandardMaterial3D_thg6r"),
+"primitive": 1,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 6,
+"vertex_data": PackedByteArray("AAAAAAAAAAAAAAAAAACAPwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgD8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIC/")
+}]

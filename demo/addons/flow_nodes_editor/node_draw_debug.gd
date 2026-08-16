@@ -9,41 +9,45 @@ var node : FlowNodeBase
 var scenario_rid : RID
 var multimesh_rid : RID
 var instance_rid : RID
-var mesh_resource: Mesh = preload( "res://addons/flow_nodes_editor/resources/unit_cube.tres" )
+var current_mesh_resource : Mesh
+const default_mesh_resource : Mesh = preload( "res://addons/flow_nodes_editor/resources/unit_cube.tres" )
 var selection_color := Color.MAGENTA
 
-func create_axis_mesh() -> Mesh:
-	var mesh := ImmediateMesh.new()
-	mesh.surface_begin(Mesh.PRIMITIVE_LINES)
+func generate_resource_axis_mesh():
+	var surface := SurfaceTool.new()
+	surface.begin(Mesh.PRIMITIVE_LINES)
 
-	# X axis (red)
-	mesh.surface_set_color(Color.RED)
-	mesh.surface_add_vertex(Vector3.ZERO)
-	mesh.surface_add_vertex(Vector3.RIGHT)
+	surface.set_color(Color.RED)
+	surface.add_vertex(Vector3.ZERO)
+	surface.set_color(Color.RED)
+	surface.add_vertex(Vector3.RIGHT)
 
-	# Y axis (green)
-	mesh.surface_set_color(Color.GREEN)
-	mesh.surface_add_vertex(Vector3.ZERO)
-	mesh.surface_add_vertex(Vector3.UP)
+	surface.set_color(Color.GREEN)
+	surface.add_vertex(Vector3.ZERO)
+	surface.set_color(Color.GREEN)
+	surface.add_vertex(Vector3.UP)
 
-	# Z axis (blue)
-	mesh.surface_set_color(Color.BLUE)
-	mesh.surface_add_vertex(Vector3.ZERO)
-	mesh.surface_add_vertex(Vector3.FORWARD)
-	mesh.surface_end()
+	surface.set_color(Color.BLUE)
+	surface.add_vertex(Vector3.ZERO)
+	surface.set_color(Color.BLUE)
+	surface.add_vertex(Vector3.FORWARD)
+
+	var mesh := surface.commit()
+
+	var material := StandardMaterial3D.new()
+	material.vertex_color_use_as_albedo = true
+	material.disable_fog = true
+	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	mesh.surface_set_material(0, material)
+	ResourceSaver.save(mesh, "res://addons/flow_nodes_editor/resources/unit_axis.tres")
 	
-	var mat = StandardMaterial3D.new()
-	mat.vertex_color_use_as_albedo = true
-	mat.disable_fog = true
-	mat.shading_mode = BaseMaterial3D.SHADING_MODE_PER_VERTEX
-	mesh.surface_set_material( 0, mat )
-	
-	return mesh
-
 func _ready():
 	var viewport = get_viewport()
 	if viewport and viewport.get_world_3d():
 		scenario_rid = viewport.get_world_3d().scenario
+	
+	# uncomment to regenerate the unit_axis.tres mesh
+	#generate_resource_axis_mesh()
 	
 func _exit_tree():
 	cleanup_multimesh_direct()
@@ -57,7 +61,9 @@ func cleanup_multimesh_direct():
 		RenderingServer.free_rid(multimesh_rid)
 		multimesh_rid = RID()	
 
-func create_multimesh_direct():
+	current_mesh_resource = null
+
+func create_multimesh_direct( mesh_resource : Mesh ):
 	if not mesh_resource:
 		print("No mesh resource assigned")
 		return
@@ -85,6 +91,8 @@ func create_multimesh_direct():
 	# Set transform
 	var global_transform : Transform3D = Transform3D.IDENTITY
 	RenderingServer.instance_set_transform(instance_rid, global_transform)
+
+	current_mesh_resource = mesh_resource
 
 func setupColors(out_data: FlowData.Data, ctx: FlowData.EvaluationContext):
 	var instance_count = out_data.size()
@@ -157,9 +165,14 @@ func setupDraw():
 		print( "setupDebugDraw failed - out_data" )
 		return
 	var instance_count = out_data.size()
-		
-	if not multimesh_rid.is_valid() or RenderingServer.multimesh_get_instance_count(multimesh_rid) < instance_count:
-		create_multimesh_direct()
+	
+	# Allow customization of the debug mesh resource
+	var mesh_resource = s.debug_mesh_resource
+	if not mesh_resource or mesh_resource == null:
+		mesh_resource = default_mesh_resource
+	if not multimesh_rid.is_valid() or RenderingServer.multimesh_get_instance_count(multimesh_rid) < instance_count or mesh_resource != current_mesh_resource:
+		create_multimesh_direct( mesh_resource )
+		current_mesh_resource = mesh_resource
 		
 	if not multimesh_rid.is_valid():
 		print( "setupDebugDraw failed - multimesh_rid" )

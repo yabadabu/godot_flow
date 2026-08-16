@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://5nnchrxn6n6t"]
 
 [ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_hyqxp"]
+[ext_resource type="BoxMesh" uid="uid://7flu82pqtc5d" path="res://addons/flow_nodes_editor/resources/unit_cube.tres" id="2_d231y"]
 [ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="2_jwd0p"]
 [ext_resource type="Script" uid="uid://b77sf57bysigx" path="res://addons/flow_nodes_editor/flow_graph_redirect.gd" id="3_d231y"]
 [ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="4_sljy6"]
@@ -118,20 +119,124 @@ data = {
 "to_node": &"id_0002_relax",
 "to_port": 0
 }, {
+"from_node": &"id_0003_transform",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0004_collapse_points",
+"to_port": 0
+}, {
+"from_node": &"id_0002_make_vector",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0003_math_op",
+"to_port": 0
+}, {
 "from_node": &"id_0002_grid",
 "from_port": 0,
 "keep_alive": false,
 "to_node": &"id_0003_transform",
 "to_port": 0
 }, {
-"from_node": &"id_0003_transform",
+"from_node": &"id_0003_math_op",
 "from_port": 0,
 "keep_alive": false,
-"to_node": &"id_0004_collapse_points",
+"to_node": &"id_0003_transform",
+"to_port": 1
+}, {
+"from_node": &"id_0002_make_vector",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0003_transform",
+"to_port": 2
+}, {
+"from_node": &"id_0001_make_float",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0002_make_vector",
 "to_port": 0
+}, {
+"from_node": &"id_0001_make_float",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0002_make_vector",
+"to_port": 1
 }],
 "min_pos": Vector2(0, 0),
 "nodes": [{
+"args_port": {},
+"name": &"id_0004_scan_splines",
+"position": Vector2(600, 0),
+"settings": {
+"random_seed": 1860528848,
+"title": "Scan Splines"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(125, 71),
+"template": "scan_splines"
+}, {
+"args_port": {},
+"name": &"id_0001_make_float",
+"position": Vector2(0, 360),
+"settings": {
+"random_seed": 2832320780,
+"title": "Dispersion",
+"value": -2.39
+},
+"show_disconnected_inputs": false,
+"size": Vector2(125, 54),
+"template": "make_float"
+}, {
+"args_port": {},
+"name": &"id_0002_grid",
+"position": Vector2(340, 140),
+"settings": {
+"random_seed": 472077282,
+"size": 0.295,
+"title": "Grid",
+"x": 50,
+"z": 50
+},
+"show_disconnected_inputs": false,
+"size": Vector2(125, 71),
+"template": "grid"
+}, {
+"args_port": {
+"In A": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0003_math_op",
+"position": Vector2(340, 240),
+"settings": {
+"operation": 4,
+"random_seed": 3752027347,
+"title": "Math"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(152, 71),
+"template": "math_op"
+}, {
+"args_port": {
+"x": {
+"connected": true,
+"port": 0
+},
+"z": {
+"connected": true,
+"port": 1
+}
+},
+"name": &"id_0002_make_vector",
+"position": Vector2(160, 340),
+"settings": {
+"random_seed": 1731921584,
+"title": "Make Vector"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(134, 101),
+"template": "make_vector"
+}, {
 "args_port": {
 "In": {
 "connected": true,
@@ -139,10 +244,11 @@ data = {
 }
 },
 "name": &"id_0004_collapse_points",
-"position": Vector2(640, 0),
+"position": Vector2(800, 240),
 "settings": {
 "debug_enabled": true,
-"max_distance": 1.8199999999999998,
+"debug_mesh_resource": ExtResource("2_d231y"),
+"max_distance": 1.27,
 "random_seed": 2128954851,
 "title": "Collapse Points"
 },
@@ -154,33 +260,27 @@ data = {
 "In": {
 "connected": true,
 "port": 0
+},
+"offset_max": {
+"connected": true,
+"port": 2
+},
+"offset_min": {
+"connected": true,
+"port": 1
 }
 },
 "name": &"id_0003_transform",
-"position": Vector2(480, 0),
+"position": Vector2(580, 240),
 "settings": {
-"offset_max": Vector3(2, 0, 2),
+"offset_max": Vector3(1, 0, 2),
 "offset_min": Vector3(-2, 0, -2),
 "random_seed": 668392754,
 "title": "Transform Points"
 },
 "show_disconnected_inputs": false,
-"size": Vector2(139, 71),
+"size": Vector2(174, 131),
 "template": "transform"
-}, {
-"args_port": {},
-"name": &"id_0002_grid",
-"position": Vector2(340, 0),
-"settings": {
-"random_seed": 472077282,
-"size": 0.295,
-"title": "Grid",
-"x": 5,
-"z": 5
-},
-"show_disconnected_inputs": false,
-"size": Vector2(125, 71),
-"template": "grid"
 }, {
 "args_port": {
 "In": {
@@ -189,7 +289,7 @@ data = {
 }
 },
 "name": &"id_0002_relax",
-"position": Vector2(1560, 620),
+"position": Vector2(1640, 720),
 "settings": {
 "num_iterations": 5,
 "padding": 0.525,
@@ -198,7 +298,7 @@ data = {
 "title": "Relax"
 },
 "show_disconnected_inputs": false,
-"size": Vector2(139, 71),
+"size": Vector2(139.00006, 71),
 "template": "relax"
 }, {
 "args_port": {
@@ -212,7 +312,7 @@ data = {
 }
 },
 "name": &"id_0001_attract",
-"position": Vector2(1360, 620),
+"position": Vector2(1440, 720),
 "settings": {
 "max_distance": 4.055,
 "random_seed": 3174207434,
@@ -230,7 +330,7 @@ data = {
 }
 },
 "name": &"id_0007_spawn_meshes",
-"position": Vector2(1160, 740),
+"position": Vector2(1240, 840),
 "settings": {
 "debug_enabled": true,
 "disabled": true,
@@ -238,7 +338,7 @@ data = {
 "title": "Spawn Meshes"
 },
 "show_disconnected_inputs": false,
-"size": Vector2(139.00006, 71),
+"size": Vector2(139, 71),
 "template": "spawn_meshes"
 }, {
 "args_port": {
@@ -248,7 +348,7 @@ data = {
 }
 },
 "name": &"id_0006_random_color",
-"position": Vector2(940, 740),
+"position": Vector2(1020, 840),
 "settings": {
 "palette": Array[Color]([Color(0, 0, 1, 1), Color(0, 0.749, 1, 1), Color(1, 0.843, 0, 1), Color(0, 0.9922, 0, 1)]),
 "random_seed": 0,
@@ -266,14 +366,14 @@ data = {
 }
 },
 "name": &"id_0001_spawn_meshes",
-"position": Vector2(1160, 600),
+"position": Vector2(1240, 700),
 "settings": {
 "disabled": true,
 "random_seed": 12151,
 "title": "Spawn Meshes"
 },
 "show_disconnected_inputs": false,
-"size": Vector2(139.00006, 71.00006),
+"size": Vector2(139, 71),
 "template": "spawn_meshes"
 }, {
 "args_port": {
@@ -283,7 +383,7 @@ data = {
 }
 },
 "name": &"id_0002_random_color",
-"position": Vector2(940, 600),
+"position": Vector2(1020, 700),
 "settings": {
 "palette": Array[Color]([Color(0, 0, 1, 1), Color(0, 0.749, 1, 1), Color(1, 0.843, 0, 1), Color(0, 0.99215686, 0, 1)]),
 "random_seed": 0,
@@ -293,7 +393,7 @@ data = {
 "val_min": 1.0
 },
 "show_disconnected_inputs": false,
-"size": Vector2(139, 71.00006),
+"size": Vector2(139, 71),
 "template": "random_color"
 }, {
 "args_port": {
@@ -303,7 +403,7 @@ data = {
 }
 },
 "name": &"id_0003_clusterize",
-"position": Vector2(720, 600),
+"position": Vector2(800, 700),
 "settings": {
 "debug_port_combined_index": 1,
 "max_distance": 1.97,
@@ -313,7 +413,7 @@ data = {
 "title": "Clusterize"
 },
 "show_disconnected_inputs": false,
-"size": Vector2(166, 101.00006),
+"size": Vector2(166, 101),
 "template": "clusterize"
 }, {
 "args_port": {
@@ -323,7 +423,7 @@ data = {
 }
 },
 "name": &"id_0007_transform",
-"position": Vector2(360, 520),
+"position": Vector2(440, 620),
 "settings": {
 "offset_max": Vector3(-4, 0, 4),
 "offset_min": Vector3(-4, 0, 4),
@@ -341,7 +441,7 @@ data = {
 }
 },
 "name": &"id_0008_filter_data_by_index",
-"position": Vector2(180, 520),
+"position": Vector2(260, 620),
 "settings": {
 "indices": "0,1",
 "random_seed": 3332167662,
@@ -358,7 +458,7 @@ data = {
 }
 },
 "name": &"id_0005_transform",
-"position": Vector2(360, 820),
+"position": Vector2(440, 920),
 "settings": {
 "offset_max": Vector3(3, 0, -4),
 "offset_min": Vector3(3, 0, -4),
@@ -366,7 +466,7 @@ data = {
 "title": "Transform Points"
 },
 "show_disconnected_inputs": false,
-"size": Vector2(139, 71),
+"size": Vector2(139, 71.00006),
 "template": "transform"
 }, {
 "args_port": {
@@ -376,14 +476,14 @@ data = {
 }
 },
 "name": &"id_0006_filter_data_by_index",
-"position": Vector2(180, 820),
+"position": Vector2(260, 920),
 "settings": {
 "indices": "2,3,1",
 "random_seed": 3332167662,
 "title": "Filter Data By Index"
 },
 "show_disconnected_inputs": false,
-"size": Vector2(147, 71),
+"size": Vector2(147, 71.00006),
 "template": "filter_data_by_index"
 }, {
 "args_port": {
@@ -393,13 +493,13 @@ data = {
 }
 },
 "name": &"id_0003_merge",
-"position": Vector2(560, 600),
+"position": Vector2(640, 700),
 "settings": {
 "random_seed": 3032352628,
 "title": "Merge"
 },
 "show_disconnected_inputs": false,
-"size": Vector2(139, 54.00006),
+"size": Vector2(139, 54),
 "template": "merge"
 }, {
 "args_port": {
@@ -409,7 +509,7 @@ data = {
 }
 },
 "name": &"id_0002_transform",
-"position": Vector2(360, 700),
+"position": Vector2(440, 800),
 "settings": {
 "offset_max": Vector3(-4, 0, -5),
 "offset_min": Vector3(-4, 0, -3),
@@ -427,7 +527,7 @@ data = {
 }
 },
 "name": &"id_0001_filter_data_by_index",
-"position": Vector2(180, 700),
+"position": Vector2(260, 800),
 "settings": {
 "indices": "0,1",
 "random_seed": 3332167662,
@@ -439,7 +539,7 @@ data = {
 }, {
 "args_port": {},
 "name": &"id_0001_grid",
-"position": Vector2(0, 600),
+"position": Vector2(80, 700),
 "settings": {
 "random_seed": 316636174,
 "size": 0.39,
@@ -448,15 +548,22 @@ data = {
 "z": 2
 },
 "show_disconnected_inputs": false,
-"size": Vector2(125, 71.00006),
+"size": Vector2(125, 71),
 "template": "grid"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
 graph_name = "demo_cluster"
-view_zoom = 1.287542
-view_offset = Vector2(610.0551, -205.3446)
+view_zoom = 0.79946214
+view_offset = Vector2(333.41486, -276.57654)
+
+[sub_resource type="Curve3D" id="Curve3D_hyqxp"]
+_data = {
+"points": PackedVector3Array(4.3825226, 0, -3.1696177, -4.3825226, 0, 3.1696177, 23.82053, 0, 0.24337074, 3.0072784, 0, -6.497593, -3.0072784, 0, 6.497593, 15.663198, 0, 9.760258, -0.71419334, 0, -8.818401, 0.71419334, 0, 8.818401, 13.623865, 0, 26.830227, -7.295883, 0, -6.987606, 7.295883, 0, 6.987606, 22.353252, 0, 43.56106, 0, 0, 0, 0, 0, 0, 43.11055, 0, 53.836952),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0)
+}
+point_count = 5
 
 [node name="DemoCluster" type="Node3D" unique_id=89839259]
 
@@ -466,3 +573,6 @@ graph = SubResource("Resource_o3677")
 regenerate = Callable()
 clearInstances = Callable()
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
+
+[node name="Path3D" type="Path3D" parent="." unique_id=1393520849]
+curve = SubResource("Curve3D_hyqxp")

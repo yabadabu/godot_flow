@@ -1,6 +1,6 @@
 @tool
 
-## This is the Node3d the user will instantiate in his final 3D scenes to trigger
+## This is the Node3D the user will instantiate in his final 3D scenes to trigger
 ## the generation of PCG
 ## It technically should not need to be a Node3D, as the transform is not really used
 ## but I'm currently generating the spawned nodes as child of this nodes

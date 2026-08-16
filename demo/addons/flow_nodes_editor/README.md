@@ -43,7 +43,6 @@
 - [X] Support for virtual streams like front, up, right from rotation.
 - [X] Support for Vector4/Color/PackedVector4Array -> Read SubAttributes / MathNode / SetAttribute / Use in Debug if exists
 - [ ] undo/redo
-- [ ] Test random colors for each node -> Graph Editor Settings
 - [ ] add_attribute, if output is single stream with a type, set the color. Maybe make it generic
 - [X] Assign categories to all nodes
 - [X] Allow the popup menu to have sections. Custom SubGraphs/Resources/Folders maybe

@@ -27,6 +27,7 @@ enum eDebugMode {
 
 @export var debug_color : Color = Color.WHITE
 @export var debug_modulate_by : String
+@export var debug_mesh_resource : Mesh
 
 # Add any other common properties here
 @export var disabled: bool = false
