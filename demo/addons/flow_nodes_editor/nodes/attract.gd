@@ -1,7 +1,7 @@
 @tool
 extends FlowNodeBase
 
-@export_range(0.0, 1.0) var weight : float = 0.5
+@export_range(-1.0, 1.0) var weight : float = 0.5
 @export var max_distance : float = 5.0
 @export var out_name = FlowData.AttrPosition
 
@@ -34,9 +34,14 @@ func execute( ctx : FlowData.EvaluationContext ):
 	out_container.resize( in_size )
 	for idx in range(in_size):
 		var nearest_attractor_index := nearest_indices[ idx ]
-		var delta := attractors_pos[ nearest_attractor_index ] - in_pos[ idx ]
+		var nearest_attractor := attractors_pos[ nearest_attractor_index ]
+		var delta := nearest_attractor - in_pos[ idx ]
 		if delta.length() < max_distance:
-			out_container[ idx ] = in_pos[ idx ] + delta * weight
+			if weight >= 0:
+				out_container[ idx ] = in_pos[ idx ] + delta * weight
+			else:
+				var unit_delta = -delta.normalized()
+				out_container[ idx ] = in_pos[ idx ] - unit_delta * ( max_distance - delta.length() )  * weight
 		else:
 			out_container[ idx ] = in_pos[ idx ]
 			
