@@ -445,7 +445,7 @@ func onNodePropertyChanged( prop_name : String ):
 			#print( "Node %s.%s has changed" % [ inspected_node.name, prop_name ])
 			flow_node.onPropChanged(prop_name)
 			if flow_node.shouldReevaluateOnPropChanged( prop_name ):
-				print( "Editor.shouldReevaluateOnPropChanged %s" % prop_name)
+				#print( "Editor.shouldReevaluateOnPropChanged %s" % prop_name)
 				queueRegen()
 			else:
 				next_scene_change_is_local = true
@@ -1117,7 +1117,7 @@ func evalGraph():
 		#print( "ctx.Run Starts " )
 		active_context.computeDirtyNodesAndRun()
 		active_nodes = active_context.active_nodes
-		print( "ctx.Regenerated.Active_nodes: ", active_nodes.size() )
+		#print( "ctx.Regenerated.Active_nodes: ", active_nodes.size() )
 		
 		for node in active_nodes:
 			if node.inspect_enabled:
@@ -1208,7 +1208,7 @@ func _on_graph_edit_duplicate_nodes_request():
 	FlowNodeIO.duplicateSelecteddNodes( self )
 	
 func onEditorSceneChanged():
-	print( "onEditorSceneChanged %s" % next_scene_change_is_local )
+	#print( "onEditorSceneChanged %s" % next_scene_change_is_local )
 	if next_scene_change_is_local:
 		next_scene_change_is_local = false
 		return
@@ -1221,7 +1221,7 @@ func onEditorSceneChanged():
 			var flow_node := graph_node.flow_node
 			if flow_node.getMeta().get( "scans_scene", false ):
 				flow_node.onSceneChanged(active_context)
-	print( "Editor scene changed!")
+	#print( "Editor scene changed!")
 	queueRegen()
 
 # new_resource = res://graph02_curves.tres

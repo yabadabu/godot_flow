@@ -55,7 +55,8 @@ func execute( ctx : FlowData.EvaluationContext ):
 		var kdtree = GDKdTree.new()
 		kdtree.set_points( sA )
 		indices = kdtree.cluster_by_distance( max_distance )
-		
+
+		# The cluster_by_distance does not return the centroids/counts
 		for in_index in range( indices.size() ):
 			var cluster_index = indices[ in_index ]
 			if cluster_index >= counts.size():
@@ -67,12 +68,13 @@ func execute( ctx : FlowData.EvaluationContext ):
 		for index in num_clusters_found:
 			centroids[ index ] /= counts[ index ]
 
-
 	else:
 		var ans = GDStreamUtils.KMeans( sA, num_clusters, 25, 0.01, random_seed)
 		if ans.result:
 			indices = ans.labels
 			centroids = ans.centroids
+			
+			# The KMeans does not provide the counts
 			for cluster_index in indices:
 				if cluster_index >= counts.size():
 					counts.resize( cluster_index + 1 )
