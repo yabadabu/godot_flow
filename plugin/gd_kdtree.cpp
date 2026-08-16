@@ -10,6 +10,7 @@ void GDKdTree::_bind_methods() {
   ClassDB::bind_method(D_METHOD("find_nearest_idx"), &GDKdTree::find_nearest_idx);
   ClassDB::bind_method(D_METHOD("find_nearest_indices"), &GDKdTree::find_nearest_indices);
   ClassDB::bind_method(D_METHOD("cluster_by_distance"), &GDKdTree::cluster_by_distance);
+  ClassDB::bind_method(D_METHOD("find_points_near"), &GDKdTree::find_points_near);
 }
 
 GDKdTree::GDKdTree( ) {
@@ -131,4 +132,28 @@ PackedInt32Array GDKdTree::cluster_by_distance(float max_distance) const {
   }
 
   return labels;
+}
+
+
+PackedInt32Array GDKdTree::find_points_near( const Vector3& pos, float max_distance ) const {
+
+  if (!tree || all.points.is_empty())
+    return PackedInt32Array{};
+
+  // A container for the results
+  using ResultItem = nanoflann::ResultItem<size_t, float>;
+  std::vector<ResultItem> matches;
+
+  nanoflann::SearchParameters params;
+  params.sorted = true;
+
+  nanoflann::RadiusResultSet<float, size_t> results( max_distance * max_distance, matches );
+  tree->findNeighbors( results, &pos.x, params );
+
+  PackedInt32Array near_indices;
+  near_indices.resize( matches.size() );
+  int32_t* ptr =near_indices.ptrw();
+  for (const auto& match : matches)
+    *ptr++ = match.first;
+  return near_indices;
 }
