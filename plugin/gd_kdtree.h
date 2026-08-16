@@ -14,6 +14,8 @@ class GDKdTree : public RefCounted {
 
 protected:
   static void _bind_methods();
+  
+  using Scalar = godot::real_t;
 
   // Container of all the points, following the requirements of the 
   // nanoflann::KDTreeSingleIndexDynamicAdaptor
@@ -24,7 +26,7 @@ protected:
     size_t kdtree_get_point_count() const {
       return points.size();
     }
-    float kdtree_get_pt(const size_t idx, const size_t dim) const {
+    Scalar kdtree_get_pt(const size_t idx, const size_t dim) const {
       return *(&points[idx].x + dim);
     }
     template <class BBOX>
@@ -32,7 +34,7 @@ protected:
   };
 
   typedef nanoflann::KDTreeSingleIndexDynamicAdaptor<
-    nanoflann::L2_Simple_Adaptor<float, PointCloud >,
+    nanoflann::L2_Simple_Adaptor<Scalar, PointCloud >,
     PointCloud,
     3
   > jTree;

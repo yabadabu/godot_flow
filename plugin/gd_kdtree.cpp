@@ -24,11 +24,11 @@ GDKdTree::~GDKdTree() {
 int GDKdTree::find_nearest_idx( const Vector3& pos ) const {
   if (!tree || all.points.is_empty())
     return -1;
-  nanoflann::KNNResultSet<float> results(1);
+  nanoflann::KNNResultSet<Scalar> results(1);
   size_t return_idx = -1;
-  float out_distance;
+  Scalar out_distance;
   results.init(&return_idx, &out_distance);
-  tree->findNeighbors(results, &pos.x, nanoflann::SearchParameters(3));
+  tree->findNeighbors(results, &pos.x, nanoflann::SearchParameters());
   return return_idx;
 }
 
@@ -48,15 +48,15 @@ PackedInt32Array GDKdTree::find_nearest_indices( const PackedVector3Array& in_po
   const bool self_distances = ( pos_addr == all.points.ptr() );
 
   // Setup 
-  nanoflann::KNNResultSet<float> results(2);
+  nanoflann::KNNResultSet<Scalar> results(2);
   size_t nearest_indices[2];
-  float out_distances[2];
+  Scalar out_distances[2];
   const int index_to_read = self_distances ? 1 : 0;
 
   // This could be executed in parallel
   for( size_t i=0; i<num_elems; ++i, ++pos_addr ) {
     results.init(nearest_indices, out_distances);
-    if( !tree->findNeighbors(results, &pos_addr->x, nanoflann::SearchParameters(3)))
+    if( !tree->findNeighbors(results, &pos_addr->x, nanoflann::SearchParameters()))
       idxs[ i ] = -1;
     else
       idxs[ i ] = nearest_indices[ index_to_read ];
@@ -90,14 +90,14 @@ PackedInt32Array GDKdTree::cluster_by_distance(float max_distance) const {
   queue.reserve(64);
 
   // To store the neighbours of each query
-  using ResultItem = nanoflann::ResultItem<size_t, float>;
+  using ResultItem = nanoflann::ResultItem<size_t, Scalar>;
   std::vector<ResultItem> matches;
   matches.reserve(64);
 
   nanoflann::SearchParameters params;
   params.sorted = false;
 
-  const float radius_squared = max_distance * max_distance;
+  const Scalar radius_squared = max_distance * max_distance;
 
   int32_t cluster_index = 0;
   for (size_t start = 0; start < num_points; ++start) {
@@ -115,7 +115,7 @@ PackedInt32Array GDKdTree::cluster_by_distance(float max_distance) const {
 
       matches.clear();
 
-      nanoflann::RadiusResultSet<float, size_t> results( radius_squared, matches );
+      nanoflann::RadiusResultSet<Scalar, size_t> results( radius_squared, matches );
 
       tree->findNeighbors( results, &all.points[current].x, params );
 
@@ -141,13 +141,13 @@ PackedInt32Array GDKdTree::find_points_near( const Vector3& pos, float max_dista
     return PackedInt32Array{};
 
   // A container for the results
-  using ResultItem = nanoflann::ResultItem<size_t, float>;
+  using ResultItem = nanoflann::ResultItem<size_t, Scalar>;
   std::vector<ResultItem> matches;
 
   nanoflann::SearchParameters params;
   params.sorted = true;
 
-  nanoflann::RadiusResultSet<float, size_t> results( max_distance * max_distance, matches );
+  nanoflann::RadiusResultSet<Scalar, size_t> results( max_distance * max_distance, matches );
   tree->findNeighbors( results, &pos.x, params );
 
   PackedInt32Array near_indices;
