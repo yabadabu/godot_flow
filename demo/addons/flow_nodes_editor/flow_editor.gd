@@ -93,7 +93,7 @@ func bindResourceToEditor(res : FlowGraphResource):
 		return
 	res.compile()
 	
-	print( "bindResourceToEditor %d nodes, %d conns (%s)" % [ res.all_nodes.size(), res.all_connections.size(), res.resource_path ])
+	#print( "bindResourceToEditor %d nodes, %d conns (%s)" % [ res.all_nodes.size(), res.all_connections.size(), res.resource_path ])
 
 	res.in_params_changed.connect(_on_inputs_changed)
 	res.input_params_removed.connect(_on_input_params_removed, CONNECT_DEFERRED)
@@ -116,24 +116,10 @@ func setResourceToEdit( new_resource : FlowGraphResource ):
 	if new_resource and new_resource.loading:
 		print( "setResourceToEdit resource is loading: %s" % new_resource )
 		return
-	print( "setResourceToEdit:%s" % [ new_resource ] )
-	
-	# Ensure we have a tab for this resource
-	#if new_resource:
-		##print( "Activating tab" )
-		#var tab_idx = findIndexInTabs( new_resource )
-		#if tab_idx < 0:
-			#print( "Adding new tab and leaving. addTabs has already trigger the activation of the resource")
-			#tab_idx = addToTabs( new_resource )
-			#return
-		##print( "tab idx is %d vs current tab %d" % [ tab_idx, tab_bar.current_tab ] )
-		#tab_bar.ensure_tab_visible( tab_idx )
-		#if tab_bar.current_tab != tab_idx:
-			#tab_bar.current_tab = tab_idx
 	
 	if current_resource != new_resource:
 		if current_resource:
-			print( "unbinding old, bindning new" )
+			#print( "unbinding old, bindning new" )
 			unbindResourceFromEditor( current_resource )
 		current_resource = new_resource
 		resource_owner = null
@@ -1251,9 +1237,8 @@ func _on_tab_bar_tab_close_pressed(tab_idx):
 func _on_tab_bar_tab_changed(tab_idx):
 	clearNavigationHistory()
 	var dtab = open_tabs[ tab_idx ] if tab_idx >= 0 and tab_idx < open_tabs.size() else null
-	print( "On tab index %d / %d" % [ tab_idx, open_tabs.size() ])
-	if dtab:
-		print( "Tab is %s" % dtab)
+	#print( "On tab index %d / %d" % [ tab_idx, open_tabs.size() ])
+	#if dtab: print( "Tab is %s" % dtab)
 	if dtab and is_instance_valid(dtab.resource):
 		setResourceToEdit( dtab.resource )
 		select_first_executor()

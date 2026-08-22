@@ -64,8 +64,8 @@ func _on_graph_inputs_change():
 	notify_property_list_changed()
 	graph_node_changed.emit(self, "graph_inputs")
 
-func _get_property_list() -> Array:
-	var props := []
+func _get_property_list() -> Array[Dictionary]:
+	var props : Array[Dictionary] = []
 
 	if graph == null:
 		print( "At FlowGraphNode3D._get_property_list graph is null")

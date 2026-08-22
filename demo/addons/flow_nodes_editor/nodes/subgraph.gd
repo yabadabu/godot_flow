@@ -46,7 +46,7 @@ func exposeParam(param_name: String) -> bool:
 func exposedAsInputNode(prop) -> bool:
 	return not String(prop.name).begins_with(FlowGraphOverrides.PROPERTY_PREFIX)
 
-func _get_property_list() -> Array:
+func _get_property_list() -> Array[Dictionary]:
 	return FlowGraphOverrides.getPropertyList(graph)
 
 func _get(property: StringName):
