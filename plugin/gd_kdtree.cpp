@@ -176,11 +176,13 @@ PackedInt32Array GDKdTree::cluster_by_max_distance(float max_distance) const {
       nanoflann::RadiusResultSet<Scalar, size_t> results( radius_squared, matches );
       tree->findNeighbors( results, &all.points[current].x, params );
       size_t last_neighbor = invalid_index;
+      int num_points_in_cluster = 0;
       for (const auto& match : matches) {
         const size_t neighbor = match.first;
         if (labels[neighbor] == invalid_index) {
           labels[neighbor] = cluster_index;
           last_neighbor = neighbor;
+          ++num_points_in_cluster;
         } 
       }
 
@@ -188,7 +190,8 @@ PackedInt32Array GDKdTree::cluster_by_max_distance(float max_distance) const {
         queue.push_back(last_neighbor);
       }
 
-      ++cluster_index;
+      if( num_points_in_cluster )
+        ++cluster_index;
     }
   }
 
