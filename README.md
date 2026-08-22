@@ -41,7 +41,7 @@ In a scene 3D:
 
 ## Features
 
-* **+60 nodes** including:
+* **+70 nodes** including:
     - Sampling splines (contour and interior)
     - Sampling meshes
     - CSG-like ops on point sets (union/intersect/diff behavior)
@@ -55,6 +55,8 @@ In a scene 3D:
     - Subgraph with loopbacks parameters
     - Grammar based generation across a spline
     - Node redirectors
+    - Clustering
+    - Attractor
 * **Grid-based Data Inspector** with selection highlighting
 * **3D Debug** overlays with color cues
 * **Graphs as resource** with optional **typed inputs**
