@@ -31,6 +31,8 @@ class NodeRuntime:
 	var inputs: Array = []
 	var input_bulks: Array = []
 	var output_bulks: Array = []
+	var debug_lines: Array[Dictionary] = []
+	var debug_labels: Array[Dictionary] = []
 	var last_eval_id: int = -1
 	var has_evaluated: bool = false
 	var dirty: bool = true
@@ -43,6 +45,10 @@ class NodeRuntime:
 		input_bulks.clear()
 		output_bulks.clear()
 
+	func clear_debug_draw() -> void:
+		debug_lines.clear()
+		debug_labels.clear()
+
 class EvaluationContext:
 	var parent_ctx : EvaluationContext
 	var owner : FlowGraphNode3D
@@ -50,6 +56,7 @@ class EvaluationContext:
 	var graph : FlowGraphResource
 	var node_runtimes: Dictionary = {}
 	var child_contexts: Dictionary = {}
+	var _executing_node: FlowNodeBase
 	
 	# Used by loops/subgraphs/non_ctes_input_params : string : FlowData
 	var inputs : Dictionary = {}
@@ -98,6 +105,29 @@ class EvaluationContext:
 
 	func resetNodeForExecution(node: FlowNodeBase) -> void:
 		getNodeRuntime(node).reset_for_execution()
+
+	func debugLine(from: Vector3, to: Vector3, color := Color.WHITE, width := 1.0) -> void:
+		if _executing_node == null:
+			push_warning("debugLine called outside a node execution")
+			return
+		getNodeRuntime(_executing_node).debug_lines.append({
+			"from": from,
+			"to": to,
+			"color": color,
+			"width": width,
+		})
+
+	func debugText(position: Vector3, text: String, color := Color.WHITE, offset := Vector2(6.0, -6.0), font_size := 14) -> void:
+		if _executing_node == null:
+			push_warning("debugText called outside a node execution")
+			return
+		getNodeRuntime(_executing_node).debug_labels.append({
+			"position": position,
+			"text": text,
+			"color": color,
+			"offset": offset,
+			"font_size": font_size,
+		})
 
 	func getInputBulks(node: FlowNodeBase) -> Array:
 		return getNodeRuntime(node).input_bulks
@@ -350,6 +380,8 @@ class EvaluationContext:
 			
 			var time_node_start := Time.get_ticks_usec()
 			active_nodes.append( node )
+			_executing_node = node
+			runtime.clear_debug_draw()
 			
 			node.preExecute( self )
 			
@@ -364,6 +396,7 @@ class EvaluationContext:
 				node.run( self )
 			elif trace_node:
 				print("  %s has disconnected required inputs. Skipping" % node.name)
+			_executing_node = null
 			
 			var time_node_ends := Time.get_ticks_usec()
 			var exec_usec := time_node_ends - time_node_start
@@ -918,7 +951,7 @@ class Data:
 			container = PackedVector3Array()
 		return container
 
-	func getTransformsStream( optional_prefix : String = "") -> TransformsStream:
+	func getTransformsStream( optional_prefix : String = "" ) -> TransformsStream:
 		optional_prefix = translateStreamName( optional_prefix )
 		var attr_pos : StringName = AttrPosition if optional_prefix.is_empty() else "%s.%s" % [ optional_prefix, AttrPosition ]
 		var attr_rot : StringName = AttrRotation if optional_prefix.is_empty() else "%s.%s" % [ optional_prefix, AttrRotation ]

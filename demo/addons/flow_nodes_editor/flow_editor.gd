@@ -230,6 +230,7 @@ func select_executor(
 	resource_owner = node
 	active_context = context
 	data_inspector.setContext(active_context)
+	FlowPlugin.get_instance().update_overlays()
 	refresh_executors()
 	for graph_node in getAllGraphNodes():
 		graph_node.refreshDebug()
@@ -1094,7 +1095,6 @@ func evalGraph():
 	if resource_owner and current_resource and active_context and active_context.graph == current_resource:
 	
 		var time_start = Time.get_ticks_usec()
-		FlowPlugin.get_instance().clear_debug_draw()
 		cacheConnections()
 		
 		active_intensity = 1.0
@@ -1103,6 +1103,7 @@ func evalGraph():
 		var performance = []
 		#print( "ctx.Run Starts " )
 		active_context.computeDirtyNodesAndRun()
+		FlowPlugin.get_instance().update_overlays()
 		active_nodes = active_context.active_nodes
 		#print( "ctx.Regenerated.Active_nodes: ", active_nodes.size() )
 		
@@ -1296,6 +1297,7 @@ func clear_active_executor():
 	clearAllDebug()
 	resource_owner = null
 	active_context = null
+	FlowPlugin.get_instance().update_overlays()
 	active_nodes.clear()
 	executor_candidates.clear()
 

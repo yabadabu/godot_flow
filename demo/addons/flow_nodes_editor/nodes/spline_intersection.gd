@@ -52,7 +52,7 @@ func filterArray( c : PackedInt32Array, max_id : int ) -> PackedInt32Array:
 			print( q ) 
 	return out
 
-func splineVsSpline( d1 : Dictionary, d2 : Dictionary, output: PackedVector3Array ):
+func splineVsSpline(ctx: FlowData.EvaluationContext, d1: Dictionary, d2: Dictionary, output: PackedVector3Array):
 	var tree : GDKdTree = d1.tree
 	var pos1 : PackedVector3Array = d1.positions
 	var pos2 : PackedVector3Array = d2.positions
@@ -66,7 +66,7 @@ func splineVsSpline( d1 : Dictionary, d2 : Dictionary, output: PackedVector3Arra
 		if d < threshold:
 			registerCandidate( pcandidates1, i1 )
 			registerCandidate( pcandidates2, i2 )
-			if trace: FlowPlugin.get_instance().debug_line( pos1[i1], pos2[i2], Color.RED )
+			if trace: ctx.debugLine(pos1[i1], pos2[i2], Color.RED)
 	pcandidates1.sort()
 	pcandidates2.sort()
 	
@@ -75,9 +75,9 @@ func splineVsSpline( d1 : Dictionary, d2 : Dictionary, output: PackedVector3Arra
 
 	if trace:
 		for id in candidates1:
-			FlowPlugin.get_instance().debug_text( pos1[id], "%d" % id, Color.YELLOW )
+			ctx.debugText(pos1[id], "%d" % id, Color.YELLOW)
 		for id in candidates2:
-			FlowPlugin.get_instance().debug_text( pos2[id], "%d" % id, Color.CYAN )
+			ctx.debugText(pos2[id], "%d" % id, Color.CYAN)
 	
 	for idx1 in range( candidates1.size() - 1):
 		var src1 = candidates1[ idx1 ]
@@ -127,8 +127,8 @@ func splineVsSpline( d1 : Dictionary, d2 : Dictionary, output: PackedVector3Arra
 					if test == num_tests or test == -1:
 						output.append( mid )
 						if trace: 
-							FlowPlugin.get_instance().debug_text( points[0], "%d-0" % output.size(), Color.MAGENTA )
-							FlowPlugin.get_instance().debug_text( points[1], "%d-1" % output.size(), Color.MAGENTA )
+							ctx.debugText(points[0], "%d-0" % output.size(), Color.MAGENTA)
+							ctx.debugText(points[1], "%d-1" % output.size(), Color.MAGENTA)
 							print( "  -> Saving result")
 						#var dd : float = 5.0
 						#output.append( p1  + Vector3.UP * dd )
@@ -186,7 +186,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 		while i2 < num_curves:
 			var d2 : Dictionary = data[i2]
 			print( "Testing spline %s vs %s" % [ d1.obj.name, d2.obj.name ])
-			splineVsSpline( d1, d2, all_intersections )
+			splineVsSpline(ctx, d1, d2, all_intersections)
 			i2 += 1
 			
 			if false:
