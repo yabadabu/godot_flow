@@ -27,12 +27,38 @@ const AttrPosition : StringName = &"position"
 const AttrRotation : StringName = &"rotation"
 const AttrSize     : StringName = &"size"
 
+class DebugLine:
+	var from: Vector3
+	var to: Vector3
+	var color: Color
+	var width: float
+
+	func _init(p_from: Vector3, p_to: Vector3, p_color: Color, p_width: float) -> void:
+		from = p_from
+		to = p_to
+		color = p_color
+		width = p_width
+
+class DebugLabel:
+	var position: Vector3
+	var text: String
+	var color: Color
+	var offset: Vector2
+	var font_size: int
+
+	func _init(p_position: Vector3, p_text: String, p_color: Color, p_offset: Vector2, p_font_size: int) -> void:
+		position = p_position
+		text = p_text
+		color = p_color
+		offset = p_offset
+		font_size = p_font_size
+
 class NodeRuntime:
 	var inputs: Array = []
 	var input_bulks: Array = []
 	var output_bulks: Array = []
-	var debug_lines: Array[Dictionary] = []
-	var debug_labels: Array[Dictionary] = []
+	var debug_lines: Array[DebugLine] = []
+	var debug_labels: Array[DebugLabel] = []
 	var last_eval_id: int = -1
 	var has_evaluated: bool = false
 	var dirty: bool = true
@@ -110,24 +136,13 @@ class EvaluationContext:
 		if _executing_node == null:
 			push_warning("debugLine called outside a node execution")
 			return
-		getNodeRuntime(_executing_node).debug_lines.append({
-			"from": from,
-			"to": to,
-			"color": color,
-			"width": width,
-		})
+		getNodeRuntime(_executing_node).debug_lines.append(DebugLine.new(from, to, color, width))
 
 	func debugText(position: Vector3, text: String, color := Color.WHITE, offset := Vector2(6.0, -6.0), font_size := 14) -> void:
 		if _executing_node == null:
 			push_warning("debugText called outside a node execution")
 			return
-		getNodeRuntime(_executing_node).debug_labels.append({
-			"position": position,
-			"text": text,
-			"color": color,
-			"offset": offset,
-			"font_size": font_size,
-		})
+		getNodeRuntime(_executing_node).debug_labels.append(DebugLabel.new(position, text, color, offset, font_size))
 
 	func getInputBulks(node: FlowNodeBase) -> Array:
 		return getNodeRuntime(node).input_bulks

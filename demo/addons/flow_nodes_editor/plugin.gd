@@ -273,9 +273,9 @@ func _draw_debug_lines(overlay: Control, camera: Camera3D, context: FlowData.Eva
 		var runtime = context.node_runtimes.get(node.name)
 		if runtime == null:
 			continue
-		for entry in runtime.debug_lines:
-			var from: Vector3 = entry["from"]
-			var to: Vector3 = entry["to"]
+		for entry: FlowData.DebugLine in runtime.debug_lines:
+			var from := entry.from
+			var to := entry.to
 			if camera.is_position_behind(from):
 				continue
 			if camera.is_position_behind(to):
@@ -289,7 +289,6 @@ func _draw_debug_lines(overlay: Control, camera: Camera3D, context: FlowData.Eva
 
 func _draw_debug_labels(overlay: Control, camera: Camera3D, context: FlowData.EvaluationContext) -> void:
 	var font := overlay.get_theme_default_font()
-	var default_size := overlay.get_theme_default_font_size()
 
 	for node in context.graph.all_nodes:
 		if node == null:
@@ -297,19 +296,19 @@ func _draw_debug_labels(overlay: Control, camera: Camera3D, context: FlowData.Ev
 		var runtime = context.node_runtimes.get(node.name)
 		if runtime == null:
 			continue
-		for entry in runtime.debug_labels:
-			_draw_debug_label(overlay, camera, font, default_size, entry)
+		for entry: FlowData.DebugLabel in runtime.debug_labels:
+			_draw_debug_label(overlay, camera, font, entry)
 
-func _draw_debug_label(overlay: Control, camera: Camera3D, font: Font, default_size: int, entry: Dictionary) -> void:
-	var world_position: Vector3 = entry["position"]
+func _draw_debug_label(overlay: Control, camera: Camera3D, font: Font, entry: FlowData.DebugLabel) -> void:
+	var world_position := entry.position
 	if camera.is_position_behind(world_position):
 		return
 	var screen_position := camera.unproject_position(world_position)
-	screen_position += entry["offset"]
+	screen_position += entry.offset
 
-	var font_size: int = entry.get("font_size", default_size)
-	var text: String = entry["text"]
-	var color: Color = entry["color"]
+	var font_size := entry.font_size
+	var text := entry.text
+	var color := entry.color
 
 	# Dark outline makes labels readable against most backgrounds.
 	overlay.draw_string_outline(
