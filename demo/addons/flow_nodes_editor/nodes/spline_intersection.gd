@@ -154,8 +154,6 @@ func execute( ctx : FlowData.EvaluationContext ):
 		return
 	num_tests = 0
 	
-	FlowPlugin.get_instance().clear_debug_draw()
-	
 	var all_intersections : PackedVector3Array
 
 	var uniform_interval : float = threshold 

@@ -1092,8 +1092,9 @@ func cacheConnections():
 func evalGraph():
 	
 	if resource_owner and current_resource and active_context and active_context.graph == current_resource:
-		
+	
 		var time_start = Time.get_ticks_usec()
+		FlowPlugin.get_instance().clear_debug_draw()
 		cacheConnections()
 		
 		active_intensity = 1.0

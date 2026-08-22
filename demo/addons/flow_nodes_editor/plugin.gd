@@ -275,7 +275,9 @@ func _draw_debug_lines( overlay: Control, camera: Camera3D ) -> void:
 			continue
 		var screen_from := camera.unproject_position(from)
 		var screen_to := camera.unproject_position(to)
-		overlay.draw_line( screen_from, screen_to, entry["color"], entry["width"], true )	
+		if screen_from.distance_squared_to( screen_to ) < 1e-5:
+			continue
+		overlay.draw_line( screen_from, screen_to, entry.color, entry.width, true )	
 
 
 func _draw_debug_labels( overlay: Control, camera: Camera3D) -> void:
