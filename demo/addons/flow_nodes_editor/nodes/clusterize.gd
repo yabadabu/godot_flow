@@ -2,8 +2,9 @@
 extends FlowNodeBase
 
 enum eOperation {
+	ByNumClusters,
 	ByDistance,
-	ByNumClusters
+	ByMaxDistance,
 }
 
 @export var operation : eOperation = eOperation.ByDistance:
@@ -28,7 +29,7 @@ func _init():
 	
 func exposeParam( name : String ) -> bool:
 	if name == "max_distance":
-		return operation == eOperation.ByDistance
+		return operation == eOperation.ByDistance or operation == eOperation.ByMaxDistance
 	elif name == "num_clusters":
 		return operation == eOperation.ByNumClusters
 	return true	
@@ -51,10 +52,13 @@ func execute( ctx : FlowData.EvaluationContext ):
 	var centroids : PackedVector3Array
 	var counts : PackedInt32Array
 	
-	if operation == eOperation.ByDistance:
+	if operation == eOperation.ByDistance or operation == eOperation.ByMaxDistance:
 		var kdtree = GDKdTree.new()
 		kdtree.set_points( sA )
-		indices = kdtree.cluster_by_distance( max_distance )
+		if operation == eOperation.ByMaxDistance:
+			indices = kdtree.cluster_by_max_distance( max_distance )
+		else:
+			indices = kdtree.cluster_by_distance( max_distance )
 
 		# The cluster_by_distance does not return the centroids/counts
 		for in_index in range( indices.size() ):
@@ -67,6 +71,8 @@ func execute( ctx : FlowData.EvaluationContext ):
 		var num_clusters_found = counts.size()
 		for index in num_clusters_found:
 			centroids[ index ] /= counts[ index ]
+
+
 
 	else:
 		var ans = GDStreamUtils.KMeans( sA, num_clusters, 25, 0.01, random_seed)

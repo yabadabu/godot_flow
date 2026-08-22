@@ -50,6 +50,7 @@ public:
   int find_nearest_idx( const Vector3& pos ) const;
   PackedInt32Array find_nearest_indices( const PackedVector3Array& in_pos ) const;
   PackedInt32Array cluster_by_distance( float max_distance ) const;
+  PackedInt32Array cluster_by_max_distance( float max_distance ) const;
   PackedInt32Array find_points_near( const Vector3& pos, float max_distance ) const;
 };
 

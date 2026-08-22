@@ -10,6 +10,7 @@ void GDKdTree::_bind_methods() {
   ClassDB::bind_method(D_METHOD("find_nearest_idx"), &GDKdTree::find_nearest_idx);
   ClassDB::bind_method(D_METHOD("find_nearest_indices"), &GDKdTree::find_nearest_indices);
   ClassDB::bind_method(D_METHOD("cluster_by_distance"), &GDKdTree::cluster_by_distance);
+  ClassDB::bind_method(D_METHOD("cluster_by_max_distance"), &GDKdTree::cluster_by_max_distance);
   ClassDB::bind_method(D_METHOD("find_points_near"), &GDKdTree::find_points_near);
 }
 
@@ -129,6 +130,66 @@ PackedInt32Array GDKdTree::cluster_by_distance(float max_distance) const {
     }
 
     ++cluster_index;
+  }
+
+  return labels;
+}
+
+// Experimenting with simple pick one, assing nearby, start again from the further unassigned point. Repeat
+PackedInt32Array GDKdTree::cluster_by_max_distance(float max_distance) const {
+  const size_t num_points = all.points.size();
+
+  if (!tree || !num_points)
+    return PackedInt32Array{};
+
+  constexpr size_t invalid_index = ~0ULL;
+  PackedInt32Array labels;
+  labels.resize(num_points);
+  labels.fill(invalid_index);
+
+  std::vector<size_t> queue;
+  queue.reserve(64);
+
+  // To store the neighbours of each query
+  using ResultItem = nanoflann::ResultItem<size_t, Scalar>;
+  std::vector<ResultItem> matches;
+  matches.reserve(64);
+
+  nanoflann::SearchParameters params;
+  params.sorted = true;
+
+  const Scalar radius_squared = max_distance * max_distance;
+
+  int32_t cluster_index = 0;
+  for (size_t start = 0; start < num_points; ++start) {
+    if (labels[start] != invalid_index)
+      continue;
+
+    queue.clear();
+    queue.push_back(start);
+
+    size_t queue_index = 0;
+    while (queue_index < queue.size()) {
+      const size_t current = queue[queue_index++];
+
+      matches.clear();
+      nanoflann::RadiusResultSet<Scalar, size_t> results( radius_squared, matches );
+      tree->findNeighbors( results, &all.points[current].x, params );
+      size_t last_neighbor = invalid_index;
+      for (const auto& match : matches) {
+        const size_t neighbor = match.first;
+        if (labels[neighbor] == invalid_index) {
+          labels[neighbor] = cluster_index;
+          last_neighbor = neighbor;
+        } 
+      }
+
+      if( last_neighbor != invalid_index ) {
+        queue.push_back(last_neighbor);
+      }
+
+      ++cluster_index;
+    }
   }
 
   return labels;
