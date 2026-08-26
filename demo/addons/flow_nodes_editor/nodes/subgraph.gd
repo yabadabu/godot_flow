@@ -33,9 +33,12 @@ func _init():
 		"tooltip" : "Evaluates a nested graph inside this node",
 		"widget" : preload( "res://addons/flow_nodes_editor/flow_graph_node_ui_subgraph.gd" ),
 		"trace" : true,
+		"keywords" : [ "loop" ],
 		"hide_inputs" : true
 	}
 func getTitle() -> String:
+	if title != "Subgraph":
+		return title
 	if graph:
 		return graph.graph_name
 	return "Subgraph"
