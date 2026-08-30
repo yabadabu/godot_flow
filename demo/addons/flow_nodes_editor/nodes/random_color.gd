@@ -54,6 +54,14 @@ func execute( ctx : FlowData.EvaluationContext ):
 	var seeds
 	if not seed_attribute.is_empty():
 		seeds = in_data.getContainerChecked(seed_attribute, FlowData.DataType.Int)
+		# If the attribute exists but it's not an int... try harder.
+		if not seeds:
+			var seeds_container = in_data.findStream(seed_attribute)
+			if seeds_container:
+				if seeds_container.data_type == FlowData.DataType.String:
+					seeds = PackedInt32Array()
+					for str : String in seeds_container.container:
+						seeds.append( str.hash() )
 	
 	if use_palette:
 		var palette : Array[Color] = palette
