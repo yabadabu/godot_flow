@@ -1,0 +1,104 @@
+[gd_scene format=3 uid="uid://bacbew31c8rjf"]
+
+[ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_5typy"]
+[ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="2_ndo0y"]
+[ext_resource type="Script" uid="uid://b77sf57bysigx" path="res://addons/flow_nodes_editor/flow_graph_redirect.gd" id="3_4ow7j"]
+[ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="4_krmge"]
+[ext_resource type="Script" uid="uid://dhpu3ptt872as" path="res://addons/flow_nodes_editor/flow_graph_param_override.gd" id="5_biut6"]
+
+[sub_resource type="Resource" id="Resource_xpe5j"]
+script = ExtResource("2_ndo0y")
+param_id = &"k6bhd"
+
+[sub_resource type="Resource" id="Resource_j1woh"]
+script = ExtResource("4_krmge")
+data = {
+"frames": [],
+"links": [{
+"from_node": &"id_0006_watabou",
+"from_port": 2,
+"keep_alive": false,
+"to_node": &"id_0009_bounds_modifier",
+"to_port": 0
+}, {
+"from_node": &"id_0006_watabou",
+"from_port": 1,
+"keep_alive": false,
+"to_node": &"id_0010_random_color",
+"to_port": 0
+}],
+"min_pos": Vector2(100, 280),
+"nodes": [{
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0009_bounds_modifier",
+"position": Vector2(180, 140),
+"settings": {
+"bounds_max": Vector3(0.5, 5, 0.5),
+"bounds_min": Vector3(0, 0, 0),
+"debug_enabled": true,
+"random_seed": 1928106483,
+"title": "Bounds Modifier"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139, 71),
+"template": "bounds_modifier"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0010_random_color",
+"position": Vector2(240.61908, 72.497406),
+"settings": {
+"random_seed": 3482643468,
+"title": "Random Color"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139, 71),
+"template": "random_color"
+}, {
+"args_port": {},
+"name": &"id_0006_watabou",
+"position": Vector2(0, 0),
+"settings": {
+"debug_enabled": true,
+"filename": "res://demos/watabou/swamp_den_of_the_fallen_god.json",
+"random_seed": 4155769364,
+"title": "Watabou"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(160, 131),
+"template": "watabou"
+}],
+"type": "flow_graph_nodes",
+"version": 1
+}
+graph_name = "demo_watabou"
+view_zoom = 1.3310001
+view_offset = Vector2(106.364044, 132.17407)
+in_params = Array[ExtResource("2_ndo0y")]([SubResource("Resource_xpe5j")])
+
+[sub_resource type="Resource" id="Resource_5typy"]
+script = ExtResource("5_biut6")
+param_id = &"arg_name"
+enabled = true
+value = 0.0
+
+[node name="DemoWatabou" type="Node3D" unique_id=902151632]
+
+[node name="FlowGraphNode3D" type="Node3D" parent="." unique_id=1311313475]
+script = ExtResource("1_5typy")
+graph = SubResource("Resource_j1woh")
+overrides = Array[ExtResource("5_biut6")]([SubResource("Resource_5typy")])
+regenerate = Callable()
+clearInstances = Callable()
+flow_override/arg_name/enabled = true
+flow_override/arg_name/value = 0.0
+metadata/_custom_type_script = "uid://d1krtmb1urldl"
