@@ -1,0 +1,1 @@
+https://watabou.github.io/one-page-dungeon/?seed=1351814869

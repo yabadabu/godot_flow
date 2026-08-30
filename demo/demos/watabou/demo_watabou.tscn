@@ -15,19 +15,55 @@ script = ExtResource("4_krmge")
 data = {
 "frames": [],
 "links": [{
-"from_node": &"id_0006_watabou",
+"from_node": &"id_0010_random_color",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0013_debug",
+"to_port": 0
+}, {
+"from_node": &"id_0015_transform",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0010_random_color",
+"to_port": 0
+}, {
+"from_node": &"id_0017_transform",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0012_debug",
+"to_port": 0
+}, {
+"from_node": &"id_0018_watabou",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0016_transform",
+"to_port": 0
+}, {
+"from_node": &"id_0018_watabou",
+"from_port": 1,
+"keep_alive": false,
+"to_node": &"id_0015_transform",
+"to_port": 0
+}, {
+"from_node": &"id_0018_watabou",
 "from_port": 2,
 "keep_alive": false,
 "to_node": &"id_0009_bounds_modifier",
 "to_port": 0
 }, {
-"from_node": &"id_0006_watabou",
-"from_port": 1,
+"from_node": &"id_0018_watabou",
+"from_port": 3,
 "keep_alive": false,
-"to_node": &"id_0010_random_color",
+"to_node": &"id_0017_transform",
+"to_port": 0
+}, {
+"from_node": &"id_0018_watabou",
+"from_port": 4,
+"keep_alive": false,
+"to_node": &"id_0019_debug",
 "to_port": 0
 }],
-"min_pos": Vector2(100, 280),
+"min_pos": Vector2(-40, 220),
 "nodes": [{
 "args_port": {
 "In": {
@@ -36,7 +72,7 @@ data = {
 }
 },
 "name": &"id_0009_bounds_modifier",
-"position": Vector2(180, 140),
+"position": Vector2(280, 200),
 "settings": {
 "bounds_max": Vector3(0.5, 5, 0.5),
 "bounds_min": Vector3(0, 0, 0),
@@ -55,34 +91,157 @@ data = {
 }
 },
 "name": &"id_0010_random_color",
-"position": Vector2(240.61908, 72.497406),
+"position": Vector2(480, 100),
 "settings": {
+"debug_mode": 1,
+"debug_modulate_by": "color",
+"debug_scale": 1.045,
 "random_seed": 3482643468,
+"seed_attribute": "type",
 "title": "Random Color"
 },
 "show_disconnected_inputs": false,
 "size": Vector2(139, 71),
 "template": "random_color"
 }, {
-"args_port": {},
-"name": &"id_0006_watabou",
-"position": Vector2(0, 0),
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0016_transform",
+"position": Vector2(280, 0),
 "settings": {
 "debug_enabled": true,
+"random_seed": 3676966269,
+"scale_max": Vector3(1, 0.1, 1),
+"scale_min": Vector3(1, 0.1, 1),
+"title": "Transform Points",
+"uniform_scale": false
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139, 71),
+"template": "transform"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0012_debug",
+"position": Vector2(440, 300),
+"settings": {
+"debug_color": Color(0, 1, 1, 1),
+"debug_scale": 1.08,
+"operation": 1,
+"random_seed": 3226290403,
+"title": "Debug"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139, 71),
+"template": "debug"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0017_transform",
+"position": Vector2(280, 300),
+"settings": {
+"random_seed": 3676966269,
+"scale_max": Vector3(1, 0.15, 1),
+"scale_min": Vector3(1, 0.15, 1),
+"title": "Transform Points",
+"uniform_scale": false
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139, 71),
+"template": "transform"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0013_debug",
+"position": Vector2(660, 100),
+"settings": {
+"debug_enabled": true,
+"debug_modulate_by": "color",
+"operation": 4,
+"random_seed": 1145554086,
+"title": "Debug"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139, 71),
+"template": "debug"
+}, {
+"args_port": {},
+"name": &"id_0018_watabou",
+"position": Vector2(0, 100),
+"settings": {
+"debug_port_combined_index": 4,
 "filename": "res://demos/watabou/swamp_den_of_the_fallen_god.json",
-"random_seed": 4155769364,
+"inspect_enabled": true,
+"random_seed": 2910422803,
 "title": "Watabou"
 },
 "show_disconnected_inputs": false,
-"size": Vector2(160, 131),
+"size": Vector2(160, 191.00006),
 "template": "watabou"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0015_transform",
+"position": Vector2(280, 100),
+"settings": {
+"random_seed": 1200376524,
+"scale_max": Vector3(0.1, 1.5, 1.5),
+"scale_min": Vector3(0.1, 1.5, 1.5),
+"title": "Transform Points",
+"uniform_scale": false
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139, 71),
+"template": "transform"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0019_debug",
+"position": Vector2(280, 400),
+"settings": {
+"attribute_name": "notes",
+"color": Color(0.92941177, 0.9882353, 0, 1),
+"debug_color": Color(0, 1, 1, 1),
+"debug_scale": 1.08,
+"operation": 1,
+"random_seed": 3226290403,
+"scale": 0.805,
+"title": "Debug"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139, 71),
+"template": "debug"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
 graph_name = "demo_watabou"
-view_zoom = 1.3310001
-view_offset = Vector2(106.364044, 132.17407)
+view_zoom = 1.1
+view_offset = Vector2(54.928955, 124.342224)
 in_params = Array[ExtResource("2_ndo0y")]([SubResource("Resource_xpe5j")])
 
 [sub_resource type="Resource" id="Resource_5typy"]
