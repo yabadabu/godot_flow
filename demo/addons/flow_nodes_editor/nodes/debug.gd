@@ -20,6 +20,11 @@ enum eOperation {
 @export var scale : float = 1.0
 var offset := Vector2(0.0, 0.0)
 
+func exposeParam( name : String ):
+	if name == "attribute_name" or name == "color" or name == "scale" :
+		return operation != eOperation.AsDefaultDebugDraw
+	return true
+
 func _init():
 	meta_node = {
 		"title" : "Debug",
