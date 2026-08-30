@@ -194,6 +194,23 @@ static func getFlowDataTypeFromObject( obj  ) -> FlowData.DataType:
 		return FlowData.DataType.Resource
 	return data_type
 
+static func canPropertyBeRuntimeInput( prop : Dictionary ) -> bool:
+	var prop_type : int = prop.get( "type", TYPE_NIL )
+	if prop.get( "hint", PROPERTY_HINT_NONE ) == PROPERTY_HINT_ENUM:
+		return false
+	if prop_type in [ TYPE_INT, TYPE_FLOAT, TYPE_VECTOR3, TYPE_STRING ]:
+		return true
+	return prop_type == TYPE_ARRAY or prop_type >= TYPE_PACKED_BYTE_ARRAY
+
+func canRuntimeOverrideProperty( prop_name : StringName ) -> bool:
+	for prop : Dictionary in get_property_list():
+		if StringName(prop.name) != prop_name:
+			continue
+		if !(prop.usage & PROPERTY_USAGE_STORAGE) || !(prop.usage & PROPERTY_USAGE_EDITOR):
+			return false
+		return canPropertyBeRuntimeInput( prop )
+	return false
+
 func exposedAsInputNode( prop ):
 	return true
 
@@ -223,6 +240,8 @@ func getExposedParams():
 		if !(prop.usage & PROPERTY_USAGE_STORAGE) || !(prop.usage & PROPERTY_USAGE_EDITOR):
 			continue
 		if !inside_my_vars:
+			continue
+		if not canPropertyBeRuntimeInput( prop ):
 			continue
 			
 		var data = {
@@ -291,6 +310,60 @@ func getSettingValue( ctx : FlowData.EvaluationContext, in_name : String, defaul
 	if trace:
 		print( "Input %s using from settings %s" % [ in_name, str(value) ])
 	return value
+
+func _getRuntimeParameterInputValue(
+	ctx : FlowData.EvaluationContext,
+	in_name : String,
+	current_value
+):
+	var input_count := getInputCount(ctx)
+	if not args_ports_by_name.has( in_name ):
+		return current_value
+	var port = args_ports_by_name[ in_name ].port
+	if port < 0 or port >= input_count:
+		return current_value
+	var input = getOptionalInput(ctx, port)
+	if not input:
+		return current_value
+	var in_streams = input.streams
+	if in_streams.size() == 0:
+		setError(ctx, "Input %s has no data" % in_name)
+		return current_value
+	if in_streams.size() > 1:
+		setError(ctx, "Input %s has too many data (%d)" % [ in_name, in_streams.size() ])
+		return current_value
+	var stream = in_streams.values()[0]
+	if stream.container.size() == 0:
+		setError(ctx, "Input %s has empty stream" % in_name)
+		return current_value
+	if typeof( current_value ) == TYPE_ARRAY:
+		var new_array : Array = current_value.duplicate()
+		new_array.clear()
+		for item in stream.container:
+			new_array.append( item )
+		return new_array
+	if typeof( current_value ) >= TYPE_PACKED_BYTE_ARRAY:
+		return stream.container
+	var new_value = stream.container[0]
+	if typeof( new_value ) != typeof( current_value ):
+		push_warning( "  Type of %s (%s) does not match the expected type (%s)" % [ in_name, type_string( typeof(new_value) ), type_string( typeof(current_value))])
+	return new_value
+
+func applyRuntimeParameterInputs( ctx : FlowData.EvaluationContext ) -> void:
+	var first_parameter_port : int = getMeta().get( "ins", [] ).size()
+	for arg_name in args_ports_by_name:
+		var port_data : Dictionary = args_ports_by_name[ arg_name ]
+		var port : int = port_data.get( "port", -1 )
+		if port < first_parameter_port or port >= getInputCount(ctx):
+			continue
+		if getOptionalInput(ctx, port) == null:
+			continue
+		if not canRuntimeOverrideProperty( arg_name ):
+			continue
+		var current_value = get( arg_name )
+		if current_value == null:
+			continue
+		set( arg_name, _getRuntimeParameterInputValue( ctx, arg_name, current_value ) )
 
 func newStream( size : int, new_name : String, init_value, data_type : FlowData.DataType ):
 	var new_container = FlowData.Data.newContainerOfType( data_type )
@@ -463,6 +536,7 @@ func run( ctx : FlowData.EvaluationContext ):
 		if trace:
 			print( "%s Inputs for bulk %d/%d (%d)" % [ name, bulk_index, bulk_count, getInputCount(ctx) ])
 		if hasRequiredInputData(ctx):
+			applyRuntimeParameterInputs( ctx )
 			execute( ctx )
 
 func removeRegisteredInstancedNodes( spawn_parent : Node3D ):
