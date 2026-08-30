@@ -4,7 +4,6 @@ extends FlowNodeBase
 @export var num_points: int = 40
 @export var point_size: Vector3 = Vector3.ONE
 
-
 func _init():
 	meta_node = {
 		"title" : "Surface Sampler",
@@ -25,13 +24,6 @@ func execute( ctx : FlowData.EvaluationContext ):
 		setError(ctx, "Input does not provide position, rotation, or scale streams")
 		return
 		
-	var seed_val = getSettingValue(ctx, "random_seed", 12345)
-	var num_pts = getSettingValue(ctx, "num_points", 40)
-	var pt_size = getSettingValue(ctx, "point_size", Vector3.ONE)
-	
-	var rng = RandomNumberGenerator.new()
-	rng.seed = seed_val
-	
 	var out_data := FlowData.Data.new()
 	out_data.addCommonStreams(0)
 	
@@ -39,7 +31,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 	var srot := out_data.getVector3Container(FlowData.AttrRotation)
 	var ssize := out_data.getVector3Container(FlowData.AttrSize)
 	
-	var total_samples = in_trs.size() * num_pts
+	var total_samples = in_trs.size() * num_points
 	spos.resize(total_samples)
 	srot.resize(total_samples)
 	ssize.resize(total_samples)
@@ -53,7 +45,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 		
 		var half_size = size * 0.5
 		
-		for j in range(num_pts):
+		for j in range(num_points):
 			# Generate local point in [-half_size, half_size]
 			var lx = rng.randf_range(-half_size.x, half_size.x)
 			var ly = rng.randf_range(-half_size.y, half_size.y)
@@ -63,7 +55,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 			# Transform to world space
 			spos[idx] = center + (basis * local_pt)
 			srot[idx] = rotation
-			ssize[idx] = pt_size
+			ssize[idx] = point_size
 			idx += 1
 			
 	setOutput(ctx, 0, out_data)

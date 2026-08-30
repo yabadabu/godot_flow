@@ -8,7 +8,12 @@ enum eMode {
 	FaceCenters,
 }
 
-@export var mode : eMode = eMode.UseDensity
+@export var mode : eMode = eMode.UseDensity:
+	set(value):
+		if mode != value:
+			mode = value
+			notify_property_list_changed()
+			
 @export var density : float = 0.5
 @export var num_samples : int = 100
 @export var point_size : float = 1.0
@@ -24,6 +29,13 @@ func _init():
 		"tooltip" : "Generates new points over the surface of the input mesh",
 		#"trace" : true
 	}
+	
+func exposeParam( name : String ) -> bool:
+	if name == "num_samples":
+		return mode == eMode.UseNumSamples
+	elif name == "density":
+		return mode == eMode.UseDensity
+	return true
 	
 static func sampleMeshSurfaceAtVertices( mi : MeshInstance3D ) -> Dictionary:
 	var mesh := mi.mesh
@@ -194,15 +206,6 @@ func execute( ctx : FlowData.EvaluationContext ):
 	var spos := output.getVector3Container( FlowData.AttrPosition )
 	var srot := output.getVector3Container( FlowData.AttrRotation )
 	
-	#var uniform_interval = getSettingValue( ctx, "uniform_interval" )
-	#if uniform_interval < min_interval:
-		#uniform_interval = min_interval
-		#uniform_interval = uniform_interval
-
-	var num_samples = getSettingValue(ctx, "num_samples" )
-	var density = getSettingValue(ctx, "density")
-	var point_size = getSettingValue(ctx, "point_size")
-
 	if mode == eMode.UseDensity:
 		num_samples = -1
 	elif mode == eMode.UseNumSamples:
