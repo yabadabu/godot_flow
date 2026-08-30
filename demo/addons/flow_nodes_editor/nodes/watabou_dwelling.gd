@@ -40,7 +40,7 @@ func importRooms( rooms : Array, floor_level : int ):
 	for room in rooms:
 		for cell in room.cells:
 			coords.append( readCell( cell, floor_level ))
-			room_names.append( room.name )
+			room_names.append( room.get( "name", "" ) )
 	return { "coords" : coords, "room_name" : room_names }
 
 func importDoors( doors : Array, floor_level : int ):
