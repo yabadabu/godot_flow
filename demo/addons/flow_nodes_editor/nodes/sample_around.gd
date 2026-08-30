@@ -86,9 +86,6 @@ func execute( ctx : FlowData.EvaluationContext ):
 		setError(ctx,  "Input does not provide position, rotation or scale streams" )
 		return
 
-	var radius = getSettingValue(ctx, "radius" )
-	var max_points = getSettingValue(ctx, "max_points" )
-	
 	var bridson = Bridson.new()
 	bridson.spatial = GDRTree.new()
 	bridson.radius = radius

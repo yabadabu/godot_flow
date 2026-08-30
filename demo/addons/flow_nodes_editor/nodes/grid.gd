@@ -20,9 +20,9 @@ func _init():
 
 func execute( ctx : FlowData.EvaluationContext ):
 	var output := FlowData.Data.new()
-	var nx : int = getSettingValue( ctx, "x" )
-	var ny : int = getSettingValue( ctx, "y" )
-	var nz : int = getSettingValue( ctx, "z" )
+	var nx : int = x
+	var ny : int = y
+	var nz : int = z
 	var nsamples : int = nx * ny * nz
 	output.addCommonStreams( nsamples )
 	var spos := output.getVector3Container( FlowData.AttrPosition )
@@ -32,10 +32,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 	if trace:
 		print( "Grid.size %d x %d x %d" % [ nx, ny, nz ])
 	var idx := 0
-	var origin : Vector3 = getSettingValue( ctx, "origin" )
-	var rotation : Vector3 = getSettingValue( ctx, "rotation" )
-	var step : Vector3 = getSettingValue( ctx, "step" )
-	var size : Vector3 = Vector3.ONE * getSettingValue( ctx, "size" )
+	var size3 : Vector3 = Vector3.ONE * size
 	var transform = Transform3D( FlowData.eulerToBasis(rotation), origin )
 	for iz in range( 0, nz ):
 		for iy in range( 0, ny ):
@@ -43,6 +40,6 @@ func execute( ctx : FlowData.EvaluationContext ):
 				var p := Vector3( ix, iy, iz ) * step
 				spos[idx] = transform * p
 				srot[idx] = rotation
-				ssize[idx] = size
+				ssize[idx] = size3
 				idx += 1
 	setOutput(ctx, 0, output )

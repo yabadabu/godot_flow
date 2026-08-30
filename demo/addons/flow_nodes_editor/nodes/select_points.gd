@@ -83,7 +83,6 @@ func execute( ctx : FlowData.EvaluationContext ):
 	var in_size := in_data.size()
 	
 	var attr_name = getSettingValue( ctx, "weight_name")
-	var ratio : float = getSettingValue(ctx, "ratio")
 	ratio = clamp( ratio, 0.0, 1.0 )
 	
 	var out_size : int = int(round(in_size * ratio))

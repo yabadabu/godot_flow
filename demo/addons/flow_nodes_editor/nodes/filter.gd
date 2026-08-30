@@ -214,7 +214,6 @@ func execute( ctx : FlowData.EvaluationContext ):
 						indices_false.append(i)
 
 			eCondition.AlmostEqual:
-				var threshold : float = getSettingValue( ctx, "threshold" )
 				for i in num_elems:
 					if abs(inA[i] - inB[i]) < threshold:
 						indices_true.append(i)

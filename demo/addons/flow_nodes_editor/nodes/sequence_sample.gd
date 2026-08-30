@@ -19,10 +19,6 @@ func execute( ctx : FlowData.EvaluationContext ):
 	
 	var indices := PackedInt32Array( )
 	
-	var start : int = getSettingValue(ctx, "start")
-	var count : int = getSettingValue(ctx, "count")
-	var step : int = getSettingValue(ctx, "step")
-	
 	var n := in_data.size()
 	if (n != 0) and (step != 0):
 

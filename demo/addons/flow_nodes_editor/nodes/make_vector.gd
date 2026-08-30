@@ -20,9 +20,9 @@ func _init():
 	}
 
 func execute( ctx : FlowData.EvaluationContext ):
-	var ix : float = getSettingValue( ctx, "x")
-	var iy = getSettingValue( ctx, "y")
-	var iz : float = getSettingValue( ctx, "z")
+	var ix := x
+	var iy := y
+	var iz := z
 
 	var output := FlowData.Data.new()
 	var container : PackedVector3Array = output.addStream( out_name, FlowData.DataType.Vector )

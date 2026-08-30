@@ -20,7 +20,6 @@ func execute( ctx : FlowData.EvaluationContext ):
 	var out_data := FlowData.Data.new()
 	var trace := trace
 	
-	var num_copies : int = getSettingValue( ctx, "num_copies" )
 	if trace: print( "Copy.num_copies %d" % [ num_copies ] )
 
 	var time_start = Time.get_ticks_usec()	
@@ -45,10 +44,8 @@ func execute( ctx : FlowData.EvaluationContext ):
 	
 	if in_trs:
 		var step3d : Transform3D = Transform3D.IDENTITY
-		var step_translation = getSettingValue( ctx, "translation" )
-		var step_rotation = getSettingValue( ctx, "rotation" )
-		step3d.origin = step_translation
-		step3d.basis = FlowData.eulerToBasis( step_rotation )
+		step3d.origin = translation
+		step3d.basis = FlowData.eulerToBasis( rotation )
 		#print( "Step3d is %s" % [ step3d ] )
 		
 		var spos := out_data.getVector3Container( FlowData.AttrPosition )

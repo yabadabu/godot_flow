@@ -131,7 +131,7 @@ func get_combined_aabb(root: Node3D) -> AABB:
 	return combined_aabb
 
 func importCommon( ctx : FlowData.EvaluationContext, output : FlowData.Data, nodes : Array[Node3D] ):
-	if getSettingValue( ctx, "import_metadata" ) as bool:
+	if import_metadata:
 		importMetaData( output, nodes )
 	
 	for prop_name in import_properties:

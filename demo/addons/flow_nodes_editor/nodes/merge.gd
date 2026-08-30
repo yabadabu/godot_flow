@@ -1,8 +1,6 @@
 @tool
 extends FlowNodeBase
 
-#@export var merge_all_attributes := true
-
 func _init():
 	meta_node = {
 		"title" : "Merge",
@@ -14,7 +12,6 @@ func _init():
 
 func run( ctx : FlowData.EvaluationContext ):
 	
-	#var merge_all = getSettingValue( ctx, "merge_all_attributes" )
 	var out_data := FlowData.Data.new()
 	var offset = 0
 	

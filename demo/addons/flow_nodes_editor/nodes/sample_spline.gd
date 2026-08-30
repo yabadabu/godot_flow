@@ -138,14 +138,10 @@ func execute( ctx : FlowData.EvaluationContext ):
 	var srot := output.getVector3Container( FlowData.AttrRotation )
 	var ssize := output.getVector3Container( FlowData.AttrSize )
 	
-	var uniform_interval = getSettingValue( ctx, "uniform_interval" )
 	if uniform_interval < min_interval:
 		uniform_interval = min_interval
-		uniform_interval = uniform_interval
 		
-	var adjust_to_borders : bool = getSettingValue( ctx, "adjust_to_borders" )
-	
-	if getSettingValue( ctx, "fill_curve" ):
+	if fill_curve:
 		for path_3d in path3d_nodes:
 			var curve : Curve3D = path_3d.curve
 			var base = spos.size()
@@ -180,7 +176,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 				num_samples_float = ( curve_length / uniform_interval )
 				num_samples = int( num_samples_float ) + 1
 			
-			if getSettingValue( ctx, "sample_segments_centers" ):
+			if sample_segments_centers:
 				if num_samples > 2:
 					num_samples -= 1
 					spos.resize( base + num_samples )

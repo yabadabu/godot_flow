@@ -40,7 +40,6 @@ func execute( ctx : FlowData.EvaluationContext ):
 	if spos == null or ssizes == null or srot == null:
 		return
 	var eulers = srot.container
-	var uniform_scale : float = getSettingValue( ctx, "uniform_scale", 1.0 )
 	
 	var b_min : Vector3 = bounds_min
 	var b_max : Vector3 = bounds_max
