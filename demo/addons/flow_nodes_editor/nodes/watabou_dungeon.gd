@@ -5,7 +5,7 @@ extends FlowNodeBase
 
 func _init():
 	meta_node = {
-		"title" : "Watabou",
+		"title" : "Watabou Dungeon",
 		"category" : "Import",
 		"ins" : [],
 		"outs" : [
@@ -15,17 +15,20 @@ func _init():
 			{ "label" : "Water" },
 			{ "label" : "Notes" },
 		],
-		"tooltip" : "Imports a watabou .json exported file",
+		"tooltip" : "Imports a watabou dungeon exported in .json format",
 	}
 
-func load_data( ctx : FlowData.EvaluationContext ) -> Dictionary:
-	var file := FileAccess.open(filename, FileAccess.READ)
+func load_data( ctx : FlowData.EvaluationContext, infilename : String ) -> Dictionary:
+	if infilename.strip_edges().is_empty():
+		setError( ctx, "Missing filename")
+		return {}
+	var file := FileAccess.open(infilename, FileAccess.READ)
 	if file == null:
-		setError( ctx, "Could not open: " + filename)
+		setError( ctx, "Could not open: " + infilename)
 		return {}
 	var data: Dictionary = JSON.parse_string(file.get_as_text())
 	if data == null:
-		setError( ctx, "Invalid JSON: " + filename)
+		setError( ctx, "Invalid JSON: " + infilename)
 		return {}
 	if not data is Dictionary:
 		setError( ctx, "JSON root is not an object/dictionary")
@@ -98,7 +101,8 @@ func importStream( ctx : FlowData.EvaluationContext, wd : Dictionary, out_idx : 
 	return false
 
 func execute( ctx : FlowData.EvaluationContext ):
-	var wd = load_data( ctx )
+	#var infilename = ilenamecod
+	var wd = load_data( ctx, filename )
 	if wd:
 		importStream( ctx, wd, 0, "rects", importRects )
 		importStream( ctx, wd, 1, "doors", importDoors )
