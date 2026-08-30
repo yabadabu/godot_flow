@@ -41,6 +41,12 @@ func importCoords( in_array : Array ):
 		coords.append( Vector3( d.x + 0.5, 0, d.y + 0.5 ))
 	return { "coords" : coords } 
 
+func importColumns( in_array : Array ):
+	var coords := PackedVector3Array()
+	for d in in_array:
+		coords.append( Vector3( d.x, 0, d.y ))
+	return { "coords" : coords } 
+
 func importRects( rects : Array ):
 	var coords := PackedVector3Array()
 	var sizes := PackedVector3Array()
@@ -58,7 +64,7 @@ func importNotes( data : Array ):
 	for d in data:
 		notes.append( d.text )
 		refs.append( int(d.ref) )
-		coords.append( Vector3( d.pos.x + 0.5, 0, d.pos.y + 0.5 ))
+		coords.append( Vector3( d.pos.x, 0, d.pos.y ))
 	return { "coords" : coords, "notes" : notes } 
 
 func importDoors( doors : Array ):
@@ -106,6 +112,6 @@ func execute( ctx : FlowData.EvaluationContext ):
 	if wd:
 		importStream( ctx, wd, 0, "rects", importRects )
 		importStream( ctx, wd, 1, "doors", importDoors )
-		importStream( ctx, wd, 2, "columns", importCoords )
+		importStream( ctx, wd, 2, "columns", importColumns )
 		importStream( ctx, wd, 3, "water", importCoords )
 		importStream( ctx, wd, 4, "notes", importNotes )
