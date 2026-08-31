@@ -94,16 +94,16 @@ func readEdge( edge : Dictionary, floor_level : int, coords : PackedVector3Array
 	var coord = readCell( edge.cell, floor_level )
 	if edge.dir == "w":
 		coord.z -= 0.5
-		rots.append( Vector3( 0,-90,0) )
+		rots.append( Vector3( 0,0,0) )
 	elif edge.dir == "e":
 		coord.z += 0.5
-		rots.append( Vector3( 0,90,0) )
+		rots.append( Vector3( 0,180,0) )
 	elif edge.dir == "n":
 		coord.x += 0.5
-		rots.append( Vector3( 0,180,0) )
+		rots.append( Vector3( 0,90,0) )
 	elif edge.dir == "s":
 		coord.x -= 0.5
-		rots.append( Vector3( 0,0,0) )
+		rots.append( Vector3( 0,-90,0) )
 	coords.append( coord )	
 
 func execute( ctx : FlowData.EvaluationContext ):
