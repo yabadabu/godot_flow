@@ -25,15 +25,16 @@ func _init():
 
 func _copy_streams(in_data : FlowData.Data, out_count : int, offsets_count : int) -> FlowData.Data:
 	var out_data := FlowData.Data.new()
-	for stream_name in in_data.streams:
-		var stream = in_data.streams[stream_name]
+	for stream in in_data.streams.values():
 		var out_container : Array = FlowData.Data.newContainerOfType(stream.data_type)
-		if out_container:
+		if out_container != null:
 			out_container.resize(out_count)
 			for src_idx : int in range(in_data.size()):
 				for offset_idx : int in range(offsets_count):
 					out_container[src_idx * offsets_count + offset_idx] = stream.container[src_idx]
 			out_data.registerStream(stream.name, out_container, stream.data_type)
+		else:
+			print( "Failed to create new container type %d" % stream.data_type)
 	out_data.tags = in_data.tags.duplicate()
 	return out_data
 
