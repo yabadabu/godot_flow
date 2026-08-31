@@ -36,7 +36,7 @@ vertical_scroll_mode = 0
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="ButtonNavigateUp" type="Button" parent="VBoxContainer/ScrollContainer/HBoxContainer"]
+[node name="ButtonNavigateUp" type="Button" parent="VBoxContainer/ScrollContainer/HBoxContainer" unique_id=1156634433]
 unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = "Return to the parent graph"
@@ -54,6 +54,7 @@ text = "Inputs"
 
 [node name="ButtonSave" type="Button" parent="VBoxContainer/ScrollContainer/HBoxContainer" unique_id=816937869]
 layout_mode = 2
+tooltip_text = "Save"
 text = "🖫"
 
 [node name="CBExecutors" type="OptionButton" parent="VBoxContainer/ScrollContainer/HBoxContainer" unique_id=1922104035]

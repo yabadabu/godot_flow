@@ -79,6 +79,7 @@ class EvaluationContext:
 	var parent_ctx : EvaluationContext
 	var owner : FlowGraphNode3D
 	var eval_id : int = 0
+	var execution_index : int = 0
 	var graph : FlowGraphResource
 	var node_runtimes: Dictionary = {}
 	var child_contexts: Dictionary = {}
@@ -117,6 +118,7 @@ class EvaluationContext:
 		child.parent_ctx = self
 		child.owner = owner
 		child.graph = child_graph
+		child.execution_index = invocation_idx
 		child.trace = trace or node.trace
 		child.name = "%s/%s[%d]" % [name, node.name, invocation_idx]
 		child.nodes_to_eval = child.getEvalOrder(child_graph.all_nodes)

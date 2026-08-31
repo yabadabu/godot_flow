@@ -77,10 +77,10 @@ func _input(event : InputEvent):
 			on_closed.emit()
 			return
 		if event.keycode == KEY_ENTER:
-			if search_results.get_child_count() == 1:
+			if search_results.get_child_count() > 0:
 				var b = search_results.get_child(0) as Button
-				#print( "Click on %s" % b.text )
-				b.pressed.emit()
+				if b:
+					b.pressed.emit()
 			return
 	if event is InputEventMouseButton and event.pressed:
 		var mouse_event := event as InputEventMouseButton
@@ -111,6 +111,7 @@ func _clear_options():
 		child.queue_free()
 
 func _populate_categories(node_types : Dictionary, required_input_type : FlowData.DataType, required_output_type : FlowData.DataType):
+	print( "Populating %d" % required_input_type)
 	for template_name in node_types.keys():
 		var node_meta = node_types[template_name]
 		if not node_meta.get("auto_register", true):
@@ -271,18 +272,27 @@ func _show_search_results(query : String):
 
 	var matches := []
 	for template_name in compatible_template_names:
-		if _matches_search(template_name, query):
-			matches.append(template_name)
+		var score := _get_search_score(template_name, query)
+		if score > 0:
+			matches.append({
+				"template_name": template_name,
+				"score": score,
+			})
 
 	matches.sort_custom(func(a, b):
-		var a_meta : Dictionary = current_node_types[a]
-		var b_meta : Dictionary = current_node_types[b]
-		var a_label := "%s / %s" % [_get_category(a_meta), a_meta.get("title", str(a))]
-		var b_label := "%s / %s" % [_get_category(b_meta), b_meta.get("title", str(b))]
+		if a.score != b.score:
+			return a.score > b.score
+		var a_template_name : String = a.template_name
+		var b_template_name : String = b.template_name
+		var a_meta : Dictionary = current_node_types[a_template_name]
+		var b_meta : Dictionary = current_node_types[b_template_name]
+		var a_label := "%s / %s" % [_get_category(a_meta), a_meta.get("title", a_template_name)]
+		var b_label := "%s / %s" % [_get_category(b_meta), b_meta.get("title", b_template_name)]
 		return a_label < b_label
 	)
 
-	for template_name in matches:
+	for match_data in matches:
+		var template_name : String = match_data.template_name
 		var node_meta : Dictionary = current_node_types[template_name]
 		var category := _get_category(node_meta)
 		var node_button := Button.new()
@@ -385,17 +395,40 @@ func _clear_results():
 		child.queue_free()
 
 func _matches_search(template_name : String, query : String) -> bool:
+	return _get_search_score(template_name, query) > 0
+
+func _get_search_score(template_name : String, query : String) -> int:
 	var node_meta : Dictionary = current_node_types[template_name]
-	var haystack := "%s %s %s" % [
+	var normalized_query := query.strip_edges().to_lower()
+	if normalized_query.is_empty():
+		return 0
+
+	var title := str(node_meta.get("title", template_name)).to_lower()
+	if title == normalized_query:
+		return 12
+	if title.begins_with(normalized_query):
+		return 10
+
+	var keywords = node_meta.get("keywords", [])
+	if keywords is Array or keywords is PackedStringArray:
+		for keyword in keywords:
+			if str(keyword).to_lower().begins_with(normalized_query):
+				return 10
+	elif str(keywords).to_lower().begins_with(normalized_query):
+		return 10
+
+	if title.contains(normalized_query):
+		return 8
+
+	var secondary_haystack := "%s %s %s %s" % [
 		template_name,
-		node_meta.get("title", ""),
 		_get_category(node_meta),
+		str(keywords),
+		str(node_meta.get("tooltip", "")),
 	]
-	if node_meta.has("keywords"):
-		haystack += " " + str(node_meta.keywords)
-	if node_meta.has("tooltip"):
-		haystack += " " + str(node_meta.tooltip)
-	return haystack.to_lower().contains(query.to_lower())
+	if secondary_haystack.to_lower().contains(normalized_query):
+		return 5
+	return 0
 
 func _get_category(node_meta : Dictionary) -> String:
 	var category : String = node_meta.get("category", "Others...")
@@ -408,8 +441,12 @@ func _fit_height_to_categories(category_count : int):
 	size = Vector2i(MIN_POPUP_SIZE.x, max(MIN_POPUP_SIZE.y, desired_height))
 
 func _is_compatible(node_meta : Dictionary, required_input_type : FlowData.DataType, required_output_type : FlowData.DataType) -> bool:
+	
+	# Invalid and Any are kind of similar here.
 	if required_input_type == FlowData.DataType.Invalid and required_output_type == FlowData.DataType.Invalid:
 		return true
+	if required_input_type == FlowData.DataType.Any and (required_output_type == FlowData.DataType.Invalid or required_output_type == FlowData.DataType.Any):
+		return true		
 
 	var ports = node_meta.ins if required_input_type != FlowData.DataType.Invalid else node_meta.outs
 	var required_type = required_input_type if required_input_type != FlowData.DataType.Invalid else required_output_type
