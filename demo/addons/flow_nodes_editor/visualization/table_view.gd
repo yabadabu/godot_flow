@@ -84,7 +84,12 @@ func splitDragged( _offset : int ):
 	$ScrollContainer.col_starts = col_starts
 	$ScrollContainer.col_widths = col_widths
 	$ScrollContainer/Contents.custom_minimum_size.x = col_titles.size.x
-	$ScrollContainer/Contents.custom_minimum_size.y = num_rows * $ScrollContainer.line_height
+	var contents_height : float = num_rows * $ScrollContainer.line_height
+	$ScrollContainer/Contents.custom_minimum_size.y = contents_height
+	# Layout updates the scrollbar limits asynchronously. Clamp the old offset now
+	# so changing to a shorter data set cannot request rows that no longer exist.
+	var max_scroll := maxf( 0.0, contents_height - $ScrollContainer.size.y )
+	$ScrollContainer.scroll_vertical = mini( $ScrollContainer.scroll_vertical, ceili( max_scroll ) )
 	
 	style_titles.bg_color = Color( 0.1, 0.1, 0.1 )	
 	updateInfo()

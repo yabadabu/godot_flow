@@ -65,6 +65,11 @@ func drawVerticalLines():
 		#verticalLine( x0 + col_widths[idx], Color.WHITE )	
 
 func drawCol( col_idx : int, y0 : float, top_row_idx : int ):
+	# The scrollbar range is updated after layout. When the data set shrinks,
+	# scroll_vertical can therefore still point past the last row for one frame.
+	if top_row_idx < 0 || top_row_idx >= num_rows:
+		return
+
 	var y1 := min( size.y, num_rows * line_height )
 	var cell_pos := Vector2( 0, y0 )
 	var w = col_widths[ col_idx ]
@@ -99,6 +104,9 @@ func drawCol( col_idx : int, y0 : float, top_row_idx : int ):
 		
 
 func drawBackgrounds( y0 : float, row_idx : int ):
+	if row_idx < 0 || row_idx >= num_rows:
+		return
+
 	var g = 0.3
 	var bg_color_odd : Color = Color( g, g, g )
 	var w = size.x
@@ -116,7 +124,7 @@ func drawBackgrounds( y0 : float, row_idx : int ):
 
 func _draw():
 	#print( "drawing table Rows:%d - %d" % [ num_rows , col_starts.size() ])
-	if col_starts.size() < 2:
+	if num_rows <= 0 || line_height <= 0 || col_starts.size() < 2:
 		return
 	
 	var voffset := scroll_vertical
@@ -126,6 +134,8 @@ func _draw():
 	var num_hidden_rows = int( floor( voffset / line_height ) )
 	if num_hidden_rows < 0:
 		num_hidden_rows = 0	
+	if num_hidden_rows >= num_rows:
+		return
 		
 	y0 += num_hidden_rows * line_height
 	row_idx += num_hidden_rows
