@@ -39,7 +39,7 @@ func _init():
 		"ins" : [
 			{ "label": "In A" },
 			{ "label": "In B", "optional": true },
-			{ "label": "In C", "optional": true },
+			#{ "label": "In C", "optional": true },		# Only for the between operator
 		], 
 		"outs" : [{ "label" : "True" }, { "label" : "False" }],
 		"hide_inputs" : true,
@@ -109,6 +109,8 @@ func getOptionalStream(ctx: FlowData.EvaluationContext, input_index: int, stream
 			read_stream = newFloatStream( expected_size, "Constant %s" % stream_name, v )
 		elif stream_name.to_lower() == "true":
 			read_stream = newFloatStream( expected_size, "Constant %s" % stream_name, 1.0 )
+		elif stream_name.to_lower() == "false":
+			read_stream = newFloatStream( expected_size, "Constant %s" % stream_name, 0.0 )
 		else:
 			setError(ctx,  "Input %s not found, and can't be interpreted as a constant number (Op:%d)" % [stream_name, condition])
 			return	null
