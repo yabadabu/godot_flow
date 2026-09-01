@@ -223,6 +223,9 @@ func delete_node( node : FlowNodeBase ):
 		if other_node:
 			_delete_connections_involving_node( other_node.deps, node_name )
 			other_node.refreshOperationalState()
+			# The dependant must run again (or at least execute preExecute) so
+			# generated scene output from the affected branch is refreshed.
+			other_node.invalidate()
 			
 	nodes_by_name.erase( node_name )
 	all_nodes.erase( node )
