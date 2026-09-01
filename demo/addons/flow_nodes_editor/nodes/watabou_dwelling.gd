@@ -3,6 +3,8 @@ extends FlowNodeBase
 
 @export_file var filename : String
 
+var curr_level : int = 0
+
 func _init():
 	meta_node = {
 		"title" : "Watabou Dwelling",
@@ -34,64 +36,41 @@ func load_data( ctx : FlowData.EvaluationContext, infilename : String ) -> Dicti
 		return {}
 	return data
 
-func importRooms( rooms : Array, floor_level : int ):
-	var room_names := PackedStringArray()
-	var coords := PackedVector3Array()
+func importRooms( rooms : Array, out : Dictionary ):
 	for room in rooms:
 		for cell in room.cells:
-			coords.append( readCell( cell, floor_level ))
-			room_names.append( room.get( "name", "" ) )
-	return { "coords" : coords, "room_name" : room_names }
+			out.coords.append( readCell( cell ))
+			out.room_names.append( room.get( "name", "" ) )
 
-func importDoors( doors : Array, floor_level : int ):
-	var coords := PackedVector3Array()
-	var rots := PackedVector3Array()
+func importDoors( doors : Array, out : Dictionary ):
 	for door in doors:
-		readEdge( door.edge, floor_level, coords, rots )
-	return { "coords" : coords, "rots" : rots }
+		readEdge( door.edge, out.coords, out.rots )
 	
-func importWindows( windows : Array, floor_level : int ):
-	var coords := PackedVector3Array()
-	var rots := PackedVector3Array()
+func importWindows( windows : Array, out : Dictionary ):
 	for window in windows:
-		readEdge( window, floor_level, coords, rots )
-	return { "coords" : coords, "rots" : rots }
+		readEdge( window, out.coords, out.rots )
 	
-func importStairs( stairs : Array, floor_level : int ):
-	var coords := PackedVector3Array()
-	var rots := PackedVector3Array()
-	var ups := PackedByteArray()
+func importStairs( stairs : Array, out : Dictionary ):
 	for stair in stairs:
-		readEdge( stair, floor_level, coords, rots )
+		readEdge( stair, out.coords, out.rots )
 		# Read again wihout the position correction
-		coords[ coords.size() - 1 ] = readCell( stair.cell, floor_level )
-		ups.append( 1 if stair.up else 0 )
-	return { "coords" : coords, "rots" : rots, "ups" : ups }
+		out.coords[ out.coords.size() - 1 ] = readCell( stair.cell )
+		out.ups.append( 1 if stair.up else 0 )
 	
-func importStream( ctx : FlowData.EvaluationContext, wd : Dictionary, floor_level : int, out_idx : int, container_name : String, importer : Callable ) -> bool:
+func importStream( ctx : FlowData.EvaluationContext, wd : Dictionary, out : Dictionary, container_name : String, importer : Callable ) -> bool:
 	if wd.has(container_name):
-		var container = wd.get(container_name)
-		if typeof( container ) == TYPE_ARRAY:
-			var out := FlowData.Data.new()
-			var rs = importer.call( container, floor_level )
-			out.addCommonStreams( rs.coords.size() )
-			out.registerStream(FlowData.AttrPosition, rs.coords)
-			if rs.has( "rots" ):
-				out.registerStream(FlowData.AttrRotation, rs.rots)
-			if rs.has( "room_name" ):
-				out.registerStream("room_name", rs.room_name)
-			if rs.has( "ups" ):
-				out.registerStream("ups", rs.ups)
-			setOutput(ctx, out_idx, out )
+		var items = wd.get(container_name)
+		if typeof( items ) == TYPE_ARRAY:
+			var rs = importer.call( items, out )
 			return true
 	setError( ctx, "Failed to find stream %s" % container_name )
 	return false
 
-func readCell( cell : Dictionary, floor_level : int ):
-	return Vector3(-cell.i, floor_level, cell.j)
+func readCell( cell : Dictionary ):
+	return Vector3(-cell.i, curr_level, cell.j)
 
-func readEdge( edge : Dictionary, floor_level : int, coords : PackedVector3Array, rots : PackedVector3Array ):
-	var coord = readCell( edge.cell, floor_level )
+func readEdge( edge : Dictionary, coords : PackedVector3Array, rots : PackedVector3Array ):
+	var coord = readCell( edge.cell )
 	if edge.dir == "w":
 		coord.z -= 0.5
 		rots.append( Vector3( 0,0,0) )
@@ -106,20 +85,52 @@ func readEdge( edge : Dictionary, floor_level : int, coords : PackedVector3Array
 		rots.append( Vector3( 0,-90,0) )
 	coords.append( coord )	
 
+func newEmptyData() -> Dictionary:
+	var d := Dictionary()
+	d.coords = PackedVector3Array()
+	return d
+
+func outputStream( ctx : FlowData.EvaluationContext, port_idx : int, data : Dictionary ):
+	var d = FlowData.Data.new()
+	d.addCommonStreams( data.coords.size() )
+	d.registerStream( FlowData.AttrPosition, data.coords )
+	if data.has( "room_names" ):
+		d.registerStream( "room_name", data.room_names )
+	if data.has( "rots" ):
+		d.registerStream( FlowData.AttrRotation, data.rots )
+	if data.has( "ups" ):
+		d.registerStream( "ups", data.ups )
+	setOutput( ctx, port_idx, d )
+
 func execute( ctx : FlowData.EvaluationContext ):
+	
+	var floors := newEmptyData()
+	floors.room_names = PackedStringArray()
+	var doors := newEmptyData()
+	doors.rots = PackedVector3Array()
+	var windows := newEmptyData()
+	windows.rots = PackedVector3Array()
+	var stairs := newEmptyData()
+	stairs.rots = PackedVector3Array()
+	stairs.ups = PackedByteArray()
+	
 	var wd = load_data( ctx, filename )
 	if wd:
-		var floors = wd.floors
-		for floor in floors:
-			var floor_level : float = float(floor.level)
-			importStream( ctx, floor, floor_level, 0, "rooms", importRooms )
-			importStream( ctx, floor, floor_level, 1, "doors", importDoors )
-			importStream( ctx, floor, floor_level, 2, "windows", importWindows )
-			importStream( ctx, floor, floor_level, 3, "stairs", importStairs )
+		for floor in wd.floors:
+			curr_level = int(floor.level)
+			importStream( ctx, floor, floors, "rooms", importRooms )
+			importStream( ctx, floor, doors, "doors", importDoors )
+			importStream( ctx, floor, windows, "windows", importWindows )
+			importStream( ctx, floor, stairs, "stairs", importStairs )
 		
 		# Import the main entrance
 		# I need a fake bulk in stream 0
-		setOutput(ctx, 0, FlowData.Data.new() )
 		# Convert the root dict into an fake array or 1 item, parse it as a Window
+		curr_level = 0
 		wd.exit = [ wd.exit ]
-		importStream( ctx, wd, 0, 1, "exit", importWindows )
+		importStream( ctx, wd, doors, "exit", importWindows )
+
+	outputStream( ctx, 0, floors )
+	outputStream( ctx, 1, doors )
+	outputStream( ctx, 2, windows )
+	outputStream( ctx, 3, stairs )

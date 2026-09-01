@@ -10,10 +10,16 @@
 [ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="4_krmge"]
 [ext_resource type="Script" uid="uid://dhpu3ptt872as" path="res://addons/flow_nodes_editor/flow_graph_param_override.gd" id="5_biut6"]
 [ext_resource type="ArrayMesh" uid="uid://big7pnmvws2vv" path="res://addons/kaykit_dungeon_remastered/Assets/obj/wall_window_open.obj" id="9_ma377"]
+[ext_resource type="ArrayMesh" uid="uid://bd7lbnbmmfcx5" path="res://addons/kaykit_dungeon_remastered/Assets/obj/column.obj" id="11_g2jmy"]
 
 [sub_resource type="Resource" id="Resource_xpe5j"]
 script = ExtResource("2_ndo0y")
 param_id = &"k6bhd"
+
+[sub_resource type="Resource" id="Resource_ma377"]
+script = ExtResource("3_4ow7j")
+redirect_id = &"0xa3p"
+name = "UsedEdges"
 
 [sub_resource type="Resource" id="Resource_j1woh"]
 script = ExtResource("4_krmge")
@@ -24,12 +30,6 @@ data = {
 "from_port": 0,
 "keep_alive": false,
 "to_node": &"id_0013_debug",
-"to_port": 0
-}, {
-"from_node": &"id_0015_transform",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0010_random_color",
 "to_port": 0
 }, {
 "from_node": &"id_0017_transform",
@@ -72,60 +72,6 @@ data = {
 "from_port": 4,
 "keep_alive": false,
 "to_node": &"id_0019_debug",
-"to_port": 0
-}, {
-"from_node": &"id_0003_merge",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0004_random_color",
-"to_port": 0
-}, {
-"from_node": &"id_0017_merge",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0016_debug",
-"to_port": 0
-}, {
-"from_node": &"id_0009_transform",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0018_merge",
-"to_port": 0
-}, {
-"from_node": &"id_0018_merge",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0007_debug",
-"to_port": 0
-}, {
-"from_node": &"id_0019_watabou_dwelling",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0003_merge",
-"to_port": 0
-}, {
-"from_node": &"id_0019_watabou_dwelling",
-"from_port": 1,
-"keep_alive": false,
-"to_node": &"id_0009_transform",
-"to_port": 0
-}, {
-"from_node": &"id_0019_watabou_dwelling",
-"from_port": 2,
-"keep_alive": false,
-"to_node": &"id_0011_transform",
-"to_port": 0
-}, {
-"from_node": &"id_0019_watabou_dwelling",
-"from_port": 3,
-"keep_alive": false,
-"to_node": &"id_0017_merge",
-"to_port": 0
-}, {
-"from_node": &"id_0004_random_color",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0002_transform",
 "to_port": 0
 }, {
 "from_node": &"id_0002_transform",
@@ -176,31 +122,109 @@ data = {
 "to_node": &"id_0008_transform",
 "to_port": 0
 }, {
-"from_node": &"id_0011_transform",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0014_debug",
-"to_port": 0
-}, {
-"from_node": &"id_0004_random_color",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0002_point_offsets",
-"to_port": 0
-}, {
-"from_node": &"id_0002_point_offsets",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0006_add_attribute",
-"to_port": 0
-}, {
 "from_node": &"id_0006_add_attribute",
 "from_port": 0,
 "keep_alive": false,
 "to_node": &"id_0005_spawn_meshes",
 "to_port": 0
+}, {
+"from_node": &"id_0015_transform",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0010_random_color",
+"to_port": 0
+}, {
+"from_node": &"id_0019_watabou_dwelling",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0004_random_color",
+"to_port": 0
+}, {
+"from_node": &"id_0019_watabou_dwelling",
+"from_port": 3,
+"keep_alive": false,
+"to_node": &"id_0016_debug",
+"to_port": 0
+}, {
+"from_node": &"id_0004_random_color",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0002_transform",
+"to_port": 0
+}, {
+"from_node": &"id_0004_random_color",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0002_partition",
+"to_port": 0
+}, {
+"from_node": &"id_0002_partition",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0001_grid_boundary",
+"to_port": 0
+}, {
+"from_node": &"id_0001_grid_boundary",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0003_merge",
+"to_port": 0
+}, {
+"from_node": &"id_0019_watabou_dwelling",
+"from_port": 2,
+"keep_alive": false,
+"to_node": &"id_0014_debug",
+"to_port": 0
+}, {
+"from_node": &"id_0019_watabou_dwelling",
+"from_port": 1,
+"keep_alive": false,
+"to_node": &"id_0007_debug",
+"to_port": 0
+}, {
+"from_node": &"id_0019_watabou_dwelling",
+"from_port": 1,
+"keep_alive": false,
+"to_node": &"id_0004_redirect_input",
+"to_port": 0
+}, {
+"from_node": &"id_0019_watabou_dwelling",
+"from_port": 2,
+"keep_alive": false,
+"to_node": &"id_0004_redirect_input",
+"to_port": 0
+}, {
+"from_node": &"id_0003_merge",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0006_substract",
+"to_port": 0
+}, {
+"from_node": &"id_0005_redirect_output",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0009_math_op",
+"to_port": 0
+}, {
+"from_node": &"id_0009_math_op",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0006_substract",
+"to_port": 1
+}, {
+"from_node": &"id_0006_substract",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0006_add_attribute",
+"to_port": 0
+}, {
+"from_node": &"id_0001_grid_boundary",
+"from_port": 1,
+"keep_alive": false,
+"to_node": &"id_0010_spawn_meshes",
+"to_port": 0
 }],
-"min_pos": Vector2(0, 0),
+"min_pos": Vector2(-60, -300),
 "nodes": [{
 "args_port": {
 "In": {
@@ -208,18 +232,475 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0012_debug",
-"position": Vector2(620, 320),
+"name": &"id_0010_spawn_meshes",
+"position": Vector2(1029.9811, 595.16565),
+"settings": {
+"random_seed": 2005452219,
+"title": "Spawn Meshes"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139, 71),
+"template": "spawn_meshes"
+}, {
+"args_port": {
+"In A": {
+"connected": true,
+"port": 0
+},
+"In B": {
+"connected": false,
+"port": 1
+}
+},
+"name": &"id_0009_math_op",
+"position": Vector2(1220, 800),
+"settings": {
+"debug_bulk": 1,
+"in_nameA": "size",
+"in_nameB": "0.5",
+"operation": 2,
+"random_seed": 2843590613,
+"title": "Math"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(152.00006, 101),
+"template": "math_op"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0004_redirect_input",
+"position": Vector2(360, 1160),
+"settings": {
+"random_seed": 1291887821,
+"redirect_id": &"0xa3p",
+"redirect_name": "UsedEdges",
+"title": "Redirect Input"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(116.00009, 54),
+"template": "redirect_input"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0002_partition",
+"position": Vector2(520, 820),
+"settings": {
+"attribute_name": "room_name",
+"debug_bulk": 4,
+"random_seed": 1196239713,
+"title": "Partition"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(160.99994, 71),
+"template": "partition"
+}, {
+"args_port": {
+"Filled Cells": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0001_grid_boundary",
+"position": Vector2(720, 760),
+"settings": {
+"random_seed": 1559202548,
+"title": "Grid Boundary"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(216.00018, 131),
+"template": "grid_boundary"
+}, {
+"args_port": {},
+"name": &"id_0005_redirect_output",
+"position": Vector2(1080, 800),
+"settings": {
+"random_seed": 22106591,
+"redirect_id": &"0xa3p",
+"redirect_name": "UsedEdges",
+"title": "Redirect Output"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(125, 54),
+"template": "redirect_output"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0005_spawn_meshes",
+"position": Vector2(1740, 720),
+"settings": {
+"mesh_variants": Array[Mesh]([ExtResource("2_xpe5j")]),
+"random_seed": 2375972160,
+"title": "Spawn Meshes"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139.00006, 71.00003),
+"template": "spawn_meshes"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0006_add_attribute",
+"position": Vector2(1580, 720),
+"settings": {
+"attr_name": "size",
+"cte_vector": Vector3(0.25, 0.25, 0.25),
+"data_type": 3,
+"random_seed": 194854782,
+"title": "Add Attribute"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139.0003, 71.00003),
+"template": "add_attribute"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0014_add_attribute",
+"position": Vector2(740, 1200),
+"settings": {
+"attr_name": "size",
+"cte_vector": Vector3(0.5, 0.5, 0.5),
+"data_type": 3,
+"random_seed": 194854782,
+"title": "Add Attribute"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139.00015, 71),
+"template": "add_attribute"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0014_debug",
+"position": Vector2(360, 1220),
 "settings": {
 "debug_color": Color(0, 1, 1, 1),
 "debug_scale": 1.08,
 "disabled": true,
+"operation": 4,
 "random_seed": 3226290403,
+"title": "Debug"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139.00003, 71.00012),
+"template": "debug"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0009_spawn_meshes",
+"position": Vector2(1060, 1200),
+"settings": {
+"mesh_variants": Array[Mesh]([ExtResource("9_ma377")]),
+"random_seed": 2375972957,
+"title": "Spawn Meshes"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139, 71),
+"template": "spawn_meshes"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0007_debug",
+"position": Vector2(360, 1060),
+"settings": {
+"debug_color": Color(0, 1, 1, 1),
+"debug_scale": 1.08,
+"disabled": true,
+"operation": 4,
+"random_seed": 3226290403,
+"title": "Debug"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139.00021, 71.000244),
+"template": "debug"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0016_debug",
+"position": Vector2(360, 1320),
+"settings": {
+"disabled": true,
+"operation": 4,
+"random_seed": 1679140112,
+"title": "Debug"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139.00009, 71.00012),
+"template": "debug"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0008_transform",
+"position": Vector2(900, 1200),
+"settings": {
+"random_seed": 2376599165,
+"scale_max": Vector3(0.5, 1, 1),
+"scale_min": Vector3(0.5, 1, 1),
+"title": "Transform Points"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139.00006, 71),
+"template": "transform"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0002_transform",
+"position": Vector2(580, 940),
+"settings": {
+"random_seed": 2376599554,
+"scale_max": Vector3(0.5, 1, 1),
+"scale_min": Vector3(0.5, 1, 1),
+"title": "Transform Points"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139.00012, 71.00012),
+"template": "transform"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0004_spawn_meshes",
+"position": Vector2(1220, 1060),
+"settings": {
+"mesh_variants": Array[Mesh]([ExtResource("2_biut6")]),
+"random_seed": 2375972160,
+"title": "Spawn Meshes"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139.00006, 71.000244),
+"template": "spawn_meshes"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0006_transform",
+"position": Vector2(1060, 1060),
+"settings": {
+"random_seed": 2376599165,
+"scale_max": Vector3(0.5, 1, 1),
+"scale_min": Vector3(0.5, 1, 1),
+"title": "Transform Points"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139, 71.000244),
+"template": "transform"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0005_add_attribute",
+"position": Vector2(880, 1060),
+"settings": {
+"attr_name": "size",
+"cte_vector": Vector3(0.5, 0.5, 0.5),
+"data_type": 3,
+"random_seed": 194854782,
+"title": "Add Attribute"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139.00006, 71.000244),
+"template": "add_attribute"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0007_spawn_meshes",
+"position": Vector2(1380, 1060),
+"settings": {
+"mesh_variants": Array[Mesh]([ExtResource("3_xpe5j")]),
+"random_seed": 2375972160,
+"title": "Spawn Meshes"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139.00024, 71.000244),
+"template": "spawn_meshes"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0001_spawn_meshes",
+"position": Vector2(740, 940),
+"settings": {
+"mesh_variants": Array[Mesh]([ExtResource("4_g2jmy")]),
+"random_seed": 2375972160,
+"title": "Spawn Meshes"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139.00015, 71.00012),
+"template": "spawn_meshes"
+}, {
+"args_port": {},
+"name": &"id_0019_watabou_dwelling",
+"position": Vector2(40, 1100),
+"settings": {
+"filename": "res://demos/watabou/house_by_the_lake.json",
+"random_seed": 867091368,
+"title": "Watabou Dwelling"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(163, 161),
+"template": "watabou_dwelling"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0004_random_color",
+"position": Vector2(340, 940),
+"settings": {
+"debug_modulate_by": "color",
+"random_seed": 4122213579,
+"seed_attribute": "room_name",
+"title": "Random Color",
+"use_palette": false
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139, 71.00012),
+"template": "random_color"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0003_merge",
+"position": Vector2(1000, 720),
+"settings": {
+"random_seed": 3897034384,
+"title": "Merge"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139.00006, 54.00003),
+"template": "merge"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0019_debug",
+"position": Vector2(360, 420),
+"settings": {
+"attribute_name": "notes",
+"color": Color(0.92941177, 0.9882353, 0, 1),
+"debug_color": Color(0, 1, 1, 1),
+"debug_scale": 1.08,
+"disabled": true,
+"operation": 1,
+"random_seed": 3226290403,
+"scale": 0.805,
 "title": "Debug"
 },
 "show_disconnected_inputs": false,
 "size": Vector2(139.00003, 71),
 "template": "debug"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0009_bounds_modifier",
+"position": Vector2(460, 220),
+"settings": {
+"bounds_max": Vector3(0.5, 5, 0.5),
+"bounds_min": Vector3(0, 0, 0),
+"random_seed": 1928106483,
+"title": "Bounds Modifier"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139.00009, 71.00003),
+"template": "bounds_modifier"
+}, {
+"args_port": {},
+"name": &"id_0001_make_string",
+"position": Vector2(0, 120),
+"settings": {
+"random_seed": 2558135604,
+"title": "Make String",
+"value": "res://demos/watabou/swamp_den_of_the_fallen_god.json"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(125, 54),
+"template": "make_string"
+}, {
+"args_port": {
+"filename": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0001_watabou_dungeon",
+"position": Vector2(160, 120),
+"settings": {
+"filename": "res://demos/watabou/swamp_den_of_the_fallen_god.json",
+"random_seed": 2347803077,
+"title": "Watabou Dungeon"
+},
+"show_disconnected_inputs": true,
+"size": Vector2(207.00006, 191.00003),
+"template": "watabou_dungeon"
 }, {
 "args_port": {
 "In": {
@@ -237,7 +718,7 @@ data = {
 "uniform_scale": false
 },
 "show_disconnected_inputs": false,
-"size": Vector2(139, 71),
+"size": Vector2(139.00009, 71),
 "template": "transform"
 }, {
 "args_port": {
@@ -246,479 +727,18 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0009_bounds_modifier",
-"position": Vector2(460, 220),
-"settings": {
-"bounds_max": Vector3(0.5, 5, 0.5),
-"bounds_min": Vector3(0, 0, 0),
-"random_seed": 1928106483,
-"title": "Bounds Modifier"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(139, 71.000046),
-"template": "bounds_modifier"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0010_random_color",
-"position": Vector2(660, 120),
-"settings": {
-"debug_mode": 1,
-"debug_modulate_by": "color",
-"debug_scale": 1.045,
-"random_seed": 3482643468,
-"seed_attribute": "type",
-"title": "Random Color"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(139.00002, 71.00018),
-"template": "random_color"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0019_debug",
-"position": Vector2(460, 420),
-"settings": {
-"attribute_name": "notes",
-"color": Color(0.92941177, 0.9882353, 0, 1),
-"debug_color": Color(0, 1, 1, 1),
-"debug_scale": 1.08,
-"disabled": true,
-"operation": 1,
-"random_seed": 3226290403,
-"scale": 0.805,
-"title": "Debug"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(139, 71),
-"template": "debug"
-}, {
-"args_port": {
-"filename": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0001_watabou_dungeon",
-"position": Vector2(160, 120),
-"settings": {
-"filename": "res://demos/watabou/swamp_den_of_the_fallen_god.json",
-"random_seed": 2347803077,
-"title": "Watabou Dungeon"
-},
-"show_disconnected_inputs": true,
-"size": Vector2(207.00006, 191),
-"template": "watabou_dungeon"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0005_spawn_meshes",
-"position": Vector2(1080, 380),
-"settings": {
-"disabled": true,
-"mesh_variants": Array[Mesh]([ExtResource("2_xpe5j")]),
-"random_seed": 2375972160,
-"title": "Spawn Meshes"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(139.00012, 71.00003),
-"template": "spawn_meshes"
-}, {
-"args_port": {
-"Anchors": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0002_point_offsets",
-"position": Vector2(680, 520),
-"settings": {
-"offsets": Array[Vector3]([Vector3(-0.5, 0, 0), Vector3(0, 0, -0.5), Vector3(0.5, 0, 0), Vector3(0, 0, 0.5)]),
-"random_seed": 3834138853,
-"rotations": Array[Vector3]([Vector3(0, -90, 0), Vector3(0, 180, 0), Vector3(0, 90, 0), Vector3(0, 0, 0)]),
-"title": "Point Offsets"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(197.00002, 72),
-"template": "point_offsets"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0006_add_attribute",
-"position": Vector2(900, 400),
-"settings": {
-"attr_name": "size",
-"cte_vector": Vector3(0.25, 0.25, 0.25),
-"data_type": 3,
-"random_seed": 194854782,
-"title": "Add Attribute"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(139, 71.00003),
-"template": "add_attribute"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0014_add_attribute",
-"position": Vector2(680, 900),
-"settings": {
-"attr_name": "size",
-"cte_vector": Vector3(0.5, 0.5, 0.5),
-"data_type": 3,
-"random_seed": 194854782,
-"title": "Add Attribute"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(139.00002, 71),
-"template": "add_attribute"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0014_debug",
-"position": Vector2(440, 900),
-"settings": {
-"debug_color": Color(0, 1, 1, 1),
-"debug_scale": 1.08,
-"disabled": true,
-"operation": 4,
-"random_seed": 3226290403,
-"title": "Debug"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(139.00003, 71),
-"template": "debug"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0009_spawn_meshes",
-"position": Vector2(1000, 900),
-"settings": {
-"mesh_variants": Array[Mesh]([ExtResource("9_ma377")]),
-"random_seed": 2375972957,
-"title": "Spawn Meshes"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(139.00027, 71),
-"template": "spawn_meshes"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0018_merge",
-"position": Vector2(460, 760),
-"settings": {
-"random_seed": 2332111681,
-"title": "Merge"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(139, 54),
-"template": "merge"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0007_debug",
-"position": Vector2(620, 760),
-"settings": {
-"debug_color": Color(0, 1, 1, 1),
-"debug_scale": 1.08,
-"disabled": true,
-"operation": 4,
-"random_seed": 3226290403,
-"title": "Debug"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(139.00003, 71),
-"template": "debug"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0011_transform",
-"position": Vector2(280, 900),
-"settings": {
-"random_seed": 1200376524,
-"scale_max": Vector3(0.1, 1.5, 1.5),
-"scale_min": Vector3(0.1, 1.5, 1.5),
-"title": "Transform Points",
-"uniform_scale": false
-},
-"show_disconnected_inputs": false,
-"size": Vector2(139, 71),
-"template": "transform"
-}, {
-"args_port": {},
-"name": &"id_0019_watabou_dwelling",
-"position": Vector2(0, 760),
-"settings": {
-"filename": "res://demos/watabou/house_by_the_lake.json",
-"random_seed": 867091368,
-"title": "Watabou Dwelling"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(163, 161),
-"template": "watabou_dwelling"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0006_transform",
-"position": Vector2(1000, 760),
-"settings": {
-"random_seed": 2376599165,
-"scale_max": Vector3(0.5, 1, 1),
-"scale_min": Vector3(0.5, 1, 1),
-"title": "Transform Points"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(139.00027, 71),
-"template": "transform"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0001_spawn_meshes",
-"position": Vector2(1040, 640),
-"settings": {
-"mesh_variants": Array[Mesh]([ExtResource("4_g2jmy")]),
-"random_seed": 2375972160,
-"title": "Spawn Meshes"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(139.0001, 71.00012),
-"template": "spawn_meshes"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0004_spawn_meshes",
-"position": Vector2(1160, 760),
-"settings": {
-"mesh_variants": Array[Mesh]([ExtResource("2_biut6")]),
-"random_seed": 2375972160,
-"title": "Spawn Meshes"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(139.00005, 71),
-"template": "spawn_meshes"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0005_add_attribute",
-"position": Vector2(820, 760),
-"settings": {
-"attr_name": "size",
-"cte_vector": Vector3(0.5, 0.5, 0.5),
-"data_type": 3,
-"random_seed": 194854782,
-"title": "Add Attribute"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(139.00002, 71),
-"template": "add_attribute"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0002_transform",
-"position": Vector2(880, 640),
-"settings": {
-"random_seed": 2376599554,
-"scale_max": Vector3(0.5, 1, 1),
-"scale_min": Vector3(0.5, 1, 1),
-"title": "Transform Points"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(139.00035, 71.00012),
-"template": "transform"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0007_spawn_meshes",
-"position": Vector2(1320, 760),
-"settings": {
-"mesh_variants": Array[Mesh]([ExtResource("3_xpe5j")]),
-"random_seed": 2375972160,
-"title": "Spawn Meshes"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(139, 71),
-"template": "spawn_meshes"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0008_transform",
-"position": Vector2(840, 900),
-"settings": {
-"random_seed": 2376599165,
-"scale_max": Vector3(0.5, 1, 1),
-"scale_min": Vector3(0.5, 1, 1),
-"title": "Transform Points"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(139.00002, 71),
-"template": "transform"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0009_transform",
-"position": Vector2(280, 760),
-"settings": {
-"random_seed": 1200376524,
-"scale_max": Vector3(0.1, 1.5, 1.5),
-"scale_min": Vector3(0.1, 1.5, 1.5),
-"title": "Transform Points",
-"uniform_scale": false
-},
-"show_disconnected_inputs": false,
-"size": Vector2(139, 71),
-"template": "transform"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0016_debug",
-"position": Vector2(440, 1040),
-"settings": {
-"disabled": true,
-"operation": 4,
-"random_seed": 1679140112,
-"title": "Debug"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(139.00003, 71.00018),
-"template": "debug"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0004_random_color",
-"position": Vector2(480, 640),
+"name": &"id_0013_debug",
+"position": Vector2(840, 120),
 "settings": {
 "debug_modulate_by": "color",
-"random_seed": 4122213579,
-"seed_attribute": "room_name",
-"title": "Random Color",
-"use_palette": false
+"disabled": true,
+"operation": 4,
+"random_seed": 1145554086,
+"title": "Debug"
 },
 "show_disconnected_inputs": false,
-"size": Vector2(139.00006, 71.00012),
-"template": "random_color"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0017_merge",
-"position": Vector2(280, 1040),
-"settings": {
-"random_seed": 3262018393,
-"title": "Merge"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(139, 54.000275),
-"template": "merge"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0003_merge",
-"position": Vector2(280, 640),
-"settings": {
-"random_seed": 2757438932,
-"title": "Merge"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(139, 54.000122),
-"template": "merge"
-}, {
-"args_port": {},
-"name": &"id_0001_make_string",
-"position": Vector2(0, 120),
-"settings": {
-"random_seed": 2558135604,
-"title": "Make String",
-"value": "res://demos/watabou/swamp_den_of_the_fallen_god.json"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(125, 54.000183),
-"template": "make_string"
+"size": Vector2(139, 71),
+"template": "debug"
 }, {
 "args_port": {
 "In": {
@@ -738,8 +758,68 @@ data = {
 "uniform_scale": false
 },
 "show_disconnected_inputs": false,
-"size": Vector2(139, 71),
+"size": Vector2(139.00009, 71.0001),
 "template": "transform"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0012_debug",
+"position": Vector2(620, 320),
+"settings": {
+"debug_color": Color(0, 1, 1, 1),
+"debug_scale": 1.08,
+"disabled": true,
+"random_seed": 3226290403,
+"title": "Debug"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139.00015, 71.0001),
+"template": "debug"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0010_random_color",
+"position": Vector2(660, 120),
+"settings": {
+"debug_mode": 1,
+"debug_modulate_by": "color",
+"debug_scale": 1.045,
+"random_seed": 3482643468,
+"seed_attribute": "type",
+"title": "Random Color"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139.00006, 71),
+"template": "random_color"
+}, {
+"args_port": {
+"In A": {
+"connected": true,
+"port": 0
+},
+"In B": {
+"connected": true,
+"port": 1
+}
+},
+"name": &"id_0006_substract",
+"position": Vector2(1400, 720),
+"settings": {
+"inspect_enabled": true,
+"random_seed": 1833905928,
+"title": "Substract"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(152, 84.00003),
+"template": "substract"
 }, {
 "args_port": {
 "In": {
@@ -757,106 +837,148 @@ data = {
 "uniform_scale": false
 },
 "show_disconnected_inputs": false,
-"size": Vector2(139, 71.00018),
+"size": Vector2(139.00009, 71),
 "template": "transform"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0013_debug",
-"position": Vector2(840, 120),
-"settings": {
-"debug_modulate_by": "color",
-"disabled": true,
-"operation": 4,
-"random_seed": 1145554086,
-"title": "Debug"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(139.00002, 71.00018),
-"template": "debug"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
 graph_name = "demo_watabou"
-view_zoom = 0.23256795
-view_offset = Vector2(29.425705, -200.40352)
+view_zoom = 0.88317674
+view_offset = Vector2(662.66473, 90.68341)
 in_params = Array[ExtResource("2_ndo0y")]([SubResource("Resource_xpe5j")])
+redirectors = Array[ExtResource("3_4ow7j")]([SubResource("Resource_ma377")])
 
-[sub_resource type="Resource" id="Resource_biut6"]
+[sub_resource type="Resource" id="Resource_g2jmy"]
 script = ExtResource("5_biut6")
 param_id = &"arg_name"
 enabled = true
 value = 0.0
 
-[sub_resource type="MultiMesh" id="MultiMesh_g2jmy"]
-transform_format = 1
-instance_count = 15
-mesh = ExtResource("9_ma377")
-buffer = PackedFloat32Array(-1.0927847e-08, 0, -0.25, -2.5, 0, 0.25, 0, 0, 0.25, 0, -1.0927847e-08, 0, 0.25, 0, 0, -3, 0, 0.25, 0, 0, 0, 0, 0.25, 0.5, -1.0927847e-08, 0, -0.25, -3.5, 0, 0.25, 0, 0, 0.25, 0, -1.0927847e-08, 1, 0.25, 0, 0, -2, 0, 0.25, 0, 0, 0, 0, 0.25, -0.5, 0.25, 0, 0, -1, 0, 0.25, 0, 0, 0, 0, 0.25, -0.5, -1.0927847e-08, 0, 0.25, 0.5, 0, 0.25, 0, 0, -0.25, 0, -1.0927847e-08, 1, -1.0927847e-08, 0, 0.25, 0.5, 0, 0.25, 0, 0, -0.25, 0, -1.0927847e-08, 2, -1.0927847e-08, 0, -0.25, -3.5, 0, 0.25, 0, 0, 0.25, 0, -1.0927847e-08, 6, -1.0927847e-08, 0, -0.25, -3.5, 0, 0.25, 0, 0, 0.25, 0, -1.0927847e-08, 5, -1.0927847e-08, 0, -0.25, -3.5, 0, 0.25, 0, 0, 0.25, 0, -1.0927847e-08, 3, -1.0927847e-08, 0, -0.25, -3.5, 0, 0.25, 0, 0, 0.25, 0, -1.0927847e-08, 2, -1.0927847e-08, 0, 0.25, -1.5, 0, 0.25, 0, 0, -0.25, 0, -1.0927847e-08, 3, -1.0927847e-08, 0, 0.25, -1.5, 0, 0.25, 0, 0, -0.25, 0, -1.0927847e-08, 4, -1.0927847e-08, 0, 0.25, -1.5, 0, 0.25, 0, 0, -0.25, 0, -1.0927847e-08, 5, -1.0927847e-08, 0, 0.25, -1.5, 0, 0.25, 0, 0, -0.25, 0, -1.0927847e-08, 6)
-
 [sub_resource type="MultiMesh" id="MultiMesh_ma377"]
 transform_format = 1
-instance_count = 12
-mesh = ExtResource("9_ma377")
-buffer = PackedFloat32Array(-0.25, 0, -2.1855694e-08, -2, 0, 0.25, 0, 1, 2.1855694e-08, 0, -0.25, 1.5, -0.25, 0, -2.1855694e-08, -3, 0, 0.25, 0, 1, 2.1855694e-08, 0, -0.25, 1.5, -0.25, 0, -2.1855694e-08, 0, 0, 0.25, 0, 1, 2.1855694e-08, 0, -0.25, 2.5, -0.25, 0, -2.1855694e-08, -1, 0, 0.25, 0, 1, 2.1855694e-08, 0, -0.25, 2.5, -1.0927847e-08, 0, -0.25, -1.5, 0, 0.25, 0, 1, 0.25, 0, -1.0927847e-08, 2, -1.0927847e-08, 0, 0.25, 0.5, 0, 0.25, 0, 1, -0.25, 0, -1.0927847e-08, 1, -1.0927847e-08, 0, 0.25, 0.5, 0, 0.25, 0, 1, -0.25, 0, -1.0927847e-08, 2, 0.25, 0, 0, -3, 0, 0.25, 0, 1, 0, 0, 0.25, 0.5, 0.25, 0, 0, -2, 0, 0.25, 0, 1, 0, 0, 0.25, -0.5, 0.25, 0, 0, -1, 0, 0.25, 0, 1, 0, 0, 0.25, -0.5, -1.0927847e-08, 0, -0.25, -3.5, 0, 0.25, 0, 1, 0.25, 0, -1.0927847e-08, 1, -1.0927847e-08, 0, -0.25, -2.5, 0, 0.25, 0, 1, 0.25, 0, -1.0927847e-08, 0)
+instance_count = 4
+mesh = ExtResource("11_g2jmy")
+buffer = PackedFloat32Array(0.2, 0, 0, -1.5, 0, 1, 0, 0, 0, 0, 0.2, 1.5, 0.2, 0, 0, -3.5, 0, 1, 0, 0, 0, 0, 0.2, 1.5, 0.2, 0, 0, -3.5, 0, 1, 0, 0, 0, 0, 0.2, 6.5, 0.2, 0, 0, -1.5, 0, 1, 0, 0, 0, 0, 0.2, 6.5)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kkffj"]
+[sub_resource type="MultiMesh" id="MultiMesh_kkffj"]
+transform_format = 1
+instance_count = 8
+mesh = ExtResource("11_g2jmy")
+buffer = PackedFloat32Array(0.2, 0, 0, -3.5, 0, 1, 0, 0, 0, 0, 0.2, 0.5, 0.2, 0, 0, -3.5, 0, 1, 0, 0, 0, 0, 0.2, 1.5, 0.2, 0, 0, -2.5, 0, 1, 0, 0, 0, 0, 0.2, 0.5, 0.2, 0, 0, -1.5, 0, 1, 0, 0, 0, 0, 0.2, 1.5, 0.2, 0, 0, -2.5, 0, 1, 0, 0, 0, 0, 0.2, -0.5, 0.2, 0, 0, 0.5, 0, 1, 0, 0, 0, 0, 0.2, -0.5, 0.2, 0, 0, 0.5, 0, 1, 0, 0, 0, 0, 0.2, 2.5, 0.2, 0, 0, -1.5, 0, 1, 0, 0, 0, 0, 0.2, 2.5)
+
+[sub_resource type="MultiMesh" id="MultiMesh_xrvlj"]
+transform_format = 1
+instance_count = 8
+mesh = ExtResource("11_g2jmy")
+buffer = PackedFloat32Array(0.2, 0, 0, -3.5, 0, 1, 0, 1, 0, 0, 0.2, 0.5, 0.2, 0, 0, -3.5, 0, 1, 0, 1, 0, 0, 0.2, 1.5, 0.2, 0, 0, -2.5, 0, 1, 0, 1, 0, 0, 0.2, 0.5, 0.2, 0, 0, -1.5, 0, 1, 0, 1, 0, 0, 0.2, 1.5, 0.2, 0, 0, -2.5, 0, 1, 0, 1, 0, 0, 0.2, -0.5, 0.2, 0, 0, 0.5, 0, 1, 0, 1, 0, 0, 0.2, -0.5, 0.2, 0, 0, 0.5, 0, 1, 0, 1, 0, 0, 0.2, 2.5, 0.2, 0, 0, -1.5, 0, 1, 0, 1, 0, 0, 0.2, 2.5)
+
+[sub_resource type="MultiMesh" id="MultiMesh_0xa3p"]
+transform_format = 1
+instance_count = 6
+mesh = ExtResource("11_g2jmy")
+buffer = PackedFloat32Array(0.2, 0, 0, -2.5, 0, 1, 0, -1, 0, 0, 0.2, -0.5, 0.2, 0, 0, -2.5, 0, 1, 0, -1, 0, 0, 0.2, 0.5, 0.2, 0, 0, -1.5, 0, 1, 0, -1, 0, 0, 0.2, 0.5, 0.2, 0, 0, 0.5, 0, 1, 0, -1, 0, 0, 0.2, -0.5, 0.2, 0, 0, -1.5, 0, 1, 0, -1, 0, 0, 0.2, 2.5, 0.2, 0, 0, 0.5, 0, 1, 0, -1, 0, 0, 0.2, 2.5)
+
+[sub_resource type="MultiMesh" id="MultiMesh_3ekyw"]
+transform_format = 1
+instance_count = 4
+mesh = ExtResource("11_g2jmy")
+buffer = PackedFloat32Array(0.2, 0, 0, -1.5, 0, 1, 0, -1, 0, 0, 0.2, 3.5, 0.2, 0, 0, -3.5, 0, 1, 0, -1, 0, 0, 0.2, 3.5, 0.2, 0, 0, -1.5, 0, 1, 0, -1, 0, 0, 0.2, 0.5, 0.2, 0, 0, -3.5, 0, 1, 0, -1, 0, 0, 0.2, 0.5)
+
+[sub_resource type="MultiMesh" id="MultiMesh_cmerg"]
+transform_format = 1
+instance_count = 4
+mesh = ExtResource("11_g2jmy")
+buffer = PackedFloat32Array(0.2, 0, 0, -1.5, 0, 1, 0, -1, 0, 0, 0.2, 3.5, 0.2, 0, 0, -1.5, 0, 1, 0, -1, 0, 0, 0.2, 5.5, 0.2, 0, 0, -3.5, 0, 1, 0, -1, 0, 0, 0.2, 3.5, 0.2, 0, 0, -3.5, 0, 1, 0, -1, 0, 0, 0.2, 5.5)
+
+[sub_resource type="MultiMesh" id="MultiMesh_lxxk8"]
+transform_format = 1
+instance_count = 4
+mesh = ExtResource("2_biut6")
+buffer = PackedFloat32Array(0.25, 0, 0, -3, 0, 0.25, 0, 0, 0, 0, 0.25, 1.5, -0.25, 0, -2.1855694e-08, -2, 0, 0.25, 0, -1, 2.1855694e-08, 0, -0.25, 0.5, -0.25, 0, -2.1855694e-08, -2, 0, 0.25, 0, -1, 2.1855694e-08, 0, -0.25, 3.5, -1.0927847e-08, 0, -0.25, -3.5, 0, 0.25, 0, 0, 0.25, 0, -1.0927847e-08, 4)
+
+[sub_resource type="MultiMesh" id="MultiMesh_5q45k"]
+transform_format = 1
+instance_count = 4
+mesh = ExtResource("3_xpe5j")
+buffer = PackedFloat32Array(0.25, 0, 0, -3, 0, 0.25, 0, 0, 0, 0, 0.25, 1.5, -0.25, 0, -2.1855694e-08, -2, 0, 0.25, 0, -1, 2.1855694e-08, 0, -0.25, 0.5, -0.25, 0, -2.1855694e-08, -2, 0, 0.25, 0, -1, 2.1855694e-08, 0, -0.25, 3.5, -1.0927847e-08, 0, -0.25, -3.5, 0, 0.25, 0, 0, 0.25, 0, -1.0927847e-08, 4)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_66cwp"]
 vertex_color_use_as_albedo = true
 roughness = 0.3
 
-[sub_resource type="MultiMesh" id="MultiMesh_xrvlj"]
+[sub_resource type="MultiMesh" id="MultiMesh_0nctk"]
 transform_format = 1
 use_colors = true
 instance_count = 45
 mesh = ExtResource("4_g2jmy")
 buffer = PackedFloat32Array(0.5, 0, 0, -2, 0, 0.5, 0, 0, 0, 0, 0.5, 3, 0.5607123, 0.663425, 0.13029243, 1, 0.5, 0, 0, -2, 0, 0.5, 0, 0, 0, 0, 0.5, 4, 0.5607123, 0.663425, 0.13029243, 1, 0.5, 0, 0, -3, 0, 0.5, 0, 0, 0, 0, 0.5, 3, 0.5607123, 0.663425, 0.13029243, 1, 0.5, 0, 0, -2, 0, 0.5, 0, 0, 0, 0, 0.5, 2, 0.5607123, 0.663425, 0.13029243, 1, 0.5, 0, 0, -3, 0, 0.5, 0, 0, 0, 0, 0.5, 2, 0.5607123, 0.663425, 0.13029243, 1, 0.5, 0, 0, -3, 0, 0.5, 0, 0, 0, 0, 0.5, 4, 0.5607123, 0.663425, 0.13029243, 1, 0.5, 0, 0, -3, 0, 0.5, 0, 0, 0, 0, 0.5, 5, 0.5607123, 0.663425, 0.13029243, 1, 0.5, 0, 0, -2, 0, 0.5, 0, 0, 0, 0, 0.5, 5, 0.5607123, 0.663425, 0.13029243, 1, 0.5, 0, 0, -3, 0, 0.5, 0, 0, 0, 0, 0.5, 6, 0.5607123, 0.663425, 0.13029243, 1, 0.5, 0, 0, -2, 0, 0.5, 0, 0, 0, 0, 0.5, 6, 0.5607123, 0.663425, 0.13029243, 1, 0.5, 0, 0, -3, 0, 0.5, 0, 0, 0, 0, 0.5, 1, 0.19227137, 0.47560623, 0.8608531, 1, 0.5, 0, 0, -2, 0, 0.5, 0, 0, 0, 0, 0.5, 1, 0.19227137, 0.47560623, 0.8608531, 1, 0.5, 0, 0, -1, 0, 0.5, 0, 0, 0, 0, 0.5, 1, 0.19227137, 0.47560623, 0.8608531, 1, 0.5, 0, 0, -2, 0, 0.5, 0, 0, 0, 0, 0.5, 0, 0.19227137, 0.47560623, 0.8608531, 1, 0.5, 0, 0, -1, 0, 0.5, 0, 0, 0, 0, 0.5, 0, 0.19227137, 0.47560623, 0.8608531, 1, 0.5, 0, 0, 0, 0, 0.5, 0, 0, 0, 0, 0.5, 0, 0.19227137, 0.47560623, 0.8608531, 1, 0.5, 0, 0, 0, 0, 0.5, 0, 0, 0, 0, 0.5, 1, 0.19227137, 0.47560623, 0.8608531, 1, 0.5, 0, 0, 0, 0, 0.5, 0, 0, 0, 0, 0.5, 2, 0.19227137, 0.47560623, 0.8608531, 1, 0.5, 0, 0, -1, 0, 0.5, 0, 0, 0, 0, 0.5, 2, 0.19227137, 0.47560623, 0.8608531, 1, 0.5, 0, 0, -3, 0, 0.5, 0, 1, 0, 0, 0.5, 1, 0.25444785, 0.6944146, 0.9868548, 1, 0.5, 0, 0, -2, 0, 0.5, 0, 1, 0, 0, 0.5, 1, 0.25444785, 0.6944146, 0.9868548, 1, 0.5, 0, 0, -1, 0, 0.5, 0, 1, 0, 0, 0.5, 1, 0.25444785, 0.6944146, 0.9868548, 1, 0.5, 0, 0, -2, 0, 0.5, 0, 1, 0, 0, 0.5, 0, 0.25444785, 0.6944146, 0.9868548, 1, 0.5, 0, 0, -1, 0, 0.5, 0, 1, 0, 0, 0.5, 0, 0.25444785, 0.6944146, 0.9868548, 1, 0.5, 0, 0, 0, 0, 0.5, 0, 1, 0, 0, 0.5, 0, 0.25444785, 0.6944146, 0.9868548, 1, 0.5, 0, 0, 0, 0, 0.5, 0, 1, 0, 0, 0.5, 1, 0.25444785, 0.6944146, 0.9868548, 1, 0.5, 0, 0, 0, 0, 0.5, 0, 1, 0, 0, 0.5, 2, 0.25444785, 0.6944146, 0.9868548, 1, 0.5, 0, 0, -1, 0, 0.5, 0, 1, 0, 0, 0.5, 2, 0.25444785, 0.6944146, 0.9868548, 1, 0.5, 0, 0, -2, 0, 0.5, 0, -1, 0, 0, 0.5, 0, 0.20630373, 0.44009, 0.97279376, 1, 0.5, 0, 0, -1, 0, 0.5, 0, -1, 0, 0, 0.5, 0, 0.20630373, 0.44009, 0.97279376, 1, 0.5, 0, 0, 0, 0, 0.5, 0, -1, 0, 0, 0.5, 0, 0.20630373, 0.44009, 0.97279376, 1, 0.5, 0, 0, -1, 0, 0.5, 0, -1, 0, 0, 0.5, 1, 0.20630373, 0.44009, 0.97279376, 1, 0.5, 0, 0, 0, 0, 0.5, 0, -1, 0, 0, 0.5, 1, 0.20630373, 0.44009, 0.97279376, 1, 0.5, 0, 0, -1, 0, 0.5, 0, -1, 0, 0, 0.5, 2, 0.20630373, 0.44009, 0.97279376, 1, 0.5, 0, 0, 0, 0, 0.5, 0, -1, 0, 0, 0.5, 2, 0.20630373, 0.44009, 0.97279376, 1, 0.5, 0, 0, -2, 0, 0.5, 0, -1, 0, 0, 0.5, 3, 0.75575536, 0.02418949, 0.12922908, 1, 0.5, 0, 0, -3, 0, 0.5, 0, -1, 0, 0, 0.5, 3, 0.75575536, 0.02418949, 0.12922908, 1, 0.5, 0, 0, -2, 0, 0.5, 0, -1, 0, 0, 0.5, 2, 0.75575536, 0.02418949, 0.12922908, 1, 0.5, 0, 0, -3, 0, 0.5, 0, -1, 0, 0, 0.5, 2, 0.75575536, 0.02418949, 0.12922908, 1, 0.5, 0, 0, -2, 0, 0.5, 0, -1, 0, 0, 0.5, 1, 0.75575536, 0.02418949, 0.12922908, 1, 0.5, 0, 0, -3, 0, 0.5, 0, -1, 0, 0, 0.5, 1, 0.75575536, 0.02418949, 0.12922908, 1, 0.5, 0, 0, -2, 0, 0.5, 0, -1, 0, 0, 0.5, 4, 0.7091026, 0.18185887, 0.52074337, 1, 0.5, 0, 0, -2, 0, 0.5, 0, -1, 0, 0, 0.5, 5, 0.7091026, 0.18185887, 0.52074337, 1, 0.5, 0, 0, -3, 0, 0.5, 0, -1, 0, 0, 0.5, 4, 0.7091026, 0.18185887, 0.52074337, 1, 0.5, 0, 0, -3, 0, 0.5, 0, -1, 0, 0, 0.5, 5, 0.7091026, 0.18185887, 0.52074337, 1)
 
-[sub_resource type="MultiMesh" id="MultiMesh_0xa3p"]
+[sub_resource type="MultiMesh" id="MultiMesh_lyml4"]
 transform_format = 1
-instance_count = 4
-mesh = ExtResource("2_biut6")
-buffer = PackedFloat32Array(0.25, 0, 0, -3, 0, 0.25, 0, 0, 0, 0, 0.25, 1.5, -0.25, 0, -2.1855694e-08, -2, 0, 0.25, 0, -1, 2.1855694e-08, 0, -0.25, 0.5, -0.25, 0, -2.1855694e-08, -2, 0, 0.25, 0, -1, 2.1855694e-08, 0, -0.25, 3.5, -1.0927847e-08, 0, -0.25, -3.5, 0, 0.25, 0, 0, 0.25, 0, -1.0927847e-08, 4)
+instance_count = 27
+mesh = ExtResource("9_ma377")
+buffer = PackedFloat32Array(-1.0927847e-08, 0, -0.25, -2.5, 0, 0.25, 0, 0, 0.25, 0, -1.0927847e-08, 0, 0.25, 0, 0, -3, 0, 0.25, 0, 0, 0, 0, 0.25, 0.5, -1.0927847e-08, 0, -0.25, -3.5, 0, 0.25, 0, 0, 0.25, 0, -1.0927847e-08, 1, 0.25, 0, 0, -2, 0, 0.25, 0, 0, 0, 0, 0.25, -0.5, 0.25, 0, 0, -1, 0, 0.25, 0, 0, 0, 0, 0.25, -0.5, -1.0927847e-08, 0, 0.25, 0.5, 0, 0.25, 0, 0, -0.25, 0, -1.0927847e-08, 1, -1.0927847e-08, 0, 0.25, 0.5, 0, 0.25, 0, 0, -0.25, 0, -1.0927847e-08, 2, -1.0927847e-08, 0, -0.25, -3.5, 0, 0.25, 0, 0, 0.25, 0, -1.0927847e-08, 6, -1.0927847e-08, 0, -0.25, -3.5, 0, 0.25, 0, 0, 0.25, 0, -1.0927847e-08, 5, -1.0927847e-08, 0, -0.25, -3.5, 0, 0.25, 0, 0, 0.25, 0, -1.0927847e-08, 3, -1.0927847e-08, 0, -0.25, -3.5, 0, 0.25, 0, 0, 0.25, 0, -1.0927847e-08, 2, -1.0927847e-08, 0, 0.25, -1.5, 0, 0.25, 0, 0, -0.25, 0, -1.0927847e-08, 3, -1.0927847e-08, 0, 0.25, -1.5, 0, 0.25, 0, 0, -0.25, 0, -1.0927847e-08, 4, -1.0927847e-08, 0, 0.25, -1.5, 0, 0.25, 0, 0, -0.25, 0, -1.0927847e-08, 5, -1.0927847e-08, 0, 0.25, -1.5, 0, 0.25, 0, 0, -0.25, 0, -1.0927847e-08, 6, -0.25, 0, -2.1855694e-08, -2, 0, 0.25, 0, 1, 2.1855694e-08, 0, -0.25, 1.5, -0.25, 0, -2.1855694e-08, -3, 0, 0.25, 0, 1, 2.1855694e-08, 0, -0.25, 1.5, -0.25, 0, -2.1855694e-08, 0, 0, 0.25, 0, 1, 2.1855694e-08, 0, -0.25, 2.5, -0.25, 0, -2.1855694e-08, -1, 0, 0.25, 0, 1, 2.1855694e-08, 0, -0.25, 2.5, -1.0927847e-08, 0, -0.25, -1.5, 0, 0.25, 0, 1, 0.25, 0, -1.0927847e-08, 2, -1.0927847e-08, 0, 0.25, 0.5, 0, 0.25, 0, 1, -0.25, 0, -1.0927847e-08, 1, -1.0927847e-08, 0, 0.25, 0.5, 0, 0.25, 0, 1, -0.25, 0, -1.0927847e-08, 2, 0.25, 0, 0, -3, 0, 0.25, 0, 1, 0, 0, 0.25, 0.5, 0.25, 0, 0, -2, 0, 0.25, 0, 1, 0, 0, 0.25, -0.5, 0.25, 0, 0, -1, 0, 0.25, 0, 1, 0, 0, 0.25, -0.5, -1.0927847e-08, 0, -0.25, -3.5, 0, 0.25, 0, 1, 0.25, 0, -1.0927847e-08, 1, -1.0927847e-08, 0, -0.25, -2.5, 0, 0.25, 0, 1, 0.25, 0, -1.0927847e-08, 0)
 
-[sub_resource type="MultiMesh" id="MultiMesh_3ekyw"]
+[sub_resource type="MultiMesh" id="MultiMesh_muxxq"]
 transform_format = 1
-instance_count = 4
-mesh = ExtResource("3_xpe5j")
-buffer = PackedFloat32Array(0.25, 0, 0, -3, 0, 0.25, 0, 0, 0, 0, 0.25, 1.5, -0.25, 0, -2.1855694e-08, -2, 0, 0.25, 0, -1, 2.1855694e-08, 0, -0.25, 0.5, -0.25, 0, -2.1855694e-08, -2, 0, 0.25, 0, -1, 2.1855694e-08, 0, -0.25, 3.5, -1.0927847e-08, 0, -0.25, -3.5, 0, 0.25, 0, 0, 0.25, 0, -1.0927847e-08, 4)
+instance_count = 38
+mesh = ExtResource("2_xpe5j")
+buffer = PackedFloat32Array(-1.0927847e-08, 0, -0.25, -1.5, 0, 0.25, 0, 0, 0.25, 0, -1.0927847e-08, 2, 0.25, 0, 0, -2, 0, 0.25, 0, 0, 0, 0, 0.25, 1.5, -0.25, 0, -2.1855694e-08, -3, 0, 0.25, 0, 0, 2.1855694e-08, 0, -0.25, 6.5, -0.25, 0, -2.1855694e-08, -2, 0, 0.25, 0, 0, 2.1855694e-08, 0, -0.25, 6.5, -0.25, 0, -2.1855694e-08, -2, 0, 0.25, 0, 0, 2.1855694e-08, 0, -0.25, 1.5, -1.0927847e-08, 0, -0.25, 0.5, 0, 0.25, 0, 0, 0.25, 0, -1.0927847e-08, 0, 0.25, 0, 0, 0, 0, 0.25, 0, 0, 0, 0, 0.25, -0.5, -0.25, 0, -2.1855694e-08, 0, 0, 0.25, 0, 0, 2.1855694e-08, 0, -0.25, 2.5, -1.0927847e-08, 0, 0.25, -1.5, 0, 0.25, 0, 0, -0.25, 0, -1.0927847e-08, 2, -0.25, 0, -2.1855694e-08, -1, 0, 0.25, 0, 0, 2.1855694e-08, 0, -0.25, 2.5, -1.0927847e-08, 0, -0.25, 0.5, 0, 0.25, 0, 1, 0.25, 0, -1.0927847e-08, 0, 0.25, 0, 0, 0, 0, 0.25, 0, 1, 0, 0, 0.25, -0.5, -1.0927847e-08, 0, 0.25, -2.5, 0, 0.25, 0, -1, -0.25, 0, -1.0927847e-08, 0, 0.25, 0, 0, -2, 0, 0.25, 0, -1, 0, 0, 0.25, -0.5, 0.25, 0, 0, -1, 0, 0.25, 0, -1, 0, 0, 0.25, -0.5, -1.0927847e-08, 0, -0.25, 0.5, 0, 0.25, 0, -1, 0.25, 0, -1.0927847e-08, 0, 0.25, 0, 0, 0, 0, 0.25, 0, -1, 0, 0, 0.25, -0.5, -1.0927847e-08, 0, 0.25, -1.5, 0, 0.25, 0, -1, -0.25, 0, -1.0927847e-08, 1, -1.0927847e-08, 0, -0.25, 0.5, 0, 0.25, 0, -1, 0.25, 0, -1.0927847e-08, 1, -1.0927847e-08, 0, 0.25, -1.5, 0, 0.25, 0, -1, -0.25, 0, -1.0927847e-08, 2, -0.25, 0, -2.1855694e-08, -1, 0, 0.25, 0, -1, 2.1855694e-08, 0, -0.25, 2.5, -1.0927847e-08, 0, -0.25, 0.5, 0, 0.25, 0, -1, 0.25, 0, -1.0927847e-08, 2, -0.25, 0, -2.1855694e-08, 0, 0, 0.25, 0, -1, 2.1855694e-08, 0, -0.25, 2.5, -1.0927847e-08, 0, -0.25, -1.5, 0, 0.25, 0, -1, 0.25, 0, -1.0927847e-08, 3, -1.0927847e-08, 0, 0.25, -3.5, 0, 0.25, 0, -1, -0.25, 0, -1.0927847e-08, 3, -0.25, 0, -2.1855694e-08, -3, 0, 0.25, 0, -1, 2.1855694e-08, 0, -0.25, 3.5, -1.0927847e-08, 0, -0.25, -1.5, 0, 0.25, 0, -1, 0.25, 0, -1.0927847e-08, 2, -1.0927847e-08, 0, 0.25, -3.5, 0, 0.25, 0, -1, -0.25, 0, -1.0927847e-08, 2, -1.0927847e-08, 0, -0.25, -1.5, 0, 0.25, 0, -1, 0.25, 0, -1.0927847e-08, 1, -1.0927847e-08, 0, 0.25, -3.5, 0, 0.25, 0, -1, -0.25, 0, -1.0927847e-08, 1, 0.25, 0, 0, -3, 0, 0.25, 0, -1, 0, 0, 0.25, 0.5, -1.0927847e-08, 0, -0.25, -1.5, 0, 0.25, 0, -1, 0.25, 0, -1.0927847e-08, 4, -1.0927847e-08, 0, -0.25, -1.5, 0, 0.25, 0, -1, 0.25, 0, -1.0927847e-08, 5, -0.25, 0, -2.1855694e-08, -2, 0, 0.25, 0, -1, 2.1855694e-08, 0, -0.25, 5.5, -1.0927847e-08, 0, 0.25, -3.5, 0, 0.25, 0, -1, -0.25, 0, -1.0927847e-08, 4, 0.25, 0, 0, -3, 0, 0.25, 0, -1, 0, 0, 0.25, 3.5, -1.0927847e-08, 0, 0.25, -3.5, 0, 0.25, 0, -1, -0.25, 0, -1.0927847e-08, 5, -0.25, 0, -2.1855694e-08, -3, 0, 0.25, 0, -1, 2.1855694e-08, 0, -0.25, 5.5)
 
 [node name="DemoWatabou" type="Node3D" unique_id=902151632]
 
 [node name="FlowGraphNode3D" type="Node3D" parent="." unique_id=1311313475]
 script = ExtResource("1_5typy")
 graph = SubResource("Resource_j1woh")
-overrides = Array[ExtResource("5_biut6")]([SubResource("Resource_biut6")])
+overrides = Array[ExtResource("5_biut6")]([SubResource("Resource_g2jmy")])
 regenerate = Callable()
 clearInstances = Callable()
 flow_override/arg_name/enabled = true
 flow_override/arg_name/value = 0.0
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
 
-[node name="Spawn Meshes_0000" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=1540233820]
-multimesh = SubResource("MultiMesh_g2jmy")
-metadata/flow_owner = &"id_0009_spawn_meshes"
-
-[node name="Spawn Meshes_0001" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=83805175]
+[node name="@MultiMeshInstance3D@54640" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=593702247]
 multimesh = SubResource("MultiMesh_ma377")
-metadata/flow_owner = &"id_0009_spawn_meshes"
+metadata/flow_owner = &"id_0010_spawn_meshes"
 
-[node name="@MultiMeshInstance3D@42562" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=1856954152]
-material_override = SubResource("StandardMaterial3D_kkffj")
+[node name="Spawn Meshes_0001" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=2025896162]
+multimesh = SubResource("MultiMesh_kkffj")
+metadata/flow_owner = &"id_0010_spawn_meshes"
+
+[node name="Spawn Meshes_0002" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=267817749]
 multimesh = SubResource("MultiMesh_xrvlj")
-metadata/flow_owner = &"id_0001_spawn_meshes"
+metadata/flow_owner = &"id_0010_spawn_meshes"
 
-[node name="@MultiMeshInstance3D@43412" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=1218981188]
+[node name="Spawn Meshes_0003" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=787426517]
 multimesh = SubResource("MultiMesh_0xa3p")
+metadata/flow_owner = &"id_0010_spawn_meshes"
+
+[node name="Spawn Meshes_0004" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=34689998]
+multimesh = SubResource("MultiMesh_3ekyw")
+metadata/flow_owner = &"id_0010_spawn_meshes"
+
+[node name="Spawn Meshes_0005" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=1138076872]
+multimesh = SubResource("MultiMesh_cmerg")
+metadata/flow_owner = &"id_0010_spawn_meshes"
+
+[node name="@MultiMeshInstance3D@54641" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=1240477219]
+multimesh = SubResource("MultiMesh_lxxk8")
 metadata/flow_owner = &"id_0004_spawn_meshes"
 
-[node name="@MultiMeshInstance3D@43413" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=166299674]
-multimesh = SubResource("MultiMesh_3ekyw")
+[node name="Spawn Meshes_0000" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=1977043068]
+multimesh = SubResource("MultiMesh_5q45k")
 metadata/flow_owner = &"id_0007_spawn_meshes"
+
+[node name="@MultiMeshInstance3D@54642" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=1008207005]
+material_override = SubResource("StandardMaterial3D_66cwp")
+multimesh = SubResource("MultiMesh_0nctk")
+metadata/flow_owner = &"id_0001_spawn_meshes"
+
+[node name="@MultiMeshInstance3D@54643" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=663526987]
+multimesh = SubResource("MultiMesh_lyml4")
+metadata/flow_owner = &"id_0009_spawn_meshes"
+
+[node name="@MultiMeshInstance3D@54644" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=1852938273]
+multimesh = SubResource("MultiMesh_muxxq")
+metadata/flow_owner = &"id_0005_spawn_meshes"
