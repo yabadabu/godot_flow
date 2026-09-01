@@ -79,6 +79,8 @@ func getMeta() -> Dictionary:
 	return meta_node
 		
 func getTitle() -> String:
+	if title != "Math" and title:
+		return title
 	return eOperation.keys()[operation]	
 
 func execute( ctx : FlowData.EvaluationContext ):
