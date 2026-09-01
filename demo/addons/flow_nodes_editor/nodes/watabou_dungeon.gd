@@ -14,6 +14,7 @@ func _init():
 			{ "label" : "Columns" },
 			{ "label" : "Water" },
 			{ "label" : "Notes" },
+			{ "label" : "Floors" }, 
 		],
 		"tooltip" : "Imports a watabou dungeon exported in .json format",
 	}
@@ -38,13 +39,13 @@ func load_data( ctx : FlowData.EvaluationContext, infilename : String ) -> Dicti
 func importCoords( in_array : Array ):
 	var coords := PackedVector3Array()
 	for d in in_array:
-		coords.append( Vector3( d.x + 0.5, 0, d.y + 0.5 ))
+		coords.append( Vector3( d.x, 0, d.y ))
 	return { "coords" : coords } 
 
 func importColumns( in_array : Array ):
 	var coords := PackedVector3Array()
 	for d in in_array:
-		coords.append( Vector3( d.x, 0, d.y ))
+		coords.append( Vector3( d.x - 0.5, 0, d.y - 0.5))
 	return { "coords" : coords } 
 
 func importRects( rects : Array ):
@@ -54,7 +55,7 @@ func importRects( rects : Array ):
 		var w = r.w
 		var h = r.h
 		sizes.append( Vector3( w, 1, h ))
-		coords.append( Vector3( r.x + w * 0.5, 0, r.y + h * 0.5 ))
+		coords.append( Vector3( r.x + w * 0.5 - 0.5, 0, r.y + h * 0.5 - 0.5 ))
 	return { "coords" : coords, "sizes" : sizes } 
 
 func importNotes( data : Array ):
@@ -64,7 +65,7 @@ func importNotes( data : Array ):
 	for d in data:
 		notes.append( d.text )
 		refs.append( int(d.ref) )
-		coords.append( Vector3( d.pos.x, 0, d.pos.y ))
+		coords.append( Vector3( d.pos.x- 0.5, 0, d.pos.y - 0.5 ))
 	return { "coords" : coords, "notes" : notes } 
 
 func importDoors( doors : Array ):
@@ -73,15 +74,15 @@ func importDoors( doors : Array ):
 	var types := PackedInt32Array()
 	for d in doors:
 		if d.dir.x == 1 and d.dir.y == 0:
-			rots.append( Vector3( 0, 0, 0 ))
-		elif d.dir.x == -1 and d.dir.y == 0:
-			rots.append( Vector3( 0, 0, 0 ))
-		elif d.dir.x == 0 and d.dir.y == 1:
 			rots.append( Vector3( 0, 90, 0 ))
-		else:
+		elif d.dir.x == -1 and d.dir.y == 0:
 			rots.append( Vector3( 0, -90, 0 ))
+		elif d.dir.x == 0 and d.dir.y == 1:
+			rots.append( Vector3( 0, 0, 0 ))
+		else:
+			rots.append( Vector3( 0, 180, 0 ))
+		coords.append( Vector3( d.x, 0, d.y ))
 		types.append( d.type )
-		coords.append( Vector3( d.x + 0.5, 0, d.y + 0.5 ))
 	return { "coords" : coords, "rots" : rots, "door_type" : types } 
 
 func importStream( ctx : FlowData.EvaluationContext, wd : Dictionary, out_idx : int, container_name : String, importer : Callable ) -> bool:
@@ -106,6 +107,25 @@ func importStream( ctx : FlowData.EvaluationContext, wd : Dictionary, out_idx : 
 		return true
 	return false
 
+func generateFloors( ctx : FlowData.EvaluationContext, rects : Array ):
+	# sample rects to get the grounds
+	var out := FlowData.Data.new()
+	var coords := PackedVector3Array()
+	var room_idxs := PackedInt32Array()
+	var room_idx := 0
+	for r in rects:
+		var w = r.w
+		var h = r.h
+		for y in range( h ):
+			for x in range( w ):
+				coords.append( Vector3( r.x + x, 0, r.y + y ))
+				room_idxs.append( room_idx )
+		room_idx += 1
+	out.addCommonStreams( coords.size() )
+	out.registerStream( FlowData.AttrPosition, coords )
+	out.registerStream( "room_idx", room_idxs )
+	setOutput( ctx, 5, out )
+	
 func execute( ctx : FlowData.EvaluationContext ):
 	#var infilename = ilenamecod
 	var wd = load_data( ctx, filename )
@@ -115,3 +135,4 @@ func execute( ctx : FlowData.EvaluationContext ):
 		importStream( ctx, wd, 2, "columns", importColumns )
 		importStream( ctx, wd, 3, "water", importCoords )
 		importStream( ctx, wd, 4, "notes", importNotes )
+		generateFloors( ctx, wd.rects )
