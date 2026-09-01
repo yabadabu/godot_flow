@@ -52,9 +52,9 @@ func importWindows( windows : Array, out : Dictionary ):
 	
 func importStairs( stairs : Array, out : Dictionary ):
 	for stair in stairs:
-		readEdge( stair, out.coords, out.rots )
+		readEdge( stair, out.contact_pos, out.rots )
 		# Read again wihout the position correction
-		out.coords[ out.coords.size() - 1 ] = readCell( stair.cell )
+		out.coords.append( readCell( stair.cell ) )
 		out.ups.append( 1 if stair.up else 0 )
 	
 func importStream( ctx : FlowData.EvaluationContext, wd : Dictionary, out : Dictionary, container_name : String, importer : Callable ) -> bool:
@@ -98,6 +98,8 @@ func outputStream( ctx : FlowData.EvaluationContext, port_idx : int, data : Dict
 		d.registerStream( "room_name", data.room_names )
 	if data.has( "rots" ):
 		d.registerStream( FlowData.AttrRotation, data.rots )
+	if data.has( "contact_pos" ):
+		d.registerStream( "contact_pos", data.contact_pos )
 	if data.has( "ups" ):
 		d.registerStream( "ups", data.ups )
 	setOutput( ctx, port_idx, d )
@@ -111,6 +113,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 	var windows := newEmptyData()
 	windows.rots = PackedVector3Array()
 	var stairs := newEmptyData()
+	stairs.contact_pos = PackedVector3Array()
 	stairs.rots = PackedVector3Array()
 	stairs.ups = PackedByteArray()
 	
