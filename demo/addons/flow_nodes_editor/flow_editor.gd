@@ -82,7 +82,9 @@ func unbindResourceFromEditor(res : FlowGraphResource):
 		#print( "unbindResourceFromEditor. kicking out %s" % node.name)
 		node.draw.disconnect( node._on_draw )
 		gedit.remove_child( node )
-	deleteFrames( getAllFrames() )
+	for frame in getAllFrames():
+		gedit.remove_child( frame )
+		frame.queue_free()
 	gedit.clear_connections()
 	input_sources.clear()
 	inspector.edit( null )
@@ -93,13 +95,12 @@ func bindResourceToEditor(res : FlowGraphResource):
 		return
 	res.compile()
 	
-	#print( "bindResourceToEditor %d nodes, %d conns (%s)" % [ res.all_nodes.size(), res.all_connections.size(), res.resource_path ])
+	#print( "bindResourceToEditor %d nodes, %d conns, %d frames (%s)" % [ res.all_nodes.size(), res.all_connections.size(), res.all_frames.size(), res.resource_path ])
 
 	res.in_params_changed.connect(_on_inputs_changed)
 	res.input_params_removed.connect(_on_input_params_removed, CONNECT_DEFERRED)
 
 	res.editor = self
-
 	for node in res.all_nodes:
 		onNodeCreated( node )
 	for conn in res.all_connections:
@@ -318,8 +319,7 @@ func onFrameCreated( frame_data : Dictionary ) -> GraphFrame:
 	var frame := GraphFrame.new()
 	frame.name = frame_data.name
 	frame.title = frame_data.title
-	#var in_pos = FlowNodeIO._parse_vector2( frame_data.position )
-	#frame.position_offset = (in_pos + paste_offset ) * ui_scale
+	frame.position_offset = FlowNodeIO._parse_vector2( frame_data.position )
 	frame.size = FlowNodeIO._parse_vector2( frame_data.size )
 	frame.tint_color = FlowNodeIO._parse_color( frame_data.tint_color )
 	frame.tint_color_enabled = true
@@ -700,6 +700,8 @@ func addComment():
 	for node in nodes:
 		node.selected = false
 	new_frame.selected = true
+	queueSave()
+	queueRegen()
 	
 func _on_graph_edit_node_selected(node):
 	

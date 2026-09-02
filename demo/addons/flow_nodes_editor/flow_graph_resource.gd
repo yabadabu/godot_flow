@@ -277,8 +277,11 @@ func dump():
 func compile():
 	if compiled:
 		return
-	print( "FlowGraph.Compilation.Starts (%s)" % [ resource_path ])
+	# This is only executed once when we load the resource the first time in memory
+	# The other changes provided by the action while running the editor
+	print( "FlowGraph.Compilation.Starts (%s )" % [ resource_path ])
 	all_connections.clear()
+	all_frames.clear()
 	all_nodes.clear()
 	nodes_by_name.clear()
 	input_nodes.clear()

@@ -126,7 +126,8 @@ static func nodes_as_dict( nodes, frames, editor : FlowGraphEditor ):
 	nodes.sort_custom(func(a, b): return a.name < b.name)
 	frames.sort_custom(func(a, b): return a.name < b.name)
 	
-	# Find the top-left coord of all nodes beign exported
+	# Find the top-left coord of every exported graph element. Frames must take
+	# part too, especially when a comment is copied without any attached nodes.
 	var min_pos = null
 	for node in nodes:
 		var pos = node.position_offset / editor.ui_scale
@@ -135,6 +136,15 @@ static func nodes_as_dict( nodes, frames, editor : FlowGraphEditor ):
 		else:
 			min_pos.x = minf( min_pos.x, pos.x )
 			min_pos.y = minf( min_pos.y, pos.y )
+	for frame in frames:
+		var pos = frame.position_offset / editor.ui_scale
+		if min_pos == null:
+			min_pos = pos
+		else:
+			min_pos.x = minf( min_pos.x, pos.x )
+			min_pos.y = minf( min_pos.y, pos.y )
+	if min_pos == null:
+		min_pos = Vector2.ZERO
 	
 	var nodes_clean = nodes.map( func( ui_node : FlowGraphNodeUI ):
 		var node = ui_node.flow_node
@@ -168,7 +178,9 @@ static func nodes_as_dict( nodes, frames, editor : FlowGraphEditor ):
 			"title" : graph_frame.title,
 			"attached" : attached,
 		}
-	)		
+	)
+	for frame in frames:
+		print( "stored frame", frame.title )
 			
 	var data := {
 		"type" : "flow_graph_nodes",
@@ -204,8 +216,13 @@ static func _paste_nodes_from_dict( dict, editor : FlowGraphEditor, at_graph_coo
 	for conn in new_conns:
 		editor.onConnCreated( conn )
 
+	var new_frames = new_data.get( "frames", [] )
+	for frame_data in new_frames:
+		var graph_frame = editor.onFrameCreated( frame_data )
+		graph_frame.selected = true
+
 static func create_nodes_from_dict( dict, graph : FlowGraphResource, paste_offset = null) -> Dictionary:
-	print( "at create_nodes_from_dict")
+	print( "at create_nodes_from_dict ", dict)
 	if dict.get( "type", null) != "flow_graph_nodes":
 		push_error( "Invalid dict to paste nodes from" )
 		return {}
@@ -258,18 +275,23 @@ static func create_nodes_from_dict( dict, graph : FlowGraphResource, paste_offse
 		new_conns.append( new_conn )
 
 	for frame_data in dict.get( "frames", [] ):
-		print( "Parsing frames %s" % frame_data )
+		print( "Parsing frame %s" % frame_data )
+		while graph.all_frames.any(func(existing): return existing.name == frame_data.name):
+			frame_data.name = FlowPlugin.get_instance().nodes_factory.getNewName("comment")
 		var new_names = []
 		for old_name in frame_data.attached:
-			new_names.append( old_to_new_names.get( old_name, null ) )
+			var new_name = old_to_new_names.get( old_name, null )
+			if new_name != null:
+				new_names.append( new_name )
 		frame_data.attached = new_names
 		
 		var in_pos = _parse_vector2( frame_data.position )
 		frame_data.position = ( in_pos + paste_offset ) * ui_scale
 		graph.addFrame(frame_data)
+		new_frames.append(frame_data)
 
 	graph.loading = false
-	return { "nodes" : new_nodes, "conns" : new_conns }
+	return { "nodes" : new_nodes, "conns" : new_conns, "frames" : new_frames }
 
 static func copySelectionToClipboard( editor : FlowGraphEditor ):
 	var graph_nodes = editor.getSelectedGraphNodes()
@@ -293,14 +315,25 @@ static func saveEditorStateToResource( editor : FlowGraphEditor ):
 	if not res:
 		return
 	var all_nodes := editor.getAllGraphNodes()
-	#for node in all_nodes:
-		#node.flow_node.ui_position_offset = node.position_offset
-		#print( "Node %s is at %s" % [ node.name, node.ui_position_offset ])
-	var all_frames = editor.gedit.get_children().filter( func( n ):
-		return n is GraphFrame
-	)
+	var all_frames = editor.gedit.get_children().filter( func( n ): return n is GraphFrame )
 	print( "saveEditorStateToResource %d nodes, %d conns and %d frames (%s) (%d:%d)" % [ all_nodes.size(), editor.gedit.connections.size(), all_frames.size(), res.resource_path, res.all_nodes.size(), res.all_connections.size() ] )
 	res.data = FlowNodeIO.nodes_as_dict( all_nodes, all_frames, editor )
+
+	# Nodes need no equivalent synchronization because their GraphNode UIs are
+	# bound to the live FlowNodeBase objects already stored in res.all_nodes.
+	# Frames are native GraphFrame controls without a separate backing model, so
+	# refresh res.all_frames from those controls before they are removed.
+	res.all_frames.clear()
+	for graph_frame: GraphFrame in all_frames:
+		res.all_frames.append({
+			"position": graph_frame.position_offset,
+			"size": graph_frame.size,
+			"name": graph_frame.name,
+			"tint_color": graph_frame.tint_color,
+			"title": graph_frame.title,
+			"attached": editor.gedit.get_attached_nodes_of_frame(graph_frame.name),
+		})
+
 	res.view_zoom = editor.gedit.zoom
 	res.view_offset = editor.gedit.scroll_offset
 	#print( "Saved graph:", res.data )
