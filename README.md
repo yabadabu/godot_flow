@@ -41,7 +41,7 @@ In a scene 3D:
 
 ## Features
 
-* **+70 nodes** including:
+* **+75 nodes** including:
     - Sampling splines (contour and interior)
     - Sampling meshes
     - CSG-like ops on point sets (union/intersect/diff behavior)
@@ -57,6 +57,7 @@ In a scene 3D:
     - Node redirectors
     - Clustering
     - Attractor
+    - Watabou importers for dungeon and dwellings
 * **Grid-based Data Inspector** with selection highlighting
 * **3D Debug** overlays with color cues
 * **Graphs as resource** with optional **typed inputs**
