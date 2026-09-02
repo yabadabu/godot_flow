@@ -30,7 +30,42 @@ name = "HolesInFloors"
 [sub_resource type="Resource" id="Resource_j1woh"]
 script = ExtResource("4_krmge")
 data = {
-"frames": [],
+"frames": [{
+"attached": Array[StringName]([&"id_0010_spawn_meshes", &"id_0009_math_op", &"id_0005_redirect_output", &"id_0006_substract", &"id_0003_merge", &"id_0001_grid_boundary", &"id_0002_partition", &"id_0005_spawn_meshes", &"id_0006_add_attribute"]),
+"name": &"id_0001_comment",
+"position": Vector2(580, 0),
+"size": Vector2(1419.0001, 312),
+"tint_color": Color(0.3241333, 0.55, 0.242, 1),
+"title": "Walls where there are no window or door"
+}, {
+"attached": Array[StringName]([&"id_0022_math_op", &"id_0021_redirect_output", &"id_0002_transform", &"id_0001_spawn_meshes", &"id_0020_substract"]),
+"name": &"id_0002_comment",
+"position": Vector2(2160, 280),
+"size": Vector2(979, 242.00003),
+"tint_color": Color(0.242, 0.5192, 0.55, 1),
+"title": "Ground tiles except for stairs"
+}, {
+"attached": Array[StringName]([&"id_0026_attribute_rename", &"id_0023_spawn_meshes", &"id_0024_add_attribute"]),
+"name": &"id_0003_comment",
+"position": Vector2(720, 700),
+"size": Vector2(599.00006, 152),
+"tint_color": Color(0.55, 0.242, 0.53460014, 1),
+"title": "Stairs going up"
+}, {
+"attached": Array[StringName]([&"id_0004_spawn_meshes", &"id_0006_transform", &"id_0005_add_attribute", &"id_0007_spawn_meshes"]),
+"name": &"id_0004_comment",
+"position": Vector2(700, 420),
+"size": Vector2(719, 172),
+"tint_color": Color(0.28235295, 0.23921569, 0.54509807, 1),
+"title": "My Comments..."
+}, {
+"attached": Array[StringName]([&"id_0009_spawn_meshes", &"id_0008_transform", &"id_0014_add_attribute"]),
+"name": &"@GraphFrame@28149",
+"position": Vector2(620, 900),
+"size": Vector2(539, 152.00009),
+"tint_color": Color(0.242, 0.55, 0.34980002, 1),
+"title": "Windows"
+}],
 "links": [{
 "from_node": &"id_0002_transform",
 "from_port": 0,
@@ -224,25 +259,83 @@ data = {
 "to_node": &"id_0004_spawn_meshes",
 "to_port": 0
 }],
-"min_pos": Vector2(-20, 340),
+"min_pos": Vector2(0, -41),
 "nodes": [{
+"args_port": {},
+"name": &"id_0021_redirect_output",
+"position": Vector2(2200, 381),
+"settings": {
+"random_seed": 2838425415,
+"redirect_id": &"lyml4",
+"redirect_name": "HolesInFloors",
+"title": "Redirect Output"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(125, 54.00003),
+"template": "redirect_output"
+}, {
+"args_port": {
+"In A": {
+"connected": true,
+"port": 0
+},
+"In B": {
+"connected": true,
+"port": 1
+}
+},
+"name": &"id_0020_substract",
+"position": Vector2(2560, 321),
+"settings": {
+"random_seed": 1833905928,
+"title": "Substract"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(152, 84.00003),
+"template": "substract"
+}, {
 "args_port": {
 "In": {
 "connected": true,
 "port": 0
 }
 },
-"name": &"id_0028_debug",
-"position": Vector2(300, 420),
+"name": &"id_0024_add_attribute",
+"position": Vector2(760, 741),
 "settings": {
-"debug_enabled": true,
-"disabled": true,
-"random_seed": 947923964,
-"title": "Debug"
+"attr_name": "size",
+"cte_vector": Vector3(0.25, 0.25, 0.25),
+"data_type": 3,
+"random_seed": 194854782,
+"title": "Add Attribute"
 },
 "show_disconnected_inputs": false,
-"size": Vector2(139, 71),
-"template": "debug"
+"size": Vector2(139.00009, 71),
+"template": "add_attribute"
+}, {
+"args_port": {
+"In A": {
+"connected": true,
+"port": 0
+},
+"In B": {
+"connected": false,
+"port": 1
+}
+},
+"name": &"id_0022_math_op",
+"position": Vector2(2360, 381),
+"settings": {
+"debug_bulk": 1,
+"in_nameA": "size",
+"in_nameB": "0.5",
+"operation": 2,
+"random_seed": 2843590613,
+"title": "Math"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(152.00006, 101),
+"template": "math_op"
 }, {
 "args_port": {
 "In": {
@@ -251,10 +344,105 @@ data = {
 }
 },
 "name": &"id_0023_spawn_meshes",
-"position": Vector2(1140, 700),
+"position": Vector2(1140, 741),
 "settings": {
 "mesh_variants": Array[Mesh]([ExtResource("13_kkffj")]),
 "random_seed": 2375972957,
+"title": "Spawn Meshes"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139.00012, 71),
+"template": "spawn_meshes"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0028_debug",
+"position": Vector2(300, 461),
+"settings": {
+"debug_enabled": true,
+"disabled": true,
+"random_seed": 947923964,
+"title": "Debug"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139.00006, 71.00006),
+"template": "debug"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0026_attribute_rename",
+"position": Vector2(940, 741),
+"settings": {
+"from_name": "contact_pos",
+"overwrite_existing": true,
+"random_seed": 4154345169,
+"title": "Attribute Rename",
+"to_name": "position"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(176.0002, 71),
+"template": "attribute_rename"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0019_redirect_input",
+"position": Vector2(580, 701),
+"settings": {
+"random_seed": 940432175,
+"redirect_id": &"lyml4",
+"redirect_name": "HolesInFloors",
+"title": "Redirect Input"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(116, 54),
+"template": "redirect_input"
+}, {
+"args_port": {
+"In A": {
+"connected": true,
+"port": 0
+},
+"In B": {
+"connected": false,
+"port": 1
+}
+},
+"name": &"id_0018_filter",
+"position": Vector2(320, 701),
+"settings": {
+"in_nameA": "ups",
+"in_nameB": "false",
+"random_seed": 1240363679,
+"title": "Filter"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(164.00006, 84),
+"template": "filter"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0010_spawn_meshes",
+"position": Vector2(1080, 201),
+"settings": {
+"disabled": true,
+"mesh_variants": Array[Mesh]([ExtResource("11_g2jmy")]),
+"random_seed": 2005452219,
 "title": "Spawn Meshes"
 },
 "show_disconnected_inputs": false,
@@ -271,17 +459,32 @@ data = {
 "port": 1
 }
 },
-"name": &"id_0018_filter",
-"position": Vector2(320, 660),
+"name": &"id_0009_math_op",
+"position": Vector2(1300, 121),
 "settings": {
-"in_nameA": "ups",
-"in_nameB": "false",
-"random_seed": 1240363679,
-"title": "Filter"
+"debug_bulk": 1,
+"in_nameA": "size",
+"in_nameB": "0.5",
+"operation": 2,
+"random_seed": 2843590613,
+"title": "Math"
 },
 "show_disconnected_inputs": false,
-"size": Vector2(164, 84),
-"template": "filter"
+"size": Vector2(152.00012, 101.000015),
+"template": "math_op"
+}, {
+"args_port": {},
+"name": &"id_0005_redirect_output",
+"position": Vector2(1160, 121),
+"settings": {
+"random_seed": 22106591,
+"redirect_id": &"0xa3p",
+"redirect_name": "UsedEdges",
+"title": "Redirect Output"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(125, 54.000015),
+"template": "redirect_output"
 }, {
 "args_port": {
 "In A": {
@@ -293,8 +496,8 @@ data = {
 "port": 1
 }
 },
-"name": &"id_0020_substract",
-"position": Vector2(2220, 280),
+"name": &"id_0006_substract",
+"position": Vector2(1480, 41),
 "settings": {
 "random_seed": 1833905928,
 "title": "Substract"
@@ -309,50 +512,8 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0010_spawn_meshes",
-"position": Vector2(1080, 160),
-"settings": {
-"disabled": true,
-"mesh_variants": Array[Mesh]([ExtResource("11_g2jmy")]),
-"random_seed": 2005452219,
-"title": "Spawn Meshes"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(139, 71.000015),
-"template": "spawn_meshes"
-}, {
-"args_port": {
-"In A": {
-"connected": true,
-"port": 0
-},
-"In B": {
-"connected": false,
-"port": 1
-}
-},
-"name": &"id_0009_math_op",
-"position": Vector2(1300, 80),
-"settings": {
-"debug_bulk": 1,
-"in_nameA": "size",
-"in_nameB": "0.5",
-"operation": 2,
-"random_seed": 2843590613,
-"title": "Math"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(152, 101),
-"template": "math_op"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
 "name": &"id_0004_redirect_input",
-"position": Vector2(320, 540),
+"position": Vector2(320, 581),
 "settings": {
 "random_seed": 1291887821,
 "redirect_id": &"0xa3p",
@@ -369,320 +530,8 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0002_partition",
-"position": Vector2(620, 40),
-"settings": {
-"attribute_name": "room_name",
-"random_seed": 1196239713,
-"title": "Partition"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(153.00003, 71),
-"template": "partition"
-}, {
-"args_port": {
-"Filled Cells": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0001_grid_boundary",
-"position": Vector2(800, 40),
-"settings": {
-"include_corners": false,
-"random_seed": 1559202548,
-"title": "Grid Boundary"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(216, 131),
-"template": "grid_boundary"
-}, {
-"args_port": {},
-"name": &"id_0005_redirect_output",
-"position": Vector2(1160, 80),
-"settings": {
-"random_seed": 22106591,
-"redirect_id": &"0xa3p",
-"redirect_name": "UsedEdges",
-"title": "Redirect Output"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(125, 54),
-"template": "redirect_output"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0005_spawn_meshes",
-"position": Vector2(1820, 0),
-"settings": {
-"mesh_variants": Array[Mesh]([ExtResource("2_xpe5j")]),
-"random_seed": 2375972160,
-"title": "Spawn Meshes"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(139, 71),
-"template": "spawn_meshes"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0006_add_attribute",
-"position": Vector2(1660, 0),
-"settings": {
-"attr_name": "size",
-"cte_vector": Vector3(0.25, 0.25, 0.25),
-"data_type": 3,
-"random_seed": 194854782,
-"title": "Add Attribute"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(139, 71),
-"template": "add_attribute"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0014_add_attribute",
-"position": Vector2(720, 840),
-"settings": {
-"attr_name": "size",
-"cte_vector": Vector3(0.5, 0.5, 0.5),
-"data_type": 3,
-"random_seed": 194854782,
-"title": "Add Attribute"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(139, 71),
-"template": "add_attribute"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0014_debug",
-"position": Vector2(320, 800),
-"settings": {
-"debug_color": Color(0, 1, 1, 1),
-"debug_scale": 1.08,
-"disabled": true,
-"operation": 4,
-"random_seed": 3226290403,
-"title": "Debug"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(139, 71),
-"template": "debug"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0009_spawn_meshes",
-"position": Vector2(1040, 840),
-"settings": {
-"mesh_variants": Array[Mesh]([ExtResource("9_ma377")]),
-"random_seed": 2375972957,
-"title": "Spawn Meshes"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(139, 71),
-"template": "spawn_meshes"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0016_debug",
-"position": Vector2(320, 900),
-"settings": {
-"disabled": true,
-"operation": 4,
-"random_seed": 1679140112,
-"title": "Debug"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(139, 71.00003),
-"template": "debug"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0008_transform",
-"position": Vector2(880, 840),
-"settings": {
-"random_seed": 2376599165,
-"scale_max": Vector3(0.5, 1, 1),
-"scale_min": Vector3(0.5, 1, 1),
-"title": "Transform Points"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(139, 71),
-"template": "transform"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0002_transform",
-"position": Vector2(2460, 280),
-"settings": {
-"random_seed": 2376599554,
-"scale_max": Vector3(0.5, 1, 1),
-"scale_min": Vector3(0.5, 1, 1),
-"title": "Transform Points"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(139, 71),
-"template": "transform"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0004_spawn_meshes",
-"position": Vector2(1080, 420),
-"settings": {
-"mesh_variants": Array[Mesh]([ExtResource("2_biut6")]),
-"random_seed": 2375972160,
-"title": "Spawn Meshes"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(139, 71),
-"template": "spawn_meshes"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0006_transform",
-"position": Vector2(920, 420),
-"settings": {
-"random_seed": 2376599165,
-"scale_max": Vector3(0.5, 1, 1),
-"scale_min": Vector3(0.5, 1, 1),
-"title": "Transform Points"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(139, 71),
-"template": "transform"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0005_add_attribute",
-"position": Vector2(740, 420),
-"settings": {
-"attr_name": "size",
-"cte_vector": Vector3(0.5, 0.5, 0.5),
-"data_type": 3,
-"random_seed": 194854782,
-"title": "Add Attribute"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(139, 71),
-"template": "add_attribute"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0007_spawn_meshes",
-"position": Vector2(1240, 420),
-"settings": {
-"mesh_variants": Array[Mesh]([ExtResource("3_xpe5j")]),
-"random_seed": 2375972160,
-"title": "Spawn Meshes"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(139, 71),
-"template": "spawn_meshes"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0001_spawn_meshes",
-"position": Vector2(2620, 280),
-"settings": {
-"mesh_variants": Array[Mesh]([ExtResource("4_g2jmy")]),
-"random_seed": 2375972160,
-"title": "Spawn Meshes"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(139, 71),
-"template": "spawn_meshes"
-}, {
-"args_port": {},
-"name": &"id_0019_watabou_dwelling",
-"position": Vector2(0, 480),
-"settings": {
-"filename": "res://demos/watabou/house_by_the_lake.json",
-"random_seed": 867091368,
-"title": "Watabou Dwelling"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(163, 161),
-"template": "watabou_dwelling"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0004_random_color",
-"position": Vector2(300, 300),
-"settings": {
-"debug_modulate_by": "color",
-"random_seed": 4122213579,
-"seed_attribute": "room_name",
-"title": "Random Color",
-"use_palette": false
-},
-"show_disconnected_inputs": false,
-"size": Vector2(139, 71),
-"template": "random_color"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
 "name": &"id_0003_merge",
-"position": Vector2(1080, 0),
+"position": Vector2(1080, 41),
 "settings": {
 "random_seed": 3897034384,
 "title": "Merge"
@@ -692,24 +541,21 @@ data = {
 "template": "merge"
 }, {
 "args_port": {
-"In A": {
+"Filled Cells": {
 "connected": true,
 "port": 0
-},
-"In B": {
-"connected": true,
-"port": 1
 }
 },
-"name": &"id_0006_substract",
-"position": Vector2(1480, 0),
+"name": &"id_0001_grid_boundary",
+"position": Vector2(800, 81),
 "settings": {
-"random_seed": 1833905928,
-"title": "Substract"
+"include_corners": false,
+"random_seed": 1559202548,
+"title": "Grid Boundary"
 },
 "show_disconnected_inputs": false,
-"size": Vector2(152, 84),
-"template": "substract"
+"size": Vector2(216.00002, 131.0001),
+"template": "grid_boundary"
 }, {
 "args_port": {
 "In": {
@@ -717,54 +563,65 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0019_redirect_input",
-"position": Vector2(580, 660),
+"name": &"id_0002_partition",
+"position": Vector2(620, 81),
 "settings": {
-"random_seed": 940432175,
-"redirect_id": &"lyml4",
-"redirect_name": "HolesInFloors",
-"title": "Redirect Input"
+"attribute_name": "room_name",
+"random_seed": 1196239713,
+"title": "Partition"
 },
 "show_disconnected_inputs": false,
-"size": Vector2(116.00003, 54),
-"template": "redirect_input"
+"size": Vector2(153.00002, 71.00011),
+"template": "partition"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0016_debug",
+"position": Vector2(320, 941),
+"settings": {
+"disabled": true,
+"operation": 4,
+"random_seed": 1679140112,
+"title": "Debug"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139, 71.00015),
+"template": "debug"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0004_random_color",
+"position": Vector2(300, 341),
+"settings": {
+"debug_modulate_by": "color",
+"random_seed": 4122213579,
+"seed_attribute": "room_name",
+"title": "Random Color",
+"use_palette": false
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139.00006, 71),
+"template": "random_color"
 }, {
 "args_port": {},
-"name": &"id_0021_redirect_output",
-"position": Vector2(1860, 340),
+"name": &"id_0019_watabou_dwelling",
+"position": Vector2(0, 521),
 "settings": {
-"random_seed": 2838425415,
-"redirect_id": &"lyml4",
-"redirect_name": "HolesInFloors",
-"title": "Redirect Output"
+"filename": "res://demos/watabou/house_by_the_lake.json",
+"random_seed": 867091368,
+"title": "Watabou Dwelling"
 },
 "show_disconnected_inputs": false,
-"size": Vector2(125, 54),
-"template": "redirect_output"
-}, {
-"args_port": {
-"In A": {
-"connected": true,
-"port": 0
-},
-"In B": {
-"connected": false,
-"port": 1
-}
-},
-"name": &"id_0022_math_op",
-"position": Vector2(2020, 340),
-"settings": {
-"debug_bulk": 1,
-"in_nameA": "size",
-"in_nameB": "0.5",
-"operation": 2,
-"random_seed": 2843590613,
-"title": "Math"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(152, 101),
-"template": "math_op"
+"size": Vector2(163.00002, 161),
+"template": "watabou_dwelling"
 }, {
 "args_port": {
 "In": {
@@ -772,8 +629,205 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0024_add_attribute",
-"position": Vector2(760, 700),
+"name": &"id_0014_add_attribute",
+"position": Vector2(660, 941),
+"settings": {
+"attr_name": "size",
+"cte_vector": Vector3(0.5, 0.5, 0.5),
+"data_type": 3,
+"random_seed": 194854782,
+"title": "Add Attribute"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139.00006, 71.00015),
+"template": "add_attribute"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0014_debug",
+"position": Vector2(320, 841),
+"settings": {
+"debug_color": Color(0, 1, 1, 1),
+"debug_scale": 1.08,
+"disabled": true,
+"operation": 4,
+"random_seed": 3226290403,
+"title": "Debug"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139, 71.00012),
+"template": "debug"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0009_spawn_meshes",
+"position": Vector2(980, 941),
+"settings": {
+"mesh_variants": Array[Mesh]([ExtResource("9_ma377")]),
+"random_seed": 2375972957,
+"title": "Spawn Meshes"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139.00002, 71.00015),
+"template": "spawn_meshes"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0008_transform",
+"position": Vector2(820, 941),
+"settings": {
+"random_seed": 2376599165,
+"scale_max": Vector3(0.5, 1, 1),
+"scale_min": Vector3(0.5, 1, 1),
+"title": "Transform Points"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139.00009, 71.00015),
+"template": "transform"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0004_spawn_meshes",
+"position": Vector2(1080, 461),
+"settings": {
+"mesh_variants": Array[Mesh]([ExtResource("2_biut6")]),
+"random_seed": 2375972160,
+"title": "Spawn Meshes"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139, 71.00006),
+"template": "spawn_meshes"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0007_spawn_meshes",
+"position": Vector2(1240, 461),
+"settings": {
+"mesh_variants": Array[Mesh]([ExtResource("3_xpe5j")]),
+"random_seed": 2375972160,
+"title": "Spawn Meshes"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139, 71.00006),
+"template": "spawn_meshes"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0005_add_attribute",
+"position": Vector2(740, 481),
+"settings": {
+"attr_name": "size",
+"cte_vector": Vector3(0.5, 0.5, 0.5),
+"data_type": 3,
+"random_seed": 194854782,
+"title": "Add Attribute"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139.00008, 71),
+"template": "add_attribute"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0006_transform",
+"position": Vector2(920, 461),
+"settings": {
+"random_seed": 2376599165,
+"scale_max": Vector3(0.5, 1, 1),
+"scale_min": Vector3(0.5, 1, 1),
+"title": "Transform Points"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139.00002, 71.00006),
+"template": "transform"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0001_spawn_meshes",
+"position": Vector2(2960, 321),
+"settings": {
+"mesh_variants": Array[Mesh]([ExtResource("4_g2jmy")]),
+"random_seed": 2375972160,
+"title": "Spawn Meshes"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139.00006, 71.00003),
+"template": "spawn_meshes"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0002_transform",
+"position": Vector2(2800, 321),
+"settings": {
+"random_seed": 2376599554,
+"scale_max": Vector3(0.5, 1, 1),
+"scale_min": Vector3(0.5, 1, 1),
+"title": "Transform Points"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139, 71.00003),
+"template": "transform"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0005_spawn_meshes",
+"position": Vector2(1820, 41),
+"settings": {
+"mesh_variants": Array[Mesh]([ExtResource("2_xpe5j")]),
+"random_seed": 2375972160,
+"title": "Spawn Meshes"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139.00012, 71),
+"template": "spawn_meshes"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0006_add_attribute",
+"position": Vector2(1660, 41),
 "settings": {
 "attr_name": "size",
 "cte_vector": Vector3(0.25, 0.25, 0.25),
@@ -784,77 +838,58 @@ data = {
 "show_disconnected_inputs": false,
 "size": Vector2(139, 71),
 "template": "add_attribute"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0026_attribute_rename",
-"position": Vector2(940, 700),
-"settings": {
-"from_name": "contact_pos",
-"overwrite_existing": true,
-"random_seed": 4154345169,
-"title": "Attribute Rename",
-"to_name": "position"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(176, 71),
-"template": "attribute_rename"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
 graph_name = "demo_watabou"
-view_zoom = 0.34050277
-view_offset = Vector2(-139.45575, 33.01349)
+view_zoom = 0.30954796
+view_offset = Vector2(59.795975, -222.57867)
 in_params = Array[ExtResource("2_ndo0y")]([SubResource("Resource_xpe5j")])
 redirectors = Array[ExtResource("3_4ow7j")]([SubResource("Resource_ma377"), SubResource("Resource_kkffj")])
 
-[sub_resource type="Resource" id="Resource_g2jmy"]
+[sub_resource type="Resource" id="Resource_k73d1"]
 script = ExtResource("5_biut6")
 param_id = &"arg_name"
 enabled = true
 value = 0.0
 
-[sub_resource type="MultiMesh" id="MultiMesh_0xa3p"]
-transform_format = 1
-instance_count = 27
-mesh = ExtResource("9_ma377")
-buffer = PackedFloat32Array(-1.0927847e-08, 0, -0.25, -2.5, 0, 0.25, 0, 0, 0.25, 0, -1.0927847e-08, 0, 0.25, 0, 0, -3, 0, 0.25, 0, 0, 0, 0, 0.25, 0.5, -1.0927847e-08, 0, -0.25, -3.5, 0, 0.25, 0, 0, 0.25, 0, -1.0927847e-08, 1, 0.25, 0, 0, -2, 0, 0.25, 0, 0, 0, 0, 0.25, -0.5, 0.25, 0, 0, -1, 0, 0.25, 0, 0, 0, 0, 0.25, -0.5, -1.0927847e-08, 0, 0.25, 0.5, 0, 0.25, 0, 0, -0.25, 0, -1.0927847e-08, 1, -1.0927847e-08, 0, 0.25, 0.5, 0, 0.25, 0, 0, -0.25, 0, -1.0927847e-08, 2, -1.0927847e-08, 0, -0.25, -3.5, 0, 0.25, 0, 0, 0.25, 0, -1.0927847e-08, 6, -1.0927847e-08, 0, -0.25, -3.5, 0, 0.25, 0, 0, 0.25, 0, -1.0927847e-08, 5, -1.0927847e-08, 0, -0.25, -3.5, 0, 0.25, 0, 0, 0.25, 0, -1.0927847e-08, 3, -1.0927847e-08, 0, -0.25, -3.5, 0, 0.25, 0, 0, 0.25, 0, -1.0927847e-08, 2, -1.0927847e-08, 0, 0.25, -1.5, 0, 0.25, 0, 0, -0.25, 0, -1.0927847e-08, 3, -1.0927847e-08, 0, 0.25, -1.5, 0, 0.25, 0, 0, -0.25, 0, -1.0927847e-08, 4, -1.0927847e-08, 0, 0.25, -1.5, 0, 0.25, 0, 0, -0.25, 0, -1.0927847e-08, 5, -1.0927847e-08, 0, 0.25, -1.5, 0, 0.25, 0, 0, -0.25, 0, -1.0927847e-08, 6, -0.25, 0, -2.1855694e-08, -2, 0, 0.25, 0, 1, 2.1855694e-08, 0, -0.25, 1.5, -0.25, 0, -2.1855694e-08, -3, 0, 0.25, 0, 1, 2.1855694e-08, 0, -0.25, 1.5, -0.25, 0, -2.1855694e-08, 0, 0, 0.25, 0, 1, 2.1855694e-08, 0, -0.25, 2.5, -0.25, 0, -2.1855694e-08, -1, 0, 0.25, 0, 1, 2.1855694e-08, 0, -0.25, 2.5, -1.0927847e-08, 0, -0.25, -1.5, 0, 0.25, 0, 1, 0.25, 0, -1.0927847e-08, 2, -1.0927847e-08, 0, 0.25, 0.5, 0, 0.25, 0, 1, -0.25, 0, -1.0927847e-08, 1, -1.0927847e-08, 0, 0.25, 0.5, 0, 0.25, 0, 1, -0.25, 0, -1.0927847e-08, 2, 0.25, 0, 0, -3, 0, 0.25, 0, 1, 0, 0, 0.25, 0.5, 0.25, 0, 0, -2, 0, 0.25, 0, 1, 0, 0, 0.25, -0.5, 0.25, 0, 0, -1, 0, 0.25, 0, 1, 0, 0, 0.25, -0.5, -1.0927847e-08, 0, -0.25, -3.5, 0, 0.25, 0, 1, 0.25, 0, -1.0927847e-08, 1, -1.0927847e-08, 0, -0.25, -2.5, 0, 0.25, 0, 1, 0.25, 0, -1.0927847e-08, 0)
-
-[sub_resource type="MultiMesh" id="MultiMesh_3ekyw"]
-transform_format = 1
-instance_count = 38
-mesh = ExtResource("2_xpe5j")
-buffer = PackedFloat32Array(-1.0927847e-08, 0, -0.25, -1.5, 0, 0.25, 0, 0, 0.25, 0, -1.0927847e-08, 2, 0.25, 0, 0, -2, 0, 0.25, 0, 0, 0, 0, 0.25, 1.5, -0.25, 0, -2.1855694e-08, -3, 0, 0.25, 0, 0, 2.1855694e-08, 0, -0.25, 6.5, -0.25, 0, -2.1855694e-08, -2, 0, 0.25, 0, 0, 2.1855694e-08, 0, -0.25, 6.5, -0.25, 0, -2.1855694e-08, -2, 0, 0.25, 0, 0, 2.1855694e-08, 0, -0.25, 1.5, -1.0927847e-08, 0, -0.25, 0.5, 0, 0.25, 0, 0, 0.25, 0, -1.0927847e-08, 0, 0.25, 0, 0, 0, 0, 0.25, 0, 0, 0, 0, 0.25, -0.5, -0.25, 0, -2.1855694e-08, 0, 0, 0.25, 0, 0, 2.1855694e-08, 0, -0.25, 2.5, -1.0927847e-08, 0, 0.25, -1.5, 0, 0.25, 0, 0, -0.25, 0, -1.0927847e-08, 2, -0.25, 0, -2.1855694e-08, -1, 0, 0.25, 0, 0, 2.1855694e-08, 0, -0.25, 2.5, -1.0927847e-08, 0, -0.25, 0.5, 0, 0.25, 0, 1, 0.25, 0, -1.0927847e-08, 0, 0.25, 0, 0, 0, 0, 0.25, 0, 1, 0, 0, 0.25, -0.5, -1.0927847e-08, 0, 0.25, -2.5, 0, 0.25, 0, -1, -0.25, 0, -1.0927847e-08, 0, 0.25, 0, 0, -2, 0, 0.25, 0, -1, 0, 0, 0.25, -0.5, 0.25, 0, 0, -1, 0, 0.25, 0, -1, 0, 0, 0.25, -0.5, -1.0927847e-08, 0, -0.25, 0.5, 0, 0.25, 0, -1, 0.25, 0, -1.0927847e-08, 0, 0.25, 0, 0, 0, 0, 0.25, 0, -1, 0, 0, 0.25, -0.5, -1.0927847e-08, 0, 0.25, -1.5, 0, 0.25, 0, -1, -0.25, 0, -1.0927847e-08, 1, -1.0927847e-08, 0, -0.25, 0.5, 0, 0.25, 0, -1, 0.25, 0, -1.0927847e-08, 1, -1.0927847e-08, 0, 0.25, -1.5, 0, 0.25, 0, -1, -0.25, 0, -1.0927847e-08, 2, -0.25, 0, -2.1855694e-08, -1, 0, 0.25, 0, -1, 2.1855694e-08, 0, -0.25, 2.5, -1.0927847e-08, 0, -0.25, 0.5, 0, 0.25, 0, -1, 0.25, 0, -1.0927847e-08, 2, -0.25, 0, -2.1855694e-08, 0, 0, 0.25, 0, -1, 2.1855694e-08, 0, -0.25, 2.5, -1.0927847e-08, 0, -0.25, -1.5, 0, 0.25, 0, -1, 0.25, 0, -1.0927847e-08, 3, -1.0927847e-08, 0, 0.25, -3.5, 0, 0.25, 0, -1, -0.25, 0, -1.0927847e-08, 3, -0.25, 0, -2.1855694e-08, -3, 0, 0.25, 0, -1, 2.1855694e-08, 0, -0.25, 3.5, -1.0927847e-08, 0, -0.25, -1.5, 0, 0.25, 0, -1, 0.25, 0, -1.0927847e-08, 2, -1.0927847e-08, 0, 0.25, -3.5, 0, 0.25, 0, -1, -0.25, 0, -1.0927847e-08, 2, -1.0927847e-08, 0, -0.25, -1.5, 0, 0.25, 0, -1, 0.25, 0, -1.0927847e-08, 1, -1.0927847e-08, 0, 0.25, -3.5, 0, 0.25, 0, -1, -0.25, 0, -1.0927847e-08, 1, 0.25, 0, 0, -3, 0, 0.25, 0, -1, 0, 0, 0.25, 0.5, -1.0927847e-08, 0, -0.25, -1.5, 0, 0.25, 0, -1, 0.25, 0, -1.0927847e-08, 4, -1.0927847e-08, 0, -0.25, -1.5, 0, 0.25, 0, -1, 0.25, 0, -1.0927847e-08, 5, -0.25, 0, -2.1855694e-08, -2, 0, 0.25, 0, -1, 2.1855694e-08, 0, -0.25, 5.5, -1.0927847e-08, 0, 0.25, -3.5, 0, 0.25, 0, -1, -0.25, 0, -1.0927847e-08, 4, 0.25, 0, 0, -3, 0, 0.25, 0, -1, 0, 0, 0.25, 3.5, -1.0927847e-08, 0, 0.25, -3.5, 0, 0.25, 0, -1, -0.25, 0, -1.0927847e-08, 5, -0.25, 0, -2.1855694e-08, -3, 0, 0.25, 0, -1, 2.1855694e-08, 0, -0.25, 5.5)
-
-[sub_resource type="MultiMesh" id="MultiMesh_cmerg"]
-transform_format = 1
-instance_count = 4
-mesh = ExtResource("2_biut6")
-buffer = PackedFloat32Array(0.25, 0, 0, -3, 0, 0.25, 0, 0, 0, 0, 0.25, 1.5, -0.25, 0, -2.1855694e-08, -2, 0, 0.25, 0, -1, 2.1855694e-08, 0, -0.25, 0.5, -0.25, 0, -2.1855694e-08, -2, 0, 0.25, 0, -1, 2.1855694e-08, 0, -0.25, 3.5, -1.0927847e-08, 0, -0.25, -3.5, 0, 0.25, 0, 0, 0.25, 0, -1.0927847e-08, 4)
-
-[sub_resource type="MultiMesh" id="MultiMesh_lxxk8"]
-transform_format = 1
-instance_count = 4
-mesh = ExtResource("3_xpe5j")
-buffer = PackedFloat32Array(0.25, 0, 0, -3, 0, 0.25, 0, 0, 0, 0, 0.25, 1.5, -0.25, 0, -2.1855694e-08, -2, 0, 0.25, 0, -1, 2.1855694e-08, 0, -0.25, 0.5, -0.25, 0, -2.1855694e-08, -2, 0, 0.25, 0, -1, 2.1855694e-08, 0, -0.25, 3.5, -1.0927847e-08, 0, -0.25, -3.5, 0, 0.25, 0, 0, 0.25, 0, -1.0927847e-08, 4)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xrvlj"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_w5gg5"]
 vertex_color_use_as_albedo = true
 roughness = 0.3
 
-[sub_resource type="MultiMesh" id="MultiMesh_5q45k"]
+[sub_resource type="MultiMesh" id="MultiMesh_17k3s"]
 transform_format = 1
 use_colors = true
 instance_count = 44
 mesh = ExtResource("4_g2jmy")
 buffer = PackedFloat32Array(0.5, 0, 0, -2, 0, 0.5, 0, 0, 0, 0, 0.5, 3, 0.5607123, 0.663425, 0.13029243, 1, 0.5, 0, 0, -2, 0, 0.5, 0, 0, 0, 0, 0.5, 4, 0.5607123, 0.663425, 0.13029243, 1, 0.5, 0, 0, -3, 0, 0.5, 0, 0, 0, 0, 0.5, 3, 0.5607123, 0.663425, 0.13029243, 1, 0.5, 0, 0, -2, 0, 0.5, 0, 0, 0, 0, 0.5, 2, 0.5607123, 0.663425, 0.13029243, 1, 0.5, 0, 0, -3, 0, 0.5, 0, 0, 0, 0, 0.5, 2, 0.5607123, 0.663425, 0.13029243, 1, 0.5, 0, 0, -3, 0, 0.5, 0, 0, 0, 0, 0.5, 4, 0.5607123, 0.663425, 0.13029243, 1, 0.5, 0, 0, -3, 0, 0.5, 0, 0, 0, 0, 0.5, 5, 0.5607123, 0.663425, 0.13029243, 1, 0.5, 0, 0, -2, 0, 0.5, 0, 0, 0, 0, 0.5, 5, 0.5607123, 0.663425, 0.13029243, 1, 0.5, 0, 0, -3, 0, 0.5, 0, 0, 0, 0, 0.5, 6, 0.5607123, 0.663425, 0.13029243, 1, 0.5, 0, 0, -2, 0, 0.5, 0, 0, 0, 0, 0.5, 6, 0.5607123, 0.663425, 0.13029243, 1, 0.5, 0, 0, -3, 0, 0.5, 0, 0, 0, 0, 0.5, 1, 0.19227137, 0.47560623, 0.8608531, 1, 0.5, 0, 0, -2, 0, 0.5, 0, 0, 0, 0, 0.5, 1, 0.19227137, 0.47560623, 0.8608531, 1, 0.5, 0, 0, -1, 0, 0.5, 0, 0, 0, 0, 0.5, 1, 0.19227137, 0.47560623, 0.8608531, 1, 0.5, 0, 0, -2, 0, 0.5, 0, 0, 0, 0, 0.5, 0, 0.19227137, 0.47560623, 0.8608531, 1, 0.5, 0, 0, -1, 0, 0.5, 0, 0, 0, 0, 0.5, 0, 0.19227137, 0.47560623, 0.8608531, 1, 0.5, 0, 0, 0, 0, 0.5, 0, 0, 0, 0, 0.5, 0, 0.19227137, 0.47560623, 0.8608531, 1, 0.5, 0, 0, 0, 0, 0.5, 0, 0, 0, 0, 0.5, 1, 0.19227137, 0.47560623, 0.8608531, 1, 0.5, 0, 0, -1, 0, 0.5, 0, 0, 0, 0, 0.5, 2, 0.19227137, 0.47560623, 0.8608531, 1, 0.5, 0, 0, -3, 0, 0.5, 0, 1, 0, 0, 0.5, 1, 0.25444785, 0.6944146, 0.9868548, 1, 0.5, 0, 0, -2, 0, 0.5, 0, 1, 0, 0, 0.5, 1, 0.25444785, 0.6944146, 0.9868548, 1, 0.5, 0, 0, -1, 0, 0.5, 0, 1, 0, 0, 0.5, 1, 0.25444785, 0.6944146, 0.9868548, 1, 0.5, 0, 0, -2, 0, 0.5, 0, 1, 0, 0, 0.5, 0, 0.25444785, 0.6944146, 0.9868548, 1, 0.5, 0, 0, -1, 0, 0.5, 0, 1, 0, 0, 0.5, 0, 0.25444785, 0.6944146, 0.9868548, 1, 0.5, 0, 0, 0, 0, 0.5, 0, 1, 0, 0, 0.5, 0, 0.25444785, 0.6944146, 0.9868548, 1, 0.5, 0, 0, 0, 0, 0.5, 0, 1, 0, 0, 0.5, 1, 0.25444785, 0.6944146, 0.9868548, 1, 0.5, 0, 0, 0, 0, 0.5, 0, 1, 0, 0, 0.5, 2, 0.25444785, 0.6944146, 0.9868548, 1, 0.5, 0, 0, -1, 0, 0.5, 0, 1, 0, 0, 0.5, 2, 0.25444785, 0.6944146, 0.9868548, 1, 0.5, 0, 0, -2, 0, 0.5, 0, -1, 0, 0, 0.5, 0, 0.20630373, 0.44009, 0.97279376, 1, 0.5, 0, 0, -1, 0, 0.5, 0, -1, 0, 0, 0.5, 0, 0.20630373, 0.44009, 0.97279376, 1, 0.5, 0, 0, 0, 0, 0.5, 0, -1, 0, 0, 0.5, 0, 0.20630373, 0.44009, 0.97279376, 1, 0.5, 0, 0, -1, 0, 0.5, 0, -1, 0, 0, 0.5, 1, 0.20630373, 0.44009, 0.97279376, 1, 0.5, 0, 0, 0, 0, 0.5, 0, -1, 0, 0, 0.5, 1, 0.20630373, 0.44009, 0.97279376, 1, 0.5, 0, 0, -1, 0, 0.5, 0, -1, 0, 0, 0.5, 2, 0.20630373, 0.44009, 0.97279376, 1, 0.5, 0, 0, 0, 0, 0.5, 0, -1, 0, 0, 0.5, 2, 0.20630373, 0.44009, 0.97279376, 1, 0.5, 0, 0, -2, 0, 0.5, 0, -1, 0, 0, 0.5, 3, 0.75575536, 0.02418949, 0.12922908, 1, 0.5, 0, 0, -3, 0, 0.5, 0, -1, 0, 0, 0.5, 3, 0.75575536, 0.02418949, 0.12922908, 1, 0.5, 0, 0, -2, 0, 0.5, 0, -1, 0, 0, 0.5, 2, 0.75575536, 0.02418949, 0.12922908, 1, 0.5, 0, 0, -3, 0, 0.5, 0, -1, 0, 0, 0.5, 2, 0.75575536, 0.02418949, 0.12922908, 1, 0.5, 0, 0, -2, 0, 0.5, 0, -1, 0, 0, 0.5, 1, 0.75575536, 0.02418949, 0.12922908, 1, 0.5, 0, 0, -3, 0, 0.5, 0, -1, 0, 0, 0.5, 1, 0.75575536, 0.02418949, 0.12922908, 1, 0.5, 0, 0, -2, 0, 0.5, 0, -1, 0, 0, 0.5, 4, 0.7091026, 0.18185887, 0.52074337, 1, 0.5, 0, 0, -2, 0, 0.5, 0, -1, 0, 0, 0.5, 5, 0.7091026, 0.18185887, 0.52074337, 1, 0.5, 0, 0, -3, 0, 0.5, 0, -1, 0, 0, 0.5, 4, 0.7091026, 0.18185887, 0.52074337, 1, 0.5, 0, 0, -3, 0, 0.5, 0, -1, 0, 0, 0.5, 5, 0.7091026, 0.18185887, 0.52074337, 1)
 
-[sub_resource type="MultiMesh" id="MultiMesh_66cwp"]
+[sub_resource type="MultiMesh" id="MultiMesh_dku1g"]
+transform_format = 1
+instance_count = 4
+mesh = ExtResource("2_biut6")
+buffer = PackedFloat32Array(0.25, 0, 0, -3, 0, 0.25, 0, 0, 0, 0, 0.25, 1.5, -0.25, 0, -2.1855694e-08, -2, 0, 0.25, 0, -1, 2.1855694e-08, 0, -0.25, 0.5, -0.25, 0, -2.1855694e-08, -2, 0, 0.25, 0, -1, 2.1855694e-08, 0, -0.25, 3.5, -1.0927847e-08, 0, -0.25, -3.5, 0, 0.25, 0, 0, 0.25, 0, -1.0927847e-08, 4)
+
+[sub_resource type="MultiMesh" id="MultiMesh_dowx3"]
+transform_format = 1
+instance_count = 4
+mesh = ExtResource("3_xpe5j")
+buffer = PackedFloat32Array(0.25, 0, 0, -3, 0, 0.25, 0, 0, 0, 0, 0.25, 1.5, -0.25, 0, -2.1855694e-08, -2, 0, 0.25, 0, -1, 2.1855694e-08, 0, -0.25, 0.5, -0.25, 0, -2.1855694e-08, -2, 0, 0.25, 0, -1, 2.1855694e-08, 0, -0.25, 3.5, -1.0927847e-08, 0, -0.25, -3.5, 0, 0.25, 0, 0, 0.25, 0, -1.0927847e-08, 4)
+
+[sub_resource type="MultiMesh" id="MultiMesh_0noci"]
+transform_format = 1
+instance_count = 38
+mesh = ExtResource("2_xpe5j")
+buffer = PackedFloat32Array(-1.0927847e-08, 0, -0.25, -1.5, 0, 0.25, 0, 0, 0.25, 0, -1.0927847e-08, 2, 0.25, 0, 0, -2, 0, 0.25, 0, 0, 0, 0, 0.25, 1.5, -0.25, 0, -2.1855694e-08, -3, 0, 0.25, 0, 0, 2.1855694e-08, 0, -0.25, 6.5, -0.25, 0, -2.1855694e-08, -2, 0, 0.25, 0, 0, 2.1855694e-08, 0, -0.25, 6.5, -0.25, 0, -2.1855694e-08, -2, 0, 0.25, 0, 0, 2.1855694e-08, 0, -0.25, 1.5, -1.0927847e-08, 0, -0.25, 0.5, 0, 0.25, 0, 0, 0.25, 0, -1.0927847e-08, 0, 0.25, 0, 0, 0, 0, 0.25, 0, 0, 0, 0, 0.25, -0.5, -0.25, 0, -2.1855694e-08, 0, 0, 0.25, 0, 0, 2.1855694e-08, 0, -0.25, 2.5, -1.0927847e-08, 0, 0.25, -1.5, 0, 0.25, 0, 0, -0.25, 0, -1.0927847e-08, 2, -0.25, 0, -2.1855694e-08, -1, 0, 0.25, 0, 0, 2.1855694e-08, 0, -0.25, 2.5, -1.0927847e-08, 0, -0.25, 0.5, 0, 0.25, 0, 1, 0.25, 0, -1.0927847e-08, 0, 0.25, 0, 0, 0, 0, 0.25, 0, 1, 0, 0, 0.25, -0.5, -1.0927847e-08, 0, 0.25, -2.5, 0, 0.25, 0, -1, -0.25, 0, -1.0927847e-08, 0, 0.25, 0, 0, -2, 0, 0.25, 0, -1, 0, 0, 0.25, -0.5, 0.25, 0, 0, -1, 0, 0.25, 0, -1, 0, 0, 0.25, -0.5, -1.0927847e-08, 0, -0.25, 0.5, 0, 0.25, 0, -1, 0.25, 0, -1.0927847e-08, 0, 0.25, 0, 0, 0, 0, 0.25, 0, -1, 0, 0, 0.25, -0.5, -1.0927847e-08, 0, 0.25, -1.5, 0, 0.25, 0, -1, -0.25, 0, -1.0927847e-08, 1, -1.0927847e-08, 0, -0.25, 0.5, 0, 0.25, 0, -1, 0.25, 0, -1.0927847e-08, 1, -1.0927847e-08, 0, 0.25, -1.5, 0, 0.25, 0, -1, -0.25, 0, -1.0927847e-08, 2, -0.25, 0, -2.1855694e-08, -1, 0, 0.25, 0, -1, 2.1855694e-08, 0, -0.25, 2.5, -1.0927847e-08, 0, -0.25, 0.5, 0, 0.25, 0, -1, 0.25, 0, -1.0927847e-08, 2, -0.25, 0, -2.1855694e-08, 0, 0, 0.25, 0, -1, 2.1855694e-08, 0, -0.25, 2.5, -1.0927847e-08, 0, -0.25, -1.5, 0, 0.25, 0, -1, 0.25, 0, -1.0927847e-08, 3, -1.0927847e-08, 0, 0.25, -3.5, 0, 0.25, 0, -1, -0.25, 0, -1.0927847e-08, 3, -0.25, 0, -2.1855694e-08, -3, 0, 0.25, 0, -1, 2.1855694e-08, 0, -0.25, 3.5, -1.0927847e-08, 0, -0.25, -1.5, 0, 0.25, 0, -1, 0.25, 0, -1.0927847e-08, 2, -1.0927847e-08, 0, 0.25, -3.5, 0, 0.25, 0, -1, -0.25, 0, -1.0927847e-08, 2, -1.0927847e-08, 0, -0.25, -1.5, 0, 0.25, 0, -1, 0.25, 0, -1.0927847e-08, 1, -1.0927847e-08, 0, 0.25, -3.5, 0, 0.25, 0, -1, -0.25, 0, -1.0927847e-08, 1, 0.25, 0, 0, -3, 0, 0.25, 0, -1, 0, 0, 0.25, 0.5, -1.0927847e-08, 0, -0.25, -1.5, 0, 0.25, 0, -1, 0.25, 0, -1.0927847e-08, 4, -1.0927847e-08, 0, -0.25, -1.5, 0, 0.25, 0, -1, 0.25, 0, -1.0927847e-08, 5, -0.25, 0, -2.1855694e-08, -2, 0, 0.25, 0, -1, 2.1855694e-08, 0, -0.25, 5.5, -1.0927847e-08, 0, 0.25, -3.5, 0, 0.25, 0, -1, -0.25, 0, -1.0927847e-08, 4, 0.25, 0, 0, -3, 0, 0.25, 0, -1, 0, 0, 0.25, 3.5, -1.0927847e-08, 0, 0.25, -3.5, 0, 0.25, 0, -1, -0.25, 0, -1.0927847e-08, 5, -0.25, 0, -2.1855694e-08, -3, 0, 0.25, 0, -1, 2.1855694e-08, 0, -0.25, 5.5)
+
+[sub_resource type="MultiMesh" id="MultiMesh_pjksy"]
+transform_format = 1
+instance_count = 27
+mesh = ExtResource("9_ma377")
+buffer = PackedFloat32Array(-1.0927847e-08, 0, -0.25, -2.5, 0, 0.25, 0, 0, 0.25, 0, -1.0927847e-08, 0, 0.25, 0, 0, -3, 0, 0.25, 0, 0, 0, 0, 0.25, 0.5, -1.0927847e-08, 0, -0.25, -3.5, 0, 0.25, 0, 0, 0.25, 0, -1.0927847e-08, 1, 0.25, 0, 0, -2, 0, 0.25, 0, 0, 0, 0, 0.25, -0.5, 0.25, 0, 0, -1, 0, 0.25, 0, 0, 0, 0, 0.25, -0.5, -1.0927847e-08, 0, 0.25, 0.5, 0, 0.25, 0, 0, -0.25, 0, -1.0927847e-08, 1, -1.0927847e-08, 0, 0.25, 0.5, 0, 0.25, 0, 0, -0.25, 0, -1.0927847e-08, 2, -1.0927847e-08, 0, -0.25, -3.5, 0, 0.25, 0, 0, 0.25, 0, -1.0927847e-08, 6, -1.0927847e-08, 0, -0.25, -3.5, 0, 0.25, 0, 0, 0.25, 0, -1.0927847e-08, 5, -1.0927847e-08, 0, -0.25, -3.5, 0, 0.25, 0, 0, 0.25, 0, -1.0927847e-08, 3, -1.0927847e-08, 0, -0.25, -3.5, 0, 0.25, 0, 0, 0.25, 0, -1.0927847e-08, 2, -1.0927847e-08, 0, 0.25, -1.5, 0, 0.25, 0, 0, -0.25, 0, -1.0927847e-08, 3, -1.0927847e-08, 0, 0.25, -1.5, 0, 0.25, 0, 0, -0.25, 0, -1.0927847e-08, 4, -1.0927847e-08, 0, 0.25, -1.5, 0, 0.25, 0, 0, -0.25, 0, -1.0927847e-08, 5, -1.0927847e-08, 0, 0.25, -1.5, 0, 0.25, 0, 0, -0.25, 0, -1.0927847e-08, 6, -0.25, 0, -2.1855694e-08, -2, 0, 0.25, 0, 1, 2.1855694e-08, 0, -0.25, 1.5, -0.25, 0, -2.1855694e-08, -3, 0, 0.25, 0, 1, 2.1855694e-08, 0, -0.25, 1.5, -0.25, 0, -2.1855694e-08, 0, 0, 0.25, 0, 1, 2.1855694e-08, 0, -0.25, 2.5, -0.25, 0, -2.1855694e-08, -1, 0, 0.25, 0, 1, 2.1855694e-08, 0, -0.25, 2.5, -1.0927847e-08, 0, -0.25, -1.5, 0, 0.25, 0, 1, 0.25, 0, -1.0927847e-08, 2, -1.0927847e-08, 0, 0.25, 0.5, 0, 0.25, 0, 1, -0.25, 0, -1.0927847e-08, 1, -1.0927847e-08, 0, 0.25, 0.5, 0, 0.25, 0, 1, -0.25, 0, -1.0927847e-08, 2, 0.25, 0, 0, -3, 0, 0.25, 0, 1, 0, 0, 0.25, 0.5, 0.25, 0, 0, -2, 0, 0.25, 0, 1, 0, 0, 0.25, -0.5, 0.25, 0, 0, -1, 0, 0.25, 0, 1, 0, 0, 0.25, -0.5, -1.0927847e-08, 0, -0.25, -3.5, 0, 0.25, 0, 1, 0.25, 0, -1.0927847e-08, 1, -1.0927847e-08, 0, -0.25, -2.5, 0, 0.25, 0, 1, 0.25, 0, -1.0927847e-08, 0)
+
+[sub_resource type="MultiMesh" id="MultiMesh_kbrxe"]
 transform_format = 1
 instance_count = 1
 mesh = ExtResource("13_kkffj")
@@ -865,34 +900,34 @@ buffer = PackedFloat32Array(-0.25, 0, -2.1855694e-08, 0, 0, 0.25, 0, -1, 2.18556
 [node name="FlowGraphNode3D" type="Node3D" parent="." unique_id=1311313475]
 script = ExtResource("1_5typy")
 graph = SubResource("Resource_j1woh")
-overrides = Array[ExtResource("5_biut6")]([SubResource("Resource_g2jmy")])
+overrides = Array[ExtResource("5_biut6")]([SubResource("Resource_k73d1")])
 regenerate = Callable()
 clearInstances = Callable()
 flow_override/arg_name/enabled = true
 flow_override/arg_name/value = 0.0
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
 
-[node name="@MultiMeshInstance3D@92007" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=1118123049]
-multimesh = SubResource("MultiMesh_0xa3p")
-metadata/flow_owner = &"id_0009_spawn_meshes"
-
-[node name="@MultiMeshInstance3D@92008" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=2053611152]
-multimesh = SubResource("MultiMesh_3ekyw")
-metadata/flow_owner = &"id_0005_spawn_meshes"
-
-[node name="@MultiMeshInstance3D@92847" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=1922750848]
-multimesh = SubResource("MultiMesh_cmerg")
-metadata/flow_owner = &"id_0004_spawn_meshes"
-
-[node name="@MultiMeshInstance3D@92848" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=1551879345]
-multimesh = SubResource("MultiMesh_lxxk8")
-metadata/flow_owner = &"id_0007_spawn_meshes"
-
-[node name="@MultiMeshInstance3D@93382" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=1556174488]
-material_override = SubResource("StandardMaterial3D_xrvlj")
-multimesh = SubResource("MultiMesh_5q45k")
+[node name="@MultiMeshInstance3D@24513" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=1405499215]
+material_override = SubResource("StandardMaterial3D_w5gg5")
+multimesh = SubResource("MultiMesh_17k3s")
 metadata/flow_owner = &"id_0001_spawn_meshes"
 
-[node name="Spawn Meshes_0000" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=1886602989]
-multimesh = SubResource("MultiMesh_66cwp")
+[node name="@MultiMeshInstance3D@24514" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=756313210]
+multimesh = SubResource("MultiMesh_dku1g")
+metadata/flow_owner = &"id_0004_spawn_meshes"
+
+[node name="@MultiMeshInstance3D@24515" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=432732531]
+multimesh = SubResource("MultiMesh_dowx3")
+metadata/flow_owner = &"id_0007_spawn_meshes"
+
+[node name="@MultiMeshInstance3D@24516" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=439330076]
+multimesh = SubResource("MultiMesh_0noci")
+metadata/flow_owner = &"id_0005_spawn_meshes"
+
+[node name="@MultiMeshInstance3D@24517" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=1451450550]
+multimesh = SubResource("MultiMesh_pjksy")
+metadata/flow_owner = &"id_0009_spawn_meshes"
+
+[node name="Spawn Meshes_0000" type="MultiMeshInstance3D" parent="FlowGraphNode3D" unique_id=975972596]
+multimesh = SubResource("MultiMesh_kbrxe")
 metadata/flow_owner = &"id_0023_spawn_meshes"

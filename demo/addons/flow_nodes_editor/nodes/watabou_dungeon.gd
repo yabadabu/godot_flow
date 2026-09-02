@@ -135,4 +135,5 @@ func execute( ctx : FlowData.EvaluationContext ):
 		importStream( ctx, wd, 2, "columns", importColumns )
 		importStream( ctx, wd, 3, "water", importCoords )
 		importStream( ctx, wd, 4, "notes", importNotes )
-		generateFloors( ctx, wd.rects )
+		if wd.has( "rects"):
+			generateFloors( ctx, wd.rects )
