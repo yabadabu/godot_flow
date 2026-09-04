@@ -31,26 +31,19 @@ name = "HolesInFloors"
 script = ExtResource("4_krmge")
 data = {
 "frames": [{
-"attached": Array[StringName]([&"id_0010_spawn_meshes", &"id_0009_math_op", &"id_0005_redirect_output", &"id_0006_substract", &"id_0003_merge", &"id_0001_grid_boundary", &"id_0002_partition", &"id_0005_spawn_meshes", &"id_0006_add_attribute"]),
-"name": &"id_0001_comment",
-"position": Vector2(580, 0),
-"size": Vector2(1419.0001, 312),
-"tint_color": Color(0.3241333, 0.55, 0.242, 1),
-"title": "Walls where there are no window or door"
+"attached": Array[StringName]([&"id_0026_attribute_rename", &"id_0023_spawn_meshes", &"id_0024_add_attribute"]),
+"name": &"id_0003_comment",
+"position": Vector2(720, 700),
+"size": Vector2(599, 152),
+"tint_color": Color(0.55, 0.242, 0.53460014, 1),
+"title": "Stairs going up"
 }, {
 "attached": Array[StringName]([&"id_0022_math_op", &"id_0021_redirect_output", &"id_0002_transform", &"id_0001_spawn_meshes", &"id_0020_substract"]),
 "name": &"id_0002_comment",
 "position": Vector2(2160, 280),
-"size": Vector2(979, 242.00003),
+"size": Vector2(979, 241.99997),
 "tint_color": Color(0.242, 0.5192, 0.55, 1),
 "title": "Ground tiles except for stairs"
-}, {
-"attached": Array[StringName]([&"id_0026_attribute_rename", &"id_0023_spawn_meshes", &"id_0024_add_attribute"]),
-"name": &"id_0003_comment",
-"position": Vector2(720, 700),
-"size": Vector2(599.00006, 152),
-"tint_color": Color(0.55, 0.242, 0.53460014, 1),
-"title": "Stairs going up"
 }, {
 "attached": Array[StringName]([&"id_0004_spawn_meshes", &"id_0006_transform", &"id_0005_add_attribute", &"id_0007_spawn_meshes"]),
 "name": &"id_0004_comment",
@@ -59,10 +52,17 @@ data = {
 "tint_color": Color(0.28235295, 0.23921569, 0.54509807, 1),
 "title": "My Comments..."
 }, {
+"attached": Array[StringName]([&"id_0010_spawn_meshes", &"id_0009_math_op", &"id_0005_redirect_output", &"id_0006_substract", &"id_0003_merge", &"id_0001_grid_boundary", &"id_0002_partition", &"id_0005_spawn_meshes", &"id_0006_add_attribute"]),
+"name": &"id_0001_comment",
+"position": Vector2(580, 0),
+"size": Vector2(1419, 312),
+"tint_color": Color(0.3241333, 0.55, 0.242, 1),
+"title": "Walls where there are no window or door"
+}, {
 "attached": Array[StringName]([&"id_0009_spawn_meshes", &"id_0008_transform", &"id_0014_add_attribute"]),
-"name": &"@GraphFrame@28149",
+"name": &"_GraphFrame_28149",
 "position": Vector2(620, 900),
-"size": Vector2(539, 152.00009),
+"size": Vector2(539, 152.00003),
 "tint_color": Color(0.242, 0.55, 0.34980002, 1),
 "title": "Windows"
 }],
@@ -259,101 +259,8 @@ data = {
 "to_node": &"id_0004_spawn_meshes",
 "to_port": 0
 }],
-"min_pos": Vector2(0, -41),
+"min_pos": Vector2(0, 0),
 "nodes": [{
-"args_port": {},
-"name": &"id_0021_redirect_output",
-"position": Vector2(2200, 381),
-"settings": {
-"random_seed": 2838425415,
-"redirect_id": &"lyml4",
-"redirect_name": "HolesInFloors",
-"title": "Redirect Output"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(125, 54.00003),
-"template": "redirect_output"
-}, {
-"args_port": {
-"In A": {
-"connected": true,
-"port": 0
-},
-"In B": {
-"connected": true,
-"port": 1
-}
-},
-"name": &"id_0020_substract",
-"position": Vector2(2560, 321),
-"settings": {
-"random_seed": 1833905928,
-"title": "Substract"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(152, 84.00003),
-"template": "substract"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0024_add_attribute",
-"position": Vector2(760, 741),
-"settings": {
-"attr_name": "size",
-"cte_vector": Vector3(0.25, 0.25, 0.25),
-"data_type": 3,
-"random_seed": 194854782,
-"title": "Add Attribute"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(139.00009, 71),
-"template": "add_attribute"
-}, {
-"args_port": {
-"In A": {
-"connected": true,
-"port": 0
-},
-"In B": {
-"connected": false,
-"port": 1
-}
-},
-"name": &"id_0022_math_op",
-"position": Vector2(2360, 381),
-"settings": {
-"debug_bulk": 1,
-"in_nameA": "size",
-"in_nameB": "0.5",
-"operation": 2,
-"random_seed": 2843590613,
-"title": "Math"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(152.00006, 101),
-"template": "math_op"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0023_spawn_meshes",
-"position": Vector2(1140, 741),
-"settings": {
-"mesh_variants": Array[Mesh]([ExtResource("13_kkffj")]),
-"random_seed": 2375972957,
-"title": "Spawn Meshes"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(139.00012, 71),
-"template": "spawn_meshes"
-}, {
 "args_port": {
 "In": {
 "connected": true,
@@ -369,27 +276,8 @@ data = {
 "title": "Debug"
 },
 "show_disconnected_inputs": false,
-"size": Vector2(139.00006, 71.00006),
+"size": Vector2(139, 71),
 "template": "debug"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0026_attribute_rename",
-"position": Vector2(940, 741),
-"settings": {
-"from_name": "contact_pos",
-"overwrite_existing": true,
-"random_seed": 4154345169,
-"title": "Attribute Rename",
-"to_name": "position"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(176.0002, 71),
-"template": "attribute_rename"
 }, {
 "args_port": {
 "In": {
@@ -428,8 +316,369 @@ data = {
 "title": "Filter"
 },
 "show_disconnected_inputs": false,
-"size": Vector2(164.00006, 84),
+"size": Vector2(164, 84),
 "template": "filter"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0004_redirect_input",
+"position": Vector2(320, 581),
+"settings": {
+"random_seed": 1291887821,
+"redirect_id": &"0xa3p",
+"redirect_name": "UsedEdges",
+"title": "Redirect Input"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(116, 54),
+"template": "redirect_input"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0016_debug",
+"position": Vector2(320, 941),
+"settings": {
+"disabled": true,
+"operation": 4,
+"random_seed": 1679140112,
+"title": "Debug"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139, 71),
+"template": "debug"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0004_random_color",
+"position": Vector2(300, 341),
+"settings": {
+"debug_modulate_by": "color",
+"random_seed": 4122213579,
+"seed_attribute": "room_name",
+"title": "Random Color",
+"use_palette": false
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139, 71),
+"template": "random_color"
+}, {
+"args_port": {},
+"name": &"id_0019_watabou_dwelling",
+"position": Vector2(0, 521),
+"settings": {
+"filename": "res://demos/watabou/house_by_the_lake.json",
+"random_seed": 867091368,
+"title": "Watabou Dwelling"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(163, 161),
+"template": "watabou_dwelling"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0014_debug",
+"position": Vector2(320, 841),
+"settings": {
+"debug_color": Color(0, 1, 1, 1),
+"debug_scale": 1.08,
+"disabled": true,
+"operation": 4,
+"random_seed": 3226290403,
+"title": "Debug"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139, 71),
+"template": "debug"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0024_add_attribute",
+"position": Vector2(760, 741),
+"settings": {
+"attr_name": "size",
+"cte_vector": Vector3(0.25, 0.25, 0.25),
+"data_type": 3,
+"random_seed": 194854782,
+"title": "Add Attribute"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139, 71),
+"template": "add_attribute"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0023_spawn_meshes",
+"position": Vector2(1140, 741),
+"settings": {
+"mesh_variants": Array[Mesh]([ExtResource("13_kkffj")]),
+"random_seed": 2375972957,
+"title": "Spawn Meshes"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139, 71),
+"template": "spawn_meshes"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0026_attribute_rename",
+"position": Vector2(940, 741),
+"settings": {
+"from_name": "contact_pos",
+"overwrite_existing": true,
+"random_seed": 4154345169,
+"title": "Attribute Rename",
+"to_name": "position"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(176.00002, 71),
+"template": "attribute_rename"
+}, {
+"args_port": {},
+"name": &"id_0021_redirect_output",
+"position": Vector2(2200, 381),
+"settings": {
+"random_seed": 2838425415,
+"redirect_id": &"lyml4",
+"redirect_name": "HolesInFloors",
+"title": "Redirect Output"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(125, 54),
+"template": "redirect_output"
+}, {
+"args_port": {
+"In A": {
+"connected": true,
+"port": 0
+},
+"In B": {
+"connected": false,
+"port": 1
+}
+},
+"name": &"id_0022_math_op",
+"position": Vector2(2360, 381),
+"settings": {
+"debug_bulk": 1,
+"in_nameA": "size",
+"in_nameB": "0.5",
+"operation": 2,
+"random_seed": 2843590613,
+"title": "Math"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(152, 101),
+"template": "math_op"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0001_spawn_meshes",
+"position": Vector2(2960, 321),
+"settings": {
+"mesh_variants": Array[Mesh]([ExtResource("4_g2jmy")]),
+"random_seed": 2375972160,
+"title": "Spawn Meshes"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139, 71),
+"template": "spawn_meshes"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0002_transform",
+"position": Vector2(2800, 321),
+"settings": {
+"random_seed": 2376599554,
+"scale_max": Vector3(0.5, 1, 1),
+"scale_min": Vector3(0.5, 1, 1),
+"title": "Transform Points"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139, 71),
+"template": "transform"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0006_transform",
+"position": Vector2(920, 461),
+"settings": {
+"random_seed": 2376599165,
+"scale_max": Vector3(0.5, 1, 1),
+"scale_min": Vector3(0.5, 1, 1),
+"title": "Transform Points"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139.00002, 71),
+"template": "transform"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0005_add_attribute",
+"position": Vector2(740, 481),
+"settings": {
+"attr_name": "size",
+"cte_vector": Vector3(0.5, 0.5, 0.5),
+"data_type": 3,
+"random_seed": 194854782,
+"title": "Add Attribute"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139.00002, 71),
+"template": "add_attribute"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0004_spawn_meshes",
+"position": Vector2(1080, 461),
+"settings": {
+"mesh_variants": Array[Mesh]([ExtResource("2_biut6")]),
+"random_seed": 2375972160,
+"title": "Spawn Meshes"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139, 71),
+"template": "spawn_meshes"
+}, {
+"args_port": {
+"In A": {
+"connected": true,
+"port": 0
+},
+"In B": {
+"connected": true,
+"port": 1
+}
+},
+"name": &"id_0020_substract",
+"position": Vector2(2560, 321),
+"settings": {
+"random_seed": 1833905928,
+"title": "Substract"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(152, 84),
+"template": "substract"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0007_spawn_meshes",
+"position": Vector2(1240, 461),
+"settings": {
+"mesh_variants": Array[Mesh]([ExtResource("3_xpe5j")]),
+"random_seed": 2375972160,
+"title": "Spawn Meshes"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139, 71),
+"template": "spawn_meshes"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0006_add_attribute",
+"position": Vector2(1660, 41),
+"settings": {
+"attr_name": "size",
+"cte_vector": Vector3(0.25, 0.25, 0.25),
+"data_type": 3,
+"random_seed": 194854782,
+"title": "Add Attribute"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139, 71),
+"template": "add_attribute"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0014_add_attribute",
+"position": Vector2(660, 941),
+"settings": {
+"attr_name": "size",
+"cte_vector": Vector3(0.5, 0.5, 0.5),
+"data_type": 3,
+"random_seed": 194854782,
+"title": "Add Attribute"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139, 71),
+"template": "add_attribute"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0008_transform",
+"position": Vector2(820, 941),
+"settings": {
+"random_seed": 2376599165,
+"scale_max": Vector3(0.5, 1, 1),
+"scale_min": Vector3(0.5, 1, 1),
+"title": "Transform Points"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139, 71),
+"template": "transform"
 }, {
 "args_port": {
 "In": {
@@ -449,30 +698,6 @@ data = {
 "size": Vector2(139, 71),
 "template": "spawn_meshes"
 }, {
-"args_port": {
-"In A": {
-"connected": true,
-"port": 0
-},
-"In B": {
-"connected": false,
-"port": 1
-}
-},
-"name": &"id_0009_math_op",
-"position": Vector2(1300, 121),
-"settings": {
-"debug_bulk": 1,
-"in_nameA": "size",
-"in_nameB": "0.5",
-"operation": 2,
-"random_seed": 2843590613,
-"title": "Math"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(152.00012, 101.000015),
-"template": "math_op"
-}, {
 "args_port": {},
 "name": &"id_0005_redirect_output",
 "position": Vector2(1160, 121),
@@ -483,46 +708,8 @@ data = {
 "title": "Redirect Output"
 },
 "show_disconnected_inputs": false,
-"size": Vector2(125, 54.000015),
+"size": Vector2(125, 54),
 "template": "redirect_output"
-}, {
-"args_port": {
-"In A": {
-"connected": true,
-"port": 0
-},
-"In B": {
-"connected": true,
-"port": 1
-}
-},
-"name": &"id_0006_substract",
-"position": Vector2(1480, 41),
-"settings": {
-"random_seed": 1833905928,
-"title": "Substract"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(152, 84),
-"template": "substract"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0004_redirect_input",
-"position": Vector2(320, 581),
-"settings": {
-"random_seed": 1291887821,
-"redirect_id": &"0xa3p",
-"redirect_name": "UsedEdges",
-"title": "Redirect Input"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(116, 54),
-"template": "redirect_input"
 }, {
 "args_port": {
 "In": {
@@ -554,8 +741,52 @@ data = {
 "title": "Grid Boundary"
 },
 "show_disconnected_inputs": false,
-"size": Vector2(216.00002, 131.0001),
+"size": Vector2(216.00002, 131),
 "template": "grid_boundary"
+}, {
+"args_port": {
+"In A": {
+"connected": true,
+"port": 0
+},
+"In B": {
+"connected": true,
+"port": 1
+}
+},
+"name": &"id_0006_substract",
+"position": Vector2(1480, 41),
+"settings": {
+"random_seed": 1833905928,
+"title": "Substract"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(152, 84),
+"template": "substract"
+}, {
+"args_port": {
+"In A": {
+"connected": true,
+"port": 0
+},
+"In B": {
+"connected": false,
+"port": 1
+}
+},
+"name": &"id_0009_math_op",
+"position": Vector2(1300, 121),
+"settings": {
+"debug_bulk": 1,
+"in_nameA": "size",
+"in_nameB": "0.5",
+"operation": 2,
+"random_seed": 2843590613,
+"title": "Math"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(152, 101),
+"template": "math_op"
 }, {
 "args_port": {
 "In": {
@@ -571,237 +802,8 @@ data = {
 "title": "Partition"
 },
 "show_disconnected_inputs": false,
-"size": Vector2(153.00002, 71.00011),
+"size": Vector2(153.00002, 71),
 "template": "partition"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0016_debug",
-"position": Vector2(320, 941),
-"settings": {
-"disabled": true,
-"operation": 4,
-"random_seed": 1679140112,
-"title": "Debug"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(139, 71.00015),
-"template": "debug"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0004_random_color",
-"position": Vector2(300, 341),
-"settings": {
-"debug_modulate_by": "color",
-"random_seed": 4122213579,
-"seed_attribute": "room_name",
-"title": "Random Color",
-"use_palette": false
-},
-"show_disconnected_inputs": false,
-"size": Vector2(139.00006, 71),
-"template": "random_color"
-}, {
-"args_port": {},
-"name": &"id_0019_watabou_dwelling",
-"position": Vector2(0, 521),
-"settings": {
-"filename": "res://demos/watabou/house_by_the_lake.json",
-"random_seed": 867091368,
-"title": "Watabou Dwelling"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(163.00002, 161),
-"template": "watabou_dwelling"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0014_add_attribute",
-"position": Vector2(660, 941),
-"settings": {
-"attr_name": "size",
-"cte_vector": Vector3(0.5, 0.5, 0.5),
-"data_type": 3,
-"random_seed": 194854782,
-"title": "Add Attribute"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(139.00006, 71.00015),
-"template": "add_attribute"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0014_debug",
-"position": Vector2(320, 841),
-"settings": {
-"debug_color": Color(0, 1, 1, 1),
-"debug_scale": 1.08,
-"disabled": true,
-"operation": 4,
-"random_seed": 3226290403,
-"title": "Debug"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(139, 71.00012),
-"template": "debug"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0009_spawn_meshes",
-"position": Vector2(980, 941),
-"settings": {
-"mesh_variants": Array[Mesh]([ExtResource("9_ma377")]),
-"random_seed": 2375972957,
-"title": "Spawn Meshes"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(139.00002, 71.00015),
-"template": "spawn_meshes"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0008_transform",
-"position": Vector2(820, 941),
-"settings": {
-"random_seed": 2376599165,
-"scale_max": Vector3(0.5, 1, 1),
-"scale_min": Vector3(0.5, 1, 1),
-"title": "Transform Points"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(139.00009, 71.00015),
-"template": "transform"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0004_spawn_meshes",
-"position": Vector2(1080, 461),
-"settings": {
-"mesh_variants": Array[Mesh]([ExtResource("2_biut6")]),
-"random_seed": 2375972160,
-"title": "Spawn Meshes"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(139, 71.00006),
-"template": "spawn_meshes"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0007_spawn_meshes",
-"position": Vector2(1240, 461),
-"settings": {
-"mesh_variants": Array[Mesh]([ExtResource("3_xpe5j")]),
-"random_seed": 2375972160,
-"title": "Spawn Meshes"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(139, 71.00006),
-"template": "spawn_meshes"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0005_add_attribute",
-"position": Vector2(740, 481),
-"settings": {
-"attr_name": "size",
-"cte_vector": Vector3(0.5, 0.5, 0.5),
-"data_type": 3,
-"random_seed": 194854782,
-"title": "Add Attribute"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(139.00008, 71),
-"template": "add_attribute"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0006_transform",
-"position": Vector2(920, 461),
-"settings": {
-"random_seed": 2376599165,
-"scale_max": Vector3(0.5, 1, 1),
-"scale_min": Vector3(0.5, 1, 1),
-"title": "Transform Points"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(139.00002, 71.00006),
-"template": "transform"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0001_spawn_meshes",
-"position": Vector2(2960, 321),
-"settings": {
-"mesh_variants": Array[Mesh]([ExtResource("4_g2jmy")]),
-"random_seed": 2375972160,
-"title": "Spawn Meshes"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(139.00006, 71.00003),
-"template": "spawn_meshes"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0002_transform",
-"position": Vector2(2800, 321),
-"settings": {
-"random_seed": 2376599554,
-"scale_max": Vector3(0.5, 1, 1),
-"scale_min": Vector3(0.5, 1, 1),
-"title": "Transform Points"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(139, 71.00003),
-"template": "transform"
 }, {
 "args_port": {
 "In": {
@@ -817,7 +819,7 @@ data = {
 "title": "Spawn Meshes"
 },
 "show_disconnected_inputs": false,
-"size": Vector2(139.00012, 71),
+"size": Vector2(139, 71),
 "template": "spawn_meshes"
 }, {
 "args_port": {
@@ -826,18 +828,16 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0006_add_attribute",
-"position": Vector2(1660, 41),
+"name": &"id_0009_spawn_meshes",
+"position": Vector2(980, 941),
 "settings": {
-"attr_name": "size",
-"cte_vector": Vector3(0.25, 0.25, 0.25),
-"data_type": 3,
-"random_seed": 194854782,
-"title": "Add Attribute"
+"mesh_variants": Array[Mesh]([ExtResource("9_ma377")]),
+"random_seed": 2375972957,
+"title": "Spawn Meshes"
 },
 "show_disconnected_inputs": false,
-"size": Vector2(139, 71),
-"template": "add_attribute"
+"size": Vector2(139.00002, 71),
+"template": "spawn_meshes"
 }],
 "type": "flow_graph_nodes",
 "version": 1
