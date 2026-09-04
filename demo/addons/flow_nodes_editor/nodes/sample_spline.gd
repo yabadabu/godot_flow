@@ -210,12 +210,10 @@ func execute( ctx : FlowData.EvaluationContext ):
 
 					#print( "%d : %s %s" % [ idx, spos[ base+idx], srot[ base+idx ] ])
 
-		uniform_interval = 1.0
-				
 	# All the samples have the same size
 	if ssize.size() != spos.size():
 		ssize.resize( spos.size() )
-		var sample_size = Vector3.ONE * uniform_interval
+		var sample_size = Vector3.ONE
 		#print( "Generating size sample", sample_size)
 		ssize.fill(sample_size)
 
