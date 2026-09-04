@@ -22,12 +22,6 @@ data = {
 "to_node": &"id_0008_debug",
 "to_port": 0
 }, {
-"from_node": &"id_0004_make_string",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0001_watabou_glade",
-"to_port": 0
-}, {
 "from_node": &"id_0001_watabou_glade",
 "from_port": 0,
 "keep_alive": false,
@@ -81,88 +75,42 @@ data = {
 "keep_alive": false,
 "to_node": &"id_0009_substract",
 "to_port": 1
+}, {
+"from_node": &"id_0001_make_string",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0001_watabou_glade",
+"to_port": 0
 }],
-"min_pos": Vector2(0, -100),
+"min_pos": Vector2(0, 0),
 "nodes": [{
-"args_port": {
-"Splines": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0007_sample_spline",
-"position": Vector2(1040, 340),
+"args_port": {},
+"name": &"id_0004_make_string",
+"position": Vector2(0, 260),
 "settings": {
-"fill_curve": true,
-"inspect_enabled": true,
-"random_seed": 181437406,
-"title": "Sample Spline",
-"uniform_interval": 5.0
+"random_seed": 2558135604,
+"title": "Make String",
+"value": "uid://cnxrunf4qaoh5"
 },
 "show_disconnected_inputs": false,
-"size": Vector2(173, 71),
-"template": "sample_spline"
+"size": Vector2(125.000084, 54.00003),
+"template": "make_string"
 }, {
 "args_port": {
-"In A": {
-"connected": true,
-"port": 0
-},
-"In B": {
-"connected": true,
-"port": 1
-}
-},
-"name": &"id_0009_substract",
-"position": Vector2(1340, 340),
-"settings": {
-"random_seed": 991750756,
-"title": "Substract"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(152, 84),
-"template": "substract"
-}, {
-"args_port": {
-"Splines": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0008_sample_spline",
-"position": Vector2(1040, 440),
-"settings": {
-"debug_enabled": true,
-"fill_curve": true,
-"random_seed": 181437406,
-"title": "Sample Spline",
-"uniform_interval": 5.0
-},
-"show_disconnected_inputs": false,
-"size": Vector2(173, 71),
-"template": "sample_spline"
-}, {
-"args_port": {
-"In A": {
-"connected": true,
-"port": 0
-},
-"In B": {
+"In": {
 "connected": false,
-"port": 1
+"port": 0
 }
 },
-"name": &"id_0006_filter",
-"position": Vector2(800, 340),
+"name": &"id_0006_merge",
+"position": Vector2(520, 0),
 "settings": {
-"in_nameA": "Index",
-"in_nameB": "0",
-"random_seed": 943275548,
-"title": "Filter"
+"random_seed": 368099857,
+"title": "Merge"
 },
 "show_disconnected_inputs": false,
-"size": Vector2(164, 84),
-"template": "filter"
+"size": Vector2(139.00003, 54),
+"template": "merge"
 }, {
 "args_port": {
 "In": {
@@ -171,14 +119,28 @@ data = {
 }
 },
 "name": &"id_0010_bounds_modifier",
-"position": Vector2(1240, 480),
+"position": Vector2(1240, 440),
 "settings": {
+"mode": 3,
 "random_seed": 20765624,
-"title": "Bounds Modifier"
+"title": "dBounds Modifier",
+"uniform_scale": 3.0
 },
 "show_disconnected_inputs": false,
-"size": Vector2(139, 71),
+"size": Vector2(139.00037, 71.00021),
 "template": "bounds_modifier"
+}, {
+"args_port": {},
+"name": &"id_0001_make_string",
+"position": Vector2(0, 160),
+"settings": {
+"random_seed": 2558135604,
+"title": "Make String",
+"value": "uid://enlpys1wdx0"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(125.000206, 54.00003),
+"template": "make_string"
 }, {
 "args_port": {
 "In": {
@@ -186,27 +148,16 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0003_merge",
-"position": Vector2(620, 340),
+"name": &"id_0007_merge",
+"position": Vector2(860, 220),
 "settings": {
-"random_seed": 3389243077,
+"disabled": true,
+"random_seed": 3642725428,
 "title": "Merge"
 },
 "show_disconnected_inputs": false,
-"size": Vector2(139, 54),
+"size": Vector2(139.00049, 54.00006),
 "template": "merge"
-}, {
-"args_port": {},
-"name": &"id_0001_make_string",
-"position": Vector2(80, 100),
-"settings": {
-"random_seed": 2558135604,
-"title": "Make String",
-"value": "uid://enlpys1wdx0"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(125, 54),
-"template": "make_string"
 }, {
 "args_port": {
 "In": {
@@ -224,8 +175,25 @@ data = {
 "title": "Debug"
 },
 "show_disconnected_inputs": false,
-"size": Vector2(139.00012, 71.00003),
+"size": Vector2(139.00024, 71.00006),
 "template": "debug"
+}, {
+"args_port": {
+"filename": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0001_watabou_glade",
+"position": Vector2(180, 220),
+"settings": {
+"filename": "uid://enlpys1wdx0",
+"random_seed": 1738269338,
+"title": "Watabou Glade"
+},
+"show_disconnected_inputs": true,
+"size": Vector2(222.00012, 71.00006),
+"template": "watabou_glade"
 }, {
 "args_port": {
 "In": {
@@ -233,32 +201,111 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0007_merge",
-"position": Vector2(860, 220),
+"name": &"id_0002_create_spline",
+"position": Vector2(440, 220),
 "settings": {
-"disabled": true,
-"random_seed": 3642725428,
-"title": "Merge"
+"random_seed": 3119561804,
+"title": "Create Spline"
 },
 "show_disconnected_inputs": false,
-"size": Vector2(139, 54.00003),
-"template": "merge"
+"size": Vector2(164.00012, 54.00006),
+"template": "create_spline"
 }, {
 "args_port": {
 "In": {
-"connected": false,
+"connected": true,
 "port": 0
 }
 },
-"name": &"id_0006_merge",
-"position": Vector2(520, 0),
+"name": &"id_0003_merge",
+"position": Vector2(620, 340),
 "settings": {
-"random_seed": 368099857,
+"random_seed": 3389243077,
 "title": "Merge"
 },
 "show_disconnected_inputs": false,
-"size": Vector2(139.00006, 54.000015),
+"size": Vector2(139.0003, 54),
 "template": "merge"
+}, {
+"args_port": {
+"In A": {
+"connected": true,
+"port": 0
+},
+"In B": {
+"connected": false,
+"port": 1
+}
+},
+"name": &"id_0006_filter",
+"position": Vector2(800, 340),
+"settings": {
+"debug_port_combined_index": 1,
+"in_nameA": "Index",
+"in_nameB": "0",
+"random_seed": 943275548,
+"title": "Filter"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(164.00049, 84),
+"template": "filter"
+}, {
+"args_port": {
+"Splines": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0007_sample_spline",
+"position": Vector2(1040, 340),
+"settings": {
+"fill_curve": true,
+"random_seed": 181437406,
+"title": "Sample Spline",
+"uniform_interval": 5.0
+},
+"show_disconnected_inputs": false,
+"size": Vector2(173.00049, 71),
+"template": "sample_spline"
+}, {
+"args_port": {
+"Splines": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0008_sample_spline",
+"position": Vector2(1040, 440),
+"settings": {
+"fill_curve": true,
+"random_seed": 181437406,
+"title": "Sample Spline",
+"uniform_interval": 5.0
+},
+"show_disconnected_inputs": false,
+"size": Vector2(173.00049, 71.00021),
+"template": "sample_spline"
+}, {
+"args_port": {
+"In A": {
+"connected": true,
+"port": 0
+},
+"In B": {
+"connected": true,
+"port": 1
+}
+},
+"name": &"id_0009_substract",
+"position": Vector2(1380, 340),
+"settings": {
+"debug_enabled": true,
+"random_seed": 991750756,
+"title": "Substract"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(152, 84),
+"template": "substract"
 }, {
 "args_port": {
 "Splines": {
@@ -278,60 +325,15 @@ data = {
 "uniform_interval": 10.0
 },
 "show_disconnected_inputs": false,
-"size": Vector2(173, 71.00003),
+"size": Vector2(173.00049, 71.00006),
 "template": "sample_spline"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0002_create_spline",
-"position": Vector2(440, 220),
-"settings": {
-"random_seed": 3119561804,
-"title": "Create Spline"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(164.00006, 54.00003),
-"template": "create_spline"
-}, {
-"args_port": {},
-"name": &"id_0004_make_string",
-"position": Vector2(0, 220),
-"settings": {
-"random_seed": 2558135604,
-"title": "Make String",
-"value": "uid://cnxrunf4qaoh5"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(125, 54.00003),
-"template": "make_string"
-}, {
-"args_port": {
-"filename": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0001_watabou_glade",
-"position": Vector2(180, 220),
-"settings": {
-"filename": "uid://cnxrunf4qaoh5",
-"random_seed": 1738269338,
-"title": "Watabou Glade"
-},
-"show_disconnected_inputs": true,
-"size": Vector2(222, 71.00003),
-"template": "watabou_glade"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
 graph_name = "demo_watabou_glade"
-view_zoom = 1.1755081
-view_offset = Vector2(1379.225, 22.390503)
+view_zoom = 0.45127565
+view_offset = Vector2(-52.702766, -180.75156)
 
 [node name="DemoWatabouDungeon" type="Node3D" unique_id=902151632]
 

@@ -2,6 +2,7 @@
 extends FlowNodeBase
 
 @export_file var filename : String
+@export var scale : float = 1.0
 
 func _init():
 	meta_node = {
@@ -28,7 +29,7 @@ func parsePaths( str : String ):
 		var path = PackedVector3Array()
 		path.resize(count)
 		for i in count:
-			path[i] = Vector3(floats[i * 2], 0, floats[i * 2 + 1])
+			path[i] = Vector3(floats[i * 2], 0, floats[i * 2 + 1]) * scale
 		paths.append(path)
 	return paths
 
