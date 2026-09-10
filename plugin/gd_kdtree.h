@@ -21,19 +21,23 @@ protected:
   // nanoflann::KDTreeSingleIndexDynamicAdaptor
   struct PointCloud {
     PackedVector3Array points;
+
+    // Cached base addr
+    const Vector3* points_ptr = nullptr;
+    
     PointCloud() {
     }
     size_t kdtree_get_point_count() const {
       return points.size();
     }
     Scalar kdtree_get_pt(const size_t idx, const size_t dim) const {
-      return *(&points[idx].x + dim);
+      return points_ptr[idx][dim];
     }
     template <class BBOX>
     bool kdtree_get_bbox(BBOX& /* bb */) const { return false; }
   };
 
-  typedef nanoflann::KDTreeSingleIndexDynamicAdaptor<
+  typedef nanoflann::KDTreeSingleIndexAdaptor<
     nanoflann::L2_Simple_Adaptor<Scalar, PointCloud >,
     PointCloud,
     3
