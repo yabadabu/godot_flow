@@ -29,10 +29,21 @@ func get_bounds_of_resource( res : Resource ):
 			return AABB( pmin, half )
 	return null
 
+func get_bounds_of_node( node : Node ):
+	if node is Path3D:
+		return get_bounds_of_resource( node.curve )
+	return null
+
 func find_attribute( in_data : FlowData.Data ):
 	if attribute_name == "@auto":
 		var streams := in_data.streams.values().filter( func( candidate ) -> bool:
 			return candidate.data_type == FlowData.DataType.Resource
+			)
+		if streams.size() == 1:
+			return streams[0]
+
+		streams = in_data.streams.values().filter( func( candidate ) -> bool:
+			return candidate.data_type == FlowData.DataType.NodePath
 			)
 		if streams.size() == 1:
 			return streams[0]
@@ -48,15 +59,27 @@ func execute( ctx : FlowData.EvaluationContext ):
 		return
 	var bounds_container : PackedVector3Array
 	bounds_container.resize( in_data.size() )
+	var centers_container : PackedVector3Array
+	centers_container.resize( in_data.size() )
 	if in_stream != null:
 		match in_stream.data_type:
 			FlowData.DataType.Resource:
 				for idx in range( in_stream.container.size() ):
 					var res : Resource = in_stream.container[ idx ]
 					var aabb = get_bounds_of_resource( res )
-					bounds_container[ idx ] = aabb.size
+					if aabb != null:
+						bounds_container[ idx ] = aabb.size
+						centers_container[ idx ] = aabb.get_center()
+			FlowData.DataType.NodePath:
+				for idx in range( in_stream.container.size() ):
+					var node : Node = in_stream.container[ idx ]
+					var aabb = get_bounds_of_node( node )
+					if aabb != null:
+						bounds_container[ idx ] = aabb.size
+						centers_container[ idx ] = aabb.get_center()
 			_:
 				print( "Stream has type %s" % FlowData.DataType.keys()[ in_stream.data_type ])
 				pass
 	out_data.registerStream( "bounds", bounds_container, FlowData.DataType.Vector )
+	out_data.registerStream( "center", centers_container, FlowData.DataType.Vector )
 	setOutput(ctx, 0, out_data )
