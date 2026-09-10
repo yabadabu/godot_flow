@@ -5,33 +5,53 @@
 [ext_resource type="Script" uid="uid://b77sf57bysigx" path="res://addons/flow_nodes_editor/flow_graph_redirect.gd" id="8_m826l"]
 [ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="9_a0iuc"]
 
+[sub_resource type="Resource" id="Resource_ivn56"]
+script = ExtResource("8_m826l")
+redirect_id = &"raljx"
+name = "Contours"
+
+[sub_resource type="Resource" id="Resource_raljx"]
+script = ExtResource("8_m826l")
+redirect_id = &"ivn56"
+name = "PlayerAreas"
+
 [sub_resource type="Resource" id="Resource_j1woh"]
 script = ExtResource("9_a0iuc")
 data = {
-"frames": [],
-"links": [{
-"from_node": &"id_0003_sample_spline",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0007_merge",
-"to_port": 0
+"frames": [{
+"attached": Array[StringName]([&"id_0009_sample_spline", &"id_0007_merge", &"id_0008_debug"]),
+"name": &"id_0010_comment",
+"position": Vector2(720, 799),
+"size": Vector2(779, 172.00021),
+"tint_color": Color(0.28235295, 0.23921569, 0.54509807, 1),
+"title": "Show contours"
 }, {
+"attached": Array[StringName]([&"id_0008_sample_spline", &"id_0010_bounds_modifier"]),
+"name": &"id_0011_comment",
+"position": Vector2(1340, 159),
+"size": Vector2(499, 152),
+"tint_color": Color(0.44815415, 0.18726698, 0.34993398, 1),
+"title": "Interior islands"
+}, {
+"attached": Array[StringName]([&"id_0002_bounds_modifier", &"id_0035_sample_points", &"id_0007_bounds_modifier"]),
+"name": &"id_0008_comment",
+"position": Vector2(2320, 499),
+"size": Vector2(539.0005, 152.00037),
+"tint_color": Color(0.28235295, 0.23921569, 0.54509807, 1),
+"title": "Expand, sample, fix size"
+}, {
+"attached": Array[StringName]([&"id_0015_attribute_rename", &"id_0013_get_bounds", &"id_0016_attribute_rename", &"id_0017_add_attribute"]),
+"name": &"id_0002_comment",
+"position": Vector2(1580, 499),
+"size": Vector2(719, 152.00024),
+"tint_color": Color(0.242, 0.46273333, 0.55, 1),
+"title": "Create a single point around the boundary"
+}],
+"links": [{
 "from_node": &"id_0007_merge",
 "from_port": 0,
 "keep_alive": false,
 "to_node": &"id_0008_debug",
-"to_port": 0
-}, {
-"from_node": &"id_0001_watabou_glade",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0002_create_spline",
-"to_port": 0
-}, {
-"from_node": &"id_0002_create_spline",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0003_sample_spline",
 "to_port": 0
 }, {
 "from_node": &"id_0002_create_spline",
@@ -76,41 +96,170 @@ data = {
 "to_node": &"id_0009_substract",
 "to_port": 1
 }, {
-"from_node": &"id_0001_make_string",
+"from_node": &"id_0001_watabou_glade",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0002_create_spline",
+"to_port": 0
+}, {
+"from_node": &"id_0004_make_string",
 "from_port": 0,
 "keep_alive": false,
 "to_node": &"id_0001_watabou_glade",
 "to_port": 0
+}, {
+"from_node": &"id_0009_sample_spline",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0007_merge",
+"to_port": 0
+}, {
+"from_node": &"id_0002_create_spline",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0009_sample_spline",
+"to_port": 0
+}, {
+"from_node": &"id_0003_merge",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0001_sample_spline",
+"to_port": 0
+}, {
+"from_node": &"id_0013_get_bounds",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0015_attribute_rename",
+"to_port": 0
+}, {
+"from_node": &"id_0015_attribute_rename",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0016_attribute_rename",
+"to_port": 0
+}, {
+"from_node": &"id_0016_attribute_rename",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0017_add_attribute",
+"to_port": 0
+}, {
+"from_node": &"id_0017_add_attribute",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0002_bounds_modifier",
+"to_port": 0
+}, {
+"from_node": &"id_0002_bounds_modifier",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0035_sample_points",
+"to_port": 0
+}, {
+"from_node": &"id_0006_filter",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0013_get_bounds",
+"to_port": 0
+}, {
+"from_node": &"id_0007_merge",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0018_redirect_input",
+"to_port": 0
+}, {
+"from_node": &"id_0018_distance",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0020_math_op",
+"to_port": 0
+}, {
+"from_node": &"id_0005_filter",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0022_bounds_modifier",
+"to_port": 0
+}, {
+"from_node": &"id_0022_bounds_modifier",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0021_substract",
+"to_port": 0
+}, {
+"from_node": &"id_0009_substract",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0023_redirect_input",
+"to_port": 0
+}, {
+"from_node": &"id_0024_redirect_output",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0021_substract",
+"to_port": 1
+}, {
+"from_node": &"id_0019_redirect_output",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0018_distance",
+"to_port": 1
+}, {
+"from_node": &"id_0020_math_op",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0005_filter",
+"to_port": 0
+}, {
+"from_node": &"id_0005_redirect_output",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0004_substract",
+"to_port": 1
+}, {
+"from_node": &"id_0004_substract",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0006_bounds_modifier",
+"to_port": 0
+}, {
+"from_node": &"id_0018_distance",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0004_substract",
+"to_port": 0
+}, {
+"from_node": &"id_0035_sample_points",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0007_bounds_modifier",
+"to_port": 0
+}, {
+"from_node": &"id_0007_bounds_modifier",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0018_distance",
+"to_port": 0
 }],
 "min_pos": Vector2(0, 0),
 "nodes": [{
-"args_port": {},
-"name": &"id_0004_make_string",
-"position": Vector2(0, 260),
-"settings": {
-"random_seed": 2558135604,
-"title": "Make String",
-"value": "uid://cnxrunf4qaoh5"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(125.000084, 54.00003),
-"template": "make_string"
-}, {
 "args_port": {
 "In": {
-"connected": false,
+"connected": true,
 "port": 0
 }
 },
-"name": &"id_0006_merge",
-"position": Vector2(520, 0),
+"name": &"id_0006_bounds_modifier",
+"position": Vector2(3520, 480),
 "settings": {
-"random_seed": 368099857,
-"title": "Merge"
+"debug_color": Color(1, 0.12, 0.12, 1),
+"mode": 3,
+"random_seed": 998838746,
+"title": "Bounds Modifier",
+"uniform_scale": 10.0
 },
 "show_disconnected_inputs": false,
-"size": Vector2(139.00003, 54),
-"template": "merge"
+"size": Vector2(139.00015, 71),
+"template": "bounds_modifier"
 }, {
 "args_port": {
 "In": {
@@ -119,7 +268,7 @@ data = {
 }
 },
 "name": &"id_0010_bounds_modifier",
-"position": Vector2(1240, 440),
+"position": Vector2(1660, 200),
 "settings": {
 "mode": 3,
 "random_seed": 20765624,
@@ -127,8 +276,48 @@ data = {
 "uniform_scale": 3.0
 },
 "show_disconnected_inputs": false,
-"size": Vector2(139.00037, 71.00021),
+"size": Vector2(139, 71),
 "template": "bounds_modifier"
+}, {
+"args_port": {
+"origin": {
+"connected": false,
+"port": 4
+},
+"rotation": {
+"connected": false,
+"port": 5
+},
+"size": {
+"connected": false,
+"port": 6
+},
+"step": {
+"connected": false,
+"port": 3
+},
+"x": {
+"connected": false,
+"port": 0
+},
+"y": {
+"connected": false,
+"port": 1
+},
+"z": {
+"connected": false,
+"port": 2
+}
+},
+"name": &"id_0012_grid",
+"position": Vector2(0, 300),
+"settings": {
+"random_seed": 2450935000,
+"title": "Grid"
+},
+"show_disconnected_inputs": true,
+"size": Vector2(156, 251.00003),
+"template": "grid"
 }, {
 "args_port": {},
 "name": &"id_0001_make_string",
@@ -139,25 +328,21 @@ data = {
 "value": "uid://enlpys1wdx0"
 },
 "show_disconnected_inputs": false,
-"size": Vector2(125.000206, 54.00003),
+"size": Vector2(125, 54.00006),
 "template": "make_string"
 }, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0007_merge",
-"position": Vector2(860, 220),
+"args_port": {},
+"name": &"id_0024_redirect_output",
+"position": Vector2(3500, 840),
 "settings": {
-"disabled": true,
-"random_seed": 3642725428,
-"title": "Merge"
+"random_seed": 2434692204,
+"redirect_id": &"ivn56",
+"redirect_name": "PlayerAreas",
+"title": "Redirect Output"
 },
 "show_disconnected_inputs": false,
-"size": Vector2(139.00049, 54.00006),
-"template": "merge"
+"size": Vector2(125, 54.000275),
+"template": "redirect_output"
 }, {
 "args_port": {
 "In": {
@@ -165,51 +350,43 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0008_debug",
-"position": Vector2(1040, 220),
+"name": &"id_0023_redirect_input",
+"position": Vector2(2100, 40),
 "settings": {
+"debug_color": Color(1, 0.8946667, 0.20999998, 1),
 "debug_enabled": true,
-"disabled": true,
-"operation": 1,
-"random_seed": 2426990092,
-"title": "Debug"
+"random_seed": 2971961280,
+"redirect_id": &"ivn56",
+"redirect_name": "PlayerAreas",
+"title": "Redirect Input"
 },
 "show_disconnected_inputs": false,
-"size": Vector2(139.00024, 71.00006),
-"template": "debug"
+"size": Vector2(116.00006, 54.000107),
+"template": "redirect_input"
 }, {
 "args_port": {
-"filename": {
+"In A": {
 "connected": true,
 "port": 0
-}
 },
-"name": &"id_0001_watabou_glade",
-"position": Vector2(180, 220),
-"settings": {
-"filename": "uid://enlpys1wdx0",
-"random_seed": 1738269338,
-"title": "Watabou Glade"
-},
-"show_disconnected_inputs": true,
-"size": Vector2(222.00012, 71.00006),
-"template": "watabou_glade"
-}, {
-"args_port": {
-"In": {
+"In B": {
 "connected": true,
-"port": 0
+"port": 1
 }
 },
-"name": &"id_0002_create_spline",
-"position": Vector2(440, 220),
+"name": &"id_0021_substract",
+"position": Vector2(3640, 740),
 "settings": {
-"random_seed": 3119561804,
-"title": "Create Spline"
+"debug_color": Color(0, 0.7294118, 0, 1),
+"debug_enabled": true,
+"debug_mode": 1,
+"debug_scale": 2.0,
+"random_seed": 991750756,
+"title": "Substract"
 },
 "show_disconnected_inputs": false,
-"size": Vector2(164.00012, 54.00006),
-"template": "create_spline"
+"size": Vector2(152, 84.00043),
+"template": "substract"
 }, {
 "args_port": {
 "In": {
@@ -217,15 +394,17 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0003_merge",
-"position": Vector2(620, 340),
+"name": &"id_0022_bounds_modifier",
+"position": Vector2(3480, 720),
 "settings": {
-"random_seed": 3389243077,
-"title": "Merge"
+"debug_color": Color(1, 0.120000005, 0.120000005, 1),
+"random_seed": 998838746,
+"title": "Bounds Modifier",
+"uniform_scale": 10.0
 },
 "show_disconnected_inputs": false,
-"size": Vector2(139.0003, 54),
-"template": "merge"
+"size": Vector2(139.00006, 71.00037),
+"template": "bounds_modifier"
 }, {
 "args_port": {
 "In A": {
@@ -235,56 +414,97 @@ data = {
 "In B": {
 "connected": false,
 "port": 1
+},
+"In C": {
+"connected": false,
+"port": 2
 }
 },
-"name": &"id_0006_filter",
-"position": Vector2(800, 340),
+"name": &"id_0005_filter",
+"position": Vector2(3260, 720),
 "settings": {
-"debug_port_combined_index": 1,
-"in_nameA": "Index",
-"in_nameB": "0",
-"random_seed": 943275548,
+"condition": 11,
+"debug_color": Color(0, 1, 1, 1),
+"debug_mode": 1,
+"debug_modulate_by": "distance",
+"in_nameA": "distance",
+"in_nameB": "1",
+"in_nameC": "30",
+"random_seed": 11165205,
 "title": "Filter"
 },
 "show_disconnected_inputs": false,
-"size": Vector2(164.00049, 84),
+"size": Vector2(203.00006, 114.00049),
 "template": "filter"
 }, {
 "args_port": {
-"Splines": {
+"In A": {
 "connected": true,
 "port": 0
 }
 },
-"name": &"id_0007_sample_spline",
-"position": Vector2(1040, 340),
+"name": &"id_0020_math_op",
+"position": Vector2(3060, 720),
 "settings": {
-"fill_curve": true,
-"random_seed": 181437406,
-"title": "Sample Spline",
-"uniform_interval": 5.0
+"operation": 5,
+"random_seed": 3133446265,
+"title": "Math"
 },
 "show_disconnected_inputs": false,
-"size": Vector2(173.00049, 71),
-"template": "sample_spline"
+"size": Vector2(152.00009, 71.00037),
+"template": "math_op"
+}, {
+"args_port": {},
+"name": &"id_0019_redirect_output",
+"position": Vector2(2660, 820),
+"settings": {
+"random_seed": 465865547,
+"redirect_id": &"raljx",
+"redirect_name": "Contours",
+"title": "Redirect Output"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(125.000885, 54.000275),
+"template": "redirect_output"
 }, {
 "args_port": {
-"Splines": {
+"In": {
 "connected": true,
 "port": 0
 }
 },
-"name": &"id_0008_sample_spline",
-"position": Vector2(1040, 440),
+"name": &"id_0018_redirect_input",
+"position": Vector2(1280, 920),
 "settings": {
-"fill_curve": true,
-"random_seed": 181437406,
-"title": "Sample Spline",
-"uniform_interval": 5.0
+"random_seed": 1868051957,
+"redirect_id": &"raljx",
+"redirect_name": "Contours",
+"title": "Redirect Input"
 },
 "show_disconnected_inputs": false,
-"size": Vector2(173.00049, 71.00021),
-"template": "sample_spline"
+"size": Vector2(116.00003, 54),
+"template": "redirect_input"
+}, {
+"args_port": {
+"filename": {
+"connected": true,
+"port": 0
+},
+"scale": {
+"connected": false,
+"port": 1
+}
+},
+"name": &"id_0001_watabou_glade",
+"position": Vector2(260, 0),
+"settings": {
+"filename": "uid://daw778unedute",
+"random_seed": 1738269338,
+"title": "Watabou Glade"
+},
+"show_disconnected_inputs": true,
+"size": Vector2(222, 101.00012),
+"template": "watabou_glade"
 }, {
 "args_port": {
 "In A": {
@@ -297,14 +517,13 @@ data = {
 }
 },
 "name": &"id_0009_substract",
-"position": Vector2(1380, 340),
+"position": Vector2(1900, 40),
 "settings": {
-"debug_enabled": true,
 "random_seed": 991750756,
 "title": "Substract"
 },
 "show_disconnected_inputs": false,
-"size": Vector2(152, 84),
+"size": Vector2(152.00009, 84.000046),
 "template": "substract"
 }, {
 "args_port": {
@@ -313,27 +532,376 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0003_sample_spline",
-"position": Vector2(640, 220),
+"name": &"id_0001_sample_spline",
+"position": Vector2(1120, 0),
 "settings": {
-"adjust_to_borders": false,
-"debug_mode": 1,
-"debug_scale": 2.0,
-"random_seed": 1048645954,
+"debug_enabled": true,
+"debug_scale": 0.405,
+"random_seed": 4039099082,
 "sample_segments_centers": true,
-"title": "Sample Spline",
-"uniform_interval": 10.0
+"title": "Contour",
+"uniform_interval": 8.0
 },
 "show_disconnected_inputs": false,
-"size": Vector2(173.00049, 71.00006),
+"size": Vector2(173.00003, 71.00006),
 "template": "sample_spline"
+}, {
+"args_port": {},
+"name": &"id_0004_make_string",
+"position": Vector2(0, 0),
+"settings": {
+"random_seed": 2558135604,
+"title": "Make String",
+"value": "uid://daw778unedute"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(125, 54.000122),
+"template": "make_string"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0015_attribute_rename",
+"position": Vector2(1800, 540),
+"settings": {
+"from_name": "center",
+"random_seed": 3204740431,
+"title": "Attribute Rename",
+"to_name": "position"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139.00003, 71.000244),
+"template": "attribute_rename"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0017_add_attribute",
+"position": Vector2(2120, 540),
+"settings": {
+"attr_name": "rotation",
+"data_type": 3,
+"random_seed": 1674388259,
+"title": "Add Attribute"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139.00012, 71.000244),
+"template": "add_attribute"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0002_bounds_modifier",
+"position": Vector2(2360, 540),
+"settings": {
+"mode": 3,
+"padding": Vector3(1, 0, 1),
+"random_seed": 12266,
+"title": "Bounds Modifier",
+"uniform_scale": 75.0
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139.00085, 71.000244),
+"template": "bounds_modifier"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0016_attribute_rename",
+"position": Vector2(1960, 540),
+"settings": {
+"from_name": "bounds",
+"random_seed": 3204740431,
+"title": "Attribute Rename",
+"to_name": "size"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139.00006, 71.000244),
+"template": "attribute_rename"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0013_get_bounds",
+"position": Vector2(1620, 540),
+"settings": {
+"random_seed": 1741426593,
+"title": "Get Bounds"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139, 71.000244),
+"template": "get_bounds"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0035_sample_points",
+"position": Vector2(2520, 540),
+"settings": {
+"debug_mode": 1,
+"debug_scale": 1.5,
+"distribution": 3,
+"groups": Array[int]([2410]),
+"max_x": 64,
+"max_y": 1,
+"max_z": 64,
+"num_samples": 5000,
+"phase": 0.205,
+"random_seed": 8468,
+"sampling_distance": 0.5,
+"size": 0.02,
+"title": "Sample Points"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139.00092, 71.0004),
+"template": "sample_points"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+},
+"Target": {
+"connected": true,
+"port": 1
+}
+},
+"name": &"id_0018_distance",
+"position": Vector2(2820, 720),
+"settings": {
+"debug_mode": 1,
+"debug_modulate_by": "distance",
+"debug_scale": 0.14,
+"random_seed": 2293053265,
+"title": "Distance"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(144.0004, 101.000305),
+"template": "distance"
+}, {
+"args_port": {
+"Splines": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0007_sample_spline",
+"position": Vector2(1420, 40),
+"settings": {
+"fill_curve": true,
+"random_seed": 181437406,
+"title": "Sample Spline",
+"uniform_interval": 5.0
+},
+"show_disconnected_inputs": false,
+"size": Vector2(173.00003, 71.000046),
+"template": "sample_spline"
+}, {
+"args_port": {
+"In A": {
+"connected": true,
+"port": 0
+},
+"In B": {
+"connected": false,
+"port": 1
+}
+},
+"name": &"id_0006_filter",
+"position": Vector2(1120, 180),
+"settings": {
+"debug_port_combined_index": 1,
+"in_nameA": "Index",
+"in_nameB": "0",
+"random_seed": 943275548,
+"title": "Filter"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(164.00003, 84.00003),
+"template": "filter"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0003_merge",
+"position": Vector2(840, 0),
+"settings": {
+"random_seed": 3389243077,
+"title": "Merge"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139.00021, 54.000122),
+"template": "merge"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0002_create_spline",
+"position": Vector2(580, 0),
+"settings": {
+"random_seed": 3119561804,
+"title": "Create Spline"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(164, 54.000122),
+"template": "create_spline"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0008_debug",
+"position": Vector2(1320, 840),
+"settings": {
+"debug_enabled": true,
+"disabled": true,
+"operation": 1,
+"random_seed": 2426990092,
+"title": "Debug"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139.00003, 71.00055),
+"template": "debug"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0007_merge",
+"position": Vector2(1020, 860),
+"settings": {
+"random_seed": 3642725428,
+"title": "Merge"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139.00002, 54.000153),
+"template": "merge"
+}, {
+"args_port": {
+"Splines": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0009_sample_spline",
+"position": Vector2(760, 860),
+"settings": {
+"random_seed": 1939396955,
+"title": "Sample Spline",
+"uniform_interval": 1.0
+},
+"show_disconnected_inputs": false,
+"size": Vector2(173, 71.000244),
+"template": "sample_spline"
+}, {
+"args_port": {
+"Splines": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0008_sample_spline",
+"position": Vector2(1380, 200),
+"settings": {
+"fill_curve": true,
+"random_seed": 181437406,
+"title": "Sample Spline",
+"uniform_interval": 5.0
+},
+"show_disconnected_inputs": false,
+"size": Vector2(173.00003, 71),
+"template": "sample_spline"
+}, {
+"args_port": {},
+"name": &"id_0005_redirect_output",
+"position": Vector2(3100, 520),
+"settings": {
+"random_seed": 465865547,
+"redirect_id": &"raljx",
+"redirect_name": "Contours",
+"title": "Redirect Output"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(125.00006, 54),
+"template": "redirect_output"
+}, {
+"args_port": {
+"In A": {
+"connected": true,
+"port": 0
+},
+"In B": {
+"connected": true,
+"port": 1
+}
+},
+"name": &"id_0004_substract",
+"position": Vector2(3340, 480),
+"settings": {
+"operation": 1,
+"random_seed": 2498335789,
+"title": "Substract"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(152.00003, 84),
+"template": "substract"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0007_bounds_modifier",
+"position": Vector2(2680, 540),
+"settings": {
+"debug_color": Color(1, 0.12, 0.12, 1),
+"random_seed": 998838746,
+"title": "Bounds Modifier",
+"uniform_scale": 25.0
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139.00052, 71),
+"template": "bounds_modifier"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
 graph_name = "demo_watabou_glade"
-view_zoom = 0.45127565
-view_offset = Vector2(-52.702766, -180.75156)
+view_zoom = 0.25582466
+view_offset = Vector2(528.74994, -189.94427)
+redirectors = Array[ExtResource("8_m826l")]([SubResource("Resource_ivn56"), SubResource("Resource_raljx")])
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_e778l"]
+size = Vector2(300, 200)
 
 [node name="DemoWatabouDungeon" type="Node3D" unique_id=902151632]
 
@@ -343,3 +911,8 @@ graph = SubResource("Resource_j1woh")
 regenerate = Callable()
 clearInstances = Callable()
 metadata/_custom_type_script = "uid://d1krtmb1urldl"
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1960493789]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23.75243, 8.014755, 5.929062)
+visible = false
+mesh = SubResource("PlaneMesh_e778l")
