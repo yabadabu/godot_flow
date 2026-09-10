@@ -13,8 +13,9 @@ env = SConscript("godot-cpp/SConstruct")
 # - LINKFLAGS are for linking flags
 
 # tweak this if you want to use different folders, or more folders, to store your source code in.
-env.Append(CPPPATH=["plugins/"])
+env.Append(CPPPATH=["plugin/", "plugin/thirdparty/spirv_reflect/"])
 common_sources = Glob("plugin/*.cpp")
+common_sources += Glob("plugin/thirdparty/spirv_reflect/spirv_reflect.c")
 
 if env["platform"] == "macos":
     

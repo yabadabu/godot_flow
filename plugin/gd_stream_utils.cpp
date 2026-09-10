@@ -1,7 +1,8 @@
 #include "gd_stream_utils.h"
 #include <godot_cpp/core/class_db.hpp>
-#include <random>
 #include <algorithm>
+#include <cstring>
+#include <random>
 
 using namespace godot;
 
@@ -9,6 +10,8 @@ void GDStreamUtils::_bind_methods() {
   ClassDB::bind_static_method("GDStreamUtils", D_METHOD("get_sorted_indices_f32", "values"), &GDStreamUtils::get_sorted_indices_f32);
   ClassDB::bind_static_method("GDStreamUtils", D_METHOD("get_sorted_indices_i32", "values"), &GDStreamUtils::get_sorted_indices_i32);
   ClassDB::bind_static_method("GDStreamUtils", D_METHOD("get_sorted_indices_string", "values"), &GDStreamUtils::get_sorted_indices_string);
+  ClassDB::bind_static_method("GDStreamUtils", D_METHOD("pack_vec3_f32", "values", "stride"), &GDStreamUtils::pack_vec3_f32, DEFVAL(16));
+  ClassDB::bind_static_method("GDStreamUtils", D_METHOD("unpack_vec3_f32", "bytes", "count", "stride"), &GDStreamUtils::unpack_vec3_f32, DEFVAL(16));
   ClassDB::bind_static_method("GDStreamUtils", D_METHOD("KMeans", "points", "num_clusters", "max_iterations", "tolerance", "seed"), &GDStreamUtils::KMeans);
 }
 
@@ -44,6 +47,46 @@ PackedInt32Array GDStreamUtils::get_sorted_indices_i32(const PackedInt32Array &v
 
 PackedInt32Array GDStreamUtils::get_sorted_indices_string(const PackedStringArray &values) {
     return get_sorted_container( values ); 
+}
+
+PackedByteArray GDStreamUtils::pack_vec3_f32(
+    const PackedVector3Array& values,
+    int64_t stride) {
+  PackedByteArray bytes;
+  if (stride < 12 || values.is_empty())
+    return bytes;
+
+  bytes.resize(values.size() * stride);
+  uint8_t* destination = bytes.ptrw();
+  const Vector3* source = values.ptr();
+  for (int64_t index = 0; index < values.size(); ++index) {
+    const float components[3] = {
+      static_cast<float>(source[index].x),
+      static_cast<float>(source[index].y),
+      static_cast<float>(source[index].z),
+    };
+    std::memcpy(destination + index * stride, components, sizeof(components));
+  }
+  return bytes;
+}
+
+PackedVector3Array GDStreamUtils::unpack_vec3_f32(
+    const PackedByteArray& bytes,
+    int64_t count,
+    int64_t stride) {
+  PackedVector3Array values;
+  if (stride < 12 || count < 0 || count > bytes.size() / stride)
+    return values;
+
+  values.resize(count);
+  Vector3* destination = values.ptrw();
+  const uint8_t* source = bytes.ptr();
+  for (int64_t index = 0; index < count; ++index) {
+    float components[3];
+    std::memcpy(components, source + index * stride, sizeof(components));
+    destination[index] = Vector3(components[0], components[1], components[2]);
+  }
+  return values;
 }
 
 Dictionary GDStreamUtils::KMeans(

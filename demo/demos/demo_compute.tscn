@@ -1,0 +1,160 @@
+[gd_scene format=3 uid="uid://bxb8u0mv3jfs1"]
+
+[ext_resource type="Script" uid="uid://d1krtmb1urldl" path="res://addons/flow_nodes_editor/flow_node.gd" id="1_jpxv6"]
+[ext_resource type="Script" uid="uid://co0f3ugd2wj1y" path="res://addons/flow_nodes_editor/graph_input_parameter.gd" id="2_olhr3"]
+[ext_resource type="Script" uid="uid://b77sf57bysigx" path="res://addons/flow_nodes_editor/flow_graph_redirect.gd" id="3_fb0te"]
+[ext_resource type="Script" uid="uid://j6vjeb5cjjoy" path="res://addons/flow_nodes_editor/flow_graph_resource.gd" id="4_kcvrn"]
+
+[sub_resource type="Resource" id="Resource_k8xvn"]
+script = ExtResource("4_kcvrn")
+data = {
+"frames": [],
+"links": [{
+"from_node": &"id_0001_grid",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0001_math_op",
+"to_port": 0
+}, {
+"from_node": &"id_0002_make_vector",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0001_math_op",
+"to_port": 1
+}, {
+"from_node": &"id_0002_compute_shader",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0003_debug",
+"to_port": 0
+}, {
+"from_node": &"id_0001_math_op",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0003_debug",
+"to_port": 0
+}, {
+"from_node": &"id_0001_grid",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0002_compute_shader",
+"to_port": 0
+}, {
+"from_node": &"id_0002_make_vector",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0002_compute_shader",
+"to_port": 1
+}],
+"min_pos": Vector2(0, 0),
+"nodes": [{
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0003_debug",
+"position": Vector2(386.01797, 195.52174),
+"settings": {
+"debug_enabled": true,
+"debug_mode": 1,
+"debug_scale": 0.8,
+"random_seed": 1924366003,
+"title": "Debug"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139, 71),
+"template": "debug"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+},
+"offset": {
+"connected": true,
+"port": 1
+}
+},
+"name": &"id_0002_compute_shader",
+"position": Vector2(180, 40),
+"settings": {
+"debug_mode": 1,
+"debug_scale": 0.92,
+"parameter_values": {
+"offset": Vector3(4.055, 0, 0)
+},
+"random_seed": 2138710521,
+"title": "Compute Shader"
+},
+"show_disconnected_inputs": true,
+"size": Vector2(142, 101.000046),
+"template": "compute_shader"
+}, {
+"args_port": {},
+"name": &"id_0002_make_vector",
+"position": Vector2(0, 100),
+"settings": {
+"random_seed": 3018966963,
+"title": "Make Vector",
+"x": 2.455
+},
+"show_disconnected_inputs": false,
+"size": Vector2(125.00003, 71),
+"template": "make_vector"
+}, {
+"args_port": {},
+"name": &"id_0001_grid",
+"position": Vector2(0, 0),
+"settings": {
+"debug_mode": 1,
+"debug_scale": 0.875,
+"random_seed": 1538665311,
+"title": "Grid",
+"x": 50,
+"y": 5,
+"z": 50
+},
+"show_disconnected_inputs": false,
+"size": Vector2(125, 71),
+"template": "grid"
+}, {
+"args_port": {
+"In A": {
+"connected": true,
+"port": 0
+},
+"In B": {
+"connected": true,
+"port": 1
+}
+},
+"name": &"id_0001_math_op",
+"position": Vector2(180, 140),
+"settings": {
+"debug_mode": 1,
+"debug_scale": 0.8,
+"in_nameA": "Position",
+"random_seed": 2943855164,
+"title": "Math"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(152, 101),
+"template": "math_op"
+}],
+"type": "flow_graph_nodes",
+"version": 1
+}
+graph_name = "demo_compute"
+view_zoom = 1.5579263
+view_offset = Vector2(56.43579, 55.848083)
+
+[node name="DemoCompute" type="Node3D" unique_id=1189648527]
+
+[node name="FlowGraphNode3D" type="Node3D" parent="." unique_id=740653843]
+script = ExtResource("1_jpxv6")
+graph = SubResource("Resource_k8xvn")
+regenerate = Callable()
+clearInstances = Callable()
+metadata/_custom_type_script = "uid://d1krtmb1urldl"

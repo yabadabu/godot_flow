@@ -2,6 +2,7 @@
 #include "gd_rtree.h"
 #include "gd_kdtree.h"
 #include "gd_stream_utils.h"
+#include "gd_shader_reflection.h"
 
 #include <gdextension_interface.h>
 #include <godot_cpp/core/defs.hpp>
@@ -17,6 +18,7 @@ void initialize_module(ModuleInitializationLevel p_level) {
   ClassDB::register_class<GDRTree>();
   ClassDB::register_class<GDKdTree>();
   ClassDB::register_class<GDStreamUtils>();
+  ClassDB::register_class<GDShaderReflection>();
 }
 
 void uninitialize_module(ModuleInitializationLevel p_level) {
