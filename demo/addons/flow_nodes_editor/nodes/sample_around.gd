@@ -2,6 +2,7 @@
 extends FlowNodeBase
 
 @export var radius : float = 1.0
+@export var max_radius : float = 3.0
 @export var max_points : int = 100
 
 func _init():
@@ -18,7 +19,9 @@ class Bridson:
 	var candidates_positions : PackedVector3Array
 	var candidates_rads : PackedFloat32Array
 	var radius : float = 1.0
-	var spatial : GDRTree
+	var max_radius : float = 3.0
+	var spatial : GDKdTree
+	var sources_spatial : GDKdTree
 	var rng : RandomNumberGenerator = RandomNumberGenerator.new()
 	var ordered_generation : bool = true
 	var new_positions : PackedVector3Array
@@ -26,7 +29,8 @@ class Bridson:
 
 	func addSources( in_trs : FlowData.TransformsStream ):
 		var in_size : int = in_trs.size()
-		#spatial.add( in_trs.positions, in_trs.sizes )	
+		spatial.set_points( in_trs.positions )	
+		sources_spatial.set_points( in_trs.positions )	
 		active.resize( in_size )
 		for i in range(in_size):
 			active[i] = i
@@ -35,22 +39,10 @@ class Bridson:
 		for i in range(in_size):
 			candidates_rads[i] = ( in_trs.sizes[ i ] * Vector3(1,0,1) ).length()
 
-	func insert( new_pos : Vector3 ):
-		var poss : PackedVector3Array  
-		var sizes : PackedVector3Array  
-		poss.append( new_pos )
-		sizes.append( Vector3.ONE * radius )
-		spatial.add( poss, sizes )
-		new_positions.append(new_pos)
-		
-	func isClose( p : Vector3, rad : float ) -> bool:
-		var poss : PackedVector3Array  
-		var sizes : PackedVector3Array  
-		poss.append( p )
-		sizes.append( Vector3.ONE * rad )
-		var r = spatial.overlaps( poss, sizes, true )
-		#print( "isClose(%f,%f) r:%f -> %s" % [ p.x, p.z, rad, "true" if r.result else "false"  ])
-		return r.result and r.idxs_overlapped.size() > 0
+	func insert( new_pos : Vector3 ) -> int:
+		var new_idx = spatial.add_point( new_pos )
+		new_positions.append( new_pos )
+		return new_idx
 		
 	func suggestCandidate( p : Vector3, r : float ) -> Vector3:
 		for i : int in range( 8 ):
@@ -58,7 +50,9 @@ class Bridson:
 			var rad_factor = rng.randf_range( 1.0, 2.0 )
 			var dir = Vector3( cos(angle), 0, sin(angle))
 			var candidate = p + dir * ( r + radius * rad_factor ) * 1.02 * 0.5
-			if isClose( candidate, radius ):
+			if spatial.is_close( candidate, radius ):
+				continue
+			if not sources_spatial.is_close( candidate, max_radius ):
 				continue
 			return candidate
 		return Vector3.INF
@@ -71,8 +65,11 @@ class Bridson:
 		var new_pos = suggestCandidate( center_pos, center_rad )
 		#print( "Testing point_id %d/%d A:%d at %f,%f-> %f,%f" % [ point_id, active.size(), active_idx, center_pos.x, center_pos.z, new_pos.x, new_pos.z ])
 		if new_pos != Vector3.INF:
-			insert( new_pos )
-			next_idx = ( next_idx + 1 ) 
+			var new_idx = insert( new_pos )
+			next_idx = ( next_idx + 1 )
+			candidates_positions.append( new_pos )
+			candidates_rads.append( radius )
+			active.push_back( new_idx )
 			#print( "  Success. Now we have %d active points. next_idx is %d" % [ active.size(), next_idx ])
 			return true
 		#print( "Failed. Discarting point %d" % [ active_idx ])
@@ -87,8 +84,10 @@ func execute( ctx : FlowData.EvaluationContext ):
 		return
 
 	var bridson = Bridson.new()
-	bridson.spatial = GDRTree.new()
+	bridson.spatial = GDKdTree.new()
+	bridson.sources_spatial = GDKdTree.new()
 	bridson.radius = radius
+	bridson.max_radius = max_radius
 	bridson.rng.seed = random_seed
 	bridson.addSources( in_trs )
 

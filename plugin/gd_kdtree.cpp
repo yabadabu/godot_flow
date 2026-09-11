@@ -7,6 +7,8 @@ using namespace godot;
 
 void GDKdTree::_bind_methods() {
   ClassDB::bind_method(D_METHOD("set_points"), &GDKdTree::set_points);
+  ClassDB::bind_method(D_METHOD("add_point"), &GDKdTree::insert);
+  ClassDB::bind_method(D_METHOD("is_close"), &GDKdTree::is_close);
   ClassDB::bind_method(D_METHOD("find_nearest_idx"), &GDKdTree::find_nearest_idx);
   ClassDB::bind_method(D_METHOD("find_nearest_indices"), &GDKdTree::find_nearest_indices);
   ClassDB::bind_method(D_METHOD("cluster_by_distance"), &GDKdTree::cluster_by_distance);
@@ -26,11 +28,22 @@ int GDKdTree::find_nearest_idx( const Vector3& pos ) const {
   if (!tree || all.points.is_empty())
     return -1;
   nanoflann::KNNResultSet<Scalar> results(1);
-  size_t return_idx = -1;
+  size_t return_idx = ~0;
   Scalar out_distance;
   results.init(&return_idx, &out_distance);
   tree->findNeighbors(results, &pos.x, nanoflann::SearchParameters());
   return return_idx;
+}
+
+bool GDKdTree::is_close(const Vector3& pos, Scalar max_distance ) const {
+  nanoflann::KNNResultSet<Scalar> results(1);
+  size_t return_idx = ~0;
+  float out_distance;
+  results.init(&return_idx, &out_distance);
+  tree->findNeighbors(results, &pos.x, nanoflann::SearchParameters());
+  if (results.size() == 1 && out_distance < max_distance * max_distance )
+    return true;
+  return false;
 }
 
 PackedInt32Array GDKdTree::find_nearest_indices( const PackedVector3Array& in_pos ) const {
@@ -75,6 +88,13 @@ void GDKdTree::set_points( const PackedVector3Array& in_pos ) {
   if (in_pos.is_empty())
     return;
   tree = new jTree(3, all, nanoflann::KDTreeSingleIndexAdaptorParams());
+}
+
+int GDKdTree::insert(const Vector3& c) {
+  size_t n = all.points.size();
+  all.points.push_back(c);
+  tree->addPoints(n, n);
+  return n;
 }
 
 PackedInt32Array GDKdTree::cluster_by_distance(float max_distance) const {

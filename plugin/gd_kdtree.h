@@ -47,7 +47,9 @@ public:
   ~GDKdTree();
   
   void set_points( const PackedVector3Array& in_pos );
-  int find_nearest_idx( const Vector3& pos ) const;
+  int  insert(const Vector3& c);
+  int  find_nearest_idx( const Vector3& pos ) const;
+  bool is_close( const Vector3& pos, Scalar max_distance ) const;
   PackedInt32Array find_nearest_indices( const PackedVector3Array& in_pos ) const;
   PackedInt32Array cluster_by_distance( float max_distance ) const;
   PackedInt32Array cluster_by_max_distance( float max_distance ) const;

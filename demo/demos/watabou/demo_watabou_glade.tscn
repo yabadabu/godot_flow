@@ -19,33 +19,33 @@ name = "PlayerAreas"
 script = ExtResource("9_a0iuc")
 data = {
 "frames": [{
-"attached": Array[StringName]([&"id_0009_sample_spline", &"id_0007_merge", &"id_0008_debug"]),
-"name": &"id_0010_comment",
-"position": Vector2(720, 799),
-"size": Vector2(779, 172.00021),
-"tint_color": Color(0.28235295, 0.23921569, 0.54509807, 1),
-"title": "Show contours"
-}, {
-"attached": Array[StringName]([&"id_0008_sample_spline", &"id_0010_bounds_modifier"]),
-"name": &"id_0011_comment",
-"position": Vector2(1340, 159),
-"size": Vector2(499, 152),
-"tint_color": Color(0.44815415, 0.18726698, 0.34993398, 1),
-"title": "Interior islands"
+"attached": Array[StringName]([&"id_0015_attribute_rename", &"id_0013_get_bounds", &"id_0016_attribute_rename", &"id_0017_add_attribute"]),
+"name": &"id_0002_comment",
+"position": Vector2(1580, 499),
+"size": Vector2(719, 152.00012),
+"tint_color": Color(0.242, 0.46273333, 0.55, 1),
+"title": "Create a single point around the boundary"
 }, {
 "attached": Array[StringName]([&"id_0002_bounds_modifier", &"id_0035_sample_points", &"id_0007_bounds_modifier"]),
 "name": &"id_0008_comment",
 "position": Vector2(2320, 499),
-"size": Vector2(539.0005, 152.00037),
+"size": Vector2(539.0004, 152.00012),
 "tint_color": Color(0.28235295, 0.23921569, 0.54509807, 1),
 "title": "Expand, sample, fix size"
 }, {
-"attached": Array[StringName]([&"id_0015_attribute_rename", &"id_0013_get_bounds", &"id_0016_attribute_rename", &"id_0017_add_attribute"]),
-"name": &"id_0002_comment",
-"position": Vector2(1580, 499),
-"size": Vector2(719, 152.00024),
-"tint_color": Color(0.242, 0.46273333, 0.55, 1),
-"title": "Create a single point around the boundary"
+"attached": Array[StringName]([&"id_0008_sample_spline", &"id_0010_bounds_modifier"]),
+"name": &"id_0011_comment",
+"position": Vector2(1340, 159),
+"size": Vector2(499, 152.00003),
+"tint_color": Color(0.44815415, 0.18726698, 0.34993398, 1),
+"title": "Interior islands"
+}, {
+"attached": Array[StringName]([&"id_0009_sample_spline", &"id_0007_merge", &"id_0008_debug"]),
+"name": &"id_0010_comment",
+"position": Vector2(720, 799),
+"size": Vector2(779, 172),
+"tint_color": Color(0.28235295, 0.23921569, 0.54509807, 1),
+"title": "Show contours"
 }],
 "links": [{
 "from_node": &"id_0007_merge",
@@ -102,12 +102,6 @@ data = {
 "to_node": &"id_0002_create_spline",
 "to_port": 0
 }, {
-"from_node": &"id_0004_make_string",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0001_watabou_glade",
-"to_port": 0
-}, {
 "from_node": &"id_0009_sample_spline",
 "from_port": 0,
 "keep_alive": false,
@@ -154,12 +148,6 @@ data = {
 "from_port": 0,
 "keep_alive": false,
 "to_node": &"id_0035_sample_points",
-"to_port": 0
-}, {
-"from_node": &"id_0006_filter",
-"from_port": 0,
-"keep_alive": false,
-"to_node": &"id_0013_get_bounds",
 "to_port": 0
 }, {
 "from_node": &"id_0007_merge",
@@ -239,45 +227,56 @@ data = {
 "keep_alive": false,
 "to_node": &"id_0018_distance",
 "to_port": 0
+}, {
+"from_node": &"id_0004_make_string",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0001_watabou_glade",
+"to_port": 0
+}, {
+"from_node": &"id_0007_merge",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0002_sample_around",
+"to_port": 0
+}, {
+"from_node": &"id_0008_bounds_modifier",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0005_substract",
+"to_port": 0
+}, {
+"from_node": &"id_0003_redirect_output",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0005_substract",
+"to_port": 1
+}, {
+"from_node": &"id_0002_sample_around",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0008_bounds_modifier",
+"to_port": 0
+}, {
+"from_node": &"id_0006_filter",
+"from_port": 0,
+"keep_alive": false,
+"to_node": &"id_0013_get_bounds",
+"to_port": 0
 }],
 "min_pos": Vector2(0, 0),
 "nodes": [{
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0006_bounds_modifier",
-"position": Vector2(3520, 480),
+"args_port": {},
+"name": &"id_0001_make_string",
+"position": Vector2(0, 160),
 "settings": {
-"debug_color": Color(1, 0.12, 0.12, 1),
-"mode": 3,
-"random_seed": 998838746,
-"title": "Bounds Modifier",
-"uniform_scale": 10.0
+"random_seed": 2558135604,
+"title": "Make String",
+"value": "uid://enlpys1wdx0"
 },
 "show_disconnected_inputs": false,
-"size": Vector2(139.00015, 71),
-"template": "bounds_modifier"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0010_bounds_modifier",
-"position": Vector2(1660, 200),
-"settings": {
-"mode": 3,
-"random_seed": 20765624,
-"title": "dBounds Modifier",
-"uniform_scale": 3.0
-},
-"show_disconnected_inputs": false,
-"size": Vector2(139, 71),
-"template": "bounds_modifier"
+"size": Vector2(125, 54),
+"template": "make_string"
 }, {
 "args_port": {
 "origin": {
@@ -316,20 +315,86 @@ data = {
 "title": "Grid"
 },
 "show_disconnected_inputs": true,
-"size": Vector2(156, 251.00003),
+"size": Vector2(156, 251.00006),
 "template": "grid"
 }, {
 "args_port": {},
-"name": &"id_0001_make_string",
-"position": Vector2(0, 160),
+"name": &"id_0004_make_string",
+"position": Vector2(0, 0),
 "settings": {
 "random_seed": 2558135604,
 "title": "Make String",
-"value": "uid://enlpys1wdx0"
+"value": "uid://daw778unedute"
 },
 "show_disconnected_inputs": false,
-"size": Vector2(125, 54.00006),
+"size": Vector2(125, 54.000015),
 "template": "make_string"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0006_bounds_modifier",
+"position": Vector2(3520, 480),
+"settings": {
+"debug_color": Color(1, 0.12, 0.12, 1),
+"mode": 3,
+"random_seed": 998838746,
+"title": "Bounds Modifier",
+"uniform_scale": 10.0
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139, 71.00003),
+"template": "bounds_modifier"
+}, {
+"args_port": {
+"In A": {
+"connected": true,
+"port": 0
+},
+"In B": {
+"connected": true,
+"port": 1
+}
+},
+"name": &"id_0004_substract",
+"position": Vector2(3340, 480),
+"settings": {
+"operation": 1,
+"random_seed": 2498335789,
+"title": "Substract"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(152.00012, 84.00015),
+"template": "substract"
+}, {
+"args_port": {},
+"name": &"id_0005_redirect_output",
+"position": Vector2(3100, 520),
+"settings": {
+"random_seed": 465865547,
+"redirect_id": &"raljx",
+"redirect_name": "Contours",
+"title": "Redirect Output"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(125, 54),
+"template": "redirect_output"
+}, {
+"args_port": {},
+"name": &"id_0019_redirect_output",
+"position": Vector2(2660, 820),
+"settings": {
+"random_seed": 465865547,
+"redirect_id": &"raljx",
+"redirect_name": "Contours",
+"title": "Redirect Output"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(125.00006, 54),
+"template": "redirect_output"
 }, {
 "args_port": {},
 "name": &"id_0024_redirect_output",
@@ -341,7 +406,7 @@ data = {
 "title": "Redirect Output"
 },
 "show_disconnected_inputs": false,
-"size": Vector2(125, 54.000275),
+"size": Vector2(125, 54.000183),
 "template": "redirect_output"
 }, {
 "args_port": {
@@ -361,7 +426,7 @@ data = {
 "title": "Redirect Input"
 },
 "show_disconnected_inputs": false,
-"size": Vector2(116.00006, 54.000107),
+"size": Vector2(116, 54),
 "template": "redirect_input"
 }, {
 "args_port": {
@@ -385,7 +450,7 @@ data = {
 "title": "Substract"
 },
 "show_disconnected_inputs": false,
-"size": Vector2(152, 84.00043),
+"size": Vector2(152.00024, 84.00006),
 "template": "substract"
 }, {
 "args_port": {
@@ -403,7 +468,7 @@ data = {
 "uniform_scale": 10.0
 },
 "show_disconnected_inputs": false,
-"size": Vector2(139.00006, 71.00037),
+"size": Vector2(139, 71),
 "template": "bounds_modifier"
 }, {
 "args_port": {
@@ -434,7 +499,7 @@ data = {
 "title": "Filter"
 },
 "show_disconnected_inputs": false,
-"size": Vector2(203.00006, 114.00049),
+"size": Vector2(203, 114),
 "template": "filter"
 }, {
 "args_port": {
@@ -451,21 +516,31 @@ data = {
 "title": "Math"
 },
 "show_disconnected_inputs": false,
-"size": Vector2(152.00009, 71.00037),
+"size": Vector2(152, 71),
 "template": "math_op"
 }, {
-"args_port": {},
-"name": &"id_0019_redirect_output",
-"position": Vector2(2660, 820),
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+},
+"Target": {
+"connected": true,
+"port": 1
+}
+},
+"name": &"id_0018_distance",
+"position": Vector2(2820, 720),
 "settings": {
-"random_seed": 465865547,
-"redirect_id": &"raljx",
-"redirect_name": "Contours",
-"title": "Redirect Output"
+"debug_mode": 1,
+"debug_modulate_by": "distance",
+"debug_scale": 0.14,
+"random_seed": 2293053265,
+"title": "Distance"
 },
 "show_disconnected_inputs": false,
-"size": Vector2(125.000885, 54.000275),
-"template": "redirect_output"
+"size": Vector2(144, 101),
+"template": "distance"
 }, {
 "args_port": {
 "In": {
@@ -482,8 +557,27 @@ data = {
 "title": "Redirect Input"
 },
 "show_disconnected_inputs": false,
-"size": Vector2(116.00003, 54),
+"size": Vector2(116, 54),
 "template": "redirect_input"
+}, {
+"args_port": {
+"Splines": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0001_sample_spline",
+"position": Vector2(1120, 0),
+"settings": {
+"debug_scale": 0.405,
+"random_seed": 4039099082,
+"sample_segments_centers": true,
+"title": "Contour",
+"uniform_interval": 8.0
+},
+"show_disconnected_inputs": false,
+"size": Vector2(173, 71.000015),
+"template": "sample_spline"
 }, {
 "args_port": {
 "filename": {
@@ -496,14 +590,14 @@ data = {
 }
 },
 "name": &"id_0001_watabou_glade",
-"position": Vector2(260, 0),
+"position": Vector2(240, 0),
 "settings": {
 "filename": "uid://daw778unedute",
 "random_seed": 1738269338,
 "title": "Watabou Glade"
 },
 "show_disconnected_inputs": true,
-"size": Vector2(222, 101.00012),
+"size": Vector2(222, 101.000015),
 "template": "watabou_glade"
 }, {
 "args_port": {
@@ -523,7 +617,7 @@ data = {
 "title": "Substract"
 },
 "show_disconnected_inputs": false,
-"size": Vector2(152.00009, 84.000046),
+"size": Vector2(152, 84),
 "template": "substract"
 }, {
 "args_port": {
@@ -532,31 +626,40 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0001_sample_spline",
-"position": Vector2(1120, 0),
+"name": &"id_0007_sample_spline",
+"position": Vector2(1420, 40),
 "settings": {
-"debug_enabled": true,
-"debug_scale": 0.405,
-"random_seed": 4039099082,
-"sample_segments_centers": true,
-"title": "Contour",
-"uniform_interval": 8.0
+"fill_curve": true,
+"random_seed": 181437406,
+"title": "Sample Spline",
+"uniform_interval": 5.0
 },
 "show_disconnected_inputs": false,
-"size": Vector2(173.00003, 71.00006),
+"size": Vector2(173, 71),
 "template": "sample_spline"
 }, {
-"args_port": {},
-"name": &"id_0004_make_string",
-"position": Vector2(0, 0),
+"args_port": {
+"In A": {
+"connected": true,
+"port": 0
+},
+"In B": {
+"connected": false,
+"port": 1
+}
+},
+"name": &"id_0006_filter",
+"position": Vector2(1120, 180),
 "settings": {
-"random_seed": 2558135604,
-"title": "Make String",
-"value": "uid://daw778unedute"
+"debug_port_combined_index": 1,
+"in_nameA": "Index",
+"in_nameB": "0",
+"random_seed": 943275548,
+"title": "Filter"
 },
 "show_disconnected_inputs": false,
-"size": Vector2(125, 54.000122),
-"template": "make_string"
+"size": Vector2(164, 84.00003),
+"template": "filter"
 }, {
 "args_port": {
 "In": {
@@ -564,17 +667,31 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0015_attribute_rename",
-"position": Vector2(1800, 540),
+"name": &"id_0003_merge",
+"position": Vector2(840, 0),
 "settings": {
-"from_name": "center",
-"random_seed": 3204740431,
-"title": "Attribute Rename",
-"to_name": "position"
+"random_seed": 3389243077,
+"title": "Merge"
 },
 "show_disconnected_inputs": false,
-"size": Vector2(139.00003, 71.000244),
-"template": "attribute_rename"
+"size": Vector2(139, 54.000015),
+"template": "merge"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0002_create_spline",
+"position": Vector2(580, 0),
+"settings": {
+"random_seed": 3119561804,
+"title": "Create Spline"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(164, 54.000015),
+"template": "create_spline"
 }, {
 "args_port": {
 "In": {
@@ -591,27 +708,8 @@ data = {
 "title": "Add Attribute"
 },
 "show_disconnected_inputs": false,
-"size": Vector2(139.00012, 71.000244),
+"size": Vector2(139.00012, 71.00012),
 "template": "add_attribute"
-}, {
-"args_port": {
-"In": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0002_bounds_modifier",
-"position": Vector2(2360, 540),
-"settings": {
-"mode": 3,
-"padding": Vector3(1, 0, 1),
-"random_seed": 12266,
-"title": "Bounds Modifier",
-"uniform_scale": 75.0
-},
-"show_disconnected_inputs": false,
-"size": Vector2(139.00085, 71.000244),
-"template": "bounds_modifier"
 }, {
 "args_port": {
 "In": {
@@ -628,7 +726,7 @@ data = {
 "to_name": "size"
 },
 "show_disconnected_inputs": false,
-"size": Vector2(139.00006, 71.000244),
+"size": Vector2(139, 71.00012),
 "template": "attribute_rename"
 }, {
 "args_port": {
@@ -644,8 +742,44 @@ data = {
 "title": "Get Bounds"
 },
 "show_disconnected_inputs": false,
-"size": Vector2(139, 71.000244),
+"size": Vector2(139, 71.00012),
 "template": "get_bounds"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0015_attribute_rename",
+"position": Vector2(1800, 540),
+"settings": {
+"from_name": "center",
+"random_seed": 3204740431,
+"title": "Attribute Rename",
+"to_name": "position"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139, 71.00012),
+"template": "attribute_rename"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0007_bounds_modifier",
+"position": Vector2(2680, 540),
+"settings": {
+"debug_color": Color(1, 0.12, 0.12, 1),
+"random_seed": 998838746,
+"title": "Bounds Modifier",
+"uniform_scale": 25.0
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139.00049, 71.00012),
+"template": "bounds_modifier"
 }, {
 "args_port": {
 "In": {
@@ -671,31 +805,45 @@ data = {
 "title": "Sample Points"
 },
 "show_disconnected_inputs": false,
-"size": Vector2(139.00092, 71.0004),
+"size": Vector2(139.00006, 71.00012),
 "template": "sample_points"
 }, {
 "args_port": {
 "In": {
 "connected": true,
 "port": 0
-},
-"Target": {
-"connected": true,
-"port": 1
 }
 },
-"name": &"id_0018_distance",
-"position": Vector2(2820, 720),
+"name": &"id_0002_bounds_modifier",
+"position": Vector2(2360, 540),
 "settings": {
-"debug_mode": 1,
-"debug_modulate_by": "distance",
-"debug_scale": 0.14,
-"random_seed": 2293053265,
-"title": "Distance"
+"mode": 3,
+"padding": Vector3(1, 0, 1),
+"random_seed": 12266,
+"title": "Bounds Modifier",
+"uniform_scale": 75.0
 },
 "show_disconnected_inputs": false,
-"size": Vector2(144.0004, 101.000305),
-"template": "distance"
+"size": Vector2(139.00006, 71.00012),
+"template": "bounds_modifier"
+}, {
+"args_port": {
+"In": {
+"connected": true,
+"port": 0
+}
+},
+"name": &"id_0010_bounds_modifier",
+"position": Vector2(1660, 200),
+"settings": {
+"mode": 3,
+"random_seed": 20765624,
+"title": "dBounds Modifier",
+"uniform_scale": 3.0
+},
+"show_disconnected_inputs": false,
+"size": Vector2(139, 71.00003),
+"template": "bounds_modifier"
 }, {
 "args_port": {
 "Splines": {
@@ -703,8 +851,8 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0007_sample_spline",
-"position": Vector2(1420, 40),
+"name": &"id_0008_sample_spline",
+"position": Vector2(1380, 200),
 "settings": {
 "fill_curve": true,
 "random_seed": 181437406,
@@ -712,63 +860,41 @@ data = {
 "uniform_interval": 5.0
 },
 "show_disconnected_inputs": false,
-"size": Vector2(173.00003, 71.000046),
+"size": Vector2(173, 71.00003),
 "template": "sample_spline"
 }, {
 "args_port": {
-"In A": {
-"connected": true,
-"port": 0
-},
-"In B": {
-"connected": false,
-"port": 1
-}
-},
-"name": &"id_0006_filter",
-"position": Vector2(1120, 180),
-"settings": {
-"debug_port_combined_index": 1,
-"in_nameA": "Index",
-"in_nameB": "0",
-"random_seed": 943275548,
-"title": "Filter"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(164.00003, 84.00003),
-"template": "filter"
-}, {
-"args_port": {
 "In": {
 "connected": true,
 "port": 0
 }
 },
-"name": &"id_0003_merge",
-"position": Vector2(840, 0),
+"name": &"id_0007_merge",
+"position": Vector2(1020, 860),
 "settings": {
-"random_seed": 3389243077,
+"random_seed": 3642725428,
 "title": "Merge"
 },
 "show_disconnected_inputs": false,
-"size": Vector2(139.00021, 54.000122),
+"size": Vector2(139, 54),
 "template": "merge"
 }, {
 "args_port": {
-"In": {
+"Splines": {
 "connected": true,
 "port": 0
 }
 },
-"name": &"id_0002_create_spline",
-"position": Vector2(580, 0),
+"name": &"id_0009_sample_spline",
+"position": Vector2(760, 860),
 "settings": {
-"random_seed": 3119561804,
-"title": "Create Spline"
+"random_seed": 1939396955,
+"title": "Sample Spline",
+"uniform_interval": 1.0
 },
 "show_disconnected_inputs": false,
-"size": Vector2(164, 54.000122),
-"template": "create_spline"
+"size": Vector2(173, 71),
+"template": "sample_spline"
 }, {
 "args_port": {
 "In": {
@@ -786,8 +912,21 @@ data = {
 "title": "Debug"
 },
 "show_disconnected_inputs": false,
-"size": Vector2(139.00003, 71.00055),
+"size": Vector2(139, 71.00018),
 "template": "debug"
+}, {
+"args_port": {},
+"name": &"id_0003_redirect_output",
+"position": Vector2(1580, 820),
+"settings": {
+"random_seed": 2434692204,
+"redirect_id": &"ivn56",
+"redirect_name": "PlayerAreas",
+"title": "Redirect Output"
+},
+"show_disconnected_inputs": false,
+"size": Vector2(125, 54),
+"template": "redirect_output"
 }, {
 "args_port": {
 "In": {
@@ -795,63 +934,17 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0007_merge",
-"position": Vector2(1020, 860),
+"name": &"id_0008_bounds_modifier",
+"position": Vector2(1560, 740),
 "settings": {
-"random_seed": 3642725428,
-"title": "Merge"
+"debug_color": Color(1, 0.12, 0.12, 1),
+"random_seed": 998838746,
+"title": "Bounds Modifier",
+"uniform_scale": 10.0
 },
 "show_disconnected_inputs": false,
-"size": Vector2(139.00002, 54.000153),
-"template": "merge"
-}, {
-"args_port": {
-"Splines": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0009_sample_spline",
-"position": Vector2(760, 860),
-"settings": {
-"random_seed": 1939396955,
-"title": "Sample Spline",
-"uniform_interval": 1.0
-},
-"show_disconnected_inputs": false,
-"size": Vector2(173, 71.000244),
-"template": "sample_spline"
-}, {
-"args_port": {
-"Splines": {
-"connected": true,
-"port": 0
-}
-},
-"name": &"id_0008_sample_spline",
-"position": Vector2(1380, 200),
-"settings": {
-"fill_curve": true,
-"random_seed": 181437406,
-"title": "Sample Spline",
-"uniform_interval": 5.0
-},
-"show_disconnected_inputs": false,
-"size": Vector2(173.00003, 71),
-"template": "sample_spline"
-}, {
-"args_port": {},
-"name": &"id_0005_redirect_output",
-"position": Vector2(3100, 520),
-"settings": {
-"random_seed": 465865547,
-"redirect_id": &"raljx",
-"redirect_name": "Contours",
-"title": "Redirect Output"
-},
-"show_disconnected_inputs": false,
-"size": Vector2(125.00006, 54),
-"template": "redirect_output"
+"size": Vector2(139.00006, 71.00006),
+"template": "bounds_modifier"
 }, {
 "args_port": {
 "In A": {
@@ -863,15 +956,17 @@ data = {
 "port": 1
 }
 },
-"name": &"id_0004_substract",
-"position": Vector2(3340, 480),
+"name": &"id_0005_substract",
+"position": Vector2(1720, 760),
 "settings": {
-"operation": 1,
-"random_seed": 2498335789,
+"debug_color": Color(0, 0.7294, 0, 1),
+"debug_mode": 1,
+"debug_scale": 2.0,
+"random_seed": 991750756,
 "title": "Substract"
 },
 "show_disconnected_inputs": false,
-"size": Vector2(152.00003, 84),
+"size": Vector2(152.00006, 84),
 "template": "substract"
 }, {
 "args_port": {
@@ -880,24 +975,25 @@ data = {
 "port": 0
 }
 },
-"name": &"id_0007_bounds_modifier",
-"position": Vector2(2680, 540),
+"name": &"id_0002_sample_around",
+"position": Vector2(1340, 680),
 "settings": {
-"debug_color": Color(1, 0.12, 0.12, 1),
-"random_seed": 998838746,
-"title": "Bounds Modifier",
-"uniform_scale": 25.0
+"max_points": 20000,
+"max_radius": 30.0,
+"radius": 5.0,
+"random_seed": 2363116427,
+"title": "Sample Around"
 },
 "show_disconnected_inputs": false,
-"size": Vector2(139.00052, 71),
-"template": "bounds_modifier"
+"size": Vector2(139, 71.00006),
+"template": "sample_around"
 }],
 "type": "flow_graph_nodes",
 "version": 1
 }
 graph_name = "demo_watabou_glade"
-view_zoom = 0.25582466
-view_offset = Vector2(528.74994, -189.94427)
+view_zoom = 0.60322106
+view_offset = Vector2(584.3322, -64.344955)
 redirectors = Array[ExtResource("8_m826l")]([SubResource("Resource_ivn56"), SubResource("Resource_raljx")])
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_e778l"]
