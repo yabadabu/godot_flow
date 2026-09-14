@@ -20,6 +20,14 @@ public:
   static PackedInt32Array get_sorted_indices_i32(const PackedInt32Array &values);
   static PackedInt32Array get_sorted_indices_string(const PackedStringArray &values);
 
+  static PackedVector3Array sample_around(
+    const PackedVector3Array& positions,
+    const PackedVector3Array& sizes,
+    float radius,
+    float max_radius,
+    int32_t max_points,
+    uint64_t seed);
+
   static Dictionary KMeans(
     const PackedVector3Array& points,
     int32_t num_clusters,
