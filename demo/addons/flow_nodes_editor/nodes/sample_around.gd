@@ -1,9 +1,9 @@
 @tool
 extends FlowNodeBase
 
-@export var radius : float = 1.0
+@export var size : float = 1.0
 @export var max_radius : float = 3.0
-@export var max_points : int = 100
+@export var max_tries : int = 100
 
 func _init():
 	meta_node = {
@@ -21,13 +21,18 @@ func execute( ctx : FlowData.EvaluationContext ):
 		setError(ctx,  "Input does not provide position, rotation or scale streams" )
 		return
 
-	var new_positions := GDStreamUtils.sample_around(
+	var sample_result : Dictionary = GDStreamUtils.sample_around(
 		in_trs.positions,
 		in_trs.sizes,
-		radius,
+		size,
 		max_radius,
-		max_points,
+		max_tries,
 		random_seed)
+	if not sample_result.result:
+		setError(ctx, "Invalid input parameters for Sample Around")
+		return
+	var new_positions : PackedVector3Array = sample_result.positions
+	var generations : PackedInt32Array = sample_result.generations
 
 	var out_data := FlowData.Data.new()
 	out_data.addCommonStreams( 0 )
@@ -38,6 +43,7 @@ func execute( ctx : FlowData.EvaluationContext ):
 	srot.resize( new_positions.size() )
 	srot.fill( Vector3.ZERO )
 	ssize.resize( new_positions.size() )
-	ssize.fill( Vector3.ONE * radius )
+	ssize.fill( Vector3.ONE * size )
+	out_data.registerStream( "generation", generations, FlowData.DataType.Int )
 	
 	setOutput(ctx, 0, out_data )

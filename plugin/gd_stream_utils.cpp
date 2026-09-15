@@ -36,7 +36,7 @@ void GDStreamUtils::_bind_methods() {
   ClassDB::bind_static_method("GDStreamUtils", D_METHOD("get_sorted_indices_f32", "values"), &GDStreamUtils::get_sorted_indices_f32);
   ClassDB::bind_static_method("GDStreamUtils", D_METHOD("get_sorted_indices_i32", "values"), &GDStreamUtils::get_sorted_indices_i32);
   ClassDB::bind_static_method("GDStreamUtils", D_METHOD("get_sorted_indices_string", "values"), &GDStreamUtils::get_sorted_indices_string);
-  ClassDB::bind_static_method("GDStreamUtils", D_METHOD("sample_around", "positions", "sizes", "radius", "max_radius", "max_points", "seed"), &GDStreamUtils::sample_around);
+  ClassDB::bind_static_method("GDStreamUtils", D_METHOD("sample_around", "positions", "sizes", "size", "max_radius", "max_tries", "seed"), &GDStreamUtils::sample_around);
   ClassDB::bind_static_method("GDStreamUtils", D_METHOD("KMeans", "points", "num_clusters", "max_iterations", "tolerance", "seed"), &GDStreamUtils::KMeans);
 }
 
@@ -74,32 +74,42 @@ PackedInt32Array GDStreamUtils::get_sorted_indices_string(const PackedStringArra
     return get_sorted_container( values ); 
 }
 
-PackedVector3Array GDStreamUtils::sample_around(
+Dictionary GDStreamUtils::sample_around(
     const PackedVector3Array& positions,
     const PackedVector3Array& sizes,
-    float radius,
+    float size,
     float max_radius,
-    int32_t max_points,
+    int32_t max_tries,
     uint64_t seed) {
-  PackedVector3Array new_positions;
+  Dictionary ret;
+  ret["result"] = false;
   const int32_t source_count = positions.size();
-  if (source_count == 0 || sizes.size() < source_count || max_points <= 0)
-    return new_positions;
+
+  // Validate input parameters
+  if (source_count == 0 || sizes.size() < source_count || max_tries <= 0)
+    return ret;
+
+  PackedVector3Array new_positions;
+  PackedInt32Array new_generations;
 
   // A static KD-tree handles the potentially much larger max_radius query.
   // For the minimum-distance test, Bridson's uniform XZ grid only needs the 9
   // adjacent cells and is cheaper to update than a dynamic KD-tree. Distances
-  // are still checked in 3D to preserve the GDScript implementation exactly.
+  // are still checked in 3D.
   Ref<GDKdTree> sources_spatial;
   sources_spatial.instantiate();
   sources_spatial->set_points(positions);
 
   std::vector<Vector3> candidate_positions;
-  std::vector<float> candidate_radii;
-  candidate_positions.reserve(static_cast<size_t>(source_count) + max_points);
-  candidate_radii.reserve(static_cast<size_t>(source_count) + max_points);
+  std::vector<float> candidate_sizes;
+  std::vector<int32_t> candidate_generations;
+  candidate_positions.reserve(static_cast<size_t>(source_count) + max_tries);
+  candidate_sizes.reserve(static_cast<size_t>(source_count) + max_tries);
+  candidate_generations.reserve(static_cast<size_t>(source_count) + max_tries);
 
-  const float minimum_distance = Math::abs(radius);
+  // The proximity grid it's a 2D grid to confirm no point is too close to previous
+  // spawned points
+  const float minimum_distance = Math::abs(size);
   const float minimum_distance_squared = minimum_distance * minimum_distance;
   const float cell_size = minimum_distance > 0.0f ? minimum_distance : 1.0f;
   const auto cell_for = [cell_size](const Vector3& point) -> GridCell {
@@ -110,17 +120,20 @@ PackedVector3Array GDStreamUtils::sample_around(
   };
 
   std::unordered_map<GridCell, std::vector<int32_t>, GridCellHash> proximity_grid;
-  proximity_grid.reserve(static_cast<size_t>(source_count + max_points));
+  proximity_grid.reserve(static_cast<size_t>(source_count + max_tries));
 
+  // Register the initial set of points
   std::deque<int32_t> active;
   for (int32_t i = 0; i < source_count; ++i) {
     candidate_positions.push_back(positions[i]);
     const Vector3 planar_size(sizes[i].x, 0.0f, sizes[i].z);
-    candidate_radii.push_back(planar_size.length());
+    candidate_sizes.push_back(planar_size.length());
+    candidate_generations.push_back(0);
     active.push_back(i);
     proximity_grid[cell_for(positions[i])].push_back(i);
   }
 
+  // The condition is not to be too close to any other point already in the proximity_grid
   const auto is_too_close = [&](const Vector3& point) -> bool {
     if (minimum_distance_squared == 0.0f)
       return false;
@@ -144,30 +157,38 @@ PackedVector3Array GDStreamUtils::sample_around(
   rng.instantiate();
   rng->set_seed(seed);
 
-  new_positions.resize(max_points);
+  new_positions.resize(max_tries);
+  new_generations.resize(max_tries);
   int32_t accepted_count = 0;
-  for (int32_t iteration = 0; iteration < max_points && !active.empty(); ++iteration) {
+  for (int32_t iteration = 0; iteration < max_tries && !active.empty(); ++iteration) {
     const int32_t point_id = active.front();
     const Vector3 center = candidate_positions[point_id];
-    const float center_radius = candidate_radii[point_id];
+    const float center_size = candidate_sizes[point_id];
     bool accepted = false;
 
     for (int32_t attempt = 0; attempt < 8; ++attempt) {
+      // Find a random direction and move a random amount between 1 and 2
       const float angle = rng->randf() * static_cast<float>(Math_TAU);
-      const float radius_factor = rng->randf_range(1.0f, 2.0f);
+      const float spacing_factor = rng->randf_range(1.0f, 2.0f);
       const Vector3 direction(Math::cos(angle), 0.0f, Math::sin(angle));
       const Vector3 candidate = center + direction *
-        ((center_radius + radius * radius_factor) * 1.02f * 0.5f);
+        ((center_size + size * spacing_factor) * 1.02f * 0.5f);
 
       if (is_too_close(candidate))
         continue;
+
+      // Second condition is the point must still be 'close' to the original input set
       if (!sources_spatial->is_close(candidate, max_radius))
         continue;
 
       const int32_t new_index = static_cast<int32_t>(candidate_positions.size());
-      new_positions[accepted_count++] = candidate;
+      const int32_t new_generation = candidate_generations[point_id] + 1;
+      new_positions[accepted_count] = candidate;
+      new_generations[accepted_count] = new_generation;
+      ++accepted_count;
       candidate_positions.push_back(candidate);
-      candidate_radii.push_back(radius);
+      candidate_sizes.push_back(size);
+      candidate_generations.push_back(new_generation);
       active.push_back(new_index);
       proximity_grid[cell_for(candidate)].push_back(new_index);
       accepted = true;
@@ -179,7 +200,11 @@ PackedVector3Array GDStreamUtils::sample_around(
   }
 
   new_positions.resize(accepted_count);
-  return new_positions;
+  new_generations.resize(accepted_count);
+  ret["result"] = true;
+  ret["positions"] = new_positions;
+  ret["generations"] = new_generations;
+  return ret;
 }
 
 Dictionary GDStreamUtils::KMeans(
