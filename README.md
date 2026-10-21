@@ -15,30 +15,6 @@ Flow graphs are regular Godot resources and can expose typed inputs for reuse.
     * ```demo/bin```
 2. In Godot: **Project** → **Project Settings** → **Plugins** and enable "Flow Nodes Editor"
 
-##  Quickstart
-
-In a scene 3D:
-
-* Add a node of type ```FlowGraphNode3D```
-* Open the Data Flow dock (appears on the right when the plugin is enabled).
-* **Right click** in the graph to open **Add Node….**
-* Add a node, e.g. ```Grid```
-* Press ```D``` to toggle the 3D debug on that node - points appear as white boxes in the viewport.
-* Adjust the selected node’s parameters (e.g. grid count/size).
-* Press ```E``` to toggle the **Data Inspector** and inspect the actual per-point values.
-    * Click on each row to highlight the point in the 3d scene as a magenta point
-
-## Handy Shortcuts
-
-* **Right-click**: Add node
-* **D**: Toggle 3D point debug
-* **Shift+D**: Disables 3D point debug in all nodes except the selected one
-* **A**: Toggle Data Inspector
-* **E**: Toggle Enable/Disable Node
-* **C**: Create a comments box around selected nodes
-* **X**: Deletes selected nodes
-* **R**: Forces reevaluation of selected nodes
-
 ## Features
 
 * **+75 nodes** including:
@@ -57,7 +33,7 @@ In a scene 3D:
     - Node redirectors
     - Clustering
     - Attractor
-    - Watabou importers for dungeon and dwellings
+    - Watabou importers for galdes, dungeons and dwellings
 * **Grid-based Data Inspector** with selection highlighting
 * **3D Debug** overlays with color cues
 * **Graphs as resource** with optional **typed inputs**
@@ -83,6 +59,24 @@ And the Associated graph
 ### Demo Grammars
 ![demo_grammar](demo/addons/flow_nodes_editor/doc/demo_grammar.png)
 
+### Demo Watabou Glades Importer (from [www.watabou.com](https://watabou.github.io/))
+<p float="left">
+  <img alt="Image" src="https://github.com/user-attachments/assets/71fedf57-9987-48eb-9de6-728c21475bad" width="512" />
+</p>
+<p float="left">
+  <img src="/demo/addons/flow_nodes_editor/doc/demo_watabou_glade00.png" width="512" /> 
+  <img src="/demo/addons/flow_nodes_editor/doc/demo_watabou_glade01.png" width="512" />
+</p>
+
+### Demo Watabou Dungeon Importer 
+from https://watabou.github.io/one-page-dungeon/?seed=1351814869
+<p float="left">
+  <img src="/demo/addons/flow_nodes_editor/doc/demo_watabou_dungeon01.png" width="512" /> 
+</p>
+<p float="left">
+  <img src="/demo/addons/flow_nodes_editor/doc/demo_watabou_dungeon00.png" width="512" /> 
+</p>
+
 ### Demo Non Uniform Sampling
 ![demo_non_uniform_sampling](demo/addons/flow_nodes_editor/doc/demo_non_uniform_sampling.png)
 
@@ -100,6 +94,30 @@ And the Associated graph
 
 ### Demo Simple Fence from a spline
 ![demo_sample_spline](demo/addons/flow_nodes_editor/doc/demo_sample_spline.png)
+
+##  Quickstart
+
+In a scene 3D:
+
+* Add a node of type ```FlowGraphNode3D```
+* Open the Data Flow dock (appears on the right when the plugin is enabled).
+* **Right click** in the graph to open **Add Node….**
+* Add a node, e.g. ```Grid```
+* Press ```D``` to toggle the 3D debug on that node - points appear as white boxes in the viewport.
+* Adjust the selected node’s parameters (e.g. grid count/size).
+* Press ```E``` to toggle the **Data Inspector** and inspect the actual per-point values.
+    * Click on each row to highlight the point in the 3d scene as a magenta point
+
+## Handy Shortcuts
+
+* **Right-click**: Add node
+* **D**: Toggle 3D point debug
+* **Shift+D**: Disables 3D point debug in all nodes except the selected one
+* **A**: Toggle Data Inspector
+* **E**: Toggle Enable/Disable Node
+* **C**: Create a comments box around selected nodes
+* **X**: Deletes selected nodes
+* **R**: Forces reevaluation of selected nodes
 
 ## Contributing
 
